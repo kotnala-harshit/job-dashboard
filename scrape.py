@@ -696,7 +696,31 @@ TITLE_KEYWORDS = [
     "data analyst", "data scientist", "business intelligence",
     "business analyst", "consultant", "erp", "retail sales",
     "customer service", "store assistant",
+    # Part-time / internship track, matching the Part Time CV's 3 target
+    # categories (retail sales / customer service / store & stock assistant,
+    # already covered above) plus general part-time and internship phrasing
+    # so genuinely part-time or intern postings get caught even when the
+    # title doesn't literally say "retail" or "customer service".
+    "intern", "internship", "working student", "student job", "placement",
+    "part time", "part-time", "sales assistant", "stock assistant",
+    "seasonal", "temporary staff", "christmas temp", "weekend staff",
 ]
+
+# Used to tag each matched job's employment_type after scraping (see main()).
+# Order matters: internship is checked before part-time so "part-time
+# internship" style titles land as "internship".
+INTERNSHIP_KEYWORDS = ["intern", "internship", "working student", "student job", "placement", "co-op", "co op"]
+PART_TIME_KEYWORDS = ["part time", "part-time", "seasonal", "temporary staff", "christmas temp", "weekend staff"]
+
+
+def employment_type(title: str) -> str:
+    t = (title or "").lower()
+    if any(k in t for k in INTERNSHIP_KEYWORDS):
+        return "internship"
+    if any(k in t for k in PART_TIME_KEYWORDS):
+        return "part_time"
+    return "full_time"
+
 
 # ---------------------------------------------------------------------------
 # Region filter: everything below is kept in full; US listings are kept
@@ -1411,6 +1435,7 @@ def main():
         posted_dt = parse_posted_date(j.get("updated_at"))
         j["posted_at_parsed"] = posted_dt.isoformat() if posted_dt else None
         j["recency"] = recency_bucket(posted_dt)
+        j["employment_type"] = employment_type(j.get("title"))
 
     if MAX_AGE_DAYS is not None:
         cutoff = datetime.now(timezone.utc) - timedelta(days=MAX_AGE_DAYS)
