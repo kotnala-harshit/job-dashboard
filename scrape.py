@@ -700,7 +700,7 @@ TITLE_KEYWORDS = [
 
 # ---------------------------------------------------------------------------
 # Region filter: everything below is kept in full; US listings are kept
-# ONLY if they're remote (Sri isn't relocating to the US on spec).
+# ONLY if they're remote (Harshit isn't relocating to the US on spec).
 # ---------------------------------------------------------------------------
 
 REGION_KEYWORDS = [
