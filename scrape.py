@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Free, unlimited job scraper for Sri's job dashboard.
+Free, unlimited job scraper for Harshit's job dashboard.
 Hits public, unauthenticated ATS JSON APIs directly (Greenhouse, Lever, Ashby) -
 no Apify, no API key, no cost, no rate cap beyond each ATS's own fair-use limits.
 
