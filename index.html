@@ -79,11 +79,17 @@
 
 <div class="controls">
   <input id="search" type="text" placeholder="Search title, company, location..." />
+  <select id="companyFilter">
+    <option value="">All companies</option>
+  </select>
+  <select id="countryFilter">
+    <option value="">All countries</option>
+  </select>
+  <select id="sectorFilter">
+    <option value="">All sectors</option>
+  </select>
   <select id="atsFilter">
     <option value="">All sources</option>
-    <option value="greenhouse">Greenhouse</option>
-    <option value="lever">Lever</option>
-    <option value="ashby">Ashby</option>
   </select>
   <select id="recencyFilter">
     <option value="">Any time posted</option>
@@ -116,6 +122,7 @@ fetch('data.json?t=' + Date.now())
     allJobs = data.jobs || [];
     document.getElementById('updated').textContent =
       `Last updated: ${new Date(data.generated_at).toLocaleString()} · ${data.total_companies_checked} companies checked · ${data.total_matches} matches`;
+    populateFilterOptions();
     render();
   })
   .catch(err => {
@@ -167,9 +174,39 @@ function recencyBucket(date) {
   return 'older';
 }
 
+// Fills the Company/Country/Sector/Source dropdowns from whatever values are
+// actually present in the loaded data.json, rather than a hardcoded list --
+// so as scrape.py's company/ATS coverage grows, these stay in sync
+// automatically with no manual edits to this file needed.
+function populateFilterOptions() {
+  const fill = (selectId, values, formatLabel) => {
+    const select = document.getElementById(selectId);
+    const current = select.value;
+    // Keep only the first ("All ...") option, drop any previously injected ones.
+    while (select.options.length > 1) select.remove(1);
+    const unique = Array.from(new Set(values.filter(v => v && String(v).trim())));
+    unique.sort((a, b) => String(a).localeCompare(String(b)));
+    for (const v of unique) {
+      const opt = document.createElement('option');
+      opt.value = v;
+      opt.textContent = formatLabel ? formatLabel(v) : v;
+      select.appendChild(opt);
+    }
+    if (unique.includes(current)) select.value = current;
+  };
+
+  fill('companyFilter', allJobs.map(j => j.company));
+  fill('countryFilter', allJobs.map(j => j.country || 'Other'));
+  fill('sectorFilter', allJobs.map(j => j.sector || 'Other'));
+  fill('atsFilter', allJobs.map(j => j.ats), v => v.charAt(0).toUpperCase() + v.slice(1));
+}
+
 function render() {
   const q = document.getElementById('search').value.toLowerCase();
   const ats = document.getElementById('atsFilter').value;
+  const company = document.getElementById('companyFilter').value;
+  const country = document.getElementById('countryFilter').value;
+  const sector = document.getElementById('sectorFilter').value;
   const recency = document.getElementById('recencyFilter').value;
   const empType = document.getElementById('typeFilter').value;
   const sortBy = document.getElementById('sortBy').value;
@@ -179,13 +216,16 @@ function render() {
     const haystack = `${j.title} ${j.company} ${j.location}`.toLowerCase();
     const matchesQuery = !q || haystack.includes(q);
     const matchesAts = !ats || j.ats === ats;
+    const matchesCompany = !company || j.company === company;
+    const matchesCountry = !country || (j.country || 'Other') === country;
+    const matchesSector = !sector || (j.sector || 'Other') === sector;
     let matchesRecency = true;
     if (recency) {
       const bucket = recencyBucket(parsePostedDate(j.updated_at));
       matchesRecency = recencyRank[bucket] <= recencyRank[recency];
     }
     const matchesType = !empType || (j.employment_type || employmentType(j.title)) === empType;
-    return matchesQuery && matchesAts && matchesRecency && matchesType;
+    return matchesQuery && matchesAts && matchesCompany && matchesCountry && matchesSector && matchesRecency && matchesType;
   });
 
   jobs.sort((a, b) => {
@@ -214,6 +254,8 @@ function render() {
       <h3><a href="${j.url}" target="_blank" rel="noopener">${escapeHtml(j.title)}</a></h3>
       <div class="meta">
         <span class="badge">${escapeHtml(j.location || 'Unknown location')}</span>
+        <span class="badge">${escapeHtml(j.country || 'Other')}</span>
+        <span class="badge">${escapeHtml(j.sector || 'Other')}</span>
         <span class="badge">${escapeHtml(j.ats)}</span>
         ${postedDate ? `<span class="badge">${postedDate.toLocaleDateString()}</span>` : ''}
         ${bucketLabel ? `<span class="badge" style="border-color:var(--accent);color:var(--accent);">${bucketLabel}</span>` : ''}
@@ -232,6 +274,9 @@ function escapeHtml(str) {
 
 document.getElementById('search').addEventListener('input', render);
 document.getElementById('atsFilter').addEventListener('change', render);
+document.getElementById('companyFilter').addEventListener('change', render);
+document.getElementById('countryFilter').addEventListener('change', render);
+document.getElementById('sectorFilter').addEventListener('change', render);
 document.getElementById('recencyFilter').addEventListener('change', render);
 document.getElementById('typeFilter').addEventListener('change', render);
 document.getElementById('sortBy').addEventListener('change', render);
