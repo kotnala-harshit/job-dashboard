@@ -157,7 +157,7 @@ JSONLD_CAREER_PAGES = [
     ("Deloitte Ireland", "https://www2.deloitte.com/ie/en/careers.html"),
     ("PwC Ireland", "https://www.pwc.ie/careers.html"),
     ("KPMG Ireland", "https://home.kpmg/ie/en/home/careers.html"),
-    ("EY Ireland", "https://www.ey.com/en_ie/careers"),
+    ("EY Ireland", "https://careers.ey.com/ey"),
     ("IBM Ireland", "https://www.ibm.com/ie-en/employment"),
     ("SAP Ireland", "https://jobs.sap.com/"),
     ("Version 1", "https://www.version1.com/careers/"),
@@ -174,7 +174,7 @@ JSONLD_CAREER_PAGES = [
     ("Aer Lingus", "https://careers.aerlingus.com/"),
     ("Concentrix (Ireland)", "https://www.concentrix.com/careers/"),
     ("Teleperformance (Ireland)", "https://www.teleperformance.com/en-us/careers/"),
-    ("Apple (Ireland)", "https://jobs.apple.com/en-ie"),
+    ("Apple (Ireland)", "https://jobs.apple.com/en-ie/search"),
     ("Oracle (Ireland)", "https://www.oracle.com/careers/"),
     ("Emirates Group", "https://www.emiratesgroupcareers.com/"),
     ("Emaar Properties", "https://www.emaar.com/en/careers/"),
@@ -635,6 +635,438 @@ JSONLD_CAREER_PAGES = [
     ("Toptal", "https://www.toptal.com/careers"),
     ("Doist", "https://doist.com/careers"),
 ]
+
+# ---------------------------------------------------------------------------
+# Ireland company registry
+#
+# This is separate from the ATS connector lists. Every employer in this
+# registry remains visible even when its ATS returns zero jobs or errors.
+# This gives the dashboard the same "live matches + manual-check companies"
+# behaviour as the reference Job Radar.
+# ---------------------------------------------------------------------------
+
+IRELAND_COMPANY_REGISTRY = [
+    'A&L Goodbody',
+    'ABB',
+    'Abbott',
+    'ABP Food Group',
+    'Adecco Ireland',
+    'Advanced Micro Devices (AMD)',
+    'AECOM',
+    'Aer Lingus',
+    'AerCap',
+    'Agilent Technologies',
+    'AIB (Allied Irish Banks)',
+    'Akamai',
+    'Aldi Ireland',
+    'Alexion Pharmaceuticals',
+    'Alkermes',
+    'Alvarez & Marsal',
+    'Amazon',
+    'Amgen',
+    'An Post',
+    'Aon',
+    'Apple',
+    'Applied Materials',
+    'Arcadis',
+    'Arthur Cox',
+    'Arup',
+    'ASML',
+    'AstraZeneca',
+    'AtkinsRéalis',
+    'Atlantic Technological University (ATU)',
+    'Atlassian',
+    'Aviva Ireland',
+    'Avolon',
+    'AXA Ireland',
+    'B&Q Ireland',
+    'Bain & Company',
+    'Baker Tilly Ireland',
+    'BAM Ireland',
+    'Bank of Ireland',
+    'Barclays',
+    'Bausch + Lomb',
+    'Baxter International',
+    'Bayer',
+    'BDO Ireland',
+    'Becton Dickinson (BD)',
+    'Bio-Rad Laboratories',
+    'Biotronik',
+    'Bloomberg',
+    'BNP Paribas Ireland',
+    'BNY Mellon',
+    'Boehringer Ingelheim',
+    'Boots Ireland',
+    'Bord Gáis Energy',
+    'Boston Consulting Group (BCG)',
+    'Boston Scientific',
+    'Box',
+    'Brightwater',
+    'Bristol Myers Squibb',
+    'Broadcom',
+    'Brown Thomas Arnotts',
+    'Bruker',
+    'Bus Éireann',
+    'ByrneWallace',
+    'C&C Group',
+    'Cairn Homes',
+    'Cantor Fitzgerald Ireland',
+    'Canva',
+    'Capgemini',
+    'Carbery Group',
+    'Carrier',
+    'Catalent',
+    'Charles River Laboratories',
+    'Check Point Software',
+    'Cisco',
+    'Citi',
+    'Citrix',
+    'Clayton Hotels',
+    'Cloudflare',
+    'Coca-Cola HBC Ireland',
+    'Cognizant',
+    'Cohesity',
+    'Coillte',
+    'Coloplast',
+    'Concentrix (Ireland)',
+    'Convatec',
+    'Cook Medical',
+    'CPL Resources',
+    'CRH',
+    'CrowdStrike',
+    'Currys Ireland',
+    'CyberArk',
+    'daa (Dublin Airport Authority)',
+    'Dairygold',
+    'Dalata Hotel Group',
+    'Danaher Corporation',
+    'Databricks',
+    'Davy',
+    'Dawn Meats',
+    'Decathlon Ireland',
+    'Dell Technologies',
+    'DePuy Synthes',
+    'Dexcom',
+    'DHL Ireland',
+    'Diageo Ireland',
+    'DocuSign',
+    'DPS Group (Arcadis)',
+    'DSV Ireland',
+    'Dublin Bus',
+    'Dublin City University (DCU)',
+    'Dunnes Stores',
+    'DXC Technology',
+    'Dynatrace',
+    'Eason',
+    'Eaton',
+    'Edwards Lifesciences',
+    'Eir',
+    'EirGrid Group',
+    'Eli Lilly',
+    'Emerson',
+    'Energia Group',
+    'Enterprise Ireland',
+    'ESB (Electricity Supply Board)',
+    'Etsy',
+    'Eversheds Sutherland Ireland',
+    'EY Ireland',
+    'FactSet',
+    'Fáilte Ireland',
+    'Fastly',
+    'Fastway Couriers Ireland',
+    'FBD Insurance',
+    'FedEx Express Ireland',
+    'Fenergo',
+    'Fidelity Investments',
+    'Fiserv',
+    'Fitch Ratings',
+    'Fortinet',
+    'Forvis Mazars Ireland',
+    'FTI Consulting',
+    'Gas Networks Ireland',
+    'Glanbia / Tirlán',
+    'GlaxoSmithKline (GSK)',
+    'Glenveagh Properties',
+    'Goldman Sachs',
+    'Goodbody',
+    'Google',
+    'Grant Thornton Ireland',
+    'Greencore',
+    'H&M Ireland',
+    'Haleon',
+    'Halfords Ireland',
+    'Hays Ireland',
+    'Heineken Ireland',
+    'Hewlett Packard Enterprise (HPE)',
+    'Holland & Barrett Ireland',
+    'Hollister Incorporated',
+    'Honeywell',
+    'Horizon Therapeutics (Amgen)',
+    'HP (Hewlett-Packard)',
+    'HSBC Ireland',
+    'HSE (Health Service Executive)',
+    'IBM',
+    'ICON plc',
+    'IDA Ireland',
+    'Illumina',
+    'Indeed (Ireland)',
+    'Infineon Technologies',
+    'Infosys',
+    'Insulet Corporation',
+    'Integra LifeSciences',
+    'Intel',
+    'Intersport Elverys',
+    'IQVIA',
+    'Irish Distillers (Pernod Ricard)',
+    'Irish Ferries',
+    'Irish Life',
+    'Irish Rail (Iarnród Éireann)',
+    'Jacobs',
+    'Jamf',
+    'Jazz Pharmaceuticals',
+    'John Sisk & Son (Sisk Group)',
+    'Johnson & Johnson',
+    'Johnson Controls',
+    'Jones Engineering',
+    'JPMorgan Chase',
+    'Kepak Group',
+    'Keysight Technologies',
+    'Kingspan Group',
+    'Kirby Group Engineering',
+    'KLA Corporation',
+    'KPMG Ireland',
+    'Kuehne+Nagel Ireland',
+    'Labcorp',
+    'Lam Research',
+    'Laya Healthcare',
+    'Lidl Ireland',
+    'Life Style Sports',
+    'Linesight',
+    'LinkedIn',
+    'LK Shields',
+    'LloydsPharmacy Ireland',
+    'Logitech',
+    'Lonza',
+    'Macquarie Group',
+    'Maldron Hotels',
+    'Manpower Ireland',
+    'Maples Group Ireland',
+    'Marks & Spencer Ireland',
+    'Marvell Technology',
+    'Mason Hayes & Curran',
+    'Matheson',
+    'Maynooth University',
+    'McCann FitzGerald',
+    'McKinsey & Company',
+    'Mediahuis Ireland',
+    'Medpace',
+    'Medtronic',
+    'Merck Group',
+    'Merit Medical',
+    'Meta',
+    'Microchip Technology',
+    'Micron Technology',
+    'Microsoft',
+    'Monday.com',
+    "Moody's",
+    'Morgan McKinley',
+    'Morgan Stanley',
+    'Morningstar',
+    'Mott MacDonald',
+    'MSCI',
+    'Munster Technological University (MTU)',
+    'Musgrave Group (SuperValu / Centra)',
+    'NetApp',
+    'Next Ireland',
+    'Nokia',
+    'Northern Trust',
+    'Novartis',
+    'Nutanix',
+    'NVIDIA',
+    'NXP Semiconductors',
+    'Oliver Wyman',
+    'Oracle',
+    'Ornua',
+    'Palo Alto Networks',
+    'Philip Lee',
+    'Ping Identity',
+    'PM Group',
+    'Press Up Hospitality Group',
+    'Proofpoint',
+    'Protiviti',
+    'PublicJobs.ie (PAS)',
+    'QIAGEN',
+    'Qorvo',
+    'Qualcomm',
+    'Rapid7',
+    'Refinitiv (LSEG)',
+    'Regeneron',
+    'Renesas Electronics',
+    'ResMed',
+    'Revvity (PerkinElmer)',
+    'Roche',
+    'Rockwell Automation',
+    'RTÉ (Raidió Teilifís Éireann)',
+    'Rubrik',
+    'Ryanair',
+    'S&P Global',
+    'SAP',
+    'Schneider Electric',
+    'Science Foundation Ireland (SFI)',
+    'Seagate',
+    'SentinelOne',
+    'Shannon Airport Group',
+    'Sigmar Recruitment',
+    'Sky Ireland',
+    'Slack',
+    'Slalom',
+    'SMBC Aviation Capital',
+    'Smith & Nephew',
+    'Smurfit Westrock',
+    'Smyths Toys Superstores',
+    'Societe Generale',
+    'Sophos',
+    'South East Technological University (SETU)',
+    'Splunk',
+    'SSE Airtricity / SSE',
+    'Stantec',
+    'Stena Line Ireland',
+    'STMicroelectronics',
+    'Stryker',
+    'Superdrug Ireland',
+    'SuperValu / Musgrave',
+    'Susquehanna International Group (SIG)',
+    'Syneos Health',
+    'Synopsys',
+    'Takeda',
+    'Tandem Diabetes Care',
+    'Tata Consultancy Services (TCS)',
+    'Teagasc',
+    'Technological University Dublin (TU Dublin)',
+    'Teleflex',
+    'Teleperformance (Ireland)',
+    'Tenable',
+    'Terumo',
+    'Tesco Ireland',
+    'Tetra Tech',
+    'Teva Pharmaceuticals',
+    'Texas Instruments',
+    'The Doyle Collection',
+    'The Irish Times',
+    'Thermo Fisher Scientific',
+    'Three Ireland',
+    'TikTok',
+    'TK Maxx Ireland',
+    'Tourism Ireland',
+    'Trane Technologies',
+    'Trend Micro',
+    'Trinity College Dublin (TCD)',
+    'UBS',
+    'Uisce Éireann (Irish Water)',
+    'Uniphar Group',
+    'University College Cork (UCC)',
+    'University College Dublin (UCD)',
+    'University of Galway',
+    'University of Limerick (UL)',
+    'UPS Ireland',
+    'Veeam',
+    'VHI Healthcare',
+    'Viatris',
+    'Virgin Media Ireland',
+    'Visa',
+    'VMware (Broadcom)',
+    'Vodafone Ireland',
+    'Walkers Ireland',
+    'Waters Corporation',
+    'Waterstones Ireland',
+    'Western Digital',
+    'William Fry',
+    'Willis Towers Watson (WTW)',
+    'Wipro',
+    "Woodie's",
+    'WSP',
+    'WuXi Biologics',
+    'Zara / Inditex Ireland',
+    'Zendesk',
+    'Zurich Insurance',
+]
+
+CAREERS_URL_OVERRIDES = {
+    "Apple": "https://jobs.apple.com/en-ie/search",
+    "EY Ireland": "https://careers.ey.com/ey",
+}
+
+def _company_key(value: str) -> str:
+    value = (value or "").lower().replace("&", "and")
+    return re.sub(r"[^a-z0-9]+", "", value)
+
+def _registry_url_map():
+    out = {}
+    for company, url in JSONLD_CAREER_PAGES:
+        key = _company_key(company)
+        if key:
+            out[key] = url
+    for company, url in CAREERS_URL_OVERRIDES.items():
+        out[_company_key(company)] = url
+    return out
+
+def build_company_registry():
+    url_map = _registry_url_map()
+    connector_maps = [
+        ({_company_key(x): "greenhouse" for x in GREENHOUSE_COMPANIES}),
+        ({_company_key(x): "lever" for x in LEVER_COMPANIES}),
+        ({_company_key(x): "ashby" for x in ASHBY_COMPANIES}),
+        ({_company_key(x[0]): "workday" for x in WORKDAY_COMPANIES}),
+        ({_company_key(x): "smartrecruiters" for x in SMARTRECRUITERS_COMPANIES}),
+        ({_company_key(x): "workable" for x in WORKABLE_COMPANIES}),
+        ({_company_key(x): "recruitee" for x in RECRUITEE_COMPANIES}),
+        ({_company_key(x): "personio" for x in PERSONIO_COMPANIES}),
+    ]
+    status_by_key = {}
+    for mapping in connector_maps:
+        status_by_key.update(mapping)
+
+    registry = []
+    for name in IRELAND_COMPANY_REGISTRY:
+        key = _company_key(name)
+        platform = status_by_key.get(key, "manual-check")
+        url = CAREERS_URL_OVERRIDES.get(name) or url_map.get(key)
+
+        # Allow compact ATS slugs to match display names.
+        if platform == "manual-check":
+            for slug_key, slug_platform in status_by_key.items():
+                if slug_key and (slug_key in key or key in slug_key):
+                    platform = slug_platform
+                    break
+
+        registry.append({
+            "company": name,
+            "country": "Ireland",
+            "platform": platform,
+            "careers_url": url,
+            "automatic": platform != "manual-check",
+        })
+    return registry
+
+def company_display_name(raw: str) -> str:
+    key = _company_key(raw)
+    for name in IRELAND_COMPANY_REGISTRY:
+        if _company_key(name) == key:
+            return name
+    aliases = {
+        "nvidia": "NVIDIA",
+        "docusign": "DocuSign",
+        "microsoft": "Microsoft",
+        "linkedin": "LinkedIn",
+        "meta": "Meta",
+        "google": "Google",
+        "apple": "Apple",
+        "ey": "EY Ireland",
+        "kpmg": "KPMG Ireland",
+        "aib": "AIB (Allied Irish Banks)",
+    }
+    return aliases.get(key, raw)
+
 
 # ---------------------------------------------------------------------------
 # External job aggregator APIs -- optional, free, but need YOUR OWN key
@@ -2355,6 +2787,7 @@ def main():
     # Tag every job with a parsed posting date + recency bucket, so the
     # dashboard can filter by "last 24h / 7d / 30d" without re-parsing.
     for j in results:
+        j["company"] = company_display_name(j.get("company", ""))
         posted_dt = parse_posted_date(j.get("updated_at"))
         j["posted_at_parsed"] = posted_dt.isoformat() if posted_dt else None
         j["recency"] = recency_bucket(posted_dt)
@@ -2367,21 +2800,19 @@ def main():
         )
         j.pop("description_text", None)
 
+    company_registry = build_company_registry()
+
     manual_check = []
-    for company, url in JSONLD_CAREER_PAGES:
-        if IRELAND_ONLY and not jsonld_page_is_ireland(company, url):
+    for item in company_registry:
+        if item["automatic"]:
             continue
         manual_check.append({
-            "company": company,
-            "url": url,
-            "platform": "Careers page",
+            "company": item["company"],
+            "url": item["careers_url"],
+            "platform": item["platform"],
+            "status": "manual-check" if item["careers_url"] else "needs-careers-url",
         })
     manual_check.sort(key=lambda x: x["company"].lower())
-
-    jsonld_ie_count = sum(
-        1 for c, _ in JSONLD_CAREER_PAGES
-        if not IRELAND_ONLY or jsonld_page_is_ireland(c, _)
-    )
 
     if MAX_AGE_DAYS is not None:
         cutoff = datetime.now(timezone.utc) - timedelta(days=MAX_AGE_DAYS)
@@ -2400,17 +2831,21 @@ def main():
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "focus": "ireland" if IRELAND_ONLY else "multi_region",
         "recency_counts": recency_counts,
-        "total_companies_checked": (
-            len(GREENHOUSE_COMPANIES) + len(LEVER_COMPANIES) + len(ASHBY_COMPANIES)
-            + len(WORKDAY_COMPANIES) + len(SMARTRECRUITERS_COMPANIES)
-            + len(WORKABLE_COMPANIES) + len(RECRUITEE_COMPANIES) + len(PERSONIO_COMPANIES)
-            + jsonld_ie_count + 2
-        ),
+        "total_companies_checked": len(company_registry),
+        "registry_companies": company_registry,
         "total_matches": len(results),
         "manual_check_companies": manual_check,
+        "manual_check_count": len(manual_check),
+        "automatic_company_count": sum(1 for x in company_registry if x["automatic"]),
+        "companies_with_careers_url": sum(1 for x in company_registry if x["careers_url"]),
         "errors": errors,
         "jobs": results,
-        "note": "Ireland-only pipeline: ATS APIs + JSON-LD career pages. Google/Apple/Meta may need manual checks where anti-bot blocks structured data.",
+        "note": (
+            "Ireland-only pipeline. Employer coverage is based on the master "
+            "registry, independent of ATS success. Apple and EY are explicitly "
+            "included; companies without a working connector remain visible as "
+            "manual-check rather than disappearing."
+        ),
     }
 
     with open("data.json", "w") as f:
