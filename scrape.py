@@ -53,7 +53,8 @@ LEVER_COMPANIES = [
 
 ASHBY_COMPANIES = [
     "notion", "linear", "ramp", "elevenlabs", "openai", "anthropic",
-    "vercel", "scale", "deel", "partly",
+    "vercel", "scale", "deel", "partly", "clickup", "snowflake",
+    "wayflyer", "harveynash",
 ]
 
 # ---------------------------------------------------------------------------
@@ -71,9 +72,51 @@ ASHBY_COMPANIES = [
 # ---------------------------------------------------------------------------
 
 WORKDAY_COMPANIES = [
-    ("nvidia", "wd5", "NVIDIAExternalCareerSite"),
-    ("paypal", "wd1", "jobs"),
-    ("accenture", "wd103", "AccentureCareers"),
+    ('Accenture', 'accenture', 'wd103', 'AccentureCareers'),
+    ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'),
+    ('Workday', 'workday', 'wd5', 'Workday'),
+    ('VMware (Broadcom)', 'broadcom', 'wd1', 'External_Career'),
+    ('Genesys', 'genesys', 'wd1', 'Genesys'),
+    ('Slack', 'salesforce', 'wd12', 'Slack'),
+    ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'),
+    ('PayPal', 'paypal', 'wd1', 'jobs'),
+    ('Adobe', 'adobe', 'wd5', 'external_experienced'),
+    ('Autodesk', 'autodesk', 'wd1', 'Ext'),
+    ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'),
+    ('Analog Devices', 'analogdevices', 'wd1', 'External'),
+    ('NVIDIA', 'nvidia', 'wd5', 'NVIDIAExternalCareerSite'),
+    ('Broadcom', 'broadcom', 'wd1', 'External_Career'),
+    ('NXP Semiconductors', 'nxp', 'wd3', 'careers'),
+    ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'),
+    ('Eaton', 'eaton', 'wd5', 'Eaton'),
+    ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'),
+    ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'),
+    ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'),
+    ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'),
+    ('Takeda', 'takeda', 'wd3', 'External'),
+    ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'),
+    ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'),
+    ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'),
+    ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'),
+    ('Viatris', 'viatris', 'wd1', 'ViatrisCareers'),
+    ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'),
+    ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'),
+    ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'),
+    ('Becton Dickinson (BD)', 'bd', 'wd1', 'BD_External'),
+    ('Illumina', 'illumina', 'wd1', 'illumina-careers'),
+    ('Catalent', 'catalent', 'wd1', 'External'),
+    ('State Street', 'statestreet', 'wd1', 'Global'),
+    ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'),
+    ('Northern Trust', 'northerntrust', 'wd1', 'External_Careers'),
+    ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'),
+    ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'),
+    ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'),
+    ('DXC Technology', 'dxc', 'wd1', 'DXC_Jobs'),
+    ('Aon', 'aon', 'wd1', 'AonCareers'),
+    ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'),
+    ('Mercer', 'mmc', 'wd1', 'MMC'),
+    ('Marsh McLennan', 'mmc', 'wd1', 'MMC'),
+    ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'),
 ]
 
 # ---------------------------------------------------------------------------
@@ -87,7 +130,8 @@ WORKDAY_COMPANIES = [
 # ---------------------------------------------------------------------------
 
 SMARTRECRUITERS_COMPANIES = [
-    "smartrecruiters",
+    "smartrecruiters", "servicenow", "aristanetworks", "abbvie",
+    "eurofins", "version1", "primark",
 ]
 
 # ---------------------------------------------------------------------------
@@ -116,8 +160,13 @@ RECRUITEE_COMPANIES = [
 ]
 
 PERSONIO_COMPANIES = [
-    # https://{slug}.jobs.personio.de/xml?language=en -- add slugs here
-    # (Personio skews German/DACH SMB -- useful if expanding Germany/Austria coverage)
+    "dilloneustace",
+]
+
+PINPOINT_COMPANIES = [
+    "ericsson", "ptsb", "kpmg", "morganmckinley", "greencore",
+    "arcadis", "zendesk", "synopsys", "nutanix", "virgin", "terumo",
+    "smith", "waterstones", "next",
 ]
 
 # ---------------------------------------------------------------------------
@@ -1010,6 +1059,18 @@ def _registry_url_map():
         out[_company_key(company)] = url
     return out
 
+def _load_company_master():
+    """Load the Ireland master registry. CSV is intentionally editable without touching Python."""
+    try:
+        import csv
+        with open("ireland_companies.csv", encoding="utf-8-sig", newline="") as f:
+            rows = list(csv.DictReader(f))
+        if rows:
+            return [((r.get("company_name") or "").strip(), (r.get("career_url") or "").strip()) for r in rows]
+    except Exception as exc:
+        print(f"  ! ireland_companies.csv unavailable, using embedded registry: {exc}")
+    return [(name, None) for name in IRELAND_COMPANY_REGISTRY]
+
 def build_company_registry():
     url_map = _registry_url_map()
     connector_maps = [
@@ -1021,16 +1082,19 @@ def build_company_registry():
         ({_company_key(x): "workable" for x in WORKABLE_COMPANIES}),
         ({_company_key(x): "recruitee" for x in RECRUITEE_COMPANIES}),
         ({_company_key(x): "personio" for x in PERSONIO_COMPANIES}),
+        ({_company_key(x): "pinpoint" for x in PINPOINT_COMPANIES}),
     ]
     status_by_key = {}
     for mapping in connector_maps:
         status_by_key.update(mapping)
 
     registry = []
-    for name in IRELAND_COMPANY_REGISTRY:
+    for name, master_url in _load_company_master():
+        if not name:
+            continue
         key = _company_key(name)
         platform = status_by_key.get(key, "manual-check")
-        url = CAREERS_URL_OVERRIDES.get(name) or url_map.get(key)
+        url = CAREERS_URL_OVERRIDES.get(name) or master_url or url_map.get(key)
 
         # Allow compact ATS slugs to match display names.
         if platform == "manual-check":
@@ -1266,6 +1330,7 @@ def recency_bucket(posted_dt):
 
 
 def title_matches(title: str) -> bool:
+    """Preference tag only. Never use this to decide whether a job is ingested."""
     t = (title or "").lower()
     return any(k in t for k in TITLE_KEYWORDS)
 
@@ -2183,7 +2248,7 @@ def scrape_greenhouse(slug: str):
     for j in data["jobs"]:
         title = j.get("title", "")
         location = (j.get("location") or {}).get("name", "")
-        if title_matches(title) and region_ok(location):
+        if region_ok(location):
             content_html = j.get("content") or ""
             out.append({
                 "company": slug,
@@ -2206,7 +2271,7 @@ def scrape_lever(slug: str):
         title = j.get("text", "")
         cats = j.get("categories") or {}
         location = cats.get("location", "")
-        if title_matches(title) and region_ok(location):
+        if region_ok(location):
             created = j.get("createdAt")
             created_iso = None
             if created:
@@ -2236,7 +2301,7 @@ def scrape_ashby(slug: str):
         location = j.get("location", "") or j.get("locationName", "")
         if j.get("isRemote") and "remote" not in (location or "").lower():
             location = f"{location} (Remote)".strip()
-        if title_matches(title) and region_ok(location):
+        if region_ok(location):
             out.append({
                 "company": slug,
                 "ats": "ashby",
@@ -2248,7 +2313,7 @@ def scrape_ashby(slug: str):
     return out
 
 
-def scrape_workday(tenant: str, wd_host: str, site: str, max_pages: int = 15):
+def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages: int = 25):
     base = f"https://{tenant}.{wd_host}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs"
     out = []
     offset = 0
@@ -2284,10 +2349,10 @@ def scrape_workday(tenant: str, wd_host: str, site: str, max_pages: int = 15):
         for j in postings:
             title = j.get("title", "")
             location = j.get("locationsText", "") or j.get("bulletFields", [""])[0]
-            if title_matches(title) and region_ok(location):
+            if region_ok(location):
                 path = j.get("externalPath", "")
                 out.append({
-                    "company": tenant,
+                    "company": company,
                     "ats": "workday",
                     "title": title,
                     "location": location,
@@ -2323,7 +2388,7 @@ def scrape_smartrecruiters(company_id: str, max_pages: int = 15):
             location = ", ".join(filter(None, [loc.get("city"), loc.get("region"), loc.get("country")]))
             if loc.get("remote"):
                 location = f"{location} (Remote)".strip(", ")
-            if title_matches(title) and region_ok(location):
+            if region_ok(location):
                 out.append({
                     "company": company_id,
                     "ats": "smartrecruiters",
@@ -2354,7 +2419,7 @@ def scrape_workable(slug: str):
         ]))
         if location.get("telecommuting"):
             loc_str = f"{loc_str} (Remote)".strip(", ")
-        if title_matches(title) and region_ok(loc_str):
+        if region_ok(loc_str):
             out.append({
                 "company": slug,
                 "ats": "workable",
@@ -2376,7 +2441,7 @@ def scrape_recruitee(slug: str):
         location = j.get("location", "") or j.get("city", "")
         if j.get("remote"):
             location = f"{location} (Remote)".strip(", ")
-        if title_matches(title) and region_ok(location):
+        if region_ok(location):
             out.append({
                 "company": slug,
                 "ats": "recruitee",
@@ -2409,7 +2474,7 @@ def scrape_personio(slug: str):
 
         title = field("name")
         location = ", ".join(filter(None, [field("office"), field("city")]))
-        if title_matches(title) and region_ok(location):
+        if region_ok(location):
             out.append({
                 "company": slug,
                 "ats": "personio",
@@ -2420,6 +2485,32 @@ def scrape_personio(slug: str):
             })
     return out
 
+
+
+def scrape_pinpoint(slug: str):
+    data = fetch_json(f"https://{slug}.pinpointhq.com/postings.json")
+    if not data:
+        return []
+    postings = data if isinstance(data, list) else (data.get("data") or data.get("jobs") or data.get("postings") or [])
+    out = []
+    for j in postings:
+        if not isinstance(j, dict):
+            continue
+        title = j.get("title") or j.get("name") or ""
+        location = j.get("location") or j.get("location_name") or ""
+        if isinstance(location, dict):
+            location = ", ".join(filter(None, [location.get("city"), location.get("region"), location.get("country")]))
+        if region_ok(str(location)):
+            out.append({
+                "company": slug,
+                "ats": "pinpoint",
+                "title": title,
+                "location": str(location),
+                "url": j.get("url") or j.get("apply_url") or j.get("external_url"),
+                "updated_at": j.get("published_at") or j.get("created_at") or j.get("updated_at"),
+                "description_text": _strip_html(j.get("description") or ""),
+            })
+    return out
 
 def _jsonld_location(job_location):
     """jobLocation can be a dict, a list of dicts, or absent entirely."""
@@ -2484,7 +2575,7 @@ def scrape_jsonld(company: str, url: str):
             if c.get("jobLocationType") == "TELECOMMUTE" or c.get("applicantLocationRequirements"):
                 location = f"{location} (Remote)".strip(", ")
 
-            if title_matches(title) and region_ok(location):
+            if region_ok(location):
                 desc = c.get("description") or ""
                 out.append({
                     "company": company,
@@ -2513,7 +2604,7 @@ def scrape_adzuna(country: str, query: str):
     for j in data["results"]:
         title = j.get("title", "")
         location = (j.get("location") or {}).get("display_name", "")
-        if title_matches(title) and region_ok(location):
+        if region_ok(location):
             out.append({
                 "company": (j.get("company") or {}).get("display_name", "unknown"),
                 "ats": "adzuna",
@@ -2540,7 +2631,7 @@ def scrape_careerjet(locale: str, query: str):
     for j in data["jobs"]:
         title = j.get("title", "")
         location = j.get("locations", "")
-        if title_matches(title) and region_ok(location):
+        if region_ok(location):
             out.append({
                 "company": j.get("company", "unknown"),
                 "ats": "careerjet",
@@ -2571,7 +2662,7 @@ def scrape_jooble(keywords: str, location: str = ""):
     for j in (data or {}).get("jobs", []):
         title = j.get("title", "")
         loc = j.get("location", "")
-        if title_matches(title) and region_ok(loc):
+        if region_ok(loc):
             out.append({
                 "company": j.get("company", "unknown"),
                 "ats": "jooble",
@@ -2592,7 +2683,7 @@ def scrape_amazon(query: str):
     for j in data["jobs"]:
         title = j.get("title", "")
         location = j.get("normalized_location", "") or j.get("location", "")
-        if title_matches(title) and region_ok(location):
+        if region_ok(location):
             path = j.get("job_path", "")
             out.append({
                 "company": "amazon",
@@ -2618,7 +2709,7 @@ def scrape_netflix(query: str):
     for j in positions:
         title = j.get("name", "")
         location = j.get("location", "")
-        if title_matches(title) and region_ok(location):
+        if region_ok(location):
             t_update = j.get("t_update")
             updated_iso = None
             if t_update:
@@ -2668,9 +2759,9 @@ def main():
             errors.append(f"ashby/{slug}: {e}")
         time.sleep(0.3)
 
-    for tenant, wd_host, site in WORKDAY_COMPANIES:
+    for company, tenant, wd_host, site in WORKDAY_COMPANIES:
         try:
-            found = scrape_workday(tenant, wd_host, site)
+            found = scrape_workday(company, tenant, wd_host, site)
             results.extend(found)
             print(f"workday/{tenant}: {len(found)} matches")
         except Exception as e:
@@ -2711,6 +2802,15 @@ def main():
             print(f"personio/{slug}: {len(found)} matches")
         except Exception as e:
             errors.append(f"personio/{slug}: {e}")
+        time.sleep(0.3)
+
+    for slug in PINPOINT_COMPANIES:
+        try:
+            found = scrape_pinpoint(slug)
+            results.extend(found)
+            print(f"pinpoint/{slug}: {len(found)} Ireland jobs")
+        except Exception as e:
+            errors.append(f"pinpoint/{slug}: {e}")
         time.sleep(0.3)
 
     for company, url in JSONLD_CAREER_PAGES:
@@ -2778,7 +2878,11 @@ def main():
     seen = set()
     deduped = []
     for j in results:
-        key = (j.get("company"), j.get("url") or j.get("title"))
+        company_key = _company_key(company_display_name(j.get("company", "")))
+        url_key = (j.get("url") or "").split("?")[0].rstrip("/").lower()
+        title_key = re.sub(r"\s+", " ", (j.get("title") or "").strip().lower())
+        loc_key = re.sub(r"\s+", " ", (j.get("location") or "").strip().lower())
+        key = (company_key, url_key or title_key, loc_key if not url_key else "")
         if key not in seen:
             seen.add(key)
             deduped.append(j)
@@ -2792,6 +2896,7 @@ def main():
         j["posted_at_parsed"] = posted_dt.isoformat() if posted_dt else None
         j["recency"] = recency_bucket(posted_dt)
         j["employment_type"] = employment_type(j.get("title"))
+        j["target_role_match"] = title_matches(j.get("title"))
         j["sector"] = sector_for(j.get("company"))
         j["country"] = "Ireland" if IRELAND_ONLY else country_from_location(j.get("location"))
         j["ireland_area"] = ireland_area(j.get("location"))
@@ -2799,6 +2904,32 @@ def main():
             j.get("title"), j.get("location"), j.get("description_text"),
         )
         j.pop("description_text", None)
+
+    # Persist first-seen state so the dashboard can highlight genuinely new postings.
+    now_iso = datetime.now(timezone.utc).isoformat()
+    try:
+        with open("seen_jobs.json", encoding="utf-8") as f:
+            seen_jobs = json.load(f)
+        if not isinstance(seen_jobs, dict):
+            seen_jobs = {}
+    except Exception:
+        seen_jobs = {}
+
+    current_seen = dict(seen_jobs)
+    for j in results:
+        stable_url = (j.get("url") or "").split("?")[0].rstrip("/").lower()
+        identity = stable_url or "|".join([
+            _company_key(j.get("company", "")),
+            re.sub(r"\s+", " ", (j.get("title") or "").strip().lower()),
+            re.sub(r"\s+", " ", (j.get("location") or "").strip().lower()),
+        ])
+        first_seen = seen_jobs.get(identity)
+        j["new_since_last_check"] = first_seen is None
+        j["first_seen_at"] = first_seen or now_iso
+        current_seen[identity] = first_seen or now_iso
+
+    with open("seen_jobs.json", "w", encoding="utf-8") as f:
+        json.dump(current_seen, f, indent=2)
 
     company_registry = build_company_registry()
 
@@ -2827,6 +2958,12 @@ def main():
     for j in results:
         recency_counts[j["recency"]] += 1
 
+    source_counts = {}
+    company_job_counts = {}
+    for j in results:
+        source_counts[j.get("ats") or "unknown"] = source_counts.get(j.get("ats") or "unknown", 0) + 1
+        company_job_counts[j.get("company") or "Unknown"] = company_job_counts.get(j.get("company") or "Unknown", 0) + 1
+
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "focus": "ireland" if IRELAND_ONLY else "multi_region",
@@ -2834,6 +2971,10 @@ def main():
         "total_companies_checked": len(company_registry),
         "registry_companies": company_registry,
         "total_matches": len(results),
+        "new_since_last_check": sum(1 for j in results if j.get("new_since_last_check")),
+        "source_counts": source_counts,
+        "companies_with_live_jobs": len(company_job_counts),
+        "company_job_counts": company_job_counts,
         "manual_check_companies": manual_check,
         "manual_check_count": len(manual_check),
         "automatic_company_count": sum(1 for x in company_registry if x["automatic"]),
@@ -2841,7 +2982,7 @@ def main():
         "errors": errors,
         "jobs": results,
         "note": (
-            "Ireland-only pipeline. Employer coverage is based on the master "
+            "Ireland-only all-jobs pipeline. Employer coverage is based on the master "
             "registry, independent of ATS success. Apple and EY are explicitly "
             "included; companies without a working connector remain visible as "
             "manual-check rather than disappearing."
