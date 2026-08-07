@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 """
-Free, unlimited job scraper for Harshit's job dashboard.
-Hits public, unauthenticated ATS JSON APIs directly (Greenhouse, Lever, Ashby) -
-no Apify, no API key, no cost, no rate cap beyond each ATS's own fair-use limits.
-
-Run by GitHub Actions on a daily schedule. Writes data.json for the dashboard
-(index.html) to read.
+Free job scraper for Harshit's Ireland Job Radar dashboard.
+Hits public ATS JSON APIs (Greenhouse, Lever, Ashby, …) and JSON-LD career pages.
+Run by GitHub Actions hourly. Writes data.json for index.html.
 """
 
 import json
@@ -661,10 +658,8 @@ JSONLD_CAREER_PAGES = [
 
 ADZUNA_APP_ID = ""    # fill in after free signup at developer.adzuna.com
 ADZUNA_APP_KEY = ""
-ADZUNA_COUNTRIES = ["gb", "ie", "de", "nl", "at", "es", "pl", "in", "sg", "au", "nz", "ca"]
 
 CAREERJET_AFFID = ""  # fill in after free signup at careerjet.com/partners
-CAREERJET_LOCALES = ["en_GB", "en_IE", "en_US", "en_AU", "en_CA", "en_SG", "en_IN"]
 
 JOOBLE_API_KEY = ""   # fill in after free signup at jooble.org/api/about
 
@@ -723,24 +718,63 @@ def employment_type(title: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Region filter: everything below is kept in full; US listings are kept
-# ONLY if they're remote (Harshit isn't relocating to the US on spec).
+# Location filter — Ireland-only pipeline (roles in IE or IE-remote/hybrid).
 # ---------------------------------------------------------------------------
 
-REGION_KEYWORDS = [
-    "ireland", "dublin", "cork", "uk", "united kingdom", "london", "europe",
-    "eu", "germany", "berlin", "france", "paris", "netherlands", "amsterdam",
-    "spain", "madrid", "barcelona", "italy", "milan", "sweden", "stockholm",
-    "denmark", "copenhagen", "finland", "helsinki", "norway", "oslo",
-    "poland", "warsaw", "portugal", "lisbon", "belgium", "brussels",
-    "austria", "vienna", "switzerland", "zurich", "singapore", "dubai",
-    "uae", "united arab emirates", "india", "bangalore", "bengaluru",
-    "mumbai", "delhi", "hyderabad", "pune", "chennai", "gurgaon", "gurugram",
-    "australia", "sydney", "melbourne", "brisbane", "nsw", "queensland",
-    "victoria", "new zealand", "auckland", "wellington", "nz",
-    "saudi arabia", "riyadh", "jeddah", "qatar", "doha",
+IRELAND_ONLY = True
+
+IRELAND_LOCATION_KEYWORDS = [
+    "ireland", "éire", "eire", "dublin", "cork", "galway", "limerick",
+    "waterford", "kildare", "kilkenny", "wexford", "sligo", "mayo",
+    "donegal", "kerry", "tipperary", "meath", "louth", "wicklow", "carlow",
+    "laois", "offaly", "westmeath", "longford", "roscommon", "cavan",
+    "monaghan", "clare", "ennis", "shannon", "athlone", "dundalk", "bray",
+    "naas", "tralee", "letterkenny", "drogheda", "swords", "blanchardstown",
+    "dún laoghaire", "dun laoghaire", "tallaght", "cork city", "dublin city",
+    "irL",  # typo guard — removed below via normalized check
 ]
-US_KEYWORDS = ["usa", "united states", "u.s.a", "u.s."]
+# Drop accidental typo token
+IRELAND_LOCATION_KEYWORDS = [k for k in IRELAND_LOCATION_KEYWORDS if k != "irL"]
+
+IRELAND_REMOTE_HINTS = [
+    "remote, ireland", "remote ireland", "ireland remote", "remote (ireland)",
+    "remote - ireland", "remote/hybrid ireland", "hybrid ireland",
+    "ireland (remote", "ireland - remote", "based in ireland",
+]
+
+# Canonical county/city bucket for the dashboard location filter.
+IRELAND_AREA_KEYWORDS = [
+    ("dublin", "Dublin"),
+    ("cork", "Cork"),
+    ("galway", "Galway"),
+    ("limerick", "Limerick"),
+    ("waterford", "Waterford"),
+    ("kildare", "Kildare"),
+    ("remote", "Remote / Hybrid"),
+    ("hybrid", "Remote / Hybrid"),
+]
+
+_REGION_TAG_RE = re.compile(r"\(([^)]+)\)")
+
+IRISH_DOMESTIC_CAREER_PAGES = {
+    "aib", "an post", "ryanair", "aer lingus", "eir", "version 1",
+    "dunnes stores", "supervalu / musgrave", "musgrave",
+    "penneys / primark ireland", "bank of ireland", "ibm ireland", "sap ireland",
+}
+
+VISA_SPONSOR_KEYWORDS = [
+    "visa sponsorship", "sponsor visa", "will sponsor", "sponsorship available",
+    "employment permit", "work permit sponsorship", "stamp 1g", "stamp 1",
+]
+VISA_NO_SPONSOR_KEYWORDS = [
+    "no visa sponsorship", "no sponsorship", "unable to sponsor",
+    "will not sponsor", "cannot sponsor", "without sponsorship",
+    "must have the right to work", "right to work in ireland without restriction",
+    "eligible to work in ireland without",
+]
+
+ADZUNA_COUNTRIES = ["ie"] if IRELAND_ONLY else ["gb", "ie", "de", "nl", "at", "es", "pl", "in", "sg", "au", "nz", "ca"]
+CAREERJET_LOCALES = ["en_IE"] if IRELAND_ONLY else ["en_GB", "en_IE", "en_US", "en_AU", "en_CA", "en_SG", "en_IN"]
 
 # ---------------------------------------------------------------------------
 # Recency filter. Aggregators (Adzuna/Careerjet/Jooble) mostly buy you
@@ -804,14 +838,83 @@ def title_matches(title: str) -> bool:
     return any(k in t for k in TITLE_KEYWORDS)
 
 
+def _strip_html(text: str) -> str:
+    if not text:
+        return ""
+    return re.sub(r"<[^>]+>", " ", str(text))
+
+
+def ireland_area(location: str) -> str:
+    loc = (location or "").lower()
+    for keyword, label in IRELAND_AREA_KEYWORDS:
+        if keyword in loc:
+            return label
+    if any(k in loc for k in IRELAND_LOCATION_KEYWORDS):
+        return "Ireland (other)"
+    return "Ireland (other)"
+
+
+def visa_sponsorship_from_text(*parts: str) -> str:
+    text = " ".join(_strip_html(p) for p in parts if p).lower()
+    if not text.strip():
+        return "not_mentioned"
+    if any(k in text for k in VISA_NO_SPONSOR_KEYWORDS):
+        return "no_sponsorship"
+    if any(k in text for k in VISA_SPONSOR_KEYWORDS):
+        return "sponsors"
+    return "not_mentioned"
+
+
+def jsonld_page_is_ireland(company: str, url: str) -> bool:
+    """Keep JSON-LD career pages that target Ireland (skip other regions)."""
+    u = (url or "").lower()
+    c = (company or "").lower()
+    if ".ie/" in u or "/ie/" in u or "en-ie" in u or "en_ie" in u:
+        return True
+    if "bankofireland" in u or "dublin-ireland" in u:
+        return True
+    if " ireland" in c or c.endswith(" ireland"):
+        return True
+    tags = [t.lower() for t in _REGION_TAG_RE.findall(company or "")]
+    if tags:
+        return any("ireland" in t for t in tags)
+    if c in IRISH_DOMESTIC_CAREER_PAGES:
+        return True
+    return False
+
+
 def region_ok(location: str) -> bool:
     loc = (location or "").lower()
+    if IRELAND_ONLY:
+        if any(h in loc for h in IRELAND_REMOTE_HINTS):
+            return True
+        if any(k in loc for k in IRELAND_LOCATION_KEYWORDS):
+            return True
+        if "remote" in loc or "hybrid" in loc:
+            # Generic remote with no country — too broad for an Ireland-only board.
+            return False
+        return False
+
+    # Legacy multi-region mode (set IRELAND_ONLY = False to re-enable).
+    REGION_KEYWORDS = [
+        "ireland", "dublin", "cork", "uk", "united kingdom", "london", "europe",
+        "eu", "germany", "berlin", "france", "paris", "netherlands", "amsterdam",
+        "spain", "madrid", "barcelona", "italy", "milan", "sweden", "stockholm",
+        "denmark", "copenhagen", "finland", "helsinki", "norway", "oslo",
+        "poland", "warsaw", "portugal", "lisbon", "belgium", "brussels",
+        "austria", "vienna", "switzerland", "zurich", "singapore", "dubai",
+        "uae", "united arab emirates", "india", "bangalore", "bengaluru",
+        "mumbai", "delhi", "hyderabad", "pune", "chennai", "gurgaon", "gurugram",
+        "australia", "sydney", "melbourne", "brisbane", "nsw", "queensland",
+        "victoria", "new zealand", "auckland", "wellington", "nz",
+        "saudi arabia", "riyadh", "jeddah", "qatar", "doha",
+    ]
+    US_KEYWORDS = ["usa", "united states", "u.s.a", "u.s."]
     if any(k in loc for k in REGION_KEYWORDS):
         return True
     if any(k in loc for k in US_KEYWORDS):
         return "remote" in loc
     if "remote" in loc:
-        # No country specified alongside "remote" -- likely globally open, keep it.
         return True
     return False
 
@@ -1649,6 +1752,7 @@ def scrape_greenhouse(slug: str):
         title = j.get("title", "")
         location = (j.get("location") or {}).get("name", "")
         if title_matches(title) and region_ok(location):
+            content_html = j.get("content") or ""
             out.append({
                 "company": slug,
                 "ats": "greenhouse",
@@ -1656,6 +1760,7 @@ def scrape_greenhouse(slug: str):
                 "location": location,
                 "url": j.get("absolute_url"),
                 "updated_at": j.get("updated_at"),
+                "description_text": _strip_html(content_html),
             })
     return out
 
@@ -1948,6 +2053,7 @@ def scrape_jsonld(company: str, url: str):
                 location = f"{location} (Remote)".strip(", ")
 
             if title_matches(title) and region_ok(location):
+                desc = c.get("description") or ""
                 out.append({
                     "company": company,
                     "ats": "jsonld",
@@ -1955,6 +2061,7 @@ def scrape_jsonld(company: str, url: str):
                     "location": location,
                     "url": c.get("url") or url,
                     "updated_at": c.get("datePosted"),
+                    "description_text": _strip_html(desc) if isinstance(desc, str) else "",
                 })
     return out
 
@@ -2175,6 +2282,8 @@ def main():
         time.sleep(0.3)
 
     for company, url in JSONLD_CAREER_PAGES:
+        if IRELAND_ONLY and not jsonld_page_is_ireland(company, url):
+            continue
         try:
             found = scrape_jsonld(company, url)
             results.extend(found)
@@ -2251,7 +2360,28 @@ def main():
         j["recency"] = recency_bucket(posted_dt)
         j["employment_type"] = employment_type(j.get("title"))
         j["sector"] = sector_for(j.get("company"))
-        j["country"] = country_from_location(j.get("location"))
+        j["country"] = "Ireland" if IRELAND_ONLY else country_from_location(j.get("location"))
+        j["ireland_area"] = ireland_area(j.get("location"))
+        j["visa_sponsorship"] = visa_sponsorship_from_text(
+            j.get("title"), j.get("location"), j.get("description_text"),
+        )
+        j.pop("description_text", None)
+
+    manual_check = []
+    for company, url in JSONLD_CAREER_PAGES:
+        if IRELAND_ONLY and not jsonld_page_is_ireland(company, url):
+            continue
+        manual_check.append({
+            "company": company,
+            "url": url,
+            "platform": "Careers page",
+        })
+    manual_check.sort(key=lambda x: x["company"].lower())
+
+    jsonld_ie_count = sum(
+        1 for c, _ in JSONLD_CAREER_PAGES
+        if not IRELAND_ONLY or jsonld_page_is_ireland(c, _)
+    )
 
     if MAX_AGE_DAYS is not None:
         cutoff = datetime.now(timezone.utc) - timedelta(days=MAX_AGE_DAYS)
@@ -2268,17 +2398,19 @@ def main():
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "focus": "ireland" if IRELAND_ONLY else "multi_region",
         "recency_counts": recency_counts,
         "total_companies_checked": (
             len(GREENHOUSE_COMPANIES) + len(LEVER_COMPANIES) + len(ASHBY_COMPANIES)
             + len(WORKDAY_COMPANIES) + len(SMARTRECRUITERS_COMPANIES)
             + len(WORKABLE_COMPANIES) + len(RECRUITEE_COMPANIES) + len(PERSONIO_COMPANIES)
-            + len(JSONLD_CAREER_PAGES) + 2
+            + jsonld_ie_count + 2
         ),
         "total_matches": len(results),
+        "manual_check_companies": manual_check,
         "errors": errors,
         "jobs": results,
-        "note": "Google, Apple, and Meta are not scraped here (require heavier reverse-engineering / anti-bot handling) -- pull those from the Apify FAANG actor separately.",
+        "note": "Ireland-only pipeline: ATS APIs + JSON-LD career pages. Google/Apple/Meta may need manual checks where anti-bot blocks structured data.",
     }
 
     with open("data.json", "w") as f:
