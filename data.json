@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-07T21:58:03.109191+00:00",
+  "generated_at": "2026-08-07T22:56:32.544960+00:00",
   "focus": "ireland",
   "recency_counts": {
     "24h": 3,
@@ -8,180 +8,4390 @@
     "older": 1,
     "unknown": 0
   },
-  "total_companies_checked": 210,
+  "total_companies_checked": 343,
+  "registry_companies": [
+    {
+      "company": "A&L Goodbody",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "ABB",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "Abbott",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "ABP Food Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Adecco Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Advanced Micro Devices (AMD)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "AECOM",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Aer Lingus",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://careers.aerlingus.com/",
+      "automatic": false
+    },
+    {
+      "company": "AerCap",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Agilent Technologies",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "AIB (Allied Irish Banks)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Akamai",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Aldi Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Alexion Pharmaceuticals",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Alkermes",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Alvarez & Marsal",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Amazon",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Amgen",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "An Post",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Aon",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Apple",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://jobs.apple.com/en-ie/search",
+      "automatic": false
+    },
+    {
+      "company": "Applied Materials",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Arcadis",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Arthur Cox",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Arup",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "ASML",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.asml.com/en/careers",
+      "automatic": false
+    },
+    {
+      "company": "AstraZeneca",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://careers.astrazeneca.com/",
+      "automatic": false
+    },
+    {
+      "company": "AtkinsR\u00e9alis",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Atlantic Technological University (ATU)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Atlassian",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.atlassian.com/company/careers",
+      "automatic": false
+    },
+    {
+      "company": "Aviva Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Avolon",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "AXA Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "B&Q Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Bain & Company",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Baker Tilly Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "BAM Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Bank of Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://careers.bankofireland.com/",
+      "automatic": false
+    },
+    {
+      "company": "Barclays",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://search.jobs.barclays/",
+      "automatic": false
+    },
+    {
+      "company": "Bausch + Lomb",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Baxter International",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Bayer",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "BDO Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Becton Dickinson (BD)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Bio-Rad Laboratories",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Biotronik",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Bloomberg",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "BNP Paribas Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "BNY Mellon",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Boehringer Ingelheim",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Boots Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Bord G\u00e1is Energy",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Boston Consulting Group (BCG)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Boston Scientific",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Box",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "Brightwater",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Bristol Myers Squibb",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Broadcom",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Brown Thomas Arnotts",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Bruker",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Bus \u00c9ireann",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "ByrneWallace",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "C&C Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Cairn Homes",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Cantor Fitzgerald Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Canva",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "Capgemini",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Carbery Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Carrier",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Catalent",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Charles River Laboratories",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Check Point Software",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Cisco",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Citi",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Citrix",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Clayton Hotels",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Cloudflare",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "Coca-Cola HBC Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Cognizant",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Cohesity",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Coillte",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Coloplast",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Concentrix (Ireland)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.concentrix.com/careers/",
+      "automatic": false
+    },
+    {
+      "company": "Convatec",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Cook Medical",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "CPL Resources",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "CRH",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "CrowdStrike",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Currys Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "CyberArk",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "daa (Dublin Airport Authority)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Dairygold",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Dalata Hotel Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Danaher Corporation",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Databricks",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "Davy",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Dawn Meats",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Decathlon Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Dell Technologies",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "DePuy Synthes",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Dexcom",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "DHL Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Diageo Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "DocuSign",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "DPS Group (Arcadis)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "DSV Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Dublin Bus",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Dublin City University (DCU)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Dunnes Stores",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.dunnesstoresjobs.ie/",
+      "automatic": false
+    },
+    {
+      "company": "DXC Technology",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Dynatrace",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Eason",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Eaton",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Edwards Lifesciences",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Eir",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.eir.ie/careers/",
+      "automatic": false
+    },
+    {
+      "company": "EirGrid Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Eli Lilly",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Emerson",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Energia Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Enterprise Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "ESB (Electricity Supply Board)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Etsy",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Eversheds Sutherland Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "EY Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://careers.ey.com/ey",
+      "automatic": false
+    },
+    {
+      "company": "FactSet",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "F\u00e1ilte Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Fastly",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Fastway Couriers Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "FBD Insurance",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "FedEx Express Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Fenergo",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "Fidelity Investments",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Fiserv",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Fitch Ratings",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Fortinet",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Forvis Mazars Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "FTI Consulting",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Gas Networks Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Glanbia / Tirl\u00e1n",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "GlaxoSmithKline (GSK)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Glenveagh Properties",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Goldman Sachs",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Goodbody",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Google",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Grant Thornton Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Greencore",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "H&M Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Haleon",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Halfords Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Hays Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Heineken Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Hewlett Packard Enterprise (HPE)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Holland & Barrett Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Hollister Incorporated",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Honeywell",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Horizon Therapeutics (Amgen)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "HP (Hewlett-Packard)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "HSBC Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "HSE (Health Service Executive)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "IBM",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "ICON plc",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "IDA Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Illumina",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Indeed (Ireland)",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": "https://www.indeed.jobs/",
+      "automatic": true
+    },
+    {
+      "company": "Infineon Technologies",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Infosys",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.infosys.com/careers.html",
+      "automatic": false
+    },
+    {
+      "company": "Insulet Corporation",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Integra LifeSciences",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Intel",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Intersport Elverys",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "IQVIA",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Irish Distillers (Pernod Ricard)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Irish Ferries",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Irish Life",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Irish Rail (Iarnr\u00f3d \u00c9ireann)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Jacobs",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Jamf",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Jazz Pharmaceuticals",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "John Sisk & Son (Sisk Group)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Johnson & Johnson",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Johnson Controls",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Jones Engineering",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "JPMorgan Chase",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Kepak Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Keysight Technologies",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Kingspan Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Kirby Group Engineering",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "KLA Corporation",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "KPMG Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://home.kpmg/ie/en/home/careers.html",
+      "automatic": false
+    },
+    {
+      "company": "Kuehne+Nagel Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Labcorp",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Lam Research",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "Laya Healthcare",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Lidl Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Life Style Sports",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Linesight",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "LinkedIn",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "LK Shields",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "LloydsPharmacy Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Logitech",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Lonza",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Macquarie Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Maldron Hotels",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Manpower Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Maples Group Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Marks & Spencer Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Marvell Technology",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Mason Hayes & Curran",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Matheson",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Maynooth University",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "McCann FitzGerald",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "McKinsey & Company",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Mediahuis Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Medpace",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Medtronic",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Merck Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Merit Medical",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Meta",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Microchip Technology",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Micron Technology",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Microsoft",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Monday.com",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Moody's",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Morgan McKinley",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Morgan Stanley",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Morningstar",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Mott MacDonald",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "MSCI",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Munster Technological University (MTU)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Musgrave Group (SuperValu / Centra)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "NetApp",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Next Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Nokia",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.nokia.com/careers/",
+      "automatic": false
+    },
+    {
+      "company": "Northern Trust",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Novartis",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Nutanix",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "NVIDIA",
+      "country": "Ireland",
+      "platform": "workday",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "NXP Semiconductors",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Oliver Wyman",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Oracle",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Ornua",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Palo Alto Networks",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Philip Lee",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Ping Identity",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "PM Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Press Up Hospitality Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Proofpoint",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Protiviti",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "PublicJobs.ie (PAS)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "QIAGEN",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Qorvo",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Qualcomm",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Rapid7",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Refinitiv (LSEG)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Regeneron",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Renesas Electronics",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "ResMed",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Revvity (PerkinElmer)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Roche",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Rockwell Automation",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "RT\u00c9 (Raidi\u00f3 Teilif\u00eds \u00c9ireann)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Rubrik",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Ryanair",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://careers.ryanair.com/",
+      "automatic": false
+    },
+    {
+      "company": "S&P Global",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "SAP",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://jobs.sap.com/",
+      "automatic": false
+    },
+    {
+      "company": "Schneider Electric",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Science Foundation Ireland (SFI)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Seagate",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "SentinelOne",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Shannon Airport Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Sigmar Recruitment",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Sky Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Slack",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Slalom",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "SMBC Aviation Capital",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Smith & Nephew",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Smurfit Westrock",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Smyths Toys Superstores",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Societe Generale",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Sophos",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "South East Technological University (SETU)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Splunk",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "SSE Airtricity / SSE",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "Stantec",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Stena Line Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "STMicroelectronics",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Stryker",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Superdrug Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "SuperValu / Musgrave",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://careers.musgravegroup.com/",
+      "automatic": false
+    },
+    {
+      "company": "Susquehanna International Group (SIG)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Syneos Health",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Synopsys",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Takeda",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Tandem Diabetes Care",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Tata Consultancy Services (TCS)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Teagasc",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Technological University Dublin (TU Dublin)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Teleflex",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Teleperformance (Ireland)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.teleperformance.com/en-us/careers/",
+      "automatic": false
+    },
+    {
+      "company": "Tenable",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Terumo",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Tesco Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.tesco.ie/careers/",
+      "automatic": false
+    },
+    {
+      "company": "Tetra Tech",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Teva Pharmaceuticals",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Texas Instruments",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "The Doyle Collection",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "The Irish Times",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Thermo Fisher Scientific",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Three Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://careers.three.ie/",
+      "automatic": false
+    },
+    {
+      "company": "TikTok",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "TK Maxx Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Tourism Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Trane Technologies",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Trend Micro",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Trinity College Dublin (TCD)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "UBS",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "Uisce \u00c9ireann (Irish Water)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Uniphar Group",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "University College Cork (UCC)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "University College Dublin (UCD)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "University of Galway",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "University of Limerick (UL)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "UPS Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Veeam",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "VHI Healthcare",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Viatris",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Virgin Media Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Visa",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "VMware (Broadcom)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Vodafone Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Walkers Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Waters Corporation",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Waterstones Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Western Digital",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "William Fry",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Willis Towers Watson (WTW)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Wipro",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://careers.wipro.com/",
+      "automatic": false
+    },
+    {
+      "company": "Woodie's",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "WSP",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "WuXi Biologics",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Zara / Inditex Ireland",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    },
+    {
+      "company": "Zendesk",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": null,
+      "automatic": true
+    },
+    {
+      "company": "Zurich Insurance",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": null,
+      "automatic": false
+    }
+  ],
   "total_matches": 26,
   "manual_check_companies": [
     {
+      "company": "A&L Goodbody",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Abbott",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "ABP Food Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Adecco Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Advanced Micro Devices (AMD)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "AECOM",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
       "company": "Aer Lingus",
       "url": "https://careers.aerlingus.com/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
     },
     {
-      "company": "AIB",
-      "url": "https://aib.ie/careers",
-      "platform": "Careers page"
+      "company": "AerCap",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "Amazon (Ireland)",
-      "url": "https://www.amazon.jobs/en/locations/dublin-ireland",
-      "platform": "Careers page"
+      "company": "Agilent Technologies",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "Apple (Ireland)",
-      "url": "https://jobs.apple.com/en-ie",
-      "platform": "Careers page"
+      "company": "AIB (Allied Irish Banks)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Akamai",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Aldi Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Alexion Pharmaceuticals",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Alkermes",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Alvarez & Marsal",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Amazon",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Amgen",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "An Post",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Aon",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Apple",
+      "url": "https://jobs.apple.com/en-ie/search",
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "Applied Materials",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Arcadis",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Arthur Cox",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Arup",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "ASML",
+      "url": "https://www.asml.com/en/careers",
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "AstraZeneca",
+      "url": "https://careers.astrazeneca.com/",
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "AtkinsR\u00e9alis",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Atlantic Technological University (ATU)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Atlassian",
+      "url": "https://www.atlassian.com/company/careers",
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "Aviva Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Avolon",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "AXA Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "B&Q Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Bain & Company",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Baker Tilly Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "BAM Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
       "company": "Bank of Ireland",
       "url": "https://careers.bankofireland.com/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
     },
     {
-      "company": "Citi (Ireland)",
-      "url": "https://jobs.citi.com/",
-      "platform": "Careers page"
+      "company": "Barclays",
+      "url": "https://search.jobs.barclays/",
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "Bausch + Lomb",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Baxter International",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Bayer",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "BDO Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Becton Dickinson (BD)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Bio-Rad Laboratories",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Biotronik",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Bloomberg",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "BNP Paribas Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "BNY Mellon",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Boehringer Ingelheim",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Boots Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Bord G\u00e1is Energy",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Boston Consulting Group (BCG)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Boston Scientific",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Brightwater",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Bristol Myers Squibb",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Broadcom",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Brown Thomas Arnotts",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Bruker",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Bus \u00c9ireann",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "ByrneWallace",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "C&C Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Cairn Homes",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Cantor Fitzgerald Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Capgemini",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Carbery Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Carrier",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Catalent",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Charles River Laboratories",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Check Point Software",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Cisco",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Citi",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Citrix",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Clayton Hotels",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Coca-Cola HBC Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Cognizant",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Cohesity",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Coillte",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Coloplast",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
       "company": "Concentrix (Ireland)",
       "url": "https://www.concentrix.com/careers/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
     },
     {
-      "company": "Deloitte Ireland",
-      "url": "https://www2.deloitte.com/ie/en/careers.html",
-      "platform": "Careers page"
+      "company": "Convatec",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Cook Medical",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "CPL Resources",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "CRH",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "CrowdStrike",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Currys Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "CyberArk",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "daa (Dublin Airport Authority)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Dairygold",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Dalata Hotel Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Danaher Corporation",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Davy",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Dawn Meats",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Decathlon Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Dell Technologies",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "DePuy Synthes",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Dexcom",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "DHL Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Diageo Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "DPS Group (Arcadis)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "DSV Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Dublin Bus",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Dublin City University (DCU)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
       "company": "Dunnes Stores",
       "url": "https://www.dunnesstoresjobs.ie/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
     },
     {
-      "company": "eBay/PayPal Ireland ops",
-      "url": "https://www.paypal.com/us/webapps/mpp/jobs",
-      "platform": "Careers page"
+      "company": "DXC Technology",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "eir",
+      "company": "Dynatrace",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Eason",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Eaton",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Edwards Lifesciences",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Eir",
       "url": "https://www.eir.ie/careers/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "EirGrid Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Eli Lilly",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Emerson",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Energia Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Enterprise Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "ESB (Electricity Supply Board)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Etsy",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Eversheds Sutherland Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
       "company": "EY Ireland",
-      "url": "https://www.ey.com/en_ie/careers",
-      "platform": "Careers page"
+      "url": "https://careers.ey.com/ey",
+      "platform": "manual-check",
+      "status": "manual-check"
     },
     {
-      "company": "Google (Ireland)",
-      "url": "https://www.google.com/about/careers/applications/jobs/results/?location=Dublin%2C%20Ireland",
-      "platform": "Careers page"
+      "company": "FactSet",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "IBM Ireland",
-      "url": "https://www.ibm.com/ie-en/employment",
-      "platform": "Careers page"
+      "company": "Fastly",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "Indeed (Ireland)",
-      "url": "https://www.indeed.jobs/",
-      "platform": "Careers page"
+      "company": "Fastway Couriers Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "J.P. Morgan (Ireland)",
-      "url": "https://careers.jpmorgan.com/",
-      "platform": "Careers page"
+      "company": "FBD Insurance",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "FedEx Express Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Fidelity Investments",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Fiserv",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Fitch Ratings",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Fortinet",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Forvis Mazars Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "FTI Consulting",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "F\u00e1ilte Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Gas Networks Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Glanbia / Tirl\u00e1n",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "GlaxoSmithKline (GSK)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Glenveagh Properties",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Goldman Sachs",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Goodbody",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Google",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Grant Thornton Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Greencore",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "H&M Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Haleon",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Halfords Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Hays Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Heineken Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Hewlett Packard Enterprise (HPE)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Holland & Barrett Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Hollister Incorporated",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Honeywell",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Horizon Therapeutics (Amgen)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "HP (Hewlett-Packard)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "HSBC Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "HSE (Health Service Executive)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "IBM",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "ICON plc",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "IDA Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Illumina",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Infineon Technologies",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Infosys",
+      "url": "https://www.infosys.com/careers.html",
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "Insulet Corporation",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Integra LifeSciences",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Intel",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Intersport Elverys",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "IQVIA",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Irish Distillers (Pernod Ricard)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Irish Ferries",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Irish Life",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Irish Rail (Iarnr\u00f3d \u00c9ireann)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Jacobs",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Jamf",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Jazz Pharmaceuticals",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "John Sisk & Son (Sisk Group)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Johnson & Johnson",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Johnson Controls",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Jones Engineering",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "JPMorgan Chase",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Kepak Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Keysight Technologies",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Kingspan Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Kirby Group Engineering",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "KLA Corporation",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
       "company": "KPMG Ireland",
       "url": "https://home.kpmg/ie/en/home/careers.html",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
     },
     {
-      "company": "LinkedIn (Ireland)",
-      "url": "https://careers.linkedin.com/",
-      "platform": "Careers page"
+      "company": "Kuehne+Nagel Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "Mastercard (Ireland)",
-      "url": "https://careers.mastercard.com/",
-      "platform": "Careers page"
+      "company": "Labcorp",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "Meta (Ireland)",
-      "url": "https://www.metacareers.com/locations/dublin",
-      "platform": "Careers page"
+      "company": "Laya Healthcare",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "Microsoft (Ireland)",
-      "url": "https://jobs.careers.microsoft.com/global/en/search?lc=Dublin%2C%20Ireland",
-      "platform": "Careers page"
+      "company": "Lidl Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "Oracle (Ireland)",
-      "url": "https://www.oracle.com/careers/",
-      "platform": "Careers page"
+      "company": "Life Style Sports",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "PwC Ireland",
-      "url": "https://www.pwc.ie/careers.html",
-      "platform": "Careers page"
+      "company": "Linesight",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "LinkedIn",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "LK Shields",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "LloydsPharmacy Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Logitech",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Lonza",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Macquarie Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Maldron Hotels",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Manpower Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Maples Group Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Marks & Spencer Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Marvell Technology",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Mason Hayes & Curran",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Matheson",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Maynooth University",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "McCann FitzGerald",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "McKinsey & Company",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Mediahuis Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Medpace",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Medtronic",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Merck Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Merit Medical",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Meta",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Microchip Technology",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Micron Technology",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Microsoft",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Monday.com",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Moody's",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Morgan McKinley",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Morgan Stanley",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Morningstar",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Mott MacDonald",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "MSCI",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Munster Technological University (MTU)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Musgrave Group (SuperValu / Centra)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "NetApp",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Next Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Nokia",
+      "url": "https://www.nokia.com/careers/",
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "Northern Trust",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Novartis",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Nutanix",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "NXP Semiconductors",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Oliver Wyman",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Oracle",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Ornua",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Palo Alto Networks",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Philip Lee",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Ping Identity",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "PM Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Press Up Hospitality Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Proofpoint",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Protiviti",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "PublicJobs.ie (PAS)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "QIAGEN",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Qorvo",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Qualcomm",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Rapid7",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Refinitiv (LSEG)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Regeneron",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Renesas Electronics",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "ResMed",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Revvity (PerkinElmer)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Roche",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Rockwell Automation",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "RT\u00c9 (Raidi\u00f3 Teilif\u00eds \u00c9ireann)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Rubrik",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
       "company": "Ryanair",
       "url": "https://careers.ryanair.com/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
     },
     {
-      "company": "Salesforce (Ireland)",
-      "url": "https://careers.salesforce.com/en/",
-      "platform": "Careers page"
+      "company": "S&P Global",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "SAP Ireland",
+      "company": "SAP",
       "url": "https://jobs.sap.com/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
     },
     {
-      "company": "State Street (Ireland)",
-      "url": "https://careers.statestreet.com/",
-      "platform": "Careers page"
+      "company": "Schneider Electric",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Science Foundation Ireland (SFI)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "SentinelOne",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Shannon Airport Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Sigmar Recruitment",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Sky Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Slack",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Slalom",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "SMBC Aviation Capital",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Smith & Nephew",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Smurfit Westrock",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Smyths Toys Superstores",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Societe Generale",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Sophos",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "South East Technological University (SETU)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Splunk",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Stantec",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Stena Line Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "STMicroelectronics",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Stryker",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Superdrug Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
       "company": "SuperValu / Musgrave",
       "url": "https://careers.musgravegroup.com/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "Susquehanna International Group (SIG)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Syneos Health",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Synopsys",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Takeda",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Tandem Diabetes Care",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Tata Consultancy Services (TCS)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Teagasc",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Technological University Dublin (TU Dublin)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Teleflex",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
       "company": "Teleperformance (Ireland)",
       "url": "https://www.teleperformance.com/en-us/careers/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "Tenable",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Terumo",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
       "company": "Tesco Ireland",
       "url": "https://www.tesco.ie/careers/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "Tetra Tech",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Teva Pharmaceuticals",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Texas Instruments",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "The Doyle Collection",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "The Irish Times",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Thermo Fisher Scientific",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
       "company": "Three Ireland",
       "url": "https://careers.three.ie/",
-      "platform": "Careers page"
+      "platform": "manual-check",
+      "status": "manual-check"
     },
     {
-      "company": "TikTok (Ireland)",
-      "url": "https://careers.tiktok.com/",
-      "platform": "Careers page"
+      "company": "TikTok",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "Version 1",
-      "url": "https://www.version1.com/careers/",
-      "platform": "Careers page"
+      "company": "TK Maxx Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     },
     {
-      "company": "Workday (Ireland)",
-      "url": "https://workday.wd5.myworkdayjobs.com/Workday",
-      "platform": "Careers page"
+      "company": "Tourism Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Trane Technologies",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Trend Micro",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Trinity College Dublin (TCD)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Uisce \u00c9ireann (Irish Water)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Uniphar Group",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "University College Cork (UCC)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "University College Dublin (UCD)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "University of Galway",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "University of Limerick (UL)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "UPS Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Veeam",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "VHI Healthcare",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Viatris",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Virgin Media Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Visa",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "VMware (Broadcom)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Vodafone Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Walkers Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Waters Corporation",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Waterstones Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Western Digital",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "William Fry",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Willis Towers Watson (WTW)",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Wipro",
+      "url": "https://careers.wipro.com/",
+      "platform": "manual-check",
+      "status": "manual-check"
+    },
+    {
+      "company": "Woodie's",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "WSP",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "WuXi Biologics",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Zara / Inditex Ireland",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
+    },
+    {
+      "company": "Zurich Insurance",
+      "url": null,
+      "platform": "manual-check",
+      "status": "needs-careers-url"
     }
   ],
+  "manual_check_count": 329,
+  "automatic_company_count": 14,
+  "companies_with_careers_url": 22,
   "errors": [],
   "jobs": [
     {
@@ -575,5 +4785,5 @@
       "visa_sponsorship": "not_mentioned"
     }
   ],
-  "note": "Ireland-only pipeline: ATS APIs + JSON-LD career pages. Google/Apple/Meta may need manual checks where anti-bot blocks structured data."
+  "note": "Ireland-only pipeline. Employer coverage is based on the master registry, independent of ATS success. Apple and EY are explicitly included; companies without a working connector remain visible as manual-check rather than disappearing."
 }
