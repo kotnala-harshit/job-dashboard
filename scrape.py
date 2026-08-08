@@ -2717,7 +2717,7 @@ def _jsonld_location(job_location):
 # Dynamic ATS discovery + cached coverage expansion
 # ---------------------------------------------------------------------------
 
-ATS_PROBE_VERSION = 32
+ATS_PROBE_VERSION = 33
 ATS_PROBE_LIMIT = int(os.environ.get("ATS_PROBE_LIMIT", "60"))
 ATS_CACHE_PATH = "ats_platform_cache.json"
 
@@ -3092,6 +3092,87 @@ def scrape_jsonld(company: str, url: str):
                 })
     return out
 
+
+
+def _employer_name_match(target: str, returned: str) -> bool:
+    """Conservative company-name match for targeted aggregator rescue."""
+    a = _company_key(target)
+    b = _company_key(returned)
+    if not a or not b or b == "unknown":
+        return False
+    if a == b:
+        return True
+    # Strip common legal/branding noise, but do not accept tiny ambiguous tokens.
+    noise = {
+        "ireland","irish","limited","ltd","plc","inc","incorporated","corporation",
+        "corp","company","group","holdings","international","technologies","technology"
+    }
+    def tokens(s):
+        return [x for x in re.findall(r"[a-z0-9]+", s.lower()) if x not in noise and len(x) > 1]
+    ta, tb = set(tokens(target)), set(tokens(returned))
+    if not ta or not tb:
+        return False
+    overlap = ta & tb
+    return bool(overlap) and (
+        len(overlap) >= 2
+        or (len(ta) == 1 and next(iter(ta)) in tb and len(next(iter(ta))) >= 4)
+        or (len(tb) == 1 and next(iter(tb)) in ta and len(next(iter(tb))) >= 4)
+    )
+
+
+def rescue_zero_companies_with_aggregators(results, company_registry, max_companies=80):
+    """Target aggregators by employer for configured connectors that returned zero.
+
+    The old broad aggregator query only fetched the first page of Ireland results,
+    so it could never reliably rescue employers such as Accenture, HubSpot, etc.
+    This pass searches each zero-result employer explicitly and only keeps records
+    whose returned employer name conservatively matches the target company.
+    """
+    direct_sources = {
+        "direct","workday","greenhouse","lever","ashby","smartrecruiters",
+        "workable","recruitee","personio","pinpoint","phenom","eightfold",
+        "oracle","jsonld"
+    }
+    live = {
+        _company_key(company_display_name(j.get("company","")))
+        for j in results
+        if (j.get("ats") or "").lower() in direct_sources
+    }
+    targets = [
+        x["company"] for x in company_registry
+        if x.get("automatic") and _company_key(x["company"]) not in live
+    ][:max_companies]
+
+    rescued = []
+    for company in targets:
+        found = []
+        # One targeted provider per company keeps request count/API usage bounded.
+        try:
+            if JOOBLE_API_KEY:
+                found = scrape_jooble(company, "Ireland")
+            elif CAREERJET_AFFID:
+                found = scrape_careerjet("en_IE", company)
+            elif ADZUNA_APP_ID and ADZUNA_APP_KEY:
+                found = scrape_adzuna("ie", company)
+        except Exception as e:
+            print(f"  ! zero-rescue/{company}: {e}")
+            continue
+
+        accepted = 0
+        for j in found:
+            if not _employer_name_match(company, j.get("company","")):
+                continue
+            j["aggregator_company"] = j.get("company")
+            j["company"] = company
+            j["coverage_rescue"] = True
+            rescued.append(j)
+            accepted += 1
+        if accepted:
+            print(f"zero-rescue/{company}: {accepted} Ireland jobs")
+        time.sleep(0.12)
+
+    print(f"Zero-company targeted rescue: {len(rescued)} jobs across {len(targets)} checked companies")
+    return rescued
 
 def scrape_adzuna(country: str, query: str):
     if not ADZUNA_APP_ID or not ADZUNA_APP_KEY:
@@ -3966,6 +4047,16 @@ def main():
     except Exception as e:
         errors.append(f"direct/Netflix: {e}")
     time.sleep(0.5)
+
+    # Targeted second pass for configured companies that still returned zero.
+    # This uses the already-configured free aggregator API, but searches by
+    # employer name instead of relying on a single broad first page.
+    try:
+        rescue_registry = build_company_registry(include_cache=True)
+        rescued = rescue_zero_companies_with_aggregators(results, rescue_registry)
+        results.extend(rescued)
+    except Exception as e:
+        errors.append(f"zero-company targeted rescue: {e}")
 
     # Source-priority de-duplication. Direct employer/ATS records win over
     # aggregator copies of the same vacancy.
