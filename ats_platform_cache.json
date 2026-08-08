@@ -179,10 +179,6 @@
     "platform": "smartrecruiters",
     "slug": "citrix"
   },
-  "Pure Storage": {
-    "platform": "greenhouse",
-    "slug": "purestorage"
-  },
   "Rubrik": {
     "platform": "greenhouse",
     "slug": "rubrik"
@@ -1350,6 +1346,10 @@
   "Workvivo": {
     "platform": "smartrecruiters",
     "slug": "workvivo"
+  },
+  "Pure Storage": {
+    "platform": "greenhouse",
+    "slug": "purestorage"
   },
   "__probe_version__": 30
 }
