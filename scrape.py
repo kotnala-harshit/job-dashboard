@@ -2994,6 +2994,26 @@ def scrape_netflix(query: str):
     return out
 
 
+
+RESUME_MATCH_STOPWORDS = {
+    "the","and","for","with","that","this","from","your","you","our","are","will","have","has","job","role","work","team","company","candidate","candidates","skills","skill","experience","years","year","including","within","across","using","into","about","more","their","they","them","who","what","when","where","which","while","also","all","any","but","not","can","may","must","should","would","could","a","an","as","at","be","by","in","is","it","of","on","or","to","we","i","us"
+}
+
+def resume_match_keywords(*parts, limit=60):
+    """Return compact, generic searchable terms for browser-side CV/job matching.
+    Descriptions are intentionally not shipped wholesale to keep data.json smaller.
+    """
+    text = " ".join(str(p or "") for p in parts).lower()
+    tokens = re.findall(r"[a-z][a-z0-9+#.\-]{2,}", text)
+    counts = {}
+    for token in tokens:
+        token = token.strip(".-")
+        if len(token) < 3 or token in RESUME_MATCH_STOPWORDS or token.isdigit():
+            continue
+        counts[token] = counts.get(token, 0) + 1
+    # Stable weighting: repeated description terms first, then alphabetically.
+    return [t for t, _ in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:limit]]
+
 def main():
     results = []
     errors = []
@@ -3171,12 +3191,16 @@ def main():
         j["posted_at_parsed"] = posted_dt.isoformat() if posted_dt else None
         j["recency"] = recency_bucket(posted_dt)
         j["employment_type"] = employment_type(j.get("title"))
-        j["target_role_match"] = title_matches(j.get("title"))
         j["sector"] = sector_for(j.get("company"))
         j["country"] = "Ireland" if IRELAND_ONLY else country_from_location(j.get("location"))
         j["ireland_area"] = ireland_area(j.get("location"))
+        description_text = j.get("description_text") or ""
         j["visa_sponsorship"] = visa_sponsorship_from_text(
-            j.get("title"), j.get("location"), j.get("description_text"),
+            j.get("title"), j.get("location"), description_text,
+        )
+        # Generic CV/job matching metadata. No user-profile-specific title filtering.
+        j["match_keywords"] = resume_match_keywords(
+            j.get("title"), j.get("company"), j.get("sector"), j.get("location"), description_text
         )
         j.pop("description_text", None)
 
