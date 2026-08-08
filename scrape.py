@@ -1205,6 +1205,24 @@ def build_company_registry(include_cache: bool = False):
         ({_company_key(x): "eightfold" for x in KNOWN_EIGHTFOLD_MAPPINGS}),
     ]
     status_by_key = {}
+
+    # High-priority Ireland employers with known connector families. These aliases
+    # prevent display-name differences such as "Meta" vs "Meta (Ireland)" from
+    # incorrectly placing an employer in Manual Search Needed.
+    explicit_status_aliases = {
+        "Accenture": "workday",
+        "Citi": "direct",
+        "KPMG Ireland": "direct",
+        "Grant Thornton Ireland": "workday",
+        "HSBC Ireland": "eightfold",
+        "Version 1": "direct",
+        "Meta": "direct",
+        "Google": "direct",
+        "TikTok": "direct",
+        "NetApp": "eightfold",
+        "EY Ireland": "direct",
+    }
+    status_by_key.update({_company_key(k): v for k, v in explicit_status_aliases.items()})
     for mapping in connector_maps:
         status_by_key.update(mapping)
 
@@ -3170,6 +3188,53 @@ def _employer_name_match(target: str, returned: str) -> bool:
     )
 
 
+PRIORITY_IRELAND_EMPLOYERS = [
+    "Accenture", "Citi", "KPMG Ireland", "Grant Thornton Ireland",
+    "HSBC Ireland", "Version 1", "Meta", "Google", "TikTok",
+    "NetApp", "EY Ireland",
+]
+
+def rescue_priority_ireland_employers(results):
+    """Targeted fallback for important employers whose custom/client-rendered
+    career search can defeat generic HTML discovery. Direct/ATS data remains
+    preferred; aggregators are queried only when the employer has no live result.
+    """
+    live = {
+        _company_key(company_display_name(j.get("company", "")))
+        for j in results if j.get("company")
+    }
+    rescued = []
+    for company in PRIORITY_IRELAND_EMPLOYERS:
+        key = _company_key(company)
+        if key in live:
+            continue
+        candidates = []
+        try:
+            if JOOBLE_API_KEY:
+                candidates.extend(scrape_jooble(company, "Ireland"))
+            if ADZUNA_APP_ID and ADZUNA_APP_KEY:
+                candidates.extend(scrape_adzuna(company, "Ireland"))
+            if CAREERJET_API_KEY:
+                candidates.extend(scrape_careerjet(company, "Ireland"))
+        except Exception as e:
+            print(f"  ! priority-rescue/{company}: {e}")
+            continue
+
+        accepted = 0
+        for j in candidates:
+            returned = company_display_name(j.get("company", ""))
+            if not _employer_name_matches(company, returned):
+                continue
+            j["company"] = company
+            j["coverage_rescue"] = True
+            j["source_detail"] = (j.get("source_detail") or j.get("ats") or "aggregator") + " · priority employer rescue"
+            rescued.append(j)
+            accepted += 1
+        if accepted:
+            live.add(key)
+            print(f"priority-rescue/{company}: {accepted} Ireland jobs")
+    return rescued
+
 def rescue_zero_companies_with_aggregators(results, company_registry, max_companies=80):
     """Target aggregators by employer for configured connectors that returned zero.
 
@@ -4105,6 +4170,11 @@ def main():
     # This uses the already-configured free aggregator API, but searches by
     # employer name instead of relying on a single broad first page.
     try:
+        # First rescue the specifically verified high-priority employers.
+        priority_rescued = rescue_priority_ireland_employers(results)
+        results.extend(priority_rescued)
+
+        # Then run the broader zero-company rescue.
         rescue_registry = build_company_registry(include_cache=True)
         rescued = rescue_zero_companies_with_aggregators(results, rescue_registry)
         results.extend(rescued)
