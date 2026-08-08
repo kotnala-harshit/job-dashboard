@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Free job scraper for Harshit's Ireland Job Radar dashboard.
+General Ireland job-search scraper.
 Hits public ATS JSON APIs (Greenhouse, Lever, Ashby, …) and JSON-LD career pages.
 Run by GitHub Actions hourly. Writes data.json for index.html.
 """
@@ -9,6 +9,7 @@ import json
 import re
 import time
 import os
+import html
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -1089,6 +1090,9 @@ def build_company_registry(include_cache: bool = False):
         ({_company_key(x): "recruitee" for x in RECRUITEE_COMPANIES}),
         ({_company_key(x): "personio" for x in PERSONIO_COMPANIES}),
         ({_company_key(x): "pinpoint" for x in PINPOINT_COMPANIES}),
+        ({_company_key(x): "direct" for x in DIRECT_COMPANY_CONNECTORS}),
+        ({_company_key(x): "phenom" for x in KNOWN_PHENOM_MAPPINGS}),
+        ({_company_key(x): "eightfold" for x in KNOWN_EIGHTFOLD_MAPPINGS}),
     ]
     status_by_key = {}
     for mapping in connector_maps:
@@ -1197,10 +1201,50 @@ JOOBLE_API_KEY = ""   # fill in after free signup at jooble.org/api/about
 # risk silently-wrong or empty data from a guessed integration.
 # ---------------------------------------------------------------------------
 
-DIRECT_QUERIES = [
-    "data analyst", "data scientist", "business intelligence",
-    "business analyst", "consultant", "customer service",
-]
+
+# Direct company career-site connectors. These are intentionally separate from
+# ATS discovery because the sites use proprietary/public search surfaces rather
+# than a reusable third-party ATS board. A connector is allowed to return zero
+# without failing the whole run; the dashboard then exposes it under
+# "Zero jobs scraped" for diagnosis.
+DIRECT_COMPANY_CONNECTORS = {
+    "Apple": "apple",
+    "Google": "google",
+    "Microsoft": "microsoft",
+    "Meta": "meta",
+    "TikTok": "tiktok",
+    "Oracle": "oracle",
+    "Amazon": "amazon",
+    "Netflix": "netflix",
+}
+
+# Exact enterprise-platform mappings learned from validated public career-site
+# hosts. Unlike guessed ATS slugs, these are revalidated at runtime before use.
+KNOWN_EIGHTFOLD_MAPPINGS = {
+    "NetApp": "netapp",
+    "STMicroelectronics": "stmicroelectronics",
+    "Bayer": "bayer",
+    "HSBC Ireland": "hsbc",
+}
+
+KNOWN_PHENOM_MAPPINGS = {
+    "Cisco": "careers.cisco.com|CISCISGLOBAL",
+    "Fiserv": "careers.fiserv.com|FFFYJUS",
+    "Roche": "careers.roche.com|ROCHGLOBAL",
+    "Merck Group": "jobs.merck.com|MERCUS",
+    "Zimmer Biomet": "careers.zimmerbiomet.com|ZBUZBRUS",
+    "Convatec": "careers.convatec.com|CONVGLOBAL",
+    "Labcorp": "careers.labcorp.com|COVAGLOBAL",
+    "Danaher Corporation": "jobs.danaher.com|DANAGLOBAL",
+    "Catalent": "careers.catalent.com|CATAUS",
+    "Kerry Group": "jobs.kerry.com|KGUKGRGLOBAL",
+    "DHL Ireland": "careers.dhl.com|DPDHGLOBAL",
+    "Kuehne+Nagel Ireland": "jobs.kuehne-nagel.com|KUNAGLOBAL",
+    "State Street": "careers.statestreet.com|STSTGLOBAL",
+    "Thermo Fisher Scientific": "jobs.thermofisher.com|TFSCGLOBAL",
+}
+
+DIRECT_QUERIES = [""]  # general search engine: retrieve all jobs; filter in the dashboard
 
 # ---------------------------------------------------------------------------
 # Role keyword filter (title must contain at least one of these)
@@ -2560,7 +2604,7 @@ def _jsonld_location(job_location):
 # Dynamic ATS discovery + cached coverage expansion
 # ---------------------------------------------------------------------------
 
-ATS_PROBE_VERSION = 20
+ATS_PROBE_VERSION = 30
 ATS_PROBE_LIMIT = int(os.environ.get("ATS_PROBE_LIMIT", "60"))
 ATS_CACHE_PATH = "ats_platform_cache.json"
 
@@ -2750,6 +2794,12 @@ def discover_and_scrape_manual(company_registry):
             cache={k:v for k,v in cache.items() if isinstance(v,dict) and v.get("platform") not in (None,"none")}
     except Exception:
         cache={}
+
+    # Seed exact enterprise mappings, but still validate each endpoint before use.
+    for company, slug in KNOWN_EIGHTFOLD_MAPPINGS.items():
+        cache.setdefault(company, {"platform": "eightfold", "slug": slug})
+    for company, slug in KNOWN_PHENOM_MAPPINGS.items():
+        cache.setdefault(company, {"platform": "phenom", "slug": slug})
 
     dynamic_jobs=[]; confirmed={}; fresh=0
     hardcoded_keys={_company_key(x["company"]) for x in company_registry if x.get("automatic")}
@@ -2995,6 +3045,151 @@ def scrape_netflix(query: str):
 
 
 
+def _fetch_html(url: str, timeout: int = 25):
+    if requests is None:
+        return ""
+    try:
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (compatible; IrelandJobSearch/3.0)"}, timeout=timeout)
+        if r.status_code != 200:
+            return ""
+        return r.text
+    except Exception:
+        return ""
+
+
+def _html_text(fragment: str) -> str:
+    return re.sub(r"\\s+", " ", html.unescape(_strip_html(fragment or ""))).strip()
+
+
+def _absolute_url(base: str, href: str) -> str:
+    return urllib.parse.urljoin(base, href or "")
+
+
+def scrape_apple():
+    """Apple's Ireland search is server-rendered enough to parse without login/API keys."""
+    base = "https://jobs.apple.com"
+    url = base + "/en-ie/search?location=ireland-IRL"
+    page = _fetch_html(url)
+    if not page:
+        return []
+    out=[]
+    # Each result links to /en-ie/details/<role-number>/<slug>. Capture the
+    # surrounding list-item/card so location/date/description can be extracted.
+    blocks = re.findall(r"(<li[^>]*>.*?/en-ie/details/.*?</li>)", page, flags=re.I|re.S)
+    if not blocks:
+        blocks = re.split(r'(?=<a[^>]+href=["\\\']/en-ie/details/)', page, flags=re.I)
+    seen=set()
+    for block in blocks:
+        m=re.search(r'href=["\\\']([^"\\\']*/en-ie/details/[^"\\\']+)["\\\'][^>]*>(.*?)</a>', block, flags=re.I|re.S)
+        if not m:
+            continue
+        href=_absolute_url(base,m.group(1)); title=_html_text(m.group(2))
+        if not title or href in seen:
+            continue
+        seen.add(href)
+        txt=_html_text(block)
+        lm=re.search(r'Location\\s+([^|•]+?)(?:Actions|Role Number|Weekly Hours|$)', txt, flags=re.I)
+        location=(lm.group(1).strip() if lm else "Ireland")
+        if not region_ok(location):
+            continue
+        dm=re.search(r'\\b(\\d{1,2}\\s+[A-Za-z]{3}\\s+20\\d{2}|[A-Za-z]{3}\\s+\\d{1,2},?\\s+20\\d{2})\\b', txt)
+        out.append({"company":"Apple","ats":"direct","title":title,"location":location,"url":href,"updated_at":dm.group(1) if dm else None,"description_text":txt[:5000]})
+    return out
+
+
+def _scrape_public_careers_page(company: str, url: str, href_hints, default_location="Ireland"):
+    """Conservative server-rendered careers-page parser for proprietary sites.
+
+    Only emits cards whose surrounding text clearly contains an Irish location.
+    It is a fallback, not a claim that every JS-only site is fully covered.
+    """
+    page=_fetch_html(url)
+    if not page:
+        return []
+    out=[]; seen=set()
+    # Work with bounded chunks around anchors so one Ireland mention elsewhere on
+    # the page cannot incorrectly tag a non-Ireland role.
+    for m in re.finditer(r'<a\\b[^>]*href=["\\\']([^"\\\']+)["\\\'][^>]*>(.*?)</a>', page, flags=re.I|re.S):
+        href=m.group(1); label=_html_text(m.group(2))
+        if not label or len(label)<3 or len(label)>220:
+            continue
+        full=_absolute_url(url,href)
+        low=full.lower()
+        if not any(h in low for h in href_hints):
+            continue
+        start=max(0,m.start()-1800); end=min(len(page),m.end()+2600)
+        chunk=_html_text(page[start:end])
+        if not region_ok(chunk):
+            continue
+        # Prefer a compact location phrase if visible.
+        lm=re.search(r'((?:Dublin|Cork|Galway|Limerick|Waterford|Kilkenny|Athlone|Ireland)(?:[^|•<>]{0,80}))', chunk, flags=re.I)
+        location=lm.group(1).strip()[:140] if lm else default_location
+        key=(label.lower(),full.split('?')[0])
+        if key in seen:
+            continue
+        seen.add(key)
+        dm=re.search(r'\\b(20\\d{2}-\\d{2}-\\d{2}|\\d{1,2}\\s+[A-Za-z]{3,9}\\s+20\\d{2}|[A-Za-z]{3,9}\\s+\\d{1,2},?\\s+20\\d{2})\\b', chunk)
+        out.append({"company":company,"ats":"direct","title":label,"location":location,"url":full,"updated_at":dm.group(1) if dm else None,"description_text":chunk[:5000]})
+    return out
+
+
+def scrape_google():
+    return _scrape_public_careers_page(
+        "Google",
+        "https://www.google.com/about/careers/applications/jobs/results/?location=Ireland",
+        ("/about/careers/applications/jobs/results/", "/jobs/results/"),
+    )
+
+
+def scrape_microsoft():
+    # The Dublin location page is server-rendered and currently exposes the
+    # Ireland vacancies plus their dates/descriptions.
+    return _scrape_public_careers_page(
+        "Microsoft",
+        "https://careers.microsoft.com/v2/global/en/locations/dublin.html",
+        ("/job/", "/jobs/", "jobid", "job-id"),
+    )
+
+
+def scrape_meta():
+    return _scrape_public_careers_page(
+        "Meta",
+        "https://www.metacareers.com/jobs?offices[0]=Dublin%2C%20Ireland",
+        ("/jobs/",),
+    )
+
+
+def scrape_tiktok():
+    return _scrape_public_careers_page(
+        "TikTok",
+        "https://careers.tiktok.com/position?keyword=&location=Dublin%2C+Ireland",
+        ("/position/", "position/detail", "/jobs/"),
+    )
+
+
+def scrape_oracle():
+    # Oracle Recruiting Cloud pages vary by tenant/site. This conservative
+    # parser follows publicly rendered requisition links and requires Ireland
+    # context in the same local card/chunk.
+    return _scrape_public_careers_page(
+        "Oracle",
+        "https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/requisitions?location=Ireland",
+        ("/job/", "/requisitions/", "candidateexperience"),
+    )
+
+
+def scrape_direct_company(company: str):
+    fn={
+        "Apple": scrape_apple,
+        "Google": scrape_google,
+        "Microsoft": scrape_microsoft,
+        "Meta": scrape_meta,
+        "TikTok": scrape_tiktok,
+        "Oracle": scrape_oracle,
+    }.get(company)
+    return fn() if fn else []
+
+
 RESUME_MATCH_STOPWORDS = {
     "the","and","for","with","that","this","from","your","you","our","are","will","have","has","job","role","work","team","company","candidate","candidates","skills","skill","experience","years","year","including","within","across","using","into","about","more","their","they","them","who","what","when","where","which","while","also","all","any","but","not","can","may","must","should","would","could","a","an","as","at","be","by","in","is","it","of","on","or","to","we","i","us"
 }
@@ -3099,6 +3294,42 @@ def main():
             errors.append(f"pinpoint/{slug}: {e}")
         time.sleep(0.3)
 
+    # Exact enterprise-platform mappings (Phenom / Eightfold). Validate before
+    # scraping so a stale mapping cannot silently pollute the dataset.
+    enterprise_sess = _session()
+    if enterprise_sess:
+        for company, slug in KNOWN_EIGHTFOLD_MAPPINGS.items():
+            try:
+                if _probe_platform("eightfold", slug, enterprise_sess):
+                    found = _scrape_eightfold(company, slug, enterprise_sess)
+                    results.extend(found)
+                    print(f"eightfold/{company}: {len(found)} Ireland jobs")
+                else:
+                    errors.append(f"eightfold/{company}: endpoint validation failed")
+            except Exception as e:
+                errors.append(f"eightfold/{company}: {e}")
+        for company, slug in KNOWN_PHENOM_MAPPINGS.items():
+            try:
+                if _probe_platform("phenom", slug, enterprise_sess):
+                    found = _scrape_phenom(company, slug, enterprise_sess)
+                    results.extend(found)
+                    print(f"phenom/{company}: {len(found)} Ireland jobs")
+                else:
+                    errors.append(f"phenom/{company}: endpoint validation failed")
+            except Exception as e:
+                errors.append(f"phenom/{company}: {e}")
+
+    # Proprietary/direct company search surfaces. These are deliberately
+    # conservative and only emit records with local Ireland context.
+    for company in ("Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle"):
+        try:
+            found = scrape_direct_company(company)
+            results.extend(found)
+            print(f"direct/{company}: {len(found)} Ireland jobs")
+        except Exception as e:
+            errors.append(f"direct/{company}: {e}")
+        time.sleep(0.4)
+
     # Suman-style dynamic ATS discovery for companies not already wired into a
     # known connector. Confirmed mappings persist in ats_platform_cache.json.
     initial_registry = build_company_registry(include_cache=False)
@@ -3151,23 +3382,21 @@ def main():
             errors.append(f"jooble ({query}): {e}")
         time.sleep(0.3)
 
-    for query in DIRECT_QUERIES:
-        try:
-            found = scrape_amazon(query)
-            results.extend(found)
-            print(f"direct/amazon ({query}): {len(found)} matches")
-        except Exception as e:
-            errors.append(f"direct/amazon ({query}): {e}")
-        time.sleep(0.5)
+    try:
+        found = scrape_amazon("")
+        results.extend(found)
+        print(f"direct/Amazon: {len(found)} Ireland jobs")
+    except Exception as e:
+        errors.append(f"direct/Amazon: {e}")
+    time.sleep(0.5)
 
-    for query in DIRECT_QUERIES:
-        try:
-            found = scrape_netflix(query)
-            results.extend(found)
-            print(f"direct/netflix ({query}): {len(found)} matches")
-        except Exception as e:
-            errors.append(f"direct/netflix ({query}): {e}")
-        time.sleep(0.5)
+    try:
+        found = scrape_netflix("")
+        results.extend(found)
+        print(f"direct/Netflix: {len(found)} Ireland jobs")
+    except Exception as e:
+        errors.append(f"direct/Netflix: {e}")
+    time.sleep(0.5)
 
     # De-dupe (Amazon/Netflix queries overlap and can return the same job twice)
     seen = set()
