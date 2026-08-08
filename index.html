@@ -780,7 +780,7 @@ function renderSaved() {
     card.onclick = () => j.url && window.open(j.url,'_blank','noopener');
     card.innerHTML = `<div class="company">${escapeHtml(j.company)}</div><div class="title">${escapeHtml(j.title)}</div>
       <div class="meta"><span class="chip">${escapeHtml(j.location || 'Ireland')}</span>
-      ${j.candidate_match_score != null ? `<span class="score-badge match">${j.candidate_match_score}% Match</span>` : ''}</div>
+      ${pm.score != null ? `<span class="score-badge match">${pm.score}% ${pm.personalized ? 'Personal Match' : 'Match'}</span>` : ''}</div>
       <div class="card-footer"><button class="save-btn saved" data-unsave="1">Remove saved</button><span class="apply-hint">Open →</span></div>`;
     const b=card.querySelector('[data-unsave]'); b.addEventListener('click',e=>{e.stopPropagation(); toggleSaved(j);});
     grid.appendChild(card);
@@ -1407,6 +1407,7 @@ function applyFilters() {
     const bucket = recencyBucket(postedDate);
     const fresh = ageHours(postedDate) <= 24;
     const badge = visaLabel(j.visa_sponsorship || 'not_mentioned');
+    const pm = personalJobMatch(j);
     const type = j.employment_type || employmentType(j.title);
     const typeLabel = { part_time: 'Part-time', internship: 'Internship' }[type];
     const bucketLabel = recencyLabel(postedDate);
