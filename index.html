@@ -335,6 +335,22 @@
   }
   .profile-note { margin-top:8px; font:10.5px var(--mono); color:var(--muted); line-height:1.45; }
 
+
+  .authbar {
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:10px;
+    border-top:1px solid var(--line); padding-top:10px;
+  }
+  .authbar input {
+    background:var(--bg); color:var(--text); border:1px solid var(--line);
+    border-radius:5px; padding:7px 9px; font:11px var(--mono); min-width:190px;
+  }
+  .authbar button {
+    background:transparent; color:var(--text); border:1px solid var(--line);
+    border-radius:5px; padding:7px 9px; font:10.5px var(--mono); cursor:pointer;
+  }
+  .authbar button.primary { color:var(--amber); border-color:var(--amber); }
+  .auth-status { color:var(--muted); font:10.5px var(--mono); }
+
 </style>
 </head>
 <body>
@@ -380,6 +396,15 @@
       LinkedIn URL is stored as profile metadata only. A static GitHub Pages site cannot reliably read LinkedIn profile content from the URL because LinkedIn commonly requires authentication and blocks cross-origin scraping. Paste LinkedIn profile text above for it to affect matching.
     </div>
   </details>
+
+  <div class="authbar">
+    <input id="authEmail" type="email" placeholder="Email for cloud sync" autocomplete="email" />
+    <input id="authPassword" type="password" placeholder="Password" autocomplete="current-password" />
+    <button type="button" class="primary" onclick="signInSupabase()">Sign in</button>
+    <button type="button" onclick="signUpSupabase()">Create account</button>
+    <button type="button" id="signOutBtn" onclick="signOutSupabase()" style="display:none">Sign out</button>
+    <span id="authStatus" class="auth-status">Local-only mode</span>
+  </div>
 
   <div class="filter-row" style="margin-top: 14px;">
     <div class="search-wrap">
@@ -524,6 +549,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./supabase-config.js"></script>
 <script>
 const DATA_URL = './data.json';
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
@@ -532,6 +559,179 @@ let ALL_JOBS = [];
 let ALL_MANUAL = [];
 let ALL_REGISTRY = [];
 let RAW_TOTAL = 0;
+
+let SUPABASE_CLIENT = null;
+let SUPABASE_USER = null;
+
+function initSupabase() {
+  const cfg = window.__SUPABASE_CONFIG__ || {};
+  if (!cfg.url || !cfg.publishableKey || !window.supabase) {
+    updateAuthUI('Local-only mode');
+    return;
+  }
+  try {
+    SUPABASE_CLIENT = window.supabase.createClient(cfg.url, cfg.publishableKey);
+    SUPABASE_CLIENT.auth.getSession().then(({data}) => {
+      SUPABASE_USER = data?.session?.user || null;
+      updateAuthUI();
+      if (SUPABASE_USER) mergeRemoteState();
+    });
+    SUPABASE_CLIENT.auth.onAuthStateChange((_event, session) => {
+      SUPABASE_USER = session?.user || null;
+      updateAuthUI();
+      if (SUPABASE_USER) mergeRemoteState();
+    });
+  } catch (e) {
+    console.warn('Supabase init failed', e);
+    updateAuthUI('Local-only mode');
+  }
+}
+
+function updateAuthUI(message='') {
+  const status = document.getElementById('authStatus');
+  const out = document.getElementById('signOutBtn');
+  if (!status) return;
+  if (SUPABASE_USER) {
+    status.textContent = message || `Cloud sync: ${SUPABASE_USER.email || 'signed in'}`;
+    if (out) out.style.display = '';
+  } else {
+    status.textContent = message || (SUPABASE_CLIENT ? 'Not signed in · local state still works' : 'Local-only mode');
+    if (out) out.style.display = 'none';
+  }
+}
+
+async function signUpSupabase() {
+  if (!SUPABASE_CLIENT) return updateAuthUI('Supabase is not configured yet');
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  if (!email || password.length < 6) return updateAuthUI('Enter an email and password of at least 6 characters');
+  const {error} = await SUPABASE_CLIENT.auth.signUp({email, password});
+  updateAuthUI(error ? `Sign-up error: ${error.message}` : 'Account created. Check your email if confirmation is enabled.');
+}
+
+async function signInSupabase() {
+  if (!SUPABASE_CLIENT) return updateAuthUI('Supabase is not configured yet');
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const {error} = await SUPABASE_CLIENT.auth.signInWithPassword({email, password});
+  updateAuthUI(error ? `Sign-in error: ${error.message}` : '');
+}
+
+async function signOutSupabase() {
+  if (SUPABASE_CLIENT) await SUPABASE_CLIENT.auth.signOut();
+  SUPABASE_USER = null;
+  updateAuthUI();
+}
+
+async function cloudUpsertProfile() {
+  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
+  await SUPABASE_CLIENT.from('user_profiles').upsert({
+    user_id: SUPABASE_USER.id,
+    linkedin_url: PERSONAL_PROFILE?.linkedin_url || '',
+    profile_json: PERSONAL_PROFILE || {},
+    updated_at: new Date().toISOString()
+  });
+}
+
+async function cloudDeleteProfile() {
+  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
+  await SUPABASE_CLIENT.from('user_profiles').delete().eq('user_id', SUPABASE_USER.id);
+}
+
+async function cloudSyncSaved(job, remove=false) {
+  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
+  const id = job.id || jobId(job);
+  if (remove) {
+    await SUPABASE_CLIENT.from('saved_jobs').delete().eq('user_id', SUPABASE_USER.id).eq('job_id', id);
+  } else {
+    await SUPABASE_CLIENT.from('saved_jobs').upsert({
+      user_id: SUPABASE_USER.id, job_id: id, job, saved_at: job.saved_at || new Date().toISOString()
+    });
+  }
+}
+
+async function cloudSyncIgnored(id) {
+  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
+  await SUPABASE_CLIENT.from('ignored_jobs').upsert({
+    user_id: SUPABASE_USER.id, job_id: id, ignored_at: new Date().toISOString()
+  });
+}
+
+async function cloudSyncApplication(app, remove=false) {
+  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
+  if (remove) {
+    await SUPABASE_CLIENT.from('applications').delete().eq('user_id', SUPABASE_USER.id).eq('job_id', app.id);
+  } else {
+    await SUPABASE_CLIENT.from('applications').upsert({
+      user_id: SUPABASE_USER.id,
+      job_id: app.id,
+      job: {
+        company: app.company, title: app.title, location: app.location,
+        url: app.url, source: app.source
+      },
+      status: app.status || 'Applied',
+      notes: app.notes || '',
+      applied_at: app.applied_at || new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    });
+  }
+}
+
+async function mergeRemoteState() {
+  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
+  try {
+    const uid = SUPABASE_USER.id;
+    const [{data: profiles}, {data: saved}, {data: ignored}, {data: apps}] = await Promise.all([
+      SUPABASE_CLIENT.from('user_profiles').select('*').eq('user_id', uid).limit(1),
+      SUPABASE_CLIENT.from('saved_jobs').select('*').eq('user_id', uid),
+      SUPABASE_CLIENT.from('ignored_jobs').select('*').eq('user_id', uid),
+      SUPABASE_CLIENT.from('applications').select('*').eq('user_id', uid)
+    ]);
+
+    if (profiles?.[0]?.profile_json && Object.keys(profiles[0].profile_json).length) {
+      PERSONAL_PROFILE = profiles[0].profile_json;
+      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(PERSONAL_PROFILE));
+      updatePersonalProfileUI();
+    }
+
+    const savedMap = new Map(SAVED_JOBS.map(x => [x.id, x]));
+    (saved || []).forEach(r => savedMap.set(r.job_id, {...(r.job || {}), id:r.job_id, saved_at:r.saved_at}));
+    SAVED_JOBS = [...savedMap.values()];
+    localStorage.setItem(SAVED_KEY, JSON.stringify(SAVED_JOBS));
+
+    IGNORED_JOBS = [...new Set([...IGNORED_JOBS, ...(ignored || []).map(r => r.job_id)])];
+    localStorage.setItem(IGNORED_KEY, JSON.stringify(IGNORED_JOBS));
+
+    const appMap = new Map(APPLICATIONS.map(x => [x.id, x]));
+    (apps || []).forEach(r => {
+      const j = r.job || {};
+      appMap.set(r.job_id, {
+        id:r.job_id, company:j.company || '', title:j.title || '',
+        location:j.location || '', url:j.url || '', source:j.source || '',
+        status:r.status, notes:r.notes || '', applied_at:r.applied_at, updated_at:r.updated_at
+      });
+    });
+    APPLICATIONS = [...appMap.values()].sort((a,b) => String(b.updated_at||'').localeCompare(String(a.updated_at||'')));
+    localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
+
+    // Push any local-only records into the cloud after merging.
+    await Promise.all([
+      ...SAVED_JOBS.map(j => cloudSyncSaved(j)),
+      ...IGNORED_JOBS.map(id => cloudSyncIgnored(id)),
+      ...APPLICATIONS.map(a => cloudSyncApplication(a)),
+      PERSONAL_PROFILE ? cloudUpsertProfile() : Promise.resolve()
+    ]);
+
+    renderSaved();
+    renderApplications();
+    applyFilters();
+    updateAuthUI('Cloud sync complete');
+  } catch (e) {
+    console.warn('Supabase sync failed', e);
+    updateAuthUI('Cloud sync unavailable · local state preserved');
+  }
+}
+
 
 const SAVED_KEY = 'ireland_job_dashboard_saved_v1';
 const IGNORED_KEY = 'ireland_job_dashboard_ignored_v1';
@@ -547,8 +747,17 @@ function isSaved(j) { return SAVED_JOBS.some(x => x.id === jobId(j)); }
 function isIgnored(j) { return IGNORED_JOBS.includes(jobId(j)); }
 function toggleSaved(j) {
   const id = jobId(j);
-  if (isSaved(j)) SAVED_JOBS = SAVED_JOBS.filter(x => x.id !== id);
-  else SAVED_JOBS.unshift({id, company:j.company, title:j.title, location:j.location, url:j.url, candidate_match_score:effectiveMatchScore(j), discovery_score:j.discovery_score, saved_at:new Date().toISOString()});
+  const existing = SAVED_JOBS.find(x => x.id === id);
+  if (existing) {
+    SAVED_JOBS = SAVED_JOBS.filter(x => x.id !== id);
+    cloudSyncSaved(existing, true);
+  } else {
+    const row = {id, company:j.company, title:j.title, location:j.location, url:j.url,
+      candidate_match_score:effectiveMatchScore(j), discovery_score:j.discovery_score,
+      saved_at:new Date().toISOString()};
+    SAVED_JOBS.unshift(row);
+    cloudSyncSaved(row);
+  }
   localStorage.setItem(SAVED_KEY, JSON.stringify(SAVED_JOBS));
   renderSaved(); applyFilters();
 }
@@ -556,6 +765,7 @@ function ignoreJob(j) {
   const id = jobId(j);
   if (!IGNORED_JOBS.includes(id)) IGNORED_JOBS.push(id);
   localStorage.setItem(IGNORED_KEY, JSON.stringify(IGNORED_JOBS));
+  cloudSyncIgnored(id);
   populateRoleFamilies();
   updatePersonalProfileUI();
   applyFilters();
@@ -570,7 +780,7 @@ function renderSaved() {
     card.onclick = () => j.url && window.open(j.url,'_blank','noopener');
     card.innerHTML = `<div class="company">${escapeHtml(j.company)}</div><div class="title">${escapeHtml(j.title)}</div>
       <div class="meta"><span class="chip">${escapeHtml(j.location || 'Ireland')}</span>
-      ${pm.score != null ? `<span class="score-badge match">${pm.score}% ${pm.personalized ? 'Personal Match' : 'Match'}</span>` : ''}</div>
+      ${j.candidate_match_score != null ? `<span class="score-badge match">${j.candidate_match_score}% Match</span>` : ''}</div>
       <div class="card-footer"><button class="save-btn saved" data-unsave="1">Remove saved</button><span class="apply-hint">Open →</span></div>`;
     const b=card.querySelector('[data-unsave]'); b.addEventListener('click',e=>{e.stopPropagation(); toggleSaved(j);});
     grid.appendChild(card);
@@ -587,6 +797,7 @@ function loadApplications() {
 }
 function saveApplications() {
   localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
+  if (SUPABASE_USER) APPLICATIONS.forEach(a => cloudSyncApplication(a));
 }
 function applicationId(job) {
   return String(job.url || `${job.company}|${job.title}|${job.location || ''}`);
@@ -628,8 +839,10 @@ function updateApplication(id, field, value) {
   renderApplications();
 }
 function removeApplication(id) {
+  const prior = APPLICATIONS.find(a => a.id === id);
   APPLICATIONS = APPLICATIONS.filter(a => a.id !== id);
-  saveApplications();
+  if (prior) cloudSyncApplication(prior, true);
+  localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
   renderApplications();
   applyFilters();
 }
@@ -914,8 +1127,13 @@ function loadPersonalProfile() {
 }
 
 function savePersonalProfile() {
-  if (PERSONAL_PROFILE) localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(PERSONAL_PROFILE));
-  else localStorage.removeItem(PROFILE_STORAGE_KEY);
+  if (PERSONAL_PROFILE) {
+    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(PERSONAL_PROFILE));
+    cloudUpsertProfile();
+  } else {
+    localStorage.removeItem(PROFILE_STORAGE_KEY);
+  cloudDeleteProfile();
+  }
 }
 
 async function buildPersonalProfile() {
@@ -1425,6 +1643,7 @@ function escapeHtml(str) {
   return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 }
 
+initSupabase();
 loadPersonalProfile();
 loadRadarState();
 loadApplications();
