@@ -30,32 +30,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4 curl_cffi
 
-      - name: Generate Supabase browser config
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        run: |
-          python - <<'PY'
-          import json, os
-          config = {
-              "url": os.environ.get("SUPABASE_URL", ""),
-              "publishableKey": os.environ.get("SUPABASE_ANON_KEY", ""),
-          }
-          with open("supabase-config.js", "w", encoding="utf-8") as f:
-              f.write("window.__SUPABASE_CONFIG__ = ")
-              json.dump(config, f)
-              f.write(";\n")
-          PY
-
-      - name: Run broad collector + profile-aware ranker
+      - name: Run Ireland job collector
         env:
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
           CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
-          ALERT_MATCH_THRESHOLD: "75"
+          ATS_PROBE_LIMIT: "60"
         run: python scrape.py
 
       - name: Commit generated state safely
@@ -66,38 +47,15 @@ jobs:
           git config user.name "job-radar-bot"
           git config user.email "actions@users.noreply.github.com"
 
-          # Save the files produced by THIS scrape outside the repository.
-          # Generated state should not be merge/rebase-resolved line-by-line.
           tmpdir="$(mktemp -d)"
-
-          for f in \
-            data.json \
-            seen_jobs.json \
-            ats_platform_cache.json \
-            supabase-config.js \
-            sponsorship_history.json \
-            official_permit_stats.json
-          do
-            if [ -f "$f" ]; then
-              cp "$f" "$tmpdir/$f"
-            fi
+          for f in data.json seen_jobs.json ats_platform_cache.json sponsorship_history.json official_permit_stats.json; do
+            [ -f "$f" ] && cp "$f" "$tmpdir/$f"
           done
 
-          # Move onto the newest remote main BEFORE creating our commit.
-          # This safely preserves any manual/code changes that landed while
-          # the scraper was running.
           git fetch origin main
           git reset --hard origin/main
 
-          # Reapply this run's freshly generated state on top of latest main.
-          for f in \
-            data.json \
-            seen_jobs.json \
-            ats_platform_cache.json \
-            supabase-config.js \
-            sponsorship_history.json \
-            official_permit_stats.json
-          do
+          for f in data.json seen_jobs.json ats_platform_cache.json sponsorship_history.json official_permit_stats.json; do
             if [ -f "$tmpdir/$f" ]; then
               cp "$tmpdir/$f" "$f"
               git add "$f"
@@ -105,62 +63,36 @@ jobs:
           done
 
           if git diff --staged --quiet; then
-            echo "No generated-file changes to commit"
+            echo "No generated-file changes"
             exit 0
           fi
 
           git commit -m "Refresh Ireland Job Radar $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-          # A second fetch protects against a very small race between the
-          # first fetch and this push. Because Actions concurrency prevents
-          # overlapping radar runs, this is mainly for manual repo edits.
           for attempt in 1 2 3 4 5; do
             if git push origin HEAD:main; then
               echo "Push succeeded on attempt $attempt"
               exit 0
             fi
 
-            echo "Remote moved before push; rebuilding commit on latest main..."
-
-            # Preserve our generated files again.
-            for f in \
-              data.json \
-              seen_jobs.json \
-              ats_platform_cache.json \
-              supabase-config.js \
-              sponsorship_history.json \
-              official_permit_stats.json
-            do
-              if [ -f "$f" ]; then
-                cp "$f" "$tmpdir/$f"
-              fi
+            echo "Remote moved; rebuilding generated-state commit on latest main"
+            for f in data.json seen_jobs.json ats_platform_cache.json sponsorship_history.json official_permit_stats.json; do
+              [ -f "$f" ] && cp "$f" "$tmpdir/$f"
             done
 
             git fetch origin main
             git reset --hard origin/main
 
-            for f in \
-              data.json \
-              seen_jobs.json \
-              ats_platform_cache.json \
-              supabase-config.js \
-              sponsorship_history.json \
-              official_permit_stats.json
-            do
+            for f in data.json seen_jobs.json ats_platform_cache.json sponsorship_history.json official_permit_stats.json; do
               if [ -f "$tmpdir/$f" ]; then
                 cp "$tmpdir/$f" "$f"
                 git add "$f"
               fi
             done
 
-            if git diff --staged --quiet; then
-              echo "Latest main already contains equivalent generated state"
-              exit 0
-            fi
-
+            git diff --staged --quiet && exit 0
             git commit -m "Refresh Ireland Job Radar $(date -u +%Y-%m-%dT%H:%M:%SZ)"
             sleep 5
           done
 
-          echo "All push attempts failed"
           exit 1
