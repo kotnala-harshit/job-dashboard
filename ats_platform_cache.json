@@ -1,967 +1,43 @@
 {
-  "Google": {
-    "platform": "smartrecruiters",
-    "slug": "google"
-  },
-  "Microsoft": {
-    "platform": "smartrecruiters",
-    "slug": "microsoft"
-  },
-  "Apple": {
-    "platform": "smartrecruiters",
-    "slug": "apple"
-  },
-  "Meta": {
-    "platform": "smartrecruiters",
-    "slug": "meta"
-  },
-  "Amazon": {
-    "platform": "smartrecruiters",
-    "slug": "amazon"
-  },
-  "LinkedIn": {
-    "platform": "greenhouse",
-    "slug": "linkedin"
-  },
-  "TikTok": {
-    "platform": "smartrecruiters",
-    "slug": "tiktok"
-  },
-  "Intel": {
-    "platform": "smartrecruiters",
-    "slug": "intel"
-  },
-  "Dell Technologies": {
-    "platform": "smartrecruiters",
-    "slug": "delltechnologies"
-  },
-  "HP (Hewlett-Packard)": {
-    "platform": "smartrecruiters",
-    "slug": "hp"
-  },
-  "Hewlett Packard Enterprise (HPE)": {
-    "platform": "smartrecruiters",
-    "slug": "hewlettpackardenterprise"
-  },
-  "IBM": {
-    "platform": "smartrecruiters",
-    "slug": "ibm"
-  },
-  "Oracle": {
-    "platform": "smartrecruiters",
-    "slug": "oracle"
-  },
   "Cisco": {
-    "platform": "smartrecruiters",
-    "slug": "cisco"
-  },
-  "SAP": {
-    "platform": "smartrecruiters",
-    "slug": "sap"
-  },
-  "Qualtrics": {
-    "platform": "greenhouse",
-    "slug": "qualtrics"
-  },
-  "Atlassian": {
-    "platform": "smartrecruiters",
-    "slug": "atlassian"
-  },
-  "NetApp": {
-    "platform": "smartrecruiters",
-    "slug": "netapp"
+    "platform": "phenom",
+    "slug": "careers.cisco.com|CISCISGLOBAL"
   },
   "Fiserv": {
-    "platform": "smartrecruiters",
-    "slug": "fiserv"
-  },
-  "Visa": {
-    "platform": "smartrecruiters",
-    "slug": "visa"
-  },
-  "Microchip Technology": {
-    "platform": "smartrecruiters",
-    "slug": "microchiptechnology"
-  },
-  "Qorvo": {
-    "platform": "smartrecruiters",
-    "slug": "qorvo"
-  },
-  "Advanced Micro Devices (AMD)": {
-    "platform": "smartrecruiters",
-    "slug": "advancedmicrodevices"
-  },
-  "Logitech": {
-    "platform": "smartrecruiters",
-    "slug": "logitech"
-  },
-  "Nokia": {
-    "platform": "smartrecruiters",
-    "slug": "nokia"
-  },
-  "Etsy": {
-    "platform": "smartrecruiters",
-    "slug": "etsy"
-  },
-  "Monday.com": {
-    "platform": "smartrecruiters",
-    "slug": "mondaycom"
-  },
-  "Dynatrace": {
-    "platform": "smartrecruiters",
-    "slug": "dynatrace"
-  },
-  "Splunk": {
-    "platform": "smartrecruiters",
-    "slug": "splunk"
-  },
-  "CrowdStrike": {
-    "platform": "smartrecruiters",
-    "slug": "crowdstrike"
-  },
-  "Palo Alto Networks": {
-    "platform": "smartrecruiters",
-    "slug": "paloaltonetworks"
-  },
-  "Fortinet": {
-    "platform": "smartrecruiters",
-    "slug": "fortinet"
-  },
-  "Fastly": {
-    "platform": "greenhouse",
-    "slug": "fastly"
-  },
-  "Akamai": {
-    "platform": "smartrecruiters",
-    "slug": "akamai"
-  },
-  "Ping Identity": {
-    "platform": "greenhouse",
-    "slug": "pingidentity"
-  },
-  "CyberArk": {
-    "platform": "smartrecruiters",
-    "slug": "cyberark"
-  },
-  "Rapid7": {
-    "platform": "smartrecruiters",
-    "slug": "rapid7"
-  },
-  "SentinelOne": {
-    "platform": "smartrecruiters",
-    "slug": "sentinelone"
-  },
-  "Check Point Software": {
-    "platform": "smartrecruiters",
-    "slug": "checkpointsoftware"
-  },
-  "Tenable": {
-    "platform": "smartrecruiters",
-    "slug": "tenable"
-  },
-  "Proofpoint": {
-    "platform": "smartrecruiters",
-    "slug": "proofpoint"
-  },
-  "Sophos": {
-    "platform": "lever",
-    "slug": "sophos"
-  },
-  "Trend Micro": {
-    "platform": "smartrecruiters",
-    "slug": "trendmicro"
-  },
-  "Jamf": {
-    "platform": "greenhouse",
-    "slug": "jamf"
-  },
-  "Citrix": {
-    "platform": "smartrecruiters",
-    "slug": "citrix"
-  },
-  "Rubrik": {
-    "platform": "greenhouse",
-    "slug": "rubrik"
-  },
-  "Cohesity": {
-    "platform": "smartrecruiters",
-    "slug": "cohesity"
-  },
-  "Veeam": {
-    "platform": "smartrecruiters",
-    "slug": "veeam"
-  },
-  "Western Digital": {
-    "platform": "smartrecruiters",
-    "slug": "westerndigital"
-  },
-  "Micron Technology": {
-    "platform": "smartrecruiters",
-    "slug": "microntechnology"
-  },
-  "Texas Instruments": {
-    "platform": "smartrecruiters",
-    "slug": "texasinstruments"
-  },
-  "Qualcomm": {
-    "platform": "smartrecruiters",
-    "slug": "qualcomm"
-  },
-  "Marvell Technology": {
-    "platform": "smartrecruiters",
-    "slug": "marvelltechnology"
-  },
-  "STMicroelectronics": {
-    "platform": "smartrecruiters",
-    "slug": "stmicroelectronics"
-  },
-  "Infineon Technologies": {
-    "platform": "smartrecruiters",
-    "slug": "infineontechnologies"
-  },
-  "Renesas Electronics": {
-    "platform": "smartrecruiters",
-    "slug": "renesaselectronics"
-  },
-  "KLA Corporation": {
-    "platform": "smartrecruiters",
-    "slug": "kla"
-  },
-  "Applied Materials": {
-    "platform": "smartrecruiters",
-    "slug": "appliedmaterials"
-  },
-  "ASML": {
-    "platform": "smartrecruiters",
-    "slug": "asml"
-  },
-  "Keysight Technologies": {
-    "platform": "smartrecruiters",
-    "slug": "keysighttechnologies"
-  },
-  "Honeywell": {
-    "platform": "smartrecruiters",
-    "slug": "honeywell"
-  },
-  "Emerson": {
-    "platform": "smartrecruiters",
-    "slug": "emerson"
-  },
-  "Schneider Electric": {
-    "platform": "smartrecruiters",
-    "slug": "schneiderelectric"
-  },
-  "Johnson Controls": {
-    "platform": "smartrecruiters",
-    "slug": "johnsoncontrols"
-  },
-  "Trane Technologies": {
-    "platform": "smartrecruiters",
-    "slug": "tranetechnologies"
-  },
-  "Carrier": {
-    "platform": "smartrecruiters",
-    "slug": "carrier"
-  },
-  "Vodafone Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "vodafone"
-  },
-  "Three Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "three"
-  },
-  "Sky Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "sky"
-  },
-  "Johnson & Johnson": {
-    "platform": "smartrecruiters",
-    "slug": "johnsonjohnson"
-  },
-  "Boston Scientific": {
-    "platform": "smartrecruiters",
-    "slug": "bostonscientific"
-  },
-  "Medtronic": {
-    "platform": "smartrecruiters",
-    "slug": "medtronic"
-  },
-  "Abbott": {
-    "platform": "smartrecruiters",
-    "slug": "abbott"
-  },
-  "Novartis": {
-    "platform": "smartrecruiters",
-    "slug": "novartis"
-  },
-  "Eli Lilly": {
-    "platform": "smartrecruiters",
-    "slug": "elililly"
+    "platform": "phenom",
+    "slug": "careers.fiserv.com|FFFYJUS"
   },
   "Roche": {
-    "platform": "smartrecruiters",
-    "slug": "roche"
-  },
-  "Bristol Myers Squibb": {
-    "platform": "smartrecruiters",
-    "slug": "bristolmyerssquibb"
-  },
-  "ICON plc": {
-    "platform": "greenhouse",
-    "slug": "icon"
-  },
-  "Horizon Therapeutics (Amgen)": {
-    "platform": "smartrecruiters",
-    "slug": "horizontherapeutics"
-  },
-  "Stryker": {
-    "platform": "smartrecruiters",
-    "slug": "stryker"
-  },
-  "Cook Medical": {
-    "platform": "smartrecruiters",
-    "slug": "cookmedical"
-  },
-  "Amgen": {
-    "platform": "smartrecruiters",
-    "slug": "amgen"
-  },
-  "Regeneron": {
-    "platform": "smartrecruiters",
-    "slug": "regeneron"
-  },
-  "AstraZeneca": {
-    "platform": "smartrecruiters",
-    "slug": "astrazeneca"
+    "platform": "phenom",
+    "slug": "careers.roche.com|ROCHGLOBAL"
   },
   "Merck Group": {
-    "platform": "smartrecruiters",
-    "slug": "merck"
-  },
-  "Alexion Pharmaceuticals": {
-    "platform": "smartrecruiters",
-    "slug": "alexionpharmaceuticals"
-  },
-  "Biotronik": {
-    "platform": "smartrecruiters",
-    "slug": "biotronik"
-  },
-  "Alkermes": {
-    "platform": "smartrecruiters",
-    "slug": "alkermes"
-  },
-  "WuXi Biologics": {
-    "platform": "smartrecruiters",
-    "slug": "wuxibiologics"
-  },
-  "DePuy Synthes": {
-    "platform": "smartrecruiters",
-    "slug": "depuysynthes"
-  },
-  "Baxter International": {
-    "platform": "smartrecruiters",
-    "slug": "baxter"
-  },
-  "Coloplast": {
-    "platform": "smartrecruiters",
-    "slug": "coloplast"
-  },
-  "Convatec": {
-    "platform": "smartrecruiters",
-    "slug": "convatec"
-  },
-  "Integra LifeSciences": {
-    "platform": "smartrecruiters",
-    "slug": "integralifesciences"
-  },
-  "Merit Medical": {
-    "platform": "smartrecruiters",
-    "slug": "meritmedical"
-  },
-  "Hollister Incorporated": {
-    "platform": "smartrecruiters",
-    "slug": "hollister"
-  },
-  "Insulet Corporation": {
-    "platform": "smartrecruiters",
-    "slug": "insulet"
-  },
-  "Dexcom": {
-    "platform": "smartrecruiters",
-    "slug": "dexcom"
-  },
-  "Tandem Diabetes Care": {
-    "platform": "smartrecruiters",
-    "slug": "tandemdiabetescare"
-  },
-  "IQVIA": {
-    "platform": "smartrecruiters",
-    "slug": "iqvia"
-  },
-  "Syneos Health": {
-    "platform": "smartrecruiters",
-    "slug": "syneoshealth"
-  },
-  "Charles River Laboratories": {
-    "platform": "smartrecruiters",
-    "slug": "charlesriverlaboratories"
-  },
-  "Labcorp": {
-    "platform": "smartrecruiters",
-    "slug": "labcorp"
-  },
-  "Medpace": {
-    "platform": "smartrecruiters",
-    "slug": "medpace"
-  },
-  "Waters Corporation": {
-    "platform": "smartrecruiters",
-    "slug": "waters"
-  },
-  "Agilent Technologies": {
-    "platform": "smartrecruiters",
-    "slug": "agilenttechnologies"
-  },
-  "Thermo Fisher Scientific": {
-    "platform": "smartrecruiters",
-    "slug": "thermofisherscientific"
-  },
-  "Danaher Corporation": {
-    "platform": "smartrecruiters",
-    "slug": "danaher"
-  },
-  "Revvity (PerkinElmer)": {
-    "platform": "smartrecruiters",
-    "slug": "revvity"
-  },
-  "Bruker": {
-    "platform": "smartrecruiters",
-    "slug": "bruker"
-  },
-  "Bio-Rad Laboratories": {
-    "platform": "smartrecruiters",
-    "slug": "bioradlaboratories"
-  },
-  "QIAGEN": {
-    "platform": "smartrecruiters",
-    "slug": "qiagen"
-  },
-  "Lonza": {
-    "platform": "smartrecruiters",
-    "slug": "lonza"
-  },
-  "Boehringer Ingelheim": {
-    "platform": "smartrecruiters",
-    "slug": "boehringeringelheim"
-  },
-  "Bayer": {
-    "platform": "smartrecruiters",
-    "slug": "bayer"
-  },
-  "Haleon": {
-    "platform": "smartrecruiters",
-    "slug": "haleon"
-  },
-  "AIB (Allied Irish Banks)": {
-    "platform": "smartrecruiters",
-    "slug": "aib"
-  },
-  "Bank of Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "bankof"
-  },
-  "Citi": {
-    "platform": "smartrecruiters",
-    "slug": "citi"
-  },
-  "JPMorgan Chase": {
-    "platform": "smartrecruiters",
-    "slug": "jpmorganchase"
-  },
-  "BNY Mellon": {
-    "platform": "smartrecruiters",
-    "slug": "bnymellon"
-  },
-  "Fidelity Investments": {
-    "platform": "smartrecruiters",
-    "slug": "fidelityinvestments"
-  },
-  "Susquehanna International Group (SIG)": {
-    "platform": "smartrecruiters",
-    "slug": "susquehanna"
-  },
-  "Irish Life": {
-    "platform": "smartrecruiters",
-    "slug": "irishlife"
-  },
-  "Zurich Insurance": {
-    "platform": "smartrecruiters",
-    "slug": "zurichinsurance"
-  },
-  "AXA Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "axa"
-  },
-  "Aviva Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "aviva"
-  },
-  "Laya Healthcare": {
-    "platform": "smartrecruiters",
-    "slug": "layahealthcare"
-  },
-  "VHI Healthcare": {
-    "platform": "smartrecruiters",
-    "slug": "vhihealthcare"
-  },
-  "Davy": {
-    "platform": "smartrecruiters",
-    "slug": "davy"
-  },
-  "Goodbody": {
-    "platform": "smartrecruiters",
-    "slug": "goodbody"
-  },
-  "Cantor Fitzgerald Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "cantorfitzgerald"
-  },
-  "FBD Insurance": {
-    "platform": "smartrecruiters",
-    "slug": "fbdinsurance"
-  },
-  "Morgan Stanley": {
-    "platform": "smartrecruiters",
-    "slug": "morganstanley"
-  },
-  "Goldman Sachs": {
-    "platform": "smartrecruiters",
-    "slug": "goldmansachs"
-  },
-  "Barclays": {
-    "platform": "smartrecruiters",
-    "slug": "barclays"
-  },
-  "HSBC Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "hsbc"
-  },
-  "Societe Generale": {
-    "platform": "smartrecruiters",
-    "slug": "societegenerale"
-  },
-  "BNP Paribas Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "bnpparibas"
-  },
-  "SMBC Aviation Capital": {
-    "platform": "smartrecruiters",
-    "slug": "smbcaviationcapital"
-  },
-  "Avolon": {
-    "platform": "smartrecruiters",
-    "slug": "avolon"
-  },
-  "AerCap": {
-    "platform": "smartrecruiters",
-    "slug": "aercap"
-  },
-  "Macquarie Group": {
-    "platform": "smartrecruiters",
-    "slug": "macquarie"
-  },
-  "FactSet": {
-    "platform": "smartrecruiters",
-    "slug": "factset"
-  },
-  "Morningstar": {
-    "platform": "smartrecruiters",
-    "slug": "morningstar"
-  },
-  "MSCI": {
-    "platform": "smartrecruiters",
-    "slug": "msci"
-  },
-  "S&P Global": {
-    "platform": "smartrecruiters",
-    "slug": "spglobal"
-  },
-  "Moody's": {
-    "platform": "smartrecruiters",
-    "slug": "moodys"
-  },
-  "Fitch Ratings": {
-    "platform": "smartrecruiters",
-    "slug": "fitchratings"
-  },
-  "Bloomberg": {
-    "platform": "smartrecruiters",
-    "slug": "bloomberg"
-  },
-  "Refinitiv (LSEG)": {
-    "platform": "smartrecruiters",
-    "slug": "refinitiv"
-  },
-  "EY Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "ey"
-  },
-  "BDO Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "bdo"
-  },
-  "Forvis Mazars Ireland": {
-    "platform": "greenhouse",
-    "slug": "forvismazars"
-  },
-  "Baker Tilly Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "bakertilly"
-  },
-  "Capgemini": {
-    "platform": "smartrecruiters",
-    "slug": "capgemini"
-  },
-  "Infosys": {
-    "platform": "smartrecruiters",
-    "slug": "infosys"
-  },
-  "Wipro": {
-    "platform": "smartrecruiters",
-    "slug": "wipro"
-  },
-  "Tata Consultancy Services (TCS)": {
-    "platform": "smartrecruiters",
-    "slug": "tataconsultancyservices"
-  },
-  "Cognizant": {
-    "platform": "smartrecruiters",
-    "slug": "cognizant"
-  },
-  "Slalom": {
-    "platform": "smartrecruiters",
-    "slug": "slalom"
-  },
-  "Protiviti": {
-    "platform": "smartrecruiters",
-    "slug": "protiviti"
-  },
-  "Alvarez & Marsal": {
-    "platform": "smartrecruiters",
-    "slug": "alvarezmarsal"
-  },
-  "FTI Consulting": {
-    "platform": "smartrecruiters",
-    "slug": "fticonsulting"
-  },
-  "McKinsey & Company": {
-    "platform": "smartrecruiters",
-    "slug": "mckinsey"
-  },
-  "Boston Consulting Group (BCG)": {
-    "platform": "smartrecruiters",
-    "slug": "bostonconsulting"
-  },
-  "Bain & Company": {
-    "platform": "smartrecruiters",
-    "slug": "bain"
-  },
-  "Oliver Wyman": {
-    "platform": "lever",
-    "slug": "oliverwyman"
-  },
-  "Matheson": {
-    "platform": "smartrecruiters",
-    "slug": "matheson"
-  },
-  "A&L Goodbody": {
-    "platform": "smartrecruiters",
-    "slug": "algoodbody"
-  },
-  "Arthur Cox": {
-    "platform": "smartrecruiters",
-    "slug": "arthurcox"
-  },
-  "McCann FitzGerald": {
-    "platform": "smartrecruiters",
-    "slug": "mccannfitzgerald"
-  },
-  "Mason Hayes & Curran": {
-    "platform": "smartrecruiters",
-    "slug": "masonhayescurran"
-  },
-  "William Fry": {
-    "platform": "smartrecruiters",
-    "slug": "williamfry"
-  },
-  "Eversheds Sutherland Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "evershedssutherland"
-  },
-  "ByrneWallace": {
-    "platform": "smartrecruiters",
-    "slug": "byrnewallace"
-  },
-  "Philip Lee": {
-    "platform": "smartrecruiters",
-    "slug": "philiplee"
-  },
-  "Maples Group Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "maples"
-  },
-  "Walkers Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "walkers"
-  },
-  "LK Shields": {
-    "platform": "smartrecruiters",
-    "slug": "lkshields"
-  },
-  "CPL Resources": {
-    "platform": "smartrecruiters",
-    "slug": "cplresources"
-  },
-  "Sigmar Recruitment": {
-    "platform": "smartrecruiters",
-    "slug": "sigmarrecruitment"
-  },
-  "Hays Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "hays"
-  },
-  "Brightwater": {
-    "platform": "smartrecruiters",
-    "slug": "brightwater"
-  },
-  "Adecco Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "adecco"
-  },
-  "Manpower Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "manpower"
-  },
-  "Tesco Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "tesco"
-  },
-  "Lidl Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "lidl"
-  },
-  "Aldi Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "aldi"
-  },
-  "Dunnes Stores": {
-    "platform": "smartrecruiters",
-    "slug": "dunnesstores"
-  },
-  "Musgrave Group (SuperValu / Centra)": {
-    "platform": "smartrecruiters",
-    "slug": "musgrave"
-  },
-  "Kerry Group": {
-    "platform": "smartrecruiters",
-    "slug": "kerry"
-  },
-  "Glanbia / Tirl\u00e1n": {
-    "platform": "smartrecruiters",
-    "slug": "glanbiatirln"
-  },
-  "Smurfit Westrock": {
-    "platform": "smartrecruiters",
-    "slug": "smurfitwestrock"
-  },
-  "Carbery Group": {
-    "platform": "smartrecruiters",
-    "slug": "carbery"
-  },
-  "Dairygold": {
-    "platform": "smartrecruiters",
-    "slug": "dairygold"
-  },
-  "Kepak Group": {
-    "platform": "smartrecruiters",
-    "slug": "kepak"
-  },
-  "Dawn Meats": {
-    "platform": "smartrecruiters",
-    "slug": "dawnmeats"
-  },
-  "ABP Food Group": {
-    "platform": "smartrecruiters",
-    "slug": "abpfood"
-  },
-  "Ornua": {
-    "platform": "smartrecruiters",
-    "slug": "ornua"
-  },
-  "Coca-Cola HBC Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "cocacolahbc"
-  },
-  "Irish Distillers (Pernod Ricard)": {
-    "platform": "smartrecruiters",
-    "slug": "irishdistillers"
-  },
-  "Heineken Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "heineken"
-  },
-  "C&C Group": {
-    "platform": "greenhouse",
-    "slug": "cc"
-  },
-  "Marks & Spencer Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "marksspencer"
-  },
-  "Brown Thomas Arnotts": {
-    "platform": "smartrecruiters",
-    "slug": "brownthomasarnotts"
-  },
-  "Eason": {
-    "platform": "smartrecruiters",
-    "slug": "eason"
-  },
-  "Halfords Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "halfords"
-  },
-  "Woodie's": {
-    "platform": "smartrecruiters",
-    "slug": "woodies"
-  },
-  "B&Q Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "bq"
-  },
-  "Currys Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "currys"
-  },
-  "Smyths Toys Superstores": {
-    "platform": "smartrecruiters",
-    "slug": "smythstoyssuperstores"
-  },
-  "JD Sports Ireland": {
-    "platform": "greenhouse",
-    "slug": "jdsports"
-  },
-  "Boots Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "boots"
-  },
-  "LloydsPharmacy Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "lloydspharmacy"
-  },
-  "Uniphar Group": {
-    "platform": "smartrecruiters",
-    "slug": "uniphar"
-  },
-  "Superdrug Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "superdrug"
-  },
-  "Holland & Barrett Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "hollandbarrett"
-  },
-  "Zara / Inditex Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "zarainditex"
-  },
-  "H&M Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "hm"
-  },
-  "TK Maxx Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "tkmaxx"
-  },
-  "Decathlon Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "decathlon"
-  },
-  "Life Style Sports": {
-    "platform": "smartrecruiters",
-    "slug": "lifestylesports"
-  },
-  "Intersport Elverys": {
-    "platform": "smartrecruiters",
-    "slug": "intersportelverys"
-  },
-  "CRH": {
-    "platform": "smartrecruiters",
-    "slug": "crh"
-  },
-  "Kingspan Group": {
-    "platform": "smartrecruiters",
-    "slug": "kingspan"
-  },
-  "Glenveagh Properties": {
-    "platform": "smartrecruiters",
-    "slug": "glenveaghproperties"
-  },
-  "Cairn Homes": {
-    "platform": "smartrecruiters",
-    "slug": "cairnhomes"
-  },
-  "BAM Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "bam"
-  },
-  "John Sisk & Son (Sisk Group)": {
-    "platform": "smartrecruiters",
-    "slug": "johnsiskson"
-  },
-  "Jones Engineering": {
-    "platform": "smartrecruiters",
-    "slug": "jonesengineering"
-  },
-  "Mercury Engineering": {
-    "platform": "smartrecruiters",
-    "slug": "mercuryengineering"
-  },
-  "PM Group": {
-    "platform": "greenhouse",
-    "slug": "pm"
-  },
-  "Kirby Group Engineering": {
-    "platform": "smartrecruiters",
-    "slug": "kirbyengineering"
-  },
-  "Linesight": {
-    "platform": "smartrecruiters",
-    "slug": "linesight"
-  },
-  "Arup": {
-    "platform": "smartrecruiters",
-    "slug": "arup"
-  },
-  "Jacobs": {
-    "platform": "smartrecruiters",
-    "slug": "jacobs"
-  },
-  "AECOM": {
-    "platform": "smartrecruiters",
-    "slug": "aecom"
-  },
-  "Mott MacDonald": {
-    "platform": "smartrecruiters",
-    "slug": "mottmacdonald"
+    "platform": "phenom",
+    "slug": "jobs.merck.com|MERCUS"
   },
   "Zimmer Biomet": {
     "platform": "phenom",
     "slug": "careers.zimmerbiomet.com|ZBUZBRUS"
   },
+  "Convatec": {
+    "platform": "phenom",
+    "slug": "careers.convatec.com|CONVGLOBAL"
+  },
+  "Labcorp": {
+    "platform": "phenom",
+    "slug": "careers.labcorp.com|COVAGLOBAL"
+  },
+  "Danaher Corporation": {
+    "platform": "phenom",
+    "slug": "jobs.danaher.com|DANAGLOBAL"
+  },
   "Catalent": {
     "platform": "phenom",
     "slug": "careers.catalent.com|CATAUS"
+  },
+  "Kerry Group": {
+    "platform": "phenom",
+    "slug": "jobs.kerry.com|KGUKGRGLOBAL"
   },
   "DHL Ireland": {
     "platform": "phenom",
@@ -975,797 +51,309 @@
     "platform": "phenom",
     "slug": "careers.statestreet.com|STSTGLOBAL"
   },
-  "WSP": {
-    "platform": "smartrecruiters",
-    "slug": "wsp"
+  "Thermo Fisher Scientific": {
+    "platform": "phenom",
+    "slug": "jobs.thermofisher.com|TFSCGLOBAL"
   },
-  "Tetra Tech": {
-    "platform": "smartrecruiters",
-    "slug": "tetratech"
+  "A&L Goodbody": {
+    "platform": "pinpoint",
+    "slug": "algoodbody",
+    "probe_version": 32
   },
-  "Stantec": {
-    "platform": "smartrecruiters",
-    "slug": "stantec"
+  "ABB": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "AtkinsR\u00e9alis": {
-    "platform": "smartrecruiters",
-    "slug": "atkinsralis"
+  "Abbott": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "ESB (Electricity Supply Board)": {
-    "platform": "smartrecruiters",
-    "slug": "esb"
+  "AbbVie": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "Bord G\u00e1is Energy": {
-    "platform": "smartrecruiters",
-    "slug": "bordgisenergy"
+  "ABP Food Group": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "Energia Group": {
-    "platform": "smartrecruiters",
-    "slug": "energia"
+  "Accenture": {
+    "platform": "recruitee",
+    "slug": "accenture",
+    "probe_version": 32
   },
-  "EirGrid Group": {
-    "platform": "smartrecruiters",
-    "slug": "eirgrid"
+  "Adecco Ireland": {
+    "platform": "recruitee",
+    "slug": "adecco",
+    "probe_version": 32
   },
-  "Gas Networks Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "gasnetworks"
+  "Adobe": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "Coillte": {
-    "platform": "smartrecruiters",
-    "slug": "coillte"
+  "Advanced Micro Devices (AMD)": {
+    "platform": "recruitee",
+    "slug": "advanced",
+    "probe_version": 32
   },
-  "Uisce \u00c9ireann (Irish Water)": {
-    "platform": "smartrecruiters",
-    "slug": "uisceireann"
-  },
-  "Ryanair": {
-    "platform": "smartrecruiters",
-    "slug": "ryanair"
+  "AECOM": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
   "Aer Lingus": {
     "platform": "greenhouse",
-    "slug": "aerlingus"
+    "slug": "aerlingus",
+    "probe_version": 32
   },
-  "daa (Dublin Airport Authority)": {
-    "platform": "smartrecruiters",
-    "slug": "daa"
+  "AerCap": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "Shannon Airport Group": {
-    "platform": "smartrecruiters",
-    "slug": "shannonairport"
+  "Agilent Technologies": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "Irish Rail (Iarnr\u00f3d \u00c9ireann)": {
-    "platform": "smartrecruiters",
-    "slug": "irishrail"
+  "AIB (Allied Irish Banks)": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "Bus \u00c9ireann": {
-    "platform": "smartrecruiters",
-    "slug": "busireann"
+  "Akamai": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "Dublin Bus": {
-    "platform": "smartrecruiters",
-    "slug": "dublinbus"
+  "Aldi Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "An Post": {
-    "platform": "smartrecruiters",
-    "slug": "anpost"
+  "Alexion Pharmaceuticals": {
+    "platform": "eightfold",
+    "slug": "astrazeneca",
+    "probe_version": 32
   },
-  "FedEx Express Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "fedexexpress"
+  "Alkermes": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "UPS Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "ups"
+  "Alvarez & Marsal": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "DSV Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "dsv"
-  },
-  "Fastway Couriers Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "fastwaycouriers"
-  },
-  "Irish Ferries": {
-    "platform": "smartrecruiters",
-    "slug": "irishferries"
-  },
-  "Stena Line Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "stenaline"
-  },
-  "Dalata Hotel Group": {
-    "platform": "smartrecruiters",
-    "slug": "dalatahotel"
-  },
-  "Press Up Hospitality Group": {
-    "platform": "smartrecruiters",
-    "slug": "pressuphospitality"
-  },
-  "Clayton Hotels": {
-    "platform": "smartrecruiters",
-    "slug": "claytonhotels"
-  },
-  "Maldron Hotels": {
-    "platform": "smartrecruiters",
-    "slug": "maldronhotels"
-  },
-  "The Doyle Collection": {
-    "platform": "smartrecruiters",
-    "slug": "thedoylecollection"
-  },
-  "RT\u00c9 (Raidi\u00f3 Teilif\u00eds \u00c9ireann)": {
-    "platform": "smartrecruiters",
-    "slug": "rt"
-  },
-  "Mediahuis Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "mediahuis"
-  },
-  "The Irish Times": {
-    "platform": "smartrecruiters",
-    "slug": "theirishtimes"
-  },
-  "F\u00e1ilte Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "filte"
-  },
-  "Tourism Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "tourism"
-  },
-  "Enterprise Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "enterprise"
-  },
-  "IDA Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "ida"
-  },
-  "Science Foundation Ireland (SFI)": {
-    "platform": "smartrecruiters",
-    "slug": "sciencefoundation"
-  },
-  "Teagasc": {
-    "platform": "smartrecruiters",
-    "slug": "teagasc"
-  },
-  "PublicJobs.ie (PAS)": {
-    "platform": "smartrecruiters",
-    "slug": "publicjobsie"
-  },
-  "HSE (Health Service Executive)": {
-    "platform": "smartrecruiters",
-    "slug": "hse"
-  },
-  "Trinity College Dublin (TCD)": {
-    "platform": "smartrecruiters",
-    "slug": "trinitycollegedublin"
-  },
-  "University College Dublin (UCD)": {
-    "platform": "smartrecruiters",
-    "slug": "universitycollegedublin"
-  },
-  "Dublin City University (DCU)": {
-    "platform": "smartrecruiters",
-    "slug": "dublincityuniversity"
-  },
-  "University College Cork (UCC)": {
-    "platform": "smartrecruiters",
-    "slug": "universitycollegecork"
-  },
-  "University of Galway": {
-    "platform": "smartrecruiters",
-    "slug": "universityofgalway"
-  },
-  "University of Limerick (UL)": {
-    "platform": "greenhouse",
-    "slug": "universityoflimerick"
-  },
-  "Maynooth University": {
-    "platform": "smartrecruiters",
-    "slug": "maynoothuniversity"
-  },
-  "South East Technological University (SETU)": {
-    "platform": "smartrecruiters",
-    "slug": "southeasttechnologicaluniversity"
-  },
-  "Technological University Dublin (TU Dublin)": {
-    "platform": "smartrecruiters",
-    "slug": "technologicaluniversitydublin"
-  },
-  "Atlantic Technological University (ATU)": {
-    "platform": "smartrecruiters",
-    "slug": "atlantictechnologicaluniversity"
-  },
-  "Munster Technological University (MTU)": {
-    "platform": "smartrecruiters",
-    "slug": "munstertechnologicaluniversity"
-  },
-  "SuperValu / Musgrave": {
-    "platform": "smartrecruiters",
-    "slug": "supervalumusgrave"
-  },
-  "Concentrix (Ireland)": {
-    "platform": "smartrecruiters",
-    "slug": "concentrix"
-  },
-  "Teleperformance (Ireland)": {
-    "platform": "smartrecruiters",
-    "slug": "teleperformance"
+  "Amazon": {
+    "platform": "personio",
+    "slug": "amazon",
+    "probe_version": 32
   },
   "American Express": {
-    "platform": "smartrecruiters",
-    "slug": "americanexpress"
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "Approach People Recruitment": {
-    "platform": "smartrecruiters",
-    "slug": "approachpeoplerecruitment"
+  "Amgen": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
-  "Bank of America": {
-    "platform": "smartrecruiters",
-    "slug": "bankofamerica"
-  },
-  "BearingPoint": {
-    "platform": "greenhouse",
-    "slug": "bearingpoint"
-  },
-  "BlackRock": {
-    "platform": "smartrecruiters",
-    "slug": "blackrock"
-  },
-  "BNY": {
-    "platform": "smartrecruiters",
-    "slug": "bny"
-  },
-  "Bord na M\u00f3na": {
-    "platform": "smartrecruiters",
-    "slug": "bordnamna"
-  },
-  "CDB Aviation": {
-    "platform": "smartrecruiters",
-    "slug": "cdbaviation"
-  },
-  "Central Bank of Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "centralbankof"
-  },
-  "CGI": {
-    "platform": "smartrecruiters",
-    "slug": "cgi"
-  },
-  "Cpl": {
-    "platform": "smartrecruiters",
-    "slug": "cpl"
-  },
-  "DAE Capital": {
-    "platform": "smartrecruiters",
-    "slug": "daecapital"
-  },
-  "Datalex": {
-    "platform": "smartrecruiters",
-    "slug": "datalex"
-  },
-  "Deutsche Bank": {
-    "platform": "smartrecruiters",
-    "slug": "deutschebank"
-  },
-  "DraftKings": {
-    "platform": "smartrecruiters",
-    "slug": "draftkings"
-  },
-  "EirGrid": {
-    "platform": "smartrecruiters",
-    "slug": "eirgrid"
-  },
-  "ESB": {
-    "platform": "smartrecruiters",
-    "slug": "esb"
-  },
-  "Flutter Entertainment": {
-    "platform": "smartrecruiters",
-    "slug": "flutterentertainment"
-  },
-  "FRS Recruitment": {
-    "platform": "smartrecruiters",
-    "slug": "frsrecruitment"
-  },
-  "Fujitsu": {
-    "platform": "smartrecruiters",
-    "slug": "fujitsu"
-  },
-  "Gartner": {
-    "platform": "smartrecruiters",
-    "slug": "gartner"
-  },
-  "Genesis (formerly GECAS)": {
-    "platform": "greenhouse",
-    "slug": "genesis"
-  },
-  "Glanbia": {
-    "platform": "smartrecruiters",
-    "slug": "glanbia"
-  },
-  "Guidewire": {
-    "platform": "smartrecruiters",
-    "slug": "guidewire"
-  },
-  "HIQA": {
-    "platform": "smartrecruiters",
-    "slug": "hiqa"
-  },
-  "Nordic Aviation Capital": {
-    "platform": "smartrecruiters",
-    "slug": "nordicaviationcapital"
-  },
-  "NTMA": {
-    "platform": "smartrecruiters",
-    "slug": "ntma"
-  },
-  "Personio": {
-    "platform": "smartrecruiters",
-    "slug": "personio"
-  },
-  "Public Jobs / Civil Service": {
-    "platform": "smartrecruiters",
-    "slug": "publicjobscivilservice"
-  },
-  "Reperio Human Capital": {
-    "platform": "smartrecruiters",
-    "slug": "reperiohumancapital"
-  },
-  "Revenue": {
-    "platform": "smartrecruiters",
-    "slug": "revenue"
-  },
-  "Riot Games": {
-    "platform": "greenhouse",
-    "slug": "riotgames"
-  },
-  "Sage": {
-    "platform": "greenhouse",
-    "slug": "sage"
-  },
-  "Smurfit Kappa": {
-    "platform": "smartrecruiters",
-    "slug": "smurfitkappa"
-  },
-  "Storm3": {
-    "platform": "smartrecruiters",
-    "slug": "storm3"
-  },
-  "Transport Infrastructure Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "transportinfrastructure"
-  },
-  "Uisce \u00c9ireann / Irish Water": {
-    "platform": "smartrecruiters",
-    "slug": "uisceireannirishwater"
-  },
-  "Workvivo": {
-    "platform": "smartrecruiters",
-    "slug": "workvivo"
-  },
-  "Pure Storage": {
-    "platform": "greenhouse",
-    "slug": "purestorage"
-  },
-  "ABB": {
-    "platform": "smartrecruiters",
-    "slug": "abb"
-  },
-  "AbbVie": {
-    "platform": "smartrecruiters",
-    "slug": "abbvie"
-  },
-  "Accenture": {
-    "platform": "smartrecruiters",
-    "slug": "accenture"
-  },
-  "Adobe": {
-    "platform": "smartrecruiters",
-    "slug": "adobe"
+  "An Post": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
   "Analog Devices": {
-    "platform": "smartrecruiters",
-    "slug": "analogdevices"
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
   "Aon": {
-    "platform": "smartrecruiters",
-    "slug": "aon"
+    "platform": "eightfold",
+    "slug": "aon",
+    "probe_version": 32
+  },
+  "Apple": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Applied Materials": {
+    "platform": "eightfold",
+    "slug": "appliedmaterials",
+    "probe_version": 32
+  },
+  "Approach People Recruitment": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
   "Arcadis": {
-    "platform": "smartrecruiters",
-    "slug": "arcadis"
+    "platform": "pinpoint",
+    "slug": "arcadis",
+    "probe_version": 32
   },
   "Arista Networks": {
-    "platform": "smartrecruiters",
-    "slug": "aristanetworks"
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Arthur Cox": {
+    "platform": "pinpoint",
+    "slug": "arthurcox",
+    "probe_version": 32
+  },
+  "Arup": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
   "Asana": {
     "platform": "greenhouse",
-    "slug": "asana"
+    "slug": "asana",
+    "probe_version": 32
+  },
+  "ASML": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "AstraZeneca": {
+    "platform": "eightfold",
+    "slug": "astrazeneca",
+    "probe_version": 32
+  },
+  "AtkinsR\u00e9alis": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Atlantic Technological University (ATU)": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Atlassian": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
   "Autodesk": {
-    "platform": "smartrecruiters",
-    "slug": "autodesk"
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Aviva Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Avolon": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "AXA Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "B&Q Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Bain & Company": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Baker Tilly Ireland": {
+    "platform": "recruitee",
+    "slug": "bakertilly",
+    "probe_version": 32
+  },
+  "BAM Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Bank of America": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Bank of Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Barclays": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
   },
   "Bausch + Lomb": {
-    "platform": "smartrecruiters",
-    "slug": "bauschlomb"
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Baxter International": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Bayer": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "BDO Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "BearingPoint": {
+    "platform": "greenhouse",
+    "slug": "bearingpoint",
+    "probe_version": 32
   },
   "Becton Dickinson (BD)": {
-    "platform": "smartrecruiters",
-    "slug": "bectondickinson"
-  },
-  "Box": {
-    "platform": "smartrecruiters",
-    "slug": "box"
-  },
-  "Broadcom": {
-    "platform": "smartrecruiters",
-    "slug": "broadcom"
-  },
-  "Cadence Design Systems": {
-    "platform": "smartrecruiters",
-    "slug": "cadencedesignsystems"
-  },
-  "Canva": {
-    "platform": "smartrecruiters",
-    "slug": "canva"
-  },
-  "ClickUp": {
-    "platform": "smartrecruiters",
-    "slug": "clickup"
-  },
-  "Cloudflare": {
-    "platform": "greenhouse",
-    "slug": "cloudflare"
-  },
-  "Coinbase": {
-    "platform": "greenhouse",
-    "slug": "coinbase"
-  },
-  "Databricks": {
-    "platform": "greenhouse",
-    "slug": "databricks"
-  },
-  "Datadog": {
-    "platform": "greenhouse",
-    "slug": "datadog"
-  },
-  "Deloitte Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "deloitte"
-  },
-  "Diageo Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "diageo"
-  },
-  "Dillon Eustace": {
-    "platform": "smartrecruiters",
-    "slug": "dilloneustace"
-  },
-  "DocuSign": {
-    "platform": "smartrecruiters",
-    "slug": "docusign"
-  },
-  "DPS Group (Arcadis)": {
-    "platform": "smartrecruiters",
-    "slug": "dps"
-  },
-  "Dropbox": {
-    "platform": "greenhouse",
-    "slug": "dropbox"
-  },
-  "DXC Technology": {
-    "platform": "smartrecruiters",
-    "slug": "dxctechnology"
-  },
-  "Eaton": {
-    "platform": "smartrecruiters",
-    "slug": "eaton"
-  },
-  "Edwards Lifesciences": {
-    "platform": "smartrecruiters",
-    "slug": "edwardslifesciences"
-  },
-  "Eir": {
-    "platform": "smartrecruiters",
-    "slug": "eir"
-  },
-  "Elavon": {
-    "platform": "smartrecruiters",
-    "slug": "elavon"
-  },
-  "Ergo": {
-    "platform": "smartrecruiters",
-    "slug": "ergo"
-  },
-  "Ericsson": {
-    "platform": "eightfold",
-    "slug": "ericsson"
-  },
-  "Eurofins Scientific": {
-    "platform": "smartrecruiters",
-    "slug": "Eurofins"
-  },
-  "Fenergo": {
-    "platform": "smartrecruiters",
-    "slug": "fenergo"
-  },
-  "Figma": {
-    "platform": "greenhouse",
-    "slug": "figma"
-  },
-  "Genesys": {
-    "platform": "smartrecruiters",
-    "slug": "genesys"
-  },
-  "Gilead Sciences": {
-    "platform": "smartrecruiters",
-    "slug": "gileadsciences"
-  },
-  "GlaxoSmithKline (GSK)": {
-    "platform": "smartrecruiters",
-    "slug": "glaxosmithkline"
-  },
-  "Grant Thornton Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "grantthornton"
-  },
-  "Greencore": {
-    "platform": "smartrecruiters",
-    "slug": "greencore"
-  },
-  "Harvey Nash Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "harveynash"
-  },
-  "HubSpot": {
-    "platform": "greenhouse",
-    "slug": "hubspot"
-  },
-  "Illumina": {
-    "platform": "smartrecruiters",
-    "slug": "illumina"
-  },
-  "Indeed": {
-    "platform": "greenhouse",
-    "slug": "indeed"
-  },
-  "Indeed (Ireland)": {
-    "platform": "greenhouse",
-    "slug": "indeed"
-  },
-  "Intercom": {
-    "platform": "greenhouse",
-    "slug": "intercom"
-  },
-  "Jazz Pharmaceuticals": {
-    "platform": "smartrecruiters",
-    "slug": "jazzpharmaceuticals"
-  },
-  "KPMG Ireland": {
-    "platform": "lever",
-    "slug": "kpmg"
-  },
-  "Lam Research": {
-    "platform": "eightfold",
-    "slug": "lamresearch"
-  },
-  "Marsh McLennan": {
-    "platform": "smartrecruiters",
-    "slug": "marshmclennan"
-  },
-  "Mastercard": {
-    "platform": "smartrecruiters",
-    "slug": "mastercard"
-  },
-  "Mercer": {
-    "platform": "smartrecruiters",
-    "slug": "mercer"
-  },
-  "Microsoft Dynamics Partners": {
-    "platform": "smartrecruiters",
-    "slug": "microsoftdynamicspartners"
-  },
-  "MongoDB": {
-    "platform": "greenhouse",
-    "slug": "mongodb"
-  },
-  "Morgan McKinley": {
-    "platform": "smartrecruiters",
-    "slug": "morganmckinley"
-  },
-  "MSD (Merck Sharp & Dohme)": {
-    "platform": "smartrecruiters",
-    "slug": "msd"
-  },
-  "Next Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "next"
-  },
-  "Northern Trust": {
-    "platform": "smartrecruiters",
-    "slug": "northerntrust"
-  },
-  "Notion": {
-    "platform": "ashby",
-    "slug": "notion"
-  },
-  "Nutanix": {
-    "platform": "smartrecruiters",
-    "slug": "nutanix"
-  },
-  "NVIDIA": {
-    "platform": "smartrecruiters",
-    "slug": "nvidia"
-  },
-  "NXP Semiconductors": {
-    "platform": "smartrecruiters",
-    "slug": "nxpsemiconductors"
-  },
-  "Okta": {
-    "platform": "greenhouse",
-    "slug": "okta"
-  },
-  "PayPal": {
-    "platform": "smartrecruiters",
-    "slug": "paypal"
-  },
-  "Pfizer": {
-    "platform": "smartrecruiters",
-    "slug": "pfizer"
-  },
-  "Pinterest": {
-    "platform": "greenhouse",
-    "slug": "pinterest"
-  },
-  "Primark / Penneys": {
-    "platform": "smartrecruiters",
-    "slug": "external-referrals"
-  },
-  "PTSB (Permanent TSB)": {
-    "platform": "smartrecruiters",
-    "slug": "ptsb"
-  },
-  "PwC Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "pwc"
-  },
-  "Reddit": {
-    "platform": "greenhouse",
-    "slug": "reddit"
-  },
-  "ResMed": {
-    "platform": "smartrecruiters",
-    "slug": "resmed"
-  },
-  "Rockwell Automation": {
-    "platform": "smartrecruiters",
-    "slug": "rockwellautomation"
-  },
-  "Salesforce": {
-    "platform": "smartrecruiters",
-    "slug": "salesforce"
-  },
-  "Sanofi": {
-    "platform": "smartrecruiters",
-    "slug": "sanofi"
-  },
-  "Seagate": {
-    "platform": "smartrecruiters",
-    "slug": "seagate"
-  },
-  "ServiceNow": {
-    "platform": "smartrecruiters",
-    "slug": "servicenow"
-  },
-  "Slack": {
-    "platform": "smartrecruiters",
-    "slug": "slack"
-  },
-  "Smith & Nephew": {
-    "platform": "smartrecruiters",
-    "slug": "smithnephew"
-  },
-  "Snowflake": {
-    "platform": "smartrecruiters",
-    "slug": "snowflake"
-  },
-  "Squarespace": {
-    "platform": "greenhouse",
-    "slug": "squarespace"
-  },
-  "SSE Airtricity / SSE": {
-    "platform": "smartrecruiters",
-    "slug": "sseairtricitysse"
-  },
-  "Stripe": {
-    "platform": "greenhouse",
-    "slug": "stripe"
-  },
-  "Synopsys": {
-    "platform": "smartrecruiters",
-    "slug": "synopsys"
-  },
-  "Takeda": {
-    "platform": "smartrecruiters",
-    "slug": "takeda"
-  },
-  "Teleflex": {
-    "platform": "smartrecruiters",
-    "slug": "teleflex"
-  },
-  "Terumo": {
-    "platform": "smartrecruiters",
-    "slug": "terumo"
-  },
-  "Teva Pharmaceuticals": {
-    "platform": "smartrecruiters",
-    "slug": "tevapharmaceuticals"
-  },
-  "Toast": {
-    "platform": "greenhouse",
-    "slug": "toast"
-  },
-  "Twilio": {
-    "platform": "eightfold",
-    "slug": "app"
-  },
-  "UBS": {
-    "platform": "smartrecruiters",
-    "slug": "ubs"
-  },
-  "Version 1": {
-    "platform": "smartrecruiters",
-    "slug": "version1"
-  },
-  "Viatris": {
-    "platform": "smartrecruiters",
-    "slug": "viatris"
-  },
-  "Virgin Media Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "virginmedia"
-  },
-  "VMware (Broadcom)": {
-    "platform": "smartrecruiters",
-    "slug": "vmware"
-  },
-  "Waterstones Ireland": {
-    "platform": "smartrecruiters",
-    "slug": "waterstones"
-  },
-  "Wayflyer": {
-    "platform": "ashby",
-    "slug": "wayflyer"
-  },
-  "Willis Towers Watson (WTW)": {
-    "platform": "smartrecruiters",
-    "slug": "willistowerswatson"
-  },
-  "Workday": {
-    "platform": "smartrecruiters",
-    "slug": "workday"
-  },
-  "Workhuman": {
-    "platform": "smartrecruiters",
-    "slug": "workhuman"
-  },
-  "WTW": {
-    "platform": "smartrecruiters",
-    "slug": "wtw"
-  },
-  "Zendesk": {
-    "platform": "smartrecruiters",
-    "slug": "zendesk"
-  },
-  "Zscaler": {
-    "platform": "greenhouse",
-    "slug": "zscaler"
-  },
-  "__probe_version__": 31
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Bio-Rad Laboratories": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Biotronik": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "BlackRock": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "Bloomberg": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "BNP Paribas Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 32
+  },
+  "__probe_version__": 32
 }
