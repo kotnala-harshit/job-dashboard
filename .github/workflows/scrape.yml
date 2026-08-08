@@ -36,7 +36,7 @@ jobs:
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
           CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
-          ATS_PROBE_LIMIT: "60"
+          ATS_PROBE_LIMIT: "100"
         run: python scrape.py
 
       - name: Commit generated state safely
