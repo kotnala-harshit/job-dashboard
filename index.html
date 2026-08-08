@@ -118,15 +118,7 @@
   }
   .live-dot { font-family: var(--mono); font-size: 11px; color: var(--teal); }
   .live-dot.stale { color: var(--rose); }
-  #manualLoadLink {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    text-decoration: underline;
-    cursor: pointer;
-  }
   #genTime { font-family: var(--mono); font-size: 11px; color: var(--muted); }
-  #fileInput { display: none; }
 
   main { padding: 22px 28px 60px; }
   .subhead {
@@ -276,6 +268,73 @@
     border:1px solid #3fcf9a44; background:var(--teal-dim); color:var(--teal);
   }
   .privacy-note { font-size:10.5px; color:var(--muted); }
+
+  .application-summary { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; }
+  .application-stat { border:1px solid var(--line); background:var(--panel); border-radius:7px; padding:7px 10px; font-family:var(--mono); font-size:11px; color:var(--muted); }
+  .application-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .application-toolbar select, .application-toolbar button { background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; font:12px var(--mono); cursor:pointer; }
+  .application-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:10px; }
+  .application-card { border:1px solid var(--line); background:var(--panel); border-radius:8px; padding:14px; }
+  .application-card .app-title { font-weight:650; font-size:14px; line-height:1.35; margin:4px 0; }
+  .application-card .app-company { color:var(--amber); font-family:var(--mono); font-size:11px; text-transform:uppercase; }
+  .application-card .app-meta { color:var(--muted); font:11px var(--mono); margin:6px 0 10px; }
+  .application-card textarea { width:100%; min-height:54px; resize:vertical; background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:5px; padding:7px; font:11px var(--mono); }
+  .application-actions { display:flex; gap:7px; flex-wrap:wrap; align-items:center; margin-top:8px; }
+  .application-actions select, .application-actions button, .track-btn { background:transparent; color:var(--text); border:1px solid var(--line); border-radius:5px; padding:6px 8px; font:10.5px var(--mono); cursor:pointer; }
+  .track-btn { color:var(--amber); border-color:var(--amber); }
+  .track-btn.tracked { color:#74c991; border-color:#74c991; }
+  #applicationsPane { display:none; }
+
+
+  .score-row { display:flex; gap:7px; flex-wrap:wrap; margin:8px 0; }
+  .score-badge { font:11px var(--mono); border:1px solid var(--line); border-radius:5px; padding:4px 7px; }
+  .score-badge.match { color:#74c991; border-color:#406b50; }
+  .score-badge.discovery { color:var(--amber); border-color:#7a6330; }
+  .reason-row { font:10.5px var(--mono); color:var(--muted); margin-top:7px; line-height:1.5; }
+  .reason-good { color:#74c991; }
+  .reason-missing { color:#d3a761; }
+  .save-btn,.ignore-btn { background:transparent;color:var(--text);border:1px solid var(--line);border-radius:5px;padding:6px 8px;font:10.5px var(--mono);cursor:pointer; }
+  .save-btn.saved { color:#74c991;border-color:#74c991; }
+  .ignore-btn { color:var(--muted); }
+
+
+  .profile-builder {
+    margin-top:14px; border:1px solid var(--line); background:var(--panel);
+    border-radius:8px; padding:12px 14px;
+  }
+  .profile-builder summary {
+    cursor:pointer; font-family:var(--mono); font-size:12px; color:var(--amber);
+    user-select:none;
+  }
+  .profile-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:10px; margin-top:12px;
+  }
+  .profile-field label {
+    display:block; font:10.5px var(--mono); color:var(--muted); margin-bottom:5px;
+    text-transform:uppercase; letter-spacing:.04em;
+  }
+  .profile-field input, .profile-field textarea {
+    width:100%; box-sizing:border-box; background:var(--bg); color:var(--text);
+    border:1px solid var(--line); border-radius:6px; padding:9px 10px;
+    font:12px var(--mono);
+  }
+  .profile-field textarea { min-height:90px; resize:vertical; }
+  .profile-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  .profile-actions button {
+    background:transparent; color:var(--text); border:1px solid var(--line);
+    border-radius:6px; padding:8px 10px; font:11px var(--mono); cursor:pointer;
+  }
+  .profile-actions button.primary { color:var(--amber); border-color:var(--amber); }
+  .profile-status {
+    font:11px var(--mono); color:var(--muted); line-height:1.5; flex:1; min-width:220px;
+  }
+  .profile-chip {
+    display:inline-block; margin:3px 4px 0 0; border:1px solid var(--line);
+    border-radius:4px; padding:3px 6px; font:10px var(--mono); color:var(--muted);
+  }
+  .profile-note { margin-top:8px; font:10.5px var(--mono); color:var(--muted); line-height:1.45; }
+
 </style>
 </head>
 <body>
@@ -283,8 +342,8 @@
 <div class="board">
   <div class="board-top">
     <div>
-      <p class="eyebrow">Ireland-wide job search · all roles · all sectors</p>
-      <h1>Ireland Job Search</h1>
+      <p class="eyebrow">Direct-company + hidden-job discovery · broad Ireland engine underneath</p>
+      <h1>Ireland Job Radar</h1>
     </div>
     <div class="readout">
       <div><b id="stCompanies">0</b>companies checked</div>
@@ -293,6 +352,34 @@
     </div>
   </div>
   <div id="genTime">Connecting to live data...</div>
+
+
+  <details class="profile-builder" id="profileBuilder">
+    <summary>Personalize this Job Radar from your resume + LinkedIn profile</summary>
+    <div class="profile-grid">
+      <div class="profile-field">
+        <label for="personalResume">Resume / CV</label>
+        <input id="personalResume" type="file" accept=".pdf,.docx,.txt,.md,application/pdf,text/plain" />
+      </div>
+      <div class="profile-field">
+        <label for="linkedinUrl">LinkedIn profile URL</label>
+        <input id="linkedinUrl" type="url" placeholder="https://www.linkedin.com/in/your-profile/" />
+      </div>
+      <div class="profile-field" style="grid-column:1/-1">
+        <label for="linkedinText">LinkedIn profile text (recommended)</label>
+        <textarea id="linkedinText" placeholder="Paste your LinkedIn About, Experience, Skills, certifications, projects, or exported profile text here."></textarea>
+      </div>
+    </div>
+    <div class="profile-actions">
+      <button type="button" class="primary" onclick="buildPersonalProfile()">Build / update my profile</button>
+      <button type="button" onclick="resetPersonalProfile()">Use default profile</button>
+      <span id="personalProfileStatus" class="profile-status">Default profile is active.</span>
+    </div>
+    <div id="personalProfileSummary" class="profile-note"></div>
+    <div class="profile-note">
+      LinkedIn URL is stored as profile metadata only. A static GitHub Pages site cannot reliably read LinkedIn profile content from the URL because LinkedIn commonly requires authentication and blocks cross-origin scraping. Paste LinkedIn profile text above for it to affect matching.
+    </div>
+  </details>
 
   <div class="filter-row" style="margin-top: 14px;">
     <div class="search-wrap">
@@ -333,10 +420,25 @@
       <option value="part_time">Part-time</option>
       <option value="internship">Internship</option>
     </select>
-    <select id="fResume">
-      <option value="">All jobs</option>
-      <option value="matched">Resume keyword matches</option>
-      <option value="strong">Stronger resume matches</option>
+    <select id="fRadar">
+      <option value="for_you">For You</option>
+      <option value="">All Ireland jobs</option>
+      <option value="best">Best Matches (75+)</option>
+      <option value="new_today">New Today</option>
+      <option value="hidden">Hidden / Discovery Value</option>
+      <option value="graduate">Graduate Radar</option>
+      <option value="closing">Closing Soon</option>
+    </select>
+    <select id="fRoleFamily">
+      <option value="">All role families</option>
+    </select>
+    <select id="fExperience">
+      <option value="">Any experience fit</option>
+      <option value="Strong">Strong</option>
+      <option value="Possible">Possible</option>
+      <option value="Stretch">Stretch</option>
+      <option value="Overqualified">Overqualified</option>
+      <option value="Too Senior">Too Senior</option>
     </select>
     <select id="fNew">
       <option value="">All postings</option>
@@ -349,35 +451,28 @@
       <option value="not_mentioned">Not mentioned</option>
     </select>
     <select id="fSort">
+      <option value="match">Best candidate match</option>
+      <option value="discovery">Highest discovery value</option>
       <option value="date">Newest first</option>
-      <option value="resume">Best resume match</option>
       <option value="company">Company A–Z</option>
       <option value="title">Title A–Z</option>
     </select>
     <div class="loadctrl">
       <span id="liveStatus" class="live-dot">● live</span>
       <button type="button" onclick="autoFetchJobs()">Refresh now</button>
-      <label id="manualLoadLink" for="fileInput">load file manually</label>
-      <input id="fileInput" type="file" accept="application/json,.json" />
     </div>
-  </div>
-  <div class="resume-panel">
-    <strong>Resume match</strong>
-    <label class="resume-button" for="resumeInput">Load resume</label>
-    <input id="resumeInput" type="file" accept=".pdf,.docx,.txt,.md,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
-    <button id="clearResume" class="resume-button" type="button" style="display:none">Clear</button>
-    <span id="resumeStatus" class="resume-status">Optional: upload PDF, DOCX or TXT to rank jobs by keyword overlap.</span>
-    <span class="privacy-note">Processed in your browser; the resume is not uploaded to this site.</span>
   </div>
 </div>
 
 <main>
   <div class="subhead">
     <div class="tabs">
-      <div id="tabLive" class="tab active" onclick="showTab('live')">Live matches</div>
+      <div id="tabLive" class="tab active" onclick="showTab('live')">For You / Jobs</div>
       <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
       <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
       <div id="tabZero" class="tab" onclick="showTab('zero')">Zero jobs scraped</div>
+      <div id="tabSaved" class="tab" onclick="showTab('saved')">Saved</div>
+      <div id="tabApplications" class="tab" onclick="showTab('applications')">Applications</div>
     </div>
     <span id="resultCount">0 results</span>
   </div>
@@ -400,6 +495,31 @@
     <div id="zeroSummary" class="diag-summary"></div>
     <div id="zeroGrid" class="dir-grid"></div>
   </div>
+
+
+  <div id="savedPane" style="display:none">
+    <div id="savedGrid" class="grid"></div>
+    <div id="savedEmpty" class="empty">No saved jobs yet.</div>
+  </div>
+
+  <div id="applicationsPane">
+    <div id="applicationSummary" class="application-summary"></div>
+    <div class="application-toolbar">
+      <select id="applicationStatusFilter" onchange="renderApplications()">
+        <option value="">All application statuses</option>
+        <option value="Applied">Applied</option>
+        <option value="Assessment">Assessment</option>
+        <option value="Interview">Interview</option>
+        <option value="Offer">Offer</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Withdrawn">Withdrawn</option>
+      </select>
+      <button type="button" onclick="exportApplications()">Export applications</button>
+    </div>
+    <div id="applicationGrid" class="application-grid"></div>
+    <div id="applicationsEmpty" class="empty">No applications tracked yet. Use “Mark applied” on a job card after you apply.</div>
+  </div>
+
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -412,9 +532,162 @@ let ALL_JOBS = [];
 let ALL_MANUAL = [];
 let ALL_REGISTRY = [];
 let RAW_TOTAL = 0;
-let RESUME_TEXT = '';
-let RESUME_TERMS = new Set();
-let RESUME_FILE_NAME = '';
+
+const SAVED_KEY = 'ireland_job_dashboard_saved_v1';
+const IGNORED_KEY = 'ireland_job_dashboard_ignored_v1';
+let SAVED_JOBS = [];
+let IGNORED_JOBS = [];
+
+function loadRadarState() {
+  try { SAVED_JOBS = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch(e) { SAVED_JOBS = []; }
+  try { IGNORED_JOBS = JSON.parse(localStorage.getItem(IGNORED_KEY) || '[]'); } catch(e) { IGNORED_JOBS = []; }
+}
+function jobId(j) { return String(j.url || `${j.company}|${j.title}|${j.location || ''}`); }
+function isSaved(j) { return SAVED_JOBS.some(x => x.id === jobId(j)); }
+function isIgnored(j) { return IGNORED_JOBS.includes(jobId(j)); }
+function toggleSaved(j) {
+  const id = jobId(j);
+  if (isSaved(j)) SAVED_JOBS = SAVED_JOBS.filter(x => x.id !== id);
+  else SAVED_JOBS.unshift({id, company:j.company, title:j.title, location:j.location, url:j.url, candidate_match_score:effectiveMatchScore(j), discovery_score:j.discovery_score, saved_at:new Date().toISOString()});
+  localStorage.setItem(SAVED_KEY, JSON.stringify(SAVED_JOBS));
+  renderSaved(); applyFilters();
+}
+function ignoreJob(j) {
+  const id = jobId(j);
+  if (!IGNORED_JOBS.includes(id)) IGNORED_JOBS.push(id);
+  localStorage.setItem(IGNORED_KEY, JSON.stringify(IGNORED_JOBS));
+  populateRoleFamilies();
+  updatePersonalProfileUI();
+  applyFilters();
+}
+function renderSaved() {
+  const grid = document.getElementById('savedGrid');
+  const empty = document.getElementById('savedEmpty');
+  grid.innerHTML = '';
+  empty.style.display = SAVED_JOBS.length ? 'none' : 'block';
+  SAVED_JOBS.forEach(j => {
+    const card = document.createElement('div'); card.className='card';
+    card.onclick = () => j.url && window.open(j.url,'_blank','noopener');
+    card.innerHTML = `<div class="company">${escapeHtml(j.company)}</div><div class="title">${escapeHtml(j.title)}</div>
+      <div class="meta"><span class="chip">${escapeHtml(j.location || 'Ireland')}</span>
+      ${pm.score != null ? `<span class="score-badge match">${pm.score}% ${pm.personalized ? 'Personal Match' : 'Match'}</span>` : ''}</div>
+      <div class="card-footer"><button class="save-btn saved" data-unsave="1">Remove saved</button><span class="apply-hint">Open →</span></div>`;
+    const b=card.querySelector('[data-unsave]'); b.addEventListener('click',e=>{e.stopPropagation(); toggleSaved(j);});
+    grid.appendChild(card);
+  });
+  const tab=document.getElementById('tabSaved'); if(tab) tab.textContent=`Saved (${SAVED_JOBS.length})`;
+}
+
+const APPLICATIONS_KEY = 'ireland_job_dashboard_applications_v1';
+let APPLICATIONS = [];
+
+function loadApplications() {
+  try { APPLICATIONS = JSON.parse(localStorage.getItem(APPLICATIONS_KEY) || '[]'); }
+  catch (e) { APPLICATIONS = []; }
+}
+function saveApplications() {
+  localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
+}
+function applicationId(job) {
+  return String(job.url || `${job.company}|${job.title}|${job.location || ''}`);
+}
+function isTracked(job) {
+  const id = applicationId(job);
+  return APPLICATIONS.some(a => a.id === id);
+}
+function markApplied(job) {
+  const id = applicationId(job);
+  const existing = APPLICATIONS.find(a => a.id === id);
+  if (!existing) {
+    APPLICATIONS.unshift({
+      id,
+      company: job.company || '',
+      title: job.title || 'Untitled role',
+      location: job.location || job.ireland_area || 'Ireland',
+      url: job.url || '',
+      source: job.ats || '',
+      status: 'Applied',
+      applied_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      notes: ''
+    });
+  } else {
+    existing.status = existing.status || 'Applied';
+    existing.updated_at = new Date().toISOString();
+  }
+  saveApplications();
+  renderApplications();
+  applyFilters();
+}
+function updateApplication(id, field, value) {
+  const app = APPLICATIONS.find(a => a.id === id);
+  if (!app) return;
+  app[field] = value;
+  app.updated_at = new Date().toISOString();
+  saveApplications();
+  renderApplications();
+}
+function removeApplication(id) {
+  APPLICATIONS = APPLICATIONS.filter(a => a.id !== id);
+  saveApplications();
+  renderApplications();
+  applyFilters();
+}
+function exportApplications() {
+  const blob = new Blob([JSON.stringify(APPLICATIONS, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'job-applications.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function renderApplications() {
+  const grid = document.getElementById('applicationGrid');
+  const empty = document.getElementById('applicationsEmpty');
+  const filter = document.getElementById('applicationStatusFilter')?.value || '';
+  const statuses = ['Applied','Assessment','Interview','Offer','Rejected','Withdrawn'];
+  const apps = APPLICATIONS.filter(a => !filter || a.status === filter);
+
+  document.getElementById('applicationSummary').innerHTML =
+    statuses.map(s => `<span class="application-stat">${s}: ${APPLICATIONS.filter(a => a.status === s).length}</span>`).join('') +
+    `<span class="application-stat">Total: ${APPLICATIONS.length}</span>`;
+
+  grid.innerHTML = '';
+  empty.style.display = apps.length ? 'none' : 'block';
+
+  apps.forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'application-card';
+    const date = a.applied_at ? new Date(a.applied_at).toLocaleDateString() : '';
+    card.innerHTML = `
+      <div class="app-company">${escapeHtml(a.company)}</div>
+      <div class="app-title">${escapeHtml(a.title)}</div>
+      <div class="app-meta">${escapeHtml(a.location || '')}${date ? ` · Applied ${escapeHtml(date)}` : ''}</div>
+      <textarea placeholder="Notes: recruiter, referral, interview date, follow-up..." data-notes-id="${escapeHtml(a.id)}">${escapeHtml(a.notes || '')}</textarea>
+      <div class="application-actions">
+        <select data-status-id="${escapeHtml(a.id)}">
+          ${statuses.map(s => `<option value="${s}" ${a.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+        </select>
+        ${a.url ? `<button type="button" onclick="window.open('${escapeHtml(a.url)}','_blank','noopener')">Open job</button>` : ''}
+        <button type="button" data-remove-id="${escapeHtml(a.id)}">Remove</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  grid.querySelectorAll('[data-status-id]').forEach(el =>
+    el.addEventListener('change', e => updateApplication(e.target.dataset.statusId, 'status', e.target.value))
+  );
+  grid.querySelectorAll('[data-notes-id]').forEach(el =>
+    el.addEventListener('change', e => updateApplication(e.target.dataset.notesId, 'notes', e.target.value))
+  );
+  grid.querySelectorAll('[data-remove-id]').forEach(el =>
+    el.addEventListener('click', e => removeApplication(e.target.dataset.removeId))
+  );
+
+  document.getElementById('tabApplications').textContent = `Applications (${APPLICATIONS.length})`;
+}
 
 const INTERNSHIP_KEYWORDS = ['intern', 'internship', 'working student', 'student job', 'placement', 'co-op', 'co op'];
 const PART_TIME_KEYWORDS = ['part time', 'part-time', 'seasonal', 'temporary staff', 'christmas temp', 'weekend staff'];
@@ -508,51 +781,105 @@ function visaLabel(status) {
   return { cls: '', text: 'Visa not mentioned' };
 }
 
-const RESUME_STOPWORDS = new Set(['the','and','for','with','that','this','from','your','you','our','are','will','have','has','job','role','work','team','company','candidate','skills','skill','experience','years','year','including','within','across','using','into','about','more','their','they','them','who','what','when','where','which','while','also','all','any','but','not','can','may','must','should','would','could','a','an','as','at','be','by','in','is','it','of','on','or','to','we','i','us']);
+const PROFILE_STORAGE_KEY = 'ireland_job_radar_personal_profile_v1';
+let PERSONAL_PROFILE = null;
+let PERSONAL_RESUME_TEXT = '';
 
-function tokenize(text) {
-  const raw = String(text || '').toLowerCase().match(/[a-z][a-z0-9+#.\-]{2,}/g) || [];
+const PROFILE_STOPWORDS = new Set([
+  'the','and','for','with','that','this','from','your','you','our','are','will','have','has',
+  'job','role','work','team','company','candidate','skills','skill','experience','years','year',
+  'including','within','across','using','into','about','more','their','they','them','who','what',
+  'when','where','which','while','also','all','any','but','not','can','may','must','should',
+  'would','could','a','an','as','at','be','by','in','is','it','of','on','or','to','we','i','us',
+  'responsibilities','requirements','required','preferred','position','working','looking'
+]);
+
+const KNOWN_SKILLS = [
+  'sql','python','java','javascript','typescript','r','excel','power bi','tableau','looker',
+  'snowflake','databricks','aws','azure','gcp','google cloud','docker','kubernetes','git','github',
+  'postgresql','postgres','mysql','oracle','mongodb','etl','data pipelines','data warehousing',
+  'data modelling','data modeling','pandas','numpy','scikit-learn','machine learning','forecasting',
+  'predictive analytics','anomaly detection','statistics','regression','classification','clustering',
+  'requirements gathering','requirements analysis','process mapping','process improvement','uat',
+  'user acceptance testing','stakeholder management','project management','agile','scrum','jira',
+  'erp','sap','salesforce','microsoft dynamics 365','d365','implementation','application support',
+  'functional support','business analysis','business intelligence','bi','financial analysis',
+  'risk management','compliance','aml','fraud','product analytics','operations','consulting',
+  'strategy','market research','pricing','customer insights','supply chain','revenue operations'
+];
+
+const ROLE_FAMILY_HINTS = {
+  'Data & BI': ['data analyst','business intelligence','bi analyst','reporting analyst','analytics analyst','insights analyst','power bi','tableau','sql'],
+  'Business Analysis': ['business analyst','business systems','requirements gathering','requirements analysis','process mapping','uat','functional analyst'],
+  'Consulting': ['consultant','consulting','advisory','strategy','client delivery','client communication','transformation'],
+  'Implementation / Enterprise Systems': ['implementation','erp','functional consultant','application support','systems implementation','d365','sap','oracle'],
+  'Operations': ['operations analyst','business operations','operational excellence','process improvement','supply chain','revenue operations'],
+  'Product': ['product analyst','product analytics','product operations','product data'],
+  'Finance / Risk': ['risk analyst','finance analyst','financial analyst','compliance','aml','fraud','regulatory','financial crime'],
+  'Customer / Commercial': ['commercial analyst','customer insights','pricing','growth analyst','market research','sales operations','revenue analyst'],
+  'Technical Data': ['data engineer','data scientist','analytics engineer','etl developer','sql developer','database','data quality','data governance']
+};
+
+function profileTokenize(text) {
+  const raw = String(text || '').toLowerCase().match(/[a-z][a-z0-9+#.\-]{1,}/g) || [];
   return raw.map(t => t.replace(/^[.\-]+|[.\-]+$/g, ''))
-    .filter(t => t.length >= 3 && !RESUME_STOPWORDS.has(t) && !/^\d+$/.test(t));
+    .filter(t => t.length >= 2 && !PROFILE_STOPWORDS.has(t) && !/^\d+$/.test(t));
 }
 
-function setResumeText(text, filename) {
-  RESUME_TEXT = String(text || '');
-  RESUME_FILE_NAME = filename || 'resume';
-  const counts = {};
-  tokenize(RESUME_TEXT).forEach(t => counts[t] = (counts[t] || 0) + 1);
-  RESUME_TERMS = new Set(Object.entries(counts)
-    .sort((a,b) => b[1] - a[1])
-    .slice(0, 300)
-    .map(([t]) => t));
-  document.getElementById('resumeStatus').textContent = `${RESUME_FILE_NAME} loaded · ${RESUME_TERMS.size} searchable terms · ranking available`;
-  document.getElementById('clearResume').style.display = 'inline-block';
-  document.getElementById('fSort').value = 'resume';
-  document.getElementById('fResume').value = 'matched';
-  applyFilters();
+function phrasePresent(text, phrase) {
+  const a = String(text || '').toLowerCase().replace(/[^a-z0-9+#]+/g,' ');
+  const b = String(phrase || '').toLowerCase().replace(/[^a-z0-9+#]+/g,' ').trim();
+  return !!b && a.includes(b);
 }
 
-function resumeScore(job) {
-  if (!RESUME_TERMS.size) return 0;
-  const titleTerms = new Set(tokenize(job.title));
-  const companyTerms = new Set(tokenize(job.company));
-  const sectorTerms = new Set(tokenize(job.sector));
-  const jobTerms = new Set([...(job.match_keywords || []), ...titleTerms, ...companyTerms, ...sectorTerms]);
-  let weighted = 0;
-  let possible = 0;
-  for (const term of RESUME_TERMS) {
-    let w = 1;
-    if (titleTerms.has(term)) w = 5;
-    else if (sectorTerms.has(term)) w = 2.5;
-    else if (companyTerms.has(term)) w = 1.5;
-    possible += 1;
-    if (jobTerms.has(term)) weighted += w;
+function detectExperienceYears(text) {
+  const t = String(text || '').toLowerCase();
+  const candidates = [];
+  for (const re of [
+    /(\d+(?:\.\d+)?)\s*\+\s*years?/g,
+    /(\d+(?:\.\d+)?)\s*years?\s+(?:of\s+)?(?:professional\s+)?experience/g,
+    /(?:over|more than)\s+(\d+(?:\.\d+)?)\s*years?/g
+  ]) {
+    let m;
+    while ((m = re.exec(t))) candidates.push(Number(m[1]));
   }
-  // Keep the score interpretable as a keyword-overlap indicator, not an AI fit claim.
-  return Math.min(100, Math.round((weighted / Math.max(12, Math.sqrt(RESUME_TERMS.size) * 4)) * 100));
+  return candidates.length ? Math.max(...candidates.filter(x => x >= 0 && x <= 40)) : null;
+}
+
+function buildProfileFromText(text, linkedinUrl='') {
+  const combined = String(text || '');
+  const counts = {};
+  profileTokenize(combined).forEach(t => counts[t] = (counts[t] || 0) + 1);
+  const terms = Object.entries(counts)
+    .sort((a,b) => b[1] - a[1])
+    .slice(0, 350)
+    .map(([t]) => t);
+
+  const skills = KNOWN_SKILLS.filter(s => phrasePresent(combined, s));
+  const familyScores = {};
+  Object.entries(ROLE_FAMILY_HINTS).forEach(([family, hints]) => {
+    familyScores[family] = hints.reduce((n,h) => n + (phrasePresent(combined,h) ? 1 : 0), 0);
+  });
+  const roleFamilies = Object.entries(familyScores)
+    .filter(([,score]) => score > 0)
+    .sort((a,b) => b[1]-a[1])
+    .slice(0,5)
+    .map(([family,score]) => ({family, score}));
+
+  return {
+    version: 1,
+    linkedin_url: linkedinUrl || '',
+    terms,
+    skills,
+    role_families: roleFamilies,
+    experience_years: detectExperienceYears(combined),
+    generated_at: new Date().toISOString(),
+    text_length: combined.length
+  };
 }
 
 async function extractResumeText(file) {
+  if (!file) return '';
   const name = (file.name || '').toLowerCase();
   if (name.endsWith('.txt') || name.endsWith('.md') || file.type === 'text/plain') return await file.text();
   if (name.endsWith('.docx')) {
@@ -573,6 +900,166 @@ async function extractResumeText(file) {
     return text;
   }
   throw new Error('Use a PDF, DOCX, TXT or MD resume');
+}
+
+function loadPersonalProfile() {
+  try {
+    PERSONAL_PROFILE = JSON.parse(localStorage.getItem(PROFILE_STORAGE_KEY) || 'null');
+  } catch(e) {
+    PERSONAL_PROFILE = null;
+  }
+  const url = PERSONAL_PROFILE?.linkedin_url || '';
+  if (url) document.getElementById('linkedinUrl').value = url;
+  updatePersonalProfileUI();
+}
+
+function savePersonalProfile() {
+  if (PERSONAL_PROFILE) localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(PERSONAL_PROFILE));
+  else localStorage.removeItem(PROFILE_STORAGE_KEY);
+}
+
+async function buildPersonalProfile() {
+  const status = document.getElementById('personalProfileStatus');
+  try {
+    status.textContent = 'Building local profile...';
+    const file = document.getElementById('personalResume').files?.[0];
+    if (file) PERSONAL_RESUME_TEXT = await extractResumeText(file);
+    const linkedinText = document.getElementById('linkedinText').value || '';
+    const linkedinUrl = document.getElementById('linkedinUrl').value.trim();
+
+    const combined = [PERSONAL_RESUME_TEXT, linkedinText].filter(Boolean).join('\n');
+    if (combined.trim().length < 80) {
+      throw new Error('Upload a resume or paste enough LinkedIn profile text to build a useful profile.');
+    }
+
+    PERSONAL_PROFILE = buildProfileFromText(combined, linkedinUrl);
+    PERSONAL_PROFILE.resume_filename = file?.name || PERSONAL_PROFILE?.resume_filename || '';
+    savePersonalProfile();
+    updatePersonalProfileUI();
+    document.getElementById('fRadar').value = 'for_you';
+    document.getElementById('fSort').value = 'match';
+    applyFilters();
+  } catch(err) {
+    status.textContent = 'Profile not updated: ' + err.message;
+  }
+}
+
+function resetPersonalProfile() {
+  PERSONAL_PROFILE = null;
+  PERSONAL_RESUME_TEXT = '';
+  localStorage.removeItem(PROFILE_STORAGE_KEY);
+  document.getElementById('personalResume').value = '';
+  document.getElementById('linkedinUrl').value = '';
+  document.getElementById('linkedinText').value = '';
+  updatePersonalProfileUI();
+  applyFilters();
+}
+
+function updatePersonalProfileUI() {
+  const status = document.getElementById('personalProfileStatus');
+  const summary = document.getElementById('personalProfileSummary');
+  if (!PERSONAL_PROFILE) {
+    status.textContent = 'Default profile is active.';
+    summary.innerHTML = '';
+    return;
+  }
+
+  status.textContent = `Personal profile active · ${PERSONAL_PROFILE.skills?.length || 0} skills · ${PERSONAL_PROFILE.role_families?.length || 0} inferred role families`;
+  const family = (PERSONAL_PROFILE.role_families || []).map(x => x.family);
+  const chips = [
+    ...(PERSONAL_PROFILE.skills || []).slice(0,12),
+    ...family.slice(0,4).map(x => 'Role: ' + x),
+    ...(PERSONAL_PROFILE.experience_years != null ? [`Experience: ~${PERSONAL_PROFILE.experience_years}y`] : [])
+  ];
+  summary.innerHTML = chips.map(x => `<span class="profile-chip">${escapeHtml(x)}</span>`).join('');
+}
+
+function localExperienceFit(job) {
+  if (!PERSONAL_PROFILE || PERSONAL_PROFILE.experience_years == null) return job.experience_fit || 'Unknown';
+  const yrs = Number(PERSONAL_PROFILE.experience_years);
+  const min = job.experience_min == null ? null : Number(job.experience_min);
+  const max = job.experience_max == null ? null : Number(job.experience_max);
+  if (min == null) return 'Possible';
+  if (yrs >= min && (max == null || yrs <= max + 1)) return 'Strong';
+  if (yrs + 2 >= min) return 'Possible';
+  if (yrs + 4 >= min) return 'Stretch';
+  if (max != null && yrs > max + 4) return 'Overqualified';
+  return 'Too Senior';
+}
+
+function personalJobMatch(job) {
+  if (!PERSONAL_PROFILE) {
+    return {
+      score: Number(job.candidate_match_score || 0),
+      reasons: job.match_reasons || [],
+      missing: job.missing_skills || [],
+      experienceFit: job.experience_fit || 'Unknown',
+      personalized: false
+    };
+  }
+
+  const titleTerms = new Set(profileTokenize(job.title || ''));
+  const featureTerms = new Set([
+    ...profileTokenize((job.match_keywords || []).join(' ')),
+    ...profileTokenize(job.role_family || ''),
+    ...profileTokenize(job.sector || ''),
+    ...profileTokenize(job.company || '')
+  ]);
+  const jobText = [
+    job.title || '', job.role_family || '', job.sector || '',
+    (job.match_keywords || []).join(' ')
+  ].join(' ');
+
+  let score = 0;
+  const reasons = [];
+  const matchedTerms = [];
+
+  for (const term of PERSONAL_PROFILE.terms || []) {
+    if (titleTerms.has(term)) {
+      score += 3.0;
+      matchedTerms.push(term);
+    } else if (featureTerms.has(term)) {
+      score += 1.2;
+      matchedTerms.push(term);
+    }
+  }
+
+  const matchedSkills = (PERSONAL_PROFILE.skills || []).filter(s => phrasePresent(jobText, s));
+  score += Math.min(34, matchedSkills.length * 5);
+
+  const inferredFamilies = (PERSONAL_PROFILE.role_families || []).map(x => x.family);
+  if (job.role_family && inferredFamilies.includes(job.role_family)) {
+    score += 22;
+    reasons.push(job.role_family + ' profile fit');
+  }
+
+  const expFit = localExperienceFit(job);
+  score += {Strong:14, Possible:8, Stretch:2, Overqualified:-4, 'Too Senior':-20, Unknown:0}[expFit] || 0;
+
+  if (/director|vice president|\bvp\b|head of|principal|staff engineer/i.test(job.title || '')) score -= 18;
+  if (/graduate|junior|analyst|associate|consultant/i.test(job.title || '')) score += 5;
+
+  // Convert token accumulation into a stable 0–100 range.
+  const tokenComponent = Math.min(35, score > 0 ? Math.log1p(Math.max(0, score)) * 9 : 0);
+  const structured = Math.max(0, score - Math.min(score, matchedTerms.length * 3.0));
+  const finalScore = Math.max(0, Math.min(100, Math.round(tokenComponent + structured)));
+
+  reasons.push(...matchedSkills.slice(0,7));
+  if (expFit === 'Strong' || expFit === 'Possible') reasons.push('Experience fit: ' + expFit);
+
+  const missing = (PERSONAL_PROFILE.skills || []).filter(s => !matchedSkills.includes(s)).slice(0,4);
+
+  return {
+    score: finalScore,
+    reasons: [...new Set(reasons)].slice(0,10),
+    missing,
+    experienceFit: expFit,
+    personalized: true
+  };
+}
+
+function effectiveMatchScore(job) {
+  return personalJobMatch(job).score;
 }
 
 function loadData(data) {
@@ -611,54 +1098,30 @@ async function autoFetchJobs() {
     document.getElementById('liveStatus').textContent = '● live';
     document.getElementById('liveStatus').classList.remove('stale');
   } catch (err) {
-    document.getElementById('liveStatus').textContent = '○ not connected — use "load file manually"';
+    document.getElementById('liveStatus').textContent = '○ data.json unavailable';
     document.getElementById('liveStatus').classList.add('stale');
   }
 }
 
-document.getElementById('fileInput').addEventListener('change', function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    try {
-      loadData(JSON.parse(evt.target.result));
-      document.getElementById('liveStatus').textContent = '● loaded from file';
-      document.getElementById('liveStatus').classList.remove('stale');
-    } catch (err) {
-      alert('Could not parse that file — is it data.json from scrape.py?');
-    }
-  };
-  reader.readAsText(file);
-});
 
-document.getElementById('resumeInput').addEventListener('change', async function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  document.getElementById('resumeStatus').textContent = `Reading ${file.name}...`;
-  try {
-    const text = await extractResumeText(file);
-    if (!text.trim()) throw new Error('No readable text found in this resume');
-    setResumeText(text, file.name);
-  } catch (err) {
-    document.getElementById('resumeStatus').textContent = `Could not read resume: ${err.message}`;
-  }
-});
 
-document.getElementById('clearResume').addEventListener('click', function() {
-  RESUME_TEXT = ''; RESUME_FILE_NAME = ''; RESUME_TERMS = new Set();
-  document.getElementById('resumeInput').value = '';
-  document.getElementById('resumeStatus').textContent = 'Optional: upload PDF, DOCX or TXT to rank jobs by keyword overlap.';
-  document.getElementById('clearResume').style.display = 'none';
-  document.getElementById('fResume').value = '';
-  if (document.getElementById('fSort').value === 'resume') document.getElementById('fSort').value = 'date';
-  applyFilters();
-});
 
-['fSearch', 'fCompany', 'fLocation', 'fSector', 'fSource', 'fPosted', 'fType', 'fResume', 'fNew', 'fVisa', 'fSort'].forEach(id => {
-  document.getElementById(id).addEventListener('input', applyFilters);
-  document.getElementById(id).addEventListener('change', applyFilters);
-});
+function populateRoleFamilies() {
+  const el = document.getElementById('fRoleFamily');
+  if (!el) return;
+  const current = el.value;
+  const families = [...new Set(ALL_JOBS.map(j => j.role_family).filter(x => x && x !== 'Other'))].sort();
+  el.innerHTML = '<option value="">All role families</option>' + families.map(x => `<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');
+  el.value = current;
+}
+
+function closingSoon(j) {
+  if (!j.closing_date) return false;
+  const d = new Date(j.closing_date);
+  if (isNaN(d)) return false;
+  const days = (d - new Date()) / 86400000;
+  return days >= 0 && days <= 7;
+}
 
 function applyFilters() {
   const search = document.getElementById('fSearch').value.trim().toLowerCase();
@@ -668,7 +1131,9 @@ function applyFilters() {
   const source = document.getElementById('fSource').value;
   const posted = document.getElementById('fPosted').value;
   const type = document.getElementById('fType').value;
-  const resumeFilter = document.getElementById('fResume').value;
+  const radar = document.getElementById('fRadar').value;
+  const roleFamily = document.getElementById('fRoleFamily').value;
+  const expFit = document.getElementById('fExperience').value;
   const newOnly = document.getElementById('fNew').value;
   const visa = document.getElementById('fVisa').value;
   const sort = document.getElementById('fSort').value;
@@ -686,10 +1151,18 @@ function applyFilters() {
     if (sector && (j.sector || 'Other') !== sector) return false;
     if (source && j.ats !== source) return false;
     if (type && (j.employment_type || employmentType(j.title)) !== type) return false;
-    const rScore = resumeScore(j);
-    if (resumeFilter === 'matched' && RESUME_TERMS.size && rScore <= 0) return false;
-    if (resumeFilter === 'strong' && RESUME_TERMS.size && rScore < 20) return false;
-    if (newOnly === 'new' && !j.new_since_last_check) return false;
+    if (isIgnored(j)) return false;
+    if (roleFamily && j.role_family !== roleFamily) return false;
+    if (expFit && personalJobMatch(j).experienceFit !== expFit) return false;
+    const m = effectiveMatchScore(j);
+    const dscore = Number(j.discovery_score || 0);
+    if (radar === 'for_you' && m < 55) return false;
+    if (radar === 'best' && m < 75) return false;
+    if (radar === 'new_today' && ageHours(parsePostedDate(j.first_seen_at || j.updated_at || j.posted_at_parsed)) > 24) return false;
+    if (radar === 'hidden' && dscore < 65) return false;
+    if (radar === 'graduate' && !( /graduate|intern|entry|junior/i.test(j.title || '') || j.role_tier === 'A' && m >= 65)) return false;
+    if (radar === 'closing' && !closingSoon(j)) return false;
+        if (newOnly === 'new' && !j.new_since_last_check) return false;
     const v = j.visa_sponsorship || 'not_mentioned';
     if (visa && v !== visa) return false;
     if (posted) {
@@ -698,7 +1171,8 @@ function applyFilters() {
     return true;
   });
 
-  if (sort === 'resume' && RESUME_TERMS.size) filtered.sort((a, b) => resumeScore(b) - resumeScore(a) || new Date(b.updated_at || 0) - new Date(a.updated_at || 0));
+  if (sort === 'match') filtered.sort((a,b) => effectiveMatchScore(b)-effectiveMatchScore(a) || (b.discovery_score||0)-(a.discovery_score||0));
+  else if (sort === 'discovery') filtered.sort((a,b) => (b.discovery_score||0)-(a.discovery_score||0) || (b.candidate_match_score||0)-(a.candidate_match_score||0));
   else if (sort === 'company') filtered.sort((a, b) => (a.company || '').localeCompare(b.company || ''));
   else if (sort === 'title') filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
   else filtered.sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0));
@@ -718,7 +1192,6 @@ function applyFilters() {
     const type = j.employment_type || employmentType(j.title);
     const typeLabel = { part_time: 'Part-time', internship: 'Internship' }[type];
     const bucketLabel = recencyLabel(postedDate);
-    const rScore = resumeScore(j);
 
     const card = document.createElement('div');
     card.className = 'card ' + (fresh ? 'fresh' : '');
@@ -727,19 +1200,42 @@ function applyFilters() {
       ${j.new_since_last_check ? '<div class="new-ribbon">NEW</div>' : ''}
       <div class="company">${escapeHtml(j.company)}</div>
       <div class="title">${escapeHtml(j.title || 'Untitled role')}</div>
+      <div class="score-row">
+        ${j.candidate_match_score != null ? `<span class="score-badge match">${j.candidate_match_score}% Match</span>` : ''}
+        ${j.discovery_score != null ? `<span class="score-badge discovery">${j.discovery_score} Discovery</span>` : ''}
+        ${j.role_family && j.role_family !== 'Other' ? `<span class="chip">${escapeHtml(j.role_family)}</span>` : ''}
+        ${pm.experienceFit ? `<span class="chip">${escapeHtml(pm.experienceFit)}</span>` : ''}
+      </div>
+      ${(pm.reasons || []).length ? `<div class="reason-row"><span class="reason-good">Matched:</span> ${escapeHtml((pm.reasons || []).join(' · '))}</div>` : ''}
+      ${(pm.missing || []).length ? `<div class="reason-row"><span class="reason-missing">Potential gaps:</span> ${escapeHtml((pm.missing || []).join(' · '))}</div>` : ''}
       <div class="meta">
         <span class="chip">${escapeHtml(j.location || j.ireland_area || 'Ireland')}</span>
         <span class="chip">${escapeHtml(j.sector || 'Other')}</span>
         <span class="chip">${escapeHtml(j.ats || '')}</span>
-        ${RESUME_TERMS.size ? `<span class="match-badge">Resume ${rScore}%</span>` : ''}
         ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
         ${typeLabel ? `<span class="chip type">${typeLabel}</span>` : ''}
       </div>
       <div class="card-foot">
         <span class="visa-badge ${badge.cls}">${escapeHtml(badge.text)}</span>
-        <span class="apply-hint">Open →</span>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button type="button" class="save-btn ${isSaved(j) ? 'saved' : ''}" data-save-job="1">${isSaved(j) ? '✓ Saved' : 'Save'}</button>
+          <button type="button" class="ignore-btn" data-ignore-job="1">Ignore</button>
+          <button type="button" class="track-btn ${isTracked(j) ? 'tracked' : ''}" data-track-job="1">${isTracked(j) ? '✓ Applied' : 'Mark applied'}</button>
+          <span class="apply-hint">Open →</span>
+        </div>
       </div>
     `;
+    const saveButton = card.querySelector('[data-save-job]');
+    if (saveButton) saveButton.addEventListener('click', e => { e.stopPropagation(); toggleSaved(j); });
+    const ignoreButton = card.querySelector('[data-ignore-job]');
+    if (ignoreButton) ignoreButton.addEventListener('click', e => { e.stopPropagation(); ignoreJob(j); });
+    const trackButton = card.querySelector('[data-track-job]');
+    if (trackButton) {
+      trackButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        markApplied(j);
+      });
+    }
     grid.appendChild(card);
   });
 
@@ -912,17 +1408,28 @@ function showTab(which) {
   document.getElementById('directoryPane').style.display = which === 'dir' ? 'block' : 'none';
   document.getElementById('manualPane').style.display = which === 'manual' ? 'block' : 'none';
   document.getElementById('zeroPane').style.display = which === 'zero' ? 'block' : 'none';
+  document.getElementById('savedPane').style.display = which === 'saved' ? 'block' : 'none';
+  document.getElementById('applicationsPane').style.display = which === 'applications' ? 'block' : 'none';
 
   document.getElementById('tabLive').classList.toggle('active', which === 'live');
   document.getElementById('tabDir').classList.toggle('active', which === 'dir');
   document.getElementById('tabManual').classList.toggle('active', which === 'manual');
   document.getElementById('tabZero').classList.toggle('active', which === 'zero');
+  document.getElementById('tabSaved').classList.toggle('active', which === 'saved');
+  document.getElementById('tabApplications').classList.toggle('active', which === 'applications');
+  if (which === 'saved') renderSaved();
+  if (which === 'applications') renderApplications();
 }
 
 function escapeHtml(str) {
   return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 }
 
+loadPersonalProfile();
+loadRadarState();
+loadApplications();
+renderSaved();
+renderApplications();
 autoFetchJobs();
 setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
 </script>
