@@ -3167,24 +3167,65 @@ def scrape_jooble(keywords: str, location: str = ""):
 
 
 def scrape_amazon(query: str):
-    url = f"https://www.amazon.jobs/en/search.json?base_query={urllib.parse.quote(query)}&result_limit=50&offset=0"
-    data = fetch_json(url)
-    if not data or "jobs" not in data:
-        return []
+    """Fetch Amazon Ireland jobs directly.
+
+    The old implementation requested only the first 50 GLOBAL Amazon jobs and
+    then filtered for Ireland. That can easily return zero even while Amazon
+    has many Dublin/Cork vacancies. Use Amazon's Ireland location parameters
+    and paginate instead.
+    """
     out = []
-    for j in data["jobs"]:
-        title = j.get("title", "")
-        location = j.get("normalized_location", "") or j.get("location", "")
-        if region_ok(location):
+    seen = set()
+    limit = 100
+
+    for offset in range(0, 600, limit):
+        params = {
+            "base_query": query or "",
+            "loc_query": "Ireland",
+            "country": "IRL",
+            "result_limit": limit,
+            "offset": offset,
+        }
+        url = "https://www.amazon.jobs/en/search.json?" + urllib.parse.urlencode(params)
+        data = fetch_json(url)
+        if not data or "jobs" not in data:
+            break
+
+        jobs = data.get("jobs") or []
+        if not jobs:
+            break
+
+        added_this_page = 0
+        for j in jobs:
+            title = j.get("title", "")
+            location = j.get("normalized_location", "") or j.get("location", "")
+            # Amazon often uses Dublin, D, IRL; region_ok handles IRL/Ireland.
+            if not region_ok(location):
+                continue
+
             path = j.get("job_path", "")
+            job_id = str(j.get("id_icims") or j.get("id") or path or "")
+            key = job_id or (title.lower(), location.lower())
+            if key in seen:
+                continue
+            seen.add(key)
+
             out.append({
-                "company": "amazon",
+                "company": "Amazon",
                 "ats": "direct",
                 "title": title,
                 "location": location,
                 "url": f"https://www.amazon.jobs{path}" if path else None,
                 "updated_at": j.get("posted_date"),
+                "description_text": j.get("description") or j.get("basic_qualifications") or "",
+                "requisition_id": job_id or None,
             })
+            added_this_page += 1
+
+        # Stop when the endpoint returns less than a full page.
+        if len(jobs) < limit:
+            break
+
     return out
 
 
@@ -3239,6 +3280,119 @@ def _html_text(fragment: str) -> str:
 
 def _absolute_url(base: str, href: str) -> str:
     return urllib.parse.urljoin(base, href or "")
+
+
+
+def scrape_oracle_candidate_experience(
+    company: str,
+    host: str,
+    site_number: str,
+    country_code: str = "IE",
+    max_pages: int = 12,
+):
+    """Collect jobs from Oracle Recruiting Candidate Experience.
+
+    Oracle's public Candidate Experience UI is JavaScript-heavy, but its job
+    search uses the public recruitingCEJobRequisitions REST resource. This
+    adapter keeps the collection company-specific and Ireland-specific.
+    """
+    base = host.rstrip("/")
+    endpoint = base + "/hcmRestApi/resources/latest/recruitingCEJobRequisitions"
+    out = []
+    seen = set()
+    limit = 100
+
+    for page in range(max_pages):
+        offset = page * limit
+        finder = (
+            f"findReqs;siteNumber={site_number},"
+            f"workLocationCountryCode={country_code},"
+            f"limit={limit},offset={offset}"
+        )
+        params = {
+            "onlyData": "true",
+            "expand": "requisitionList",
+            "finder": finder,
+        }
+        url = endpoint + "?" + urllib.parse.urlencode(params, safe=";,")
+        data = fetch_json(url)
+        if not data:
+            break
+
+        rows = []
+        # Oracle CE commonly returns one search container whose requisitionList
+        # contains the visible jobs. Be tolerant of tenants that flatten it.
+        for item in data.get("items") or []:
+            reqs = item.get("requisitionList")
+            if isinstance(reqs, list):
+                rows.extend(reqs)
+            elif item.get("Title"):
+                rows.append(item)
+
+        if not rows:
+            break
+
+        for j in rows:
+            title = str(j.get("Title") or j.get("title") or "").strip()
+            location = str(
+                j.get("PrimaryLocation")
+                or j.get("Location")
+                or j.get("location")
+                or ""
+            ).strip()
+            country = str(j.get("PrimaryLocationCountry") or "").upper()
+
+            # Keep explicit IE rows and any location that independently passes
+            # the project's strict Republic-of-Ireland location check.
+            if country not in {"IE", "IRL"} and not region_ok(location):
+                continue
+
+            req_id = (
+                j.get("Id")
+                or j.get("RequisitionId")
+                or j.get("RequisitionNumber")
+                or j.get("JobId")
+            )
+            if not title or req_id is None:
+                continue
+
+            req_id = str(req_id)
+            key = req_id
+            if key in seen:
+                continue
+            seen.add(key)
+
+            job_url = (
+                f"{base}/hcmUI/CandidateExperience/en/sites/"
+                f"{site_number}/job/{urllib.parse.quote(req_id)}/"
+            )
+
+            out.append({
+                "company": company,
+                "ats": "oracle",
+                "title": title,
+                "location": location or "Ireland",
+                "url": job_url,
+                "updated_at": j.get("PostedDate") or j.get("PostingStartDate"),
+                "closing_date": j.get("PostingEndDate"),
+                "description_text": j.get("ShortDescriptionStr") or "",
+                "requisition_id": req_id,
+            })
+
+        has_more = bool(data.get("hasMore"))
+        if not has_more and len(rows) < limit:
+            break
+
+    return out
+
+
+def scrape_jpmorgan():
+    return scrape_oracle_candidate_experience(
+        "JPMorgan Chase",
+        "https://jpmc.fa.oraclecloud.com",
+        "CX_1001",
+        "IE",
+    )
 
 
 def scrape_apple():
@@ -3362,6 +3516,7 @@ def scrape_direct_company(company: str):
         "Meta": scrape_meta,
         "TikTok": scrape_tiktok,
         "Oracle": scrape_oracle,
+        "JPMorgan Chase": scrape_jpmorgan,
     }.get(company)
     return fn() if fn else []
 
@@ -3717,7 +3872,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ("Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle"):
+    for company in ("Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "JPMorgan Chase"):
         try:
             found = scrape_direct_company(company)
             results.extend(found)
@@ -3799,7 +3954,7 @@ def main():
     source_priority = {
         "direct": 100, "workday": 95, "greenhouse": 95, "lever": 95, "ashby": 95,
         "smartrecruiters": 95, "workable": 94, "recruitee": 94, "personio": 94,
-        "pinpoint": 94, "phenom": 93, "eightfold": 93, "jsonld": 90,
+        "pinpoint": 94, "phenom": 93, "eightfold": 93, "oracle": 93, "jsonld": 90,
         "adzuna": 30, "jooble": 25, "careerjet": 20,
     }
     aggregator_sources = {"adzuna", "jooble", "careerjet"}
@@ -3860,7 +4015,7 @@ def main():
                 "employer_direct"
                 if (j.get("ats") or "").lower() in
                 {"direct","workday","greenhouse","lever","ashby","smartrecruiters",
-                 "workable","recruitee","personio","pinpoint","phenom","eightfold","jsonld"}
+                 "workable","recruitee","personio","pinpoint","phenom","eightfold","oracle","jsonld"}
                 else "aggregator" if (j.get("ats") or "").lower() in {"adzuna","jooble","careerjet"}
                 else "other"
             )
