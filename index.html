@@ -351,6 +351,111 @@
   .authbar button.primary { color:var(--amber); border-color:var(--amber); }
   .auth-status { color:var(--muted); font:10.5px var(--mono); }
 
+
+/* ===== FINAL UI REFRESH — restrained component-library aesthetic ===== */
+:root{
+  --bg:#f7f7f5;
+  --panel:#ffffff;
+  --panel-2:#fafaf9;
+  --text:#18181b;
+  --muted:#71717a;
+  --line:#e4e4e7;
+  --line-strong:#d4d4d8;
+  --accent:#18181b;
+  --accent-contrast:#ffffff;
+  --soft:#f4f4f5;
+  --success:#166534;
+  --warning:#92400e;
+  --danger:#991b1b;
+  --radius:12px;
+  --radius-sm:8px;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.035);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg)!important;color:var(--text)!important;
+  font-family:var(--sans)!important;line-height:1.45;
+}
+header,.header{
+  background:rgba(247,247,245,.92)!important;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)!important;
+}
+.container,.wrap,main{max-width:1440px!important}
+h1,h2,h3,.title,.brand{letter-spacing:-.025em}
+.subtitle,.muted,.meta{color:var(--muted)!important}
+input,select,textarea{
+  background:var(--panel)!important;color:var(--text)!important;
+  border:1px solid var(--line)!important;border-radius:var(--radius-sm)!important;
+  min-height:38px;box-shadow:0 1px 1px rgba(0,0,0,.02);
+  transition:border-color .15s ease,box-shadow .15s ease;
+}
+input:focus,select:focus,textarea:focus{
+  outline:none!important;border-color:#a1a1aa!important;
+  box-shadow:0 0 0 3px rgba(24,24,27,.07)!important;
+}
+button,.btn{
+  border-radius:var(--radius-sm)!important;border:1px solid var(--line)!important;
+  min-height:36px;transition:background .15s ease,border-color .15s ease,transform .05s ease;
+}
+button:hover,.btn:hover{border-color:var(--line-strong)!important}
+button:active,.btn:active{transform:translateY(1px)}
+.tabs,.tab-row{
+  background:transparent!important;border-bottom:1px solid var(--line)!important;
+  gap:4px!important;
+}
+.tab{
+  border:0!important;border-radius:8px 8px 0 0!important;
+  color:var(--muted)!important;padding:10px 12px!important;
+}
+.tab:hover{background:var(--soft)!important;color:var(--text)!important}
+.tab.active{
+  background:var(--panel)!important;color:var(--text)!important;
+  box-shadow:inset 0 -2px 0 var(--text)!important;font-weight:650;
+}
+.filter-row,.filters{
+  background:var(--panel)!important;border:1px solid var(--line)!important;
+  border-radius:var(--radius)!important;padding:12px!important;
+  box-shadow:var(--shadow);gap:8px!important;
+}
+.job-card,.card,.dir-card{
+  background:var(--panel)!important;border:1px solid var(--line)!important;
+  border-radius:var(--radius)!important;box-shadow:none!important;
+  transition:border-color .15s ease,box-shadow .15s ease,transform .15s ease;
+}
+.job-card:hover,.card:hover,.dir-card:hover{
+  border-color:var(--line-strong)!important;
+  box-shadow:var(--shadow)!important;transform:translateY(-1px);
+}
+.job-title,.dir-name{font-family:var(--sans)!important;font-weight:680!important;letter-spacing:-.015em}
+.company,.job-company{font-weight:560}
+.badge,.chip,.score-badge,.pill{
+  border-radius:999px!important;border:1px solid var(--line)!important;
+  background:var(--soft)!important;color:var(--text)!important;
+  font-family:var(--sans)!important;font-size:11px!important;font-weight:600!important;
+}
+.score-badge.match{background:#f0fdf4!important;border-color:#bbf7d0!important;color:var(--success)!important}
+.apply,.apply-btn,.primary{
+  background:var(--accent)!important;color:var(--accent-contrast)!important;
+  border-color:var(--accent)!important;
+}
+.empty{
+  background:var(--panel)!important;border:1px dashed var(--line-strong)!important;
+  border-radius:var(--radius)!important;color:var(--muted)!important;padding:40px 20px!important;
+}
+.stats,.stat,.summary-card{
+  background:var(--panel)!important;border-color:var(--line)!important;border-radius:var(--radius)!important;
+}
+a{color:inherit}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#d4d4d8;border:3px solid transparent;background-clip:padding-box;border-radius:999px}
+@media(max-width:760px){
+  .filter-row,.filters{padding:10px!important}
+  .tab{padding:9px 8px!important;font-size:11px!important}
+}
+
 </style>
 </head>
 <body>
@@ -358,8 +463,8 @@
 <div class="board">
   <div class="board-top">
     <div>
-      <p class="eyebrow">Ireland-wide job discovery · direct employer, ATS and aggregator sources</p>
-      <h1>Ireland Job Radar</h1>
+      <p class="eyebrow">Ireland Job Radar · direct employer, ATS and aggregator discovery</p>
+      <h1>Ireland Job Radar</h1><div style="margin-top:6px;color:var(--muted);font-size:13px">Search broadly. Filter instantly. Apply at the original source.</div>
     </div>
     <div class="readout">
       <div><b id="stCompanies">0</b>companies checked</div>
@@ -827,7 +932,6 @@ function loadData(data) {
   applyFilters();
 }
 
-async 
 function setupInstantFilters() {
   const ids = [
     'q','fCompany','fArea','fSector','fSource','fTime','fType',
@@ -850,7 +954,7 @@ function setupInstantFilters() {
   });
 }
 
-function autoFetchJobs() {
+async function autoFetchJobs() {
   try {
     const resp = await fetch(DATA_URL + '?t=' + Date.now(), { cache: 'no-store' });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
