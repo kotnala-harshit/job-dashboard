@@ -236,7 +236,9 @@
     border-radius: 8px;
   }
 
-  #directoryPane { display: none; }
+  #directoryPane, #manualPane, #zeroPane { display: none; }
+  .diag-summary { margin: 0 0 14px; color: var(--muted); font-family: var(--mono); font-size: 12px; }
+  .status-chip { font-family: var(--mono); font-size: 10.5px; padding: 3px 7px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); margin-left: 6px; }
   .dir-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -374,6 +376,8 @@
     <div class="tabs">
       <div id="tabLive" class="tab active" onclick="showTab('live')">Live matches</div>
       <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
+      <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
+      <div id="tabZero" class="tab" onclick="showTab('zero')">Zero jobs scraped</div>
     </div>
     <span id="resultCount">0 results</span>
   </div>
@@ -385,6 +389,16 @@
 
   <div id="directoryPane">
     <div id="dirGrid" class="dir-grid"></div>
+  </div>
+
+  <div id="manualPane">
+    <div id="manualSummary" class="diag-summary"></div>
+    <div id="manualGrid" class="dir-grid"></div>
+  </div>
+
+  <div id="zeroPane">
+    <div id="zeroSummary" class="diag-summary"></div>
+    <div id="zeroGrid" class="dir-grid"></div>
   </div>
 </main>
 
@@ -730,9 +744,15 @@ function applyFilters() {
   });
 
   renderDirectory(search);
+  renderDiagnostics(search);
   document.getElementById('tabLive').textContent = `Live matches (${filtered.length})`;
   const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
   document.getElementById('tabDir').textContent = `Careers pages (${directoryCount})`;
+
+  const manualCompanies = getManualCompanies();
+  const zeroCompanies = getZeroJobCompanies();
+  document.getElementById('tabManual').textContent = `Manual search needed (${manualCompanies.length})`;
+  document.getElementById('tabZero').textContent = `Zero jobs scraped (${zeroCompanies.length})`;
 
   const selectedCompany = document.getElementById('fCompany').value;
   const selectedRegistry = ALL_REGISTRY.find(c => c.company === selectedCompany);
@@ -790,11 +810,113 @@ function renderDirectory(search) {
     });
 }
 
+
+function getManualCompanies() {
+  const byName = new Map();
+
+  // Registry is the source of truth: automatic=false means no working job-level connector.
+  ALL_REGISTRY.forEach(c => {
+    if (c.automatic !== true) {
+      byName.set(c.company, {
+        ...c,
+        url: c.careers_url || c.url || '',
+        platform: c.platform || 'manual-check'
+      });
+    }
+  });
+
+  // Keep compatibility with data files that expose manual_check_companies separately.
+  ALL_MANUAL.forEach(c => {
+    const existing = byName.get(c.company) || {};
+    byName.set(c.company, {
+      ...existing,
+      ...c,
+      url: c.url || c.careers_url || existing.url || '',
+      platform: c.platform || existing.platform || 'manual-check'
+    });
+  });
+
+  return Array.from(byName.values()).sort((a, b) => a.company.localeCompare(b.company));
+}
+
+function getZeroJobCompanies() {
+  const liveCounts = new Map();
+  ALL_JOBS.forEach(j => {
+    const name = j.company || '';
+    if (name) liveCounts.set(name, (liveCounts.get(name) || 0) + 1);
+  });
+
+  // "Zero jobs scraped" means the company has an automatic connector/check,
+  // but the latest Ireland scrape returned no live jobs.
+  return ALL_REGISTRY
+    .filter(c => c.automatic === true && !liveCounts.has(c.company))
+    .map(c => ({ ...c, url: c.careers_url || c.url || '' }))
+    .sort((a, b) => a.company.localeCompare(b.company));
+}
+
+function renderCompanyDiagnosticList(gridId, companies, search, selectedCompany, mode) {
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = '';
+
+  companies
+    .filter(c => (!selectedCompany || c.company === selectedCompany) &&
+      (!search || c.company.toLowerCase().includes(search)))
+    .forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'dir-card';
+      if (c.url) card.onclick = () => window.open(c.url, '_blank', 'noopener');
+
+      const detail = mode === 'manual'
+        ? `${c.platform || 'manual-check'} · no working job-level connector`
+        : `${c.platform || 'automatic'} · checked automatically · 0 Ireland jobs returned`;
+
+      card.innerHTML = `
+        <div>
+          <div class="dir-name">${escapeHtml(c.company)}</div>
+          <div class="dir-plat">${escapeHtml(detail)}</div>
+        </div>
+        ${c.url ? '<span class="apply-hint">Open →</span>' : '<span class="status-chip">no URL</span>'}
+      `;
+      grid.appendChild(card);
+    });
+}
+
+function renderDiagnostics(search) {
+  search = (search || '').toLowerCase();
+  const selectedCompany = document.getElementById('fCompany').value;
+
+  const manualCompanies = getManualCompanies();
+  const zeroCompanies = getZeroJobCompanies();
+
+  const manualVisible = manualCompanies.filter(c =>
+    (!selectedCompany || c.company === selectedCompany) &&
+    (!search || c.company.toLowerCase().includes(search))
+  ).length;
+  const zeroVisible = zeroCompanies.filter(c =>
+    (!selectedCompany || c.company === selectedCompany) &&
+    (!search || c.company.toLowerCase().includes(search))
+  ).length;
+
+  document.getElementById('manualSummary').textContent =
+    `${manualVisible} shown · ${manualCompanies.length} total companies require manual careers-page checking because no working automatic connector is currently available.`;
+
+  document.getElementById('zeroSummary').textContent =
+    `${zeroVisible} shown · ${zeroCompanies.length} total automatically checked companies returned zero Ireland jobs in the latest scrape.`;
+
+  renderCompanyDiagnosticList('manualGrid', manualCompanies, search, selectedCompany, 'manual');
+  renderCompanyDiagnosticList('zeroGrid', zeroCompanies, search, selectedCompany, 'zero');
+}
+
 function showTab(which) {
   document.getElementById('livePane').style.display = which === 'live' ? 'block' : 'none';
   document.getElementById('directoryPane').style.display = which === 'dir' ? 'block' : 'none';
+  document.getElementById('manualPane').style.display = which === 'manual' ? 'block' : 'none';
+  document.getElementById('zeroPane').style.display = which === 'zero' ? 'block' : 'none';
+
   document.getElementById('tabLive').classList.toggle('active', which === 'live');
   document.getElementById('tabDir').classList.toggle('active', which === 'dir');
+  document.getElementById('tabManual').classList.toggle('active', which === 'manual');
+  document.getElementById('tabZero').classList.toggle('active', which === 'zero');
 }
 
 function escapeHtml(str) {
