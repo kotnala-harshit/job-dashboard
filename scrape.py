@@ -2717,7 +2717,7 @@ def _jsonld_location(job_location):
 # Dynamic ATS discovery + cached coverage expansion
 # ---------------------------------------------------------------------------
 
-ATS_PROBE_VERSION = 31
+ATS_PROBE_VERSION = 32
 ATS_PROBE_LIMIT = int(os.environ.get("ATS_PROBE_LIMIT", "60"))
 ATS_CACHE_PATH = "ats_platform_cache.json"
 
@@ -2802,7 +2802,7 @@ def _session():
     return sess
 
 
-def _probe_platform(platform: str, slug: str, sess) -> bool:
+def _probe_platform(platform: str, slug: str, sess, allow_empty: bool = False) -> bool:
     """Validate that a slug really resolves to an ATS board. Does NOT require an Ireland vacancy."""
     if not sess or not slug:
         return False
@@ -2815,7 +2815,19 @@ def _probe_platform(platform: str, slug: str, sess) -> bool:
             return r.status_code == 200 and isinstance(r.json(), list)
         if platform == "smartrecruiters":
             r=sess.get(f"https://api.smartrecruiters.com/v1/companies/{slug}/postings?limit=1", timeout=10)
-            return r.status_code == 200 and isinstance(r.json(), dict) and "content" in r.json()
+            if r.status_code != 200:
+                return False
+            d = r.json()
+            if not isinstance(d, dict) or "content" not in d:
+                return False
+            # SmartRecruiters can return a structurally valid empty payload for
+            # guessed/non-proving identifiers. An empty API response alone does
+            # NOT establish that this is the employer's tenant. Empty feeds are
+            # accepted only when the tenant was fingerprinted from the employer's
+            # own careers page (allow_empty=True).
+            content = d.get("content") or []
+            total = d.get("totalFound")
+            return bool(content) or (isinstance(total, int) and total > 0) or allow_empty
         if platform == "ashby":
             r=sess.get(f"https://api.ashbyhq.com/posting-api/job-board/{slug}", timeout=10)
             d=r.json() if r.status_code == 200 else {}
@@ -2949,7 +2961,12 @@ def discover_and_scrape_manual(company_registry):
         stored_version=raw.pop("__probe_version__",0)
         cache=raw
         if stored_version != ATS_PROBE_VERSION:
-            cache={k:v for k,v in cache.items() if isinstance(v,dict) and v.get("platform") not in (None,"none")}
+            # Discovery semantics changed: discard ALL dynamically discovered
+            # mappings, including old positive guesses. Keeping historical
+            # positives here is what allowed false SmartRecruiters tenants to
+            # survive indefinitely. Explicit hard-coded mappings are re-seeded
+            # below and remain authoritative.
+            cache = {}
     except Exception:
         cache={}
 
@@ -2987,22 +3004,23 @@ def discover_and_scrape_manual(company_registry):
             for plat, cand in _careers_page_ats_candidates(
                 company, entry.get("careers_url") or "", sess
             ):
-                if plat in platforms and _probe_platform(plat, cand, sess):
+                if plat in platforms and _probe_platform(plat, cand, sess, allow_empty=True):
                     platform, slug = plat, cand
                     break
 
             # Only fall back to bounded slug guesses if the careers page did not
             # expose a recognizable ATS link.
             if not platform:
+                guess_platforms = tuple(p for p in platforms if p != "smartrecruiters")
                 for cand in candidate_slugs(company):
-                    for plat in platforms:
+                    for plat in guess_platforms:
                         if _probe_platform(plat,cand,sess):
                             platform,slug=plat,cand
                             break
                     if platform:
                         break
 
-            cache[company]={"platform":platform or "none","slug":slug}
+            cache[company]={"platform":platform or "none","slug":slug,"probe_version":ATS_PROBE_VERSION}
             if platform:
                 confirmed[company]={"platform":platform,"slug":slug}
                 print(f"  + discovered {company}: {platform}/{slug}")
