@@ -1,0 +1,243 @@
+{
+  "Google": {
+    "platform": "smartrecruiters",
+    "slug": "google"
+  },
+  "Microsoft": {
+    "platform": "smartrecruiters",
+    "slug": "microsoft"
+  },
+  "Apple": {
+    "platform": "smartrecruiters",
+    "slug": "apple"
+  },
+  "Meta": {
+    "platform": "smartrecruiters",
+    "slug": "meta"
+  },
+  "Amazon": {
+    "platform": "smartrecruiters",
+    "slug": "amazon"
+  },
+  "LinkedIn": {
+    "platform": "greenhouse",
+    "slug": "linkedin"
+  },
+  "TikTok": {
+    "platform": "smartrecruiters",
+    "slug": "tiktok"
+  },
+  "Intel": {
+    "platform": "smartrecruiters",
+    "slug": "intel"
+  },
+  "Dell Technologies": {
+    "platform": "smartrecruiters",
+    "slug": "delltechnologies"
+  },
+  "HP (Hewlett-Packard)": {
+    "platform": "smartrecruiters",
+    "slug": "hp"
+  },
+  "Hewlett Packard Enterprise (HPE)": {
+    "platform": "smartrecruiters",
+    "slug": "hewlettpackardenterprise"
+  },
+  "IBM": {
+    "platform": "smartrecruiters",
+    "slug": "ibm"
+  },
+  "Oracle": {
+    "platform": "smartrecruiters",
+    "slug": "oracle"
+  },
+  "Cisco": {
+    "platform": "smartrecruiters",
+    "slug": "cisco"
+  },
+  "SAP": {
+    "platform": "smartrecruiters",
+    "slug": "sap"
+  },
+  "Qualtrics": {
+    "platform": "greenhouse",
+    "slug": "qualtrics"
+  },
+  "Atlassian": {
+    "platform": "smartrecruiters",
+    "slug": "atlassian"
+  },
+  "NetApp": {
+    "platform": "smartrecruiters",
+    "slug": "netapp"
+  },
+  "Fiserv": {
+    "platform": "smartrecruiters",
+    "slug": "fiserv"
+  },
+  "Visa": {
+    "platform": "smartrecruiters",
+    "slug": "visa"
+  },
+  "Microchip Technology": {
+    "platform": "smartrecruiters",
+    "slug": "microchiptechnology"
+  },
+  "Qorvo": {
+    "platform": "smartrecruiters",
+    "slug": "qorvo"
+  },
+  "Advanced Micro Devices (AMD)": {
+    "platform": "smartrecruiters",
+    "slug": "advancedmicrodevices"
+  },
+  "Logitech": {
+    "platform": "smartrecruiters",
+    "slug": "logitech"
+  },
+  "Nokia": {
+    "platform": "smartrecruiters",
+    "slug": "nokia"
+  },
+  "Etsy": {
+    "platform": "smartrecruiters",
+    "slug": "etsy"
+  },
+  "Monday.com": {
+    "platform": "smartrecruiters",
+    "slug": "mondaycom"
+  },
+  "Dynatrace": {
+    "platform": "smartrecruiters",
+    "slug": "dynatrace"
+  },
+  "Splunk": {
+    "platform": "smartrecruiters",
+    "slug": "splunk"
+  },
+  "CrowdStrike": {
+    "platform": "smartrecruiters",
+    "slug": "crowdstrike"
+  },
+  "Palo Alto Networks": {
+    "platform": "smartrecruiters",
+    "slug": "paloaltonetworks"
+  },
+  "Fortinet": {
+    "platform": "smartrecruiters",
+    "slug": "fortinet"
+  },
+  "Fastly": {
+    "platform": "greenhouse",
+    "slug": "fastly"
+  },
+  "Akamai": {
+    "platform": "smartrecruiters",
+    "slug": "akamai"
+  },
+  "Ping Identity": {
+    "platform": "greenhouse",
+    "slug": "pingidentity"
+  },
+  "CyberArk": {
+    "platform": "smartrecruiters",
+    "slug": "cyberark"
+  },
+  "Rapid7": {
+    "platform": "smartrecruiters",
+    "slug": "rapid7"
+  },
+  "SentinelOne": {
+    "platform": "smartrecruiters",
+    "slug": "sentinelone"
+  },
+  "Check Point Software": {
+    "platform": "smartrecruiters",
+    "slug": "checkpointsoftware"
+  },
+  "Tenable": {
+    "platform": "smartrecruiters",
+    "slug": "tenable"
+  },
+  "Proofpoint": {
+    "platform": "smartrecruiters",
+    "slug": "proofpoint"
+  },
+  "Sophos": {
+    "platform": "lever",
+    "slug": "sophos"
+  },
+  "Trend Micro": {
+    "platform": "smartrecruiters",
+    "slug": "trendmicro"
+  },
+  "Jamf": {
+    "platform": "greenhouse",
+    "slug": "jamf"
+  },
+  "Citrix": {
+    "platform": "smartrecruiters",
+    "slug": "citrix"
+  },
+  "Pure Storage": {
+    "platform": "greenhouse",
+    "slug": "purestorage"
+  },
+  "Rubrik": {
+    "platform": "greenhouse",
+    "slug": "rubrik"
+  },
+  "Cohesity": {
+    "platform": "smartrecruiters",
+    "slug": "cohesity"
+  },
+  "Veeam": {
+    "platform": "smartrecruiters",
+    "slug": "veeam"
+  },
+  "Western Digital": {
+    "platform": "smartrecruiters",
+    "slug": "westerndigital"
+  },
+  "Micron Technology": {
+    "platform": "smartrecruiters",
+    "slug": "microntechnology"
+  },
+  "Texas Instruments": {
+    "platform": "smartrecruiters",
+    "slug": "texasinstruments"
+  },
+  "Qualcomm": {
+    "platform": "smartrecruiters",
+    "slug": "qualcomm"
+  },
+  "Marvell Technology": {
+    "platform": "smartrecruiters",
+    "slug": "marvelltechnology"
+  },
+  "STMicroelectronics": {
+    "platform": "smartrecruiters",
+    "slug": "stmicroelectronics"
+  },
+  "Infineon Technologies": {
+    "platform": "smartrecruiters",
+    "slug": "infineontechnologies"
+  },
+  "Renesas Electronics": {
+    "platform": "smartrecruiters",
+    "slug": "renesaselectronics"
+  },
+  "KLA Corporation": {
+    "platform": "smartrecruiters",
+    "slug": "kla"
+  },
+  "Applied Materials": {
+    "platform": "smartrecruiters",
+    "slug": "appliedmaterials"
+  },
+  "ASML": {
+    "platform": "smartrecruiters",
+    "slug": "asml"
+  },
+  "__probe_version__": 20
+}
