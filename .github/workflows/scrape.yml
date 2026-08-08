@@ -15,6 +15,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,17 +30,43 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4 curl_cffi
 
+      - name: Generate Supabase browser config
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          python - <<'PY'
+          import json, os
+          config = {
+              "url": os.environ.get("SUPABASE_URL", ""),
+              "publishableKey": os.environ.get("SUPABASE_ANON_KEY", ""),
+          }
+          with open("supabase-config.js", "w", encoding="utf-8") as f:
+              f.write("window.__SUPABASE_CONFIG__ = ")
+              json.dump(config, f)
+              f.write(";\n")
+          PY
+
       - name: Run broad collector + profile-aware ranker
+        env:
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
+          CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          ALERT_MATCH_THRESHOLD: "75"
         run: python scrape.py
 
       - name: Commit generated state
         shell: bash
         run: |
           set -e
+
           git config user.name "job-radar-bot"
           git config user.email "actions@users.noreply.github.com"
 
-          git add data.json seen_jobs.json ats_platform_cache.json
+          git add data.json seen_jobs.json ats_platform_cache.json supabase-config.js
           [ -f sponsorship_history.json ] && git add sponsorship_history.json
           [ -f official_permit_stats.json ] && git add official_permit_stats.json
 
@@ -52,8 +79,11 @@ jobs:
 
           for attempt in 1 2 3 4 5; do
             if git pull --rebase origin main && git push origin HEAD:main; then
+              echo "Push succeeded"
               exit 0
             fi
+            echo "Push attempt $attempt failed; retrying..."
             sleep 10
           done
+
           exit 1
