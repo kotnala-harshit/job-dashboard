@@ -697,6 +697,9 @@ JSONLD_CAREER_PAGES = [
 #
 # This is separate from the ATS connector lists. Every employer in this
 # registry remains visible even when its ATS returns zero jobs or errors.
+# Registry expanded with the uploaded 100-company Ireland career-page list.
+# ireland_companies.csv is the runtime source of truth; this embedded list is the fallback.
+
 # This gives the dashboard the same "live matches + manual-check companies"
 # behaviour as the reference Job Radar.
 # ---------------------------------------------------------------------------
@@ -705,8 +708,11 @@ IRELAND_COMPANY_REGISTRY = [
     'A&L Goodbody',
     'ABB',
     'Abbott',
+    'AbbVie',
     'ABP Food Group',
+    'Accenture',
     'Adecco Ireland',
+    'Adobe',
     'Advanced Micro Devices (AMD)',
     'AECOM',
     'Aer Lingus',
@@ -719,19 +725,25 @@ IRELAND_COMPANY_REGISTRY = [
     'Alkermes',
     'Alvarez & Marsal',
     'Amazon',
+    'American Express',
     'Amgen',
     'An Post',
+    'Analog Devices',
     'Aon',
     'Apple',
     'Applied Materials',
+    'Approach People Recruitment',
     'Arcadis',
+    'Arista Networks',
     'Arthur Cox',
     'Arup',
+    'Asana',
     'ASML',
     'AstraZeneca',
     'AtkinsRéalis',
     'Atlantic Technological University (ATU)',
     'Atlassian',
+    'Autodesk',
     'Aviva Ireland',
     'Avolon',
     'AXA Ireland',
@@ -739,21 +751,26 @@ IRELAND_COMPANY_REGISTRY = [
     'Bain & Company',
     'Baker Tilly Ireland',
     'BAM Ireland',
+    'Bank of America',
     'Bank of Ireland',
     'Barclays',
     'Bausch + Lomb',
     'Baxter International',
     'Bayer',
     'BDO Ireland',
+    'BearingPoint',
     'Becton Dickinson (BD)',
     'Bio-Rad Laboratories',
     'Biotronik',
+    'BlackRock',
     'Bloomberg',
     'BNP Paribas Ireland',
+    'BNY',
     'BNY Mellon',
     'Boehringer Ingelheim',
     'Boots Ireland',
     'Bord Gáis Energy',
+    'Bord na Móna',
     'Boston Consulting Group (BCG)',
     'Boston Scientific',
     'Box',
@@ -765,6 +782,7 @@ IRELAND_COMPANY_REGISTRY = [
     'Bus Éireann',
     'ByrneWallace',
     'C&C Group',
+    'Cadence Design Systems',
     'Cairn Homes',
     'Cantor Fitzgerald Ireland',
     'Canva',
@@ -772,41 +790,55 @@ IRELAND_COMPANY_REGISTRY = [
     'Carbery Group',
     'Carrier',
     'Catalent',
+    'CDB Aviation',
+    'Central Bank of Ireland',
+    'CGI',
     'Charles River Laboratories',
     'Check Point Software',
     'Cisco',
     'Citi',
     'Citrix',
     'Clayton Hotels',
+    'ClickUp',
     'Cloudflare',
     'Coca-Cola HBC Ireland',
     'Cognizant',
     'Cohesity',
     'Coillte',
+    'Coinbase',
     'Coloplast',
     'Concentrix (Ireland)',
     'Convatec',
     'Cook Medical',
+    'Cpl',
     'CPL Resources',
     'CRH',
     'CrowdStrike',
     'Currys Ireland',
     'CyberArk',
     'daa (Dublin Airport Authority)',
+    'DAE Capital',
     'Dairygold',
     'Dalata Hotel Group',
     'Danaher Corporation',
     'Databricks',
+    'Datadog',
+    'Datalex',
     'Davy',
     'Dawn Meats',
     'Decathlon Ireland',
     'Dell Technologies',
+    'Deloitte Ireland',
     'DePuy Synthes',
+    'Deutsche Bank',
     'Dexcom',
     'DHL Ireland',
     'Diageo Ireland',
+    'Dillon Eustace',
     'DocuSign',
     'DPS Group (Arcadis)',
+    'DraftKings',
+    'Dropbox',
     'DSV Ireland',
     'Dublin Bus',
     'Dublin City University (DCU)',
@@ -817,29 +849,44 @@ IRELAND_COMPANY_REGISTRY = [
     'Eaton',
     'Edwards Lifesciences',
     'Eir',
+    'EirGrid',
     'EirGrid Group',
+    'Elavon',
     'Eli Lilly',
     'Emerson',
     'Energia Group',
     'Enterprise Ireland',
+    'Ergo',
+    'Ericsson',
+    'ESB',
     'ESB (Electricity Supply Board)',
     'Etsy',
+    'Eurofins Scientific',
     'Eversheds Sutherland Ireland',
     'EY Ireland',
     'FactSet',
-    'Fáilte Ireland',
     'Fastly',
     'Fastway Couriers Ireland',
     'FBD Insurance',
     'FedEx Express Ireland',
     'Fenergo',
     'Fidelity Investments',
+    'Figma',
     'Fiserv',
     'Fitch Ratings',
+    'Flutter Entertainment',
     'Fortinet',
     'Forvis Mazars Ireland',
+    'FRS Recruitment',
     'FTI Consulting',
+    'Fujitsu',
+    'Fáilte Ireland',
+    'Gartner',
     'Gas Networks Ireland',
+    'Genesis (formerly GECAS)',
+    'Genesys',
+    'Gilead Sciences',
+    'Glanbia',
     'Glanbia / Tirlán',
     'GlaxoSmithKline (GSK)',
     'Glenveagh Properties',
@@ -848,12 +895,15 @@ IRELAND_COMPANY_REGISTRY = [
     'Google',
     'Grant Thornton Ireland',
     'Greencore',
+    'Guidewire',
     'H&M Ireland',
     'Haleon',
     'Halfords Ireland',
+    'Harvey Nash Ireland',
     'Hays Ireland',
     'Heineken Ireland',
     'Hewlett Packard Enterprise (HPE)',
+    'HIQA',
     'Holland & Barrett Ireland',
     'Hollister Incorporated',
     'Honeywell',
@@ -861,16 +911,19 @@ IRELAND_COMPANY_REGISTRY = [
     'HP (Hewlett-Packard)',
     'HSBC Ireland',
     'HSE (Health Service Executive)',
+    'HubSpot',
     'IBM',
     'ICON plc',
     'IDA Ireland',
     'Illumina',
+    'Indeed',
     'Indeed (Ireland)',
     'Infineon Technologies',
     'Infosys',
     'Insulet Corporation',
     'Integra LifeSciences',
     'Intel',
+    'Intercom',
     'Intersport Elverys',
     'IQVIA',
     'Irish Distillers (Pernod Ricard)',
@@ -880,12 +933,14 @@ IRELAND_COMPANY_REGISTRY = [
     'Jacobs',
     'Jamf',
     'Jazz Pharmaceuticals',
+    'JD Sports Ireland',
     'John Sisk & Son (Sisk Group)',
     'Johnson & Johnson',
     'Johnson Controls',
     'Jones Engineering',
     'JPMorgan Chase',
     'Kepak Group',
+    'Kerry Group',
     'Keysight Technologies',
     'Kingspan Group',
     'Kirby Group Engineering',
@@ -908,8 +963,10 @@ IRELAND_COMPANY_REGISTRY = [
     'Manpower Ireland',
     'Maples Group Ireland',
     'Marks & Spencer Ireland',
+    'Marsh McLennan',
     'Marvell Technology',
     'Mason Hayes & Curran',
+    'Mastercard',
     'Matheson',
     'Maynooth University',
     'McCann FitzGerald',
@@ -917,60 +974,87 @@ IRELAND_COMPANY_REGISTRY = [
     'Mediahuis Ireland',
     'Medpace',
     'Medtronic',
+    'Mercer',
     'Merck Group',
+    'Mercury Engineering',
     'Merit Medical',
     'Meta',
     'Microchip Technology',
     'Micron Technology',
     'Microsoft',
+    'Microsoft Dynamics Partners',
     'Monday.com',
+    'MongoDB',
     "Moody's",
     'Morgan McKinley',
     'Morgan Stanley',
     'Morningstar',
     'Mott MacDonald',
     'MSCI',
+    'MSD (Merck Sharp & Dohme)',
     'Munster Technological University (MTU)',
     'Musgrave Group (SuperValu / Centra)',
     'NetApp',
     'Next Ireland',
     'Nokia',
+    'Nordic Aviation Capital',
     'Northern Trust',
+    'Notion',
     'Novartis',
+    'NTMA',
     'Nutanix',
     'NVIDIA',
     'NXP Semiconductors',
+    'Okta',
     'Oliver Wyman',
     'Oracle',
     'Ornua',
     'Palo Alto Networks',
+    'PayPal',
+    'Personio',
+    'Pfizer',
     'Philip Lee',
     'Ping Identity',
+    'Pinterest',
     'PM Group',
     'Press Up Hospitality Group',
+    'Primark / Penneys',
     'Proofpoint',
     'Protiviti',
+    'PTSB (Permanent TSB)',
+    'Public Jobs / Civil Service',
     'PublicJobs.ie (PAS)',
+    'Pure Storage',
+    'PwC Ireland',
     'QIAGEN',
     'Qorvo',
     'Qualcomm',
+    'Qualtrics',
     'Rapid7',
+    'Reddit',
     'Refinitiv (LSEG)',
     'Regeneron',
     'Renesas Electronics',
+    'Reperio Human Capital',
     'ResMed',
+    'Revenue',
     'Revvity (PerkinElmer)',
+    'Riot Games',
     'Roche',
     'Rockwell Automation',
     'RTÉ (Raidió Teilifís Éireann)',
     'Rubrik',
     'Ryanair',
     'S&P Global',
+    'Sage',
+    'Salesforce',
+    'Sanofi',
     'SAP',
     'Schneider Electric',
     'Science Foundation Ireland (SFI)',
     'Seagate',
     'SentinelOne',
+    'ServiceNow',
     'Shannon Airport Group',
     'Sigmar Recruitment',
     'Sky Ireland',
@@ -978,16 +1062,22 @@ IRELAND_COMPANY_REGISTRY = [
     'Slalom',
     'SMBC Aviation Capital',
     'Smith & Nephew',
+    'Smurfit Kappa',
     'Smurfit Westrock',
     'Smyths Toys Superstores',
+    'Snowflake',
     'Societe Generale',
     'Sophos',
     'South East Technological University (SETU)',
     'Splunk',
+    'Squarespace',
     'SSE Airtricity / SSE',
     'Stantec',
+    'State Street',
     'Stena Line Ireland',
     'STMicroelectronics',
+    'Storm3',
+    'Stripe',
     'Stryker',
     'Superdrug Ireland',
     'SuperValu / Musgrave',
@@ -1013,12 +1103,16 @@ IRELAND_COMPANY_REGISTRY = [
     'Three Ireland',
     'TikTok',
     'TK Maxx Ireland',
+    'Toast',
     'Tourism Ireland',
     'Trane Technologies',
+    'Transport Infrastructure Ireland',
     'Trend Micro',
     'Trinity College Dublin (TCD)',
+    'Twilio',
     'UBS',
     'Uisce Éireann (Irish Water)',
+    'Uisce Éireann / Irish Water',
     'Uniphar Group',
     'University College Cork (UCC)',
     'University College Dublin (UCD)',
@@ -1026,6 +1120,7 @@ IRELAND_COMPANY_REGISTRY = [
     'University of Limerick (UL)',
     'UPS Ireland',
     'Veeam',
+    'Version 1',
     'VHI Healthcare',
     'Viatris',
     'Virgin Media Ireland',
@@ -1035,15 +1130,22 @@ IRELAND_COMPANY_REGISTRY = [
     'Walkers Ireland',
     'Waters Corporation',
     'Waterstones Ireland',
+    'Wayflyer',
     'Western Digital',
     'William Fry',
     'Willis Towers Watson (WTW)',
     'Wipro',
     "Woodie's",
+    'Workday',
+    'Workhuman',
+    'Workvivo',
     'WSP',
+    'WTW',
     'WuXi Biologics',
     'Zara / Inditex Ireland',
     'Zendesk',
+    'Zimmer Biomet',
+    'Zscaler',
     'Zurich Insurance',
 ]
 
@@ -3209,7 +3311,227 @@ def resume_match_keywords(*parts, limit=60):
     # Stable weighting: repeated description terms first, then alphabetically.
     return [t for t, _ in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:limit]]
 
+
+def load_candidate_profile(path="profile.json"):
+    """Load optional ranking profile. Collection remains profile-agnostic."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            profile = json.load(f)
+        return profile if isinstance(profile, dict) else {}
+    except Exception as e:
+        print(f"profile: unavailable ({e}); candidate ranking disabled")
+        return {}
+
+
+def _norm_phrase(text):
+    return re.sub(r"[^a-z0-9+#]+", " ", str(text or "").lower()).strip()
+
+
+def normalized_title(title):
+    text = _norm_phrase(title)
+    replacements = {
+        "business intelligence": "bi",
+        "jr ": "junior ",
+        "graduate programme": "graduate",
+        "graduate program": "graduate",
+    }
+    for a, b in replacements.items():
+        text = text.replace(a, b)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def classify_role_family(title, description, profile):
+    title_n = normalized_title(title)
+    text = f"{title_n} {_norm_phrase(description)}"
+    best = ("Other", "None", 0, [])
+    for family, cfg in (profile.get("role_families") or {}).items():
+        hits = []
+        for phrase in cfg.get("titles", []):
+            p = _norm_phrase(phrase)
+            if p and (p in title_n or (len(p.split()) >= 2 and p in text)):
+                hits.append(phrase)
+        score = cfg.get("weight", 0) + min(8, len(hits) * 2) if hits else 0
+        if score > best[2]:
+            best = (family, cfg.get("tier", "C"), score, hits)
+    return {"family": best[0], "tier": best[1], "role_score": best[2], "role_hits": best[3]}
+
+
+def extract_profile_skills(text, profile):
+    text_n = _norm_phrase(text)
+    aliases = profile.get("skill_aliases") or {}
+    canonical = {}
+    for group, skills in (profile.get("skills") or {}).items():
+        for skill in skills:
+            canonical[_norm_phrase(skill)] = skill
+    for alias, target in aliases.items():
+        canonical[_norm_phrase(alias)] = target
+
+    found = []
+    for token, label in canonical.items():
+        if token and re.search(r"(?<![a-z0-9])" + re.escape(token) + r"(?![a-z0-9])", text_n):
+            if label not in found:
+                found.append(label)
+    return found
+
+
+def parse_experience_range(text):
+    text_n = str(text or "").lower()
+    ranges = []
+    patterns = [
+        r"(\d+)\s*(?:-|–|to)\s*(\d+)\s*\+?\s*years?",
+        r"(\d+)\s*\+\s*years?",
+        r"(?:minimum of |at least )(\d+)\s*years?",
+        r"(\d+)\s*years?\s+(?:of )?experience",
+    ]
+    for pat in patterns:
+        for m in re.finditer(pat, text_n):
+            nums = [int(x) for x in m.groups() if x is not None]
+            if len(nums) == 2:
+                ranges.append((nums[0], nums[1]))
+            elif nums:
+                ranges.append((nums[0], nums[0] + 2))
+    if not ranges:
+        return (None, None)
+    # Prefer the lowest plausible requirement, since descriptions often mention multiple unrelated ranges.
+    ranges.sort(key=lambda x: (x[0], x[1]))
+    return ranges[0]
+
+
+def experience_fit(title, description, candidate_years):
+    title_n = normalized_title(title)
+    minimum, maximum = parse_experience_range(description)
+    senior_terms = ["director", "vice president", "vp", "head of", "principal", "staff", "senior manager"]
+    if any(term in title_n for term in senior_terms):
+        return "Too Senior", minimum, maximum
+    if any(term in title_n for term in ["graduate", "entry", "junior", "associate", "analyst"]):
+        if candidate_years >= 5 and "graduate" in title_n:
+            return "Overqualified", minimum, maximum
+        return "Strong", minimum, maximum
+    if minimum is None:
+        return "Possible", minimum, maximum
+    if minimum <= candidate_years <= (maximum or candidate_years + 2):
+        return "Strong", minimum, maximum
+    if minimum <= candidate_years + 2:
+        return "Possible", minimum, maximum
+    if minimum <= candidate_years + 4:
+        return "Stretch", minimum, maximum
+    return "Too Senior", minimum, maximum
+
+
+def candidate_match(job, description, profile):
+    if not profile:
+        return {
+            "candidate_match_score": None, "match_reasons": [], "missing_skills": [],
+            "matched_skills": [], "experience_fit": "Unknown"
+        }
+
+    title = job.get("title") or ""
+    role = classify_role_family(title, description, profile)
+    skills = extract_profile_skills(f"{title} {description}", profile)
+    candidate_skills = []
+    for values in (profile.get("skills") or {}).values():
+        candidate_skills.extend(values)
+    candidate_skill_set = set(candidate_skills)
+
+    matched = [s for s in skills if s in candidate_skill_set]
+    years = int(profile.get("experience_years") or 0)
+    exp_fit, exp_min, exp_max = experience_fit(title, description, years)
+
+    score = role["role_score"]
+    score += min(34, len(matched) * 4)
+    score += {"Strong": 16, "Possible": 9, "Stretch": 3, "Overqualified": -5, "Too Senior": -25, "Unknown": 0}.get(exp_fit, 0)
+
+    loc_text = _norm_phrase(job.get("location"))
+    if any(_norm_phrase(x) in loc_text for x in profile.get("preferred_locations", []) if x != "Ireland"):
+        score += 5
+    elif "ireland" in loc_text or job.get("country") == "Ireland":
+        score += 3
+
+    title_n = normalized_title(title)
+    for term, penalty in (profile.get("seniority_penalties") or {}).items():
+        if _norm_phrase(term) in title_n:
+            score -= int(penalty)
+            break
+
+    # Noise penalty for clearly irrelevant job families, without deleting the job from the broad engine.
+    for term in profile.get("negative_title_terms", []):
+        if _norm_phrase(term) in title_n:
+            score -= 18
+            break
+
+    score = max(0, min(100, int(round(score))))
+    reasons = []
+    if role["family"] != "Other":
+        reasons.append(f"{role['family']} role family")
+    reasons.extend(matched[:7])
+    if exp_fit in {"Strong", "Possible"}:
+        reasons.append(f"Experience fit: {exp_fit}")
+
+    # Missing skills are candidate skills commonly referenced in the same role family but not present in this ad.
+    priority_missing = ["SQL", "Power BI", "Python", "ERP", "UAT", "Requirements Gathering", "ETL", "Stakeholder Management"]
+    missing = [x for x in priority_missing if x in candidate_skill_set and x not in matched][:4]
+
+    return {
+        "candidate_match_score": score,
+        "match_reasons": reasons[:10],
+        "missing_skills": missing,
+        "matched_skills": matched[:15],
+        "experience_fit": exp_fit,
+        "experience_min": exp_min,
+        "experience_max": exp_max,
+        "role_family": role["family"],
+        "role_tier": role["tier"],
+        "normalized_title": normalized_title(title),
+    }
+
+
+def discovery_value(job, now_dt=None):
+    """Value of discovering the listing, independent of candidate fit."""
+    now_dt = now_dt or datetime.now(timezone.utc)
+    score = 25
+    source = (job.get("ats") or "").lower()
+    directish = {"direct", "workday", "greenhouse", "lever", "ashby", "smartrecruiters",
+                 "workable", "recruitee", "personio", "pinpoint", "phenom", "eightfold"}
+    if source in directish:
+        score += 20
+    first_seen = job.get("first_seen_at")
+    try:
+        dt = datetime.fromisoformat(first_seen.replace("Z", "+00:00")) if first_seen else None
+    except Exception:
+        dt = None
+    if dt:
+        hours = max(0, (now_dt - dt).total_seconds() / 3600)
+        if hours <= 24:
+            score += 25
+        elif hours <= 72:
+            score += 15
+        elif hours <= 168:
+            score += 7
+    if job.get("new_since_last_check"):
+        score += 12
+    if job.get("closing_date"):
+        try:
+            close_dt = datetime.fromisoformat(str(job["closing_date"]).replace("Z", "+00:00"))
+            days = (close_dt - now_dt).total_seconds() / 86400
+            if 0 <= days <= 7:
+                score += 15
+        except Exception:
+            pass
+    return max(0, min(100, int(score)))
+
+
+def job_state_identity(job):
+    stable_url = (job.get("url") or "").split("?")[0].rstrip("/").lower()
+    if stable_url:
+        return stable_url
+    return "|".join([
+        _company_key(job.get("company", "")),
+        normalized_title(job.get("title")),
+        _norm_phrase(job.get("location")),
+    ])
+
 def main():
+    profile = load_candidate_profile()
     results = []
     errors = []
 
@@ -3431,10 +3753,21 @@ def main():
         j["match_keywords"] = resume_match_keywords(
             j.get("title"), j.get("company"), j.get("sector"), j.get("location"), description_text
         )
+        # Broad collection stays untouched; profile ranking is metadata only.
+        j.update(candidate_match(j, description_text, profile))
+        j.setdefault("work_mode", "remote" if "remote" in (j.get("location") or "").lower()
+                     else "hybrid" if "hybrid" in (j.get("location") or "").lower() else "unspecified")
+        j.setdefault("closing_date", None)
+        j.setdefault("requisition_id", None)
+        j.setdefault("salary", None)
+        j.setdefault("source_type", "employer_direct" if (j.get("ats") or "").lower() in
+                     {"direct","workday","greenhouse","lever","ashby","smartrecruiters","workable","recruitee","personio","pinpoint","phenom","eightfold"}
+                     else "other")
         j.pop("description_text", None)
 
-    # Persist first-seen state so the dashboard can highlight genuinely new postings.
-    now_iso = datetime.now(timezone.utc).isoformat()
+    # Persistent freshness state: supports old {id: "timestamp"} files and richer v2 objects.
+    now_dt = datetime.now(timezone.utc)
+    now_iso = now_dt.isoformat()
     try:
         with open("seen_jobs.json", encoding="utf-8") as f:
             seen_jobs = json.load(f)
@@ -3445,16 +3778,29 @@ def main():
 
     current_seen = dict(seen_jobs)
     for j in results:
-        stable_url = (j.get("url") or "").split("?")[0].rstrip("/").lower()
-        identity = stable_url or "|".join([
-            _company_key(j.get("company", "")),
-            re.sub(r"\s+", " ", (j.get("title") or "").strip().lower()),
-            re.sub(r"\s+", " ", (j.get("location") or "").strip().lower()),
-        ])
-        first_seen = seen_jobs.get(identity)
-        j["new_since_last_check"] = first_seen is None
-        j["first_seen_at"] = first_seen or now_iso
-        current_seen[identity] = first_seen or now_iso
+        identity = job_state_identity(j)
+        prior = seen_jobs.get(identity)
+        if isinstance(prior, dict):
+            first_seen = prior.get("first_seen") or prior.get("first_seen_at") or now_iso
+        elif isinstance(prior, str):
+            first_seen = prior
+        else:
+            first_seen = now_iso
+
+        j["new_since_last_check"] = prior is None
+        j["first_seen_at"] = first_seen
+        j["last_seen_at"] = now_iso
+        j["last_verified_at"] = now_iso
+        j["active"] = True
+        j["discovery_score"] = discovery_value(j, now_dt)
+
+        current_seen[identity] = {
+            "first_seen": first_seen,
+            "last_seen": now_iso,
+            "last_verified": now_iso,
+            "company": j.get("company"),
+            "title": j.get("title"),
+        }
 
     with open("seen_jobs.json", "w", encoding="utf-8") as f:
         json.dump(current_seen, f, indent=2)
@@ -3495,6 +3841,11 @@ def main():
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "focus": "ireland" if IRELAND_ONLY else "multi_region",
+        "ranking_profile": {
+            "profile_id": profile.get("profile_id"),
+            "version": profile.get("version"),
+            "name": profile.get("name"),
+        } if profile else None,
         "recency_counts": recency_counts,
         "total_companies_checked": len(company_registry),
         "registry_companies": company_registry,
@@ -3510,9 +3861,9 @@ def main():
         "errors": errors,
         "jobs": results,
         "note": (
-            "Ireland-only all-jobs pipeline with persistent ATS auto-discovery. Employer "
-            "coverage is based on the master registry; unresolved companies remain "
-            "visible as careers-page fallbacks instead of disappearing."
+            "Broad Ireland job-data engine with persistent ATS discovery and optional "
+            "profile-aware ranking metadata. Collection is profile-agnostic; personalization "
+            "is applied after normalization so all jobs remain available."
         ),
     }
 
