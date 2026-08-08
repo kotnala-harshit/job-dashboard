@@ -8,10 +8,16 @@ Run by GitHub Actions hourly. Writes data.json for index.html.
 import json
 import re
 import time
+import os
 import urllib.request
 import urllib.error
 import urllib.parse
 from datetime import datetime, timezone, timedelta
+
+try:
+    import requests
+except ImportError:
+    requests = None
 
 # ---------------------------------------------------------------------------
 # Company list: (slug, ats) -- expand this over time as we confirm more boards
@@ -1071,7 +1077,7 @@ def _load_company_master():
         print(f"  ! ireland_companies.csv unavailable, using embedded registry: {exc}")
     return [(name, None) for name in IRELAND_COMPANY_REGISTRY]
 
-def build_company_registry():
+def build_company_registry(include_cache: bool = False):
     url_map = _registry_url_map()
     connector_maps = [
         ({_company_key(x): "greenhouse" for x in GREENHOUSE_COMPANIES}),
@@ -1087,6 +1093,23 @@ def build_company_registry():
     status_by_key = {}
     for mapping in connector_maps:
         status_by_key.update(mapping)
+
+    # Confirmed dynamic ATS mappings discovered in previous runs. Hard-coded
+    # mappings remain authoritative; cache only fills companies that otherwise
+    # would be manual-check.
+    if include_cache:
+        try:
+            with open("ats_platform_cache.json", encoding="utf-8") as f:
+                ats_cache = json.load(f)
+            for company_name, info in ats_cache.items():
+                if company_name.startswith("__") or not isinstance(info, dict):
+                    continue
+                platform = info.get("platform")
+                key = _company_key(company_name)
+                if platform and platform != "none" and key not in status_by_key:
+                    status_by_key[key] = platform
+        except Exception:
+            pass
 
     registry = []
     for name, master_url in _load_company_master():
@@ -2532,6 +2555,249 @@ def _jsonld_location(job_location):
     return one(job_location)
 
 
+
+# ---------------------------------------------------------------------------
+# Dynamic ATS discovery + cached coverage expansion
+# ---------------------------------------------------------------------------
+
+ATS_PROBE_VERSION = 20
+ATS_PROBE_LIMIT = int(os.environ.get("ATS_PROBE_LIMIT", "60"))
+ATS_CACHE_PATH = "ats_platform_cache.json"
+
+_CORP_WORDS = re.compile(r"\b(?:limited|ltd|plc|inc|incorporated|corporation|corp|company|group|holdings|ireland|international)\b", re.I)
+_EF_GROUP_ID_RE = re.compile(r'_EF_GROUP_ID[\'\"]?\]?\s*[=:]\s*[\'\"]([^\'\"]+)[\'\"]')
+_PHENOM_REFNUM_RE = re.compile(r'"refNum"\s*:\s*"([A-Za-z0-9_-]+)"')
+
+
+def candidate_slugs(company_name: str):
+    """Bounded ATS-board slug guesses. Exact cached mappings are tried first."""
+    base = re.sub(r"\([^)]*\)", " ", company_name or "")
+    base = _CORP_WORDS.sub(" ", base)
+    words = re.findall(r"[a-zA-Z0-9]+", base.lower())
+    if not words:
+        return []
+    cands = []
+    joined = "".join(words)
+    dashed = "-".join(words)
+    for x in (joined, dashed, words[0], joined + "jobs", joined + "careers"):
+        if x and x not in cands and len(x) >= 2:
+            cands.append(x)
+    # Parenthetical brand is often the actual ATS slug, e.g. VMware (Broadcom).
+    for paren in re.findall(r"\(([^)]*)\)", company_name or ""):
+        pwords = re.findall(r"[a-zA-Z0-9]+", paren.lower())
+        if pwords:
+            x = "".join(pwords)
+            if x not in cands:
+                cands.append(x)
+    return cands[:6]
+
+
+def _session():
+    if requests is None:
+        return None
+    sess = requests.Session()
+    sess.headers.update({"User-Agent": "Mozilla/5.0 (compatible; IrelandJobRadar/2.0)"})
+    return sess
+
+
+def _probe_platform(platform: str, slug: str, sess) -> bool:
+    """Validate that a slug really resolves to an ATS board. Does NOT require an Ireland vacancy."""
+    if not sess or not slug:
+        return False
+    try:
+        if platform == "greenhouse":
+            r=sess.get(f"https://boards-api.greenhouse.io/v1/boards/{slug}/jobs", timeout=10)
+            return r.status_code == 200 and isinstance(r.json().get("jobs"), list)
+        if platform == "lever":
+            r=sess.get(f"https://api.lever.co/v0/postings/{slug}?mode=json", timeout=10)
+            return r.status_code == 200 and isinstance(r.json(), list)
+        if platform == "smartrecruiters":
+            r=sess.get(f"https://api.smartrecruiters.com/v1/companies/{slug}/postings?limit=1", timeout=10)
+            return r.status_code == 200 and isinstance(r.json(), dict) and "content" in r.json()
+        if platform == "ashby":
+            r=sess.get(f"https://api.ashbyhq.com/posting-api/job-board/{slug}", timeout=10)
+            d=r.json() if r.status_code == 200 else {}
+            return r.status_code == 200 and isinstance(d, dict) and ("jobs" in d or "jobPostings" in d)
+        if platform == "recruitee":
+            r=sess.get(f"https://{slug}.recruitee.com/api/offers/", timeout=10)
+            d=r.json() if r.status_code == 200 else {}
+            return r.status_code == 200 and isinstance(d, dict) and "offers" in d
+        if platform == "personio":
+            r=sess.get(f"https://{slug}.jobs.personio.de/xml?language=en", timeout=10)
+            return r.status_code == 200 and ("<position" in r.text or "<workzag-jobs" in r.text)
+        if platform == "pinpoint":
+            r=sess.get(f"https://{slug}.pinpointhq.com/postings.json", timeout=10)
+            if r.status_code != 200: return False
+            d=r.json()
+            return isinstance(d, (list, dict))
+        if platform == "eightfold":
+            r=sess.get(f"https://{slug}.eightfold.ai/careers", timeout=10)
+            if r.status_code != 200: return False
+            m=_EF_GROUP_ID_RE.search(r.text)
+            if not m: return False
+            rr=sess.get(f"https://{slug}.eightfold.ai/api/pcsx/search", params={"domain":m.group(1),"query":"","location":"","start":0}, timeout=10)
+            return rr.status_code == 200 and isinstance(rr.json(), dict)
+        if platform == "phenom":
+            if "|" not in slug: return False
+            domain, refnum = slug.split("|",1)
+            payload={"lang":"en_global","deviceType":"desktop","country":"global","pageName":"search-results","size":1,"from":0,"jobs":True,"counts":True,"all_fields":["category","country","city","type"],"clearAll":False,"jdsource":"facets","isSliderEnable":False,"pageId":"page20","siteType":"external","keywords":"","global":True,"selected_fields":{},"sort":{"order":"desc","field":"postedDate"},"locationData":{},"refNum":refnum,"ddoKey":"refineSearch"}
+            rr=sess.post(f"https://{domain}/widgets",json=payload,timeout=15)
+            return rr.status_code == 200 and isinstance(rr.json(), dict)
+    except Exception:
+        return False
+    return False
+
+
+def _scrape_eightfold(company: str, slug: str, sess):
+    out=[]
+    try:
+        page=sess.get(f"https://{slug}.eightfold.ai/careers",timeout=10)
+        m=_EF_GROUP_ID_RE.search(page.text)
+        if not m: return out
+        start=0
+        seen_ids=set()
+        for _ in range(20):
+            r=sess.get(f"https://{slug}.eightfold.ai/api/pcsx/search",params={"domain":m.group(1),"query":"","location":"","start":start},timeout=15)
+            if r.status_code!=200: break
+            d=r.json(); jobs=d.get("positions") or d.get("results") or []
+            if not jobs: break
+            new=0
+            for j in jobs:
+                jid=str(j.get("id") or j.get("position_id") or j.get("canonicalPositionUrl") or "")
+                if jid and jid in seen_ids: continue
+                if jid: seen_ids.add(jid)
+                new+=1
+                loc=j.get("location") or j.get("locations") or j.get("city") or ""
+                if isinstance(loc,list): loc=", ".join(str(x) for x in loc)
+                loc=str(loc)
+                if not region_ok(loc): continue
+                posted=j.get("t_create") or j.get("start_date") or j.get("posted_date")
+                updated=None
+                if posted:
+                    try:
+                        updated=datetime.fromtimestamp(posted,timezone.utc).isoformat() if isinstance(posted,(int,float)) else str(posted)
+                    except Exception: updated=str(posted)
+                out.append({"company":company,"ats":"eightfold","title":j.get("name") or j.get("title") or "","location":loc,"url":j.get("canonicalPositionUrl") or j.get("apply_url") or f"https://{slug}.eightfold.ai/careers/job/{jid}","updated_at":updated,"description_text":_strip_html(j.get("job_description") or j.get("description") or "")})
+            if new==0: break
+            start += len(jobs)
+            if len(jobs)<10: break
+    except Exception as e:
+        print(f"  ! eightfold/{slug}: {e}")
+    return out
+
+
+def _scrape_phenom(company: str, slug: str, sess):
+    if "|" not in slug: return []
+    domain, refnum=slug.split("|",1)
+    out=[]; offset=0
+    for _ in range(25):
+        payload={"lang":"en_global","deviceType":"desktop","country":"global","pageName":"search-results","size":20,"from":offset,"jobs":True,"counts":True,"all_fields":["category","country","city","type"],"clearAll":False,"jdsource":"facets","isSliderEnable":False,"pageId":"page20","siteType":"external","keywords":"","global":True,"selected_fields":{},"sort":{"order":"desc","field":"postedDate"},"locationData":{},"refNum":refnum,"ddoKey":"refineSearch"}
+        try:
+            r=sess.post(f"https://{domain}/widgets",json=payload,timeout=15)
+            if r.status_code!=200: break
+            jobs=((r.json().get("refineSearch") or {}).get("data") or {}).get("jobs") or []
+        except Exception: break
+        if not jobs: break
+        for j in jobs:
+            loc=j.get("locationDisplay") or j.get("cityStateCountry") or j.get("cityCountry") or j.get("city") or ""
+            if not region_ok(str(loc)): continue
+            jid=j.get("jobId") or j.get("id") or ""
+            url=j.get("applyUrl") or j.get("jdUrl") or f"https://{domain}/job/{jid}"
+            out.append({"company":company,"ats":"phenom","title":j.get("title") or j.get("jobTitle") or "","location":str(loc),"url":url,"updated_at":j.get("postedDate"),"description_text":_strip_html(j.get("descriptionTeaser") or j.get("description") or "")})
+        if len(jobs)<20: break
+        offset += len(jobs)
+    return out
+
+
+def _scrape_cached_mapping(company: str, platform: str, slug: str, sess):
+    try:
+        if platform == "greenhouse": jobs=scrape_greenhouse(slug)
+        elif platform == "lever": jobs=scrape_lever(slug)
+        elif platform == "smartrecruiters": jobs=scrape_smartrecruiters(slug)
+        elif platform == "ashby": jobs=scrape_ashby(slug)
+        elif platform == "recruitee": jobs=scrape_recruitee(slug)
+        elif platform == "personio": jobs=scrape_personio(slug)
+        elif platform == "pinpoint": jobs=scrape_pinpoint(slug)
+        elif platform == "workable": jobs=scrape_workable(slug)
+        elif platform == "eightfold": jobs=_scrape_eightfold(company,slug,sess)
+        elif platform == "phenom": jobs=_scrape_phenom(company,slug,sess)
+        else: return []
+        for j in jobs:
+            j["company"] = company
+        return jobs
+    except Exception as e:
+        print(f"  ! cached {platform}/{company}: {e}")
+        return []
+
+
+def discover_and_scrape_manual(company_registry):
+    """Convert unresolved companies to automatic ATS coverage over time.
+
+    Cached confirmed mappings are reused every run. Cached misses are retained,
+    but a probe-version bump automatically rechecks them after discovery logic
+    changes. A bounded number of never-probed companies is attempted per run so
+    the GitHub Action remains predictable rather than turning into a multi-hour crawl.
+    """
+    sess=_session()
+    if not sess:
+        print("  ! requests not installed; dynamic ATS discovery skipped")
+        return [], {}
+    try:
+        with open(ATS_CACHE_PATH,encoding="utf-8") as f: raw=json.load(f)
+        stored_version=raw.pop("__probe_version__",0)
+        cache=raw
+        if stored_version != ATS_PROBE_VERSION:
+            cache={k:v for k,v in cache.items() if isinstance(v,dict) and v.get("platform") not in (None,"none")}
+    except Exception:
+        cache={}
+
+    dynamic_jobs=[]; confirmed={}; fresh=0
+    hardcoded_keys={_company_key(x["company"]) for x in company_registry if x.get("automatic")}
+    platforms=("greenhouse","lever","smartrecruiters","ashby","recruitee","personio","pinpoint","eightfold")
+
+    for entry in company_registry:
+        company=entry["company"]
+        if _company_key(company) in hardcoded_keys:
+            continue
+        info=cache.get(company) if isinstance(cache.get(company),dict) else None
+        platform=info.get("platform") if info else None
+        slug=info.get("slug") if info else None
+
+        if platform and platform != "none":
+            # Never trust a stale/guessed cache entry without validating its endpoint.
+            if not _probe_platform(platform,slug,sess):
+                cache.pop(company,None); platform=slug=None
+            else:
+                confirmed[company]={"platform":platform,"slug":slug}
+        elif platform == "none":
+            continue
+
+        if not platform:
+            if fresh >= ATS_PROBE_LIMIT:
+                continue
+            fresh += 1
+            for cand in candidate_slugs(company):
+                for plat in platforms:
+                    if _probe_platform(plat,cand,sess):
+                        platform,slug=plat,cand
+                        break
+                if platform: break
+            cache[company]={"platform":platform or "none","slug":slug}
+            if platform:
+                confirmed[company]={"platform":platform,"slug":slug}
+                print(f"  + discovered {company}: {platform}/{slug}")
+
+        if platform:
+            jobs=_scrape_cached_mapping(company,platform,slug,sess)
+            dynamic_jobs.extend(jobs)
+            print(f"dynamic/{company} [{platform}]: {len(jobs)} Ireland jobs")
+
+    cache["__probe_version__"]=ATS_PROBE_VERSION
+    with open(ATS_CACHE_PATH,"w",encoding="utf-8") as f:
+        json.dump(cache,f,indent=2)
+    print(f"Dynamic ATS discovery: {len(confirmed)} confirmed cached/discovered platforms; {fresh} new companies probed this run")
+    return dynamic_jobs, confirmed
+
 def scrape_jsonld(company: str, url: str):
     if not url:
         return []
@@ -2813,6 +3079,15 @@ def main():
             errors.append(f"pinpoint/{slug}: {e}")
         time.sleep(0.3)
 
+    # Suman-style dynamic ATS discovery for companies not already wired into a
+    # known connector. Confirmed mappings persist in ats_platform_cache.json.
+    initial_registry = build_company_registry(include_cache=False)
+    try:
+        dynamic_found, _dynamic_mappings = discover_and_scrape_manual(initial_registry)
+        results.extend(dynamic_found)
+    except Exception as e:
+        errors.append(f"dynamic ATS discovery: {e}")
+
     for company, url in JSONLD_CAREER_PAGES:
         if IRELAND_ONLY and not jsonld_page_is_ireland(company, url):
             continue
@@ -2931,7 +3206,7 @@ def main():
     with open("seen_jobs.json", "w", encoding="utf-8") as f:
         json.dump(current_seen, f, indent=2)
 
-    company_registry = build_company_registry()
+    company_registry = build_company_registry(include_cache=True)
 
     manual_check = []
     for item in company_registry:
@@ -2982,10 +3257,9 @@ def main():
         "errors": errors,
         "jobs": results,
         "note": (
-            "Ireland-only all-jobs pipeline. Employer coverage is based on the master "
-            "registry, independent of ATS success. Apple and EY are explicitly "
-            "included; companies without a working connector remain visible as "
-            "manual-check rather than disappearing."
+            "Ireland-only all-jobs pipeline with persistent ATS auto-discovery. Employer "
+            "coverage is based on the master registry; unresolved companies remain "
+            "visible as careers-page fallbacks instead of disappearing."
         ),
     }
 
