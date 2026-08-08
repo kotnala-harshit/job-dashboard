@@ -1175,10 +1175,18 @@ def _load_company_master():
         with open("ireland_companies.csv", encoding="utf-8-sig", newline="") as f:
             rows = list(csv.DictReader(f))
         if rows:
-            return [((r.get("company_name") or "").strip(), (r.get("career_url") or "").strip()) for r in rows]
+            return [
+                (
+                    (r.get("company_name") or "").strip(),
+                    (r.get("career_url") or "").strip(),
+                    (r.get("source_type") or "employer").strip() or "employer",
+                    (r.get("category") or "").strip(),
+                )
+                for r in rows
+            ]
     except Exception as exc:
         print(f"  ! ireland_companies.csv unavailable, using embedded registry: {exc}")
-    return [(name, None) for name in IRELAND_COMPANY_REGISTRY]
+    return [(name, None, "employer", "") for name in IRELAND_COMPANY_REGISTRY]
 
 def build_company_registry(include_cache: bool = False):
     url_map = _registry_url_map()
@@ -1218,26 +1226,25 @@ def build_company_registry(include_cache: bool = False):
             pass
 
     registry = []
-    for name, master_url in _load_company_master():
+    for name, master_url, source_type, category in _load_company_master():
         if not name:
             continue
         key = _company_key(name)
         platform = status_by_key.get(key, "manual-check")
         url = CAREERS_URL_OVERRIDES.get(name) or master_url or url_map.get(key)
 
-        # Allow compact ATS slugs to match display names.
-        if platform == "manual-check":
-            for slug_key, slug_platform in status_by_key.items():
-                if slug_key and (slug_key in key or key in slug_key):
-                    platform = slug_platform
-                    break
-
+        # IMPORTANT: do not use substring matching here.
+        # "Ergo" must not inherit Fenergo's connector, "Eir" must not inherit
+        # another company containing "eir", etc. Dynamic ATS discovery below
+        # validates real career-page/ATS endpoints instead.
         registry.append({
             "company": name,
             "country": "Ireland",
             "platform": platform,
             "careers_url": url,
             "automatic": platform != "manual-check",
+            "source_type": source_type,
+            "category": category,
         })
     return registry
 
@@ -1281,12 +1288,16 @@ def company_display_name(raw: str) -> str:
 #   Jooble:    jooble.org/api/about             -- JOOBLE_API_KEY
 # ---------------------------------------------------------------------------
 
-ADZUNA_APP_ID = ""    # fill in after free signup at developer.adzuna.com
-ADZUNA_APP_KEY = ""
+ADZUNA_APP_ID = os.environ.get("ADZUNA_APP_ID", "").strip()
+ADZUNA_APP_KEY = os.environ.get("ADZUNA_APP_KEY", "").strip()
 
-CAREERJET_AFFID = ""  # fill in after free signup at careerjet.com/partners
+# Careerjet's API calls this value "affid". Keep both environment names for compatibility.
+CAREERJET_AFFID = (
+    os.environ.get("CAREERJET_API_KEY", "").strip()
+    or os.environ.get("CAREERJET_AFFID", "").strip()
+)
 
-JOOBLE_API_KEY = ""   # fill in after free signup at jooble.org/api/about
+JOOBLE_API_KEY = os.environ.get("JOOBLE_API_KEY", "").strip()
 
 # ---------------------------------------------------------------------------
 # Direct-from-company-site sources, attempted with plain HTTP (no proxy).
@@ -2706,7 +2717,7 @@ def _jsonld_location(job_location):
 # Dynamic ATS discovery + cached coverage expansion
 # ---------------------------------------------------------------------------
 
-ATS_PROBE_VERSION = 30
+ATS_PROBE_VERSION = 31
 ATS_PROBE_LIMIT = int(os.environ.get("ATS_PROBE_LIMIT", "60"))
 ATS_CACHE_PATH = "ats_platform_cache.json"
 
@@ -2726,7 +2737,10 @@ def candidate_slugs(company_name: str):
     joined = "".join(words)
     dashed = "-".join(words)
     for x in (joined, dashed, words[0], joined + "jobs", joined + "careers"):
-        if x and x not in cands and len(x) >= 2:
+        # Very short guesses create false-positive boards (e.g. "abb", "eir").
+        # Require 4+ characters unless the full normalized company name itself is short.
+        min_len = 2 if len(joined) <= 3 and x == joined else 4
+        if x and x not in cands and len(x) >= min_len:
             cands.append(x)
     # Parenthetical brand is often the actual ATS slug, e.g. VMware (Broadcom).
     for paren in re.findall(r"\(([^)]*)\)", company_name or ""):
@@ -2736,6 +2750,48 @@ def candidate_slugs(company_name: str):
             if x not in cands:
                 cands.append(x)
     return cands[:6]
+
+
+
+def _careers_page_ats_candidates(company: str, careers_url: str, sess):
+    """Discover ATS identifiers from the employer's actual careers page.
+
+    This is deliberately preferred over guessed slugs. It follows redirects and
+    scans public HTML for known ATS hosts, then validates every candidate.
+    """
+    if not sess or not careers_url:
+        return []
+    try:
+        r = sess.get(careers_url, timeout=15, allow_redirects=True)
+        if r.status_code >= 400:
+            return []
+        text = (r.text or "") + "\n" + str(r.url or "")
+    except Exception:
+        return []
+
+    patterns = [
+        ("greenhouse", r"(?:boards|job-boards)\.greenhouse\.io/([A-Za-z0-9_-]+)"),
+        ("lever", r"jobs\.lever\.co/([A-Za-z0-9_-]+)"),
+        ("ashby", r"jobs\.ashbyhq\.com/([A-Za-z0-9_-]+)"),
+        ("smartrecruiters", r"(?:jobs\.)?smartrecruiters\.com/([A-Za-z0-9_-]+)"),
+        ("workable", r"apply\.workable\.com/([A-Za-z0-9_-]+)"),
+        ("recruitee", r"https?://([A-Za-z0-9-]+)\.recruitee\.com"),
+        ("personio", r"https?://([A-Za-z0-9-]+)\.jobs\.personio\.(?:de|com)"),
+        ("pinpoint", r"https?://([A-Za-z0-9-]+)\.pinpointhq\.com"),
+        ("eightfold", r"https?://([A-Za-z0-9-]+)\.eightfold\.ai"),
+    ]
+
+    out = []
+    seen = set()
+    for platform, pattern in patterns:
+        for m in re.finditer(pattern, text, re.I):
+            slug = m.group(1).strip()
+            key = (platform, slug.lower())
+            if not slug or key in seen:
+                continue
+            seen.add(key)
+            out.append((platform, slug))
+    return out
 
 
 def _session():
@@ -2904,13 +2960,10 @@ def discover_and_scrape_manual(company_registry):
         cache.setdefault(company, {"platform": "phenom", "slug": slug})
 
     dynamic_jobs=[]; confirmed={}; fresh=0
-    hardcoded_keys={_company_key(x["company"]) for x in company_registry if x.get("automatic")}
-    platforms=("greenhouse","lever","smartrecruiters","ashby","recruitee","personio","pinpoint","eightfold")
+    platforms=("greenhouse","lever","smartrecruiters","ashby","workable","recruitee","personio","pinpoint","eightfold")
 
     for entry in company_registry:
         company=entry["company"]
-        if _company_key(company) in hardcoded_keys:
-            continue
         info=cache.get(company) if isinstance(cache.get(company),dict) else None
         platform=info.get("platform") if info else None
         slug=info.get("slug") if info else None
@@ -2928,12 +2981,27 @@ def discover_and_scrape_manual(company_registry):
             if fresh >= ATS_PROBE_LIMIT:
                 continue
             fresh += 1
-            for cand in candidate_slugs(company):
-                for plat in platforms:
-                    if _probe_platform(plat,cand,sess):
-                        platform,slug=plat,cand
+
+            # First inspect the company's real careers page. This is much more
+            # reliable than guessing ATS board names from company strings.
+            for plat, cand in _careers_page_ats_candidates(
+                company, entry.get("careers_url") or "", sess
+            ):
+                if plat in platforms and _probe_platform(plat, cand, sess):
+                    platform, slug = plat, cand
+                    break
+
+            # Only fall back to bounded slug guesses if the careers page did not
+            # expose a recognizable ATS link.
+            if not platform:
+                for cand in candidate_slugs(company):
+                    for plat in platforms:
+                        if _probe_platform(plat,cand,sess):
+                            platform,slug=plat,cand
+                            break
+                    if platform:
                         break
-                if platform: break
+
             cache[company]={"platform":platform or "none","slug":slug}
             if platform:
                 confirmed[company]={"platform":platform,"slug":slug}
@@ -3030,6 +3098,8 @@ def scrape_adzuna(country: str, query: str):
                 "location": location,
                 "url": j.get("redirect_url"),
                 "updated_at": j.get("created"),
+                "description_text": j.get("description") or "",
+                "source_type": "aggregator",
             })
     return out
 
@@ -3057,6 +3127,8 @@ def scrape_careerjet(locale: str, query: str):
                 "location": location,
                 "url": j.get("url"),
                 "updated_at": j.get("date"),
+                "description_text": j.get("description") or j.get("snippet") or "",
+                "source_type": "aggregator",
             })
     return out
 
@@ -3088,6 +3160,8 @@ def scrape_jooble(keywords: str, location: str = ""):
                 "location": loc,
                 "url": j.get("link"),
                 "updated_at": j.get("updated"),
+                "description_text": j.get("snippet") or j.get("description") or "",
+                "source_type": "aggregator",
             })
     return out
 
@@ -3696,7 +3770,7 @@ def main():
 
     for query in DIRECT_QUERIES:
         try:
-            found = scrape_jooble(query)
+            found = scrape_jooble(query, "Ireland" if IRELAND_ONLY else "")
             results.extend(found)
             if found:
                 print(f"jooble ({query}): {len(found)} matches")
@@ -3720,18 +3794,39 @@ def main():
         errors.append(f"direct/Netflix: {e}")
     time.sleep(0.5)
 
-    # De-dupe (Amazon/Netflix queries overlap and can return the same job twice)
-    seen = set()
+    # Source-priority de-duplication. Direct employer/ATS records win over
+    # aggregator copies of the same vacancy.
+    source_priority = {
+        "direct": 100, "workday": 95, "greenhouse": 95, "lever": 95, "ashby": 95,
+        "smartrecruiters": 95, "workable": 94, "recruitee": 94, "personio": 94,
+        "pinpoint": 94, "phenom": 93, "eightfold": 93, "jsonld": 90,
+        "adzuna": 30, "jooble": 25, "careerjet": 20,
+    }
+    aggregator_sources = {"adzuna", "jooble", "careerjet"}
+    results.sort(key=lambda j: source_priority.get((j.get("ats") or "").lower(), 50), reverse=True)
+
+    seen_urls = set()
+    seen_signatures = set()
     deduped = []
     for j in results:
         company_key = _company_key(company_display_name(j.get("company", "")))
         url_key = (j.get("url") or "").split("?")[0].rstrip("/").lower()
-        title_key = re.sub(r"\s+", " ", (j.get("title") or "").strip().lower())
-        loc_key = re.sub(r"\s+", " ", (j.get("location") or "").strip().lower())
-        key = (company_key, url_key or title_key, loc_key if not url_key else "")
-        if key not in seen:
-            seen.add(key)
-            deduped.append(j)
+        title_key = normalized_title(j.get("title"))
+        loc_key = _norm_phrase(j.get("location"))
+        signature = (company_key, title_key, loc_key)
+        source = (j.get("ats") or "").lower()
+
+        if url_key and url_key in seen_urls:
+            continue
+        if source in aggregator_sources and signature in seen_signatures:
+            continue
+
+        deduped.append(j)
+        if url_key:
+            seen_urls.add(url_key)
+        if any(signature):
+            seen_signatures.add(signature)
+
     results = deduped
 
     # Tag every job with a parsed posting date + recency bucket, so the
@@ -3760,9 +3855,15 @@ def main():
         j.setdefault("closing_date", None)
         j.setdefault("requisition_id", None)
         j.setdefault("salary", None)
-        j.setdefault("source_type", "employer_direct" if (j.get("ats") or "").lower() in
-                     {"direct","workday","greenhouse","lever","ashby","smartrecruiters","workable","recruitee","personio","pinpoint","phenom","eightfold"}
-                     else "other")
+        if not j.get("source_type"):
+            j["source_type"] = (
+                "employer_direct"
+                if (j.get("ats") or "").lower() in
+                {"direct","workday","greenhouse","lever","ashby","smartrecruiters",
+                 "workable","recruitee","personio","pinpoint","phenom","eightfold","jsonld"}
+                else "aggregator" if (j.get("ats") or "").lower() in {"adzuna","jooble","careerjet"}
+                else "other"
+            )
         j.pop("description_text", None)
 
     # Persistent freshness state: supports old {id: "timestamp"} files and richer v2 objects.
@@ -3838,9 +3939,38 @@ def main():
         source_counts[j.get("ats") or "unknown"] = source_counts.get(j.get("ats") or "unknown", 0) + 1
         company_job_counts[j.get("company") or "Unknown"] = company_job_counts.get(j.get("company") or "Unknown", 0) + 1
 
+    # Coverage diagnostics. "No live jobs" is not automatically the same as
+    # "the company has no jobs"; distinguish missing connectors from configured
+    # connectors that yielded no Ireland records.
+    live_company_keys = {_company_key(name) for name in company_job_counts}
+    coverage_diagnostics = []
+    for item in company_registry:
+        key = _company_key(item["company"])
+        if key in live_company_keys:
+            state = "working"
+            reason = "Ireland jobs returned in this run"
+        elif item.get("automatic"):
+            state = "configured_zero"
+            reason = "Connector is configured but returned no qualifying Ireland jobs; mapping/filter may need verification"
+        else:
+            state = "no_validated_connector"
+            reason = "No validated automatic connector yet"
+        coverage_diagnostics.append({
+            "company": item["company"],
+            "platform": item.get("platform"),
+            "state": state,
+            "reason": reason,
+            "careers_url": item.get("careers_url"),
+        })
+
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "focus": "ireland" if IRELAND_ONLY else "multi_region",
+        "integrations": {
+            "adzuna": bool(ADZUNA_APP_ID and ADZUNA_APP_KEY),
+            "jooble": bool(JOOBLE_API_KEY),
+            "careerjet": bool(CAREERJET_AFFID),
+        },
         "ranking_profile": {
             "profile_id": profile.get("profile_id"),
             "version": profile.get("version"),
@@ -3854,6 +3984,11 @@ def main():
         "source_counts": source_counts,
         "companies_with_live_jobs": len(company_job_counts),
         "company_job_counts": company_job_counts,
+        "coverage_diagnostics": coverage_diagnostics,
+        "coverage_state_counts": {
+            state: sum(1 for x in coverage_diagnostics if x["state"] == state)
+            for state in ("working", "configured_zero", "no_validated_connector")
+        },
         "manual_check_companies": manual_check,
         "manual_check_count": len(manual_check),
         "automatic_company_count": sum(1 for x in company_registry if x["automatic"]),
