@@ -1,0 +1,70 @@
+name: Scrape jobs
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: job-dashboard-scrape
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Run scraper
+        run: python scrape.py
+
+      - name: Commit and push generated files
+        shell: bash
+        run: |
+          set -e
+
+          git config user.name "job-dashboard-bot"
+          git config user.email "actions@users.noreply.github.com"
+
+          # Stage every file the scraper is expected to generate/update.
+          # This prevents git pull --rebase from failing because of unstaged state files.
+          git add data.json
+          [ -f seen_jobs.json ] && git add seen_jobs.json
+          [ -f ats_platform_cache.json ] && git add ats_platform_cache.json
+          [ -f sponsorship_history.json ] && git add sponsorship_history.json
+          [ -f official_permit_stats.json ] && git add official_permit_stats.json
+
+          if git diff --staged --quiet; then
+            echo "No generated-file changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update job data $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+          # Re-sync safely in case main changed while this scrape was running.
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              echo "Pushed successfully on attempt $attempt"
+              exit 0
+            fi
+
+            echo "Push attempt $attempt failed, retrying in 10s..."
+            sleep 10
+          done
+
+          echo "All push attempts failed"
+          exit 1
