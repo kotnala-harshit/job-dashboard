@@ -2717,7 +2717,7 @@ def _jsonld_location(job_location):
 # Dynamic ATS discovery + cached coverage expansion
 # ---------------------------------------------------------------------------
 
-ATS_PROBE_VERSION = 33
+ATS_PROBE_VERSION = 34
 ATS_PROBE_LIMIT = int(os.environ.get("ATS_PROBE_LIMIT", "60"))
 ATS_CACHE_PATH = "ats_platform_cache.json"
 
@@ -2781,6 +2781,37 @@ def _careers_page_ats_candidates(company: str, careers_url: str, sess):
         ("eightfold", r"https?://([A-Za-z0-9-]+)\.eightfold\.ai"),
     ]
 
+    # Workday needs tenant + wd host + site rather than one slug.
+    # Encode it as tenant|wd-host|site for the common cached-mapping interface.
+    workday_patterns = [
+        r"https?://([A-Za-z0-9_-]+)\.(wd\d+|wd5|wd3|wd1|wd2)\.myworkdayjobs\.com/([A-Za-z0-9_-]+)",
+        r"/wday/cxs/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/jobs",
+    ]
+    # Full public Workday URL.
+    for m in re.finditer(workday_patterns[0], text, re.I):
+        tenant, wd_host, site = m.group(1), m.group(2), m.group(3)
+        key = ("workday", f"{tenant}|{wd_host}|{site}".lower())
+        if key not in seen:
+            seen.add(key)
+            out.append(("workday", f"{tenant}|{wd_host}|{site}"))
+
+    # CXS paths may be present without the hostname; infer host/tenant from the
+    # final careers URL if possible.
+    host_match = re.search(
+        r"https?://([A-Za-z0-9_-]+)\.(wd\d+|wd5|wd3|wd1|wd2)\.myworkdayjobs\.com",
+        text, re.I
+    )
+    if host_match:
+        tenant0, wd_host0 = host_match.group(1), host_match.group(2)
+        for m in re.finditer(workday_patterns[1], text, re.I):
+            tenant, site = m.group(1), m.group(2)
+            tenant = tenant or tenant0
+            key = ("workday", f"{tenant}|{wd_host0}|{site}".lower())
+            if key not in seen:
+                seen.add(key)
+                out.append(("workday", f"{tenant}|{wd_host0}|{site}"))
+
+
     out = []
     seen = set()
     for platform, pattern in patterns:
@@ -2807,6 +2838,20 @@ def _probe_platform(platform: str, slug: str, sess, allow_empty: bool = False) -
     if not sess or not slug:
         return False
     try:
+        if platform == "workday":
+            if not slug or slug.count("|") != 2:
+                return False
+            tenant, wd_host, site = slug.split("|", 2)
+            url = f"https://{tenant}.{wd_host}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs"
+            rr = sess.post(
+                url,
+                json={"appliedFacets": {}, "limit": 1, "offset": 0, "searchText": ""},
+                timeout=12,
+            )
+            if rr.status_code != 200:
+                return False
+            data = rr.json()
+            return isinstance(data, dict) and ("jobPostings" in data or "total" in data)
         if platform == "greenhouse":
             r=sess.get(f"https://boards-api.greenhouse.io/v1/boards/{slug}/jobs", timeout=10)
             return r.status_code == 200 and isinstance(r.json().get("jobs"), list)
@@ -2925,7 +2970,12 @@ def _scrape_phenom(company: str, slug: str, sess):
 
 def _scrape_cached_mapping(company: str, platform: str, slug: str, sess):
     try:
-        if platform == "greenhouse": jobs=scrape_greenhouse(slug)
+        if platform == "workday":
+            if not slug or slug.count("|") != 2:
+                return []
+            tenant, wd_host, site = slug.split("|", 2)
+            jobs = scrape_workday(company, tenant, wd_host, site)
+        elif platform == "greenhouse": jobs=scrape_greenhouse(slug)
         elif platform == "lever": jobs=scrape_lever(slug)
         elif platform == "smartrecruiters": jobs=scrape_smartrecruiters(slug)
         elif platform == "ashby": jobs=scrape_ashby(slug)
@@ -2977,7 +3027,7 @@ def discover_and_scrape_manual(company_registry):
         cache.setdefault(company, {"platform": "phenom", "slug": slug})
 
     dynamic_jobs=[]; confirmed={}; fresh=0
-    platforms=("greenhouse","lever","smartrecruiters","ashby","workable","recruitee","personio","pinpoint","eightfold")
+    platforms=("workday","greenhouse","lever","smartrecruiters","ashby","workable","recruitee","personio","pinpoint","eightfold")
 
     for entry in company_registry:
         company=entry["company"]
@@ -2995,12 +3045,9 @@ def discover_and_scrape_manual(company_registry):
             continue
 
         if not platform:
-            if fresh >= ATS_PROBE_LIMIT:
-                continue
-            fresh += 1
-
-            # First inspect the company's real careers page. This is much more
-            # reliable than guessing ATS board names from company strings.
+            # Always inspect the real careers page. This is one targeted request
+            # and is much safer than guessed tenants. The old code skipped this
+            # entirely once ATS_PROBE_LIMIT was reached, leaving hundreds manual.
             for plat, cand in _careers_page_ats_candidates(
                 company, entry.get("careers_url") or "", sess
             ):
@@ -3008,10 +3055,13 @@ def discover_and_scrape_manual(company_registry):
                     platform, slug = plat, cand
                     break
 
-            # Only fall back to bounded slug guesses if the careers page did not
-            # expose a recognizable ATS link.
-            if not platform:
-                guess_platforms = tuple(p for p in platforms if p != "smartrecruiters")
+            # Expensive guessed-slug probing stays bounded.
+            if not platform and fresh < ATS_PROBE_LIMIT:
+                fresh += 1
+                guess_platforms = tuple(
+                    p for p in platforms
+                    if p not in {"smartrecruiters", "workday"}
+                )
                 for cand in candidate_slugs(company):
                     for plat in guess_platforms:
                         if _probe_platform(plat,cand,sess):
@@ -3989,16 +4039,19 @@ def main():
     except Exception as e:
         errors.append(f"dynamic ATS discovery: {e}")
 
-    for company, url in JSONLD_CAREER_PAGES:
-        if IRELAND_ONLY and not jsonld_page_is_ireland(company, url):
+    # Universal structured-data fallback over the CURRENT registry.
+    # The old embedded JSONLD_CAREER_PAGES list lagged behind registry changes.
+    for company, url, _source_type, _category in _load_company_master():
+        if not url:
             continue
         try:
             found = scrape_jsonld(company, url)
             results.extend(found)
-            print(f"jsonld/{company}: {len(found)} matches")
+            if found:
+                print(f"jsonld/{company}: {len(found)} matches")
         except Exception as e:
             errors.append(f"jsonld/{company}: {e}")
-        time.sleep(0.3)
+        time.sleep(0.12)
 
     for country in ADZUNA_COUNTRIES:
         for query in DIRECT_QUERIES:
@@ -4172,18 +4225,6 @@ def main():
 
     company_registry = build_company_registry(include_cache=True)
 
-    manual_check = []
-    for item in company_registry:
-        if item["automatic"]:
-            continue
-        manual_check.append({
-            "company": item["company"],
-            "url": item["careers_url"],
-            "platform": item["platform"],
-            "status": "manual-check" if item["careers_url"] else "needs-careers-url",
-        })
-    manual_check.sort(key=lambda x: x["company"].lower())
-
     if MAX_AGE_DAYS is not None:
         cutoff = datetime.now(timezone.utc) - timedelta(days=MAX_AGE_DAYS)
         before = len(results)
@@ -4203,10 +4244,34 @@ def main():
         source_counts[j.get("ats") or "unknown"] = source_counts.get(j.get("ats") or "unknown", 0) + 1
         company_job_counts[j.get("company") or "Unknown"] = company_job_counts.get(j.get("company") or "Unknown", 0) + 1
 
+    # A company with live jobs from an automatic source (including an aggregator)
+    # should not still be presented as "manual-check". Match on normalized names.
+    live_company_keys = {
+        _company_key(company_display_name(j.get("company", "")))
+        for j in results
+        if j.get("company")
+    }
+
+    manual_check = []
+    for item in company_registry:
+        key = _company_key(item["company"])
+        if item["automatic"] or key in live_company_keys:
+            if key in live_company_keys and not item["automatic"]:
+                item["automatic"] = True
+                item["platform"] = "aggregator-covered"
+            continue
+        manual_check.append({
+            "company": item["company"],
+            "url": item["careers_url"],
+            "platform": item["platform"],
+            "status": "manual-check" if item["careers_url"] else "needs-careers-url",
+        })
+    manual_check.sort(key=lambda x: x["company"].lower())
+
     # Coverage diagnostics. "No live jobs" is not automatically the same as
     # "the company has no jobs"; distinguish missing connectors from configured
     # connectors that yielded no Ireland records.
-    live_company_keys = {_company_key(name) for name in company_job_counts}
+    # live_company_keys already computed from normalized result company names.
     coverage_diagnostics = []
     for item in company_registry:
         key = _company_key(item["company"])
