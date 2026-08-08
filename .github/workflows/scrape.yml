@@ -34,7 +34,7 @@ jobs:
         env:
           # Newly-unmapped companies probed per run. Cached mappings are reused
           # without consuming this budget, so coverage improves over successive runs.
-          ATS_PROBE_LIMIT: "60"
+          ATS_PROBE_LIMIT: "80"
         run: python scrape.py
 
       - name: Commit generated job/state files
