@@ -396,6 +396,7 @@ const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
 let ALL_JOBS = [];
 let ALL_MANUAL = [];
+let ALL_REGISTRY = [];
 let RAW_TOTAL = 0;
 let RESUME_TEXT = '';
 let RESUME_TERMS = new Set();
@@ -564,6 +565,7 @@ function loadData(data) {
   const jobs = data.jobs || [];
   ALL_JOBS = data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs);
   ALL_MANUAL = data.manual_check_companies || [];
+  ALL_REGISTRY = data.registry_companies || [];
   RAW_TOTAL = jobs.length;
 
   document.getElementById('genTime').textContent = data.generated_at
@@ -571,9 +573,16 @@ function loadData(data) {
     : '';
   document.getElementById('stLive').textContent = ALL_JOBS.length;
   document.getElementById('stCompanies').textContent = data.total_companies_checked ?? '—';
-  document.getElementById('stManual').textContent = ALL_MANUAL.length;
+  const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
+  document.getElementById('stManual').textContent = directoryCount;
 
-  fillSelect('fCompany', ALL_JOBS.map(j => j.company));
+  // Populate companies from the full registry, plus any live/manual records for backward compatibility.
+  const companyUniverse = [
+    ...ALL_REGISTRY.map(c => c.company),
+    ...ALL_JOBS.map(j => j.company),
+    ...ALL_MANUAL.map(c => c.company)
+  ];
+  fillSelect('fCompany', companyUniverse);
   fillSelect('fSector', ALL_JOBS.map(j => j.sector || 'Other'));
   fillSelect('fSource', ALL_JOBS.map(j => j.ats), v => v.charAt(0).toUpperCase() + v.slice(1));
 
@@ -722,9 +731,23 @@ function applyFilters() {
 
   renderDirectory(search);
   document.getElementById('tabLive').textContent = `Live matches (${filtered.length})`;
-  document.getElementById('tabDir').textContent = `Careers pages (${ALL_MANUAL.length})`;
+  const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
+  document.getElementById('tabDir').textContent = `Careers pages (${directoryCount})`;
 
-  if (search && filtered.length === 0 && ALL_MANUAL.some(c => c.company.toLowerCase().includes(search))) {
+  const selectedCompany = document.getElementById('fCompany').value;
+  const selectedRegistry = ALL_REGISTRY.find(c => c.company === selectedCompany);
+  const selectedManual = ALL_MANUAL.find(c => c.company === selectedCompany);
+  const fallbackCompany = selectedRegistry || selectedManual;
+  const fallbackUrl = fallbackCompany && (fallbackCompany.careers_url || fallbackCompany.url);
+
+  if (!filtered.length && selectedCompany && fallbackCompany) {
+    const status = fallbackCompany.automatic === true
+      ? 'No live Ireland vacancies were returned for this company in the latest scrape.'
+      : 'This company does not currently have a working job-level connector.';
+    document.getElementById('emptyState').innerHTML =
+      `<strong>${escapeHtml(selectedCompany)}</strong><br><br>${escapeHtml(status)}` +
+      (fallbackUrl ? `<br><br><button class="resume-button" type="button" onclick="window.open('${escapeHtml(fallbackUrl)}','_blank','noopener')">Open ${escapeHtml(selectedCompany)} Careers →</button>` : '');
+  } else if (search && filtered.length === 0 && ALL_MANUAL.some(c => c.company.toLowerCase().includes(search))) {
     document.getElementById('emptyState').innerHTML =
       `No live listings for "<strong>${escapeHtml(search)}</strong>" — check the Careers pages tab.`;
   } else if (!filtered.length) {
@@ -738,17 +761,28 @@ function renderDirectory(search) {
   const selectedCompany = document.getElementById('fCompany').value;
   const grid = document.getElementById('dirGrid');
   grid.innerHTML = '';
-  ALL_MANUAL
+  const directoryMap = new Map();
+  ALL_REGISTRY.forEach(c => {
+    const url = c.careers_url || c.url;
+    if (url) directoryMap.set(c.company, { ...c, url });
+  });
+  ALL_MANUAL.forEach(c => {
+    const existing = directoryMap.get(c.company) || {};
+    directoryMap.set(c.company, { ...existing, ...c, url: c.url || c.careers_url || existing.url });
+  });
+
+  Array.from(directoryMap.values())
     .filter(c => (!selectedCompany || c.company === selectedCompany) && (!search || c.company.toLowerCase().includes(search)))
     .sort((a, b) => a.company.localeCompare(b.company))
     .forEach(c => {
       const card = document.createElement('div');
       card.className = 'dir-card';
-      card.onclick = () => window.open(c.url, '_blank', 'noopener');
+      card.onclick = () => c.url && window.open(c.url, '_blank', 'noopener');
+      const status = c.automatic === true ? `${c.platform || 'Automatic'} · direct careers page` : (c.platform || 'Careers page');
       card.innerHTML = `
         <div>
           <div class="dir-name">${escapeHtml(c.company)}</div>
-          <div class="dir-plat">${escapeHtml(c.platform || 'Careers page')}</div>
+          <div class="dir-plat">${escapeHtml(status)}</div>
         </div>
         <span class="apply-hint">Open →</span>
       `;
