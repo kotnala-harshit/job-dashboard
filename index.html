@@ -459,6 +459,7 @@
       <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
       <div id="tabZero" class="tab" onclick="showTab('zero')">Zero jobs scraped</div>
       <div id="tabSaved" class="tab" onclick="showTab('saved')">Saved</div>
+      <div id="tabLiveCompanies" class="tab" onclick="showTab('livecompanies')">Companies with live jobs</div>
       <div id="tabApplications" class="tab" onclick="showTab('applications')">Applications</div>
     </div>
     <span id="resultCount">0 results</span>
@@ -487,6 +488,12 @@
   <div id="savedPane" style="display:none">
     <div id="savedGrid" class="grid"></div>
     <div id="savedEmpty" class="empty">No saved jobs yet.</div>
+  </div>
+
+
+  <div id="liveCompaniesPane" style="display:none">
+    <div id="liveCompaniesSummary" class="diag-summary"></div>
+    <div id="liveCompaniesGrid" class="dir-grid"></div>
   </div>
 
   <div id="applicationsPane">
@@ -820,7 +827,30 @@ function loadData(data) {
   applyFilters();
 }
 
-async function autoFetchJobs() {
+async 
+function setupInstantFilters() {
+  const ids = [
+    'q','fCompany','fArea','fSector','fSource','fTime','fType',
+    'fRadar','fRoleFamily','fExperience','fVisa','fSort','fNew'
+  ];
+
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const eventName = (el.tagName === 'INPUT' && (el.type === 'text' || el.type === 'search')) ? 'input' : 'change';
+
+    // Prevent duplicate listeners if this function is ever called twice.
+    if (el.dataset.instantBound === '1') return;
+    el.dataset.instantBound = '1';
+
+    el.addEventListener(eventName, () => {
+      applyFilters();
+    });
+  });
+}
+
+function autoFetchJobs() {
   try {
     const resp = await fetch(DATA_URL + '?t=' + Date.now(), { cache: 'no-store' });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
@@ -972,6 +1002,7 @@ function applyFilters() {
 
   renderDirectory(search);
   renderDiagnostics(search);
+  renderLiveCompanies(search);
   document.getElementById('tabLive').textContent = `Live matches (${filtered.length})`;
   const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
   document.getElementById('tabDir').textContent = `Careers pages (${directoryCount})`;
@@ -1037,6 +1068,77 @@ function renderDirectory(search) {
     });
 }
 
+
+
+function getLiveCompanies() {
+  const counts = new Map();
+  const meta = new Map();
+
+  ALL_JOBS.forEach(j => {
+    const name = j.company || '';
+    if (!name) return;
+    counts.set(name, (counts.get(name) || 0) + 1);
+    if (!meta.has(name)) {
+      meta.set(name, {
+        company: name,
+        platform: j.ats || '',
+        url: j.url || '',
+        careers_url: ''
+      });
+    }
+  });
+
+  // Enrich with registry careers URLs/platforms when available.
+  ALL_REGISTRY.forEach(c => {
+    if (!counts.has(c.company)) return;
+    const existing = meta.get(c.company) || {company:c.company};
+    meta.set(c.company, {
+      ...existing,
+      platform: c.platform || existing.platform || '',
+      careers_url: c.careers_url || c.url || '',
+      url: existing.url || c.careers_url || c.url || ''
+    });
+  });
+
+  return [...counts.entries()]
+    .map(([company, count]) => ({...(meta.get(company) || {company}), count}))
+    .sort((a,b) => b.count - a.count || a.company.localeCompare(b.company));
+}
+
+function renderLiveCompanies(search='') {
+  search = (search || '').toLowerCase();
+  const selectedCompany = document.getElementById('fCompany')?.value || '';
+  const grid = document.getElementById('liveCompaniesGrid');
+  const summary = document.getElementById('liveCompaniesSummary');
+  if (!grid || !summary) return;
+
+  const rows = getLiveCompanies().filter(c =>
+    (!selectedCompany || c.company === selectedCompany) &&
+    (!search || c.company.toLowerCase().includes(search))
+  );
+
+  summary.textContent =
+    `${rows.length} shown · ${getLiveCompanies().length} companies currently have live Ireland jobs in data.json.`;
+
+  grid.innerHTML = '';
+  rows.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'dir-card';
+    const openUrl = c.careers_url || c.url || '';
+    if (openUrl) card.onclick = () => window.open(openUrl, '_blank', 'noopener');
+    card.innerHTML = `
+      <div>
+        <div class="dir-name">${escapeHtml(c.company)}</div>
+        <div class="dir-plat">${escapeHtml(c.platform || 'source unknown')} · ${c.count} live ${c.count === 1 ? 'job' : 'jobs'}</div>
+      </div>
+      ${openUrl ? '<span class="apply-hint">Open →</span>' : ''}
+    `;
+    grid.appendChild(card);
+  });
+
+  const tab = document.getElementById('tabLiveCompanies');
+  if (tab) tab.textContent = `Companies with live jobs (${getLiveCompanies().length})`;
+}
 
 function getManualCompanies() {
   const byName = new Map();
@@ -1140,6 +1242,7 @@ function showTab(which) {
   document.getElementById('manualPane').style.display = which === 'manual' ? 'block' : 'none';
   document.getElementById('zeroPane').style.display = which === 'zero' ? 'block' : 'none';
   document.getElementById('savedPane').style.display = which === 'saved' ? 'block' : 'none';
+  document.getElementById('liveCompaniesPane').style.display = which === 'livecompanies' ? 'block' : 'none';
   document.getElementById('applicationsPane').style.display = which === 'applications' ? 'block' : 'none';
 
   document.getElementById('tabLive').classList.toggle('active', which === 'live');
@@ -1147,8 +1250,10 @@ function showTab(which) {
   document.getElementById('tabManual').classList.toggle('active', which === 'manual');
   document.getElementById('tabZero').classList.toggle('active', which === 'zero');
   document.getElementById('tabSaved').classList.toggle('active', which === 'saved');
+  document.getElementById('tabLiveCompanies').classList.toggle('active', which === 'livecompanies');
   document.getElementById('tabApplications').classList.toggle('active', which === 'applications');
   if (which === 'saved') renderSaved();
+  if (which === 'livecompanies') renderLiveCompanies(document.getElementById('q')?.value || '');
   if (which === 'applications') renderApplications();
 }
 
@@ -1160,6 +1265,7 @@ loadRadarState();
 loadApplications();
 renderSaved();
 renderApplications();
+setupInstantFilters();
 autoFetchJobs();
 setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
 </script>
