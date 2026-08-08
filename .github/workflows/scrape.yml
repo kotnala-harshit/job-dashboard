@@ -1,64 +1,50 @@
-name: Scrape jobs
-
-on:
-  schedule:
-    # Runs every hour, at :17 past the hour rather than exactly on the hour.
-    # GitHub's scheduler gets congested right at :00 (everyone's cron fires
-    # then), which can delay or occasionally drop a run during high load --
-    # an off-peak minute is more reliable for actually landing on time.
-    # Since this repeats every hour, several runs will always land overnight
-    # regardless of when you fall asleep or wake up -- there's no need for a
-    # specific "early morning" time, hourly already guarantees at least one
-    # (usually several) completed batches are waiting whenever you check.
-    # GitHub Actions minutes are completely free and uncapped on PUBLIC repos
-    # (the 2,000 min/month cap only applies to private repos), so hourly
-    # costs nothing -- dial down to e.g. "17 */3 * * *" (every 3 hours) if
-    # you'd rather be gentler on the free ATS APIs themselves.
-    - cron: "17 * * * *"
-  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab
-
-permissions:
-  contents: write
-
-jobs:
-  scrape:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Run scraper
-        run: python scrape.py
-
-      - name: Commit updated data.json
-        run: |
-          git config user.name "job-dashboard-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add data.json
-
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
-
-          git commit -m "Update job data $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-
-          # Push can be rejected if 'main' moved since this job checked out
-          # (another run overlapping, or a manual commit/upload on GitHub in
-          # the meantime) -- pull --rebase re-syncs onto the latest remote
-          # state before retrying, since this workflow only ever touches
-          # data.json, a rebase here is essentially always conflict-free.
-          for attempt in 1 2 3 4 5; do
-            if git pull --rebase origin main && git push; then
-              echo "Pushed successfully on attempt $attempt"
-              exit 0
-            fi
-            echo "Push attempt $attempt failed, retrying in 10s..."
-            sleep 10
-          done
-
-          echo "All push attempts failed"
-          exit 1
+Skip to content
+kotnala-harshit
+job-dashboard
+Repository navigation
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security and quality
+Insights
+Settings
+Scrape jobs
+Scrape jobs #72
+All jobs
+Run details
+Annotations
+1 error and 1 warning
+scrape
+failed 18 minutes ago in 14m 32s
+Search logs
+1s
+1s
+0s
+13m 38s
+50s
+Run git config user.name "job-dashboard-bot"
+[main 82dd64a] Update job data 2026-08-07T23:48:40Z
+ 1 file changed, 11001 insertions(+), 2092 deletions(-)
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+Push attempt 1 failed, retrying in 10s...
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+Push attempt 2 failed, retrying in 10s...
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+Push attempt 3 failed, retrying in 10s...
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+Push attempt 4 failed, retrying in 10s...
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+Push attempt 5 failed, retrying in 10s...
+All push attempts failed
+Error: Process completed with exit code 1.
+0s
+0s
+0s
