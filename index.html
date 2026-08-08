@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Job Radar — Ireland</title>
+<title>Ireland Job Search</title>
 <style>
   :root {
     --bg: #0c121c;
@@ -177,6 +177,11 @@
   }
   .card:hover { border-color: var(--amber); transform: translateY(-1px); }
   .card.fresh { border-left-color: var(--teal); }
+  .new-ribbon {
+    position:absolute; top:-1px; right:12px; background:var(--amber); color:#1a1305;
+    font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.06em;
+    padding:3px 8px; border-radius:0 0 5px 5px;
+  }
   .company {
     font-family: var(--mono);
     font-size: 11px;
@@ -251,6 +256,24 @@
   .dir-card:hover { border-color: var(--amber); }
   .dir-name { font-weight: 600; font-size: 13.5px; }
   .dir-plat { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+  .resume-panel {
+    margin: 14px 0 0; padding: 12px 14px; border: 1px solid var(--line);
+    background: var(--panel-2); border-radius: 8px; display:flex; gap:10px;
+    align-items:center; flex-wrap:wrap;
+  }
+  .resume-panel strong { font-size:12px; }
+  .resume-status { font-family:var(--mono); font-size:11px; color:var(--muted); flex:1 1 240px; }
+  .resume-button {
+    background:transparent; color:var(--ink); border:1px solid var(--line); padding:8px 11px;
+    border-radius:6px; cursor:pointer; font-size:12px; font-weight:700;
+  }
+  .resume-button:hover { border-color:var(--amber); }
+  #resumeInput { display:none; }
+  .match-badge {
+    font-family:var(--mono); font-size:10.5px; padding:3px 8px; border-radius:20px;
+    border:1px solid #3fcf9a44; background:var(--teal-dim); color:var(--teal);
+  }
+  .privacy-note { font-size:10.5px; color:var(--muted); }
 </style>
 </head>
 <body>
@@ -258,12 +281,12 @@
 <div class="board">
   <div class="board-top">
     <div>
-      <p class="eyebrow">Personal pipeline · Ireland only</p>
-      <h1>Job Radar</h1>
+      <p class="eyebrow">Ireland-wide job search · all roles · all sectors</p>
+      <h1>Ireland Job Search</h1>
     </div>
     <div class="readout">
       <div><b id="stCompanies">0</b>companies checked</div>
-      <div><b id="stLive">0</b>live matches</div>
+      <div><b id="stLive">0</b>live jobs</div>
       <div><b id="stManual">0</b>careers pages</div>
     </div>
   </div>
@@ -271,8 +294,11 @@
 
   <div class="filter-row" style="margin-top: 14px;">
     <div class="search-wrap">
-      <input id="fSearch" type="text" placeholder="Search title, company, location..." />
+      <input id="fSearch" type="text" placeholder="Search title, company, location, skills..." />
     </div>
+    <select id="fCompany">
+      <option value="">All companies</option>
+    </select>
     <select id="fLocation">
       <option value="">All Ireland</option>
       <option value="dublin">Dublin</option>
@@ -291,15 +317,28 @@
     </select>
     <select id="fPosted">
       <option value="">Any time posted</option>
+      <option value="1h">Last 1 hour</option>
+      <option value="3h">Last 3 hours</option>
+      <option value="6h">Last 6 hours</option>
+      <option value="12h">Last 12 hours</option>
       <option value="24h">Last 24 hours</option>
       <option value="7d">Last 7 days</option>
-      <option value="30d">Last 28 days</option>
+      <option value="30d">Last 30 days</option>
     </select>
     <select id="fType">
       <option value="">All employment types</option>
       <option value="full_time">Full-time</option>
       <option value="part_time">Part-time</option>
       <option value="internship">Internship</option>
+    </select>
+    <select id="fResume">
+      <option value="">All jobs</option>
+      <option value="matched">Resume keyword matches</option>
+      <option value="strong">Stronger resume matches</option>
+    </select>
+    <select id="fNew">
+      <option value="">All postings</option>
+      <option value="new">New since last check</option>
     </select>
     <select id="fVisa">
       <option value="">Any visa status</option>
@@ -309,6 +348,7 @@
     </select>
     <select id="fSort">
       <option value="date">Newest first</option>
+      <option value="resume">Best resume match</option>
       <option value="company">Company A–Z</option>
       <option value="title">Title A–Z</option>
     </select>
@@ -318,6 +358,14 @@
       <label id="manualLoadLink" for="fileInput">load file manually</label>
       <input id="fileInput" type="file" accept="application/json,.json" />
     </div>
+  </div>
+  <div class="resume-panel">
+    <strong>Resume match</strong>
+    <label class="resume-button" for="resumeInput">Load resume</label>
+    <input id="resumeInput" type="file" accept=".pdf,.docx,.txt,.md,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+    <button id="clearResume" class="resume-button" type="button" style="display:none">Clear</button>
+    <span id="resumeStatus" class="resume-status">Optional: upload PDF, DOCX or TXT to rank jobs by keyword overlap.</span>
+    <span class="privacy-note">Processed in your browser; the resume is not uploaded to this site.</span>
   </div>
 </div>
 
@@ -340,6 +388,8 @@
   </div>
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
 <script>
 const DATA_URL = './data.json';
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
@@ -347,6 +397,9 @@ const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 let ALL_JOBS = [];
 let ALL_MANUAL = [];
 let RAW_TOTAL = 0;
+let RESUME_TEXT = '';
+let RESUME_TERMS = new Set();
+let RESUME_FILE_NAME = '';
 
 const INTERNSHIP_KEYWORDS = ['intern', 'internship', 'working student', 'student job', 'placement', 'co-op', 'co op'];
 const PART_TIME_KEYWORDS = ['part time', 'part-time', 'seasonal', 'temporary staff', 'christmas temp', 'weekend staff'];
@@ -372,14 +425,41 @@ function parsePostedDate(value) {
   return null;
 }
 
+function ageHours(date) {
+  if (!date) return Infinity;
+  return Math.max(0, (Date.now() - date.getTime()) / 3600000);
+}
+
 function recencyBucket(date) {
-  if (!date) return 'unknown';
-  const ageMs = Date.now() - date.getTime();
-  const hour = 3600 * 1000, day = 24 * hour;
-  if (ageMs <= 24 * hour) return '24h';
-  if (ageMs <= 7 * day) return '7d';
-  if (ageMs <= 30 * day) return '30d';
+  const h = ageHours(date);
+  if (!isFinite(h)) return 'unknown';
+  if (h <= 1) return '1h';
+  if (h <= 3) return '3h';
+  if (h <= 6) return '6h';
+  if (h <= 12) return '12h';
+  if (h <= 24) return '24h';
+  if (h <= 7 * 24) return '7d';
+  if (h <= 30 * 24) return '30d';
   return 'older';
+}
+
+function postedWithin(date, filter) {
+  if (!filter) return true;
+  const limits = { '1h':1, '3h':3, '6h':6, '12h':12, '24h':24, '7d':168, '30d':720 };
+  return ageHours(date) <= (limits[filter] ?? Infinity);
+}
+
+function recencyLabel(date) {
+  const h = ageHours(date);
+  if (!isFinite(h)) return '';
+  if (h < 1) return 'Within 1h';
+  if (h <= 3) return 'Within 3h';
+  if (h <= 6) return 'Within 6h';
+  if (h <= 12) return 'Within 12h';
+  if (h <= 24) return 'Today';
+  if (h <= 7 * 24) return 'This week';
+  if (h <= 30 * 24) return 'This month';
+  return 'Older';
 }
 
 function irelandOnlyJobs(jobs) {
@@ -413,6 +493,73 @@ function visaLabel(status) {
   return { cls: '', text: 'Visa not mentioned' };
 }
 
+const RESUME_STOPWORDS = new Set(['the','and','for','with','that','this','from','your','you','our','are','will','have','has','job','role','work','team','company','candidate','skills','skill','experience','years','year','including','within','across','using','into','about','more','their','they','them','who','what','when','where','which','while','also','all','any','but','not','can','may','must','should','would','could','a','an','as','at','be','by','in','is','it','of','on','or','to','we','i','us']);
+
+function tokenize(text) {
+  const raw = String(text || '').toLowerCase().match(/[a-z][a-z0-9+#.\-]{2,}/g) || [];
+  return raw.map(t => t.replace(/^[.\-]+|[.\-]+$/g, ''))
+    .filter(t => t.length >= 3 && !RESUME_STOPWORDS.has(t) && !/^\d+$/.test(t));
+}
+
+function setResumeText(text, filename) {
+  RESUME_TEXT = String(text || '');
+  RESUME_FILE_NAME = filename || 'resume';
+  const counts = {};
+  tokenize(RESUME_TEXT).forEach(t => counts[t] = (counts[t] || 0) + 1);
+  RESUME_TERMS = new Set(Object.entries(counts)
+    .sort((a,b) => b[1] - a[1])
+    .slice(0, 300)
+    .map(([t]) => t));
+  document.getElementById('resumeStatus').textContent = `${RESUME_FILE_NAME} loaded · ${RESUME_TERMS.size} searchable terms · ranking available`;
+  document.getElementById('clearResume').style.display = 'inline-block';
+  document.getElementById('fSort').value = 'resume';
+  document.getElementById('fResume').value = 'matched';
+  applyFilters();
+}
+
+function resumeScore(job) {
+  if (!RESUME_TERMS.size) return 0;
+  const titleTerms = new Set(tokenize(job.title));
+  const companyTerms = new Set(tokenize(job.company));
+  const sectorTerms = new Set(tokenize(job.sector));
+  const jobTerms = new Set([...(job.match_keywords || []), ...titleTerms, ...companyTerms, ...sectorTerms]);
+  let weighted = 0;
+  let possible = 0;
+  for (const term of RESUME_TERMS) {
+    let w = 1;
+    if (titleTerms.has(term)) w = 5;
+    else if (sectorTerms.has(term)) w = 2.5;
+    else if (companyTerms.has(term)) w = 1.5;
+    possible += 1;
+    if (jobTerms.has(term)) weighted += w;
+  }
+  // Keep the score interpretable as a keyword-overlap indicator, not an AI fit claim.
+  return Math.min(100, Math.round((weighted / Math.max(12, Math.sqrt(RESUME_TERMS.size) * 4)) * 100));
+}
+
+async function extractResumeText(file) {
+  const name = (file.name || '').toLowerCase();
+  if (name.endsWith('.txt') || name.endsWith('.md') || file.type === 'text/plain') return await file.text();
+  if (name.endsWith('.docx')) {
+    if (!window.mammoth) throw new Error('DOCX parser did not load');
+    const result = await window.mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
+    return result.value || '';
+  }
+  if (name.endsWith('.pdf') || file.type === 'application/pdf') {
+    if (!window.pdfjsLib) throw new Error('PDF parser did not load');
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf = await window.pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    let text = '';
+    for (let pageNo = 1; pageNo <= pdf.numPages; pageNo++) {
+      const page = await pdf.getPage(pageNo);
+      const content = await page.getTextContent();
+      text += ' ' + content.items.map(i => i.str).join(' ');
+    }
+    return text;
+  }
+  throw new Error('Use a PDF, DOCX, TXT or MD resume');
+}
+
 function loadData(data) {
   const jobs = data.jobs || [];
   ALL_JOBS = data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs);
@@ -426,6 +573,7 @@ function loadData(data) {
   document.getElementById('stCompanies').textContent = data.total_companies_checked ?? '—';
   document.getElementById('stManual').textContent = ALL_MANUAL.length;
 
+  fillSelect('fCompany', ALL_JOBS.map(j => j.company));
   fillSelect('fSector', ALL_JOBS.map(j => j.sector || 'Other'));
   fillSelect('fSource', ALL_JOBS.map(j => j.ats), v => v.charAt(0).toUpperCase() + v.slice(1));
 
@@ -461,27 +609,53 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
   reader.readAsText(file);
 });
 
-['fSearch', 'fLocation', 'fSector', 'fSource', 'fPosted', 'fType', 'fVisa', 'fSort'].forEach(id => {
+document.getElementById('resumeInput').addEventListener('change', async function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  document.getElementById('resumeStatus').textContent = `Reading ${file.name}...`;
+  try {
+    const text = await extractResumeText(file);
+    if (!text.trim()) throw new Error('No readable text found in this resume');
+    setResumeText(text, file.name);
+  } catch (err) {
+    document.getElementById('resumeStatus').textContent = `Could not read resume: ${err.message}`;
+  }
+});
+
+document.getElementById('clearResume').addEventListener('click', function() {
+  RESUME_TEXT = ''; RESUME_FILE_NAME = ''; RESUME_TERMS = new Set();
+  document.getElementById('resumeInput').value = '';
+  document.getElementById('resumeStatus').textContent = 'Optional: upload PDF, DOCX or TXT to rank jobs by keyword overlap.';
+  document.getElementById('clearResume').style.display = 'none';
+  document.getElementById('fResume').value = '';
+  if (document.getElementById('fSort').value === 'resume') document.getElementById('fSort').value = 'date';
+  applyFilters();
+});
+
+['fSearch', 'fCompany', 'fLocation', 'fSector', 'fSource', 'fPosted', 'fType', 'fResume', 'fNew', 'fVisa', 'fSort'].forEach(id => {
   document.getElementById(id).addEventListener('input', applyFilters);
   document.getElementById(id).addEventListener('change', applyFilters);
 });
 
 function applyFilters() {
   const search = document.getElementById('fSearch').value.trim().toLowerCase();
+  const company = document.getElementById('fCompany').value;
   const location = document.getElementById('fLocation').value;
   const sector = document.getElementById('fSector').value;
   const source = document.getElementById('fSource').value;
   const posted = document.getElementById('fPosted').value;
   const type = document.getElementById('fType').value;
+  const resumeFilter = document.getElementById('fResume').value;
+  const newOnly = document.getElementById('fNew').value;
   const visa = document.getElementById('fVisa').value;
   const sort = document.getElementById('fSort').value;
-  const recencyRank = { '24h': 0, '7d': 1, '30d': 2, 'older': 3, 'unknown': 4 };
 
   let filtered = ALL_JOBS.filter(j => {
     if (search) {
-      const hay = ((j.title || '') + ' ' + (j.company || '') + ' ' + (j.location || '')).toLowerCase();
+      const hay = ((j.title || '') + ' ' + (j.company || '') + ' ' + (j.location || '') + ' ' + (j.sector || '') + ' ' + (j.match_keywords || []).join(' ')).toLowerCase();
       if (!hay.includes(search)) return false;
     }
+    if (company && j.company !== company) return false;
     if (location) {
       const loc = ((j.location || '') + ' ' + (j.ireland_area || '')).toLowerCase();
       if (!loc.includes(location)) return false;
@@ -489,16 +663,20 @@ function applyFilters() {
     if (sector && (j.sector || 'Other') !== sector) return false;
     if (source && j.ats !== source) return false;
     if (type && (j.employment_type || employmentType(j.title)) !== type) return false;
+    const rScore = resumeScore(j);
+    if (resumeFilter === 'matched' && RESUME_TERMS.size && rScore <= 0) return false;
+    if (resumeFilter === 'strong' && RESUME_TERMS.size && rScore < 20) return false;
+    if (newOnly === 'new' && !j.new_since_last_check) return false;
     const v = j.visa_sponsorship || 'not_mentioned';
     if (visa && v !== visa) return false;
     if (posted) {
-      const bucket = recencyBucket(parsePostedDate(j.updated_at));
-      if (recencyRank[bucket] > recencyRank[posted]) return false;
+      if (!postedWithin(parsePostedDate(j.updated_at || j.posted_at_parsed), posted)) return false;
     }
     return true;
   });
 
-  if (sort === 'company') filtered.sort((a, b) => (a.company || '').localeCompare(b.company || ''));
+  if (sort === 'resume' && RESUME_TERMS.size) filtered.sort((a, b) => resumeScore(b) - resumeScore(a) || new Date(b.updated_at || 0) - new Date(a.updated_at || 0));
+  else if (sort === 'company') filtered.sort((a, b) => (a.company || '').localeCompare(b.company || ''));
   else if (sort === 'title') filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
   else filtered.sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0));
 
@@ -510,24 +688,27 @@ function applyFilters() {
   document.getElementById('emptyState').style.display = filtered.length ? 'none' : 'block';
 
   filtered.forEach(j => {
-    const postedDate = parsePostedDate(j.updated_at);
+    const postedDate = parsePostedDate(j.updated_at || j.posted_at_parsed);
     const bucket = recencyBucket(postedDate);
-    const fresh = bucket === '24h';
+    const fresh = ageHours(postedDate) <= 24;
     const badge = visaLabel(j.visa_sponsorship || 'not_mentioned');
     const type = j.employment_type || employmentType(j.title);
     const typeLabel = { part_time: 'Part-time', internship: 'Internship' }[type];
-    const bucketLabel = { '24h': 'Today', '7d': 'This week', '30d': 'This month' }[bucket];
+    const bucketLabel = recencyLabel(postedDate);
+    const rScore = resumeScore(j);
 
     const card = document.createElement('div');
     card.className = 'card ' + (fresh ? 'fresh' : '');
     card.onclick = () => j.url && window.open(j.url, '_blank', 'noopener');
     card.innerHTML = `
+      ${j.new_since_last_check ? '<div class="new-ribbon">NEW</div>' : ''}
       <div class="company">${escapeHtml(j.company)}</div>
       <div class="title">${escapeHtml(j.title || 'Untitled role')}</div>
       <div class="meta">
         <span class="chip">${escapeHtml(j.location || j.ireland_area || 'Ireland')}</span>
         <span class="chip">${escapeHtml(j.sector || 'Other')}</span>
         <span class="chip">${escapeHtml(j.ats || '')}</span>
+        ${RESUME_TERMS.size ? `<span class="match-badge">Resume ${rScore}%</span>` : ''}
         ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
         ${typeLabel ? `<span class="chip type">${typeLabel}</span>` : ''}
       </div>
@@ -554,10 +735,11 @@ function applyFilters() {
 
 function renderDirectory(search) {
   search = (search || '').toLowerCase();
+  const selectedCompany = document.getElementById('fCompany').value;
   const grid = document.getElementById('dirGrid');
   grid.innerHTML = '';
   ALL_MANUAL
-    .filter(c => !search || c.company.toLowerCase().includes(search))
+    .filter(c => (!selectedCompany || c.company === selectedCompany) && (!search || c.company.toLowerCase().includes(search)))
     .sort((a, b) => a.company.localeCompare(b.company))
     .forEach(c => {
       const card = document.createElement('div');
