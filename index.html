@@ -456,6 +456,51 @@ a{color:inherit}
   .tab{padding:9px 8px!important;font-size:11px!important}
 }
 
+
+/* ===== Visibility polish v2 ===== */
+body{background:#f3f4f6!important}
+.board{
+  background:#ffffff!important;
+  box-shadow:0 1px 0 rgba(0,0,0,.05),0 6px 24px rgba(0,0,0,.035)!important;
+}
+.board-top{align-items:center!important;margin-bottom:14px!important}
+.readout{
+  gap:28px!important;
+  color:#52525b!important;
+  font-size:12px!important;
+  font-weight:650!important;
+  text-align:left;
+}
+.readout > div{min-width:92px}
+.readout b{
+  color:#18181b!important;
+  font-size:24px!important;
+  line-height:1.05!important;
+  font-weight:800!important;
+  letter-spacing:-.035em!important;
+  margin-bottom:4px;
+}
+#genTime{
+  display:inline-flex!important;
+  align-items:center;
+  min-height:30px;
+  padding:6px 10px!important;
+  background:#f4f4f5!important;
+  border:1px solid #e4e4e7!important;
+  border-radius:8px!important;
+  color:#3f3f46!important;
+  font-family:var(--sans)!important;
+  font-size:12.5px!important;
+  font-weight:700!important;
+  letter-spacing:0!important;
+}
+.filter-row,.filters{background:#fafafa!important}
+.job-card,.card,.dir-card{background:#ffffff!important}
+@media(max-width:760px){
+  .readout{width:100%;justify-content:space-between;gap:12px!important}
+  .readout b{font-size:21px!important}
+}
+
 </style>
 </head>
 <body>
@@ -912,7 +957,7 @@ function loadData(data) {
   RAW_TOTAL = jobs.length;
 
   document.getElementById('genTime').textContent = data.generated_at
-    ? ('Updated ' + new Date(data.generated_at).toLocaleString())
+    ? ('Last updated: ' + new Date(data.generated_at).toLocaleString())
     : '';
   document.getElementById('stLive').textContent = ALL_JOBS.length;
   document.getElementById('stCompanies').textContent = data.total_companies_checked ?? '—';
