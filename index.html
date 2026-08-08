@@ -358,7 +358,7 @@
 <div class="board">
   <div class="board-top">
     <div>
-      <p class="eyebrow">Direct-company + hidden-job discovery · broad Ireland engine underneath</p>
+      <p class="eyebrow">Ireland-wide job discovery · direct employer, ATS and aggregator sources</p>
       <h1>Ireland Job Radar</h1>
     </div>
     <div class="readout">
@@ -368,45 +368,7 @@
     </div>
   </div>
   <div id="genTime">Connecting to live data...</div>
-
-
-  <details class="profile-builder" id="profileBuilder">
-    <summary>Personalize this Job Radar from your resume + LinkedIn profile</summary>
-    <div class="profile-grid">
-      <div class="profile-field">
-        <label for="personalResume">Resume / CV</label>
-        <input id="personalResume" type="file" accept=".pdf,.docx,.txt,.md,application/pdf,text/plain" />
-      </div>
-      <div class="profile-field">
-        <label for="linkedinUrl">LinkedIn profile URL</label>
-        <input id="linkedinUrl" type="url" placeholder="https://www.linkedin.com/in/your-profile/" />
-      </div>
-      <div class="profile-field" style="grid-column:1/-1">
-        <label for="linkedinText">LinkedIn profile text (recommended)</label>
-        <textarea id="linkedinText" placeholder="Paste your LinkedIn About, Experience, Skills, certifications, projects, or exported profile text here."></textarea>
-      </div>
-    </div>
-    <div class="profile-actions">
-      <button type="button" class="primary" onclick="buildPersonalProfile()">Build / update my profile</button>
-      <button type="button" onclick="resetPersonalProfile()">Use default profile</button>
-      <span id="personalProfileStatus" class="profile-status">Default profile is active.</span>
-    </div>
-    <div id="personalProfileSummary" class="profile-note"></div>
-    <div class="profile-note">
-      LinkedIn URL is stored as profile metadata only. A static GitHub Pages site cannot reliably read LinkedIn profile content from the URL because LinkedIn commonly requires authentication and blocks cross-origin scraping. Paste LinkedIn profile text above for it to affect matching.
-    </div>
-  </details>
-
-  <div class="authbar">
-    <input id="authEmail" type="email" placeholder="Email for cloud sync" autocomplete="email" />
-    <input id="authPassword" type="password" placeholder="Password" autocomplete="current-password" />
-    <button type="button" class="primary" onclick="signInSupabase()">Sign in</button>
-    <button type="button" onclick="signUpSupabase()">Create account</button>
-    <button type="button" id="signOutBtn" onclick="signOutSupabase()" style="display:none">Sign out</button>
-    <span id="authStatus" class="auth-status">Local-only mode</span>
-  </div>
-
-  <div class="filter-row" style="margin-top: 14px;">
+<div class="filter-row" style="margin-top: 14px;">
     <div class="search-wrap">
       <input id="fSearch" type="text" placeholder="Search title, company, location, skills..." />
     </div>
@@ -446,8 +408,8 @@
       <option value="internship">Internship</option>
     </select>
     <select id="fRadar">
-      <option value="for_you">For You</option>
       <option value="">All Ireland jobs</option>
+      <option value="for_you">For You (backend profile)</option>
       <option value="best">Best Matches (75+)</option>
       <option value="new_today">New Today</option>
       <option value="hidden">Hidden / Discovery Value</option>
@@ -492,7 +454,7 @@
 <main>
   <div class="subhead">
     <div class="tabs">
-      <div id="tabLive" class="tab active" onclick="showTab('live')">For You / Jobs</div>
+      <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs</div>
       <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
       <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
       <div id="tabZero" class="tab" onclick="showTab('zero')">Zero jobs scraped</div>
@@ -546,11 +508,6 @@
   </div>
 
 </main>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./supabase-config.js"></script>
 <script>
 const DATA_URL = './data.json';
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
@@ -559,178 +516,6 @@ let ALL_JOBS = [];
 let ALL_MANUAL = [];
 let ALL_REGISTRY = [];
 let RAW_TOTAL = 0;
-
-let SUPABASE_CLIENT = null;
-let SUPABASE_USER = null;
-
-function initSupabase() {
-  const cfg = window.__SUPABASE_CONFIG__ || {};
-  if (!cfg.url || !cfg.publishableKey || !window.supabase) {
-    updateAuthUI('Local-only mode');
-    return;
-  }
-  try {
-    SUPABASE_CLIENT = window.supabase.createClient(cfg.url, cfg.publishableKey);
-    SUPABASE_CLIENT.auth.getSession().then(({data}) => {
-      SUPABASE_USER = data?.session?.user || null;
-      updateAuthUI();
-      if (SUPABASE_USER) mergeRemoteState();
-    });
-    SUPABASE_CLIENT.auth.onAuthStateChange((_event, session) => {
-      SUPABASE_USER = session?.user || null;
-      updateAuthUI();
-      if (SUPABASE_USER) mergeRemoteState();
-    });
-  } catch (e) {
-    console.warn('Supabase init failed', e);
-    updateAuthUI('Local-only mode');
-  }
-}
-
-function updateAuthUI(message='') {
-  const status = document.getElementById('authStatus');
-  const out = document.getElementById('signOutBtn');
-  if (!status) return;
-  if (SUPABASE_USER) {
-    status.textContent = message || `Cloud sync: ${SUPABASE_USER.email || 'signed in'}`;
-    if (out) out.style.display = '';
-  } else {
-    status.textContent = message || (SUPABASE_CLIENT ? 'Not signed in · local state still works' : 'Local-only mode');
-    if (out) out.style.display = 'none';
-  }
-}
-
-async function signUpSupabase() {
-  if (!SUPABASE_CLIENT) return updateAuthUI('Supabase is not configured yet');
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  if (!email || password.length < 6) return updateAuthUI('Enter an email and password of at least 6 characters');
-  const {error} = await SUPABASE_CLIENT.auth.signUp({email, password});
-  updateAuthUI(error ? `Sign-up error: ${error.message}` : 'Account created. Check your email if confirmation is enabled.');
-}
-
-async function signInSupabase() {
-  if (!SUPABASE_CLIENT) return updateAuthUI('Supabase is not configured yet');
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const {error} = await SUPABASE_CLIENT.auth.signInWithPassword({email, password});
-  updateAuthUI(error ? `Sign-in error: ${error.message}` : '');
-}
-
-async function signOutSupabase() {
-  if (SUPABASE_CLIENT) await SUPABASE_CLIENT.auth.signOut();
-  SUPABASE_USER = null;
-  updateAuthUI();
-}
-
-async function cloudUpsertProfile() {
-  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
-  await SUPABASE_CLIENT.from('user_profiles').upsert({
-    user_id: SUPABASE_USER.id,
-    linkedin_url: PERSONAL_PROFILE?.linkedin_url || '',
-    profile_json: PERSONAL_PROFILE || {},
-    updated_at: new Date().toISOString()
-  });
-}
-
-async function cloudDeleteProfile() {
-  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
-  await SUPABASE_CLIENT.from('user_profiles').delete().eq('user_id', SUPABASE_USER.id);
-}
-
-async function cloudSyncSaved(job, remove=false) {
-  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
-  const id = job.id || jobId(job);
-  if (remove) {
-    await SUPABASE_CLIENT.from('saved_jobs').delete().eq('user_id', SUPABASE_USER.id).eq('job_id', id);
-  } else {
-    await SUPABASE_CLIENT.from('saved_jobs').upsert({
-      user_id: SUPABASE_USER.id, job_id: id, job, saved_at: job.saved_at || new Date().toISOString()
-    });
-  }
-}
-
-async function cloudSyncIgnored(id) {
-  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
-  await SUPABASE_CLIENT.from('ignored_jobs').upsert({
-    user_id: SUPABASE_USER.id, job_id: id, ignored_at: new Date().toISOString()
-  });
-}
-
-async function cloudSyncApplication(app, remove=false) {
-  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
-  if (remove) {
-    await SUPABASE_CLIENT.from('applications').delete().eq('user_id', SUPABASE_USER.id).eq('job_id', app.id);
-  } else {
-    await SUPABASE_CLIENT.from('applications').upsert({
-      user_id: SUPABASE_USER.id,
-      job_id: app.id,
-      job: {
-        company: app.company, title: app.title, location: app.location,
-        url: app.url, source: app.source
-      },
-      status: app.status || 'Applied',
-      notes: app.notes || '',
-      applied_at: app.applied_at || new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    });
-  }
-}
-
-async function mergeRemoteState() {
-  if (!SUPABASE_CLIENT || !SUPABASE_USER) return;
-  try {
-    const uid = SUPABASE_USER.id;
-    const [{data: profiles}, {data: saved}, {data: ignored}, {data: apps}] = await Promise.all([
-      SUPABASE_CLIENT.from('user_profiles').select('*').eq('user_id', uid).limit(1),
-      SUPABASE_CLIENT.from('saved_jobs').select('*').eq('user_id', uid),
-      SUPABASE_CLIENT.from('ignored_jobs').select('*').eq('user_id', uid),
-      SUPABASE_CLIENT.from('applications').select('*').eq('user_id', uid)
-    ]);
-
-    if (profiles?.[0]?.profile_json && Object.keys(profiles[0].profile_json).length) {
-      PERSONAL_PROFILE = profiles[0].profile_json;
-      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(PERSONAL_PROFILE));
-      updatePersonalProfileUI();
-    }
-
-    const savedMap = new Map(SAVED_JOBS.map(x => [x.id, x]));
-    (saved || []).forEach(r => savedMap.set(r.job_id, {...(r.job || {}), id:r.job_id, saved_at:r.saved_at}));
-    SAVED_JOBS = [...savedMap.values()];
-    localStorage.setItem(SAVED_KEY, JSON.stringify(SAVED_JOBS));
-
-    IGNORED_JOBS = [...new Set([...IGNORED_JOBS, ...(ignored || []).map(r => r.job_id)])];
-    localStorage.setItem(IGNORED_KEY, JSON.stringify(IGNORED_JOBS));
-
-    const appMap = new Map(APPLICATIONS.map(x => [x.id, x]));
-    (apps || []).forEach(r => {
-      const j = r.job || {};
-      appMap.set(r.job_id, {
-        id:r.job_id, company:j.company || '', title:j.title || '',
-        location:j.location || '', url:j.url || '', source:j.source || '',
-        status:r.status, notes:r.notes || '', applied_at:r.applied_at, updated_at:r.updated_at
-      });
-    });
-    APPLICATIONS = [...appMap.values()].sort((a,b) => String(b.updated_at||'').localeCompare(String(a.updated_at||'')));
-    localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
-
-    // Push any local-only records into the cloud after merging.
-    await Promise.all([
-      ...SAVED_JOBS.map(j => cloudSyncSaved(j)),
-      ...IGNORED_JOBS.map(id => cloudSyncIgnored(id)),
-      ...APPLICATIONS.map(a => cloudSyncApplication(a)),
-      PERSONAL_PROFILE ? cloudUpsertProfile() : Promise.resolve()
-    ]);
-
-    renderSaved();
-    renderApplications();
-    applyFilters();
-    updateAuthUI('Cloud sync complete');
-  } catch (e) {
-    console.warn('Supabase sync failed', e);
-    updateAuthUI('Cloud sync unavailable · local state preserved');
-  }
-}
 
 
 const SAVED_KEY = 'ireland_job_dashboard_saved_v1';
@@ -750,13 +535,13 @@ function toggleSaved(j) {
   const existing = SAVED_JOBS.find(x => x.id === id);
   if (existing) {
     SAVED_JOBS = SAVED_JOBS.filter(x => x.id !== id);
-    cloudSyncSaved(existing, true);
+
   } else {
     const row = {id, company:j.company, title:j.title, location:j.location, url:j.url,
       candidate_match_score:effectiveMatchScore(j), discovery_score:j.discovery_score,
       saved_at:new Date().toISOString()};
     SAVED_JOBS.unshift(row);
-    cloudSyncSaved(row);
+
   }
   localStorage.setItem(SAVED_KEY, JSON.stringify(SAVED_JOBS));
   renderSaved(); applyFilters();
@@ -765,10 +550,9 @@ function ignoreJob(j) {
   const id = jobId(j);
   if (!IGNORED_JOBS.includes(id)) IGNORED_JOBS.push(id);
   localStorage.setItem(IGNORED_KEY, JSON.stringify(IGNORED_JOBS));
-  cloudSyncIgnored(id);
+
   populateRoleFamilies();
-  updatePersonalProfileUI();
-  applyFilters();
+    applyFilters();
 }
 function renderSaved() {
   const grid = document.getElementById('savedGrid');
@@ -797,7 +581,7 @@ function loadApplications() {
 }
 function saveApplications() {
   localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
-  if (SUPABASE_USER) APPLICATIONS.forEach(a => cloudSyncApplication(a));
+
 }
 function applicationId(job) {
   return String(job.url || `${job.company}|${job.title}|${job.location || ''}`);
@@ -841,7 +625,7 @@ function updateApplication(id, field, value) {
 function removeApplication(id) {
   const prior = APPLICATIONS.find(a => a.id === id);
   APPLICATIONS = APPLICATIONS.filter(a => a.id !== id);
-  if (prior) cloudSyncApplication(prior, true);
+
   localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
   renderApplications();
   applyFilters();
@@ -994,290 +778,18 @@ function visaLabel(status) {
   return { cls: '', text: 'Visa not mentioned' };
 }
 
-const PROFILE_STORAGE_KEY = 'ireland_job_radar_personal_profile_v1';
-let PERSONAL_PROFILE = null;
-let PERSONAL_RESUME_TEXT = '';
-
-const PROFILE_STOPWORDS = new Set([
-  'the','and','for','with','that','this','from','your','you','our','are','will','have','has',
-  'job','role','work','team','company','candidate','skills','skill','experience','years','year',
-  'including','within','across','using','into','about','more','their','they','them','who','what',
-  'when','where','which','while','also','all','any','but','not','can','may','must','should',
-  'would','could','a','an','as','at','be','by','in','is','it','of','on','or','to','we','i','us',
-  'responsibilities','requirements','required','preferred','position','working','looking'
-]);
-
-const KNOWN_SKILLS = [
-  'sql','python','java','javascript','typescript','r','excel','power bi','tableau','looker',
-  'snowflake','databricks','aws','azure','gcp','google cloud','docker','kubernetes','git','github',
-  'postgresql','postgres','mysql','oracle','mongodb','etl','data pipelines','data warehousing',
-  'data modelling','data modeling','pandas','numpy','scikit-learn','machine learning','forecasting',
-  'predictive analytics','anomaly detection','statistics','regression','classification','clustering',
-  'requirements gathering','requirements analysis','process mapping','process improvement','uat',
-  'user acceptance testing','stakeholder management','project management','agile','scrum','jira',
-  'erp','sap','salesforce','microsoft dynamics 365','d365','implementation','application support',
-  'functional support','business analysis','business intelligence','bi','financial analysis',
-  'risk management','compliance','aml','fraud','product analytics','operations','consulting',
-  'strategy','market research','pricing','customer insights','supply chain','revenue operations'
-];
-
-const ROLE_FAMILY_HINTS = {
-  'Data & BI': ['data analyst','business intelligence','bi analyst','reporting analyst','analytics analyst','insights analyst','power bi','tableau','sql'],
-  'Business Analysis': ['business analyst','business systems','requirements gathering','requirements analysis','process mapping','uat','functional analyst'],
-  'Consulting': ['consultant','consulting','advisory','strategy','client delivery','client communication','transformation'],
-  'Implementation / Enterprise Systems': ['implementation','erp','functional consultant','application support','systems implementation','d365','sap','oracle'],
-  'Operations': ['operations analyst','business operations','operational excellence','process improvement','supply chain','revenue operations'],
-  'Product': ['product analyst','product analytics','product operations','product data'],
-  'Finance / Risk': ['risk analyst','finance analyst','financial analyst','compliance','aml','fraud','regulatory','financial crime'],
-  'Customer / Commercial': ['commercial analyst','customer insights','pricing','growth analyst','market research','sales operations','revenue analyst'],
-  'Technical Data': ['data engineer','data scientist','analytics engineer','etl developer','sql developer','database','data quality','data governance']
-};
-
-function profileTokenize(text) {
-  const raw = String(text || '').toLowerCase().match(/[a-z][a-z0-9+#.\-]{1,}/g) || [];
-  return raw.map(t => t.replace(/^[.\-]+|[.\-]+$/g, ''))
-    .filter(t => t.length >= 2 && !PROFILE_STOPWORDS.has(t) && !/^\d+$/.test(t));
-}
-
-function phrasePresent(text, phrase) {
-  const a = String(text || '').toLowerCase().replace(/[^a-z0-9+#]+/g,' ');
-  const b = String(phrase || '').toLowerCase().replace(/[^a-z0-9+#]+/g,' ').trim();
-  return !!b && a.includes(b);
-}
-
-function detectExperienceYears(text) {
-  const t = String(text || '').toLowerCase();
-  const candidates = [];
-  for (const re of [
-    /(\d+(?:\.\d+)?)\s*\+\s*years?/g,
-    /(\d+(?:\.\d+)?)\s*years?\s+(?:of\s+)?(?:professional\s+)?experience/g,
-    /(?:over|more than)\s+(\d+(?:\.\d+)?)\s*years?/g
-  ]) {
-    let m;
-    while ((m = re.exec(t))) candidates.push(Number(m[1]));
-  }
-  return candidates.length ? Math.max(...candidates.filter(x => x >= 0 && x <= 40)) : null;
-}
-
-function buildProfileFromText(text, linkedinUrl='') {
-  const combined = String(text || '');
-  const counts = {};
-  profileTokenize(combined).forEach(t => counts[t] = (counts[t] || 0) + 1);
-  const terms = Object.entries(counts)
-    .sort((a,b) => b[1] - a[1])
-    .slice(0, 350)
-    .map(([t]) => t);
-
-  const skills = KNOWN_SKILLS.filter(s => phrasePresent(combined, s));
-  const familyScores = {};
-  Object.entries(ROLE_FAMILY_HINTS).forEach(([family, hints]) => {
-    familyScores[family] = hints.reduce((n,h) => n + (phrasePresent(combined,h) ? 1 : 0), 0);
-  });
-  const roleFamilies = Object.entries(familyScores)
-    .filter(([,score]) => score > 0)
-    .sort((a,b) => b[1]-a[1])
-    .slice(0,5)
-    .map(([family,score]) => ({family, score}));
-
-  return {
-    version: 1,
-    linkedin_url: linkedinUrl || '',
-    terms,
-    skills,
-    role_families: roleFamilies,
-    experience_years: detectExperienceYears(combined),
-    generated_at: new Date().toISOString(),
-    text_length: combined.length
-  };
-}
-
-async function extractResumeText(file) {
-  if (!file) return '';
-  const name = (file.name || '').toLowerCase();
-  if (name.endsWith('.txt') || name.endsWith('.md') || file.type === 'text/plain') return await file.text();
-  if (name.endsWith('.docx')) {
-    if (!window.mammoth) throw new Error('DOCX parser did not load');
-    const result = await window.mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
-    return result.value || '';
-  }
-  if (name.endsWith('.pdf') || file.type === 'application/pdf') {
-    if (!window.pdfjsLib) throw new Error('PDF parser did not load');
-    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    const pdf = await window.pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
-    let text = '';
-    for (let pageNo = 1; pageNo <= pdf.numPages; pageNo++) {
-      const page = await pdf.getPage(pageNo);
-      const content = await page.getTextContent();
-      text += ' ' + content.items.map(i => i.str).join(' ');
-    }
-    return text;
-  }
-  throw new Error('Use a PDF, DOCX, TXT or MD resume');
-}
-
-function loadPersonalProfile() {
-  try {
-    PERSONAL_PROFILE = JSON.parse(localStorage.getItem(PROFILE_STORAGE_KEY) || 'null');
-  } catch(e) {
-    PERSONAL_PROFILE = null;
-  }
-  const url = PERSONAL_PROFILE?.linkedin_url || '';
-  if (url) document.getElementById('linkedinUrl').value = url;
-  updatePersonalProfileUI();
-}
-
-function savePersonalProfile() {
-  if (PERSONAL_PROFILE) {
-    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(PERSONAL_PROFILE));
-    cloudUpsertProfile();
-  } else {
-    localStorage.removeItem(PROFILE_STORAGE_KEY);
-  cloudDeleteProfile();
-  }
-}
-
-async function buildPersonalProfile() {
-  const status = document.getElementById('personalProfileStatus');
-  try {
-    status.textContent = 'Building local profile...';
-    const file = document.getElementById('personalResume').files?.[0];
-    if (file) PERSONAL_RESUME_TEXT = await extractResumeText(file);
-    const linkedinText = document.getElementById('linkedinText').value || '';
-    const linkedinUrl = document.getElementById('linkedinUrl').value.trim();
-
-    const combined = [PERSONAL_RESUME_TEXT, linkedinText].filter(Boolean).join('\n');
-    if (combined.trim().length < 80) {
-      throw new Error('Upload a resume or paste enough LinkedIn profile text to build a useful profile.');
-    }
-
-    PERSONAL_PROFILE = buildProfileFromText(combined, linkedinUrl);
-    PERSONAL_PROFILE.resume_filename = file?.name || PERSONAL_PROFILE?.resume_filename || '';
-    savePersonalProfile();
-    updatePersonalProfileUI();
-    document.getElementById('fRadar').value = 'for_you';
-    document.getElementById('fSort').value = 'match';
-    applyFilters();
-  } catch(err) {
-    status.textContent = 'Profile not updated: ' + err.message;
-  }
-}
-
-function resetPersonalProfile() {
-  PERSONAL_PROFILE = null;
-  PERSONAL_RESUME_TEXT = '';
-  localStorage.removeItem(PROFILE_STORAGE_KEY);
-  document.getElementById('personalResume').value = '';
-  document.getElementById('linkedinUrl').value = '';
-  document.getElementById('linkedinText').value = '';
-  updatePersonalProfileUI();
-  applyFilters();
-}
-
-function updatePersonalProfileUI() {
-  const status = document.getElementById('personalProfileStatus');
-  const summary = document.getElementById('personalProfileSummary');
-  if (!PERSONAL_PROFILE) {
-    status.textContent = 'Default profile is active.';
-    summary.innerHTML = '';
-    return;
-  }
-
-  status.textContent = `Personal profile active · ${PERSONAL_PROFILE.skills?.length || 0} skills · ${PERSONAL_PROFILE.role_families?.length || 0} inferred role families`;
-  const family = (PERSONAL_PROFILE.role_families || []).map(x => x.family);
-  const chips = [
-    ...(PERSONAL_PROFILE.skills || []).slice(0,12),
-    ...family.slice(0,4).map(x => 'Role: ' + x),
-    ...(PERSONAL_PROFILE.experience_years != null ? [`Experience: ~${PERSONAL_PROFILE.experience_years}y`] : [])
-  ];
-  summary.innerHTML = chips.map(x => `<span class="profile-chip">${escapeHtml(x)}</span>`).join('');
-}
-
-function localExperienceFit(job) {
-  if (!PERSONAL_PROFILE || PERSONAL_PROFILE.experience_years == null) return job.experience_fit || 'Unknown';
-  const yrs = Number(PERSONAL_PROFILE.experience_years);
-  const min = job.experience_min == null ? null : Number(job.experience_min);
-  const max = job.experience_max == null ? null : Number(job.experience_max);
-  if (min == null) return 'Possible';
-  if (yrs >= min && (max == null || yrs <= max + 1)) return 'Strong';
-  if (yrs + 2 >= min) return 'Possible';
-  if (yrs + 4 >= min) return 'Stretch';
-  if (max != null && yrs > max + 4) return 'Overqualified';
-  return 'Too Senior';
-}
 
 function personalJobMatch(job) {
-  if (!PERSONAL_PROFILE) {
-    return {
-      score: Number(job.candidate_match_score || 0),
-      reasons: job.match_reasons || [],
-      missing: job.missing_skills || [],
-      experienceFit: job.experience_fit || 'Unknown',
-      personalized: false
-    };
-  }
-
-  const titleTerms = new Set(profileTokenize(job.title || ''));
-  const featureTerms = new Set([
-    ...profileTokenize((job.match_keywords || []).join(' ')),
-    ...profileTokenize(job.role_family || ''),
-    ...profileTokenize(job.sector || ''),
-    ...profileTokenize(job.company || '')
-  ]);
-  const jobText = [
-    job.title || '', job.role_family || '', job.sector || '',
-    (job.match_keywords || []).join(' ')
-  ].join(' ');
-
-  let score = 0;
-  const reasons = [];
-  const matchedTerms = [];
-
-  for (const term of PERSONAL_PROFILE.terms || []) {
-    if (titleTerms.has(term)) {
-      score += 3.0;
-      matchedTerms.push(term);
-    } else if (featureTerms.has(term)) {
-      score += 1.2;
-      matchedTerms.push(term);
-    }
-  }
-
-  const matchedSkills = (PERSONAL_PROFILE.skills || []).filter(s => phrasePresent(jobText, s));
-  score += Math.min(34, matchedSkills.length * 5);
-
-  const inferredFamilies = (PERSONAL_PROFILE.role_families || []).map(x => x.family);
-  if (job.role_family && inferredFamilies.includes(job.role_family)) {
-    score += 22;
-    reasons.push(job.role_family + ' profile fit');
-  }
-
-  const expFit = localExperienceFit(job);
-  score += {Strong:14, Possible:8, Stretch:2, Overqualified:-4, 'Too Senior':-20, Unknown:0}[expFit] || 0;
-
-  if (/director|vice president|\bvp\b|head of|principal|staff engineer/i.test(job.title || '')) score -= 18;
-  if (/graduate|junior|analyst|associate|consultant/i.test(job.title || '')) score += 5;
-
-  // Convert token accumulation into a stable 0–100 range.
-  const tokenComponent = Math.min(35, score > 0 ? Math.log1p(Math.max(0, score)) * 9 : 0);
-  const structured = Math.max(0, score - Math.min(score, matchedTerms.length * 3.0));
-  const finalScore = Math.max(0, Math.min(100, Math.round(tokenComponent + structured)));
-
-  reasons.push(...matchedSkills.slice(0,7));
-  if (expFit === 'Strong' || expFit === 'Possible') reasons.push('Experience fit: ' + expFit);
-
-  const missing = (PERSONAL_PROFILE.skills || []).filter(s => !matchedSkills.includes(s)).slice(0,4);
-
   return {
-    score: finalScore,
-    reasons: [...new Set(reasons)].slice(0,10),
-    missing,
-    experienceFit: expFit,
-    personalized: true
+    score: Number(job.candidate_match_score || 0),
+    reasons: Array.isArray(job.match_reasons) ? job.match_reasons : [],
+    missing: Array.isArray(job.missing_skills) ? job.missing_skills : [],
+    experienceFit: job.experience_fit || 'Unknown',
+    personalized: false
   };
 }
-
 function effectiveMatchScore(job) {
-  return personalJobMatch(job).score;
+  return Number(job.candidate_match_score || 0);
 }
 
 function loadData(data) {
@@ -1644,8 +1156,6 @@ function escapeHtml(str) {
   return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 }
 
-initSupabase();
-loadPersonalProfile();
 loadRadarState();
 loadApplications();
 renderSaved();
