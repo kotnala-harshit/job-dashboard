@@ -1852,11 +1852,6 @@
     "slug": "redhat|wd5|jobs",
     "probe_version": 35
   },
-  "Reddit": {
-    "platform": "greenhouse",
-    "slug": "reddit",
-    "probe_version": 35
-  },
   "Refinitiv (LSEG)": {
     "platform": "none",
     "slug": null,
@@ -2490,6 +2485,11 @@
   "Publift": {
     "platform": "smartrecruiters",
     "slug": "job-widget",
+    "probe_version": 35
+  },
+  "Reddit": {
+    "platform": "greenhouse",
+    "slug": "reddit",
     "probe_version": 35
   },
   "__probe_version__": 35
