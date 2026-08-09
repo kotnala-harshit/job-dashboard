@@ -579,12 +579,28 @@ def jsonld_page_is_ireland(company: str, url: str) -> bool:
 def region_ok(location: str) -> bool:
     loc = (location or "").lower()
     if IRELAND_ONLY:
+        # Republic-of-Ireland board: explicitly reject common false positives.
+        foreign_markers = (
+            "northern ireland", "united kingdom", " uk", "uk,",
+            "united states", " usa", "u.s.", " ohio", " dublin, oh",
+            "canada", "australia", "india", "singapore",
+        )
+        if any(m in loc for m in foreign_markers):
+            return False
+
         if any(h in loc for h in IRELAND_REMOTE_HINTS):
             return True
+
+        # Country-explicit Ireland is safest.
+        if "ireland" in loc:
+            return True
+
+        # Irish city/county names are accepted only when no foreign-country marker
+        # is present. This prevents "Dublin, Ohio, United States" leakage.
         if any(k in loc for k in IRELAND_LOCATION_KEYWORDS):
             return True
+
         if "remote" in loc or "hybrid" in loc:
-            # Generic remote with no country — too broad for an Ireland-only board.
             return False
         return False
 
@@ -2204,6 +2220,8 @@ def rescue_priority_ireland_employers(results):
     }
     rescued = []
     for company in PRIORITY_IRELAND_EMPLOYERS:
+        if SCRAPE_MODE == "fast" and TARGET_COMPANIES and not _targeted(company):
+            continue
         key = _company_key(company)
         if key in live:
             continue
@@ -3070,6 +3088,8 @@ def main():
     enterprise_sess = _session()
     if enterprise_sess:
         for company, slug in KNOWN_EIGHTFOLD_MAPPINGS.items():
+            if not _targeted(company):
+                continue
             try:
                 if _probe_platform("eightfold", slug, enterprise_sess):
                     found = _scrape_eightfold(company, slug, enterprise_sess)
@@ -3080,6 +3100,8 @@ def main():
             except Exception as e:
                 errors.append(f"eightfold/{company}: {e}")
         for company, slug in KNOWN_PHENOM_MAPPINGS.items():
+            if not _targeted(company):
+                continue
             try:
                 if _probe_platform("phenom", slug, enterprise_sess):
                     found = _scrape_phenom(company, slug, enterprise_sess)
@@ -3092,7 +3114,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ("Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "JPMorgan Chase"):
+    for company in ("Accenture", "Citi", "Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "JPMorgan Chase"):
         if not _targeted(company):
             continue
         try:
@@ -3176,19 +3198,31 @@ def main():
     # This uses the already-configured free aggregator API, but searches by
     # employer name instead of relying on a single broad first page.
     try:
-        if SCRAPE_MODE == "fast" and TARGET_COMPANIES:
-            raise RuntimeError("FAST_MODE_SKIP_RESCUE")
-        # First rescue the specifically verified high-priority employers.
+        # Priority rescue is cheap and important in FAST mode. The helper itself
+        # respects TARGET_COMPANIES, so only the selected priority employer runs.
         priority_rescued = rescue_priority_ireland_employers(results)
         results.extend(priority_rescued)
 
-        # Then run the broader zero-company rescue.
-        rescue_registry = build_company_registry(include_cache=True)
-        rescued = rescue_zero_companies_with_aggregators(results, rescue_registry)
-        results.extend(rescued)
+        # The broader 500-company rescue remains FULL-only.
+        if SCRAPE_MODE != "fast":
+            rescue_registry = build_company_registry(include_cache=True)
+            rescued = rescue_zero_companies_with_aggregators(results, rescue_registry)
+            results.extend(rescued)
     except Exception as e:
-        if str(e) != "FAST_MODE_SKIP_RESCUE":
-            errors.append(f"zero-company targeted rescue: {e}")
+        errors.append(f"zero-company targeted rescue: {e}")
+
+    if SCRAPE_MODE == "fast" and TARGET_COMPANIES:
+        print("\nFAST TARGET SUMMARY")
+        for target in sorted(TARGET_COMPANIES):
+            target_jobs = [
+                j for j in results
+                if _targeted(company_display_name(j.get("company", "")))
+            ]
+            by_source = {}
+            for j in target_jobs:
+                src = j.get("ats") or j.get("source") or "unknown"
+                by_source[src] = by_source.get(src, 0) + 1
+            print(f"  target={target}: jobs={len(target_jobs)} sources={by_source}")
 
     # Enforce the career-curated company universe for employer/ATS collectors.
     # Broad aggregators remain allowed to surface adjacent employers, but stale
