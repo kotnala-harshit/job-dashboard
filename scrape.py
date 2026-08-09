@@ -2842,10 +2842,11 @@ def _scrape_public_careers_page(company: str, url: str, href_hints, default_loca
 
 
 def _scrape_accenture_playwright():
-    """Render Accenture's Ireland job search and collect official job-detail links.
+    """Scrape all currently visible Accenture Ireland jobs.
 
-    Accenture's branded search is JavaScript-driven, so plain requests/HTML
-    parsing often sees zero cards even when Ireland roles are live.
+    Accenture's Ireland search renders official job links client-side.
+    The anchors often contain no visible text, so the job title is extracted
+    primarily from the URL's ?title= parameter and the requisition from ?id=.
     """
     if not HAS_PLAYWRIGHT:
         print("  ! Accenture: Playwright unavailable")
@@ -2853,91 +2854,187 @@ def _scrape_accenture_playwright():
 
     search_url = "https://www.accenture.com/ie-en/careers/jobsearch"
     results = {}
+
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
-            page.goto(search_url, wait_until="domcontentloaded", timeout=60000)
-            page.wait_for_timeout(2200)
+
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1200},
+                locale="en-IE",
+            )
+
+            page.goto(
+                search_url,
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+            page.wait_for_timeout(3000)
+
             _dismiss_cookie_banner(page)
 
-            stagnant, previous = 0, 0
-            for _ in range(120):
-                anchors = page.locator('a[href*="/ie-en/careers/jobdetails"], a[href*="/careers/jobdetails"]')
+            stagnant = 0
+            previous = -1
+
+            for cycle in range(120):
+                anchors = page.locator(
+                    'a[href*="/ie-en/careers/jobdetails?id="], '
+                    'a[href*="/careers/jobdetails?id="]'
+                )
+
                 for i in range(anchors.count()):
                     a = anchors.nth(i)
+
                     try:
-                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                        raw_href = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw_href)
                     except Exception:
                         continue
-                    if "jobdetails" not in href.lower() or "id=" not in href.lower():
-                        continue
-                    canonical = href.split("#")[0]
-                    if canonical in results:
+
+                    parsed = urllib.parse.urlparse(href)
+                    params = urllib.parse.parse_qs(parsed.query)
+
+                    job_id = (
+                        (params.get("id") or [""])[0]
+                        .replace("_en", "")
+                        .strip()
+                    )
+
+                    url_title = urllib.parse.unquote_plus(
+                        (params.get("title") or [""])[0]
+                    ).strip()
+
+                    if not job_id and "jobdetails" not in href.lower():
                         continue
 
-                    node, card = a, ""
-                    for _ in range(6):
+                    # Accenture commonly renders these anchors without text.
+                    title = url_title
+
+                    if not title:
+                        try:
+                            title = (_browser_text(a) or "").strip()
+                        except Exception:
+                            title = ""
+
+                    node = a
+                    card = ""
+
+                    for _ in range(7):
                         try:
                             node = node.locator("..")
                             candidate = _browser_text(node)
                         except Exception:
                             break
-                        if candidate and len(candidate) <= 2200:
+
+                        if candidate and len(candidate) <= 3000:
                             card = candidate
-                        if card and len(card) >= 40:
+
+                        if card and len(card) >= 30:
                             break
 
-                    title = _browser_text(a)
-                    if not title or title.lower() in {"apply", "apply now", "view job", "learn more", "save job"} or len(title) > 300:
+                    if (
+                        not title
+                        or title.lower() in {
+                            "apply",
+                            "apply now",
+                            "view job",
+                            "learn more",
+                            "save job",
+                        }
+                    ):
                         try:
                             heads = node.locator("h1,h2,h3,h4,h5")
-                            for hidx in range(min(heads.count(), 6)):
+                            for hidx in range(min(heads.count(), 8)):
                                 candidate = _browser_text(heads.nth(hidx))
                                 if candidate and 4 <= len(candidate) <= 300:
                                     title = candidate
                                     break
                         except Exception:
                             pass
-                    if not title:
-                        lines = [x.strip() for x in card.splitlines() if 4 <= len(x.strip()) <= 300]
-                        title = lines[0] if lines else ""
+
                     if not title:
                         continue
 
                     location = _browser_location(card, "Ireland")
-                    results[canonical] = {
-                        "company": "Accenture", "ats": "direct", "title": title[:300],
-                        "location": location, "url": canonical,
-                        "updated_at": None, "description_text": card[:5000],
+
+                    # Use requisition ID as primary key. This prevents the
+                    # title query string from producing duplicate variants.
+                    key = job_id or parsed.path.lower()
+
+                    canonical = href.split("#")[0]
+
+                    results[key] = {
+                        "company": "Accenture",
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": location,
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                        "requisition_id": job_id or None,
                     }
 
-                for label in ("Show more", "Load more", "See more", "More jobs", "View more", "Show results"):
+                current = len(results)
+
+                if current == previous:
+                    stagnant += 1
+                else:
+                    stagnant = 0
+
+                previous = current
+
+                # Try Accenture's possible load-more controls.
+                for label in (
+                    "Show more",
+                    "Load more",
+                    "See more",
+                    "More jobs",
+                    "View more",
+                    "Show results",
+                    "Next",
+                ):
                     try:
-                        btn = page.get_by_role("button", name=label, exact=False)
+                        btn = page.get_by_role(
+                            "button",
+                            name=label,
+                            exact=False,
+                        )
+
                         if btn.count() and btn.first.is_visible():
-                            btn.first.click(timeout=1200)
-                            page.wait_for_timeout(600)
+                            btn.first.click(timeout=1500)
+                            page.wait_for_timeout(900)
                     except Exception:
                         pass
 
-                page.mouse.wheel(0, 3600)
-                page.wait_for_timeout(650)
-                current = len(results)
-                stagnant = stagnant + 1 if current == previous else 0
-                previous = current
-                if stagnant >= 14:
+                # Also try link-based next-page navigation.
+                try:
+                    nxt = page.get_by_role("link", name="Next", exact=False)
+                    if nxt.count() and nxt.first.is_visible():
+                        nxt.first.click(timeout=1500)
+                        page.wait_for_timeout(1200)
+                except Exception:
+                    pass
+
+                page.mouse.wheel(0, 5000)
+                page.wait_for_timeout(800)
+
+                if stagnant >= 15:
                     break
 
-            print(f"  Accenture browser: {len(results)} unique job-detail links")
+            print(
+                f"  Accenture browser: "
+                f"{len(results)} unique Ireland job-detail links"
+            )
+
             browser.close()
+
     except Exception as exc:
         print(f"  ! Accenture browser scrape failed: {exc}")
 
-    # Ireland site context is already narrowed, but keep a final location safety
-    # check where location text is available. A generic 'Ireland' default is valid
-    # for cards whose rendered text omits the city.
-    return [j for j in results.values() if region_ok(j.get("location") or "Ireland")]
+    return [
+        j for j in results.values()
+        if region_ok(j.get("location") or "Ireland")
+    ]
 
 
 def scrape_accenture():
@@ -4333,7 +4430,31 @@ def main():
     deduped = []
     for j in results:
         company_key = _company_key(company_display_name(j.get("company", "")))
-        url_key = (j.get("url") or "").split("?")[0].rstrip("/").lower()
+
+        raw_url = (j.get("url") or "").strip()
+
+        # Most tracking query strings should be ignored when deduplicating.
+        # Accenture is an exception: its official branded job URLs encode the
+        # requisition ID in ?id=, so stripping the full query would collapse
+        # every Accenture vacancy into the same /jobdetails URL.
+        if company_key == _company_key("Accenture") and raw_url:
+            try:
+                parsed = urllib.parse.urlsplit(raw_url)
+                params = urllib.parse.parse_qs(parsed.query)
+                requisition_id = (params.get("id") or [""])[0].strip().lower()
+                base_url = urllib.parse.urlunsplit(
+                    (parsed.scheme, parsed.netloc, parsed.path.rstrip("/"), "", "")
+                ).lower()
+                url_key = (
+                    f"{base_url}?id={requisition_id}"
+                    if requisition_id
+                    else base_url
+                )
+            except Exception:
+                url_key = raw_url.lower()
+        else:
+            url_key = raw_url.split("?")[0].rstrip("/").lower()
+
         title_key = normalized_title(j.get("title"))
         loc_key = _norm_phrase(j.get("location"))
         signature = (company_key, title_key, loc_key)
