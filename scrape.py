@@ -46,7 +46,7 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'anthropi
 # the tenant/wd_host/site values are all in that URL.
 # ---------------------------------------------------------------------------
 
-WORKDAY_COMPANIES = [('Accenture', 'accenture', 'wd103', 'AccentureCareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'), ('NVIDIA', 'nvidia', 'wd5', 'NVIDIAExternalCareerSite'), ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd1', 'ViatrisCareers'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bd', 'wd1', 'BD_External'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'northerntrust', 'wd1', 'External_Careers'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('DXC Technology', 'dxc', 'wd1', 'DXC_Jobs'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers')]
+WORKDAY_COMPANIES = [('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'), ('NVIDIA', 'nvidia', 'wd5', 'NVIDIAExternalCareerSite'), ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd1', 'ViatrisCareers'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bd', 'wd1', 'BD_External'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'northerntrust', 'wd1', 'External_Careers'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('DXC Technology', 'dxc', 'wd1', 'DXC_Jobs'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers')]
 
 # ---------------------------------------------------------------------------
 # SmartRecruiters has a genuinely documented public Postings API --
@@ -189,7 +189,7 @@ def build_company_registry(include_cache: bool = False):
     # prevent display-name differences such as "Meta" vs "Meta (Ireland)" from
     # incorrectly placing an employer in Manual Search Needed.
     explicit_status_aliases = {
-        "Accenture": "workday",
+        "Accenture": "direct",
         "Citi": "direct",
         "KPMG Ireland": "direct",
         "Grant Thornton Ireland": "workday",
@@ -335,6 +335,8 @@ JOOBLE_API_KEY = os.environ.get("JOOBLE_API_KEY", "").strip()
 # without failing the whole run; the dashboard then exposes it under
 # "Zero jobs scraped" for diagnosis.
 DIRECT_COMPANY_CONNECTORS = {
+    "Accenture": "accenture",
+    "Citi": "citi",
     "Apple": "apple",
     "Google": "google",
     "Microsoft": "microsoft",
@@ -2210,9 +2212,9 @@ def rescue_priority_ireland_employers(results):
             if JOOBLE_API_KEY:
                 candidates.extend(scrape_jooble(company, "Ireland"))
             if ADZUNA_APP_ID and ADZUNA_APP_KEY:
-                candidates.extend(scrape_adzuna(company, "Ireland"))
+                candidates.extend(scrape_adzuna("ie", company))
             if CAREERJET_API_KEY:
-                candidates.extend(scrape_careerjet(company, "Ireland"))
+                candidates.extend(scrape_careerjet("en_IE", company))
         except Exception as e:
             print(f"  ! priority-rescue/{company}: {e}")
             continue
@@ -2674,6 +2676,31 @@ def _scrape_public_careers_page(company: str, url: str, href_hints, default_loca
     return out
 
 
+
+def scrape_accenture():
+    """Accenture migrated its public search experience away from the older
+    Workday board previously hard-coded here. Parse the official Ireland search
+    surface conservatively and let the priority aggregator rescue supplement it.
+    """
+    return _scrape_public_careers_page(
+        "Accenture",
+        "https://www.accenture.com/ie-en/careers/jobsearch",
+        ("/ie-en/careers/jobdetails", "/careers/jobdetails", "jobdetails?id="),
+        default_location="Ireland",
+    )
+
+
+def scrape_citi():
+    """Citi's Dublin location page is server-rendered and exposes current job
+    cards with stable /job/dublin/... links. This avoids treating Citi as manual.
+    """
+    return _scrape_public_careers_page(
+        "Citi",
+        "https://jobs.citi.com/location/dublin-jobs/7867/2963597-7521314-2964574/4",
+        ("/job/dublin/", "/en/job/dublin/", "/job/"),
+        default_location="Dublin, Ireland",
+    )
+
 def scrape_google():
     return _scrape_public_careers_page(
         "Google",
@@ -2721,6 +2748,8 @@ def scrape_oracle():
 
 def scrape_direct_company(company: str):
     fn={
+        "Accenture": scrape_accenture,
+        "Citi": scrape_citi,
         "Apple": scrape_apple,
         "Google": scrape_google,
         "Microsoft": scrape_microsoft,
@@ -3204,6 +3233,13 @@ def main():
 
         if url_key and url_key in seen_urls:
             continue
+
+        # Airbnb has repeatedly arrived through multiple sources with distinct
+        # tracking/application URLs. For Airbnb only, treat identical
+        # normalized title + location as one vacancy regardless of source.
+        if company_key == _company_key("Airbnb") and signature in seen_signatures:
+            continue
+
         if source in aggregator_sources and signature in seen_signatures:
             continue
 
