@@ -362,8 +362,11 @@ DIRECT_COMPANY_CONNECTORS = {
     "Red Hat": "redhat",
     "Amazon": "amazon",
     "Netflix": "netflix",
+<<<<<<< Updated upstream
     "EY Ireland": "ey",
     "KPMG Ireland": "kpmg",
+=======
+>>>>>>> Stashed changes
 }
 
 # Exact enterprise-platform mappings learned from validated public career-site
@@ -2331,7 +2334,11 @@ def rescue_priority_ireland_employers(results):
                 candidates.extend(scrape_jooble(company, "Ireland"))
             if ADZUNA_APP_ID and ADZUNA_APP_KEY:
                 candidates.extend(scrape_adzuna("ie", company))
+<<<<<<< Updated upstream
             if CAREERJET_AFFID:
+=======
+            if CAREERJET_API_KEY:
+>>>>>>> Stashed changes
                 candidates.extend(scrape_careerjet("en_IE", company))
         except Exception as e:
             print(f"  ! priority-rescue/{company}: {e}")
@@ -2833,6 +2840,7 @@ def _scrape_public_careers_page(company: str, url: str, href_hints, default_loca
 
 
 
+<<<<<<< Updated upstream
 def _scrape_accenture_playwright():
     """Render Accenture's Ireland job search and collect official job-detail links.
 
@@ -2932,6 +2940,8 @@ def _scrape_accenture_playwright():
     return [j for j in results.values() if region_ok(j.get("location") or "Ireland")]
 
 
+=======
+>>>>>>> Stashed changes
 def scrape_accenture():
     """Accenture Ireland.
 
@@ -2942,6 +2952,7 @@ def scrape_accenture():
     combined = []
     seen = set()
 
+<<<<<<< Updated upstream
     # Official branded search surface is client-rendered: use Chromium first.
     branded_jobs = _scrape_accenture_playwright()
     if not branded_jobs:
@@ -2952,6 +2963,15 @@ def scrape_accenture():
             default_location="Ireland",
         )
     for j in branded_jobs:
+=======
+    # Official branded search surface.
+    for j in _scrape_public_careers_page(
+        "Accenture",
+        "https://www.accenture.com/ie-en/careers/jobsearch",
+        ("/ie-en/careers/jobdetails", "/careers/jobdetails", "jobdetails?id="),
+        default_location="Ireland",
+    ):
+>>>>>>> Stashed changes
         key = ((j.get("title") or "").lower(), (j.get("url") or "").split("?")[0])
         if key not in seen:
             seen.add(key)
@@ -3182,6 +3202,7 @@ def _scrape_meta_playwright():
     return list(results.values())
 
 
+<<<<<<< Updated upstream
 
 def _scrape_ey_playwright():
     """EY Ireland: SAP SuccessFactors browser collector adapted from Suman's working pipeline."""
@@ -3314,6 +3335,8 @@ def scrape_ey():
 def scrape_kpmg():
     return _scrape_kpmg_playwright()
 
+=======
+>>>>>>> Stashed changes
 def scrape_google():
     jobs = _scrape_google_playwright()
     if jobs:
@@ -3430,8 +3453,11 @@ def scrape_direct_company(company: str):
         "Oracle": scrape_oracle,
         "Red Hat": scrape_redhat,
         "JPMorgan Chase": scrape_jpmorgan,
+<<<<<<< Updated upstream
         "EY Ireland": scrape_ey,
         "KPMG Ireland": scrape_kpmg,
+=======
+>>>>>>> Stashed changes
     }.get(company)
     return fn() if fn else []
 
@@ -3771,7 +3797,11 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
+<<<<<<< Updated upstream
     for company in ("Accenture", "Citi", "Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase", "EY Ireland", "KPMG Ireland"):
+=======
+    for company in ("Accenture", "Citi", "Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase"):
+>>>>>>> Stashed changes
         if not _targeted(company):
             continue
         try:
@@ -3873,7 +3903,11 @@ def main():
         for target in sorted(TARGET_COMPANIES):
             target_jobs = [
                 j for j in results
+<<<<<<< Updated upstream
                 if _company_key(company_display_name(j.get("company", ""))) == target
+=======
+                if _targeted(company_display_name(j.get("company", "")))
+>>>>>>> Stashed changes
             ]
             by_source = {}
             for j in target_jobs:

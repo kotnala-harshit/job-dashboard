@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<<<<<<< Updated upstream
 <title>Ireland Job Search</title>
+=======
+<title>Job Radar — Ireland</title>
+>>>>>>> Stashed changes
 <style>
   :root {
     --bg: #0c121c;
@@ -118,7 +122,19 @@
   }
   .live-dot { font-family: var(--mono); font-size: 11px; color: var(--teal); }
   .live-dot.stale { color: var(--rose); }
+<<<<<<< Updated upstream
   #genTime { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+=======
+  #manualLoadLink {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  #genTime { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  #fileInput { display: none; }
+>>>>>>> Stashed changes
 
   main { padding: 22px 28px 60px; }
   .subhead {
@@ -151,6 +167,7 @@
 
   .grid {
     display: grid;
+<<<<<<< Updated upstream
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 12px;
   }
@@ -188,6 +205,26 @@
     font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.06em;
     padding:3px 8px; border-radius:0 0 5px 5px;
   }
+=======
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line);
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: border-color 0.12s, transform 0.12s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+  }
+  .card:hover { border-color: var(--amber); transform: translateY(-1px); }
+  .card.fresh { border-left-color: var(--teal); }
+>>>>>>> Stashed changes
   .company {
     font-family: var(--mono);
     font-size: 11px;
@@ -242,9 +279,13 @@
     border-radius: 8px;
   }
 
+<<<<<<< Updated upstream
   #directoryPane, #manualPane, #zeroPane { display: none; }
   .diag-summary { margin: 0 0 14px; color: var(--muted); font-family: var(--mono); font-size: 12px; }
   .status-chip { font-family: var(--mono); font-size: 10.5px; padding: 3px 7px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); margin-left: 6px; }
+=======
+  #directoryPane { display: none; }
+>>>>>>> Stashed changes
   .dir-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -264,6 +305,7 @@
   .dir-card:hover { border-color: var(--amber); }
   .dir-name { font-weight: 600; font-size: 13.5px; }
   .dir-plat { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+<<<<<<< Updated upstream
   .resume-panel {
     margin: 14px 0 0; padding: 12px 14px; border: 1px solid var(--line);
     background: var(--panel-2); border-radius: 8px; display:flex; gap:10px;
@@ -515,6 +557,8 @@ body{background:#f3f4f6!important}
   .readout b{font-size:21px!important}
 }
 
+=======
+>>>>>>> Stashed changes
 </style>
 </head>
 <body>
@@ -522,16 +566,26 @@ body{background:#f3f4f6!important}
 <div class="board">
   <div class="board-top">
     <div>
+<<<<<<< Updated upstream
       <p class="eyebrow">Ireland Job Radar · direct employer, ATS and aggregator discovery</p>
       <h1>Ireland Job Radar</h1><div style="margin-top:6px;color:var(--muted);font-size:13px">Search broadly. Filter instantly. Apply at the original source.</div>
     </div>
     <div class="readout">
       <div><b id="stCompanies">0</b>companies checked</div>
       <div><b id="stLive">0</b>live jobs</div>
+=======
+      <p class="eyebrow">Personal pipeline · Ireland only</p>
+      <h1>Job Radar</h1>
+    </div>
+    <div class="readout">
+      <div><b id="stCompanies">0</b>companies checked</div>
+      <div><b id="stLive">0</b>live matches</div>
+>>>>>>> Stashed changes
       <div><b id="stManual">0</b>careers pages</div>
     </div>
   </div>
   <div id="genTime">Connecting to live data...</div>
+<<<<<<< Updated upstream
 <div class="filter-row" style="margin-top: 14px;">
     <div class="search-wrap">
       <input id="fSearch" type="text" placeholder="Search jobs, companies, skills, e.g. JPM, Amazon, Power BI..." />
@@ -539,6 +593,13 @@ body{background:#f3f4f6!important}
     <select id="fCompany">
       <option value="">All companies</option>
     </select>
+=======
+
+  <div class="filter-row" style="margin-top: 14px;">
+    <div class="search-wrap">
+      <input id="fSearch" type="text" placeholder="Search title, company, location..." />
+    </div>
+>>>>>>> Stashed changes
     <select id="fLocation">
       <option value="">All Ireland</option>
       <option value="dublin">Dublin</option>
@@ -557,6 +618,7 @@ body{background:#f3f4f6!important}
     </select>
     <select id="fPosted">
       <option value="">Any time posted</option>
+<<<<<<< Updated upstream
       <option value="1h">Last 1 hour</option>
       <option value="3h">Last 3 hours</option>
       <option value="6h">Last 6 hours</option>
@@ -564,6 +626,11 @@ body{background:#f3f4f6!important}
       <option value="24h">Last 24 hours</option>
       <option value="7d">Last 7 days</option>
       <option value="30d">Last 30 days</option>
+=======
+      <option value="24h">Last 24 hours</option>
+      <option value="7d">Last 7 days</option>
+      <option value="30d">Last 28 days</option>
+>>>>>>> Stashed changes
     </select>
     <select id="fType">
       <option value="">All employment types</option>
@@ -571,6 +638,7 @@ body{background:#f3f4f6!important}
       <option value="part_time">Part-time</option>
       <option value="internship">Internship</option>
     </select>
+<<<<<<< Updated upstream
     <select id="fRadar">
       <option value="">All Ireland jobs</option>
       <option value="for_you">For You (backend profile)</option>
@@ -595,6 +663,8 @@ body{background:#f3f4f6!important}
       <option value="">All postings</option>
       <option value="new">New since last check</option>
     </select>
+=======
+>>>>>>> Stashed changes
     <select id="fVisa">
       <option value="">Any visa status</option>
       <option value="sponsors">Mentions sponsorship</option>
@@ -602,8 +672,11 @@ body{background:#f3f4f6!important}
       <option value="not_mentioned">Not mentioned</option>
     </select>
     <select id="fSort">
+<<<<<<< Updated upstream
       <option value="match">Best candidate match</option>
       <option value="discovery">Highest discovery value</option>
+=======
+>>>>>>> Stashed changes
       <option value="date">Newest first</option>
       <option value="company">Company A–Z</option>
       <option value="title">Title A–Z</option>
@@ -611,6 +684,11 @@ body{background:#f3f4f6!important}
     <div class="loadctrl">
       <span id="liveStatus" class="live-dot">● live</span>
       <button type="button" onclick="autoFetchJobs()">Refresh now</button>
+<<<<<<< Updated upstream
+=======
+      <label id="manualLoadLink" for="fileInput">load file manually</label>
+      <input id="fileInput" type="file" accept="application/json,.json" />
+>>>>>>> Stashed changes
     </div>
   </div>
 </div>
@@ -618,6 +696,7 @@ body{background:#f3f4f6!important}
 <main>
   <div class="subhead">
     <div class="tabs">
+<<<<<<< Updated upstream
       <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs</div>
       <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
       <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
@@ -628,6 +707,23 @@ body{background:#f3f4f6!important}
     </div>
     <span id="resultCount">0 results</span>
   </div>
+=======
+      <div id="tabLive" class="tab active" onclick="showTab('live')">Live matches</div>
+      <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
+    </div>
+    <span id="resultCount">0 results</span>
+  </div>
+
+  <div id="livePane">
+    <div id="cardGrid" class="grid"></div>
+    <div id="emptyState" class="empty">No jobs loaded yet — waiting for data.json.</div>
+  </div>
+
+  <div id="directoryPane">
+    <div id="dirGrid" class="dir-grid"></div>
+  </div>
+</main>
+>>>>>>> Stashed changes
 
   <div id="livePane">
     <div id="cardGrid" class="grid"></div>
@@ -685,6 +781,7 @@ const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
 let ALL_JOBS = [];
 let ALL_MANUAL = [];
+<<<<<<< Updated upstream
 let ALL_REGISTRY = [];
 let RAW_TOTAL = 0;
 
@@ -857,6 +954,10 @@ function renderApplications() {
   document.getElementById('tabApplications').textContent = `Applications (${APPLICATIONS.length})`;
 }
 
+=======
+let RAW_TOTAL = 0;
+
+>>>>>>> Stashed changes
 const INTERNSHIP_KEYWORDS = ['intern', 'internship', 'working student', 'student job', 'placement', 'co-op', 'co op'];
 const PART_TIME_KEYWORDS = ['part time', 'part-time', 'seasonal', 'temporary staff', 'christmas temp', 'weekend staff'];
 
@@ -881,11 +982,14 @@ function parsePostedDate(value) {
   return null;
 }
 
+<<<<<<< Updated upstream
 function ageHours(date) {
   if (!date) return Infinity;
   return Math.max(0, (Date.now() - date.getTime()) / 3600000);
 }
 
+=======
+>>>>>>> Stashed changes
 function recencyBucket(date) {
   const h = ageHours(date);
   if (!isFinite(h)) return 'unknown';
@@ -899,6 +1003,7 @@ function recencyBucket(date) {
   return 'older';
 }
 
+<<<<<<< Updated upstream
 function postedWithin(date, filter) {
   if (!filter) return true;
   const limits = { '1h':1, '3h':3, '6h':6, '12h':12, '24h':24, '7d':168, '30d':720 };
@@ -1248,11 +1353,149 @@ function applyFilters() {
     const type = j.employment_type || employmentType(j.title);
     const typeLabel = { part_time: 'Part-time', internship: 'Internship' }[type];
     const bucketLabel = recencyLabel(postedDate);
+=======
+function irelandOnlyJobs(jobs) {
+  return jobs.filter(j => {
+    const c = (j.country || '').toLowerCase();
+    if (c === 'ireland') return true;
+    const loc = `${j.location || ''} ${j.ireland_area || ''}`.toLowerCase();
+    return loc.includes('ireland') || loc.includes('dublin') || loc.includes('cork')
+      || loc.includes('galway') || loc.includes('limerick') || loc.includes('remote');
+  });
+}
+
+function fillSelect(selectId, values, formatLabel) {
+  const select = document.getElementById(selectId);
+  const current = select.value;
+  while (select.options.length > 1) select.remove(1);
+  const unique = Array.from(new Set(values.filter(v => v && String(v).trim())));
+  unique.sort((a, b) => String(a).localeCompare(String(b)));
+  for (const v of unique) {
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = formatLabel ? formatLabel(v) : v;
+    select.appendChild(opt);
+  }
+  if (unique.includes(current)) select.value = current;
+}
+
+function visaLabel(status) {
+  if (status === 'sponsors') return { cls: 'sponsors', text: 'Mentions sponsorship' };
+  if (status === 'no_sponsorship') return { cls: 'no', text: 'No sponsorship stated' };
+  return { cls: '', text: 'Visa not mentioned' };
+}
+
+function loadData(data) {
+  const jobs = data.jobs || [];
+  ALL_JOBS = data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs);
+  ALL_MANUAL = data.manual_check_companies || [];
+  RAW_TOTAL = jobs.length;
+
+  document.getElementById('genTime').textContent = data.generated_at
+    ? ('Updated ' + new Date(data.generated_at).toLocaleString())
+    : '';
+  document.getElementById('stLive').textContent = ALL_JOBS.length;
+  document.getElementById('stCompanies').textContent = data.total_companies_checked ?? '—';
+  document.getElementById('stManual').textContent = ALL_MANUAL.length;
+
+  fillSelect('fSector', ALL_JOBS.map(j => j.sector || 'Other'));
+  fillSelect('fSource', ALL_JOBS.map(j => j.ats), v => v.charAt(0).toUpperCase() + v.slice(1));
+
+  applyFilters();
+}
+
+async function autoFetchJobs() {
+  try {
+    const resp = await fetch(DATA_URL + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    loadData(await resp.json());
+    document.getElementById('liveStatus').textContent = '● live';
+    document.getElementById('liveStatus').classList.remove('stale');
+  } catch (err) {
+    document.getElementById('liveStatus').textContent = '○ not connected — use "load file manually"';
+    document.getElementById('liveStatus').classList.add('stale');
+  }
+}
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      loadData(JSON.parse(evt.target.result));
+      document.getElementById('liveStatus').textContent = '● loaded from file';
+      document.getElementById('liveStatus').classList.remove('stale');
+    } catch (err) {
+      alert('Could not parse that file — is it data.json from scrape.py?');
+    }
+  };
+  reader.readAsText(file);
+});
+
+['fSearch', 'fLocation', 'fSector', 'fSource', 'fPosted', 'fType', 'fVisa', 'fSort'].forEach(id => {
+  document.getElementById(id).addEventListener('input', applyFilters);
+  document.getElementById(id).addEventListener('change', applyFilters);
+});
+
+function applyFilters() {
+  const search = document.getElementById('fSearch').value.trim().toLowerCase();
+  const location = document.getElementById('fLocation').value;
+  const sector = document.getElementById('fSector').value;
+  const source = document.getElementById('fSource').value;
+  const posted = document.getElementById('fPosted').value;
+  const type = document.getElementById('fType').value;
+  const visa = document.getElementById('fVisa').value;
+  const sort = document.getElementById('fSort').value;
+  const recencyRank = { '24h': 0, '7d': 1, '30d': 2, 'older': 3, 'unknown': 4 };
+
+  let filtered = ALL_JOBS.filter(j => {
+    if (search) {
+      const hay = ((j.title || '') + ' ' + (j.company || '') + ' ' + (j.location || '')).toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    if (location) {
+      const loc = ((j.location || '') + ' ' + (j.ireland_area || '')).toLowerCase();
+      if (!loc.includes(location)) return false;
+    }
+    if (sector && (j.sector || 'Other') !== sector) return false;
+    if (source && j.ats !== source) return false;
+    if (type && (j.employment_type || employmentType(j.title)) !== type) return false;
+    const v = j.visa_sponsorship || 'not_mentioned';
+    if (visa && v !== visa) return false;
+    if (posted) {
+      const bucket = recencyBucket(parsePostedDate(j.updated_at));
+      if (recencyRank[bucket] > recencyRank[posted]) return false;
+    }
+    return true;
+  });
+
+  if (sort === 'company') filtered.sort((a, b) => (a.company || '').localeCompare(b.company || ''));
+  else if (sort === 'title') filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+  else filtered.sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0));
+
+  document.getElementById('resultCount').textContent =
+    filtered.length + ' of ' + ALL_JOBS.length + ' matches';
+
+  const grid = document.getElementById('cardGrid');
+  grid.innerHTML = '';
+  document.getElementById('emptyState').style.display = filtered.length ? 'none' : 'block';
+
+  filtered.forEach(j => {
+    const postedDate = parsePostedDate(j.updated_at);
+    const bucket = recencyBucket(postedDate);
+    const fresh = bucket === '24h';
+    const badge = visaLabel(j.visa_sponsorship || 'not_mentioned');
+    const type = j.employment_type || employmentType(j.title);
+    const typeLabel = { part_time: 'Part-time', internship: 'Internship' }[type];
+    const bucketLabel = { '24h': 'Today', '7d': 'This week', '30d': 'This month' }[bucket];
+>>>>>>> Stashed changes
 
     const card = document.createElement('div');
     card.className = 'card ' + (fresh ? 'fresh' : '');
     card.onclick = () => j.url && window.open(j.url, '_blank', 'noopener');
     card.innerHTML = `
+<<<<<<< Updated upstream
       ${j.new_since_last_check ? '<div class="new-ribbon">NEW</div>' : ''}
       <div class="company">${escapeHtml(j.company)}</div>
       <div class="title">${escapeHtml(j.title || 'Untitled role')}</div>
@@ -1292,10 +1535,27 @@ function applyFilters() {
         markApplied(j);
       });
     }
+=======
+      <div class="company">${escapeHtml(j.company)}</div>
+      <div class="title">${escapeHtml(j.title || 'Untitled role')}</div>
+      <div class="meta">
+        <span class="chip">${escapeHtml(j.location || j.ireland_area || 'Ireland')}</span>
+        <span class="chip">${escapeHtml(j.sector || 'Other')}</span>
+        <span class="chip">${escapeHtml(j.ats || '')}</span>
+        ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
+        ${typeLabel ? `<span class="chip type">${typeLabel}</span>` : ''}
+      </div>
+      <div class="card-foot">
+        <span class="visa-badge ${badge.cls}">${escapeHtml(badge.text)}</span>
+        <span class="apply-hint">Open →</span>
+      </div>
+    `;
+>>>>>>> Stashed changes
     grid.appendChild(card);
   });
 
   renderDirectory(search);
+<<<<<<< Updated upstream
   renderDiagnostics(search);
   renderLiveCompanies(search);
   document.getElementById('tabLive').textContent = `Live matches (${filtered.length})`;
@@ -1321,6 +1581,12 @@ function applyFilters() {
       `<strong>${escapeHtml(selectedCompany)}</strong><br><br>${escapeHtml(status)}` +
       (fallbackUrl ? `<br><br><button class="resume-button" type="button" onclick="window.open('${escapeHtml(fallbackUrl)}','_blank','noopener')">Open ${escapeHtml(selectedCompany)} Careers →</button>` : '');
   } else if (search && filtered.length === 0 && ALL_MANUAL.some(c => c.company.toLowerCase().includes(search))) {
+=======
+  document.getElementById('tabLive').textContent = `Live matches (${filtered.length})`;
+  document.getElementById('tabDir').textContent = `Careers pages (${ALL_MANUAL.length})`;
+
+  if (search && filtered.length === 0 && ALL_MANUAL.some(c => c.company.toLowerCase().includes(search))) {
+>>>>>>> Stashed changes
     document.getElementById('emptyState').innerHTML =
       `No live listings for "<strong>${escapeHtml(search)}</strong>" — check the Careers pages tab.`;
   } else if (!filtered.length) {
@@ -1331,6 +1597,7 @@ function applyFilters() {
 
 function renderDirectory(search) {
   search = (search || '').toLowerCase();
+<<<<<<< Updated upstream
   const selectedCompany = document.getElementById('fCompany').value;
   const grid = document.getElementById('dirGrid');
   grid.innerHTML = '';
@@ -1346,16 +1613,30 @@ function renderDirectory(search) {
 
   Array.from(directoryMap.values())
     .filter(c => (!selectedCompany || c.company === selectedCompany) && (!search || c.company.toLowerCase().includes(search)))
+=======
+  const grid = document.getElementById('dirGrid');
+  grid.innerHTML = '';
+  ALL_MANUAL
+    .filter(c => !search || c.company.toLowerCase().includes(search))
+>>>>>>> Stashed changes
     .sort((a, b) => a.company.localeCompare(b.company))
     .forEach(c => {
       const card = document.createElement('div');
       card.className = 'dir-card';
+<<<<<<< Updated upstream
       card.onclick = () => c.url && window.open(c.url, '_blank', 'noopener');
       const status = c.automatic === true ? `${c.platform || 'Automatic'} · direct careers page` : (c.platform || 'Careers page');
       card.innerHTML = `
         <div>
           <div class="dir-name">${escapeHtml(c.company)}</div>
           <div class="dir-plat">${escapeHtml(status)}</div>
+=======
+      card.onclick = () => window.open(c.url, '_blank', 'noopener');
+      card.innerHTML = `
+        <div>
+          <div class="dir-name">${escapeHtml(c.company)}</div>
+          <div class="dir-plat">${escapeHtml(c.platform || 'Careers page')}</div>
+>>>>>>> Stashed changes
         </div>
         <span class="apply-hint">Open →</span>
       `;
@@ -1363,6 +1644,7 @@ function renderDirectory(search) {
     });
 }
 
+<<<<<<< Updated upstream
 
 
 function getLiveCompanies() {
@@ -1550,17 +1832,27 @@ function showTab(which) {
   if (which === 'saved') renderSaved();
   if (which === 'livecompanies') renderLiveCompanies(document.getElementById('q')?.value || '');
   if (which === 'applications') renderApplications();
+=======
+function showTab(which) {
+  document.getElementById('livePane').style.display = which === 'live' ? 'block' : 'none';
+  document.getElementById('directoryPane').style.display = which === 'dir' ? 'block' : 'none';
+  document.getElementById('tabLive').classList.toggle('active', which === 'live');
+  document.getElementById('tabDir').classList.toggle('active', which === 'dir');
+>>>>>>> Stashed changes
 }
 
 function escapeHtml(str) {
   return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 }
 
+<<<<<<< Updated upstream
 loadRadarState();
 loadApplications();
 renderSaved();
 renderApplications();
 setupInstantFilters();
+=======
+>>>>>>> Stashed changes
 autoFetchJobs();
 setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
 </script>
