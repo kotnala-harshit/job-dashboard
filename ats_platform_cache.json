@@ -292,7 +292,7 @@
     "slug": "astrazeneca",
     "probe_version": 35
   },
-  "AtkinsRéalis": {
+  "AtkinsR\u00e9alis": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -422,12 +422,12 @@
     "slug": null,
     "probe_version": 35
   },
-  "Bord Gáis Energy": {
+  "Bord G\u00e1is Energy": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
   },
-  "Bord na Móna": {
+  "Bord na M\u00f3na": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -457,7 +457,7 @@
     "slug": "bt",
     "probe_version": 35
   },
-  "Bus Éireann": {
+  "Bus \u00c9ireann": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -647,7 +647,7 @@
     "slug": "Crusoe",
     "probe_version": 35
   },
-  "Cubic³": {
+  "Cubic\u00b3": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1012,7 +1012,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Fáilte Ireland": {
+  "F\u00e1ilte Ireland": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1052,7 +1052,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Glanbia / Tirlán": {
+  "Glanbia / Tirl\u00e1n": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1282,7 +1282,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Irish Rail (Iarnród Éireann)": {
+  "Irish Rail (Iarnr\u00f3d \u00c9ireann)": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1587,7 +1587,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Nestlé Ireland": {
+  "Nestl\u00e9 Ireland": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1902,7 +1902,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "RTÉ (Raidió Teilifís Éireann)": {
+  "RT\u00c9 (Raidi\u00f3 Teilif\u00eds \u00c9ireann)": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -2302,7 +2302,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Uisce Éireann (Irish Water)": {
+  "Uisce \u00c9ireann (Irish Water)": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -2475,6 +2475,16 @@
   "Reddit": {
     "platform": "greenhouse",
     "slug": "reddit",
+    "probe_version": 35
+  },
+  "Accenture": {
+    "platform": "workday",
+    "slug": "accenture|wd103|AccentureCareers",
+    "probe_version": 35
+  },
+  "Citi": {
+    "platform": "eightfold",
+    "slug": "citi",
     "probe_version": 35
   },
   "Publift": {
