@@ -131,6 +131,8 @@ IRELAND_COMPANY_REGISTRY = ['A&L Goodbody', 'ABB', 'Abbott', 'AbbVie', 'Accentur
 CAREERS_URL_OVERRIDES = {
     "Apple": "https://jobs.apple.com/en-ie/search",
     "EY Ireland": "https://careers.ey.com/ey",
+    "Accenture": "https://www.accenture.com/ie-en/careers/jobsearch",
+    "Citi": "https://jobs.citi.com/location/dublin-jobs/287/2963597/2",
 }
 
 def _company_key(value: str) -> str:
@@ -1528,7 +1530,7 @@ def scrape_ashby(slug: str):
     return out
 
 
-def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages: int = 25):
+def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages: int = 25, search_text: str = ""):
     base = f"https://{tenant}.{wd_host}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs"
     out = []
     offset = 0
@@ -1538,7 +1540,7 @@ def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages
             "appliedFacets": {},
             "limit": page_size,
             "offset": offset,
-            "searchText": "",
+            "searchText": search_text or "",
         }).encode("utf-8")
         req = urllib.request.Request(
             base,
@@ -2244,7 +2246,18 @@ def rescue_priority_ireland_employers(results):
         accepted = 0
         for j in candidates:
             returned = company_display_name(j.get("company", ""))
-            if not _employer_name_matches(company, returned):
+            returned_key = _company_key(returned)
+            target_key = _company_key(company)
+            citi_alias = (
+                target_key == _company_key("Citi")
+                and returned_key in {
+                    _company_key("Citi"),
+                    _company_key("Citigroup"),
+                    _company_key("Citigroup Inc"),
+                    _company_key("Citi Ireland"),
+                }
+            )
+            if not citi_alias and not _employer_name_match(company, returned):
                 continue
             j["company"] = company
             j["coverage_rescue"] = True
@@ -2498,15 +2511,42 @@ def scrape_netflix(query: str):
 
 
 def _fetch_html(url: str, timeout: int = 25):
-    if requests is None:
-        return ""
+    """Fetch careers HTML with a browser-like fallback for bot-sensitive sites."""
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/126.0.0.0 Safari/537.36"
+        ),
+        "Accept-Language": "en-IE,en;q=0.9",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    }
+
+    if requests is not None:
+        try:
+            r = requests.get(url, headers=headers, timeout=timeout, allow_redirects=True)
+            if r.status_code == 200 and len(r.text or "") > 500:
+                return r.text
+        except Exception:
+            pass
+
+    # curl_cffi is already installed by the GitHub workflow and is much better
+    # at sites that reject plain python-requests TLS/browser fingerprints.
     try:
-        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (compatible; IrelandJobSearch/3.0)"}, timeout=timeout)
-        if r.status_code != 200:
-            return ""
-        return r.text
+        from curl_cffi import requests as curl_requests
+        r = curl_requests.get(
+            url,
+            headers=headers,
+            timeout=timeout,
+            impersonate="chrome",
+            allow_redirects=True,
+        )
+        if r.status_code == 200:
+            return r.text or ""
     except Exception:
-        return ""
+        pass
+
+    return ""
 
 
 def _html_text(fragment: str) -> str:
@@ -2700,28 +2740,85 @@ def _scrape_public_careers_page(company: str, url: str, href_hints, default_loca
 
 
 def scrape_accenture():
-    """Accenture migrated its public search experience away from the older
-    Workday board previously hard-coded here. Parse the official Ireland search
-    surface conservatively and let the priority aggregator rescue supplement it.
+    """Accenture Ireland.
+
+    Accenture's branded search is partly client-rendered, while current official
+    job-detail pages still hand applications to the wd103 Workday tenant.
+    Try both rather than assuming either surface is complete.
     """
-    return _scrape_public_careers_page(
+    combined = []
+    seen = set()
+
+    # Official branded search surface.
+    for j in _scrape_public_careers_page(
         "Accenture",
         "https://www.accenture.com/ie-en/careers/jobsearch",
         ("/ie-en/careers/jobdetails", "/careers/jobdetails", "jobdetails?id="),
         default_location="Ireland",
-    )
+    ):
+        key = ((j.get("title") or "").lower(), (j.get("url") or "").split("?")[0])
+        if key not in seen:
+            seen.add(key)
+            combined.append(j)
+
+    # Current Accenture job pages still use this Workday tenant for applications.
+    # Search "Ireland" so we do not have to paginate thousands of global jobs.
+    try:
+        for j in scrape_workday(
+            "Accenture", "accenture", "wd103", "AccentureCareers",
+            max_pages=25, search_text="Ireland",
+        ):
+            key = ((j.get("title") or "").lower(), (j.get("url") or "").split("?")[0])
+            if key not in seen:
+                seen.add(key)
+                combined.append(j)
+    except Exception as e:
+        print(f"  ! direct/Accenture workday fallback: {e}")
+
+    return combined
 
 
 def scrape_citi():
-    """Citi's Dublin location page is server-rendered and exposes current job
-    cards with stable /job/dublin/... links. This avoids treating Citi as manual.
+    """Citi/Citigroup Ireland direct careers collector.
+
+    Citi's jobs.citi.com pages are server-rendered but their location URLs can
+    change as taxonomy IDs change. Query several stable Ireland/Dublin variants,
+    follow the first two result pages, and deduplicate by canonical job URL.
     """
-    return _scrape_public_careers_page(
-        "Citi",
-        "https://jobs.citi.com/location/dublin-jobs/7867/2963597-7521314-2964574/4",
-        ("/job/dublin/", "/en/job/dublin/", "/job/"),
-        default_location="Dublin, Ireland",
-    )
+    urls = [
+        "https://jobs.citi.com/location/dublin-jobs/287/2963597-7521314-7778677-2964574/4",
+        "https://jobs.citi.com/location/dublin-jobs/287/2963597/2",
+        "https://jobs.citi.com/search-jobs/Ireland",
+    ]
+    out = []
+    seen = set()
+
+    for base in urls:
+        page_urls = [base]
+        if "/location/dublin-jobs/" in base:
+            page_urls.extend([base.rstrip("/") + "/1", base.rstrip("/") + "/2"])
+
+        for url in page_urls:
+            rows = _scrape_public_careers_page(
+                "Citi",
+                url,
+                ("/job/dublin/", "/en/job/dublin/", "/job/"),
+                default_location="Dublin, Leinster, Ireland",
+            )
+            for j in rows:
+                canonical = (j.get("url") or "").split("?")[0].rstrip("/").lower()
+                key = canonical or (
+                    (j.get("title") or "").strip().lower(),
+                    (j.get("location") or "").strip().lower(),
+                )
+                if key in seen:
+                    continue
+                seen.add(key)
+                # Normalize all Citi/Citigroup branding to one dashboard company.
+                j["company"] = "Citi"
+                out.append(j)
+
+    return out
 
 def scrape_google():
     return _scrape_public_careers_page(
