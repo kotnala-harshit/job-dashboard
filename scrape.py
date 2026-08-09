@@ -456,9 +456,42 @@ IRELAND_LOCATION_KEYWORDS = [
 IRELAND_LOCATION_KEYWORDS = [k for k in IRELAND_LOCATION_KEYWORDS if k != "irL"]
 
 IRELAND_REMOTE_HINTS = [
-    "remote, ireland", "remote ireland", "ireland remote", "remote (ireland)",
-    "remote - ireland", "remote/hybrid ireland", "hybrid ireland",
-    "ireland (remote", "ireland - remote", "based in ireland",
+    # Explicit Ireland-remote forms
+    "remote, ireland",
+    "remote ireland",
+    "remote - ireland",
+    "remote – ireland",
+    "remote — ireland",
+    "ireland remote",
+    "ireland - remote",
+    "ireland – remote",
+    "ireland — remote",
+    "remote (ireland)",
+    "ireland (remote",
+    "remote/ireland",
+    "ireland/remote",
+
+    # Hybrid / home-office Ireland
+    "remote/hybrid ireland",
+    "hybrid ireland",
+    "hybrid - ireland",
+    "hybrid, ireland",
+    "home office - ireland",
+    "home office ireland",
+    "ireland - home office",
+    "ireland home office",
+
+    # Eligibility wording commonly used by remote-first employers
+    "based in ireland",
+    "located in ireland",
+    "residing in ireland",
+    "resident in ireland",
+    "work from ireland",
+    "working from ireland",
+    "remote within ireland",
+    "remote in ireland",
+    "ireland-based",
+    "ireland based",
 ]
 
 # Canonical county/city bucket for the dashboard location filter.
@@ -604,34 +637,90 @@ def jsonld_page_is_ireland(company: str, url: str) -> bool:
 
 
 def region_ok(location: str) -> bool:
-    loc = (location or "").lower()
+    """Return True only when a vacancy is genuinely available in Republic of Ireland.
+
+    Remote-first employers ARE allowed. A physical Irish office is not required.
+
+    Accepted examples:
+        Dublin
+        Cork, Ireland
+        Ireland
+        Remote - Ireland
+        Ireland (Remote)
+        Home Office - Ireland
+        Remote within Ireland
+
+    Rejected examples:
+        Remote
+        Worldwide Remote
+        Europe Remote
+        EMEA
+        UK / Ireland   # ambiguous multi-country listing
+        Northern Ireland
+        Dublin, Ohio
+    """
+    loc = re.sub(r"\\s+", " ", (location or "").strip().lower())
+
     if IRELAND_ONLY:
-        # Republic-of-Ireland board: explicitly reject common false positives.
-        foreign_markers = (
-            "northern ireland", "united kingdom", " uk", "uk,",
-            "united states", " usa", "u.s.", " ohio", " dublin, oh",
-            "canada", "australia", "india", "singapore",
-        )
-        if any(m in loc for m in foreign_markers):
+        if not loc:
             return False
 
-        if any(h in loc for h in IRELAND_REMOTE_HINTS):
+        # Republic-of-Ireland only.
+        foreign_markers = (
+            "northern ireland",
+            "united states",
+            "u.s.a",
+            "u.s.",
+            " usa",
+            "dublin, oh",
+            "dublin, ohio",
+            "canada",
+            "australia",
+            "india",
+            "singapore",
+        )
+        if any(marker in loc for marker in foreign_markers):
+            return False
+
+        # Avoid ambiguous two-country advertisements unless the location text
+        # separately establishes a Republic-of-Ireland base.
+        ambiguous_cross_border = (
+            "uk / ireland",
+            "uk & ireland",
+            "uk and ireland",
+            "ireland / uk",
+            "ireland & uk",
+            "ireland and uk",
+        )
+        if any(marker in loc for marker in ambiguous_cross_border):
+            return False
+
+        # Explicit Ireland remote/hybrid/home-office roles are valid.
+        if any(hint in loc for hint in IRELAND_REMOTE_HINTS):
             return True
 
-        # Country-explicit Ireland is safest.
+        # Explicit Republic-of-Ireland country wording.
         if "ireland" in loc:
             return True
 
-        # Irish city/county names are accepted only when no foreign-country marker
-        # is present. This prevents "Dublin, Ohio, United States" leakage.
-        if any(k in loc for k in IRELAND_LOCATION_KEYWORDS):
+        # Irish city/county names are valid where no foreign marker exists.
+        if any(keyword in loc for keyword in IRELAND_LOCATION_KEYWORDS):
             return True
 
-        if "remote" in loc or "hybrid" in loc:
+        # A bare Remote / Europe / EMEA / Worldwide label is NOT sufficient.
+        if any(x in loc for x in (
+            "remote",
+            "hybrid",
+            "emea",
+            "europe",
+            "worldwide",
+            "global",
+        )):
             return False
+
         return False
 
-    # Legacy multi-region mode (set IRELAND_ONLY = False to re-enable).
+    # Legacy multi-region mode.
     REGION_KEYWORDS = [
         "ireland", "dublin", "cork", "uk", "united kingdom", "london", "europe",
         "eu", "germany", "berlin", "france", "paris", "netherlands", "amsterdam",
@@ -646,6 +735,7 @@ def region_ok(location: str) -> bool:
         "saudi arabia", "riyadh", "jeddah", "qatar", "doha",
     ]
     US_KEYWORDS = ["usa", "united states", "u.s.a", "u.s."]
+
     if any(k in loc for k in REGION_KEYWORDS):
         return True
     if any(k in loc for k in US_KEYWORDS):
@@ -653,7 +743,6 @@ def region_ok(location: str) -> bool:
     if "remote" in loc:
         return True
     return False
-
 
 # ---------------------------------------------------------------------------
 # Sector + country tagging. SECTOR_BY_COMPANY is built from the 'Sector'
@@ -4412,23 +4501,35 @@ def main():
         errors.append(f"zero-company targeted rescue: {e}")
 
 
-    # Enforce the career-curated company universe for employer/ATS collectors.
-    # Broad aggregators remain allowed to surface adjacent employers, but stale
-    # hard-coded ATS arrays can no longer reintroduce companies intentionally dropped.
+    # ireland_companies.csv is the SINGLE source of truth for the dashboard
+    # company universe.
+    #
+    # Apply this to EVERY source, including aggregators. Previously Jooble,
+    # Adzuna and Careerjet were allowed to introduce adjacent employers that
+    # were not present in ireland_companies.csv, which caused removed/unwanted
+    # companies to leak back into data.json and the HTML company filter.
     curated_keys = curated_company_key_set()
-    employer_ats_sources = {
-        "direct","workday","greenhouse","lever","ashby","smartrecruiters",
-        "workable","recruitee","personio","pinpoint","phenom","eightfold",
-        "oracle","jsonld"
-    }
+
     filtered_results = []
+    dropped_non_curated = 0
+
     for j in results:
-        src = (j.get("ats") or "").lower()
-        if src in employer_ats_sources:
-            ck = _company_key(company_display_name(j.get("company", "")))
-            if ck not in curated_keys:
-                continue
+        display_company = company_display_name(j.get("company", ""))
+        ck = _company_key(display_company)
+
+        if ck not in curated_keys:
+            dropped_non_curated += 1
+            continue
+
+        j["company"] = display_company
         filtered_results.append(j)
+
+    if dropped_non_curated:
+        print(
+            f"CSV company-universe filter: dropped "
+            f"{dropped_non_curated} jobs from companies not in ireland_companies.csv"
+        )
+
     results = filtered_results
 
     # Source-priority de-duplication. Direct employer/ATS records win over
