@@ -362,6 +362,8 @@ DIRECT_COMPANY_CONNECTORS = {
     "Red Hat": "redhat",
     "Amazon": "amazon",
     "Netflix": "netflix",
+    "EY Ireland": "ey",
+    "KPMG Ireland": "kpmg",
 }
 
 # Exact enterprise-platform mappings learned from validated public career-site
@@ -3180,6 +3182,138 @@ def _scrape_meta_playwright():
     return list(results.values())
 
 
+
+def _scrape_ey_playwright():
+    """EY Ireland: SAP SuccessFactors browser collector adapted from Suman's working pipeline."""
+    if not HAS_PLAYWRIGHT:
+        print("  ! EY Ireland: Playwright unavailable")
+        return []
+    base = "https://careers.ey.com/ey/search/"
+    results = {}
+    href_rx = re.compile(r"careers\.ey\.com/ey/job/", re.I)
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+            stagnant = 0
+            for startrow in range(0, 2500, 25):
+                url = base + "?" + urllib.parse.urlencode({"q": "", "locationsearch": "Ireland", "startrow": startrow})
+                page.goto(url, wait_until="domcontentloaded", timeout=60000)
+                page.wait_for_timeout(1000)
+                if startrow == 0:
+                    _dismiss_cookie_banner(page)
+                before = len(results)
+                anchors = page.locator("a[href]")
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+                    try:
+                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                    except Exception:
+                        continue
+                    if not href_rx.search(href) or href in results:
+                        continue
+                    title = _browser_text(a)
+                    node, card = a, ""
+                    for _ in range(5):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node)
+                        except Exception:
+                            break
+                        if candidate and len(candidate) <= 1800:
+                            card = candidate
+                        if card and len(card) >= 25:
+                            break
+                    if not title or len(title) > 300:
+                        lines = [x.strip() for x in card.splitlines() if 3 < len(x.strip()) <= 250]
+                        title = lines[0] if lines else ""
+                    if not title:
+                        continue
+                    results[href] = {
+                        "company": "EY Ireland", "ats": "direct", "title": title[:300],
+                        "location": _browser_location(card, "Ireland"), "url": href,
+                        "updated_at": None, "description_text": card[:5000],
+                    }
+                added = len(results) - before
+                print(f"  EY browser startrow={startrow}: +{added} ({len(results)} total)")
+                stagnant = stagnant + 1 if added == 0 else 0
+                if stagnant >= 2:
+                    break
+            browser.close()
+    except Exception as exc:
+        print(f"  ! EY Ireland browser scrape failed: {exc}")
+    return list(results.values())
+
+
+def _scrape_kpmg_playwright():
+    """KPMG Ireland: Avature browser collector adapted from Suman's working pipeline."""
+    if not HAS_PLAYWRIGHT:
+        print("  ! KPMG Ireland: Playwright unavailable")
+        return []
+    base = "https://kpmgireland.avature.net/careers/SearchJobs/"
+    results = {}
+    href_rx = re.compile(r"kpmgireland\.avature\.net/careers/(?:JobDetail|jobdetail|FolderDetail|folderdetail)", re.I)
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+            stagnant = 0
+            for offset in range(0, 1000, 10):
+                url = base + "?" + urllib.parse.urlencode({"folderOffset": offset})
+                page.goto(url, wait_until="domcontentloaded", timeout=60000)
+                page.wait_for_timeout(900)
+                if offset == 0:
+                    _dismiss_cookie_banner(page)
+                before = len(results)
+                anchors = page.locator("a[href]")
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+                    try:
+                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                    except Exception:
+                        continue
+                    if not href_rx.search(href) or href in results:
+                        continue
+                    title = _browser_text(a)
+                    node, card = a, ""
+                    for _ in range(5):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node)
+                        except Exception:
+                            break
+                        if candidate and len(candidate) <= 1800:
+                            card = candidate
+                        if card and len(card) >= 25:
+                            break
+                    if not title or len(title) > 300:
+                        lines = [x.strip() for x in card.splitlines() if 3 < len(x.strip()) <= 250]
+                        title = lines[0] if lines else ""
+                    if not title:
+                        continue
+                    results[href] = {
+                        "company": "KPMG Ireland", "ats": "direct", "title": title[:300],
+                        "location": _browser_location(card, "Ireland"), "url": href,
+                        "updated_at": None, "description_text": card[:5000],
+                    }
+                added = len(results) - before
+                print(f"  KPMG browser folderOffset={offset}: +{added} ({len(results)} total)")
+                stagnant = stagnant + 1 if added == 0 else 0
+                if stagnant >= 2:
+                    break
+            browser.close()
+    except Exception as exc:
+        print(f"  ! KPMG Ireland browser scrape failed: {exc}")
+    return list(results.values())
+
+
+def scrape_ey():
+    return _scrape_ey_playwright()
+
+
+def scrape_kpmg():
+    return _scrape_kpmg_playwright()
+
 def scrape_google():
     jobs = _scrape_google_playwright()
     if jobs:
@@ -3296,6 +3430,8 @@ def scrape_direct_company(company: str):
         "Oracle": scrape_oracle,
         "Red Hat": scrape_redhat,
         "JPMorgan Chase": scrape_jpmorgan,
+        "EY Ireland": scrape_ey,
+        "KPMG Ireland": scrape_kpmg,
     }.get(company)
     return fn() if fn else []
 
@@ -3635,7 +3771,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ("Accenture", "Citi", "Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase"):
+    for company in ("Accenture", "Citi", "Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase", "EY Ireland", "KPMG Ireland"):
         if not _targeted(company):
             continue
         try:
