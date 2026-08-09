@@ -1797,11 +1797,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Publift": {
-    "platform": "smartrecruiters",
-    "slug": "job-widget",
-    "probe_version": 35
-  },
   "PwC Ireland": {
     "platform": "workday",
     "slug": "pwc|wd3|Global_Experienced_Careers",
@@ -2490,6 +2485,11 @@
   "Zurich Insurance": {
     "platform": "none",
     "slug": null,
+    "probe_version": 35
+  },
+  "Publift": {
+    "platform": "smartrecruiters",
+    "slug": "job-widget",
     "probe_version": 35
   },
   "__probe_version__": 35
