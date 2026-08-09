@@ -343,6 +343,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Meta": "meta",
     "TikTok": "tiktok",
     "Oracle": "oracle",
+    "Red Hat": "redhat",
     "Amazon": "amazon",
     "Netflix": "netflix",
 }
@@ -2206,7 +2207,7 @@ def _employer_name_match(target: str, returned: str) -> bool:
 PRIORITY_IRELAND_EMPLOYERS = [
     "Accenture", "Citi", "KPMG Ireland", "Grant Thornton Ireland",
     "HSBC Ireland", "Version 1", "Meta", "Google", "TikTok",
-    "NetApp", "EY Ireland",
+    "NetApp", "EY Ireland", "Microsoft", "Oracle", "Red Hat",
 ]
 
 def rescue_priority_ireland_employers(results):
@@ -2728,12 +2729,23 @@ def scrape_google():
 
 
 def scrape_microsoft():
-    # The Dublin location page is server-rendered and currently exposes the
-    # Ireland vacancies plus their dates/descriptions.
-    return _scrape_public_careers_page(
+    """Microsoft Ireland: prefer the official Dublin location surface, then
+    try the broader careers search if the location page yields no job cards.
+    """
+    jobs = _scrape_public_careers_page(
         "Microsoft",
         "https://careers.microsoft.com/v2/global/en/locations/dublin.html",
         ("/job/", "/jobs/", "jobid", "job-id"),
+        default_location="Dublin, Ireland",
+    )
+    if jobs:
+        return jobs
+
+    return _scrape_public_careers_page(
+        "Microsoft",
+        "https://jobs.careers.microsoft.com/global/en/search?q=&lc=Ireland",
+        ("/job/", "/jobs/", "jobid", "job-id"),
+        default_location="Ireland",
     )
 
 
@@ -2754,14 +2766,56 @@ def scrape_tiktok():
 
 
 def scrape_oracle():
-    # Oracle Recruiting Cloud pages vary by tenant/site. This conservative
-    # parser follows publicly rendered requisition links and requires Ireland
-    # context in the same local card/chunk.
+    """Oracle Ireland: use the public Oracle Recruiting Cloud REST resource
+    where available, with the rendered Candidate Experience page as fallback.
+    """
+    try:
+        jobs = scrape_oracle_candidate_experience(
+            "Oracle",
+            "https://eeho.fa.us2.oraclecloud.com",
+            "CX_1",
+            "IE",
+        )
+        if jobs:
+            return jobs
+    except Exception as e:
+        print(f"  ! Oracle recruiting REST fallback: {e}")
+
     return _scrape_public_careers_page(
         "Oracle",
         "https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/requisitions?location=Ireland",
         ("/job/", "/requisitions/", "candidateexperience"),
+        default_location="Ireland",
     )
+
+
+def scrape_redhat():
+    """Red Hat Ireland: use the official jobs/locations surface. If the current
+    Red Hat site renders job cards client-side and returns zero here, the
+    priority employer rescue immediately supplements it via configured APIs.
+    """
+    jobs = _scrape_public_careers_page(
+        "Red Hat",
+        "https://www.redhat.com/en/jobs/locations",
+        ("/en/jobs/", "/jobs/", "job/"),
+        default_location="Ireland",
+    )
+
+    # Avoid accidentally treating informational Red Hat careers pages as jobs.
+    blocked = {
+        "locations", "departments", "life at red hat", "hiring process",
+        "info guide", "students", "benefits",
+    }
+    cleaned = []
+    for j in jobs:
+        title = (j.get("title") or "").strip().lower()
+        url = (j.get("url") or "").lower()
+        if any(term in title for term in blocked):
+            continue
+        if any(f"/jobs/{term.replace(' ', '-')}" in url for term in blocked):
+            continue
+        cleaned.append(j)
+    return cleaned
 
 
 def scrape_direct_company(company: str):
@@ -2774,6 +2828,7 @@ def scrape_direct_company(company: str):
         "Meta": scrape_meta,
         "TikTok": scrape_tiktok,
         "Oracle": scrape_oracle,
+        "Red Hat": scrape_redhat,
         "JPMorgan Chase": scrape_jpmorgan,
     }.get(company)
     return fn() if fn else []
@@ -3114,7 +3169,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ("Accenture", "Citi", "Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "JPMorgan Chase"):
+    for company in ("Accenture", "Citi", "Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase"):
         if not _targeted(company):
             continue
         try:
