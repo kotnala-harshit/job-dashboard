@@ -3037,6 +3037,33 @@ def _scrape_accenture_playwright():
     ]
 
 
+
+def _scrape_accenture_with_retry():
+    """Run the existing Accenture browser collector with one transient-failure retry."""
+    import time
+
+    for attempt in range(1, 3):
+        try:
+            jobs = _scrape_accenture_playwright()
+            if jobs:
+                if attempt > 1:
+                    print(f"  Accenture browser recovered on attempt {attempt}: {len(jobs)} jobs")
+                return jobs
+
+            if attempt == 1:
+                print("  ! Accenture browser returned no jobs; retrying once...")
+                time.sleep(3)
+
+        except Exception as exc:
+            if attempt == 1:
+                print(f"  ! Accenture browser attempt 1 failed: {exc}; retrying once...")
+                time.sleep(3)
+            else:
+                print(f"  ! Accenture browser retry failed: {exc}")
+
+    return []
+
+
 def scrape_accenture():
     """Accenture Ireland.
 
@@ -3048,7 +3075,7 @@ def scrape_accenture():
     seen = set()
 
     # Official branded search surface is client-rendered: use Chromium first.
-    branded_jobs = _scrape_accenture_playwright()
+    branded_jobs = _scrape_accenture_with_retry()
     if not branded_jobs:
         branded_jobs = _scrape_public_careers_page(
             "Accenture",
@@ -4349,21 +4376,23 @@ def main():
             errors.append(f"jooble ({query}): {e}")
         time.sleep(0.3)
 
-    try:
-        found = scrape_amazon("") if _targeted("Amazon") else []
-        results.extend(found)
-        print(f"direct/Amazon: {len(found)} Ireland jobs")
-    except Exception as e:
-        errors.append(f"direct/Amazon: {e}")
-    time.sleep(0.5)
+    if _targeted("Amazon"):
+        try:
+            found = scrape_amazon("")
+            results.extend(found)
+            print(f"direct/Amazon: {len(found)} Ireland jobs")
+        except Exception as e:
+            errors.append(f"direct/Amazon: {e}")
+        time.sleep(0.5)
 
-    try:
-        found = scrape_netflix("") if _targeted("Netflix") else []
-        results.extend(found)
-        print(f"direct/Netflix: {len(found)} Ireland jobs")
-    except Exception as e:
-        errors.append(f"direct/Netflix: {e}")
-    time.sleep(0.5)
+    if _targeted("Netflix"):
+        try:
+            found = scrape_netflix("")
+            results.extend(found)
+            print(f"direct/Netflix: {len(found)} Ireland jobs")
+        except Exception as e:
+            errors.append(f"direct/Netflix: {e}")
+        time.sleep(0.5)
 
     # Targeted second pass for configured companies that still returned zero.
     # This uses the already-configured free aggregator API, but searches by
@@ -4382,18 +4411,6 @@ def main():
     except Exception as e:
         errors.append(f"zero-company targeted rescue: {e}")
 
-    if SCRAPE_MODE == "fast" and TARGET_COMPANIES:
-        print("\nFAST TARGET SUMMARY")
-        for target in sorted(TARGET_COMPANIES):
-            target_jobs = [
-                j for j in results
-                if _company_key(company_display_name(j.get("company", ""))) == target
-            ]
-            by_source = {}
-            for j in target_jobs:
-                src = j.get("ats") or j.get("source") or "unknown"
-                by_source[src] = by_source.get(src, 0) + 1
-            print(f"  target={target}: jobs={len(target_jobs)} sources={by_source}")
 
     # Enforce the career-curated company universe for employer/ATS collectors.
     # Broad aggregators remain allowed to surface adjacent employers, but stale
