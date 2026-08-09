@@ -13,6 +13,8 @@ import html
 import urllib.request
 import urllib.error
 import urllib.parse
+import hashlib
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone, timedelta
 
 try:
@@ -1793,6 +1795,9 @@ def _careers_page_ats_candidates(company: str, careers_url: str, sess):
         ("eightfold", r"https?://([A-Za-z0-9-]+)\.eightfold\.ai"),
     ]
 
+    out = []
+    seen = set()
+
     # Workday needs tenant + wd host + site rather than one slug.
     # Encode it as tenant|wd-host|site for the common cached-mapping interface.
     workday_patterns = [
@@ -1824,8 +1829,6 @@ def _careers_page_ats_candidates(company: str, careers_url: str, sess):
                 out.append(("workday", f"{tenant}|{wd_host0}|{site}"))
 
 
-    out = []
-    seen = set()
     for platform, pattern in patterns:
         for m in re.finditer(pattern, text, re.I):
             slug = m.group(1).strip()
@@ -2967,91 +2970,71 @@ def job_state_identity(job):
         _norm_phrase(job.get("location")),
     ])
 
+# ---------------------------------------------------------------------------
+# Runtime modes
+# FULL (default): all configured connectors + unresolved-company deep fallback.
+# FAST: targeted development pass; set TARGET_COMPANIES comma-separated.
+# ---------------------------------------------------------------------------
+SCRAPE_MODE = os.environ.get("SCRAPE_MODE", "full").strip().lower()
+SCRAPE_WORKERS = max(2, min(32, int(os.environ.get("SCRAPE_WORKERS", "16"))))
+TARGET_COMPANIES = {
+    _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
+}
+
+def _targeted(company):
+    if not TARGET_COMPANIES:
+        return True
+    key = _company_key(company)
+    if key in TARGET_COMPANIES:
+        return True
+    # Allow ATS slugs/short brands such as "kpmg" to match "KPMG Ireland".
+    return any(len(key) >= 4 and (key in target or target in key) for target in TARGET_COMPANIES)
+
+def _parallel_collect(tasks, results, errors, workers=None):
+    """Run independent collectors concurrently; each task=(label, company, callable)."""
+    if not tasks:
+        return
+    with ThreadPoolExecutor(max_workers=workers or SCRAPE_WORKERS) as pool:
+        future_map = {pool.submit(fn): (label, company) for label, company, fn in tasks}
+        for fut in as_completed(future_map):
+            label, company = future_map[fut]
+            try:
+                found = fut.result() or []
+                results.extend(found)
+                print(f"{label}/{company}: {len(found)} matches")
+            except Exception as exc:
+                errors.append(f"{label}/{company}: {exc}")
+
+def _content_hash(job):
+    raw = "|".join(str(job.get(k) or "") for k in ("company","title","location","url","updated_at","description_text"))
+    return hashlib.sha1(raw.encode("utf-8", "ignore")).hexdigest()
+
 def main():
     profile = load_candidate_profile()
     results = []
     errors = []
 
+    print(f"SCRAPE_MODE={SCRAPE_MODE} workers={SCRAPE_WORKERS} targets={len(TARGET_COMPANIES) or 'all'}")
+    tasks = []
     for slug in GREENHOUSE_COMPANIES:
-        try:
-            found = scrape_greenhouse(slug)
-            results.extend(found)
-            print(f"greenhouse/{slug}: {len(found)} matches")
-        except Exception as e:
-            errors.append(f"greenhouse/{slug}: {e}")
-        time.sleep(0.3)
-
+        if _targeted(slug): tasks.append(("greenhouse", slug, lambda slug=slug: scrape_greenhouse(slug)))
     for slug in LEVER_COMPANIES:
-        try:
-            found = scrape_lever(slug)
-            results.extend(found)
-            print(f"lever/{slug}: {len(found)} matches")
-        except Exception as e:
-            errors.append(f"lever/{slug}: {e}")
-        time.sleep(0.3)
-
+        if _targeted(slug): tasks.append(("lever", slug, lambda slug=slug: scrape_lever(slug)))
     for slug in ASHBY_COMPANIES:
-        try:
-            found = scrape_ashby(slug)
-            results.extend(found)
-            print(f"ashby/{slug}: {len(found)} matches")
-        except Exception as e:
-            errors.append(f"ashby/{slug}: {e}")
-        time.sleep(0.3)
-
+        if _targeted(slug): tasks.append(("ashby", slug, lambda slug=slug: scrape_ashby(slug)))
     for company, tenant, wd_host, site in WORKDAY_COMPANIES:
-        try:
-            found = scrape_workday(company, tenant, wd_host, site)
-            results.extend(found)
-            print(f"workday/{tenant}: {len(found)} matches")
-        except Exception as e:
-            errors.append(f"workday/{tenant}: {e}")
-        time.sleep(0.3)
-
+        if _targeted(company): tasks.append(("workday", company, lambda company=company,tenant=tenant,wd_host=wd_host,site=site: scrape_workday(company,tenant,wd_host,site)))
     for company_id in SMARTRECRUITERS_COMPANIES:
-        try:
-            found = scrape_smartrecruiters(company_id)
-            results.extend(found)
-            print(f"smartrecruiters/{company_id}: {len(found)} matches")
-        except Exception as e:
-            errors.append(f"smartrecruiters/{company_id}: {e}")
-        time.sleep(0.3)
-
+        if _targeted(company_id): tasks.append(("smartrecruiters", company_id, lambda company_id=company_id: scrape_smartrecruiters(company_id)))
     for slug in WORKABLE_COMPANIES:
-        try:
-            found = scrape_workable(slug)
-            results.extend(found)
-            print(f"workable/{slug}: {len(found)} matches")
-        except Exception as e:
-            errors.append(f"workable/{slug}: {e}")
-        time.sleep(0.3)
-
+        if _targeted(slug): tasks.append(("workable", slug, lambda slug=slug: scrape_workable(slug)))
     for slug in RECRUITEE_COMPANIES:
-        try:
-            found = scrape_recruitee(slug)
-            results.extend(found)
-            print(f"recruitee/{slug}: {len(found)} matches")
-        except Exception as e:
-            errors.append(f"recruitee/{slug}: {e}")
-        time.sleep(0.3)
-
+        if _targeted(slug): tasks.append(("recruitee", slug, lambda slug=slug: scrape_recruitee(slug)))
     for slug in PERSONIO_COMPANIES:
-        try:
-            found = scrape_personio(slug)
-            results.extend(found)
-            print(f"personio/{slug}: {len(found)} matches")
-        except Exception as e:
-            errors.append(f"personio/{slug}: {e}")
-        time.sleep(0.3)
-
+        if _targeted(slug): tasks.append(("personio", slug, lambda slug=slug: scrape_personio(slug)))
     for slug in PINPOINT_COMPANIES:
-        try:
-            found = scrape_pinpoint(slug)
-            results.extend(found)
-            print(f"pinpoint/{slug}: {len(found)} Ireland jobs")
-        except Exception as e:
-            errors.append(f"pinpoint/{slug}: {e}")
-        time.sleep(0.3)
+        if _targeted(slug): tasks.append(("pinpoint", slug, lambda slug=slug: scrape_pinpoint(slug)))
+    _parallel_collect(tasks, results, errors)
 
     # Exact enterprise-platform mappings (Phenom / Eightfold). Validate before
     # scraping so a stale mapping cannot silently pollute the dataset.
@@ -3081,6 +3064,8 @@ def main():
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
     for company in ("Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "JPMorgan Chase"):
+        if not _targeted(company):
+            continue
         try:
             found = scrape_direct_company(company)
             results.extend(found)
@@ -3092,27 +3077,25 @@ def main():
     # Suman-style dynamic ATS discovery for companies not already wired into a
     # known connector. Confirmed mappings persist in ats_platform_cache.json.
     initial_registry = build_company_registry(include_cache=False)
+    if TARGET_COMPANIES:
+        initial_registry = [x for x in initial_registry if _targeted(x.get("company", ""))]
     try:
         dynamic_found, _dynamic_mappings = discover_and_scrape_manual(initial_registry)
         results.extend(dynamic_found)
     except Exception as e:
         errors.append(f"dynamic ATS discovery: {e}")
 
-    # Universal structured-data fallback over the CURRENT registry.
-    # The old embedded JSONLD_CAREER_PAGES list lagged behind registry changes.
+    # Universal structured-data fallback over the CURRENT registry. Run concurrently.
+    # FULL still checks every curated careers page each run; FAST checks targets only.
+    jsonld_tasks = []
     for company, url, _source_type, _category in _load_company_master():
-        if not url:
+        if not url or not _targeted(company):
             continue
-        try:
-            found = scrape_jsonld(company, url)
-            results.extend(found)
-            if found:
-                print(f"jsonld/{company}: {len(found)} matches")
-        except Exception as e:
-            errors.append(f"jsonld/{company}: {e}")
-        time.sleep(0.12)
+        jsonld_tasks.append(("jsonld", company, lambda company=company,url=url: scrape_jsonld(company, url)))
+    _parallel_collect(jsonld_tasks, results, errors, workers=min(SCRAPE_WORKERS, 20))
 
-    for country in ADZUNA_COUNTRIES:
+    run_broad_aggregators = SCRAPE_MODE != "fast" or not TARGET_COMPANIES
+    for country in (ADZUNA_COUNTRIES if run_broad_aggregators else []):
         for query in DIRECT_QUERIES:
             try:
                 found = scrape_adzuna(country, query)
@@ -3123,7 +3106,7 @@ def main():
                 errors.append(f"adzuna/{country} ({query}): {e}")
             time.sleep(0.3)
 
-    for locale in CAREERJET_LOCALES:
+    for locale in (CAREERJET_LOCALES if run_broad_aggregators else []):
         for query in DIRECT_QUERIES:
             try:
                 found = scrape_careerjet(locale, query)
@@ -3134,7 +3117,7 @@ def main():
                 errors.append(f"careerjet/{locale} ({query}): {e}")
             time.sleep(0.3)
 
-    for query in DIRECT_QUERIES:
+    for query in (DIRECT_QUERIES if run_broad_aggregators else []):
         try:
             found = scrape_jooble(query, "Ireland" if IRELAND_ONLY else "")
             results.extend(found)
@@ -3145,7 +3128,7 @@ def main():
         time.sleep(0.3)
 
     try:
-        found = scrape_amazon("")
+        found = scrape_amazon("") if _targeted("Amazon") else []
         results.extend(found)
         print(f"direct/Amazon: {len(found)} Ireland jobs")
     except Exception as e:
@@ -3153,7 +3136,7 @@ def main():
     time.sleep(0.5)
 
     try:
-        found = scrape_netflix("")
+        found = scrape_netflix("") if _targeted("Netflix") else []
         results.extend(found)
         print(f"direct/Netflix: {len(found)} Ireland jobs")
     except Exception as e:
@@ -3164,6 +3147,8 @@ def main():
     # This uses the already-configured free aggregator API, but searches by
     # employer name instead of relying on a single broad first page.
     try:
+        if SCRAPE_MODE == "fast" and TARGET_COMPANIES:
+            raise RuntimeError("FAST_MODE_SKIP_RESCUE")
         # First rescue the specifically verified high-priority employers.
         priority_rescued = rescue_priority_ireland_employers(results)
         results.extend(priority_rescued)
@@ -3173,7 +3158,8 @@ def main():
         rescued = rescue_zero_companies_with_aggregators(results, rescue_registry)
         results.extend(rescued)
     except Exception as e:
-        errors.append(f"zero-company targeted rescue: {e}")
+        if str(e) != "FAST_MODE_SKIP_RESCUE":
+            errors.append(f"zero-company targeted rescue: {e}")
 
     # Enforce the career-curated company universe for employer/ATS collectors.
     # Broad aggregators remain allowed to surface adjacent employers, but stale
@@ -3255,6 +3241,7 @@ def main():
         j.setdefault("closing_date", None)
         j.setdefault("requisition_id", None)
         j.setdefault("salary", None)
+        j["content_hash"] = _content_hash(j)
         if not j.get("source_type"):
             j["source_type"] = (
                 "employer_direct"
@@ -3278,9 +3265,12 @@ def main():
         seen_jobs = {}
 
     current_seen = dict(seen_jobs)
+    current_ids = set()
     for j in results:
         identity = job_state_identity(j)
+        current_ids.add(identity)
         prior = seen_jobs.get(identity)
+        prior_obj = prior if isinstance(prior, dict) else {}
         if isinstance(prior, dict):
             first_seen = prior.get("first_seen") or prior.get("first_seen_at") or now_iso
         elif isinstance(prior, str):
@@ -3288,7 +3278,11 @@ def main():
         else:
             first_seen = now_iso
 
+        previous_hash = prior_obj.get("content_hash")
+        changed = bool(previous_hash and previous_hash != j.get("content_hash"))
         j["new_since_last_check"] = prior is None
+        j["updated_since_last_check"] = changed
+        j["lifecycle_status"] = "new" if prior is None else "updated" if changed else "active"
         j["first_seen_at"] = first_seen
         j["last_seen_at"] = now_iso
         j["last_verified_at"] = now_iso
@@ -3296,12 +3290,35 @@ def main():
         j["discovery_score"] = discovery_value(j, now_dt)
 
         current_seen[identity] = {
-            "first_seen": first_seen,
-            "last_seen": now_iso,
-            "last_verified": now_iso,
-            "company": j.get("company"),
-            "title": j.get("title"),
+            "first_seen": first_seen, "last_seen": now_iso, "last_verified": now_iso,
+            "company": j.get("company"), "title": j.get("title"),
+            "location": j.get("location"), "url": j.get("url"), "ats": j.get("ats"),
+            "updated_at": j.get("updated_at"), "content_hash": j.get("content_hash"),
+            "active": True, "missing_runs": 0,
         }
+
+    # Missing jobs are not immediately declared closed: transient ATS failures happen.
+    # Only advance missing counters on FULL runs; targeted FAST tests never close jobs.
+    if SCRAPE_MODE != "fast":
+        for identity, prior in list(current_seen.items()):
+            if identity in current_ids or not isinstance(prior, dict):
+                continue
+            misses = int(prior.get("missing_runs") or 0) + 1
+            prior["missing_runs"] = misses
+            prior["last_verified"] = now_iso
+            if misses >= 3:
+                prior["active"] = False
+                prior.setdefault("closed_at", now_iso)
+            current_seen[identity] = prior
+
+    # Prune closed history after 30 days; active jobs are NEVER removed merely for age.
+    history_cutoff = now_dt - timedelta(days=30)
+    for identity, prior in list(current_seen.items()):
+        if not isinstance(prior, dict) or prior.get("active", True):
+            continue
+        closed = parse_posted_date(prior.get("closed_at"))
+        if closed and closed < history_cutoff:
+            current_seen.pop(identity, None)
 
     with open("seen_jobs.json", "w", encoding="utf-8") as f:
         json.dump(current_seen, f, indent=2)
@@ -3377,6 +3394,8 @@ def main():
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "scrape_mode": SCRAPE_MODE,
+        "target_companies": sorted(TARGET_COMPANIES),
         "focus": "ireland" if IRELAND_ONLY else "multi_region",
         "integrations": {
             "adzuna": bool(ADZUNA_APP_ID and ADZUNA_APP_KEY),
