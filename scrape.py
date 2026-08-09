@@ -191,6 +191,8 @@ def build_company_registry(include_cache: bool = False):
     explicit_status_aliases = {
         "Accenture": "direct",
         "Citi": "direct",
+        "Citigroup": "direct",
+        "HSBC Ireland": "eightfold",
         "KPMG Ireland": "direct",
         "Grant Thornton Ireland": "workday",
         "HSBC Ireland": "eightfold",
@@ -2205,8 +2207,9 @@ def _employer_name_match(target: str, returned: str) -> bool:
 
 
 PRIORITY_IRELAND_EMPLOYERS = [
-    "Accenture", "Citi", "KPMG Ireland", "Grant Thornton Ireland",
-    "HSBC Ireland", "Version 1", "Meta", "Google", "TikTok",
+    "Accenture", "Citi", "HSBC Ireland",
+    "KPMG Ireland", "Grant Thornton Ireland",
+    "Version 1", "Meta", "Google", "TikTok",
     "NetApp", "EY Ireland", "Microsoft", "Oracle", "Red Hat",
 ]
 

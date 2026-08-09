@@ -3,23 +3,7 @@ name: Refresh Ireland Job Radar
 on:
   schedule:
     - cron: "17 * * * *"
-
-  workflow_dispatch:
-    inputs:
-      mode:
-        description: "Run mode"
-        required: true
-        default: "fast"
-        type: choice
-        options:
-          - fast
-          - full
-
-      target_companies:
-        description: "FAST: comma-separated companies, e.g. Accenture,Citi"
-        required: false
-        default: ""
-        type: string
+  workflow_dispatch: {}
 
 permissions:
   contents: write
@@ -47,58 +31,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4 curl_cffi
 
-      - name: Resolve run mode
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [[ "${{ github.event_name }}" == "schedule" ]]; then
-            echo "SCRAPE_MODE=full" >> "$GITHUB_ENV"
-            echo "TARGET_COMPANIES=" >> "$GITHUB_ENV"
-            echo "ATS_PROBE_LIMIT=100" >> "$GITHUB_ENV"
-          else
-            MODE="${{ inputs.mode }}"
-            TARGETS="${{ inputs.target_companies }}"
-
-            echo "SCRAPE_MODE=$MODE" >> "$GITHUB_ENV"
-            echo "TARGET_COMPANIES=$TARGETS" >> "$GITHUB_ENV"
-
-            if [[ "$MODE" == "fast" ]]; then
-              echo "ATS_PROBE_LIMIT=10" >> "$GITHUB_ENV"
-
-              if [[ -z "${TARGETS// }" ]]; then
-                echo "::warning::FAST selected with no target companies."
-              fi
-            else
-              echo "ATS_PROBE_LIMIT=100" >> "$GITHUB_ENV"
-            fi
-          fi
-
-      - name: Show run configuration
-        run: |
-          echo "Mode:             $SCRAPE_MODE"
-          echo "Target companies: ${TARGET_COMPANIES:-<none>}"
-          echo "ATS probe limit:  $ATS_PROBE_LIMIT"
-          echo "Publishing:       ALWAYS"
-
-      - name: Run Ireland job collector
+      - name: Run full Ireland job collector
         env:
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
           CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
-          SCRAPE_MODE: ${{ env.SCRAPE_MODE }}
-          TARGET_COMPANIES: ${{ env.TARGET_COMPANIES }}
-          ATS_PROBE_LIMIT: ${{ env.ATS_PROBE_LIMIT }}
+          ATS_PROBE_LIMIT: "100"
         run: python scrape.py
 
-      - name: Show generated changes
-        run: |
-          git status --short
-          git diff --stat || true
-
-      # FAST and FULL both publish. FAST controls scrape scope only.
-      - name: Commit and publish generated state
+      - name: Commit generated state safely
         shell: bash
         run: |
           set -euo pipefail
@@ -107,7 +49,6 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
 
           tmpdir="$(mktemp -d)"
-
           GENERATED_FILES=(
             data.json
             seen_jobs.json
@@ -118,7 +59,6 @@ jobs:
             official_permit_stats.json
           )
 
-          # Preserve the scraper output before syncing with a possibly newer main.
           for f in "${GENERATED_FILES[@]}"; do
             [ -f "$f" ] && cp "$f" "$tmpdir/$f"
           done
@@ -135,26 +75,24 @@ jobs:
             done
 
             if git diff --staged --quiet; then
-              echo "No generated-file changes to publish."
-              echo "Pages does not need a rebuild because dashboard data is unchanged."
+              echo "No generated-file changes"
               exit 0
             fi
 
-            git commit -m "Refresh Ireland Job Radar [$SCRAPE_MODE] $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git commit -m "Refresh Ireland Job Radar $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
             if git push origin HEAD:main; then
-              echo "Generated data pushed to main."
-              echo "GitHub Pages can now deploy this commit."
+              echo "Push succeeded"
               exit 0
             fi
 
-            echo "Remote changed during publish; retrying on latest main..."
-            # Preserve the generated versions again before reset on next attempt.
             for f in "${GENERATED_FILES[@]}"; do
               [ -f "$f" ] && cp "$f" "$tmpdir/$f"
             done
+
+            echo "Remote changed; retrying..."
             sleep 5
           done
 
-          echo "All publish attempts failed."
+          echo "All push attempts failed"
           exit 1
