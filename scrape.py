@@ -22,6 +22,18 @@ try:
 except ImportError:
     requests = None
 
+try:
+    from curl_cffi import requests as cffi_requests
+except ImportError:
+    cffi_requests = None
+
+try:
+    from playwright.sync_api import sync_playwright
+    HAS_PLAYWRIGHT = True
+except ImportError:
+    sync_playwright = None
+    HAS_PLAYWRIGHT = False
+
 # ---------------------------------------------------------------------------
 # Company list: (slug, ats) -- expand this over time as we confirm more boards
 # ---------------------------------------------------------------------------
@@ -1530,57 +1542,137 @@ def scrape_ashby(slug: str):
     return out
 
 
-def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages: int = 25, search_text: str = ""):
-    base = f"https://{tenant}.{wd_host}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs"
-    out = []
-    offset = 0
-    page_size = 20  # Workday hard-caps at 20 per page
-    for _ in range(max_pages):
-        payload = json.dumps({
-            "appliedFacets": {},
-            "limit": page_size,
-            "offset": offset,
-            "searchText": search_text or "",
-        }).encode("utf-8")
-        req = urllib.request.Request(
-            base,
-            data=payload,
-            method="POST",
-            headers={
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "User-Agent": "Mozilla/5.0 (job-dashboard-bot)",
-            },
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=20) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError) as e:
-            print(f"  ! fetch failed for {base} (offset {offset}): {e}")
-            break
+def _workday_headers(tenant: str, wd_host: str, site: str):
+    origin = f"https://{tenant}.{wd_host}.myworkdayjobs.com"
+    return {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                       "AppleWebKit/537.36 (KHTML, like Gecko) "
+                       "Chrome/125.0.0.0 Safari/537.36"),
+        "sec-ch-ua": '"Chromium";v="125", "Not.A/Brand";v="24", "Google Chrome";v="125"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"Windows"',
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        "Origin": origin,
+        "Referer": f"{origin}/en-US/{site}",
+        "X-Requested-With": "XMLHttpRequest",
+    }
 
-        postings = (data or {}).get("jobPostings") or []
+
+def _workday_session():
+    if cffi_requests is not None:
+        return cffi_requests.Session(impersonate="chrome124")
+    return requests.Session() if requests is not None else None
+
+
+def _workday_post(session, url, headers, facets, limit, offset, search_text=""):
+    variants = [
+        {"appliedFacets": facets, "limit": limit, "offset": offset, "searchText": search_text},
+        {"appliedFacets": facets, "limit": limit, "offset": offset},
+        {"limit": limit, "offset": offset, "searchText": search_text},
+    ]
+    last = None
+    for payload in variants:
+        try:
+            r = session.post(url, headers=headers, json=payload, timeout=20)
+            if r.status_code == 200:
+                return r
+            last = f"HTTP {r.status_code}: {(r.text or '')[:120]}"
+            if r.status_code == 429:
+                time.sleep(3)
+                break
+        except Exception as exc:
+            last = str(exc)
+        time.sleep(0.35)
+    if last:
+        print(f"  ! Workday request failed: {last}")
+    return None
+
+
+def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages: int = 25, search_text: str = ""):
+    """Workday collector with the browser-like session/facet strategy used by Suman.
+
+    The important Accenture fix is the standard Workday Ireland country facet.
+    We still run region_ok() on every result so an ignored facet can never leak
+    global jobs into the Ireland dashboard.
+    """
+    origin = f"https://{tenant}.{wd_host}.myworkdayjobs.com"
+    api = f"{origin}/wday/cxs/{tenant}/{site}/jobs"
+    headers = _workday_headers(tenant, wd_host, site)
+    session = _workday_session()
+    if session is None:
+        return []
+
+    # Warm the tenant like a real browser before its CXS endpoint is called.
+    try:
+        session.get(f"{origin}/en-US/{site}", headers=headers, timeout=20)
+        time.sleep(0.4)
+    except Exception:
+        pass
+
+    # Workday's standard Ireland country reference ID. This is the key fix for
+    # large global tenants such as Accenture where sampling an unfiltered board
+    # can completely miss Ireland. Keep searchText as a second narrowing signal.
+    ireland_facets = {"locationCountry": ["04a05835925f45b3a59406a2a6b72c8a"]}
+    facets = {}
+    probe = _workday_post(session, api, headers, ireland_facets, 20, 0, search_text or "")
+    if probe is not None:
+        try:
+            total = int((probe.json() or {}).get("total") or 0)
+        except Exception:
+            total = 0
+        if 0 < total <= 150:
+            facets = ireland_facets
+
+    out, seen = [], set()
+    offset = 0
+    page_size = 20
+    effective_search = search_text or ("Ireland" if not facets else "")
+    page_cap = max_pages if facets else min(max_pages, 12)
+
+    for _ in range(page_cap):
+        resp = _workday_post(session, api, headers, facets, page_size, offset, effective_search)
+        if resp is None:
+            break
+        try:
+            data = resp.json() or {}
+        except Exception:
+            break
+        postings = data.get("jobPostings") or []
         if not postings:
             break
 
         for j in postings:
-            title = j.get("title", "")
-            location = j.get("locationsText", "") or j.get("bulletFields", [""])[0]
-            if region_ok(location):
-                path = j.get("externalPath", "")
-                out.append({
-                    "company": company,
-                    "ats": "workday",
-                    "title": title,
-                    "location": location,
-                    "url": f"https://{tenant}.{wd_host}.myworkdayjobs.com/{site}{path}" if path else None,
-                    "updated_at": j.get("postedOn"),
-                })
+            title = (j.get("title") or "").strip()
+            location = (j.get("locationsText") or "").strip()
+            if not location:
+                bullets = j.get("bulletFields") or []
+                location = str(bullets[0]).strip() if bullets else ""
+            # Safety net: always verify Ireland client-side.
+            if not title or not region_ok(location):
+                continue
+            path = j.get("externalPath") or ""
+            url = f"{origin}/{site}{path}" if path else f"{origin}/{site}"
+            key = (title.lower(), location.lower(), url.split("?")[0])
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append({
+                "company": company,
+                "ats": "workday",
+                "title": title,
+                "location": location,
+                "url": url,
+                "updated_at": j.get("postedOn"),
+            })
 
         if len(postings) < page_size:
             break
         offset += page_size
-        time.sleep(0.3)
+        time.sleep(0.25)
 
     return out
 
@@ -2237,7 +2329,7 @@ def rescue_priority_ireland_employers(results):
                 candidates.extend(scrape_jooble(company, "Ireland"))
             if ADZUNA_APP_ID and ADZUNA_APP_KEY:
                 candidates.extend(scrape_adzuna("ie", company))
-            if CAREERJET_API_KEY:
+            if CAREERJET_AFFID:
                 candidates.extend(scrape_careerjet("en_IE", company))
         except Exception as e:
             print(f"  ! priority-rescue/{company}: {e}")
@@ -2739,6 +2831,105 @@ def _scrape_public_careers_page(company: str, url: str, href_hints, default_loca
 
 
 
+def _scrape_accenture_playwright():
+    """Render Accenture's Ireland job search and collect official job-detail links.
+
+    Accenture's branded search is JavaScript-driven, so plain requests/HTML
+    parsing often sees zero cards even when Ireland roles are live.
+    """
+    if not HAS_PLAYWRIGHT:
+        print("  ! Accenture: Playwright unavailable")
+        return []
+
+    search_url = "https://www.accenture.com/ie-en/careers/jobsearch"
+    results = {}
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+            page.goto(search_url, wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_timeout(2200)
+            _dismiss_cookie_banner(page)
+
+            stagnant, previous = 0, 0
+            for _ in range(120):
+                anchors = page.locator('a[href*="/ie-en/careers/jobdetails"], a[href*="/careers/jobdetails"]')
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+                    try:
+                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                    except Exception:
+                        continue
+                    if "jobdetails" not in href.lower() or "id=" not in href.lower():
+                        continue
+                    canonical = href.split("#")[0]
+                    if canonical in results:
+                        continue
+
+                    node, card = a, ""
+                    for _ in range(6):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node)
+                        except Exception:
+                            break
+                        if candidate and len(candidate) <= 2200:
+                            card = candidate
+                        if card and len(card) >= 40:
+                            break
+
+                    title = _browser_text(a)
+                    if not title or title.lower() in {"apply", "apply now", "view job", "learn more", "save job"} or len(title) > 300:
+                        try:
+                            heads = node.locator("h1,h2,h3,h4,h5")
+                            for hidx in range(min(heads.count(), 6)):
+                                candidate = _browser_text(heads.nth(hidx))
+                                if candidate and 4 <= len(candidate) <= 300:
+                                    title = candidate
+                                    break
+                        except Exception:
+                            pass
+                    if not title:
+                        lines = [x.strip() for x in card.splitlines() if 4 <= len(x.strip()) <= 300]
+                        title = lines[0] if lines else ""
+                    if not title:
+                        continue
+
+                    location = _browser_location(card, "Ireland")
+                    results[canonical] = {
+                        "company": "Accenture", "ats": "direct", "title": title[:300],
+                        "location": location, "url": canonical,
+                        "updated_at": None, "description_text": card[:5000],
+                    }
+
+                for label in ("Show more", "Load more", "See more", "More jobs", "View more", "Show results"):
+                    try:
+                        btn = page.get_by_role("button", name=label, exact=False)
+                        if btn.count() and btn.first.is_visible():
+                            btn.first.click(timeout=1200)
+                            page.wait_for_timeout(600)
+                    except Exception:
+                        pass
+
+                page.mouse.wheel(0, 3600)
+                page.wait_for_timeout(650)
+                current = len(results)
+                stagnant = stagnant + 1 if current == previous else 0
+                previous = current
+                if stagnant >= 14:
+                    break
+
+            print(f"  Accenture browser: {len(results)} unique job-detail links")
+            browser.close()
+    except Exception as exc:
+        print(f"  ! Accenture browser scrape failed: {exc}")
+
+    # Ireland site context is already narrowed, but keep a final location safety
+    # check where location text is available. A generic 'Ireland' default is valid
+    # for cards whose rendered text omits the city.
+    return [j for j in results.values() if region_ok(j.get("location") or "Ireland")]
+
+
 def scrape_accenture():
     """Accenture Ireland.
 
@@ -2749,13 +2940,16 @@ def scrape_accenture():
     combined = []
     seen = set()
 
-    # Official branded search surface.
-    for j in _scrape_public_careers_page(
-        "Accenture",
-        "https://www.accenture.com/ie-en/careers/jobsearch",
-        ("/ie-en/careers/jobdetails", "/careers/jobdetails", "jobdetails?id="),
-        default_location="Ireland",
-    ):
+    # Official branded search surface is client-rendered: use Chromium first.
+    branded_jobs = _scrape_accenture_playwright()
+    if not branded_jobs:
+        branded_jobs = _scrape_public_careers_page(
+            "Accenture",
+            "https://www.accenture.com/ie-en/careers/jobsearch",
+            ("/ie-en/careers/jobdetails", "/careers/jobdetails", "jobdetails?id="),
+            default_location="Ireland",
+        )
+    for j in branded_jobs:
         key = ((j.get("title") or "").lower(), (j.get("url") or "").split("?")[0])
         if key not in seen:
             seen.add(key)
@@ -2820,7 +3014,176 @@ def scrape_citi():
 
     return out
 
+def _browser_text(locator):
+    try:
+        return (locator.inner_text(timeout=1500) or "").strip()
+    except Exception:
+        try:
+            return (locator.text_content(timeout=1500) or "").strip()
+        except Exception:
+            return ""
+
+
+def _browser_location(card_text: str, default="Ireland"):
+    lines = [x.strip() for x in (card_text or "").splitlines() if x.strip()]
+    for line in lines:
+        if region_ok(line):
+            return line[:180]
+    return default
+
+
+def _dismiss_cookie_banner(page):
+    for text in ("Accept all", "Accept All", "I agree", "I Agree", "Accept",
+                 "Allow all", "Allow All", "Got it", "OK"):
+        try:
+            btn = page.get_by_role("button", name=text, exact=False)
+            if btn.count() and btn.first.is_visible():
+                btn.first.click(timeout=1500)
+                page.wait_for_timeout(500)
+                return
+        except Exception:
+            pass
+
+
+def _scrape_google_playwright():
+    if not HAS_PLAYWRIGHT:
+        print("  ! Google: Playwright unavailable")
+        return []
+    base = "https://www.google.com/about/careers/applications/jobs/results"
+    out, seen = [], set()
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+            empty_pages = 0
+            for page_no in range(1, 31):
+                url = base + "?" + urllib.parse.urlencode({"location": "Ireland", "page": page_no})
+                page.goto(url, wait_until="domcontentloaded", timeout=60000)
+                page.wait_for_timeout(1500)
+                if page_no == 1:
+                    _dismiss_cookie_banner(page)
+                before = len(out)
+                hs = page.locator("h3")
+                for i in range(hs.count()):
+                    h = hs.nth(i)
+                    title = _browser_text(h)
+                    if not title or len(title) > 220:
+                        continue
+                    low = title.lower().strip()
+                    if low in {"jobs", "careers", "search jobs", "locations", "teams"} or low in seen:
+                        continue
+                    node, card = h, ""
+                    for _ in range(4):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node)
+                        except Exception:
+                            break
+                        if candidate and len(candidate) <= 1000:
+                            card = candidate
+                        if card and len(card) >= 30:
+                            break
+                    seen.add(low)
+                    out.append({
+                        "company": "Google", "ats": "direct", "title": title,
+                        "location": _browser_location(card, "Ireland"), "url": url,
+                        "updated_at": None, "description_text": card[:5000],
+                    })
+                added = len(out) - before
+                print(f"  Google browser page {page_no}: +{added}")
+                empty_pages = empty_pages + 1 if added == 0 else 0
+                if empty_pages >= 2:
+                    break
+            browser.close()
+    except Exception as exc:
+        print(f"  ! Google browser scrape failed: {exc}")
+    return out
+
+
+def _scrape_meta_playwright():
+    if not HAS_PLAYWRIGHT:
+        print("  ! Meta: Playwright unavailable")
+        return []
+    pages = [
+        ("Dublin, Ireland", "https://www.metacareers.com/locations/dublin/?offices%5B0%5D=Dublin%2C+Ireland&p%5Boffices%5D%5B0%5D=Dublin%2C+Ireland"),
+        ("Clonee, Ireland", "https://www.metacareers.com/locations/clonee/?offices%5B0%5D=Clonee%2C+Ireland&p%5Boffices%5D%5B0%5D=Clonee%2C+Ireland"),
+    ]
+    results = {}
+    rx = re.compile(r"metacareers\.com/profile/job_details/\d+/?", re.I)
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+            for default_location, url in pages:
+                page.goto(url, wait_until="domcontentloaded", timeout=60000)
+                page.wait_for_timeout(1800)
+                _dismiss_cookie_banner(page)
+                stagnant, previous = 0, len(results)
+                for _ in range(100):
+                    anchors = page.locator("a[href]")
+                    for i in range(anchors.count()):
+                        a = anchors.nth(i)
+                        try:
+                            href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                        except Exception:
+                            continue
+                        if not rx.search(href) or href in results:
+                            continue
+                        title = _browser_text(a)
+                        node, card = a, ""
+                        for _ in range(5):
+                            try:
+                                node = node.locator("..")
+                                candidate = _browser_text(node)
+                            except Exception:
+                                break
+                            if candidate and len(candidate) <= 1600:
+                                card = candidate
+                            if card and len(card) >= 30:
+                                break
+                        if not title or len(title) > 260:
+                            try:
+                                heads = node.locator("h1,h2,h3,h4")
+                                if heads.count():
+                                    title = _browser_text(heads.first)
+                            except Exception:
+                                pass
+                        if not title:
+                            lines = [x.strip() for x in card.splitlines() if 3 < len(x.strip()) <= 220]
+                            title = lines[0] if lines else ""
+                        if not title:
+                            continue
+                        results[href] = {
+                            "company": "Meta", "ats": "direct", "title": title[:300],
+                            "location": _browser_location(card, default_location), "url": href,
+                            "updated_at": None, "description_text": card[:5000],
+                        }
+                    for label in ("Show more", "Load more", "See more", "More jobs", "View more"):
+                        try:
+                            btn = page.get_by_role("button", name=label, exact=False)
+                            if btn.count() and btn.first.is_visible():
+                                btn.first.click(timeout=1000)
+                                page.wait_for_timeout(400)
+                        except Exception:
+                            pass
+                    page.mouse.wheel(0, 3200)
+                    page.wait_for_timeout(500)
+                    current = len(results)
+                    stagnant = stagnant + 1 if current == previous else 0
+                    previous = current
+                    if stagnant >= 12:
+                        break
+                print(f"  Meta {default_location}: {len(results)} unique jobs accumulated")
+            browser.close()
+    except Exception as exc:
+        print(f"  ! Meta browser scrape failed: {exc}")
+    return list(results.values())
+
+
 def scrape_google():
+    jobs = _scrape_google_playwright()
+    if jobs:
+        return jobs
     return _scrape_public_careers_page(
         "Google",
         "https://www.google.com/about/careers/applications/jobs/results/?location=Ireland",
@@ -2850,6 +3213,9 @@ def scrape_microsoft():
 
 
 def scrape_meta():
+    jobs = _scrape_meta_playwright()
+    if jobs:
+        return jobs
     return _scrape_public_careers_page(
         "Meta",
         "https://www.metacareers.com/jobs?offices[0]=Dublin%2C%20Ireland",
@@ -3371,7 +3737,7 @@ def main():
         for target in sorted(TARGET_COMPANIES):
             target_jobs = [
                 j for j in results
-                if _targeted(company_display_name(j.get("company", "")))
+                if _company_key(company_display_name(j.get("company", ""))) == target
             ]
             by_source = {}
             for j in target_jobs:
