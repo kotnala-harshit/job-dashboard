@@ -16,16 +16,10 @@ on:
           - full
 
       target_companies:
-        description: "FAST mode only: comma-separated company names, e.g. Accenture,Citi,KPMG Ireland"
+        description: "FAST: comma-separated companies, e.g. Accenture,Citi"
         required: false
         default: ""
         type: string
-
-      publish_results:
-        description: "Commit generated files to main after this manual run?"
-        required: true
-        default: false
-        type: boolean
 
 permissions:
   contents: write
@@ -62,23 +56,18 @@ jobs:
             echo "SCRAPE_MODE=full" >> "$GITHUB_ENV"
             echo "TARGET_COMPANIES=" >> "$GITHUB_ENV"
             echo "ATS_PROBE_LIMIT=100" >> "$GITHUB_ENV"
-            echo "PUBLISH_RESULTS=true" >> "$GITHUB_ENV"
           else
             MODE="${{ inputs.mode }}"
             TARGETS="${{ inputs.target_companies }}"
-            PUBLISH="${{ inputs.publish_results }}"
 
             echo "SCRAPE_MODE=$MODE" >> "$GITHUB_ENV"
             echo "TARGET_COMPANIES=$TARGETS" >> "$GITHUB_ENV"
-            echo "PUBLISH_RESULTS=$PUBLISH" >> "$GITHUB_ENV"
 
             if [[ "$MODE" == "fast" ]]; then
-              # FAST mode is intended for targeted connector testing.
-              # Keep discovery bounded so one-company tests stay quick.
               echo "ATS_PROBE_LIMIT=10" >> "$GITHUB_ENV"
 
               if [[ -z "${TARGETS// }" ]]; then
-                echo "::warning::FAST mode was selected with no target companies. The scraper will use its own FAST-mode fallback behavior."
+                echo "::warning::FAST selected with no target companies."
               fi
             else
               echo "ATS_PROBE_LIMIT=100" >> "$GITHUB_ENV"
@@ -86,12 +75,11 @@ jobs:
           fi
 
       - name: Show run configuration
-        shell: bash
         run: |
-          echo "Mode:              $SCRAPE_MODE"
-          echo "Target companies:  ${TARGET_COMPANIES:-<none>}"
-          echo "ATS probe limit:   $ATS_PROBE_LIMIT"
-          echo "Publish results:   $PUBLISH_RESULTS"
+          echo "Mode:             $SCRAPE_MODE"
+          echo "Target companies: ${TARGET_COMPANIES:-<none>}"
+          echo "ATS probe limit:  $ATS_PROBE_LIMIT"
+          echo "Publishing:       ALWAYS"
 
       - name: Run Ireland job collector
         env:
@@ -105,22 +93,12 @@ jobs:
         run: python scrape.py
 
       - name: Show generated changes
-        shell: bash
         run: |
-          echo "Generated file changes:"
           git status --short
-          echo
           git diff --stat || true
 
-      - name: Skip publishing FAST test
-        if: env.PUBLISH_RESULTS != 'true'
-        run: |
-          echo "This was a test-only run."
-          echo "Generated changes were intentionally NOT committed to main."
-          echo "When the connector looks correct, run FULL or rerun with Publish results enabled."
-
-      - name: Commit generated state safely
-        if: env.PUBLISH_RESULTS == 'true'
+      # FAST and FULL both publish. FAST controls scrape scope only.
+      - name: Commit and publish generated state
         shell: bash
         run: |
           set -euo pipefail
@@ -130,85 +108,53 @@ jobs:
 
           tmpdir="$(mktemp -d)"
 
-          for f in \
-            data.json \
-            seen_jobs.json \
-            job_state.json \
-            connector_cache.json \
-            ats_platform_cache.json \
-            sponsorship_history.json \
+          GENERATED_FILES=(
+            data.json
+            seen_jobs.json
+            job_state.json
+            connector_cache.json
+            ats_platform_cache.json
+            sponsorship_history.json
             official_permit_stats.json
-          do
+          )
+
+          # Preserve the scraper output before syncing with a possibly newer main.
+          for f in "${GENERATED_FILES[@]}"; do
             [ -f "$f" ] && cp "$f" "$tmpdir/$f"
           done
 
-          git fetch origin main
-          git reset --hard origin/main
-
-          for f in \
-            data.json \
-            seen_jobs.json \
-            job_state.json \
-            connector_cache.json \
-            ats_platform_cache.json \
-            sponsorship_history.json \
-            official_permit_stats.json
-          do
-            if [ -f "$tmpdir/$f" ]; then
-              cp "$tmpdir/$f" "$f"
-              git add "$f"
-            fi
-          done
-
-          if git diff --staged --quiet; then
-            echo "No generated-file changes"
-            exit 0
-          fi
-
-          git commit -m "Refresh Ireland Job Radar $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-
           for attempt in 1 2 3 4 5; do
-            if git push origin HEAD:main; then
-              echo "Push succeeded on attempt $attempt"
-              exit 0
-            fi
-
-            echo "Remote moved; rebuilding generated-state commit on latest main"
-
-            for f in \
-              data.json \
-              seen_jobs.json \
-              job_state.json \
-              connector_cache.json \
-              ats_platform_cache.json \
-              sponsorship_history.json \
-              official_permit_stats.json
-            do
-              [ -f "$f" ] && cp "$f" "$tmpdir/$f"
-            done
-
             git fetch origin main
             git reset --hard origin/main
 
-            for f in \
-              data.json \
-              seen_jobs.json \
-              job_state.json \
-              connector_cache.json \
-              ats_platform_cache.json \
-              sponsorship_history.json \
-              official_permit_stats.json
-            do
+            for f in "${GENERATED_FILES[@]}"; do
               if [ -f "$tmpdir/$f" ]; then
                 cp "$tmpdir/$f" "$f"
                 git add "$f"
               fi
             done
 
-            git diff --staged --quiet && exit 0
-            git commit -m "Refresh Ireland Job Radar $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            if git diff --staged --quiet; then
+              echo "No generated-file changes to publish."
+              echo "Pages does not need a rebuild because dashboard data is unchanged."
+              exit 0
+            fi
+
+            git commit -m "Refresh Ireland Job Radar [$SCRAPE_MODE] $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+            if git push origin HEAD:main; then
+              echo "Generated data pushed to main."
+              echo "GitHub Pages can now deploy this commit."
+              exit 0
+            fi
+
+            echo "Remote changed during publish; retrying on latest main..."
+            # Preserve the generated versions again before reset on next attempt.
+            for f in "${GENERATED_FILES[@]}"; do
+              [ -f "$f" ] && cp "$f" "$tmpdir/$f"
+            done
             sleep 5
           done
 
-          echo "All push attempts failed"
+          echo "All publish attempts failed."
           exit 1
