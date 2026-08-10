@@ -2903,6 +2903,9 @@ def scrape_apple():
                 flags=re.I,
             )
             location = (lm.group(1).strip(" -|•") if lm else "") or "Ireland"
+            if len(location) > 120:
+                city_match = re.search(r"\b(Cork|Dublin|Limerick|Galway|Waterford|Kilkenny|Athlone)\b", txt, re.I)
+                location = city_match.group(1).title() if city_match else "Ireland"
             if not region_ok(location):
                 continue
 
@@ -4033,8 +4036,7 @@ def scrape_dxc():
 
 
 def scrape_blackrock():
-    """Collect BlackRock roles from the official Dublin jobs page."""
-    return _browser_board_collect(
+    jobs = _browser_board_collect(
         "BlackRock",
         [
             "https://careers.blackrock.com/location/dublin-jobs/45831/2963597-7521314-2964574/4",
@@ -4043,20 +4045,42 @@ def scrape_blackrock():
         ("careers.blackrock.com/job/dublin/",),
         default_location="Dublin, Ireland",
         max_scrolls=30,
-        require_ireland=True,
+        require_ireland=False,
     )
+    for j in jobs:
+        title = (j.get("title") or "").strip()
+        j["title"] = re.split(r"\s*Location:\s*", title, maxsplit=1, flags=re.I)[0].strip()
+        j["location"] = "Dublin, Ireland"
+    return jobs
 
 
 def scrape_bank_of_ireland():
-    """Collect Republic-of-Ireland roles from Bank of Ireland's official board."""
-    return _browser_board_collect(
+    jobs = _browser_board_collect(
         "Bank of Ireland",
         ["https://careers.bankofireland.com/jobs/search"],
         ("careers.bankofireland.com/jobs/",),
         default_location="Ireland",
         max_scrolls=20,
-        require_ireland=True,
+        require_ireland=False,
     )
+    cleaned=[]; seen=set()
+    for j in jobs:
+        title=(j.get("title") or "").strip(); url=(j.get("url") or "").strip()
+        text=f"{title} {j.get('description_text') or ''} {url}".lower()
+        if not title or title.lower().startswith("skip to") or "#jobs_search_results" in url:
+            continue
+        irish=bool(re.search(r"\b(dublin|cork|galway|limerick|waterford|kilkenny|ireland)\b", text))
+        uk_only=bool(re.search(r"\b(bristol|london|belfast|england|scotland|wales|united kingdom|\buk\b)\b", text)) and not bool(re.search(r"\b(dublin|cork|galway|limerick|waterford|kilkenny|ireland)\b", text))
+        if not irish or uk_only: continue
+        key=url.split("#",1)[0].rstrip("/").lower()
+        if key in seen: continue
+        seen.add(key)
+        if "dublin" in text: j["location"]="Dublin, Ireland"
+        elif "cork" in text: j["location"]="Cork, Ireland"
+        elif "galway" in text: j["location"]="Galway, Ireland"
+        else: j["location"]="Ireland"
+        cleaned.append(j)
+    return cleaned
 
 
 def scrape_jnj():
