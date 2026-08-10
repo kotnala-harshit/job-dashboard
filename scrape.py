@@ -2863,34 +2863,67 @@ def scrape_jpmorgan():
 
 
 def scrape_apple():
-    """Apple's Ireland search is server-rendered enough to parse without login/API keys."""
+    """Collect all Republic-of-Ireland roles from Apple's server-rendered search."""
     base = "https://jobs.apple.com"
-    url = base + "/en-ie/search?location=ireland-IRL"
-    page = _fetch_html(url)
-    if not page:
-        return []
-    out=[]
-    # Each result links to /en-ie/details/<role-number>/<slug>. Capture the
-    # surrounding list-item/card so location/date/description can be extracted.
-    blocks = re.findall(r"(<li[^>]*>.*?/en-ie/details/.*?</li>)", page, flags=re.I|re.S)
-    if not blocks:
-        blocks = re.split(r'(?=<a[^>]+href=["\\\']/en-ie/details/)', page, flags=re.I)
-    seen=set()
-    for block in blocks:
-        m=re.search(r'href=["\\\']([^"\\\']*/en-ie/details/[^"\\\']+)["\\\'][^>]*>(.*?)</a>', block, flags=re.I|re.S)
-        if not m:
-            continue
-        href=_absolute_url(base,m.group(1)); title=_html_text(m.group(2))
-        if not title or href in seen:
-            continue
-        seen.add(href)
-        txt=_html_text(block)
-        lm=re.search(r'Location\\s+([^|•]+?)(?:Actions|Role Number|Weekly Hours|$)', txt, flags=re.I)
-        location=(lm.group(1).strip() if lm else "Ireland")
-        if not region_ok(location):
-            continue
-        dm=re.search(r'\\b(\\d{1,2}\\s+[A-Za-z]{3}\\s+20\\d{2}|[A-Za-z]{3}\\s+\\d{1,2},?\\s+20\\d{2})\\b', txt)
-        out.append({"company":"Apple","ats":"direct","title":title,"location":location,"url":href,"updated_at":dm.group(1) if dm else None,"description_text":txt[:5000]})
+    out, seen = [], set()
+
+    for page_no in range(1, 15):
+        params = {"location": "ireland-IRL"}
+        if page_no > 1:
+            params["page"] = page_no
+        url = base + "/en-ie/search?" + urllib.parse.urlencode(params)
+        page = _fetch_html(url)
+        if not page:
+            break
+
+        before = len(out)
+        blocks = re.findall(r"(<li\b[^>]*>.*?/en-ie/details/.*?</li>)", page, flags=re.I | re.S)
+        if not blocks:
+            blocks = re.split(r'(?=<a[^>]+href=["\'][^"\']*/en-ie/details/)', page, flags=re.I)
+
+        for block in blocks:
+            m = re.search(
+                r'href=["\']([^"\']*/en-ie/details/[^"\']+)["\'][^>]*>(.*?)</a>',
+                block,
+                flags=re.I | re.S,
+            )
+            if not m:
+                continue
+
+            href = _absolute_url(base, m.group(1))
+            title = re.sub(r"\s+", " ", html.unescape(_strip_html(m.group(2) or ""))).strip()
+            key = href.split("?")[0].rstrip("/").lower()
+            if not title or key in seen:
+                continue
+
+            txt = re.sub(r"\s+", " ", html.unescape(_strip_html(block or ""))).strip()
+            lm = re.search(
+                r"Location\s+(.+?)(?:\s+Actions|\s+Role Number:|\s+Weekly Hours:|$)",
+                txt,
+                flags=re.I,
+            )
+            location = (lm.group(1).strip(" -|•") if lm else "") or "Ireland"
+            if not region_ok(location):
+                continue
+
+            dm = re.search(
+                r"\b(\d{1,2}\s+[A-Za-z]{3}\s+20\d{2}|[A-Za-z]{3}\s+\d{1,2},?\s+20\d{2})\b",
+                txt,
+            )
+            seen.add(key)
+            out.append({
+                "company": "Apple",
+                "ats": "direct",
+                "title": title,
+                "location": location,
+                "url": href,
+                "updated_at": dm.group(1) if dm else None,
+                "description_text": txt[:5000],
+            })
+
+        if len(out) == before:
+            break
+
     return out
 
 
@@ -3999,12 +4032,39 @@ def scrape_dxc():
     )
 
 
+def scrape_blackrock():
+    """Collect BlackRock roles from the official Dublin jobs page."""
+    return _browser_board_collect(
+        "BlackRock",
+        [
+            "https://careers.blackrock.com/location/dublin-jobs/45831/2963597-7521314-2964574/4",
+            "https://careers.blackrock.com/search-jobs?location=Dublin%2C%20Ireland",
+        ],
+        ("careers.blackrock.com/job/dublin/",),
+        default_location="Dublin, Ireland",
+        max_scrolls=30,
+        require_ireland=True,
+    )
+
+
+def scrape_bank_of_ireland():
+    """Collect Republic-of-Ireland roles from Bank of Ireland's official board."""
+    return _browser_board_collect(
+        "Bank of Ireland",
+        ["https://careers.bankofireland.com/jobs/search"],
+        ("careers.bankofireland.com/jobs/",),
+        default_location="Ireland",
+        max_scrolls=20,
+        require_ireland=True,
+    )
+
+
 def scrape_jnj():
     return _browser_board_collect(
         "Johnson & Johnson",
         [
             "https://www.careers.jnj.com/en/locations/emea/ireland/",
-            "https://www.careers.jnj.com/en/jobs/?search=Ireland",
+            "https://www.careers.jnj.com/en/jobs/?location=Ireland&search=",
         ],
         (
             "careers.jnj.com/en/jobs/",
@@ -4389,6 +4449,8 @@ def scrape_direct_company(company: str):
         "Accenture": scrape_accenture,
         "Citi": scrape_citi,
         "Apple": scrape_apple,
+        "BlackRock": scrape_blackrock,
+        "Bank of Ireland": scrape_bank_of_ireland,
         "Google": scrape_google,
         "Microsoft": scrape_microsoft,
         "Meta": scrape_meta,
@@ -4747,7 +4809,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ("Accenture", "Citi", "Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase", "EY Ireland", "KPMG Ireland", "NetApp", "Version 1", "Grant Thornton Ireland", "HSBC Ireland", "Zscaler"):
+    for company in ("Accenture", "Citi", "Apple", "BlackRock", "Bank of Ireland", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase", "EY Ireland", "KPMG Ireland", "NetApp", "Version 1", "Grant Thornton Ireland", "HSBC Ireland", "Johnson & Johnson", "Johnson Controls", "Zscaler"):
         if not _targeted(company):
             continue
         try:
