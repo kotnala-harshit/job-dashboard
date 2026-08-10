@@ -2912,9 +2912,23 @@ def scrape_apple():
             if not m:
                 continue
 
-            href = _absolute_url(base, m.group(1))
+            # Apple occasionally includes tracking/team query parameters or HTML-escaped
+            # separators in search-result hrefs.  Build the dashboard URL from the
+            # canonical role-number + slug path so every Apply link lands directly
+            # on the Apple job detail page.
+            raw_href = html.unescape(m.group(1) or "").strip()
+            href_abs = _absolute_url(base, raw_href)
+            canonical = re.search(
+                r"/details/(\d+-\d+)/([^/?#]+)",
+                urllib.parse.urlparse(href_abs).path,
+                flags=re.I,
+            )
+            if not canonical:
+                continue
+            role_number, slug = canonical.groups()
+            href = f"{base}/en-ie/details/{role_number}/{slug}"
             title = re.sub(r"\s+", " ", html.unescape(_strip_html(m.group(2) or ""))).strip()
-            key = href.split("?")[0].rstrip("/").lower()
+            key = href.rstrip("/").lower()
             if not title or key in seen:
                 continue
 
