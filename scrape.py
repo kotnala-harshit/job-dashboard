@@ -390,6 +390,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Jacobs": "jacobs_official",
+    "HP (Hewlett-Packard)": "hp_official",
+    "HCLTech": "hcltech_successfactors",
     "Arup": "arup_official",
     "Deutsche Bank": "deutsche_bank_official",
     "SMBC Group": "smbc_successfactors",
@@ -5084,51 +5087,385 @@ def scrape_arup():
     page = _fetch_html(source_url) or ""
     results = {}
 
-    for m in re.finditer(
+    # Arup's Taleo page repeats the same job URL for the title and "Learn More".
+    # Capture the real title anchor plus nearby Ireland location/requisition text.
+    anchors = list(re.finditer(
         r'<a\b[^>]*href=["\']([^"\']*?/jobs/[^"\']+)["\'][^>]*>(.*?)</a>',
         page,
         flags=re.I | re.S,
-    ):
-        href = _absolute_url(source_url, m.group(1)).split("?")[0]
-        title = _html_text(m.group(2)).strip()
+    ))
 
-        if "/other-jobs-matching/" in href.lower():
-            continue
-        if not re.search(r"/jobs/[a-z0-9][^/]*-\d+$", href, re.I):
-            continue
-        if not title or title.lower() in {"learn more", "jobs", "search jobs"}:
-            continue
-        if title.startswith("🔍"):
+    for idx, m in enumerate(anchors):
+        href = _absolute_url(source_url, m.group(1))
+        label = _html_text(m.group(2)).strip()
+        if not label or label.lower() in {"learn more", "jobs", "search jobs"}:
             continue
 
         start = max(0, m.start() - 400)
         end = min(len(page), m.end() + 1800)
         chunk = _html_text(page[start:end])
+
         if not region_ok(chunk):
             continue
 
         lm = re.search(
-            r'(?:Dublin|Cork|Galway|Limerick|Waterford|Ireland)(?:[^|•<>\n]{0,50})',
+            r'(Dublin|Cork|Galway|Limerick|Waterford|Ireland)(?:[^|•<>]{0,80})',
             chunk,
             re.I,
         )
-        location = re.sub(r"\s+", " ", lm.group(0)).strip() if lm else "Ireland"
-        location = location.replace("-,", "").strip(" ,-")
-        if len(location) > 90:
-            location = "Ireland"
+        location = lm.group(0).strip()[:140] if lm else "Ireland"
 
-        key = href.rstrip("/").lower()
+        canonical = href.split("?")[0]
+        key = canonical.rstrip("/").lower()
         results[key] = {
             "company": company,
             "ats": "taleo",
-            "title": title[:300],
+            "title": label[:300],
             "location": location,
-            "url": href,
+            "url": canonical,
             "updated_at": None,
             "description_text": chunk[:5000],
         }
 
+    # Browser fallback.
+    if not results and HAS_PLAYWRIGHT:
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+                page_obj = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+                page_obj.goto(source_url, wait_until="domcontentloaded", timeout=60000)
+                page_obj.wait_for_timeout(1200)
+                anchors = page_obj.locator('a[href*="/jobs/"]')
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+                    href = urllib.parse.urljoin(page_obj.url, a.get_attribute("href") or "")
+                    title = _browser_text(a).strip()
+                    if not title or title.lower() == "learn more":
+                        continue
+                    node, card = a, ""
+                    for _ in range(5):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node)
+                        except Exception:
+                            break
+                        if candidate and len(candidate) <= 2200:
+                            card = candidate
+                        if card and region_ok(card):
+                            break
+                    if not region_ok(card):
+                        continue
+                    key = href.split("?")[0].rstrip("/").lower()
+                    results[key] = {
+                        "company": company,
+                        "ats": "taleo",
+                        "title": title[:300],
+                        "location": _browser_location(card, "Ireland"),
+                        "url": href.split("?")[0],
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+                browser.close()
+        except Exception as exc:
+            print(f"  ! Arup browser fallback failed: {exc}")
+
     print(f"  Arup official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_hcltech():
+    company = "HCLTech"
+    urls = [
+        "https://careers.hcltech.com/search/?q=&locationsearch=Ireland",
+        "https://careers.hcltech.com/",
+    ]
+    results = {}
+
+    # First, static SuccessFactors search HTML.
+    for url in urls:
+        page = _fetch_html(url) or ""
+        for m in re.finditer(
+            r'<a\b[^>]*href=["\']([^"\']*?/job/[^"\']+)["\'][^>]*>(.*?)</a>',
+            page,
+            flags=re.I | re.S,
+        ):
+            href = _absolute_url(url, m.group(1))
+            title = _html_text(m.group(2)).strip()
+            if not title or title.lower() in {"view job", "apply now"}:
+                continue
+            start = max(0, m.start() - 1200)
+            end = min(len(page), m.end() + 1800)
+            chunk = _html_text(page[start:end])
+            if not region_ok(chunk):
+                continue
+            key = href.split("?")[0].rstrip("/").lower()
+            results[key] = {
+                "company": company,
+                "ats": "successfactors",
+                "title": title[:300],
+                "location": _browser_location(chunk, "Ireland"),
+                "url": href.split("?")[0],
+                "updated_at": None,
+                "description_text": chunk[:5000],
+            }
+
+    # Browser fallback with search field interaction.
+    if not results and HAS_PLAYWRIGHT:
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+                page_obj = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+                page_obj.goto("https://careers.hcltech.com/", wait_until="domcontentloaded", timeout=60000)
+                page_obj.wait_for_timeout(1400)
+                _dismiss_cookie_banner(page_obj)
+
+                for selector in (
+                    'input[name="locationsearch"]',
+                    'input[placeholder*="location" i]',
+                    'input[aria-label*="location" i]',
+                ):
+                    try:
+                        inp = page_obj.locator(selector)
+                        if inp.count():
+                            inp.first.fill("Ireland")
+                            inp.first.press("Enter")
+                            page_obj.wait_for_timeout(1200)
+                            break
+                    except Exception:
+                        pass
+
+                for _ in range(50):
+                    anchors = page_obj.locator('a[href*="/job/"]')
+                    for i in range(anchors.count()):
+                        a = anchors.nth(i)
+                        href = urllib.parse.urljoin(page_obj.url, a.get_attribute("href") or "")
+                        title = _browser_text(a).strip()
+                        node, card = a, ""
+                        for _up in range(5):
+                            try:
+                                node = node.locator("..")
+                                candidate = _browser_text(node)
+                            except Exception:
+                                break
+                            if candidate and len(candidate) <= 2200:
+                                card = candidate
+                            if card and region_ok(card):
+                                break
+                        if not region_ok(card):
+                            continue
+                        if not title or title.lower() in {"view job", "apply now"}:
+                            continue
+                        key = href.split("?")[0].rstrip("/").lower()
+                        results[key] = {
+                            "company": company,
+                            "ats": "successfactors",
+                            "title": title[:300],
+                            "location": _browser_location(card, "Ireland"),
+                            "url": href.split("?")[0],
+                            "updated_at": None,
+                            "description_text": card[:5000],
+                        }
+                    page_obj.mouse.wheel(0, 2800)
+                    page_obj.wait_for_timeout(300)
+                browser.close()
+        except Exception as exc:
+            print(f"  ! HCLTech browser scrape failed: {exc}")
+
+    print(f"  HCLTech official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_hp():
+    company = "HP (Hewlett-Packard)"
+    results = {}
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! HP: Playwright unavailable")
+        return []
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+            page.goto("https://jobs.hp.com/", wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(1800)
+            _dismiss_cookie_banner(page)
+
+            # Open Search Jobs if needed.
+            try:
+                link = page.get_by_role("link", name=re.compile(r"Search Jobs", re.I))
+                if link.count():
+                    link.first.click(timeout=1500)
+                    page.wait_for_timeout(1200)
+            except Exception:
+                pass
+
+            for selector in (
+                'input[placeholder*="location" i]',
+                'input[aria-label*="location" i]',
+                'input[name*="location" i]',
+            ):
+                try:
+                    inp = page.locator(selector)
+                    if inp.count():
+                        inp.first.fill("Ireland")
+                        try:
+                            inp.first.press("Enter")
+                        except Exception:
+                            pass
+                        page.wait_for_timeout(1200)
+                        break
+                except Exception:
+                    pass
+
+            for _ in range(60):
+                anchors = page.locator("a[href]")
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+                    try:
+                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                    except Exception:
+                        continue
+                    if not any(x in href.lower() for x in ("/job/", "/jobs/", "jobdetail", "job-detail")):
+                        continue
+                    title = _browser_text(a).strip()
+                    node, card = a, ""
+                    for _up in range(6):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node)
+                        except Exception:
+                            break
+                        if candidate and len(candidate) <= 2400:
+                            card = candidate
+                        if card and region_ok(card):
+                            break
+                    if not region_ok(f"{title} {card}"):
+                        continue
+                    if not title or len(title) > 300:
+                        continue
+                    key = href.split("?")[0].rstrip("/").lower()
+                    results[key] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": _browser_location(card, "Ireland"),
+                        "url": href.split("?")[0],
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(300)
+            browser.close()
+    except Exception as exc:
+        print(f"  ! HP browser scrape failed: {exc}")
+
+    print(f"  HP official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_jacobs():
+    company = "Jacobs"
+    urls = [
+        "https://careers.jacobs.com/en_US/careers/SearchJobs",
+    ]
+    results = {}
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Jacobs: Playwright unavailable")
+        return []
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+            for url in urls:
+                page.goto(url, wait_until="domcontentloaded", timeout=90000)
+                page.wait_for_timeout(2200)
+                _dismiss_cookie_banner(page)
+
+                # Search "Ireland" or "Dublin" if a search field is available.
+                for selector in (
+                    'input[placeholder*="location" i]',
+                    'input[aria-label*="location" i]',
+                    'input[name*="location" i]',
+                    'input[placeholder*="keyword" i]',
+                ):
+                    try:
+                        inp = page.locator(selector)
+                        if inp.count():
+                            inp.first.fill("Ireland")
+                            try:
+                                inp.first.press("Enter")
+                            except Exception:
+                                pass
+                            page.wait_for_timeout(1500)
+                            break
+                    except Exception:
+                        pass
+
+                stagnant, previous = 0, 0
+                for _ in range(80):
+                    anchors = page.locator('a[href*="/careers/JobDetail/"]')
+                    for i in range(anchors.count()):
+                        a = anchors.nth(i)
+                        try:
+                            href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                        except Exception:
+                            continue
+                        title = _browser_text(a).strip()
+                        node, card = a, ""
+                        for _up in range(7):
+                            try:
+                                node = node.locator("..")
+                                candidate = _browser_text(node)
+                            except Exception:
+                                break
+                            if candidate and len(candidate) <= 2600:
+                                card = candidate
+                            if card and region_ok(card):
+                                break
+                        evidence = f"{title} {card} {href}"
+                        if not region_ok(evidence):
+                            continue
+                        if not title or len(title) > 300:
+                            lines = [x.strip() for x in card.splitlines() if 4 <= len(x.strip()) <= 220]
+                            title = lines[0] if lines else ""
+                        if not title:
+                            continue
+                        key = href.split("?")[0].rstrip("/").lower()
+                        results[key] = {
+                            "company": company,
+                            "ats": "direct",
+                            "title": title[:300],
+                            "location": _browser_location(card, "Ireland"),
+                            "url": href.split("?")[0],
+                            "updated_at": None,
+                            "description_text": card[:5000],
+                        }
+
+                    for label in ("Load more", "Show more", "Next"):
+                        try:
+                            btn = page.get_by_role("button", name=label, exact=False)
+                            if btn.count() and btn.first.is_visible():
+                                btn.first.click(timeout=1200)
+                                page.wait_for_timeout(450)
+                                break
+                        except Exception:
+                            pass
+
+                    page.mouse.wheel(0, 3000)
+                    page.wait_for_timeout(350)
+                    current = len(results)
+                    stagnant = stagnant + 1 if current == previous else 0
+                    previous = current
+                    if stagnant >= 8:
+                        break
+            browser.close()
+    except Exception as exc:
+        print(f"  ! Jacobs browser scrape failed: {exc}")
+
+    print(f"  Jacobs official Ireland careers: {len(results)} jobs")
     return list(results.values())
 
 
@@ -5261,6 +5598,9 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "Jacobs": scrape_jacobs,
+        "HP (Hewlett-Packard)": scrape_hp,
+        "HCLTech": scrape_hcltech,
         "Arup": scrape_arup,
         "Deutsche Bank": scrape_deutsche_bank,
         "SMBC Group": scrape_smbc_group,
@@ -5618,7 +5958,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs'):
         if not _targeted(company):
             continue
         try:
@@ -5772,23 +6112,60 @@ def main():
         # Accenture is an exception: its official branded job URLs encode the
         # requisition ID in ?id=, so stripping the full query would collapse
         # every Accenture vacancy into the same /jobdetails URL.
-        if company_key == _company_key("Accenture") and raw_url:
+        if raw_url:
             try:
                 parsed = urllib.parse.urlsplit(raw_url)
                 params = urllib.parse.parse_qs(parsed.query)
-                requisition_id = (params.get("id") or [""])[0].strip().lower()
                 base_url = urllib.parse.urlunsplit(
                     (parsed.scheme, parsed.netloc, parsed.path.rstrip("/"), "", "")
                 ).lower()
-                url_key = (
-                    f"{base_url}?id={requisition_id}"
-                    if requisition_id
-                    else base_url
-                )
+
+                # Some employer sites encode the REAL vacancy ID entirely in
+                # the query string. Stripping every query parameter collapses
+                # dozens of distinct jobs into one URL.
+                #
+                # Examples:
+                #   Stripe / Pinterest / MongoDB / Toast -> ?gh_jid=...
+                #   Accenture -> ?id=...
+                # Preserve only known identity-bearing parameters while still
+                # dropping tracking parameters.
+                identity_pairs = []
+
+                for param in (
+                    "gh_jid",        # Greenhouse custom career pages
+                    "id",            # Accenture / generic requisition ID
+                    "jobId",
+                    "job_id",
+                    "jobid",
+                    "requisitionId",
+                    "requisition_id",
+                    "reqId",
+                    "reqid",
+                ):
+                    vals = params.get(param) or []
+                    if vals and str(vals[0]).strip():
+                        identity_pairs.append(
+                            (param.lower(), str(vals[0]).strip().lower())
+                        )
+
+                if identity_pairs:
+                    identity_pairs.sort()
+                    query_key = "&".join(f"{k}={v}" for k, v in identity_pairs)
+                    url_key = f"{base_url}?{query_key}"
+                elif company_key == _company_key("Google"):
+                    # Google collector currently uses a result-page URL for
+                    # each visible job. Multiple vacancies therefore share
+                    # the same URL. Include title in the dedupe identity so
+                    # valid Google jobs are not collapsed.
+                    title_part = normalized_title(j.get("title"))
+                    url_key = f"{base_url}#title={title_part}"
+                else:
+                    url_key = base_url
+
             except Exception:
                 url_key = raw_url.lower()
         else:
-            url_key = raw_url.split("?")[0].rstrip("/").lower()
+            url_key = ""
 
         title_key = normalized_title(j.get("title"))
         loc_key = _norm_phrase(j.get("location"))
