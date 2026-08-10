@@ -368,6 +368,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "PIMCO": "pimco_workday",
     "Boston Scientific": "boston_scientific_browser",
     "DXC Technology": "dxc_browser",
     "Johnson & Johnson": "jnj_browser",
@@ -4360,6 +4361,19 @@ def scrape_redhat():
 
 
 
+def scrape_pimco():
+    """PIMCO official Workday career site, filtered to Ireland."""
+    jobs = scrape_workday(
+        "PIMCO",
+        "pimco",
+        "wd1",
+        "pimco-careers",
+        max_pages=25
+    )
+    print(f"  PIMCO Workday: {len(jobs)} Ireland jobs")
+    return jobs
+
+
 def scrape_zscaler():
     """Zscaler Ireland/Irish-remote opportunities.
 
@@ -4488,6 +4502,7 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "PIMCO": scrape_pimco,
         "Boston Scientific": scrape_boston_scientific,
         "DXC Technology": scrape_dxc,
         "Johnson & Johnson": scrape_jnj,
@@ -4833,7 +4848,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ("Accenture", "Citi", "Apple", "BlackRock", "Bank of Ireland", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase", "EY Ireland", "KPMG Ireland", "NetApp", "Version 1", "Grant Thornton Ireland", "HSBC Ireland", "Johnson & Johnson", "Johnson Controls", "Zscaler"):
+    for company in ("Accenture", "Citi", "Apple", "BlackRock", "Bank of Ireland", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase", "EY Ireland", "KPMG Ireland", "NetApp", "Version 1", "Grant Thornton Ireland", "HSBC Ireland", "PIMCO", "Johnson & Johnson", "Johnson Controls", "Zscaler"):
         if not _targeted(company):
             continue
         try:
