@@ -2467,11 +2467,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Reddit": {
-    "platform": "greenhouse",
-    "slug": "reddit",
-    "probe_version": 35
-  },
   "Accenture": {
     "platform": "workday",
     "slug": "accenture|wd103|AccentureCareers",
@@ -2495,6 +2490,11 @@
   "Publift": {
     "platform": "smartrecruiters",
     "slug": "job-widget",
+    "probe_version": 35
+  },
+  "Reddit": {
+    "platform": "greenhouse",
+    "slug": "reddit",
     "probe_version": 35
   },
   "__probe_version__": 35
