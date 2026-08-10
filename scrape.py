@@ -390,6 +390,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Agilent Technologies": "agilent_workday",
     "Jacobs": "jacobs_official",
     "HP (Hewlett-Packard)": "hp_official",
     "HCLTech": "hcltech_successfactors",
@@ -5470,6 +5471,32 @@ def scrape_jacobs():
 
 
 
+def scrape_agilent():
+    company = "Agilent Technologies"
+    out = {}
+
+    for site in ("Agilent_Careers", "Agilent_Student_Careers"):
+        rows = scrape_workday(
+            company,
+            "agilent",
+            "wd5",
+            site,
+            max_pages=30,
+        )
+
+        for j in rows:
+            href = str(j.get("url") or "")
+            if not href:
+                continue
+
+            j["company"] = company
+            out[href.split("?")[0].rstrip("/").lower()] = j
+
+    print(f"  Agilent official Ireland Workday: {len(out)} jobs")
+    return list(out.values())
+
+
+
 def scrape_zscaler():
     """Zscaler Ireland/Irish-remote opportunities.
 
@@ -5598,6 +5625,7 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "Agilent Technologies": scrape_agilent,
         "Jacobs": scrape_jacobs,
         "HP (Hewlett-Packard)": scrape_hp,
         "HCLTech": scrape_hcltech,
@@ -5958,7 +5986,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies'):
         if not _targeted(company):
             continue
         try:
