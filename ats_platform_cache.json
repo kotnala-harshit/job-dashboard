@@ -837,11 +837,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Elavon": {
-    "platform": "workday",
-    "slug": "usbank|wd1|Elavon_Careers",
-    "probe_version": 35
-  },
   "Eli Lilly": {
     "platform": "none",
     "slug": null,
@@ -2485,6 +2480,11 @@
   "Citi": {
     "platform": "eightfold",
     "slug": "citi",
+    "probe_version": 35
+  },
+  "Elavon": {
+    "platform": "none",
+    "slug": null,
     "probe_version": 35
   },
   "Publift": {
