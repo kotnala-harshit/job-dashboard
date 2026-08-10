@@ -40,7 +40,7 @@ except ImportError:
 
 GREENHOUSE_COMPANIES = ['stripe', 'airbnb', 'doordash', 'pinterest', 'squarespace', 'twilio', 'docusign', 'robinhood', 'reddit', 'coinbase', 'gitlab', 'github', 'hubspot', 'indeed', 'zendesk', 'trustpilot', 'workhuman', 'wayflyer', 'intercom', 'wise', 'asana', 'cloudflare', 'datadog', 'snowflake', 'instacart', 'lyft', 'fenergo', 'affirm', 'airtable', 'algolia', 'amplitude', 'betterup', 'buffer', 'calendly', 'carta', 'chime', 'classpass', 'coursera', 'discord', 'doximity', 'elastic', 'envoy', 'faire', 'flexport', 'gusto', 'handshake', 'hashicorp', 'honeycomb', 'justworks', 'klaviyo', 'lattice', 'mixpanel', 'mongodb', 'mural', 'okta', 'opendoor', 'patreon', 'peloton', 'pilot', 'postman', 'procore', 'quora', 'rippling', 'samsara', 'segment', 'sendgrid', 'sourcegraph', 'sprinklr', 'strava', 'tanium', 'thumbtack', 'toast', 'turo', 'udemy', 'verkada', 'webflow', 'wework', 'yelp', 'zapier', 'zoominfo', 'getyourguide', 'trivago', 'deliveryhero', 'babbel', 'contentful', 'celonis', 'flixbus', 'tiermobility', 'gorillas', 'typeform', 'glovo', 'cabify', 'blablacar', 'backmarket', 'doctolib', 'qonto', 'alan', 'payfit', 'gocardless', 'truelayer', 'thoughtmachine', 'cazoo', 'octopusenergy', 'farfetch', 'starlingbank', 'revolut', 'darktrace', 'graphcore', 'onfido', 'fundingcircle', 'tines', 'flipdish', 'letsgetchecked', 'genesys', 'grab', 'sea', 'carousell', 'razer', 'lazada', 'careem', 'noon', 'talabat', 'propertyfinder', 'razorpay', 'swiggy', 'freshworks', 'browserstack', 'meesho', 'cred', 'groww', 'urbancompany', 'chargebee', 'clevertap', 'cultureamp', 'safetyculture', 'employmenthero', 'airwallex', 'deputy', 'linktree', 'go1', 'halter', 'judobank']
 
-LEVER_COMPANIES = ['netflix', 'spotify', 'plaid', 'brex', 'checkout', 'deliveroo', 'monzo', 'wolt', 'bolt', 'pipedrive', 'zopa', 'gojek', 'traveloka']
+LEVER_COMPANIES = ['spotify', 'plaid', 'brex', 'checkout', 'deliveroo', 'monzo', 'wolt', 'bolt', 'pipedrive', 'zopa', 'gojek', 'traveloka']
 
 ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'anthropic', 'vercel', 'scale', 'deel', 'partly', 'clickup', 'snowflake', 'wayflyer']
 
@@ -373,6 +373,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Johnson & Johnson": "jnj_browser",
     "Johnson Controls": "johnson_controls_browser",
     "Dropbox": "dropbox_browser",
+    "Zscaler": "zscaler",
 }
 
 # Exact enterprise-platform mappings learned from validated public career-site
@@ -3792,16 +3793,180 @@ def scrape_citi():
 
 
 def scrape_hsbc():
-    # HSBC uses SAP SuccessFactors. Country facet is much more reliable than the free-text location field.
-    urls = [
-        "https://apply.careers.hsbc.com/search/?createNewAlert=false&q=&locationsearch=Ireland",
-        "https://apply.careers.hsbc.com/search/?q=&locationsearch=Dublin&optionsFacetsDD_country=IE",
-        "https://apply.careers.hsbc.com/search/?q=&optionsFacetsDD_country=IE",
+    """HSBC Ireland via its official SAP SuccessFactors careers site."""
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! HSBC Ireland: Playwright unavailable")
+        return []
+
+    search_urls = [
+        "https://apply.careers.hsbc.com/search/?q=&locationsearch=Dublin",
+        "https://apply.careers.hsbc.com/search/?q=&locationsearch=Ireland",
+        "https://apply.careers.hsbc.com/search/?createNewAlert=false&q=&locationsearch=Dublin",
     ]
-    return _browser_board_collect(
-        "HSBC Ireland", urls, ("apply.careers.hsbc.com/job/",),
-        default_location="Dublin, Ireland", max_scrolls=25, require_ireland=True,
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1100},
+                locale="en-IE",
+            )
+
+            for search_url in search_urls:
+                try:
+                    page.goto(
+                        search_url,
+                        wait_until="domcontentloaded",
+                        timeout=90000,
+                    )
+                    page.wait_for_timeout(2500)
+                    _dismiss_cookie_banner(page)
+                except Exception as exc:
+                    print(f"  ! HSBC page load failed: {exc}")
+                    continue
+
+                # SuccessFactors job-detail URLs normally contain /job/
+                # and frequently a numeric requisition suffix.
+                anchors = page.locator("a[href*='/job/']")
+
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+
+                    try:
+                        href = urllib.parse.urljoin(
+                            page.url,
+                            a.get_attribute("href") or "",
+                        )
+                    except Exception:
+                        continue
+
+                    if not href or href in results:
+                        continue
+
+                    title = _browser_text(a)
+
+                    node = a
+                    card = ""
+
+                    for _ in range(6):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node)
+                        except Exception:
+                            break
+
+                        if candidate and len(candidate) <= 3000:
+                            card = candidate
+
+                        if (
+                            "dublin" in card.lower()
+                            or "ireland" in card.lower()
+                            or ", ie" in card.lower()
+                        ):
+                            break
+
+                    evidence = f"{title} {card} {href}"
+
+                    if not title:
+                        continue
+
+                    if not region_ok(evidence):
+                        continue
+
+                    results[href] = {
+                        "company": "HSBC Ireland",
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": _browser_location(
+                            card,
+                            "Dublin, Ireland",
+                        ),
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+                # Support more than first page where available.
+                for _ in range(10):
+                    try:
+                        next_btn = page.get_by_role(
+                            "link",
+                            name=re.compile(r"next", re.I),
+                        )
+
+                        if not next_btn.count() or not next_btn.first.is_visible():
+                            break
+
+                        before = len(results)
+
+                        next_btn.first.click(timeout=2500)
+                        page.wait_for_timeout(1800)
+
+                        anchors = page.locator("a[href*='/job/']")
+
+                        for i in range(anchors.count()):
+                            a = anchors.nth(i)
+
+                            href = urllib.parse.urljoin(
+                                page.url,
+                                a.get_attribute("href") or "",
+                            )
+
+                            if not href or href in results:
+                                continue
+
+                            title = _browser_text(a)
+
+                            node = a
+                            card = ""
+
+                            for _up in range(6):
+                                try:
+                                    node = node.locator("..")
+                                    candidate = _browser_text(node)
+                                except Exception:
+                                    break
+
+                                if candidate and len(candidate) <= 3000:
+                                    card = candidate
+
+                            evidence = f"{title} {card} {href}"
+
+                            if title and region_ok(evidence):
+                                results[href] = {
+                                    "company": "HSBC Ireland",
+                                    "ats": "direct",
+                                    "title": title[:300],
+                                    "location": _browser_location(
+                                        card,
+                                        "Dublin, Ireland",
+                                    ),
+                                    "url": href,
+                                    "updated_at": None,
+                                    "description_text": card[:5000],
+                                }
+
+                        if len(results) == before:
+                            break
+
+                    except Exception:
+                        break
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! HSBC Ireland browser scrape failed: {exc}")
+
+    print(
+        f"  HSBC Ireland official careers: "
+        f"{len(results)} unique Ireland jobs"
     )
+
+    return list(results.values())
 
 
 def scrape_boston_scientific():
@@ -3969,11 +4134,82 @@ def scrape_nvidia():
 
 
 def scrape_grant_thornton():
-    return _scrape_workday_board_browser(
-        "Grant Thornton Ireland",
-        "https://iegt.wd3.myworkdayjobs.com/en-US/GTI_External_Careers_Experienced_Hires_ROI/search?q=Ireland",
-        "Ireland",
+    """Grant Thornton Ireland official careers collector.
+
+    The historical iegt.wd3 Workday board is no longer dependable.
+    Use the current Grant Thornton Ireland careers pages instead.
+    """
+
+    urls = [
+        "https://www.grantthornton.ie/careers/",
+        "https://www.grantthornton.ie/careers/experienced-hires/",
+        "https://www.grantthornton.ie/careers/early-careers/",
+    ]
+
+    results = []
+    seen = set()
+
+    for url in urls:
+        try:
+            rows = _scrape_public_careers_page(
+                "Grant Thornton Ireland",
+                url,
+                (
+                    "/careers/",
+                    "/job/",
+                    "/jobs/",
+                    "vacanc",
+                    "opportunit",
+                    "experienced-hires",
+                    "graduate",
+                    "undergrad",
+                ),
+                default_location="Ireland",
+            )
+        except Exception as exc:
+            print(f"  ! Grant Thornton Ireland page failed {url}: {exc}")
+            continue
+
+        for job in rows:
+            title = (job.get("title") or "").strip()
+            href = (job.get("url") or "").strip()
+
+            if not title or not href:
+                continue
+
+            low_title = title.lower()
+
+            # Remove obvious navigation/information links.
+            blocked = (
+                "why grant thornton",
+                "our benefits",
+                "working at grant thornton",
+                "careers",
+                "experienced hires",
+                "early careers",
+                "graduate programme",
+                "undergrad programme",
+                "contact us",
+            )
+
+            if low_title in blocked:
+                continue
+
+            key = href.split("?")[0].rstrip("/").lower()
+            if key in seen:
+                continue
+
+            seen.add(key)
+            job["company"] = "Grant Thornton Ireland"
+            job["ats"] = "direct"
+            results.append(job)
+
+    print(
+        f"  Grant Thornton Ireland official careers: "
+        f"{len(results)} candidate Ireland opportunities"
     )
+
+    return results
 
 
 def scrape_microsoft():
@@ -4039,6 +4275,115 @@ def scrape_redhat():
     return cleaned
 
 
+
+def scrape_zscaler():
+    """Zscaler Ireland/Irish-remote opportunities.
+
+    Zscaler is remote/hybrid and maintains an Ireland employment presence.
+    Only retain jobs whose rendered vacancy evidence explicitly establishes
+    Ireland availability.
+    """
+
+    if not HAS_PLAYWRIGHT:
+        return []
+
+    results = {}
+
+    urls = [
+        "https://www.zscaler.com/careers",
+    ]
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1100},
+                locale="en-IE",
+            )
+
+            for url in urls:
+                try:
+                    page.goto(
+                        url,
+                        wait_until="domcontentloaded",
+                        timeout=90000,
+                    )
+                    page.wait_for_timeout(2500)
+                    _dismiss_cookie_banner(page)
+                except Exception as exc:
+                    print(f"  ! Zscaler careers page failed: {exc}")
+                    continue
+
+                anchors = page.locator("a[href]")
+
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+
+                    try:
+                        href = urllib.parse.urljoin(
+                            page.url,
+                            a.get_attribute("href") or "",
+                        )
+                    except Exception:
+                        continue
+
+                    hlow = href.lower()
+
+                    if not any(x in hlow for x in (
+                        "/job/",
+                        "/jobs/",
+                        "careers/job",
+                        "career/job",
+                    )):
+                        continue
+
+                    title = _browser_text(a)
+
+                    node = a
+                    card = ""
+
+                    for _ in range(6):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node)
+                        except Exception:
+                            break
+
+                        if candidate and len(candidate) <= 3500:
+                            card = candidate
+
+                    evidence = f"{title} {card}"
+
+                    # Critical rule: generic Remote EMEA is not enough.
+                    if not region_ok(evidence):
+                        continue
+
+                    key = href.split("?")[0].rstrip("/").lower()
+
+                    if key in results:
+                        continue
+
+                    results[key] = {
+                        "company": "Zscaler",
+                        "ats": "direct",
+                        "title": title[:300] if title else "Zscaler vacancy",
+                        "location": _browser_location(card, "Ireland"),
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Zscaler browser scrape failed: {exc}")
+
+    print(f"  Zscaler official careers: {len(results)} Ireland jobs")
+
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     fn={
         "Accenture": scrape_accenture,
@@ -4062,6 +4407,7 @@ def scrape_direct_company(company: str):
         "Johnson & Johnson": scrape_jnj,
         "Johnson Controls": scrape_johnson_controls,
         "Dropbox": scrape_dropbox,
+        "Zscaler": scrape_zscaler,
     }.get(company)
     return fn() if fn else []
 
@@ -4401,7 +4747,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ("Accenture", "Citi", "Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase", "EY Ireland", "KPMG Ireland", "NetApp", "Version 1", "Grant Thornton Ireland", "HSBC Ireland"):
+    for company in ("Accenture", "Citi", "Apple", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase", "EY Ireland", "KPMG Ireland", "NetApp", "Version 1", "Grant Thornton Ireland", "HSBC Ireland", "Zscaler"):
         if not _targeted(company):
             continue
         try:
