@@ -347,6 +347,26 @@ JOOBLE_API_KEY = os.environ.get("JOOBLE_API_KEY", "").strip()
 # ---------------------------------------------------------------------------
 
 
+# Runtime health for official/direct career sources. A source is marked live when
+# its official board loads successfully, even if it currently has zero Ireland jobs.
+# This lets the dashboard distinguish a healthy zero-vacancy company from a broken scraper.
+CONNECTOR_HEALTH = {}
+
+# A company enters "Live source · 0 jobs" only after the official board has
+# been manually/independently verified as healthy and genuinely empty.
+# Do NOT infer healthy-zero merely from an HTTP 200 response.
+VERIFIED_LIVE_ZERO_COMPANIES = {
+    "Central Bank of Ireland",
+}
+
+def _mark_connector_health(company, live=True, note=None, url=None):
+    CONNECTOR_HEALTH[company] = {
+        "live": bool(live),
+        "note": note or ("Official careers source reachable" if live else "Official careers source failed"),
+        "url": url,
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+    }
+
 # Direct company career-site connectors. These are intentionally separate from
 # ATS discovery because the sites use proprietary/public search surfaces rather
 # than a reusable third-party ATS board. A connector is allowed to return zero
@@ -370,6 +390,12 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Bank of America": "bank_of_america_browser",
+    "Cognizant": "cognizant_browser",
+    "AIB (Allied Irish Banks)": "aib_browser",
+    "Central Bank of Ireland": "central_bank_browser",
+    "BNP Paribas": "bnp_paribas_browser",
+    "Capgemini": "capgemini_browser",
     "Boston Scientific": "boston_scientific_browser",
     "DXC Technology": "dxc_browser",
     "Johnson & Johnson": "jnj_browser",
@@ -3677,6 +3703,7 @@ def _browser_board_collect(company, urls, href_patterns, default_location="Irela
                     page.goto(url, wait_until="domcontentloaded", timeout=60000)
                     page.wait_for_timeout(1400)
                     _dismiss_cookie_banner(page)
+                    _mark_connector_health(company, True, "Official careers board loaded", page.url)
                 except Exception as exc:
                     print(f"  ! {company} browser page failed {url}: {exc}")
                     continue
@@ -4070,6 +4097,209 @@ def scrape_dxc():
         require_ireland=True,
     )
 
+
+def _static_official_jobs(company, url, href_pattern, default_location="Ireland"):
+    """Parse server-rendered official career pages with requests/BeautifulSoup."""
+    results = {}
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            html = r.read().decode("utf-8", errors="ignore")
+        _mark_connector_health(company, True, "Official careers page loaded", url)
+        soup = BeautifulSoup(html, "html.parser")
+        for a in soup.find_all("a", href=True):
+            href = urllib.parse.urljoin(url, a.get("href") or "")
+            if href_pattern not in href:
+                continue
+            title = re.sub(r"\s+", " ", a.get_text(" ", strip=True)).strip()
+            if not title or len(title) < 3:
+                continue
+            node = a
+            card = title
+            for _ in range(5):
+                node = node.parent if getattr(node, "parent", None) else None
+                if not node:
+                    break
+                txt = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
+                if txt and len(txt) <= 3000:
+                    card = txt
+            evidence = f"{title} {card} {href}".lower()
+            if not re.search(r"\b(ireland|dublin|cork|galway|limerick|waterford|athlone)\b", evidence):
+                continue
+            location = "Dublin, Ireland" if "dublin" in evidence else default_location
+            results[href] = {
+                "company": company, "ats": "direct", "title": title[:300],
+                "location": location, "url": href, "updated_at": None,
+                "description_text": card[:5000],
+            }
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), url)
+        print(f"  ! {company} static scrape failed: {exc}")
+    return list(results.values())
+
+
+def scrape_bank_of_america():
+    """Temporarily withheld: local validation returned non-Ireland false positives."""
+    company = "Bank of America"
+    url = "https://careers.bankofamerica.com/en-us/job-search/ireland"
+    _mark_connector_health(
+        company,
+        False,
+        "Needs verification: previous collector returned non-Ireland jobs as Dublin",
+        url,
+    )
+    print("  Bank of America: withheld from live jobs pending Ireland-only connector verification")
+    return []
+
+def scrape_cognizant():
+    """Cognizant: use server-rendered global job results and verify detail metadata for Ireland."""
+    company = "Cognizant"
+    search_url = "https://careers.cognizant.com/global-en/jobs/"
+    results = {}
+    try:
+        req = urllib.request.Request(search_url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            html = r.read().decode("utf-8", errors="ignore")
+        _mark_connector_health(company, True, "Official Cognizant careers board loaded", search_url)
+        soup = BeautifulSoup(html, "html.parser")
+        links=[]
+        for a in soup.find_all("a", href=True):
+            href=urllib.parse.urljoin(search_url,a.get("href") or "")
+            if re.search(r"/global-en/jobs/\d+/[^/]+/?$", href):
+                links.append((href, re.sub(r"\s+"," ",a.get_text(" ",strip=True)).strip()))
+        # Current page can be global and paginated; inspect visible detail links and retain only Ireland.
+        for href, anchor_title in links[:250]:
+            try:
+                req2=urllib.request.Request(href, headers={"User-Agent":"Mozilla/5.0"})
+                with urllib.request.urlopen(req2, timeout=15) as r2:
+                    h2=r2.read().decode("utf-8",errors="ignore")
+                soup2=BeautifulSoup(h2,"html.parser")
+                text=re.sub(r"\s+"," ",soup2.get_text(" ",strip=True)).strip()
+                low=text.lower()
+                if not re.search(r"\b(ireland|dublin|cork|limerick|galway|waterford)\b", low):
+                    continue
+                title=anchor_title
+                if not title:
+                    h=soup2.find(["h1","h2"])
+                    title=re.sub(r"\s+"," ",h.get_text(" ",strip=True)).strip() if h else "Cognizant role"
+                loc="Dublin, Ireland" if "dublin" in low else ("Cork, Ireland" if "cork" in low else "Ireland")
+                results[href]={"company":company,"ats":"direct","title":title[:300],"location":loc,"url":href,"updated_at":None,"description_text":text[:5000]}
+            except Exception:
+                continue
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), search_url)
+        print(f"  ! Cognizant official careers failed: {exc}")
+    print(f"  Cognizant official careers: {len(results)} Ireland jobs")
+    return list(results.values())
+
+
+def scrape_aib():
+    jobs = _browser_board_collect(
+        "AIB (Allied Irish Banks)", ["https://jobs.aib.ie/go/Search-All-Jobs/3834700/"],
+        ("jobs.aib.ie/aib/job/",), default_location="Ireland", max_scrolls=15, require_ireland=False,
+    )
+    cleaned=[]; seen=set()
+    for j in jobs:
+        text=f"{j.get('title','')} {j.get('location','')} {j.get('description_text','')} {j.get('url','')}"; low=text.lower()
+        irish=bool(re.search(r"\b(dublin|cork|galway|limerick|waterford|kildare|ireland)\b",low)) or bool(re.search(r",\s*IE\b",text))
+        pure_uk=bool(re.search(r"\b(london|belfast|england|scotland|wales|united kingdom)\b",low)) and not bool(re.search(r"\b(dublin|cork|galway|limerick|waterford|kildare|ireland)\b",low))
+        if not irish or pure_uk: continue
+        key=(j.get("url") or "").split("?",1)[0].rstrip("/").lower()
+        if not key or key in seen: continue
+        seen.add(key)
+        if "dublin" in low: j["location"]="Dublin, Ireland"
+        elif "cork" in low: j["location"]="Cork, Ireland"
+        elif "galway" in low: j["location"]="Galway, Ireland"
+        else: j["location"]="Ireland"
+        cleaned.append(j)
+    return cleaned
+
+
+def scrape_central_bank_ireland():
+    """Central Bank of Ireland Candidate Manager board; a reachable empty board is a healthy zero."""
+    company="Central Bank of Ireland"
+    url="https://www.candidatemanager.net/cm/p/pJobs.aspx?a=1bqO7eBaJhQ%3D&mid=YUYF&sid=BDCXCX"
+    if not HAS_PLAYWRIGHT:
+        print(f"  ! {company}: Playwright unavailable"); return []
+    results={}
+    try:
+        with sync_playwright() as pw:
+            browser=pw.chromium.launch(headless=True); page=browser.new_page(viewport={"width":1400,"height":1000},locale="en-IE")
+            page.goto(url,wait_until="domcontentloaded",timeout=60000); page.wait_for_timeout(900)
+            _mark_connector_health(company,True,"Candidate Manager vacancies board loaded",page.url)
+            body=_browser_text(page.locator("body"))
+            if "no jobs were found" not in body.lower():
+                anchors=page.locator("a[href*='pJobDetails.aspx']")
+                for i in range(anchors.count()):
+                    a=anchors.nth(i); href=urllib.parse.urljoin(page.url,a.get_attribute("href") or ""); title=_browser_text(a)
+                    if href and title: results[href]={"company":company,"ats":"direct","title":title[:300],"location":"Dublin, Ireland","url":href,"updated_at":None,"description_text":title}
+            browser.close()
+    except Exception as exc:
+        _mark_connector_health(company,False,str(exc),url); print(f"  ! {company} scrape failed: {exc}")
+    print(f"  {company}: {len(results)} current vacancies")
+    return list(results.values())
+
+
+def scrape_bnp_paribas():
+    """BNP's Dublin listing is server rendered and currently exposes the live offers directly."""
+    company="BNP Paribas"
+    urls=["https://group.bnpparibas/en/careers/all-job-offers/dublin","https://group.bnpparibas/en/careers/all-job-offers/permanent/ireland"]
+    results={}
+    for url in urls:
+        try:
+            req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0"})
+            with urllib.request.urlopen(req,timeout=30) as r: html=r.read().decode("utf-8",errors="ignore")
+            _mark_connector_health(company,True,"Official BNP Paribas Dublin careers page loaded",url)
+            soup=BeautifulSoup(html,"html.parser")
+            for a in soup.find_all("a",href=True):
+                href=urllib.parse.urljoin(url,a.get("href") or "")
+                # BNP detail slugs live under /en/jobs/... or career offer paths; accept candidates whose card says Dublin/Ireland.
+                title=re.sub(r"\s+"," ",a.get_text(" ",strip=True)).strip()
+                if not title or len(title)<4: continue
+                node=a; card=title
+                for _ in range(4):
+                    node=node.parent if getattr(node,"parent",None) else None
+                    if not node: break
+                    txt=re.sub(r"\s+"," ",node.get_text(" ",strip=True)).strip()
+                    if txt and len(txt)<=2200: card=txt
+                ev=f"{title} {card} {href}".lower()
+                if not re.search(r"\b(dublin|ireland)\b",ev): continue
+                if not ("/careers/" in href or "/jobs/" in href): continue
+                if "all-job-offers" in href and href.rstrip("/") in {u.rstrip("/") for u in urls}: continue
+                if any(x in title.lower() for x in ["create email alert","display job offers","apply now"]):
+                    continue
+                results[href]={"company":company,"ats":"direct","title":title[:300],"location":"Dublin, Ireland","url":href,"updated_at":None,"description_text":card[:5000]}
+        except Exception as exc:
+            print(f"  ! BNP page failed: {exc}")
+    # Browser fallback using broader href acceptance.
+    if not results:
+        jobs=_browser_board_collect(company,urls,("group.bnpparibas/en/careers/",),default_location="Dublin, Ireland",max_scrolls=20,require_ireland=False)
+        for j in jobs:
+            txt=f"{j.get('title','')} {j.get('description_text','')} {j.get('url','')}".lower()
+            if "dublin" in txt or "ireland" in txt: results[j['url']]=j
+    print(f"  BNP Paribas official careers: {len(results)} Ireland jobs")
+    if not results:
+        _mark_connector_health(
+            company,
+            False,
+            "Needs verification: official page has Ireland vacancies but collector returned 0 / encountered access blocking",
+            "https://group.bnpparibas/en/careers/all-job-offers/dublin",
+        )
+    return list(results.values())
+
+
+def scrape_capgemini():
+    """Temporarily withheld: local validation returned navigation pages, not job records."""
+    company = "Capgemini"
+    url = "https://www.capgemini.com/careers/join-capgemini/job-search/"
+    _mark_connector_health(
+        company,
+        False,
+        "Needs verification: previous collector returned careers/navigation links instead of jobs",
+        url,
+    )
+    print("  Capgemini: withheld from live jobs pending job-detail connector verification")
+    return []
 
 def scrape_blackrock():
     jobs = _browser_board_collect(
@@ -4524,6 +4754,12 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "Bank of America": scrape_bank_of_america,
+        "Cognizant": scrape_cognizant,
+        "AIB (Allied Irish Banks)": scrape_aib,
+        "Central Bank of Ireland": scrape_central_bank_ireland,
+        "BNP Paribas": scrape_bnp_paribas,
+        "Capgemini": scrape_capgemini,
         "Boston Scientific": scrape_boston_scientific,
         "DXC Technology": scrape_dxc,
         "Johnson & Johnson": scrape_jnj,
@@ -4869,7 +5105,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ("Accenture", "Citi", "Apple", "BlackRock", "Bank of Ireland", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase", "EY Ireland", "KPMG Ireland", "NetApp", "Version 1", "Grant Thornton Ireland", "HSBC Ireland", "Johnson & Johnson", "Johnson Controls", "Zscaler"):
+    for company in ("Accenture", "Citi", "Apple", "BlackRock", "Bank of Ireland", "Google", "Microsoft", "Meta", "TikTok", "Oracle", "Red Hat", "JPMorgan Chase", "EY Ireland", "KPMG Ireland", "NetApp", "Version 1", "Grant Thornton Ireland", "HSBC Ireland", "Bank of America", "Cognizant", "AIB (Allied Irish Banks)", "Central Bank of Ireland", "BNP Paribas", "Capgemini", "Johnson & Johnson", "Johnson Controls", "Zscaler"):
         if not _targeted(company):
             continue
         try:
@@ -5229,6 +5465,12 @@ def main():
         if key in live_company_keys:
             state = "working"
             reason = "Ireland jobs returned in this run"
+        elif (
+            item["company"] in VERIFIED_LIVE_ZERO_COMPANIES
+            and CONNECTOR_HEALTH.get(item["company"], {}).get("live")
+        ):
+            state = "live_zero"
+            reason = "Official careers source independently verified live and currently has 0 qualifying Ireland jobs"
         elif item.get("automatic"):
             state = "configured_zero"
             reason = "Connector is configured but returned no qualifying Ireland jobs; mapping/filter may need verification"
@@ -5267,9 +5509,13 @@ def main():
         "companies_with_live_jobs": len(company_job_counts),
         "company_job_counts": company_job_counts,
         "coverage_diagnostics": coverage_diagnostics,
+        "connector_health": CONNECTOR_HEALTH,
+        "live_zero_companies": [
+            x for x in coverage_diagnostics if x.get("state") == "live_zero"
+        ],
         "coverage_state_counts": {
             state: sum(1 for x in coverage_diagnostics if x["state"] == state)
-            for state in ("working", "configured_zero", "no_validated_connector")
+            for state in ("working", "live_zero", "configured_zero", "no_validated_connector")
         },
         "manual_check_companies": manual_check,
         "manual_check_count": len(manual_check),

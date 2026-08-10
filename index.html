@@ -621,7 +621,8 @@ body{background:#f3f4f6!important}
       <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs</div>
       <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
       <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
-      <div id="tabZero" class="tab" onclick="showTab('zero')">Zero jobs scraped</div>
+      <div id="tabLiveZero" class="tab" onclick="showTab('livezero')">Live source · 0 jobs</div>
+      <div id="tabZero" class="tab" onclick="showTab('zero')">Needs verification · 0 jobs</div>
       <div id="tabSaved" class="tab" onclick="showTab('saved')">Saved</div>
       <div id="tabLiveCompanies" class="tab" onclick="showTab('livecompanies')">Companies with live jobs</div>
       <div id="tabApplications" class="tab" onclick="showTab('applications')">Applications</div>
@@ -643,6 +644,14 @@ body{background:#f3f4f6!important}
     <div id="manualGrid" class="dir-grid"></div>
   </div>
 
+  <div id="liveZeroPane">
+    <div id="liveZeroSummary" class="diag-summary"></div>
+    <div id="liveZeroGrid" class="dir-grid"></div>
+  </div>
+  <div id="liveZeroPane">
+    <div id="liveZeroSummary" class="diag-summary"></div>
+    <div id="liveZeroGrid" class="dir-grid"></div>
+  </div>
   <div id="zeroPane">
     <div id="zeroSummary" class="diag-summary"></div>
     <div id="zeroGrid" class="dir-grid"></div>
@@ -686,6 +695,8 @@ const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 let ALL_JOBS = [];
 let ALL_MANUAL = [];
 let ALL_REGISTRY = [];
+let ALL_COVERAGE = [];
+let ALL_LIVE_ZERO = [];
 let RAW_TOTAL = 0;
 
 
@@ -968,6 +979,8 @@ function loadData(data) {
   ALL_JOBS = data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs);
   ALL_MANUAL = data.manual_check_companies || [];
   ALL_REGISTRY = data.registry_companies || [];
+  ALL_COVERAGE = data.coverage_diagnostics || [];
+  ALL_LIVE_ZERO = data.live_zero_companies || ALL_COVERAGE.filter(x => x.state === 'live_zero');
   RAW_TOTAL = jobs.length;
 
   document.getElementById('genTime').textContent = data.generated_at
@@ -1492,7 +1505,9 @@ function renderCompanyDiagnosticList(gridId, companies, search, selectedCompany,
 
       const detail = mode === 'manual'
         ? `${c.platform || 'manual-check'} · no working job-level connector`
-        : `${c.platform || 'automatic'} · checked automatically · 0 Ireland jobs returned`;
+        : mode === 'livezero'
+          ? `${c.platform || 'official source'} · source verified live · 0 Ireland jobs right now`
+          : `${c.platform || 'automatic'} · returned 0 jobs · source/connector needs verification`;
 
       card.innerHTML = `
         <div>
@@ -1535,6 +1550,7 @@ function showTab(which) {
   document.getElementById('livePane').style.display = which === 'live' ? 'block' : 'none';
   document.getElementById('directoryPane').style.display = which === 'dir' ? 'block' : 'none';
   document.getElementById('manualPane').style.display = which === 'manual' ? 'block' : 'none';
+  document.getElementById('liveZeroPane').style.display = which === 'livezero' ? 'block' : 'none';
   document.getElementById('zeroPane').style.display = which === 'zero' ? 'block' : 'none';
   document.getElementById('savedPane').style.display = which === 'saved' ? 'block' : 'none';
   document.getElementById('liveCompaniesPane').style.display = which === 'livecompanies' ? 'block' : 'none';
@@ -1543,6 +1559,7 @@ function showTab(which) {
   document.getElementById('tabLive').classList.toggle('active', which === 'live');
   document.getElementById('tabDir').classList.toggle('active', which === 'dir');
   document.getElementById('tabManual').classList.toggle('active', which === 'manual');
+  document.getElementById('tabLiveZero').classList.toggle('active', which === 'livezero');
   document.getElementById('tabZero').classList.toggle('active', which === 'zero');
   document.getElementById('tabSaved').classList.toggle('active', which === 'saved');
   document.getElementById('tabLiveCompanies').classList.toggle('active', which === 'livecompanies');
