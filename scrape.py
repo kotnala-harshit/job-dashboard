@@ -389,6 +389,8 @@ DIRECT_COMPANY_CONNECTORS = {
     "NetApp": "netapp_browser",
     "Version 1": "version1_browser",
     "HSBC Ireland": "hsbc_browser",
+    "EXL": "exl_oracle",
+    "Dell Technologies": "dell_oracle_api",
     "Tata Consultancy Services (TCS)": "tcs_candidate_manager",
     "Infosys": "infosys_ireland",
     "Wells Fargo": "wells_fargo_detail_crawl",
@@ -7111,6 +7113,263 @@ def scrape_tcs():
     return list(results.values())
 
 
+def scrape_dell():
+    company = "Dell Technologies"
+    api_url = (
+        "https://enterpriseplatform.dell.com/hcmRestApi/resources/latest/"
+        "recruitingCEJobRequisitions"
+    )
+
+    sess = _session()
+    if not sess:
+        print("  ! Dell Technologies: HTTP session unavailable")
+        return []
+
+    params = {
+        "onlyData": "true",
+        "expand": (
+            "requisitionList.workLocation,"
+            "requisitionList.otherWorkLocations,"
+            "requisitionList.secondaryLocations,"
+            "flexFieldsFacet.values,"
+            "requisitionList.requisitionFlexFields"
+        ),
+        "finder": (
+            "findReqs;"
+            "siteNumber=CX_1001,"
+            "facetsList=LOCATIONS%3BWORK_LOCATIONS%3BWORKPLACE_TYPES%3BTITLES%3B"
+            "CATEGORIES%3BORGANIZATIONS%3BPOSTING_DATES%3BFLEX_FIELDS,"
+            "limit=200,"
+            "sortBy=POSTING_DATES_DESC"
+        ),
+    }
+
+    try:
+        r = sess.get(
+            api_url,
+            params=params,
+            timeout=30,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Referer": (
+                    "https://enterpriseplatform.dell.com/hcmUI/"
+                    "CandidateExperience/en/sites/careers/jobs?mode=location"
+                ),
+                "Accept": "application/json, text/plain, */*",
+            },
+        )
+    except Exception as exc:
+        print(f"  ! Dell Oracle API request failed: {exc}")
+        return []
+
+    if r.status_code != 200:
+        print(f"  ! Dell Oracle API HTTP {r.status_code}")
+        return []
+
+    try:
+        payload = r.json()
+    except Exception:
+        print("  ! Dell Oracle API invalid JSON")
+        return []
+
+    rows = []
+    if isinstance(payload, dict):
+        items = payload.get("items") or payload.get("Item") or []
+        if isinstance(items, list):
+            for item in items:
+                if isinstance(item, dict):
+                    rl = item.get("requisitionList")
+                    if isinstance(rl, list):
+                        rows.extend(rl)
+                    elif isinstance(rl, dict):
+                        rows.append(rl)
+
+    results = {}
+
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+
+        title = str(
+            row.get("Title")
+            or row.get("title")
+            or row.get("RequisitionTitle")
+            or ""
+        ).strip()
+
+        rid = str(
+            row.get("Id")
+            or row.get("RequisitionId")
+            or row.get("RequisitionNumber")
+            or row.get("requisitionNumber")
+            or ""
+        ).strip()
+
+        blob = json.dumps(row, ensure_ascii=False)
+
+        if not re.search(r"\bIreland\b|\bDublin\b|\bCork\b|\bLimerick\b", blob, re.I):
+            continue
+
+        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
+            continue
+
+        if not title or not rid:
+            continue
+
+        location = "Ireland"
+        for city in ("Dublin", "Cork", "Limerick"):
+            if re.search(rf"\b{city}\b", blob, re.I):
+                location = f"{city}, Ireland"
+                break
+
+        href = (
+            "https://enterpriseplatform.dell.com/hcmUI/"
+            f"CandidateExperience/en/sites/careers/job/{rid}/"
+        )
+
+        results[rid.lower()] = {
+            "company": company,
+            "ats": "oracle",
+            "title": re.sub(r"\s+", " ", title).strip()[:300],
+            "location": location,
+            "url": href,
+            "updated_at": row.get("PostingDate") or row.get("postingDate"),
+            "description_text": blob[:5000],
+        }
+
+    print(f"  Dell Technologies Oracle API: {len(results)} Ireland jobs")
+    return list(results.values())
+
+
+def scrape_exl():
+    company = "EXL"
+    source_url = (
+        "https://fa-ewjt-saasfaprod1.fa.ocs.oraclecloud.com/"
+        "hcmUI/CandidateExperience/en/sites/CX_2/requisitions"
+        "?location=Ireland&locationId=300000000467194"
+        "&locationLevel=country&mode=job-location"
+    )
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! EXL: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
+
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(3000)
+
+            try:
+                page.wait_for_load_state("networkidle", timeout=15000)
+            except Exception:
+                pass
+
+            stagnant = 0
+            prev = 0
+
+            for _ in range(80):
+                anchors = page.locator('a[href*="/job/"], a[href*="/requisitions/"]')
+
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+                    try:
+                        raw = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    if "/job/" not in href and "/requisitions/" not in href:
+                        continue
+
+                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    node = a
+                    card = ""
+
+                    for _up in range(7):
+                        try:
+                            candidate = _browser_text(node)
+                        except Exception:
+                            candidate = ""
+                        if candidate and len(candidate) <= 3000:
+                            card = candidate
+                        if re.search(r"\bIreland\b|\bDublin\b", card, re.I):
+                            break
+                        try:
+                            node = node.locator("..")
+                        except Exception:
+                            break
+
+                    blob = f"{title}\n{card}\n{href}"
+
+                    # The page is already country-filtered to Ireland.
+                    if not title or len(title) > 300:
+                        lines = [
+                            re.sub(r"\s+", " ", x).strip()
+                            for x in card.splitlines()
+                            if 4 <= len(x.strip()) <= 220
+                        ]
+                        title = next(
+                            (x for x in lines if x.lower() not in {"apply now", "view job"}),
+                            "",
+                        )
+
+                    if not title:
+                        continue
+
+                    location = "Dublin, Ireland" if re.search(r"\bDublin\b", blob, re.I) else "Ireland"
+
+                    canonical = href.split("?")[0]
+                    results[canonical.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "oracle",
+                        "title": title[:300],
+                        "location": location,
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+                clicked = False
+                for selector in (
+                    'button:has-text("Load More")',
+                    'button:has-text("Show More")',
+                    'button:has-text("Next")',
+                    'a:has-text("Next")',
+                ):
+                    try:
+                        btn = page.locator(selector)
+                        if btn.count() and btn.first.is_visible():
+                            btn.first.click(timeout=1200)
+                            page.wait_for_timeout(450)
+                            clicked = True
+                            break
+                    except Exception:
+                        pass
+
+                page.mouse.wheel(0, 3200)
+                page.wait_for_timeout(300)
+
+                cur = len(results)
+                stagnant = stagnant + 1 if cur == prev else 0
+                prev = cur
+
+                if stagnant >= 8 and not clicked:
+                    break
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! EXL Ireland Oracle scrape failed: {exc}")
+
+    print(f"  EXL Oracle Ireland board: {len(results)} jobs")
+    return list(results.values())
+
+
 def scrape_zscaler():
     """Zscaler Ireland/Irish-remote opportunities.
 
@@ -7239,6 +7498,8 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "EXL": scrape_exl,
+        "Dell Technologies": scrape_dell,
         "Tata Consultancy Services (TCS)": scrape_tcs,
         "Infosys": scrape_infosys,
         "Wells Fargo": scrape_wells_fargo,
@@ -7614,7 +7875,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL'):
         if not _targeted(company):
             continue
         try:
