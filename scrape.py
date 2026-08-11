@@ -58,7 +58,7 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'anthropi
 # the tenant/wd_host/site values are all in that URL.
 # ---------------------------------------------------------------------------
 
-WORKDAY_COMPANIES = [('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'), ('NVIDIA', 'nvidia', 'wd5', 'NVIDIAExternalCareerSite'), ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd1', 'ViatrisCareers'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bd', 'wd1', 'BD_External'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External')]
+WORKDAY_COMPANIES = [('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'), ('NVIDIA', 'nvidia', 'wd5', 'NVIDIAExternalCareerSite'), ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd1', 'ViatrisCareers'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External')]
 
 # ---------------------------------------------------------------------------
 # SmartRecruiters has a genuinely documented public Postings API --
@@ -390,6 +390,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Becton Dickinson (BD)": "bd_workday_ireland",
+    "Becton Dickinson (BD)": "bd_official",
+    "AstraZeneca": "astrazeneca_official",
     "Bank of America": "bank_of_america_official",
     "Aiven": "aiven_official",
     "A&L Goodbody": "alg_official",
@@ -5759,69 +5762,168 @@ def scrape_aer_lingus():
     return list(out.values())
 
 def scrape_aon():
+    """Aon Ireland: prefer the existing Workday connector; flag Jibe anti-bot if legacy board is empty."""
     company = "Aon"
-    source_url = "https://jobs.aon.com/jobs"
-    return _browser_board_collect(
-        company,
-        [source_url],
-        ("jobs.aon.com/jobs/",),
-        default_location="Dublin, Ireland",
-        max_scrolls=60,
-        require_ireland=True,
-        source_tag="direct",
-    )
+    try:
+        jobs = scrape_workday(company, "aon", "wd1", "AonCareers", max_pages=30)
+    except Exception as exc:
+        print(f"  ! Aon Workday fallback failed: {exc}")
+        jobs = []
 
+    if jobs:
+        try:
+            _mark_connector_health(
+                company, True,
+                f"Aon Workday returned {len(jobs)} Ireland jobs",
+                "https://jobs.aon.com/jobs",
+            )
+        except Exception:
+            pass
+        print(f"  Aon verified Ireland careers: {len(jobs)} jobs")
+        return jobs
+
+    try:
+        _mark_connector_health(
+            company, False,
+            "Official Aon Jibe/iCIMS search is anti-bot protected; Workday fallback returned 0",
+            "https://jobs.aon.com/jobs",
+        )
+    except Exception:
+        pass
+
+    print("  Aon: official careers search blocked; Workday fallback returned 0")
+    return []
 
 
 def scrape_hitachi_energy():
+    """Hitachi Energy Ireland. Do not misclassify Cloudflare challenge pages as a healthy zero."""
     company = "Hitachi Energy"
-    source_urls = [
-        "https://careers.hitachi.com/search/hitachi-energy-ireland-limited/jobs",
-        "https://careers.hitachi.com/search/jobs/in/country/ireland",
-    ]
-    results = {}
+    source_url = "https://careers.hitachi.com/search/jobs/in/country/ireland"
 
-    for source_url in source_urls:
-        page = _fetch_html(source_url) or ""
-        if not page:
+    page = _fetch_html(source_url) or ""
+    if not page or "Performing security verification" in page or "Just a moment" in page:
+        try:
+            _mark_connector_health(
+                company, False,
+                "Official Hitachi careers search is Cloudflare-protected from this scraper",
+                source_url,
+            )
+        except Exception:
+            pass
+        print("  Hitachi Energy: Cloudflare blocked official Ireland search")
+        return []
+
+    results = {}
+    for m in re.finditer(
+        r'<a\b[^>]*href=["\']([^"\']*/jobs/\d+[^"\']*)["\'][^>]*>(.*?)</a>',
+        page,
+        re.I | re.S,
+    ):
+        href = _absolute_url(source_url, m.group(1)).split("?")[0]
+        title = _html_text(m.group(2)).strip()
+        start = max(0, m.start() - 1200)
+        end = min(len(page), m.end() + 1600)
+        chunk = _html_text(page[start:end])
+
+        if "HITACHI ENERGY IRELAND LIMITED" not in chunk.upper():
+            continue
+        if not region_ok(chunk):
+            continue
+        if not title or title.lower() in {"search jobs", "view job", "apply now"}:
             continue
 
-        for m in re.finditer(
-            r'<a\b[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
-            page,
-            re.I | re.S,
-        ):
-            href = _absolute_url(source_url, m.group(1)).split("?")[0]
-            start = max(0, m.start() - 1400)
-            end = min(len(page), m.end() + 1800)
-            chunk = _html_text(page[start:end])
+        key = href.rstrip("/").lower()
+        results[key] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": _browser_location(chunk, "Ireland"),
+            "url": href,
+            "updated_at": None,
+            "description_text": chunk[:5000],
+        }
 
-            if "HITACHI ENERGY IRELAND LIMITED" not in chunk.upper():
-                continue
-            if not region_ok(chunk):
-                continue
-
-            title = _html_text(m.group(2)).strip()
-            if not title or len(title) > 300:
-                lines = [x.strip() for x in chunk.splitlines() if 4 <= len(x.strip()) <= 220]
-                title = lines[0] if lines else ""
-            if not title or title.lower() in {"search jobs", "careers", "view job", "apply now"}:
-                continue
-
-            key = href.rstrip("/").lower()
-            results[key] = {
-                "company": company,
-                "ats": "direct",
-                "title": title[:300],
-                "location": _browser_location(chunk, "Ireland"),
-                "url": href,
-                "updated_at": None,
-                "description_text": chunk[:5000],
-            }
+    try:
+        _mark_connector_health(
+            company, bool(results),
+            f"Official Hitachi Ireland search returned {len(results)} Hitachi Energy jobs",
+            source_url,
+        )
+    except Exception:
+        pass
 
     print(f"  Hitachi Energy verified Ireland careers: {len(results)} jobs")
     return list(results.values())
 
+
+def scrape_astrazeneca():
+    """AstraZeneca Dublin roles from the official server-rendered Dublin location page."""
+    company = "AstraZeneca"
+    listing = "https://careers.astrazeneca.com/location/dublin-jobs/7684/2963597-7521314-2964574/4"
+    page = _fetch_html(listing) or ""
+    urls = []
+
+    for m in re.finditer(
+        r'href=["\']([^"\']*/job/dublin/[^"\']+)["\']',
+        page,
+        re.I,
+    ):
+        href = _absolute_url(listing, m.group(1)).split("?")[0]
+        if href not in urls:
+            urls.append(href)
+
+    results = {}
+    for href in urls:
+        detail = _fetch_html(href) or ""
+        if not detail:
+            continue
+        text = _html_text(detail)
+        if not re.search(r'\bDublin\b.*\bIreland\b|\bIreland\b.*\bDublin\b', text[:5000], re.I | re.S):
+            continue
+
+        hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', detail, re.I | re.S)
+        title = _html_text(hm.group(1)).strip() if hm else ""
+        if not title:
+            continue
+
+        # Keep AstraZeneca and Alexion roles both under the AstraZeneca employer page;
+        # this mirrors the official Dublin search, which mixes both companies.
+        key = href.rstrip("/").lower()
+        results[key] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": "Dublin, Ireland",
+            "url": href,
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
+
+    try:
+        _mark_connector_health(
+            company, True,
+            f"Official AstraZeneca Dublin page loaded; {len(results)} jobs found",
+            listing,
+        )
+    except Exception:
+        pass
+
+    print(f"  AstraZeneca official Dublin careers: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_becton_dickinson():
+    company = "Becton Dickinson (BD)"
+    jobs = scrape_workday(
+        company,
+        "bdx",
+        "wd1",
+        "EXTERNAL_CAREER_SITE_IRELAND",
+        max_pages=30,
+    )
+    print(f"  Becton Dickinson official Ireland Workday: {len(jobs)} jobs")
+    return jobs
 
 
 def scrape_zscaler():
@@ -5952,6 +6054,8 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "Becton Dickinson (BD)": scrape_becton_dickinson,
+        "AstraZeneca": scrape_astrazeneca,
         "Aiven": scrape_aiven,
         "A&L Goodbody": scrape_algoodbody,
         "Agilent Technologies": scrape_agilent,
@@ -6315,7 +6419,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)'):
         if not _targeted(company):
             continue
         try:
