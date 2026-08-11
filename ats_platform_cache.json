@@ -437,11 +437,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Broadcom": {
-    "platform": "workday",
-    "slug": "broadcom|wd1|External_Career",
-    "probe_version": 35
-  },
   "Brown Brothers Harriman": {
     "platform": "pinpoint",
     "slug": "brown",
@@ -470,11 +465,6 @@
   "CACEIS": {
     "platform": "pinpoint",
     "slug": "caceis",
-    "probe_version": 35
-  },
-  "Cadence Design Systems": {
-    "platform": "workday",
-    "slug": "cadence|wd1|External_Careers",
     "probe_version": 35
   },
   "Cairn Homes": {
@@ -2490,6 +2480,16 @@
   "Coinbase": {
     "platform": "greenhouse",
     "slug": "coinbase",
+    "probe_version": 35
+  },
+  "Broadcom": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Cadence Design Systems": {
+    "platform": "workday",
+    "slug": "cadence|wd1|External_Careers",
     "probe_version": 35
   },
   "Publift": {
