@@ -390,6 +390,8 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Deutsche Bank": "deutsche_bank_beesite_api",
+    "DXC Technology": "dxc_cws_api",
     "Capgemini": "capgemini_successfactors_detail",
     "Cognizant": "cognizant_detail_crawl",
     "IBM": "ibm_detail_crawl",
@@ -418,7 +420,6 @@ DIRECT_COMPANY_CONNECTORS = {
     "BNP Paribas": "bnp_paribas_browser",
     "ServiceNow": "servicenow_official",
     "Boston Scientific": "boston_scientific_browser",
-    "DXC Technology": "dxc_browser",
     "Johnson & Johnson": "jnj_browser",
     "Johnson Controls": "johnson_controls_browser",
     "Dropbox": "dropbox_browser",
@@ -4114,17 +4115,111 @@ def scrape_boston_scientific():
 
 
 def scrape_dxc():
-    return _browser_board_collect(
-        "DXC Technology",
-        [
-            "https://careers.dxc.com/job-search-results/?location=Ireland",
-            "https://careers.dxc.com/job-search-results/?keyword=&location=Ireland",
-        ],
-        ("careers.dxc.com/job/",),
-        default_location="Ireland",
-        max_scrolls=30,
-        require_ireland=True,
-    )
+    company = "DXC Technology"
+    api_url = "https://jobsapi-internal.m-cloud.io/api/job"
+
+    sess = _session()
+    if not sess:
+        print("  ! DXC Technology: HTTP session unavailable")
+        return []
+
+    results = {}
+    offset = 1
+    limit = 50
+
+    for _ in range(30):
+        params = [
+            ("callback", "CWS.jobs.jobCallback"),
+            ("facet[]", "is_internal:DXCJobs"),
+            # DXC's API exposes the country name under the compliment facet.
+            ("facet[]", "compliment:Ireland"),
+            ("sortfield", "open_date"),
+            ("sortorder", "descending"),
+            ("Limit", str(limit)),
+            ("Organization", "2492"),
+            ("offset", str(offset)),
+            ("fuzzy", "false"),
+            ("facetlist[]", "compliment"),
+            ("facetlist[]", "store_id"),
+            ("facetlist[]", "primary_city"),
+            ("facetlist[]", "primary_category"),
+            ("facetlist[]", "employment_type"),
+        ]
+
+        try:
+            r = sess.get(
+                api_url,
+                params=params,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Referer": "https://careers.dxc.com/job-search-results/",
+                    "Accept": "*/*",
+                },
+            )
+        except Exception as exc:
+            print(f"  ! DXC API request failed: {exc}")
+            break
+
+        if r.status_code != 200:
+            print(f"  ! DXC API HTTP {r.status_code}")
+            break
+
+        text = (r.text or "").strip()
+        m = re.search(r'^[^(]+\((.*)\)\s*;?\s*$', text, re.S)
+        if m:
+            text = m.group(1)
+
+        try:
+            payload = json.loads(text)
+        except Exception:
+            print("  ! DXC API returned invalid JSONP")
+            break
+
+        rows = payload.get("queryResult", []) if isinstance(payload, dict) else []
+        if not isinstance(rows, list) or not rows:
+            break
+
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+
+            # In DXC's payload:
+            # primary_country = ISO-ish code (IE)
+            # compliment = human-readable country (Ireland)
+            country_code = str(row.get("primary_country") or "").strip().upper()
+            country_name = str(row.get("compliment") or "").strip()
+            city = str(row.get("primary_city") or "").strip()
+            title = str(row.get("title") or "").strip()
+            href = str(row.get("url") or "").strip()
+            job_id = str(row.get("clientid") or row.get("id") or "").strip()
+
+            if country_code != "IE" and country_name.lower() != "ireland":
+                continue
+            if not title or not href:
+                continue
+
+            location = f"{city}, Ireland" if city else "Ireland"
+
+            key = (job_id or href).lower()
+            results[key] = {
+                "company": company,
+                "ats": "cws",
+                "title": re.sub(r"\s+", " ", title).strip()[:300],
+                "location": location[:120],
+                "url": href,
+                "updated_at": row.get("open_date"),
+                "description_text": _html_text(str(row.get("description") or ""))[:5000],
+            }
+
+        total_hits = int(payload.get("totalHits") or 0) if isinstance(payload, dict) else 0
+        if offset + limit > total_hits or len(rows) < limit:
+            break
+
+        offset += limit
+
+    print(f"  DXC Technology CWS API: {len(results)} Ireland jobs")
+    return list(results.values())
 
 
 def _static_official_jobs(company, url, href_pattern, default_location="Ireland"):
@@ -5169,113 +5264,207 @@ def scrape_smbc_group():
 
 def scrape_deutsche_bank():
     company = "Deutsche Bank"
-    urls = [
-        "https://careers.db.com/professionals/search-roles/",
-        "https://careers.db.com/professionals/search-roles/index?language_id=1",
-    ]
-    results = {}
+    api_url = "https://api-deutschebank.beesite.de/search/"
 
-    if not HAS_PLAYWRIGHT:
-        print("  ! Deutsche Bank: Playwright unavailable")
+    sess = _session()
+    if not sess:
+        print("  ! Deutsche Bank: HTTP session unavailable")
         return []
 
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
-            for url in urls:
-                try:
-                    page.goto(url, wait_until="domcontentloaded", timeout=60000)
-                    page.wait_for_timeout(1800)
-                    _dismiss_cookie_banner(page)
-                except Exception:
+    results = {}
+    first_item = 1
+    count_item = 100
+
+    def collect_position_dicts(obj, out):
+        if isinstance(obj, dict):
+            # A real position object contains at least an ID/title/location-ish field.
+            keys = set(obj.keys())
+            if (
+                ("PositionID" in keys or "PositionTitle" in keys)
+                and (
+                    "PositionLocation.CountryName" in keys
+                    or "PositionLocation" in keys
+                    or "CountryName" in keys
+                    or "PositionURI" in keys
+                )
+            ):
+                out.append(obj)
+            for val in obj.values():
+                collect_position_dicts(val, out)
+        elif isinstance(obj, list):
+            for val in obj:
+                collect_position_dicts(val, out)
+
+    while first_item <= 2500:
+        data = {
+            "LanguageCode": "en",
+            "SearchParameters": {
+                "FirstItem": first_item,
+                "CountItem": count_item,
+                "MatchedObjectDescriptor": [
+                    "PositionID",
+                    "PositionTitle",
+                    "PositionURI",
+                    "OrganizationName",
+                    "PositionLocation.CountryName",
+                    "PositionLocation.CountrySubDivisionName",
+                    "PositionLocation.CityName",
+                    "PublicationStartDate",
+                    "CareerLevel.Name",
+                    "PositionSchedule.Name",
+                    "PositionOfferingType.Name",
+                ],
+                "Sort": [
+                    {
+                        "Criterion": "PublicationStartDate",
+                        "Direction": "DESC",
+                    }
+                ],
+            },
+            # Deliberately unfiltered: this is the exact request form proven
+            # by the live Deutsche Bank page. Filter Ireland from response data.
+            "SearchCriteria": [],
+        }
+
+        try:
+            r = sess.get(
+                api_url,
+                params={"data": json.dumps(data, separators=(",", ":"))},
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Referer": "https://careers.db.com/professionals/search-roles/",
+                    "Accept": "application/json, text/plain, */*",
+                },
+            )
+        except Exception as exc:
+            print(f"  ! Deutsche Bank API request failed: {exc}")
+            break
+
+        if r.status_code != 200:
+            print(f"  ! Deutsche Bank API HTTP {r.status_code}")
+            break
+
+        try:
+            payload = r.json()
+        except Exception:
+            print("  ! Deutsche Bank API returned invalid JSON")
+            break
+
+        rows = []
+        collect_position_dicts(payload, rows)
+
+        # Deduplicate recursive discoveries from nested structures.
+        unique_rows = {}
+        for row in rows:
+            pid = str(row.get("PositionID") or row.get("ID") or row.get("id") or "")
+            title = str(row.get("PositionTitle") or row.get("Title") or row.get("title") or "")
+            key = (pid, title, json.dumps(row, sort_keys=True, ensure_ascii=False)[:500])
+            unique_rows[key] = row
+        rows = list(unique_rows.values())
+
+        if not rows:
+            # If this page genuinely contains no position objects, we're done.
+            break
+
+        for row in rows:
+            location_obj = row.get("PositionLocation") or {}
+            if not isinstance(location_obj, dict):
+                location_obj = {}
+
+            country = str(
+                row.get("PositionLocation.CountryName")
+                or location_obj.get("CountryName")
+                or row.get("CountryName")
+                or ""
+            ).strip()
+
+            city = str(
+                row.get("PositionLocation.CityName")
+                or location_obj.get("CityName")
+                or row.get("CityName")
+                or ""
+            ).strip()
+
+            subdivision = str(
+                row.get("PositionLocation.CountrySubDivisionName")
+                or location_obj.get("CountrySubDivisionName")
+                or row.get("CountrySubDivisionName")
+                or ""
+            ).strip()
+
+            title = str(
+                row.get("PositionTitle")
+                or row.get("Title")
+                or row.get("title")
+                or ""
+            ).strip()
+
+            position_id = str(
+                row.get("PositionID")
+                or row.get("ID")
+                or row.get("id")
+                or ""
+            ).strip()
+
+            uri = str(
+                row.get("PositionURI")
+                or row.get("URI")
+                or row.get("url")
+                or ""
+            ).strip()
+
+            blob = json.dumps(row, ensure_ascii=False)
+
+            if country.lower() != "ireland":
+                # Last-resort exact returned field check, not description text.
+                if not re.search(
+                    r'"(?:PositionLocation\.)?CountryName"\s*:\s*"Ireland"',
+                    blob,
+                    re.I,
+                ):
                     continue
 
-                # Try visible location/search inputs first.
-                for selector in (
-                    'input[placeholder*="Location" i]',
-                    'input[name*="location" i]',
-                    'input[aria-label*="Location" i]',
-                    'input[placeholder*="Keyword" i]',
-                ):
-                    try:
-                        inp = page.locator(selector)
-                        if inp.count():
-                            inp.first.fill("Dublin")
-                            try:
-                                inp.first.press("Enter")
-                            except Exception:
-                                pass
-                            page.wait_for_timeout(1200)
-                            break
-                    except Exception:
-                        pass
+            if not title:
+                continue
 
-                stagnant, previous = 0, 0
-                for _ in range(60):
-                    anchors = page.locator("a[href]")
-                    for i in range(anchors.count()):
-                        a = anchors.nth(i)
-                        try:
-                            href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
-                        except Exception:
-                            continue
-                        hlow = href.lower()
-                        if not any(x in hlow for x in (
-                            "job", "career", "position", "requisition"
-                        )):
-                            continue
-                        title = _browser_text(a).strip()
-                        node, card = a, ""
-                        for _up in range(6):
-                            try:
-                                node = node.locator("..")
-                                candidate = _browser_text(node)
-                            except Exception:
-                                break
-                            if candidate and len(candidate) <= 2400:
-                                card = candidate
-                            if card and region_ok(card):
-                                break
-                        evidence = f"{title} {card} {href}"
-                        if not region_ok(evidence):
-                            continue
-                        if not title or len(title) > 300:
-                            lines = [x.strip() for x in card.splitlines() if 4 <= len(x.strip()) <= 220]
-                            title = lines[0] if lines else ""
-                        if not title:
-                            continue
-                        blocked = {
-                            "search roles", "professionals", "your application",
-                            "careers", "students and graduates",
-                        }
-                        if title.lower() in blocked:
-                            continue
-                        key = href.split("?")[0].rstrip("/").lower()
-                        results[key] = {
-                            "company": company,
-                            "ats": "direct",
-                            "title": title[:300],
-                            "location": _browser_location(card, "Dublin, Ireland"),
-                            "url": href,
-                            "updated_at": None,
-                            "description_text": card[:5000],
-                        }
+            if uri:
+                href = urllib.parse.urljoin("https://careers.db.com/", uri)
+            elif position_id:
+                href = (
+                    "https://careers.db.com/professionals/search-roles/"
+                    f"#/professional/job/{position_id}"
+                )
+            else:
+                continue
 
-                    page.mouse.wheel(0, 3000)
-                    page.wait_for_timeout(400)
-                    current = len(results)
-                    stagnant = stagnant + 1 if current == previous else 0
-                    previous = current
-                    if stagnant >= 7:
-                        break
-            browser.close()
-    except Exception as exc:
-        print(f"  ! Deutsche Bank browser scrape failed: {exc}")
+            if city:
+                location = f"{city}, Ireland"
+            elif subdivision:
+                location = f"{subdivision}, Ireland"
+            else:
+                location = "Ireland"
 
-    print(f"  Deutsche Bank official Ireland careers: {len(results)} jobs")
+            key = (position_id or href).lower()
+            results[key] = {
+                "company": company,
+                "ats": "beesite",
+                "title": re.sub(r"\s+", " ", title).strip()[:300],
+                "location": location[:120],
+                "url": href,
+                "updated_at": row.get("PublicationStartDate"),
+                "description_text": blob[:5000],
+            }
+
+        # The live page reported 1846 total roles. Paginate the proven
+        # unfiltered API until a short page or sensible ceiling.
+        if len(rows) < count_item:
+            break
+
+        first_item += count_item
+
+    print(f"  Deutsche Bank Beesite API: {len(results)} Ireland jobs")
     return list(results.values())
-
 
 
 def scrape_arup():
@@ -7027,7 +7216,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology'):
         if not _targeted(company):
             continue
         try:
