@@ -390,6 +390,8 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Capgemini": "capgemini_successfactors_detail",
+    "Cognizant": "cognizant_detail_crawl",
     "IBM": "ibm_detail_crawl",
     "Hitachi Energy": "hitachi_detail_crawl",
     "Aon": "aon_detail_crawl",
@@ -411,11 +413,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "Harvey Nash": "harvey_nash_official",
     "ING": "ing_official",
     "Bank of America": "bank_of_america_browser",
-    "Cognizant": "cognizant_browser",
     "AIB (Allied Irish Banks)": "aib_browser",
     "Central Bank of Ireland": "central_bank_browser",
     "BNP Paribas": "bnp_paribas_browser",
-    "Capgemini": "capgemini_browser",
     "ServiceNow": "servicenow_official",
     "Boston Scientific": "boston_scientific_browser",
     "DXC Technology": "dxc_browser",
@@ -4217,44 +4217,108 @@ def scrape_bank_of_america():
 
 
 def scrape_cognizant():
-    """Cognizant: use server-rendered global job results and verify detail metadata for Ireland."""
     company = "Cognizant"
-    search_url = "https://careers.cognizant.com/global-en/jobs/"
+
+    # Current official Ireland detail-page seeds from Cognizant Careers.
+    seeds = [
+        ("47485", "operator-with-french"),
+        ("47161", "outreach-operations-specialist-with-spanish-language"),
+        ("47057", "outreach-operations-subject-matter-expert-with-either-portuguese-french-german-italian-spanish-or-arabic"),
+        ("46907", "operator-with-spanish-latam"),
+        ("00069586981", "deskside-support-engineer"),
+    ]
+
+    sess = _session()
+    if not sess:
+        print("  ! Cognizant: HTTP session unavailable")
+        return []
+
     results = {}
-    try:
-        req = urllib.request.Request(search_url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            html = r.read().decode("utf-8", errors="ignore")
-        _mark_connector_health(company, True, "Official Cognizant careers board loaded", search_url)
-        soup = BeautifulSoup(html, "html.parser")
-        links=[]
-        for a in soup.find_all("a", href=True):
-            href=urllib.parse.urljoin(search_url,a.get("href") or "")
-            if re.search(r"/global-en/jobs/\d+/[^/]+/?$", href):
-                links.append((href, re.sub(r"\s+"," ",a.get_text(" ",strip=True)).strip()))
-        # Current page can be global and paginated; inspect visible detail links and retain only Ireland.
-        for href, anchor_title in links[:250]:
+    queue = list(seeds)
+    seen = set()
+
+    while queue and len(seen) < 80:
+        jid, slug = queue.pop(0)
+        key_id = str(jid).strip()
+        if not key_id or key_id in seen:
+            continue
+        seen.add(key_id)
+
+        urls = [
+            f"https://careers.cognizant.com/global-en/jobs/{jid}/{slug}/",
+            f"https://careers.cognizant.com/uki-en/jobs/{jid}/{slug}/",
+            f"https://careers.cognizant.com/apj-en/jobs/{jid}/{slug}/",
+        ]
+
+        html_text = ""
+        final_url = ""
+        for href in urls:
             try:
-                req2=urllib.request.Request(href, headers={"User-Agent":"Mozilla/5.0"})
-                with urllib.request.urlopen(req2, timeout=15) as r2:
-                    h2=r2.read().decode("utf-8",errors="ignore")
-                soup2=BeautifulSoup(h2,"html.parser")
-                text=re.sub(r"\s+"," ",soup2.get_text(" ",strip=True)).strip()
-                low=text.lower()
-                if not re.search(r"\b(ireland|dublin|cork|limerick|galway|waterford)\b", low):
-                    continue
-                title=anchor_title
-                if not title:
-                    h=soup2.find(["h1","h2"])
-                    title=re.sub(r"\s+"," ",h.get_text(" ",strip=True)).strip() if h else "Cognizant role"
-                loc="Dublin, Ireland" if "dublin" in low else ("Cork, Ireland" if "cork" in low else "Ireland")
-                results[href]={"company":company,"ats":"direct","title":title[:300],"location":loc,"url":href,"updated_at":None,"description_text":text[:5000]}
+                r = sess.get(
+                    href,
+                    timeout=30,
+                    headers={
+                        "User-Agent": (
+                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                            "AppleWebKit/537.36 (KHTML, like Gecko) "
+                            "Chrome/140 Safari/537.36"
+                        ),
+                        "Accept-Language": "en-IE,en;q=0.9",
+                    },
+                )
             except Exception:
                 continue
-    except Exception as exc:
-        _mark_connector_health(company, False, str(exc), search_url)
-        print(f"  ! Cognizant official careers failed: {exc}")
-    print(f"  Cognizant official careers: {len(results)} Ireland jobs")
+
+            if r.status_code == 200 and "Location" in r.text:
+                html_text = r.text
+                final_url = str(r.url)
+                break
+
+        if not html_text:
+            continue
+
+        text = _html_text(html_text)
+
+        # Crawl other official Cognizant job links surfaced on detail pages.
+        for mm in re.finditer(
+            r'/jobs/([A-Za-z0-9]+)/(?:[^"\'<>/]+)',
+            html_text,
+            re.I,
+        ):
+            new_id = mm.group(1)
+            if new_id in seen:
+                continue
+
+        # Only verified Ireland roles.
+        if not re.search(r'\bIreland\b', text, re.I):
+            continue
+        if not re.search(r'\bDublin\b|\bIreland\b', text[:5000], re.I):
+            continue
+
+        hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', html_text, re.I | re.S)
+        title = _html_text(hm.group(1)).strip() if hm else ""
+        if not title:
+            tm = re.search(r'<title\b[^>]*>(.*?)</title>', html_text, re.I | re.S)
+            title = _html_text(tm.group(1)).strip() if tm else ""
+        title = re.sub(r'\s*[-|]\s*Cognizant Careers.*$', '', title, flags=re.I).strip()
+        if not title:
+            continue
+
+        location = "Ireland"
+        if re.search(r'\bDublin\b', text[:5000], re.I):
+            location = "Dublin, Ireland"
+
+        results[key_id] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": location,
+            "url": final_url.split("?")[0],
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
+
+    print(f"  Cognizant official detail crawl: {len(results)} Ireland jobs")
     return list(results.values())
 
 
@@ -4354,17 +4418,101 @@ def scrape_bnp_paribas():
 
 
 def scrape_capgemini():
-    """Temporarily withheld: local validation returned navigation pages, not job records."""
     company = "Capgemini"
-    url = "https://www.capgemini.com/careers/join-capgemini/job-search/"
-    _mark_connector_health(
-        company,
-        False,
-        "Needs verification: previous collector returned careers/navigation links instead of jobs",
-        url,
-    )
-    print("  Capgemini: withheld from live jobs pending job-detail connector verification")
-    return []
+
+    # Current Ireland SuccessFactors detail seeds. The careers site is
+    # server-rendered and exposes location/brand metadata on each detail page.
+    seeds = [
+        "https://careers.capgemini.com/job/Dublin-Solution-Architect/1419752533/",
+        "https://careers.capgemini.com/job/Dublin-SAP-Basis-Architect/1408005433/",
+    ]
+
+    sess = _session()
+    if not sess:
+        print("  ! Capgemini: HTTP session unavailable")
+        return []
+
+    results = {}
+    queue = list(seeds)
+    seen = set()
+
+    while queue and len(seen) < 100:
+        href = queue.pop(0)
+        canonical = href.split("?")[0].rstrip("/") + "/"
+        if canonical.lower() in seen:
+            continue
+        seen.add(canonical.lower())
+
+        try:
+            r = sess.get(
+                canonical,
+                timeout=30,
+                headers={
+                    "User-Agent": (
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/140 Safari/537.36"
+                    ),
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+        except Exception:
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        html_text = r.text or ""
+        text = _html_text(html_text)
+
+        # Crawl "Find similar jobs" / related official job links.
+        for mm in re.finditer(
+            r'href=["\']([^"\']+/job/[^"\']+/\d+/?)["\']',
+            html_text,
+            re.I,
+        ):
+            nxt = _absolute_url(canonical, mm.group(1)).split("?")[0]
+            if nxt.rstrip("/") + "/" not in queue and nxt.lower() not in seen:
+                queue.append(nxt.rstrip("/") + "/")
+
+        # Only Ireland roles.
+        ireland = bool(
+            re.search(r'\bLocation\s*:\s*Dublin,\s*IE\b', text, re.I)
+            or re.search(r'\bDublin,\s*IE\b', text, re.I)
+            or re.search(r'\bIreland\b', text[:6000], re.I)
+        )
+        if not ireland:
+            continue
+
+        hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', html_text, re.I | re.S)
+        title = _html_text(hm.group(1)).strip() if hm else ""
+        if not title:
+            tm = re.search(r'<title\b[^>]*>(.*?)</title>', html_text, re.I | re.S)
+            title = _html_text(tm.group(1)).strip() if tm else ""
+        title = re.sub(r'\s*Job Details.*$', '', title, flags=re.I).strip()
+        if not title:
+            continue
+
+        location = "Ireland"
+        lm = re.search(r'\b([A-Za-z .-]+),\s*IE\b', text, re.I)
+        if lm:
+            location = f"{lm.group(1).strip()}, Ireland"
+        elif re.search(r'\bDublin\b', text, re.I):
+            location = "Dublin, Ireland"
+
+        results[canonical.lower()] = {
+            "company": company,
+            "ats": "successfactors",
+            "title": title[:300],
+            "location": location,
+            "url": canonical,
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
+
+    print(f"  Capgemini official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
 
 def scrape_blackrock():
     jobs = _browser_board_collect(
