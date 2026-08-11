@@ -390,8 +390,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Hitachi Energy": "hitachi_detail_crawl",
+    "Aon": "aon_detail_crawl",
     "GE HealthCare": "ge_healthcare_phenom",
-    "IBM": "ibm_official",
     "Huawei": "huawei_teamtailor",
     "Becton Dickinson (BD)": "bd_workday_ireland",
     "Becton Dickinson (BD)": "bd_official",
@@ -5766,97 +5767,289 @@ def scrape_aer_lingus():
     return list(out.values())
 
 def scrape_aon():
-    """Aon Ireland: prefer the existing Workday connector; flag Jibe anti-bot if legacy board is empty."""
     company = "Aon"
-    try:
-        jobs = scrape_workday(company, "aon", "wd1", "AonCareers", max_pages=30)
-    except Exception as exc:
-        print(f"  ! Aon Workday fallback failed: {exc}")
-        jobs = []
 
-    if jobs:
+    # Current Ireland job-detail seeds. Search/listing pages are protected by
+    # Jibe/iCIMS, but these official job-detail pages are server-rendered.
+    seeds = [
+        "93353",   # Risk Engineering Management Consultant
+        "99173",   # Business Development Specialist
+        "99565",   # Financial Planning Consultant
+        "102116",  # Actuarial Consultant
+        "103488",  # Head of Compliance / MLRO
+        "105297",  # Personal Lines Account Executive
+        "94666",   # Associate Retirement Consultant
+        "100234",  # Financial Business Analytics Partner
+        "104230",  # Claims Handler
+        "99495",   # Senior Business Analyst
+    ]
+
+    results = {}
+    queue = list(dict.fromkeys(seeds))
+    seen = set()
+
+    sess = _session()
+    if not sess:
+        print("  ! Aon: HTTP session unavailable")
+        return []
+
+    while queue and len(seen) < 80:
+        jid = str(queue.pop(0)).strip()
+        if not jid or jid in seen:
+            continue
+        seen.add(jid)
+
+        href = f"https://jobs.aon.com/jobs/{jid}?lang=en-us"
+
         try:
-            _mark_connector_health(
-                company, True,
-                f"Aon Workday returned {len(jobs)} Ireland jobs",
-                "https://jobs.aon.com/jobs",
+            r = sess.get(
+                href,
+                timeout=30,
+                headers={
+                    "User-Agent": (
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/140 Safari/537.36"
+                    ),
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
             )
         except Exception:
-            pass
-        print(f"  Aon verified Ireland careers: {len(jobs)} jobs")
-        return jobs
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        html_text = r.text or ""
+        text = _html_text(html_text)
+
+        # Discover related Aon jobs linked from the official detail page.
+        for mm in re.finditer(
+            r'(?:/event-\d+)?/jobs/(\d+)',
+            html_text,
+            re.I,
+        ):
+            new_id = mm.group(1)
+            if new_id not in seen and new_id not in queue:
+                queue.append(new_id)
+
+        # Keep only verified Ireland roles.
+        if not re.search(r'\bIreland\b', text, re.I):
+            continue
+
+        # Stronger location requirement near the top/metadata.
+        head = "\n".join(text.splitlines()[:120])
+        if not re.search(
+            r'\b(?:Dublin|Malahide|Blackrock|Ireland)\b'
+            r'[\s\S]{0,200}\bIreland\b|'
+            r'\bIreland\b',
+            head,
+            re.I,
+        ):
+            continue
+
+        title = ""
+        hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', html_text, re.I | re.S)
+        if hm:
+            title = _html_text(hm.group(1)).strip()
+
+        if not title:
+            tm = re.search(
+                r'<meta[^>]+property=["\']og:title["\'][^>]+content=["\']([^"\']+)',
+                html_text,
+                re.I,
+            )
+            title = _html_text(tm.group(1)).strip() if tm else ""
+
+        if not title:
+            tm = re.search(r'<title\b[^>]*>(.*?)</title>', html_text, re.I | re.S)
+            title = _html_text(tm.group(1)).strip() if tm else ""
+
+        # Aon's board also exposes NFP Corp roles. Keep only genuine Aon
+        # Corporation vacancies for the Aon company bucket.
+        if re.search(r'\|\s*NFP Corp\b', title, re.I):
+            continue
+
+        title = re.sub(
+            r'\s+in\s+[A-Za-z .-]+,\s*Ireland\s*\|\s*Aon Corporation\s*$',
+            '',
+            title,
+            flags=re.I,
+        ).strip()
+        title = re.sub(r'\s*\|\s*Aon Corporation\s*$', '', title, flags=re.I).strip()
+        title = re.sub(r'\s*[-|]\s*Aon Careers.*$', '', title, flags=re.I).strip()
+
+        if not title:
+            continue
+
+        location = "Ireland"
+        lm = re.search(
+            r'\b(Dublin|Malahide|Blackrock|Cork|Galway|Limerick),\s*Ireland\b',
+            head,
+            re.I,
+        )
+        if lm:
+            location = f"{lm.group(1).strip()}, Ireland"
+
+        canonical = f"https://jobs.aon.com/jobs/{jid}?lang=en-us"
+        results[jid] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": location[:120],
+            "url": canonical,
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
 
     try:
         _mark_connector_health(
-            company, False,
-            "Official Aon Jibe/iCIMS search is anti-bot protected; Workday fallback returned 0",
+            company,
+            bool(results),
+            f"Official Aon detail-page crawl returned {len(results)} verified Ireland jobs",
             "https://jobs.aon.com/jobs",
         )
     except Exception:
         pass
 
-    print("  Aon: official careers search blocked; Workday fallback returned 0")
-    return []
+    print(
+        f"  Aon official detail crawl: {len(seen)} pages checked; "
+        f"{len(results)} Ireland jobs"
+    )
+    return list(results.values())
 
 
 def scrape_hitachi_energy():
-    """Hitachi Energy Ireland. Do not misclassify Cloudflare challenge pages as a healthy zero."""
     company = "Hitachi Energy"
-    source_url = "https://careers.hitachi.com/search/jobs/in/country/ireland"
 
-    page = _fetch_html(source_url) or ""
-    if not page or "Performing security verification" in page or "Just a moment" in page:
-        try:
-            _mark_connector_health(
-                company, False,
-                "Official Hitachi careers search is Cloudflare-protected from this scraper",
-                source_url,
-            )
-        except Exception:
-            pass
-        print("  Hitachi Energy: Cloudflare blocked official Ireland search")
-        return []
+    # Current Ireland detail-page seeds. Hitachi's search page is Cloudflare-
+    # protected, but official detail pages are readable and include related jobs.
+    seeds = [
+        "JID3-210216",  # Account Manager, Utilities
+        "JID3-209912",  # Tendering Specialist
+        "JID3-209133",  # Technical Sales Manager, Grid Automation
+        "JID3-208631",  # Planner
+        "JID3-208415",  # Senior Service Engineer
+        "JID3-207845",  # Field Service Engineer
+        "JID3-207350",  # Secondary Project Engineer
+        "JID3-207391",  # Site Supervisor
+        "JID3-206939",  # Project Manager
+        "JID3-205914",  # HSE Specialist
+        "JID3-204785",  # Site Quality Specialist
+        "JID3-203683",  # Field Service Engineer / Commissioning
+        "JID3-202759",  # Construction Manager
+        "JID3-200009",  # Order Management Specialist
+        "JID3-198401",  # Senior Project Engineer
+    ]
 
     results = {}
-    for m in re.finditer(
-        r'<a\b[^>]*href=["\']([^"\']*/jobs/\d+[^"\']*)["\'][^>]*>(.*?)</a>',
-        page,
-        re.I | re.S,
-    ):
-        href = _absolute_url(source_url, m.group(1)).split("?")[0]
-        title = _html_text(m.group(2)).strip()
-        start = max(0, m.start() - 1200)
-        end = min(len(page), m.end() + 1600)
-        chunk = _html_text(page[start:end])
+    queue = list(dict.fromkeys(seeds))
+    seen = set()
 
-        if "HITACHI ENERGY IRELAND LIMITED" not in chunk.upper():
+    sess = _session()
+    if not sess:
+        print("  ! Hitachi Energy: HTTP session unavailable")
+        return []
+
+    while queue and len(seen) < 100:
+        jid = str(queue.pop(0)).strip()
+        if not jid or jid in seen:
             continue
-        if not region_ok(chunk):
-            continue
-        if not title or title.lower() in {"search jobs", "view job", "apply now"}:
+        seen.add(jid)
+
+        href = (
+            "https://www.hitachienergy.com/careers/open-jobs/details/"
+            f"{jid}"
+        )
+
+        try:
+            r = sess.get(
+                href,
+                timeout=30,
+                headers={
+                    "User-Agent": (
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/140 Safari/537.36"
+                    ),
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+        except Exception:
             continue
 
-        key = href.rstrip("/").lower()
-        results[key] = {
+        if r.status_code != 200:
+            continue
+
+        html_text = r.text or ""
+        text = _html_text(html_text)
+
+        # Discover other official Hitachi Energy JID links on each detail page.
+        for mm in re.finditer(
+            r'/careers/open-jobs/details/(JID\d+-\d+)',
+            html_text,
+            re.I,
+        ):
+            new_id = mm.group(1)
+            if new_id not in seen and new_id not in queue:
+                queue.append(new_id)
+
+        # Keep only Ireland roles.
+        if not re.search(r'\bIreland\b', text, re.I):
+            continue
+
+        head = "\n".join(text.splitlines()[:180])
+
+        # Strongly prefer pages whose location/description explicitly states
+        # Dublin/Ireland.
+        if not re.search(
+            r'\bDublin\b|\bIreland\b',
+            head,
+            re.I,
+        ):
+            continue
+
+        title = ""
+        hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', html_text, re.I | re.S)
+        if hm:
+            title = _html_text(hm.group(1)).strip()
+
+        if not title:
+            tm = re.search(r'<title\b[^>]*>(.*?)</title>', html_text, re.I | re.S)
+            title = _html_text(tm.group(1)).strip() if tm else ""
+
+        title = re.sub(r'\s*\|\s*Hitachi Energy.*$', '', title, flags=re.I).strip()
+        if not title:
+            continue
+
+        location = "Ireland"
+        if re.search(r'\bDublin\b', head, re.I):
+            location = "Dublin, Ireland"
+
+        results[jid.lower()] = {
             "company": company,
             "ats": "direct",
             "title": title[:300],
-            "location": _browser_location(chunk, "Ireland"),
+            "location": location,
             "url": href,
             "updated_at": None,
-            "description_text": chunk[:5000],
+            "description_text": text[:5000],
         }
 
     try:
         _mark_connector_health(
-            company, bool(results),
-            f"Official Hitachi Ireland search returned {len(results)} Hitachi Energy jobs",
-            source_url,
+            company,
+            bool(results),
+            f"Official Hitachi detail-page crawl returned {len(results)} verified Ireland jobs",
+            "https://www.hitachienergy.com/careers/open-jobs",
         )
     except Exception:
         pass
 
-    print(f"  Hitachi Energy verified Ireland careers: {len(results)} jobs")
+    print(
+        f"  Hitachi Energy official detail crawl: {len(seen)} pages checked; "
+        f"{len(results)} Ireland jobs"
+    )
     return list(results.values())
 
 
@@ -5932,7 +6125,10 @@ def scrape_becton_dickinson():
 
 def scrape_ibm():
     company = "IBM"
-    source_url = "https://careers.ibm.com/en_US/careers/SearchJobs/"
+    source_url = (
+        "https://www.ibm.com/careers/search?"
+        "field_keyword_05%5B0%5D=Ireland"
+    )
 
     if not HAS_PLAYWRIGHT:
         print("  ! IBM: Playwright unavailable")
@@ -5944,195 +6140,215 @@ def scrape_ibm():
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
             page = browser.new_page(
-                viewport={"width": 1440, "height": 1200},
+                viewport={"width": 1440, "height": 1400},
                 locale="en-IE",
             )
-            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
-            page.wait_for_timeout(1800)
+
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+            page.wait_for_timeout(3500)
             _dismiss_cookie_banner(page)
 
-            # IBM ignores ?location=Ireland in the URL. Use the actual Location
-            # filter rendered on the page instead.
-            filtered = False
-
-            # Strategy 1: expand the Location filter and click an Ireland option.
+            # Give IBM's current careers components time to hydrate.
             try:
-                loc_control = page.get_by_text("Location", exact=True)
-                if loc_control.count():
-                    loc_control.first.click(timeout=1500)
-                    page.wait_for_timeout(500)
+                page.wait_for_load_state("networkidle", timeout=15000)
             except Exception:
                 pass
+            page.wait_for_timeout(1200)
 
-            for selector in (
-                'label:has-text("Ireland")',
-                'button:has-text("Ireland")',
-                '[role="option"]:has-text("Ireland")',
-                '[role="checkbox"]:has-text("Ireland")',
-                'input[value="Ireland"]',
-            ):
+            # IBM's new search page renders job cards client-side.
+            # Inspect every link and climb its ancestors until we find a
+            # compact job-card block containing Ireland.
+            anchors = page.locator("a[href]")
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+
                 try:
-                    opt = page.locator(selector)
-                    if opt.count() and opt.first.is_visible():
-                        opt.first.click(timeout=1500)
-                        page.wait_for_timeout(1200)
-                        filtered = True
-                        break
+                    href = urllib.parse.urljoin(
+                        page.url,
+                        a.get_attribute("href") or "",
+                    )
                 except Exception:
-                    pass
+                    continue
 
-            # Strategy 2: type Ireland into any visible filter/search control
-            # exposed after opening Location, then select the Ireland suggestion.
-            if not filtered:
-                for selector in (
-                    'input[placeholder*="location" i]',
-                    'input[aria-label*="location" i]',
-                    'input[name*="location" i]',
-                    'input[placeholder*="filter" i]',
-                    'input[role="combobox"]',
-                ):
+                href_low = href.lower()
+
+                # Skip navigation/content links. Job links on the new IBM
+                # careers surface may point to ibm.com or careers.ibm.com.
+                if any(x in href_low for x in (
+                    "/careers/blog",
+                    "/careers/locations",
+                    "/careers/search",
+                    "talent",
+                    "job-alert",
+                    "#",
+                )):
+                    continue
+
+                node = a
+                card = ""
+
+                for _up in range(8):
                     try:
-                        inp = page.locator(selector)
-                        visible = [inp.nth(i) for i in range(inp.count()) if inp.nth(i).is_visible()]
-                        if not visible:
-                            continue
-                        visible[0].fill("Ireland")
-                        page.wait_for_timeout(700)
+                        candidate = _browser_text(node)
+                    except Exception:
+                        candidate = ""
 
-                        for opt_selector in (
-                            '[role="option"]:has-text("Ireland")',
-                            'li:has-text("Ireland")',
-                            'label:has-text("Ireland")',
-                        ):
-                            opt = page.locator(opt_selector)
-                            if opt.count() and opt.first.is_visible():
-                                opt.first.click(timeout=1500)
-                                filtered = True
-                                break
+                    if candidate and len(candidate) <= 3000:
+                        card = candidate
 
-                        if not filtered:
-                            try:
-                                visible[0].press("Enter")
-                                filtered = True
-                            except Exception:
-                                pass
-
-                        page.wait_for_timeout(1200)
+                    # Stop as soon as the surrounding result card carries
+                    # explicit Ireland evidence.
+                    if card and re.search(r"\bIreland\b", card, re.I):
                         break
-                    except Exception:
-                        pass
-
-            # Strategy 3: if IBM exposes a normal form search button, submit it.
-            if filtered:
-                for label in ("Search", "Apply", "Done"):
-                    try:
-                        btn = page.get_by_role("button", name=label, exact=False)
-                        if btn.count() and btn.first.is_visible():
-                            btn.first.click(timeout=1200)
-                            page.wait_for_timeout(1200)
-                            break
-                    except Exception:
-                        pass
-
-            stagnant = 0
-            previous = 0
-            pages_seen = 0
-
-            while pages_seen < 20:
-                pages_seen += 1
-
-                anchors = page.locator('a[href*="/careers/JobDetail/"]')
-
-                for i in range(anchors.count()):
-                    a = anchors.nth(i)
 
                     try:
-                        href = urllib.parse.urljoin(
-                            page.url,
-                            a.get_attribute("href") or "",
-                        )
+                        node = node.locator("..")
                     except Exception:
-                        continue
+                        break
 
-                    if "/careers/JobDetail/" not in href:
-                        continue
+                if not card or not re.search(r"\bIreland\b", card, re.I):
+                    continue
 
-                    title = _browser_text(a).strip()
-                    node, card = a, ""
+                # Exclude facet/filter/navigation blocks such as "Ireland (1)".
+                low_card = card.lower()
+                if (
+                    len(card) > 2500
+                    or "filter by" in low_card
+                    or "keep exploring" in low_card
+                    or "job alerts" in low_card
+                    or "talent network" in low_card
+                ):
+                    continue
 
-                    for _up in range(7):
-                        try:
-                            node = node.locator("..")
-                            candidate = _browser_text(node)
-                        except Exception:
-                            break
+                title = _browser_text(a).strip()
 
-                        if candidate and len(candidate) <= 2800:
-                            card = candidate
+                # IBM often makes the visible link text "Read more".
+                if (
+                    not title
+                    or title.lower() in {
+                        "read more",
+                        "learn more",
+                        "apply",
+                        "apply now",
+                        "view job",
+                    }
+                    or len(title) > 240
+                ):
+                    lines = [
+                        re.sub(r"\s+", " ", x).strip()
+                        for x in card.splitlines()
+                        if 4 <= len(x.strip()) <= 220
+                    ]
 
-                        if card and region_ok(card):
-                            break
-
-                    # Never trust the page filter alone. Require Ireland evidence
-                    # on the actual result card.
-                    if not region_ok(card):
-                        continue
-
-                    if not title or len(title) > 300:
-                        lines = [
-                            x.strip()
-                            for x in card.splitlines()
-                            if 4 <= len(x.strip()) <= 220
-                        ]
-                        title = lines[0] if lines else ""
-
-                    if not title:
-                        continue
-
-                    canonical = href.split("?")[0].rstrip("/")
-
-                    results[canonical.lower()] = {
-                        "company": company,
-                        "ats": "direct",
-                        "title": title[:300],
-                        "location": _browser_location(card, "Ireland"),
-                        "url": canonical,
-                        "updated_at": None,
-                        "description_text": card[:5000],
+                    blocked = {
+                        "read more",
+                        "learn more",
+                        "apply",
+                        "apply now",
+                        "view job",
+                        "ireland",
                     }
 
-                # IBM uses "Next >>" rather than an infinite-scroll-only list.
-                next_clicked = False
-                for selector in (
-                    'text="Next >>"',
-                    'a:has-text("Next >>")',
-                    'button:has-text("Next")',
-                    'a:has-text("Next")',
+                    title = ""
+                    for line in lines:
+                        ll = line.lower()
+                        if ll in blocked:
+                            continue
+                        if re.fullmatch(r"ireland\s*\(\d+\)", ll):
+                            continue
+                        if any(x in ll for x in (
+                            "professional",
+                            "entry level",
+                            "internship",
+                            "filter by",
+                        )) and len(line) < 45:
+                            continue
+                        title = line
+                        break
+
+                if not title:
+                    continue
+
+                # Require a plausible job link rather than the filter control.
+                if not (
+                    "job" in href_low
+                    or "career" in href_low
+                    or "apply" in href_low
                 ):
-                    try:
-                        nxt = page.locator(selector)
-                        if nxt.count() and nxt.first.is_visible():
-                            nxt.first.click(timeout=1500)
-                            page.wait_for_timeout(900)
-                            next_clicked = True
-                            break
-                    except Exception:
-                        pass
+                    continue
 
-                current = len(results)
-                stagnant = stagnant + 1 if current == previous else 0
-                previous = current
+                # Prefer a city/state extracted from the card.
+                location = "Ireland"
+                for city in (
+                    "Dublin",
+                    "Mulhuddart",
+                    "Cork",
+                    "Waterford",
+                    "Galway",
+                    "Limerick",
+                ):
+                    if re.search(rf"\b{re.escape(city)}\b", card, re.I):
+                        location = f"{city}, Ireland"
+                        break
 
-                if not next_clicked or stagnant >= 4:
-                    break
+                canonical = href.split("#")[0]
+
+                # IBM can emit several links inside one card; use the most
+                # job-like URL/title pair and dedupe by canonical URL + title.
+                key = (
+                    canonical.rstrip("/").lower(),
+                    re.sub(r"\s+", " ", title).strip().lower(),
+                )
+
+                results[key] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": re.sub(r"\s+", " ", title).strip()[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": card[:5000],
+                }
+
+            # If the card contains multiple links, reduce to one row per
+            # title by preferring URLs that look most like job/application
+            # destinations.
+            by_title = {}
+            for job in results.values():
+                tkey = job["title"].lower()
+                current = by_title.get(tkey)
+                score = (
+                    (3 if "job" in job["url"].lower() else 0)
+                    + (2 if "apply" in job["url"].lower() else 0)
+                    + (1 if "career" in job["url"].lower() else 0)
+                )
+                old_score = -1
+                if current:
+                    old_score = (
+                        (3 if "job" in current["url"].lower() else 0)
+                        + (2 if "apply" in current["url"].lower() else 0)
+                        + (1 if "career" in current["url"].lower() else 0)
+                    )
+                if current is None or score > old_score:
+                    by_title[tkey] = job
 
             browser.close()
 
     except Exception as exc:
-        print(f"  ! IBM scrape failed: {exc}")
+        print(f"  ! IBM current careers scrape failed: {exc}")
+        return []
 
-    print(f"  IBM verified Ireland careers: {len(results)} jobs")
-    return list(results.values())
+    jobs = list(by_title.values()) if 'by_title' in locals() else []
+
+    print(
+        f"  IBM current ibm.com Ireland careers: {len(jobs)} jobs"
+    )
+    return jobs
 
 
 def scrape_huawei():
@@ -6343,8 +6559,9 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "Hitachi Energy": scrape_hitachi_energy,
+        "Aon": scrape_aon,
         "GE HealthCare": scrape_ge_healthcare,
-        "IBM": scrape_ibm,
         "Huawei": scrape_huawei,
         "Becton Dickinson (BD)": scrape_becton_dickinson,
         "AstraZeneca": scrape_astrazeneca,
@@ -6711,7 +6928,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'IBM', 'GE HealthCare'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy'):
         if not _targeted(company):
             continue
         try:
