@@ -390,7 +390,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
-    "Deutsche Bank": "deutsche_bank_beesite_api",
+    "Deutsche Bank": "deutsche_bank_workday",
     "DXC Technology": "dxc_cws_api",
     "Capgemini": "capgemini_successfactors_detail",
     "Cognizant": "cognizant_detail_crawl",
@@ -5264,207 +5264,43 @@ def scrape_smbc_group():
 
 def scrape_deutsche_bank():
     company = "Deutsche Bank"
-    api_url = "https://api-deutschebank.beesite.de/search/"
 
-    sess = _session()
-    if not sess:
-        print("  ! Deutsche Bank: HTTP session unavailable")
-        return []
+    # Current official Deutsche Bank Workday tenant.
+    jobs = scrape_workday(
+        company,
+        "db",
+        "wd3",
+        "DBWebsite",
+        max_pages=40,
+    )
 
-    results = {}
-    first_item = 1
-    count_item = 100
+    # Hard-validate Ireland in case Workday's global board leaks other locations.
+    out = []
+    seen = set()
 
-    def collect_position_dicts(obj, out):
-        if isinstance(obj, dict):
-            # A real position object contains at least an ID/title/location-ish field.
-            keys = set(obj.keys())
-            if (
-                ("PositionID" in keys or "PositionTitle" in keys)
-                and (
-                    "PositionLocation.CountryName" in keys
-                    or "PositionLocation" in keys
-                    or "CountryName" in keys
-                    or "PositionURI" in keys
-                )
-            ):
-                out.append(obj)
-            for val in obj.values():
-                collect_position_dicts(val, out)
-        elif isinstance(obj, list):
-            for val in obj:
-                collect_position_dicts(val, out)
+    for job in jobs or []:
+        title = str(job.get("title") or "").strip()
+        location = str(job.get("location") or "").strip()
+        url = str(job.get("url") or "").strip()
 
-    while first_item <= 2500:
-        data = {
-            "LanguageCode": "en",
-            "SearchParameters": {
-                "FirstItem": first_item,
-                "CountItem": count_item,
-                "MatchedObjectDescriptor": [
-                    "PositionID",
-                    "PositionTitle",
-                    "PositionURI",
-                    "OrganizationName",
-                    "PositionLocation.CountryName",
-                    "PositionLocation.CountrySubDivisionName",
-                    "PositionLocation.CityName",
-                    "PublicationStartDate",
-                    "CareerLevel.Name",
-                    "PositionSchedule.Name",
-                    "PositionOfferingType.Name",
-                ],
-                "Sort": [
-                    {
-                        "Criterion": "PublicationStartDate",
-                        "Direction": "DESC",
-                    }
-                ],
-            },
-            # Deliberately unfiltered: this is the exact request form proven
-            # by the live Deutsche Bank page. Filter Ireland from response data.
-            "SearchCriteria": [],
-        }
+        blob = f"{title} {location} {url}"
 
-        try:
-            r = sess.get(
-                api_url,
-                params={"data": json.dumps(data, separators=(",", ":"))},
-                timeout=30,
-                headers={
-                    "User-Agent": "Mozilla/5.0",
-                    "Referer": "https://careers.db.com/professionals/search-roles/",
-                    "Accept": "application/json, text/plain, */*",
-                },
-            )
-        except Exception as exc:
-            print(f"  ! Deutsche Bank API request failed: {exc}")
-            break
+        if not region_ok(blob):
+            continue
+        if not title or not url:
+            continue
 
-        if r.status_code != 200:
-            print(f"  ! Deutsche Bank API HTTP {r.status_code}")
-            break
+        key = url.split("?")[0].rstrip("/").lower()
+        if key in seen:
+            continue
+        seen.add(key)
 
-        try:
-            payload = r.json()
-        except Exception:
-            print("  ! Deutsche Bank API returned invalid JSON")
-            break
+        job["company"] = company
+        job["ats"] = "workday"
+        out.append(job)
 
-        rows = []
-        collect_position_dicts(payload, rows)
-
-        # Deduplicate recursive discoveries from nested structures.
-        unique_rows = {}
-        for row in rows:
-            pid = str(row.get("PositionID") or row.get("ID") or row.get("id") or "")
-            title = str(row.get("PositionTitle") or row.get("Title") or row.get("title") or "")
-            key = (pid, title, json.dumps(row, sort_keys=True, ensure_ascii=False)[:500])
-            unique_rows[key] = row
-        rows = list(unique_rows.values())
-
-        if not rows:
-            # If this page genuinely contains no position objects, we're done.
-            break
-
-        for row in rows:
-            location_obj = row.get("PositionLocation") or {}
-            if not isinstance(location_obj, dict):
-                location_obj = {}
-
-            country = str(
-                row.get("PositionLocation.CountryName")
-                or location_obj.get("CountryName")
-                or row.get("CountryName")
-                or ""
-            ).strip()
-
-            city = str(
-                row.get("PositionLocation.CityName")
-                or location_obj.get("CityName")
-                or row.get("CityName")
-                or ""
-            ).strip()
-
-            subdivision = str(
-                row.get("PositionLocation.CountrySubDivisionName")
-                or location_obj.get("CountrySubDivisionName")
-                or row.get("CountrySubDivisionName")
-                or ""
-            ).strip()
-
-            title = str(
-                row.get("PositionTitle")
-                or row.get("Title")
-                or row.get("title")
-                or ""
-            ).strip()
-
-            position_id = str(
-                row.get("PositionID")
-                or row.get("ID")
-                or row.get("id")
-                or ""
-            ).strip()
-
-            uri = str(
-                row.get("PositionURI")
-                or row.get("URI")
-                or row.get("url")
-                or ""
-            ).strip()
-
-            blob = json.dumps(row, ensure_ascii=False)
-
-            if country.lower() != "ireland":
-                # Last-resort exact returned field check, not description text.
-                if not re.search(
-                    r'"(?:PositionLocation\.)?CountryName"\s*:\s*"Ireland"',
-                    blob,
-                    re.I,
-                ):
-                    continue
-
-            if not title:
-                continue
-
-            if uri:
-                href = urllib.parse.urljoin("https://careers.db.com/", uri)
-            elif position_id:
-                href = (
-                    "https://careers.db.com/professionals/search-roles/"
-                    f"#/professional/job/{position_id}"
-                )
-            else:
-                continue
-
-            if city:
-                location = f"{city}, Ireland"
-            elif subdivision:
-                location = f"{subdivision}, Ireland"
-            else:
-                location = "Ireland"
-
-            key = (position_id or href).lower()
-            results[key] = {
-                "company": company,
-                "ats": "beesite",
-                "title": re.sub(r"\s+", " ", title).strip()[:300],
-                "location": location[:120],
-                "url": href,
-                "updated_at": row.get("PublicationStartDate"),
-                "description_text": blob[:5000],
-            }
-
-        # The live page reported 1846 total roles. Paginate the proven
-        # unfiltered API until a short page or sensible ceiling.
-        if len(rows) < count_item:
-            break
-
-        first_item += count_item
-
-    print(f"  Deutsche Bank Beesite API: {len(results)} Ireland jobs")
-    return list(results.values())
+    print(f"  Deutsche Bank official Workday: {len(out)} Ireland jobs")
+    return out
 
 
 def scrape_arup():
