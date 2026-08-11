@@ -390,6 +390,8 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Aiven": "aiven_official",
+    "A&L Goodbody": "alg_official",
     "Agilent Technologies": "agilent_workday",
     "Jacobs": "jacobs_official",
     "HP (Hewlett-Packard)": "hp_official",
@@ -5497,6 +5499,228 @@ def scrape_agilent():
 
 
 
+def scrape_algoodbody():
+    company = "A&L Goodbody"
+    listing = "https://www.algoodbody.com/careers/legalprofessionals"
+    html_text = _fetch_html(listing) or ""
+    urls = []
+
+    for m in re.finditer(
+        r'href=["\']([^"\']*/careers/legalprofessionals/[^"\']+)["\']',
+        html_text, re.I
+    ):
+        href = _absolute_url(listing, m.group(1)).split("?")[0]
+        if href.rstrip("/") != listing.rstrip("/") and href not in urls:
+            urls.append(href)
+
+    out = {}
+    for href in urls:
+        detail = _fetch_html(href) or ""
+        if not detail:
+            continue
+        text = _html_text(detail)
+        if not re.search(r'\bDublin\b', text, re.I):
+            continue
+
+        hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', detail, re.I | re.S)
+        title = _html_text(hm.group(1)).strip() if hm else ""
+
+        if not title:
+            tm = re.search(r'<title\b[^>]*>(.*?)</title>', detail, re.I | re.S)
+            title = _html_text(tm.group(1)).strip() if tm else ""
+
+        title = re.sub(r'\s*\|\s*A&L Goodbody.*$', '', title, flags=re.I).strip()
+        if not title or title.lower() in {"careers", "qualified professionals"}:
+            continue
+
+        out[href.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": "Dublin, Ireland",
+            "url": href,
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
+
+    print(f"  A&L Goodbody verified Dublin careers: {len(out)} jobs")
+    return list(out.values())
+
+def scrape_aiven():
+    company = "Aiven"
+    listing = "https://aiven.io/careers/job"
+    html_text = _fetch_html(listing) or ""
+    urls = []
+
+    for m in re.finditer(
+        r'href=["\']([^"\']*/careers/job/\d+[^"\']*)["\']',
+        html_text, re.I
+    ):
+        href = _absolute_url(listing, m.group(1)).split("?")[0]
+        if href not in urls:
+            urls.append(href)
+
+    out = {}
+    for href in urls:
+        detail = _fetch_html(href) or ""
+        if not detail:
+            continue
+
+        text = _html_text(detail)
+        first = "\n".join(text.splitlines()[:80])
+        if not re.search(r'\bIreland\b', first, re.I):
+            continue
+
+        hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', detail, re.I | re.S)
+        title = _html_text(hm.group(1)).strip() if hm else ""
+        if not title:
+            tm = re.search(r'<title\b[^>]*>(.*?)</title>', detail, re.I | re.S)
+            title = _html_text(tm.group(1)).strip() if tm else ""
+
+        title = re.sub(r'\s+(?:Cork,\s*|Dublin,\s*)?Ireland\s*$', '', title, flags=re.I).strip()
+        title = re.sub(r'\s{2,}[A-Za-z .\-]+,\s*[A-Za-z .\-]+,\s*(?:Finland|Ireland|Germany|France|UK|United Kingdom|USA|United States)\s*$', '', title, flags=re.I).strip()
+        if not title:
+            continue
+
+        if re.search(r'\bCork\s*,\s*Ireland\b', first, re.I):
+            location = "Cork, Ireland"
+        elif re.search(r'\bDublin\s*,\s*Ireland\b', first, re.I):
+            location = "Dublin, Ireland"
+        else:
+            location = "Ireland"
+
+        out[href.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": location,
+            "url": href,
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
+
+    print(f"  Aiven verified Ireland careers: {len(out)} jobs")
+    return list(out.values())
+
+def scrape_amd():
+    company = "Advanced Micro Devices (AMD)"
+    search_url = "https://careers.amd.com/careers-home/jobs?location=Ireland"
+    if not HAS_PLAYWRIGHT:
+        print("  ! AMD: Playwright unavailable")
+        return []
+
+    results = {}
+    ids = set()
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width":1440,"height":1200}, locale="en-IE")
+            page.goto(search_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(2500)
+            _dismiss_cookie_banner(page)
+
+            stagnant = 0
+            prev = 0
+            for _ in range(80):
+                source = page.content()
+                ids.update(re.findall(r'/careers-home/jobs/(\d+)', source, re.I))
+                anchors = page.locator('a[href*="/careers-home/jobs/"]')
+                for i in range(anchors.count()):
+                    href = anchors.nth(i).get_attribute("href") or ""
+                    mm = re.search(r'/careers-home/jobs/(\d+)', href, re.I)
+                    if mm:
+                        ids.add(mm.group(1))
+                page.mouse.wheel(0, 3500)
+                page.wait_for_timeout(400)
+                cur = len(ids)
+                stagnant = stagnant + 1 if cur == prev else 0
+                prev = cur
+                if stagnant >= 8:
+                    break
+
+            for jid in sorted(ids):
+                href = f"https://careers.amd.com/careers-home/jobs/{jid}?lang=en-us"
+                try:
+                    page.goto(href, wait_until="domcontentloaded", timeout=60000)
+                    page.wait_for_timeout(650)
+                    body = _browser_text(page.locator("body"))
+                except Exception:
+                    continue
+
+                top = "\n".join(body.splitlines()[:60])
+                if not re.search(r'\bIreland\b', top, re.I):
+                    continue
+
+                title = ""
+                try:
+                    h1 = page.locator("h1")
+                    if h1.count():
+                        title = _browser_text(h1.first).strip()
+                except Exception:
+                    pass
+                if not title:
+                    continue
+
+                if re.search(r'\bCork\s*,\s*Ireland\b', top, re.I):
+                    location = "Cork, Ireland"
+                elif re.search(r'\bDublin\s*,\s*Ireland\b', top, re.I):
+                    location = "Dublin, Ireland"
+                else:
+                    location = "Ireland"
+
+                canonical = href.split("?")[0]
+                results[canonical.lower()] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": body[:5000],
+                }
+
+            browser.close()
+    except Exception as exc:
+        print(f"  ! AMD scrape failed: {exc}")
+
+    print(f"  AMD verified Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+def scrape_aer_lingus():
+    company = "Aer Lingus"
+    url = "https://www.aerlingus.com/careers/careers-on-the-ground/ground-operations/"
+    html_text = _fetch_html(url) or ""
+    text = _html_text(html_text)
+    out = {}
+
+    if re.search(r'currently\s+have\s+vacancies', text, re.I):
+        apply_url = url
+        for m in re.finditer(
+            r'<a\b[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+            html_text, re.I | re.S
+        ):
+            label = _html_text(m.group(2)).lower()
+            if "apply" not in label:
+                continue
+            candidate = _absolute_url(url, m.group(1))
+            if candidate:
+                apply_url = candidate
+                break
+
+        out["aer-lingus-ground-operations"] = {
+            "company": company,
+            "ats": "direct",
+            "title": "Ground Operations vacancies",
+            "location": "Dublin, Ireland",
+            "url": apply_url,
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
+
+    print(f"  Aer Lingus verified current careers: {len(out)} jobs")
+    return list(out.values())
+
 def scrape_zscaler():
     """Zscaler Ireland/Irish-remote opportunities.
 
@@ -5625,6 +5849,8 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "Aiven": scrape_aiven,
+        "A&L Goodbody": scrape_algoodbody,
         "Agilent Technologies": scrape_agilent,
         "Jacobs": scrape_jacobs,
         "HP (Hewlett-Packard)": scrape_hp,
@@ -5986,7 +6212,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven'):
         if not _targeted(company):
             continue
         try:
