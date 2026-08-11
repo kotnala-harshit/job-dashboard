@@ -602,11 +602,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Coinbase": {
-    "platform": "greenhouse",
-    "slug": "coinbase",
-    "probe_version": 35
-  },
   "Coloplast": {
     "platform": "none",
     "slug": null,
@@ -2490,6 +2485,11 @@
   "LearnUpon": {
     "platform": "greenhouse",
     "slug": "learnupon",
+    "probe_version": 35
+  },
+  "Coinbase": {
+    "platform": "greenhouse",
+    "slug": "coinbase",
     "probe_version": 35
   },
   "Publift": {
