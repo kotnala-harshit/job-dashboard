@@ -390,6 +390,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Huawei": "huawei_teamtailor",
     "Becton Dickinson (BD)": "bd_workday_ireland",
     "Becton Dickinson (BD)": "bd_official",
     "AstraZeneca": "astrazeneca_official",
@@ -5926,6 +5927,223 @@ def scrape_becton_dickinson():
     return jobs
 
 
+def scrape_ibm():
+    company = "IBM"
+    source_url = "https://careers.ibm.com/en_US/careers/SearchJobs/?search=&location=Ireland"
+    if not HAS_PLAYWRIGHT:
+        print("  ! IBM: Playwright unavailable")
+        return []
+
+    results = {}
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width":1440,"height":1200}, locale="en-IE")
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(1800)
+            _dismiss_cookie_banner(page)
+
+            stagnant, prev = 0, 0
+            for _ in range(80):
+                anchors = page.locator('a[href*="/careers/JobDetail/"]')
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+                    try:
+                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                    except Exception:
+                        continue
+
+                    title = _browser_text(a).strip()
+                    node, card = a, ""
+                    for _up in range(6):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node)
+                        except Exception:
+                            break
+                        if candidate and len(candidate) <= 2600:
+                            card = candidate
+                        if card and region_ok(card):
+                            break
+
+                    if not region_ok(f"{title} {card} {href}"):
+                        continue
+                    if not title or len(title) > 300:
+                        lines = [x.strip() for x in card.splitlines() if 4 <= len(x.strip()) <= 220]
+                        title = lines[0] if lines else ""
+                    if not title:
+                        continue
+
+                    canonical = href.split("?")[0].rstrip("/")
+                    results[canonical.lower()] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": _browser_location(card, "Ireland"),
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+                page.mouse.wheel(0, 3200)
+                page.wait_for_timeout(350)
+                cur = len(results)
+                stagnant = stagnant + 1 if cur == prev else 0
+                prev = cur
+                if stagnant >= 8:
+                    break
+
+            browser.close()
+    except Exception as exc:
+        print(f"  ! IBM scrape failed: {exc}")
+
+    print(f"  IBM verified Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_huawei():
+    company = "Huawei"
+    source_url = "https://huaweiireland.teamtailor.com/jobs"
+    page = _fetch_html(source_url) or ""
+    results = {}
+
+    for m in re.finditer(
+        r'<a\b[^>]*href=["\']([^"\']+/jobs/\d+-[^"\']+)["\'][^>]*>(.*?)</a>',
+        page,
+        re.I | re.S,
+    ):
+        href = _absolute_url(source_url, m.group(1)).split("?")[0]
+        title = _html_text(m.group(2)).strip()
+        start = max(0, m.start()-900)
+        end = min(len(page), m.end()+1200)
+        chunk = _html_text(page[start:end])
+
+        if not region_ok(chunk):
+            continue
+        if not title or title.lower() in {"jobs", "view job", "apply"}:
+            continue
+
+        if re.search(r'\bDublin\b', chunk, re.I):
+            location = "Dublin, Ireland"
+        elif re.search(r'\bCork\b', chunk, re.I):
+            location = "Cork, Ireland"
+        else:
+            location = "Ireland"
+
+        results[href.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "teamtailor",
+            "title": title[:300],
+            "location": location,
+            "url": href,
+            "updated_at": None,
+            "description_text": chunk[:5000],
+        }
+
+    if not results and HAS_PLAYWRIGHT:
+        try:
+            rows = _browser_board_collect(
+                company,
+                [source_url],
+                ("/jobs/",),
+                default_location="Dublin, Ireland",
+                max_scrolls=50,
+                require_ireland=True,
+                source_tag="teamtailor",
+            )
+            for job in rows:
+                href = (job.get("url") or "").split("?")[0]
+                if re.search(r'/jobs/\d+-', href):
+                    results[href.rstrip("/").lower()] = job
+        except Exception as exc:
+            print(f"  ! Huawei fallback failed: {exc}")
+
+    print(f"  Huawei Ireland Research Centre: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_ge_healthcare():
+    company = "GE HealthCare"
+    urls = [
+        "https://careers.gehealthcare.com/global/en/search-results?keywords=&location=Ireland",
+        "https://careers.gehealthcare.com/global/en/search-results?keywords=&location=Cork%2C%20Ireland",
+    ]
+    if not HAS_PLAYWRIGHT:
+        print("  ! GE HealthCare: Playwright unavailable")
+        return []
+
+    results = {}
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width":1440,"height":1200}, locale="en-IE")
+
+            for url in urls:
+                try:
+                    page.goto(url, wait_until="domcontentloaded", timeout=90000)
+                    page.wait_for_timeout(1800)
+                    _dismiss_cookie_banner(page)
+                except Exception:
+                    continue
+
+                stagnant, prev = 0, len(results)
+                for _ in range(80):
+                    anchors = page.locator('a[href*="/global/en/job/"]')
+                    for i in range(anchors.count()):
+                        a = anchors.nth(i)
+                        try:
+                            href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                        except Exception:
+                            continue
+
+                        title = _browser_text(a).strip()
+                        node, card = a, ""
+                        for _up in range(6):
+                            try:
+                                node = node.locator("..")
+                                candidate = _browser_text(node)
+                            except Exception:
+                                break
+                            if candidate and len(candidate) <= 2600:
+                                card = candidate
+                            if card and region_ok(card):
+                                break
+
+                        if not region_ok(f"{title} {card} {href}"):
+                            continue
+                        if not title or len(title) > 300:
+                            lines = [x.strip() for x in card.splitlines() if 4 <= len(x.strip()) <= 220]
+                            title = lines[0] if lines else ""
+                        if not title:
+                            continue
+
+                        canonical = href.split("?")[0]
+                        results[canonical.lower()] = {
+                            "company": company,
+                            "ats": "phenom",
+                            "title": title[:300],
+                            "location": _browser_location(card, "Ireland"),
+                            "url": canonical,
+                            "updated_at": None,
+                            "description_text": card[:5000],
+                        }
+
+                    page.mouse.wheel(0, 3200)
+                    page.wait_for_timeout(350)
+                    cur = len(results)
+                    stagnant = stagnant + 1 if cur == prev else 0
+                    prev = cur
+                    if stagnant >= 8:
+                        break
+
+            browser.close()
+    except Exception as exc:
+        print(f"  ! GE HealthCare scrape failed: {exc}")
+
+    print(f"  GE HealthCare verified Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
 def scrape_zscaler():
     """Zscaler Ireland/Irish-remote opportunities.
 
@@ -6054,6 +6272,7 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "Huawei": scrape_huawei,
         "Becton Dickinson (BD)": scrape_becton_dickinson,
         "AstraZeneca": scrape_astrazeneca,
         "Aiven": scrape_aiven,
@@ -6419,7 +6638,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei'):
         if not _targeted(company):
             continue
         try:
