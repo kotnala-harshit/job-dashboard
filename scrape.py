@@ -389,6 +389,8 @@ DIRECT_COMPANY_CONNECTORS = {
     "NetApp": "netapp_browser",
     "Version 1": "version1_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Tata Consultancy Services (TCS)": "tcs_candidate_manager",
+    "Infosys": "infosys_ireland",
     "Wells Fargo": "wells_fargo_detail_crawl",
     "Vodafone": "vodafone_successfactors",
     "Wipro": "wipro_successfactors",
@@ -412,7 +414,6 @@ DIRECT_COMPANY_CONNECTORS = {
     "Agilent Technologies": "agilent_workday",
     "Jacobs": "jacobs_official",
     "HP (Hewlett-Packard)": "hp_official",
-    "HCLTech": "hcltech_successfactors",
     "Arup": "arup_official",
     "Deutsche Bank": "deutsche_bank_official",
     "SMBC Group": "smbc_successfactors",
@@ -5444,105 +5445,92 @@ def scrape_arup():
 
 def scrape_hcltech():
     company = "HCLTech"
-    urls = [
+    source_urls = [
         "https://careers.hcltech.com/search/?q=&locationsearch=Ireland",
-        "https://careers.hcltech.com/",
+        "https://careers.hcltech.com/search/?q=&locationsearch=Dublin",
+        "https://careers.hcltech.com/search/?q=&locationsearch=Cork",
+        "https://careers.hcltech.com/search/?q=&locationsearch=Carlow",
     ]
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! HCLTech: Playwright unavailable")
+        return []
+
     results = {}
 
-    # First, static SuccessFactors search HTML.
-    for url in urls:
-        page = _fetch_html(url) or ""
-        for m in re.finditer(
-            r'<a\b[^>]*href=["\']([^"\']*?/job/[^"\']+)["\'][^>]*>(.*?)</a>',
-            page,
-            flags=re.I | re.S,
-        ):
-            href = _absolute_url(url, m.group(1))
-            title = _html_text(m.group(2)).strip()
-            if not title or title.lower() in {"view job", "apply now"}:
-                continue
-            start = max(0, m.start() - 1200)
-            end = min(len(page), m.end() + 1800)
-            chunk = _html_text(page[start:end])
-            if not region_ok(chunk):
-                continue
-            key = href.split("?")[0].rstrip("/").lower()
-            results[key] = {
-                "company": company,
-                "ats": "successfactors",
-                "title": title[:300],
-                "location": _browser_location(chunk, "Ireland"),
-                "url": href.split("?")[0],
-                "updated_at": None,
-                "description_text": chunk[:5000],
-            }
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
 
-    # Browser fallback with search field interaction.
-    if not results and HAS_PLAYWRIGHT:
-        try:
-            with sync_playwright() as pw:
-                browser = pw.chromium.launch(headless=True)
-                page_obj = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
-                page_obj.goto("https://careers.hcltech.com/", wait_until="domcontentloaded", timeout=60000)
-                page_obj.wait_for_timeout(1400)
-                _dismiss_cookie_banner(page_obj)
+            for source_url in source_urls:
+                try:
+                    page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+                    page.wait_for_timeout(1800)
+                except Exception:
+                    continue
 
-                for selector in (
-                    'input[name="locationsearch"]',
-                    'input[placeholder*="location" i]',
-                    'input[aria-label*="location" i]',
-                ):
+                anchors = page.locator('a[href*="/job/"]')
+
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
                     try:
-                        inp = page_obj.locator(selector)
-                        if inp.count():
-                            inp.first.fill("Ireland")
-                            inp.first.press("Enter")
-                            page_obj.wait_for_timeout(1200)
-                            break
+                        raw = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
                     except Exception:
-                        pass
+                        continue
 
-                for _ in range(50):
-                    anchors = page_obj.locator('a[href*="/job/"]')
-                    for i in range(anchors.count()):
-                        a = anchors.nth(i)
-                        href = urllib.parse.urljoin(page_obj.url, a.get_attribute("href") or "")
-                        title = _browser_text(a).strip()
-                        node, card = a, ""
-                        for _up in range(5):
-                            try:
-                                node = node.locator("..")
-                                candidate = _browser_text(node)
-                            except Exception:
-                                break
-                            if candidate and len(candidate) <= 2200:
-                                card = candidate
-                            if card and region_ok(card):
-                                break
-                        if not region_ok(card):
-                            continue
-                        if not title or title.lower() in {"view job", "apply now"}:
-                            continue
-                        key = href.split("?")[0].rstrip("/").lower()
-                        results[key] = {
-                            "company": company,
-                            "ats": "successfactors",
-                            "title": title[:300],
-                            "location": _browser_location(card, "Ireland"),
-                            "url": href.split("?")[0],
-                            "updated_at": None,
-                            "description_text": card[:5000],
-                        }
-                    page_obj.mouse.wheel(0, 2800)
-                    page_obj.wait_for_timeout(300)
-                browser.close()
-        except Exception as exc:
-            print(f"  ! HCLTech browser scrape failed: {exc}")
+                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    if not title:
+                        continue
+
+                    node = a
+                    card = ""
+                    for _up in range(6):
+                        try:
+                            candidate = _browser_text(node)
+                        except Exception:
+                            candidate = ""
+                        if candidate and len(candidate) <= 2600:
+                            card = candidate
+                        if re.search(r"\b(?:Ireland|Dublin|Cork|Carlow)\b", card, re.I):
+                            break
+                        try:
+                            node = node.locator("..")
+                        except Exception:
+                            break
+
+                    blob = f"{title}\n{card}\n{href}"
+
+                    # Exclude Northern Ireland / Belfast.
+                    if re.search(r"\bBelfast\b|\bNorthern Ireland\b", blob, re.I):
+                        continue
+                    if not re.search(r"\b(?:Ireland|Dublin|Cork|Carlow)\b", blob, re.I):
+                        continue
+
+                    location = "Ireland"
+                    for city in ("Dublin", "Cork", "Carlow", "Galway", "Limerick"):
+                        if re.search(rf"\b{city}\b", blob, re.I):
+                            location = f"{city}, Ireland"
+                            break
+
+                    results[href.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "successfactors",
+                        "title": title[:300],
+                        "location": location,
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! HCLTech Ireland scrape failed: {exc}")
 
     print(f"  HCLTech official Ireland careers: {len(results)} jobs")
     return list(results.values())
-
 
 def scrape_hp():
     company = "HP (Hewlett-Packard)"
@@ -6937,6 +6925,192 @@ def scrape_wells_fargo():
     print(f"  Wells Fargo verified Dublin seeds: {len(results)} jobs")
     return list(results.values())
 
+def scrape_infosys():
+    company = "Infosys"
+    source_url = "https://digitalcareers.infosys.com/infosys/global-careers?location=Ireland"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Infosys: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(2500)
+
+            stagnant = 0
+            prev = 0
+
+            for _ in range(80):
+                anchors = page.locator('a[href*="/apply-"], a[href*="/company-job/"], a[href*="reqid"]')
+
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+                    try:
+                        raw = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    node = a
+                    card = ""
+
+                    for _up in range(6):
+                        try:
+                            candidate = _browser_text(node)
+                        except Exception:
+                            candidate = ""
+                        if candidate and len(candidate) <= 2600:
+                            card = candidate
+                        if re.search(r"\bIreland\b|\bDublin\b", card, re.I):
+                            break
+                        try:
+                            node = node.locator("..")
+                        except Exception:
+                            break
+
+                    blob = f"{title}\n{card}\n{href}"
+                    if not re.search(r"\bIreland\b", blob, re.I):
+                        continue
+
+                    if not title or len(title) > 300:
+                        lines = [
+                            re.sub(r"\s+", " ", x).strip()
+                            for x in card.splitlines()
+                            if 4 <= len(x.strip()) <= 220
+                        ]
+                        title = lines[0] if lines else ""
+
+                    if not title:
+                        continue
+
+                    location = "Dublin, Ireland" if re.search(r"\bDublin\b", blob, re.I) else "Ireland"
+
+                    # Infosys result-card text often appends location + requisition ID.
+                    title = re.sub(
+                        r"\s+(?:Dublin|Cork|Galway|Limerick)\s*-\s*Ireland\s+\d+BR\s*$",
+                        "",
+                        title,
+                        flags=re.I,
+                    ).strip()
+                    title = re.sub(
+                        r"\s+\d+BR\s*$",
+                        "",
+                        title,
+                        flags=re.I,
+                    ).strip()
+
+                    results[href.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": location,
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(300)
+
+                cur = len(results)
+                stagnant = stagnant + 1 if cur == prev else 0
+                prev = cur
+                if stagnant >= 7:
+                    break
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Infosys Ireland scrape failed: {exc}")
+
+    print(f"  Infosys official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_tcs():
+    company = "Tata Consultancy Services (TCS)"
+    source_url = "https://www.candidatemanager.net/cm/p/pJobs.aspx?mid=CXAZAZB&sid=YYAZD"
+
+    sess = _session()
+    if not sess:
+        print("  ! TCS: HTTP session unavailable")
+        return []
+
+    try:
+        r = sess.get(
+            source_url,
+            timeout=30,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+    except Exception as exc:
+        print(f"  ! TCS Candidate Manager request failed: {exc}")
+        return []
+
+    if r.status_code != 200:
+        print(f"  ! TCS Candidate Manager HTTP {r.status_code}")
+        return []
+
+    html_text = r.text or ""
+    results = {}
+
+    # Candidate Manager renders vacancy rows server-side.
+    for m in re.finditer(
+        r'<a[^>]+href=["\']([^"\']*pJobDetails[^"\']*)["\'][^>]*>(.*?)</a>',
+        html_text,
+        re.I | re.S,
+    ):
+        raw = m.group(1)
+        title = _html_text(m.group(2)).strip()
+        href = urllib.parse.urljoin(source_url, raw)
+
+        # Pull surrounding row text to get location/category.
+        start = max(0, m.start() - 1500)
+        end = min(len(html_text), m.end() + 1500)
+        row_html = html_text[start:end]
+        row_text = _html_text(row_html)
+
+        if not re.search(r"\bIreland\b", row_text, re.I):
+            continue
+        if not title:
+            continue
+
+        location = "Ireland"
+        locm = re.search(
+            r'([A-Za-z .-]+),\s*County\s+([A-Za-z .-]+),\s*Ireland',
+            row_text,
+            re.I,
+        )
+        if locm:
+            location = f"{locm.group(1).strip()}, County {locm.group(2).strip()}, Ireland"
+        else:
+            for city in ("Letterkenny", "Dublin", "Cork", "Galway", "Limerick", "Waterford"):
+                if re.search(rf"\b{city}\b", row_text, re.I):
+                    location = f"{city}, Ireland"
+                    break
+
+        results[href.lower()] = {
+            "company": company,
+            "ats": "candidate_manager",
+            "title": re.sub(r"\s+", " ", title).strip()[:300],
+            "location": location[:160],
+            "url": href,
+            "updated_at": None,
+            "description_text": row_text[:5000],
+        }
+
+    print(f"  TCS Candidate Manager: {len(results)} Ireland jobs")
+    return list(results.values())
+
+
 def scrape_zscaler():
     """Zscaler Ireland/Irish-remote opportunities.
 
@@ -7065,6 +7239,8 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "Tata Consultancy Services (TCS)": scrape_tcs,
+        "Infosys": scrape_infosys,
         "Wells Fargo": scrape_wells_fargo,
         "Vodafone": scrape_vodafone,
         "Wipro": scrape_wipro,
@@ -7081,7 +7257,6 @@ def scrape_direct_company(company: str):
         "Agilent Technologies": scrape_agilent,
         "Jacobs": scrape_jacobs,
         "HP (Hewlett-Packard)": scrape_hp,
-        "HCLTech": scrape_hcltech,
         "Arup": scrape_arup,
         "Deutsche Bank": scrape_deutsche_bank,
         "SMBC Group": scrape_smbc_group,
@@ -7439,7 +7614,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)'):
         if not _targeted(company):
             continue
         try:
