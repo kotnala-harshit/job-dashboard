@@ -390,6 +390,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Bank of America": "bank_of_america_official",
     "Aiven": "aiven_official",
     "A&L Goodbody": "alg_official",
     "Agilent Technologies": "agilent_workday",
@@ -4158,17 +4159,53 @@ def _static_official_jobs(company, url, href_pattern, default_location="Ireland"
 
 
 def scrape_bank_of_america():
-    """Temporarily withheld: local validation returned non-Ireland false positives."""
     company = "Bank of America"
-    url = "https://careers.bankofamerica.com/en-us/job-search/ireland"
-    _mark_connector_health(
-        company,
-        False,
-        "Needs verification: previous collector returned non-Ireland jobs as Dublin",
-        url,
-    )
-    print("  Bank of America: withheld from live jobs pending Ireland-only connector verification")
-    return []
+    source_url = "https://careers.bankofamerica.com/en-us/job-search/ireland"
+    page = _fetch_html(source_url) or ""
+    urls = []
+
+    for m in re.finditer(
+        r'href=["\']([^"\']*/en-us/job-detail/\d+/[^"\']+)["\']',
+        page,
+        re.I,
+    ):
+        href = _absolute_url(source_url, m.group(1)).split("?")[0]
+        if href not in urls:
+            urls.append(href)
+
+    results = {}
+    for href in urls:
+        detail = _fetch_html(href) or ""
+        if not detail:
+            continue
+        text = _html_text(detail)
+        top = "\n".join(text.splitlines()[:100])
+
+        if not re.search(r'\bDublin\s*,\s*Ireland\b', top, re.I):
+            continue
+
+        hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', detail, re.I | re.S)
+        title = _html_text(hm.group(1)).strip() if hm else ""
+        if not title:
+            tm = re.search(r'<title\b[^>]*>(.*?)</title>', detail, re.I | re.S)
+            title = _html_text(tm.group(1)).strip() if tm else ""
+        title = re.sub(r'\s*\|\s*Bank of America.*$', '', title, flags=re.I).strip()
+        if not title:
+            continue
+
+        results[href.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": "Dublin, Ireland",
+            "url": href,
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
+
+    print(f"  Bank of America verified Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
 
 def scrape_cognizant():
     """Cognizant: use server-rendered global job results and verify detail metadata for Ireland."""
@@ -5720,6 +5757,72 @@ def scrape_aer_lingus():
 
     print(f"  Aer Lingus verified current careers: {len(out)} jobs")
     return list(out.values())
+
+def scrape_aon():
+    company = "Aon"
+    source_url = "https://jobs.aon.com/jobs"
+    return _browser_board_collect(
+        company,
+        [source_url],
+        ("jobs.aon.com/jobs/",),
+        default_location="Dublin, Ireland",
+        max_scrolls=60,
+        require_ireland=True,
+        source_tag="direct",
+    )
+
+
+
+def scrape_hitachi_energy():
+    company = "Hitachi Energy"
+    source_urls = [
+        "https://careers.hitachi.com/search/hitachi-energy-ireland-limited/jobs",
+        "https://careers.hitachi.com/search/jobs/in/country/ireland",
+    ]
+    results = {}
+
+    for source_url in source_urls:
+        page = _fetch_html(source_url) or ""
+        if not page:
+            continue
+
+        for m in re.finditer(
+            r'<a\b[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+            page,
+            re.I | re.S,
+        ):
+            href = _absolute_url(source_url, m.group(1)).split("?")[0]
+            start = max(0, m.start() - 1400)
+            end = min(len(page), m.end() + 1800)
+            chunk = _html_text(page[start:end])
+
+            if "HITACHI ENERGY IRELAND LIMITED" not in chunk.upper():
+                continue
+            if not region_ok(chunk):
+                continue
+
+            title = _html_text(m.group(2)).strip()
+            if not title or len(title) > 300:
+                lines = [x.strip() for x in chunk.splitlines() if 4 <= len(x.strip()) <= 220]
+                title = lines[0] if lines else ""
+            if not title or title.lower() in {"search jobs", "careers", "view job", "apply now"}:
+                continue
+
+            key = href.rstrip("/").lower()
+            results[key] = {
+                "company": company,
+                "ats": "direct",
+                "title": title[:300],
+                "location": _browser_location(chunk, "Ireland"),
+                "url": href,
+                "updated_at": None,
+                "description_text": chunk[:5000],
+            }
+
+    print(f"  Hitachi Energy verified Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
 
 def scrape_zscaler():
     """Zscaler Ireland/Irish-remote opportunities.
