@@ -390,6 +390,8 @@ DIRECT_COMPANY_CONNECTORS = {
     "Version 1": "version1_browser",
     "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "GE HealthCare": "ge_healthcare_phenom",
+    "IBM": "ibm_official",
     "Huawei": "huawei_teamtailor",
     "Becton Dickinson (BD)": "bd_workday_ireland",
     "Becton Dickinson (BD)": "bd_official",
@@ -430,6 +432,7 @@ KNOWN_EIGHTFOLD_MAPPINGS = {
 }
 
 KNOWN_PHENOM_MAPPINGS = {
+    "GE HealthCare": "careers.gehealthcare.com|GEVGHLGLOBAL",
     "Cisco": "careers.cisco.com|CISCISGLOBAL",
     "Fiserv": "careers.fiserv.com|FFFYJUS",
     "Roche": "careers.roche.com|ROCHGLOBAL",
@@ -5929,52 +5932,165 @@ def scrape_becton_dickinson():
 
 def scrape_ibm():
     company = "IBM"
-    source_url = "https://careers.ibm.com/en_US/careers/SearchJobs/?search=&location=Ireland"
+    source_url = "https://careers.ibm.com/en_US/careers/SearchJobs/"
+
     if not HAS_PLAYWRIGHT:
         print("  ! IBM: Playwright unavailable")
         return []
 
     results = {}
+
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width":1440,"height":1200}, locale="en-IE")
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1200},
+                locale="en-IE",
+            )
             page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
             page.wait_for_timeout(1800)
             _dismiss_cookie_banner(page)
 
-            stagnant, prev = 0, 0
-            for _ in range(80):
+            # IBM ignores ?location=Ireland in the URL. Use the actual Location
+            # filter rendered on the page instead.
+            filtered = False
+
+            # Strategy 1: expand the Location filter and click an Ireland option.
+            try:
+                loc_control = page.get_by_text("Location", exact=True)
+                if loc_control.count():
+                    loc_control.first.click(timeout=1500)
+                    page.wait_for_timeout(500)
+            except Exception:
+                pass
+
+            for selector in (
+                'label:has-text("Ireland")',
+                'button:has-text("Ireland")',
+                '[role="option"]:has-text("Ireland")',
+                '[role="checkbox"]:has-text("Ireland")',
+                'input[value="Ireland"]',
+            ):
+                try:
+                    opt = page.locator(selector)
+                    if opt.count() and opt.first.is_visible():
+                        opt.first.click(timeout=1500)
+                        page.wait_for_timeout(1200)
+                        filtered = True
+                        break
+                except Exception:
+                    pass
+
+            # Strategy 2: type Ireland into any visible filter/search control
+            # exposed after opening Location, then select the Ireland suggestion.
+            if not filtered:
+                for selector in (
+                    'input[placeholder*="location" i]',
+                    'input[aria-label*="location" i]',
+                    'input[name*="location" i]',
+                    'input[placeholder*="filter" i]',
+                    'input[role="combobox"]',
+                ):
+                    try:
+                        inp = page.locator(selector)
+                        visible = [inp.nth(i) for i in range(inp.count()) if inp.nth(i).is_visible()]
+                        if not visible:
+                            continue
+                        visible[0].fill("Ireland")
+                        page.wait_for_timeout(700)
+
+                        for opt_selector in (
+                            '[role="option"]:has-text("Ireland")',
+                            'li:has-text("Ireland")',
+                            'label:has-text("Ireland")',
+                        ):
+                            opt = page.locator(opt_selector)
+                            if opt.count() and opt.first.is_visible():
+                                opt.first.click(timeout=1500)
+                                filtered = True
+                                break
+
+                        if not filtered:
+                            try:
+                                visible[0].press("Enter")
+                                filtered = True
+                            except Exception:
+                                pass
+
+                        page.wait_for_timeout(1200)
+                        break
+                    except Exception:
+                        pass
+
+            # Strategy 3: if IBM exposes a normal form search button, submit it.
+            if filtered:
+                for label in ("Search", "Apply", "Done"):
+                    try:
+                        btn = page.get_by_role("button", name=label, exact=False)
+                        if btn.count() and btn.first.is_visible():
+                            btn.first.click(timeout=1200)
+                            page.wait_for_timeout(1200)
+                            break
+                    except Exception:
+                        pass
+
+            stagnant = 0
+            previous = 0
+            pages_seen = 0
+
+            while pages_seen < 20:
+                pages_seen += 1
+
                 anchors = page.locator('a[href*="/careers/JobDetail/"]')
+
                 for i in range(anchors.count()):
                     a = anchors.nth(i)
+
                     try:
-                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                        href = urllib.parse.urljoin(
+                            page.url,
+                            a.get_attribute("href") or "",
+                        )
                     except Exception:
+                        continue
+
+                    if "/careers/JobDetail/" not in href:
                         continue
 
                     title = _browser_text(a).strip()
                     node, card = a, ""
-                    for _up in range(6):
+
+                    for _up in range(7):
                         try:
                             node = node.locator("..")
                             candidate = _browser_text(node)
                         except Exception:
                             break
-                        if candidate and len(candidate) <= 2600:
+
+                        if candidate and len(candidate) <= 2800:
                             card = candidate
+
                         if card and region_ok(card):
                             break
 
-                    if not region_ok(f"{title} {card} {href}"):
+                    # Never trust the page filter alone. Require Ireland evidence
+                    # on the actual result card.
+                    if not region_ok(card):
                         continue
+
                     if not title or len(title) > 300:
-                        lines = [x.strip() for x in card.splitlines() if 4 <= len(x.strip()) <= 220]
+                        lines = [
+                            x.strip()
+                            for x in card.splitlines()
+                            if 4 <= len(x.strip()) <= 220
+                        ]
                         title = lines[0] if lines else ""
+
                     if not title:
                         continue
 
                     canonical = href.split("?")[0].rstrip("/")
+
                     results[canonical.lower()] = {
                         "company": company,
                         "ats": "direct",
@@ -5985,15 +6101,33 @@ def scrape_ibm():
                         "description_text": card[:5000],
                     }
 
-                page.mouse.wheel(0, 3200)
-                page.wait_for_timeout(350)
-                cur = len(results)
-                stagnant = stagnant + 1 if cur == prev else 0
-                prev = cur
-                if stagnant >= 8:
+                # IBM uses "Next >>" rather than an infinite-scroll-only list.
+                next_clicked = False
+                for selector in (
+                    'text="Next >>"',
+                    'a:has-text("Next >>")',
+                    'button:has-text("Next")',
+                    'a:has-text("Next")',
+                ):
+                    try:
+                        nxt = page.locator(selector)
+                        if nxt.count() and nxt.first.is_visible():
+                            nxt.first.click(timeout=1500)
+                            page.wait_for_timeout(900)
+                            next_clicked = True
+                            break
+                    except Exception:
+                        pass
+
+                current = len(results)
+                stagnant = stagnant + 1 if current == previous else 0
+                previous = current
+
+                if not next_clicked or stagnant >= 4:
                     break
 
             browser.close()
+
     except Exception as exc:
         print(f"  ! IBM scrape failed: {exc}")
 
@@ -6064,84 +6198,21 @@ def scrape_huawei():
 
 def scrape_ge_healthcare():
     company = "GE HealthCare"
-    urls = [
-        "https://careers.gehealthcare.com/global/en/search-results?keywords=&location=Ireland",
-        "https://careers.gehealthcare.com/global/en/search-results?keywords=&location=Cork%2C%20Ireland",
-    ]
-    if not HAS_PLAYWRIGHT:
-        print("  ! GE HealthCare: Playwright unavailable")
+    slug = "careers.gehealthcare.com|GEVGHLGLOBAL"
+
+    sess = _session()
+    if not sess:
+        print("  ! GE HealthCare: HTTP session unavailable")
         return []
 
-    results = {}
     try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width":1440,"height":1200}, locale="en-IE")
-
-            for url in urls:
-                try:
-                    page.goto(url, wait_until="domcontentloaded", timeout=90000)
-                    page.wait_for_timeout(1800)
-                    _dismiss_cookie_banner(page)
-                except Exception:
-                    continue
-
-                stagnant, prev = 0, len(results)
-                for _ in range(80):
-                    anchors = page.locator('a[href*="/global/en/job/"]')
-                    for i in range(anchors.count()):
-                        a = anchors.nth(i)
-                        try:
-                            href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
-                        except Exception:
-                            continue
-
-                        title = _browser_text(a).strip()
-                        node, card = a, ""
-                        for _up in range(6):
-                            try:
-                                node = node.locator("..")
-                                candidate = _browser_text(node)
-                            except Exception:
-                                break
-                            if candidate and len(candidate) <= 2600:
-                                card = candidate
-                            if card and region_ok(card):
-                                break
-
-                        if not region_ok(f"{title} {card} {href}"):
-                            continue
-                        if not title or len(title) > 300:
-                            lines = [x.strip() for x in card.splitlines() if 4 <= len(x.strip()) <= 220]
-                            title = lines[0] if lines else ""
-                        if not title:
-                            continue
-
-                        canonical = href.split("?")[0]
-                        results[canonical.lower()] = {
-                            "company": company,
-                            "ats": "phenom",
-                            "title": title[:300],
-                            "location": _browser_location(card, "Ireland"),
-                            "url": canonical,
-                            "updated_at": None,
-                            "description_text": card[:5000],
-                        }
-
-                    page.mouse.wheel(0, 3200)
-                    page.wait_for_timeout(350)
-                    cur = len(results)
-                    stagnant = stagnant + 1 if cur == prev else 0
-                    prev = cur
-                    if stagnant >= 8:
-                        break
-
-            browser.close()
+        jobs = _scrape_phenom(company, slug, sess)
     except Exception as exc:
-        print(f"  ! GE HealthCare scrape failed: {exc}")
+        print(f"  ! GE HealthCare Phenom scrape failed: {exc}")
+        jobs = []
 
-    print(f"  GE HealthCare verified Ireland careers: {len(results)} jobs")
-    return list(results.values())
+    print(f"  GE HealthCare Phenom: {len(jobs)} Ireland jobs")
+    return jobs
 
 
 def scrape_zscaler():
@@ -6272,6 +6343,8 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "GE HealthCare": scrape_ge_healthcare,
+        "IBM": scrape_ibm,
         "Huawei": scrape_huawei,
         "Becton Dickinson (BD)": scrape_becton_dickinson,
         "AstraZeneca": scrape_astrazeneca,
@@ -6638,7 +6711,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'IBM', 'GE HealthCare'):
         if not _targeted(company):
             continue
         try:
