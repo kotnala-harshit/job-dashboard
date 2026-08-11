@@ -7478,8 +7478,291 @@ def scrape_zscaler():
     return list(results.values())
 
 
+
+def scrape_abbott_rewired():
+    company = "Abbott"
+    source_url = "https://www.jobs.abbott/us/en/ireland-jobs"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Abbott: Playwright unavailable")
+        return []
+
+    results = {}
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(2500)
+
+            stagnant = 0
+            previous = 0
+            for _ in range(100):
+                links = page.locator('a[href*="/job/"]')
+
+                for i in range(links.count()):
+                    a = links.nth(i)
+                    try:
+                        raw = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    node = a
+                    card = ""
+
+                    for _up in range(7):
+                        try:
+                            txt = _browser_text(node)
+                        except Exception:
+                            txt = ""
+                        if txt and len(txt) <= 3200:
+                            card = txt
+                        if re.search(r"\b(?:Ireland|Dublin|Cork|Kilkenny|Clonmel|Sligo|Longford|Donegal|Galway|Cavan)\b", card, re.I):
+                            break
+                        try:
+                            node = node.locator("..")
+                        except Exception:
+                            break
+
+                    blob = f"{title}\n{card}\n{href}"
+
+                    if not title or len(title) > 300:
+                        lines = [
+                            re.sub(r"\s+", " ", x).strip()
+                            for x in card.splitlines()
+                            if 5 <= len(x.strip()) <= 220
+                        ]
+                        title = next((x for x in lines if x.lower() not in {"apply now", "view job", "save job"}), "")
+
+                    if not title:
+                        continue
+
+                    location = "Ireland"
+                    for city in ("Dublin","Cork","Kilkenny","Clonmel","Sligo","Longford","Donegal","Galway","Cavan"):
+                        if re.search(rf"\b{city}\b", blob, re.I):
+                            location = f"{city}, Ireland"
+                            break
+
+                    canonical = href.split("?")[0]
+                    results[canonical.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "phenom",
+                        "title": title[:300],
+                        "location": location,
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+                page.mouse.wheel(0, 3200)
+                page.wait_for_timeout(300)
+
+                current = len(results)
+                stagnant = stagnant + 1 if current == previous else 0
+                previous = current
+                if stagnant >= 8:
+                    break
+
+            browser.close()
+    except Exception as exc:
+        print(f"  ! Abbott rewired scrape failed: {exc}")
+
+    print(f"  Abbott rewired Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_allianz_rewired():
+    company = "Allianz"
+    source_url = "https://careers.allianz.com/ie/en/allianz-ireland"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Allianz: Playwright unavailable")
+        return []
+
+    results = {}
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(3000)
+
+            stagnant = 0
+            previous = 0
+            for _ in range(80):
+                links = page.locator('a[href*="/job/"]')
+
+                for i in range(links.count()):
+                    a = links.nth(i)
+                    try:
+                        raw = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    node = a
+                    card = ""
+
+                    for _up in range(7):
+                        try:
+                            txt = _browser_text(node)
+                        except Exception:
+                            txt = ""
+                        if txt and len(txt) <= 3000:
+                            card = txt
+                        if re.search(r"\bDublin\b|\bIreland\b", card, re.I):
+                            break
+                        try:
+                            node = node.locator("..")
+                        except Exception:
+                            break
+
+                    blob = f"{title}\n{card}\n{href}"
+
+                    if re.search(r"\bBelfast\b|\bNorthern Ireland\b", blob, re.I):
+                        continue
+                    if not re.search(r"\bDublin\b|\bIreland\b", blob, re.I):
+                        continue
+
+                    if not title or len(title) > 300:
+                        lines = [
+                            re.sub(r"\s+", " ", x).strip()
+                            for x in card.splitlines()
+                            if 5 <= len(x.strip()) <= 220
+                        ]
+                        title = next((x for x in lines if x.lower() not in {"apply now", "view job", "save job"}), "")
+
+                    if not title:
+                        continue
+
+                    location = "Dublin, Ireland" if re.search(r"\bDublin\b", blob, re.I) else "Ireland"
+                    canonical = href.split("?")[0]
+
+                    results[canonical.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "phenom",
+                        "title": title[:300],
+                        "location": location,
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(350)
+
+                current = len(results)
+                stagnant = stagnant + 1 if current == previous else 0
+                previous = current
+                if stagnant >= 8:
+                    break
+
+            browser.close()
+    except Exception as exc:
+        print(f"  ! Allianz rewired scrape failed: {exc}")
+
+    print(f"  Allianz rewired Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_bnp_paribas_rewired():
+    company = "BNP Paribas"
+    source_url = "https://group.bnpparibas/en/careers/all-job-offers/dublin"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! BNP Paribas: Playwright unavailable")
+        return []
+
+    results = {}
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(2500)
+
+            stagnant = 0
+            previous = 0
+            for _ in range(60):
+                links = page.locator("a[href]")
+
+                for i in range(links.count()):
+                    a = links.nth(i)
+                    try:
+                        raw = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    node = a
+                    card = ""
+
+                    for _up in range(7):
+                        try:
+                            txt = _browser_text(node)
+                        except Exception:
+                            txt = ""
+                        if txt and len(txt) <= 3500:
+                            card = txt
+                        if re.search(r"\bDublin\b|\bCounty Dublin\b", card, re.I):
+                            break
+                        try:
+                            node = node.locator("..")
+                        except Exception:
+                            break
+
+                    blob = f"{title}\n{card}\n{href}"
+
+                    if not re.search(r"\bDublin\b|\bCounty Dublin\b", blob, re.I):
+                        continue
+                    if not title or title.lower() in {"dublin","county dublin","apply now","create email alert"}:
+                        continue
+                    if href.rstrip("/") == source_url.rstrip("/"):
+                        continue
+
+                    if len(title) > 300:
+                        continue
+
+                    canonical = href.split("?")[0]
+                    results[canonical.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": "Dublin, Ireland",
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(300)
+
+                current = len(results)
+                stagnant = stagnant + 1 if current == previous else 0
+                previous = current
+                if stagnant >= 7:
+                    break
+
+            browser.close()
+    except Exception as exc:
+        print(f"  ! BNP Paribas rewired scrape failed: {exc}")
+
+    print(f"  BNP Paribas rewired Dublin careers: {len(results)} jobs")
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     fn={
+        "Allianz Ireland": scrape_allianz_rewired,
+        "Allianz": scrape_allianz_rewired,
+        "Abbott Laboratories": scrape_abbott_rewired,
+        "Abbott": scrape_abbott_rewired,
         "Accenture": scrape_accenture,
         "Citi": scrape_citi,
         "Apple": scrape_apple,
@@ -7527,7 +7810,7 @@ def scrape_direct_company(company: str):
         "Cognizant": scrape_cognizant,
         "AIB (Allied Irish Banks)": scrape_aib,
         "Central Bank of Ireland": scrape_central_bank_ireland,
-        "BNP Paribas": scrape_bnp_paribas,
+        "BNP Paribas": scrape_bnp_paribas_rewired,
         "Capgemini": scrape_capgemini,
         "ServiceNow": scrape_servicenow,
         "Boston Scientific": scrape_boston_scientific,
