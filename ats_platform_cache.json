@@ -1377,11 +1377,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "LearnUpon": {
-    "platform": "greenhouse",
-    "slug": "learnupon",
-    "probe_version": 35
-  },
   "LetsGetChecked": {
     "platform": "none",
     "slug": null,
@@ -2490,6 +2485,11 @@
   "Canto": {
     "platform": "greenhouse",
     "slug": "canto",
+    "probe_version": 35
+  },
+  "LearnUpon": {
+    "platform": "greenhouse",
+    "slug": "learnupon",
     "probe_version": 35
   },
   "Publift": {
