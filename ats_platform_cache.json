@@ -1707,11 +1707,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Pfizer": {
-    "platform": "workday",
-    "slug": "pfizer|wd1|PfizerCareers",
-    "probe_version": 35
-  },
   "Philip Lee": {
     "platform": "none",
     "slug": null,
@@ -2490,6 +2485,11 @@
   "Coinbase": {
     "platform": "greenhouse",
     "slug": "coinbase",
+    "probe_version": 35
+  },
+  "Pfizer": {
+    "platform": "workday",
+    "slug": "pfizer|wd1|PfizerCareers",
     "probe_version": 35
   },
   "Publift": {
