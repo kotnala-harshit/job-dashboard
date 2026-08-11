@@ -388,8 +388,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "KPMG Ireland": "kpmg",
     "NetApp": "netapp_browser",
     "Version 1": "version1_browser",
-    "Grant Thornton Ireland": "grantthornton_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Grant Thornton Ireland": "grant_thornton_oracle",
+    "KPMG Ireland": "kpmg_avature",
     "Deutsche Bank": "deutsche_bank_workday",
     "DXC Technology": "dxc_cws_api",
     "Capgemini": "capgemini_successfactors_detail",
@@ -4870,84 +4871,127 @@ def scrape_nvidia():
     )
 
 
+
 def scrape_grant_thornton():
-    """Grant Thornton Ireland official careers collector.
-
-    The historical iegt.wd3 Workday board is no longer dependable.
-    Use the current Grant Thornton Ireland careers pages instead.
-    """
-
-    urls = [
-        "https://www.grantthornton.ie/careers/",
-        "https://www.grantthornton.ie/careers/experienced-hires/",
-        "https://www.grantthornton.ie/careers/early-careers/",
-    ]
-
-    results = []
-    seen = set()
-
-    for url in urls:
-        try:
-            rows = _scrape_public_careers_page(
-                "Grant Thornton Ireland",
-                url,
-                (
-                    "/careers/",
-                    "/job/",
-                    "/jobs/",
-                    "vacanc",
-                    "opportunit",
-                    "experienced-hires",
-                    "graduate",
-                    "undergrad",
-                ),
-                default_location="Ireland",
-            )
-        except Exception as exc:
-            print(f"  ! Grant Thornton Ireland page failed {url}: {exc}")
-            continue
-
-        for job in rows:
-            title = (job.get("title") or "").strip()
-            href = (job.get("url") or "").strip()
-
-            if not title or not href:
-                continue
-
-            low_title = title.lower()
-
-            # Remove obvious navigation/information links.
-            blocked = (
-                "why grant thornton",
-                "our benefits",
-                "working at grant thornton",
-                "careers",
-                "experienced hires",
-                "early careers",
-                "graduate programme",
-                "undergrad programme",
-                "contact us",
-            )
-
-            if low_title in blocked:
-                continue
-
-            key = href.split("?")[0].rstrip("/").lower()
-            if key in seen:
-                continue
-
-            seen.add(key)
-            job["company"] = "Grant Thornton Ireland"
-            job["ats"] = "direct"
-            results.append(job)
-
-    print(
-        f"  Grant Thornton Ireland official careers: "
-        f"{len(results)} candidate Ireland opportunities"
+    company = "Grant Thornton Ireland"
+    source_url = (
+        "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/"
+        "GrantThorntonIrelandExperiencedHires/jobs"
     )
 
-    return results
+    if not HAS_PLAYWRIGHT:
+        print("  ! Grant Thornton Ireland: Playwright unavailable")
+        return []
 
+    results = {}
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
+
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(3500)
+            try:
+                page.wait_for_load_state("networkidle", timeout=15000)
+            except Exception:
+                pass
+
+            stagnant = 0
+            prev = 0
+
+            for _ in range(80):
+                anchors = page.locator('a[href*="/job/"]')
+
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+                    try:
+                        raw = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    title = _browser_text(a).strip()
+                    node = a
+                    card = ""
+
+                    for _up in range(7):
+                        try:
+                            candidate = _browser_text(node)
+                        except Exception:
+                            candidate = ""
+                        if candidate and len(candidate) <= 3000:
+                            card = candidate
+                        if re.search(r"\b(?:Dublin|Ireland|Cork|Galway|Limerick)\b", card, re.I):
+                            break
+                        try:
+                            node = node.locator("..")
+                        except Exception:
+                            break
+
+                    blob = f"{title}\n{card}\n{href}"
+
+                    if not title or len(title) > 300:
+                        lines = [
+                            re.sub(r"\s+", " ", x).strip()
+                            for x in card.splitlines()
+                            if 4 <= len(x.strip()) <= 220
+                        ]
+                        title = next(
+                            (x for x in lines if x.lower() not in {"apply now", "view job", "job description"}),
+                            "",
+                        )
+
+                    if not title:
+                        continue
+
+                    location = "Ireland"
+                    for city in ("Dublin", "Cork", "Galway", "Limerick"):
+                        if re.search(rf"\b{city}\b", blob, re.I):
+                            location = f"{city}, Ireland"
+                            break
+
+                    results[href.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "oracle",
+                        "title": re.sub(r"\s+", " ", title).strip()[:300],
+                        "location": location,
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+                clicked = False
+                for selector in (
+                    'button:has-text("Load More")',
+                    'button:has-text("Show More")',
+                    'button:has-text("Next")',
+                    'a:has-text("Next")',
+                ):
+                    try:
+                        btn = page.locator(selector)
+                        if btn.count() and btn.first.is_visible():
+                            btn.first.click(timeout=1200)
+                            page.wait_for_timeout(500)
+                            clicked = True
+                            break
+                    except Exception:
+                        pass
+
+                page.mouse.wheel(0, 3200)
+                page.wait_for_timeout(350)
+
+                cur = len(results)
+                stagnant = stagnant + 1 if cur == prev else 0
+                prev = cur
+                if stagnant >= 8 and not clicked:
+                    break
+
+            browser.close()
+    except Exception as exc:
+        print(f"  ! Grant Thornton Oracle jobs-page scrape failed: {exc}")
+
+    print(f"  Grant Thornton Ireland Oracle /jobs: {len(results)} Ireland jobs")
+    return list(results.values())
 
 def scrape_microsoft():
     return _browser_board_collect(
@@ -6554,6 +6598,138 @@ def scrape_ge_healthcare():
     return jobs
 
 
+
+def scrape_kpmg_ireland():
+    company = "KPMG Ireland"
+    source_urls = [
+        "https://kpmgireland.avature.net/experiencedhires/SearchJobs/?folderOffset=0",
+        "https://kpmgireland.avature.net/experiencedhires/SearchJobs/?3_33_3=91",
+        "https://kpmgireland.avature.net/experiencedhires/SearchJobs/?3_33_3=92",
+        "https://kpmgireland.avature.net/experiencedhires/SearchJobs/?3_33_3=93",
+        "https://kpmgireland.avature.net/experiencedhires/SearchJobs/?3_33_3=95",
+        "https://kpmgireland.avature.net/experiencedhires/SearchJobs/?3_33_3=918",
+        "https://kpmgireland.avature.net/experiencedhires/SearchJobs/?5339=1416336&5339_format=2564&listFilterMode=1",
+    ]
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! KPMG Ireland: Playwright unavailable")
+        return []
+
+    results = {}
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
+
+            for source_url in source_urls:
+                try:
+                    page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+                    page.wait_for_timeout(1800)
+                except Exception:
+                    continue
+
+                stagnant = 0
+                prev = len(results)
+
+                for _ in range(60):
+                    anchors = page.locator('a[href*="/FolderDetail/"]')
+
+                    for i in range(anchors.count()):
+                        a = anchors.nth(i)
+                        try:
+                            raw = a.get_attribute("href") or ""
+                            href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                        except Exception:
+                            continue
+
+                        title = _browser_text(a).strip()
+                        node = a
+                        card = ""
+
+                        for _up in range(6):
+                            try:
+                                candidate = _browser_text(node)
+                            except Exception:
+                                candidate = ""
+                            if candidate and len(candidate) <= 2800:
+                                card = candidate
+                            if re.search(r"\b(?:Dublin|Ireland|Cork|Galway|Limerick)\b", card, re.I):
+                                break
+                            try:
+                                node = node.locator("..")
+                            except Exception:
+                                break
+
+                        blob = f"{title}\n{card}\n{href}"
+
+                        # Keep Republic of Ireland only. Avature can mix Belfast
+                        # vacancies into the same experienced-hire search.
+                        if re.search(r"\bBelfast\b", blob, re.I):
+                            continue
+                        if re.search(r"\bNorthern Ireland\b", blob, re.I):
+                            continue
+
+                        if not re.search(r"\b(?:Dublin|Ireland|Cork|Galway|Limerick)\b", blob, re.I):
+                            continue
+
+                        if not title or len(title) > 300:
+                            lines = [
+                                re.sub(r"\s+", " ", x).strip()
+                                for x in card.splitlines()
+                                if 4 <= len(x.strip()) <= 220
+                            ]
+                            title = next(
+                                (x for x in lines if x.lower() not in {"dublin -", "dublin", "apply now", "view job"}),
+                                "",
+                            )
+
+                        if not title:
+                            continue
+
+                        location = "Ireland"
+                        for city in ("Dublin", "Cork", "Galway", "Limerick"):
+                            if re.search(rf"\b{city}\b", blob, re.I):
+                                location = f"{city}, Ireland"
+                                break
+
+                        results[href.rstrip("/").lower()] = {
+                            "company": company,
+                            "ats": "avature",
+                            "title": re.sub(r"\s+", " ", title).strip()[:300],
+                            "location": location,
+                            "url": href,
+                            "updated_at": None,
+                            "description_text": card[:5000],
+                        }
+
+                    clicked = False
+                    for selector in ('a:has-text("Next")', 'button:has-text("Next")', 'a[rel="next"]'):
+                        try:
+                            nxt = page.locator(selector)
+                            if nxt.count() and nxt.first.is_visible():
+                                nxt.first.click(timeout=1200)
+                                page.wait_for_timeout(500)
+                                clicked = True
+                                break
+                        except Exception:
+                            pass
+
+                    page.mouse.wheel(0, 3000)
+                    page.wait_for_timeout(300)
+
+                    cur = len(results)
+                    stagnant = stagnant + 1 if cur == prev else 0
+                    prev = cur
+                    if stagnant >= 6 and not clicked:
+                        break
+
+            browser.close()
+    except Exception as exc:
+        print(f"  ! KPMG Ireland Avature scrape failed: {exc}")
+
+    print(f"  KPMG Ireland Avature FolderDetail: {len(results)} Ireland jobs")
+    return list(results.values())
+
 def scrape_zscaler():
     """Zscaler Ireland/Irish-remote opportunities.
 
@@ -6682,6 +6858,7 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "KPMG Ireland": scrape_kpmg_ireland,
         "IBM": scrape_ibm,
         "Hitachi Energy": scrape_hitachi_energy,
         "Aon": scrape_aon,
