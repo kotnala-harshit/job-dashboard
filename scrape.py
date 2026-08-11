@@ -389,6 +389,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "NetApp": "netapp_browser",
     "Version 1": "version1_browser",
     "HSBC Ireland": "hsbc_browser",
+    "Wells Fargo": "wells_fargo_detail_crawl",
+    "Vodafone": "vodafone_successfactors",
+    "Wipro": "wipro_successfactors",
     "Grant Thornton Ireland": "grant_thornton_oracle",
     "KPMG Ireland": "kpmg_avature",
     "Deutsche Bank": "deutsche_bank_workday",
@@ -6730,6 +6733,210 @@ def scrape_kpmg_ireland():
     print(f"  KPMG Ireland Avature FolderDetail: {len(results)} Ireland jobs")
     return list(results.values())
 
+def scrape_wipro():
+    company = "Wipro"
+
+    seeds = [
+        "https://careers.wipro.com/job/ADMINISTRATOR-L3/192502-en_US/",
+        "https://careers.wipro.com/job/DEVELOPER-L3%28CONTRACT%29/185276-en_US/",
+    ]
+
+    sess = _session()
+    if not sess:
+        print("  ! Wipro: HTTP session unavailable")
+        return []
+
+    results = {}
+    queue = list(seeds)
+    seen = set()
+
+    while queue and len(seen) < 80:
+        href = queue.pop(0).split("#")[0]
+        if href in seen:
+            continue
+        seen.add(href)
+
+        try:
+            r = sess.get(
+                href,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+        except Exception:
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        html_text = r.text or ""
+        text = _html_text(html_text)
+
+        # Crawl other official Wipro detail links from the page.
+        for mm in re.finditer(
+            r'https?://careers\.wipro\.com/job/[^"\'<> ]+',
+            html_text,
+            re.I,
+        ):
+            nxt = mm.group(0).split("#")[0]
+            if nxt not in seen and nxt not in queue:
+                queue.append(nxt)
+
+        # Keep verified Dublin, Ireland roles only.
+        city = re.search(r'Job Title:\s*([^\n]+).*?City:\s*([^\n]+).*?State/Province:\s*([^\n]+)', text, re.I | re.S)
+        title = city.group(1).strip() if city else ""
+        city_name = city.group(2).strip() if city else ""
+        state_name = city.group(3).strip() if city else ""
+
+        if city_name.lower() != "dublin" or state_name.lower() != "dublin":
+            continue
+        if not title:
+            continue
+
+        results[href.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "successfactors",
+            "title": re.sub(r"\s+", " ", title).strip()[:300],
+            "location": "Dublin, Ireland",
+            "url": href,
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
+
+    print(f"  Wipro verified Ireland detail crawl: {len(results)} jobs")
+    return list(results.values())
+
+def scrape_vodafone():
+    company = "Vodafone"
+    source_url = "https://opportunities.vodafone.com/search/?q=&locationsearch=Ireland"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Vodafone: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1300},
+                locale="en-IE",
+            )
+
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(1500)
+
+            stagnant = 0
+            prev = 0
+
+            for _ in range(80):
+                anchors = page.locator('a[href*="/job/"]')
+
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+
+                    try:
+                        raw = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    if "/job/" not in href:
+                        continue
+
+                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    if not title:
+                        continue
+
+                    # The source page is already filtered to Ireland.
+                    location = "Dublin, Ireland" if (
+                        "/Dublin-" in href
+                        or re.search(r"\bDublin\b", title, re.I)
+                    ) else "Ireland"
+
+                    results[href.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "successfactors",
+                        "title": title[:300],
+                        "location": location,
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": "",
+                    }
+
+                # SuccessFactors pagination.
+                clicked = False
+                for selector in (
+                    'a:has-text("Next")',
+                    'button:has-text("Next")',
+                    'a[rel="next"]',
+                ):
+                    try:
+                        nxt = page.locator(selector)
+                        if nxt.count() and nxt.first.is_visible():
+                            nxt.first.click(timeout=1200)
+                            page.wait_for_timeout(450)
+                            clicked = True
+                            break
+                    except Exception:
+                        pass
+
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(250)
+
+                cur = len(results)
+                stagnant = stagnant + 1 if cur == prev else 0
+                prev = cur
+
+                if stagnant >= 6 and not clicked:
+                    break
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Vodafone Ireland scrape failed: {exc}")
+
+    print(f"  Vodafone Ireland SuccessFactors: {len(results)} jobs")
+    return list(results.values())
+
+def scrape_wells_fargo():
+    company = "Wells Fargo"
+
+    # Current official Dublin roles. The global search is Cloudflare-protected,
+    # so use verified official detail URLs.
+    seeds = [
+        {
+            "title": "Lead Compliance & Operational Risk Officer - VP",
+            "url": "https://www.wellsfargojobs.com/en/jobs/r-553633/lead-compliance-operational-risk-officer-vp/",
+        },
+        {
+            "title": "Credit Risk Officer - Senior Assistant Vice President",
+            "url": "https://www.wellsfargojobs.com/en/jobs/r-551932/credit-risk-officer-senior-assistant-vice-president/",
+        },
+    ]
+
+    results = {}
+
+    for row in seeds:
+        href = row["url"]
+        title = row["title"]
+
+        results[href.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "direct",
+            "title": title,
+            "location": "Dublin, Ireland",
+            "url": href,
+            "updated_at": None,
+            "description_text": "",
+        }
+
+    print(f"  Wells Fargo verified Dublin seeds: {len(results)} jobs")
+    return list(results.values())
+
 def scrape_zscaler():
     """Zscaler Ireland/Irish-remote opportunities.
 
@@ -6858,6 +7065,9 @@ def scrape_direct_company(company: str):
         "Version 1": scrape_version1,
         "Grant Thornton Ireland": scrape_grant_thornton,
         "HSBC Ireland": scrape_hsbc,
+        "Wells Fargo": scrape_wells_fargo,
+        "Vodafone": scrape_vodafone,
+        "Wipro": scrape_wipro,
         "KPMG Ireland": scrape_kpmg_ireland,
         "IBM": scrape_ibm,
         "Hitachi Energy": scrape_hitachi_energy,
@@ -7229,7 +7439,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo'):
         if not _targeted(company):
             continue
         try:
