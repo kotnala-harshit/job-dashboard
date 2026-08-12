@@ -296,6 +296,21 @@ def company_display_name(raw: str) -> str:
         "anthropic": "Anthropic",
         "hubspotjobs": "HubSpot",
         "qualtrics": "Qualtrics",
+        "huawei": "Huawei Ireland",
+        "revenueie": "Revenue",
+        "irishrevenue": "Revenue",
+        "publicjobsie": "Public Jobs / Civil Service",
+        "publicjobs": "Public Jobs / Civil Service",
+        "publicjobscivilservice": "Public Jobs / Civil Service",
+        "cocacola": "Coca-Cola HBC Ireland",
+        "cocacolahbc": "Coca-Cola HBC Ireland",
+        "musgrave": "Musgrave Group (SuperValu / Centra)",
+        "musgravegroup": "Musgrave Group (SuperValu / Centra)",
+        "allianz": "Allianz Ireland",
+        "susquehanna": "Susquehanna International Group (SIG)",
+        "sig": "Susquehanna International Group (SIG)",
+        "susquehannainternationalgroup": "Susquehanna International Group (SIG)",
+        "heineken": "Heineken Ireland",
     }
     return aliases.get(key, raw)
 
@@ -431,6 +446,20 @@ DIRECT_COMPANY_CONNECTORS = {
     "Johnson Controls": "johnson_controls_browser",
     "Dropbox": "dropbox_browser",
     "Zscaler": "zscaler",
+    "Huawei Ireland": "huawei_teamtailor",
+    "Honeywell": "honeywell_oracle",
+    "Revenue": "revenue_direct",
+    "Public Jobs / Civil Service": "publicjobs_oleeo",
+    "NTT DATA": "nttdata_successfactors",
+    "Ryanair": "ryanair_direct",
+    "Coca-Cola HBC Ireland": "cocacola_hbc",
+    "PepsiCo": "pepsico_direct",
+    "Musgrave Group (SuperValu / Centra)": "musgrave_direct",
+    "SAP": "sap_successfactors",
+    "Allianz Ireland": "allianz_direct",
+    "Susquehanna International Group (SIG)": "sig_direct",
+    "Schneider Electric": "schneider_direct",
+    "Heineken Ireland": "heineken_successfactors",
 }
 
 # Exact enterprise-platform mappings learned from validated public career-site
@@ -11023,6 +11052,11 @@ def scrape_direct_company(company: str):
         "Johnson Controls": scrape_johnson_controls,
         "Dropbox": scrape_dropbox,
         "Zscaler": scrape_zscaler,
+        "Public Jobs / Civil Service": scrape_publicjobs,
+        "Coca-Cola HBC Ireland": scrape_coca_cola,
+        "Musgrave Group (SuperValu / Centra)": scrape_musgrave,
+        "Susquehanna International Group (SIG)": scrape_susquehanna,
+        "Schneider Electric": scrape_schneider_electric,
     }.get(company)
     return fn() if fn else []
 
@@ -11362,7 +11396,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL'):
+    for company in ('Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL', 'Huawei Ireland', 'Honeywell', 'Revenue', 'Public Jobs / Civil Service', 'NTT DATA', 'Ryanair', 'Coca-Cola HBC Ireland', 'PepsiCo', 'Musgrave Group (SuperValu / Centra)', 'SAP', 'Allianz Ireland', 'Susquehanna International Group (SIG)', 'Schneider Electric', 'Heineken Ireland'):
         if not _targeted(company):
             continue
         try:
