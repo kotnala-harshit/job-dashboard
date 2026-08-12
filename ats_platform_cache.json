@@ -2467,11 +2467,6 @@
     "slug": "protiviti",
     "probe_version": 35
   },
-  "Publift": {
-    "platform": "smartrecruiters",
-    "slug": "job-widget",
-    "probe_version": 35
-  },
   "Rockwell Automation": {
     "platform": "none",
     "slug": null,
@@ -2495,6 +2490,11 @@
   "Zendesk": {
     "platform": "pinpoint",
     "slug": "zendesk",
+    "probe_version": 35
+  },
+  "Publift": {
+    "platform": "smartrecruiters",
+    "slug": "job-widget",
     "probe_version": 35
   },
   "__probe_version__": 35
