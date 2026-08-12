@@ -9807,8 +9807,256 @@ def scrape_publicjobs():
     return list(results.values())
 
 
+
+def scrape_medtronic():
+    company = "Medtronic"
+    base = "https://jobs.medtronic.com"
+    board = "External"
+    api = f"{base}/wday/cxs/medtronic/{board}/jobs"
+
+    sess = _session()
+    if not sess:
+        print("  ! Medtronic: HTTP session unavailable")
+        return []
+
+    results = {}
+    offset = 0
+
+    while offset < 1000:
+        payload = {
+            "appliedFacets": {},
+            "limit": 20,
+            "offset": offset,
+            "searchText": "Ireland",
+        }
+
+        try:
+            r = sess.post(
+                api,
+                json=payload,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                    "Referer": f"{base}/en-US/{board}",
+                },
+            )
+        except Exception:
+            break
+
+        if r.status_code != 200:
+            break
+
+        try:
+            data = r.json()
+        except Exception:
+            break
+
+        rows = data.get("jobPostings") or []
+        if not rows:
+            break
+
+        new_count = 0
+
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+
+            blob = json.dumps(row, ensure_ascii=False)
+
+            if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
+                continue
+
+            if not re.search(
+                r"\bIreland\b|\bGalway\b|\bDublin\b|\bAthlone\b|\bTullamore\b",
+                blob,
+                re.I,
+            ):
+                continue
+
+            title = str(row.get("title") or "").strip()
+            external = str(row.get("externalPath") or "").strip()
+
+            if not title or not external:
+                continue
+
+            href = urllib.parse.urljoin(f"{base}/en-US/{board}/", external)
+            location = "Ireland"
+
+            for city in ("Galway", "Dublin", "Athlone", "Tullamore"):
+                if re.search(rf"\b{city}\b", blob, re.I):
+                    location = f"{city}, Ireland"
+                    break
+
+            key = href.split("?")[0].rstrip("/").lower()
+            if key not in results:
+                new_count += 1
+
+            results[key] = {
+                "company": company,
+                "ats": "workday",
+                "title": title[:300],
+                "location": location,
+                "url": href.split("?")[0],
+                "updated_at": None,
+                "description_text": blob[:5000],
+            }
+
+        offset += len(rows)
+
+        total = data.get("total")
+        if isinstance(total, int) and offset >= total:
+            break
+        if new_count == 0 and offset > 100:
+            break
+
+    print(f"  Medtronic Workday Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_revenue_ie():
+    company = "Revenue.ie"
+    source_url = (
+        "https://www.revenue.ie/en/corporate/"
+        "information-about-revenue/careers/career-opportunities.aspx"
+    )
+
+    sess = _session()
+    if not sess:
+        print("  ! Revenue.ie: HTTP session unavailable")
+        return []
+
+    try:
+        r = sess.get(
+            source_url,
+            timeout=30,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+    except Exception as exc:
+        print(f"  ! Revenue.ie careers page failed: {exc}")
+        return []
+
+    if r.status_code != 200:
+        print(f"  ! Revenue.ie careers HTTP {r.status_code}")
+        return []
+
+    html_text = r.text or ""
+    results = {}
+
+    # Current Revenue competitions are exposed as headings/links on the careers page.
+    # Collect links to adverts, information booklets and application pages.
+    for m in re.finditer(
+        r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+        html_text,
+        re.I | re.S,
+    ):
+        href = urllib.parse.urljoin(
+            source_url,
+            m.group(1).replace("&amp;", "&"),
+        ).split("#")[0]
+
+        title = re.sub(
+            r"\s+",
+            " ",
+            _html_text(m.group(2)),
+        ).strip()
+
+        if not title:
+            continue
+
+        blob = f"{title} {href}".lower()
+
+        if not any(x in blob for x in (
+            "career",
+            "competition",
+            "officer",
+            "principal",
+            "assistant principal",
+            "graduate",
+            "tax",
+            "customs",
+            "apply",
+            "information booklet",
+        )):
+            continue
+
+        # Ignore generic navigation.
+        if title.lower() in {
+            "careers",
+            "apply",
+            "home",
+            "revenue",
+            "more information",
+        }:
+            continue
+
+        # Nearby context usually carries the competition title + closing date.
+        start = max(0, m.start() - 1800)
+        end = min(len(html_text), m.end() + 1800)
+        card_text = _html_text(html_text[start:end])
+
+        # Prefer a meaningful nearby line if link text is generic.
+        if title.lower() in {"information booklet", "application form", "apply now"}:
+            lines = [
+                re.sub(r"\s+", " ", x).strip()
+                for x in card_text.splitlines()
+                if 8 <= len(x.strip()) <= 260
+            ]
+            title = next(
+                (
+                    x for x in lines
+                    if any(k in x.lower() for k in (
+                        "assistant principal",
+                        "administrative officer",
+                        "executive officer",
+                        "clerical officer",
+                        "customs officer",
+                        "graduate",
+                        "tax specialist",
+                    ))
+                ),
+                title,
+            )
+
+        if not title:
+            continue
+
+        location = "Ireland"
+        if re.search(r"\bDublin\b", card_text, re.I):
+            location = "Dublin, Ireland"
+        elif re.search(r"\bLimerick\b", card_text, re.I):
+            location = "Limerick, Ireland"
+        elif re.search(r"\bNationwide\b|\bVarious Locations\b", card_text, re.I):
+            location = "Nationwide, Ireland"
+
+        key = href.rstrip("/").lower() + "|" + title.lower()
+
+        results[key] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": location,
+            "url": href,
+            "updated_at": None,
+            "description_text": card_text[:5000],
+        }
+
+    print(f"  Revenue.ie official career opportunities: {len(results)} jobs")
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     fn={
+        "Irish Revenue": scrape_revenue_ie,
+        "Revenue": scrape_revenue_ie,
+        "Revenue.ie": scrape_revenue_ie,
+        "Medtronic": scrape_medtronic,
         "publicjobs": scrape_publicjobs,
         "Public Jobs": scrape_publicjobs,
         "publicjobs.ie": scrape_publicjobs,
