@@ -8395,149 +8395,132 @@ def scrape_fedex():
 
 def scrape_coca_cola():
     company = "Coca-Cola"
-    api_url = "https://jobsapi-internal.m-cloud.io/api/job"
+    source_url = "https://careers.coca-colahellenic.com/en_US/careers/SearchJobs/ireland"
 
-    sess = _session()
-    if not sess:
-        print("  ! Coca-Cola: HTTP session unavailable")
+    if not HAS_PLAYWRIGHT:
+        print("  ! Coca-Cola HBC: Playwright unavailable")
         return []
-
-    params = [
-        ("callback", "CWS.jobs.jobCallback"),
-        ("facet[]", "ats_portalid:CocaCola-Workday-External"),
-        ("facet[]", "is_internal:coca-cola-careers"),
-        ("sortfield", "open_date"),
-        ("sortorder", "descending"),
-        ("Limit", "200"),
-        ("Organization", "2110"),
-        ("offset", "1"),
-        ("useBooleanKeywordSearch", "true"),
-        ("facetlist[]", "primary_category"),
-        ("facetlist[]", "store_id"),
-        ("facetlist[]", "primary_city"),
-    ]
-
-    try:
-        r = sess.get(
-            api_url,
-            params=params,
-            timeout=30,
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Referer": "https://careers.coca-colacompany.com/job-search-results/",
-                "Accept-Language": "en-IE,en;q=0.9",
-            },
-        )
-    except Exception as exc:
-        print(f"  ! Coca-Cola CWS API failed: {exc}")
-        return []
-
-    if r.status_code != 200:
-        print(f"  ! Coca-Cola CWS API HTTP {r.status_code}")
-        return []
-
-    text = r.text or ""
-    m = re.search(r'^[^(]+\((.*)\)\s*;?\s*$', text, re.S)
-    if not m:
-        print("  ! Coca-Cola CWS API invalid JSONP")
-        return []
-
-    try:
-        payload = json.loads(m.group(1))
-    except Exception:
-        print("  ! Coca-Cola CWS API JSON parse failed")
-        return []
-
-    rows = []
-    if isinstance(payload, dict):
-        for key in ("jobs", "results", "items", "data"):
-            value = payload.get(key)
-            if isinstance(value, list):
-                rows = value
-                break
 
     results = {}
 
-    for row in rows:
-        if not isinstance(row, dict):
-            continue
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1400},
+                locale="en-IE",
+            )
 
-        blob = json.dumps(row, ensure_ascii=False)
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(2200)
 
-        # Republic of Ireland only.
-        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
-            continue
-        if not re.search(r"\bIreland\b|,\s*IE\b|\bBallina\b|\bDublin\b", blob, re.I):
-            continue
+            anchors = page.locator('a[href*="/careers/ProjectDetail/"]')
 
-        title = str(
-            row.get("title")
-            or row.get("job_title")
-            or row.get("primary_title")
-            or row.get("name")
-            or ""
-        ).strip()
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
 
-        href = str(
-            row.get("url")
-            or row.get("job_url")
-            or row.get("apply_url")
-            or row.get("canonical_url")
-            or ""
-        ).strip()
+                try:
+                    raw = a.get_attribute("href") or ""
+                    href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                except Exception:
+                    continue
 
-        if not href:
-            # CWS often exposes slug + numeric job id separately.
-            job_id = str(
-                row.get("job_id")
-                or row.get("id")
-                or row.get("req_id")
-                or row.get("requisition_id")
-                or ""
-            ).strip()
-            slug = str(row.get("slug") or row.get("seo_title") or "").strip("/")
-            if job_id and slug:
-                href = f"https://careers.coca-colacompany.com/job/{job_id}/{slug}/"
+                if "/careers/projectdetail/" not in href.lower():
+                    continue
 
-        if href and href.startswith("/"):
-            href = urllib.parse.urljoin("https://careers.coca-colacompany.com", href)
+                title = re.sub(r"\s+", " ", _browser_text(a)).strip()
 
-        if not title or not href:
-            continue
+                node = a
+                card = ""
 
-        location = "Ireland"
-        for city in ("Ballina", "Dublin"):
-            if re.search(rf"\b{city}\b", blob, re.I):
-                location = f"{city}, Ireland"
-                break
+                for _up in range(7):
+                    try:
+                        txt = _browser_text(node)
+                    except Exception:
+                        txt = ""
 
-        canonical = href.split("?")[0]
-        results[canonical.rstrip("/").lower()] = {
-            "company": company,
-            "ats": "cws",
-            "title": re.sub(r"\s+", " ", title).strip()[:300],
-            "location": location,
-            "url": canonical,
-            "updated_at": row.get("open_date") or row.get("posted_date"),
-            "description_text": blob[:5000],
-        }
+                    if txt and len(txt) <= 3800:
+                        card = txt
 
-    print(f"  Coca-Cola CWS Ireland: {len(results)} jobs")
+                    if re.search(
+                        r"\bIreland\b|\bDublin\b|\bMeath\b|\bCavan\b|\bMonaghan\b|\bLongford\b",
+                        card,
+                        re.I,
+                    ):
+                        break
+
+                    try:
+                        node = node.locator("..")
+                    except Exception:
+                        break
+
+                if not title:
+                    lines = [
+                        re.sub(r"\s+", " ", x).strip()
+                        for x in card.splitlines()
+                        if 5 <= len(x.strip()) <= 220
+                    ]
+                    title = next(
+                        (
+                            x for x in lines
+                            if x.lower() not in {
+                                "apply now", "view job", "learn more"
+                            }
+                        ),
+                        "",
+                    )
+
+                if not title:
+                    continue
+
+                blob = f"{title}\n{card}\n{href}"
+
+                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
+                    continue
+
+                location = "Ireland"
+
+                county_hits = [
+                    x for x in (
+                        "Dublin", "Meath", "Cavan", "Monaghan", "Longford",
+                        "Westmeath", "Offaly", "Laois", "Kildare"
+                    )
+                    if re.search(rf"\b{x}\b", blob, re.I)
+                ]
+
+                if len(county_hits) == 1:
+                    location = f"{county_hits[0]}, Ireland"
+                elif len(county_hits) > 1:
+                    location = ", ".join(county_hits) + ", Ireland"
+
+                canonical = href.split("?")[0]
+
+                results[canonical.rstrip("/").lower()] = {
+                    "company": company,
+                    "ats": "avature",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": card[:5000],
+                }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Coca-Cola HBC Ireland scrape failed: {exc}")
+
+    print(f"  Coca-Cola HBC Ireland careers: {len(results)} jobs")
     return list(results.values())
-
-
 
 def scrape_pepsico():
     company = "PepsiCo"
 
-    # Official Europe board currently exposes Ireland openings, but the root
-    # homepage may 403 in headless/browser environments.
-    board_urls = [
-        "https://www.pepsicojobs.com/europe/jobs",
-        "https://www.pepsicojobs.com/main/jobs",
-    ]
+    ireland_url = (
+        "https://www.pepsicojobs.com/main/jobs"
+        "?stretchUnit=MILES&stretch=10&location=Ireland&woe=12&regionCode=IE"
+    )
 
-    # Verified current Ireland detail pages from PepsiCo's official careers site.
     fallback_urls = [
         "https://www.pepsicojobs.com/main/jobs/451831?lang=en-us",
         "https://www.pepsicojobs.com/main/jobs/443247?lang=en-us",
@@ -8556,6 +8539,7 @@ def scrape_pepsico():
     def add_detail(href):
         if not sess:
             return
+
         try:
             r = sess.get(
                 href,
@@ -8563,7 +8547,7 @@ def scrape_pepsico():
                 headers={
                     "User-Agent": "Mozilla/5.0",
                     "Accept-Language": "en-IE,en;q=0.9",
-                    "Referer": "https://www.pepsicojobs.com/europe/jobs",
+                    "Referer": ireland_url,
                 },
             )
         except Exception:
@@ -8577,16 +8561,22 @@ def scrape_pepsico():
 
         if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
             return
+
         if not re.search(r"\bIreland\b|\bDublin\b|\bCork\b", body, re.I):
             return
 
         title = ""
+
         hm = re.search(r"<h1\b[^>]*>(.*?)</h1>", html_text, re.I | re.S)
         if hm:
             title = re.sub(r"\s+", " ", _html_text(hm.group(1))).strip()
 
         if not title:
-            tm = re.search(r'Pepsico Global is hiring a (.*?) in .*?Ireland', body, re.I | re.S)
+            tm = re.search(
+                r'Pepsico Global is hiring a (.*?) in .*?Ireland',
+                body,
+                re.I | re.S,
+            )
             if tm:
                 title = re.sub(r"\s+", " ", tm.group(1)).strip()
 
@@ -8612,32 +8602,32 @@ def scrape_pepsico():
         }
 
     if sess:
-        # First try the official boards and discover all Ireland detail links.
-        for board in board_urls:
-            try:
-                r = sess.get(
-                    board,
-                    timeout=30,
-                    headers={
-                        "User-Agent": "Mozilla/5.0",
-                        "Accept-Language": "en-IE,en;q=0.9",
-                    },
-                )
-            except Exception:
-                continue
+        # Primary discovery: exact Ireland-filtered PepsiCo search.
+        try:
+            r = sess.get(
+                ireland_url,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+        except Exception:
+            r = None
 
-            if r.status_code != 200:
-                continue
-
+        if r is not None and r.status_code == 200:
             html_text = r.text or ""
 
+            # Capture all PepsiCo detail links visible on the Ireland board.
             for mm in re.finditer(
                 r'href=["\']([^"\']*/main/jobs/\d+[^"\']*)["\']',
                 html_text,
                 re.I,
             ):
-                href = urllib.parse.urljoin(board, mm.group(1))
-                # Only open cards that already look Ireland-related nearby.
+                href = urllib.parse.urljoin(ireland_url, mm.group(1))
+
+                # Nearby card text should already be Ireland scoped, but keep
+                # only cards with explicit Irish location evidence.
                 start = max(0, mm.start() - 1800)
                 end = min(len(html_text), mm.end() + 2200)
                 card_text = _html_text(html_text[start:end])
@@ -8647,17 +8637,18 @@ def scrape_pepsico():
 
                 add_detail(href)
 
-        # Current official detail-page fallback prevents false zero when the
-        # board/homepage is blocked but detail pages remain reachable.
+        # Verified detail-page fallback for anti-bot / incomplete index responses.
         for href in fallback_urls:
             add_detail(href)
 
-    print(f"  PepsiCo verified Ireland careers: {len(results)} jobs")
+    print(f"  PepsiCo Ireland careers: {len(results)} jobs")
     return list(results.values())
-
 
 def scrape_direct_company(company: str):
     fn={
+        "Coca-Cola HBC": scrape_coca_cola,
+        "The Coca-Cola Company": scrape_coca_cola,
+        "Coca-Cola": scrape_coca_cola,
         "PepsiCo": scrape_pepsico,
         "FedEx": scrape_fedex,
         "Musgrave Group": scrape_musgrave,
