@@ -6513,64 +6513,137 @@ def scrape_ibm():
 
 def scrape_huawei():
     company = "Huawei"
-    source_url = "https://huaweiireland.teamtailor.com/jobs"
-    page = _fetch_html(source_url) or ""
+    base = "https://huaweiireland.teamtailor.com"
+    jobs_url = base + "/jobs"
+
+    sess = _session()
+    if not sess:
+        print("  ! Huawei: HTTP session unavailable")
+        return []
+
     results = {}
 
-    for m in re.finditer(
-        r'<a\b[^>]*href=["\']([^"\']+/jobs/\d+-[^"\']+)["\'][^>]*>(.*?)</a>',
-        page,
-        re.I | re.S,
+    try:
+        r = sess.get(
+            jobs_url,
+            timeout=30,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+    except Exception as exc:
+        print(f"  ! Huawei Ireland Research Centre failed: {exc}")
+        return []
+
+    if r.status_code != 200:
+        print(f"  ! Huawei Ireland Research Centre HTTP {r.status_code}")
+        return []
+
+    html_text = r.text or ""
+
+    # Teamtailor canonical detail URLs look like:
+    # /jobs/<numeric-id>-<slug>
+    candidates = set()
+
+    for raw in re.findall(
+        r'href=["\']([^"\']*/jobs/\d+-[^"\']+)["\']',
+        html_text,
+        re.I,
     ):
-        href = _absolute_url(source_url, m.group(1)).split("?")[0]
-        title = _html_text(m.group(2)).strip()
-        start = max(0, m.start()-900)
-        end = min(len(page), m.end()+1200)
-        chunk = _html_text(page[start:end])
+        href = urllib.parse.urljoin(jobs_url, raw).split("#")[0]
+        candidates.add(href)
 
-        if not region_ok(chunk):
+    for href in sorted(candidates):
+        try:
+            d = sess.get(
+                href,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                    "Referer": jobs_url,
+                },
+            )
+        except Exception:
             continue
-        if not title or title.lower() in {"jobs", "view job", "apply"}:
+
+        if d.status_code != 200:
             continue
 
-        if re.search(r'\bDublin\b', chunk, re.I):
-            location = "Dublin, Ireland"
-        elif re.search(r'\bCork\b', chunk, re.I):
-            location = "Cork, Ireland"
-        else:
-            location = "Ireland"
+        detail_html = d.text or ""
+        body = _html_text(detail_html)
 
-        results[href.rstrip("/").lower()] = {
+        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+            continue
+
+        if not re.search(
+            r"\bDublin\b|\bCork\b|\bGalway\b|\bIreland\b",
+            body,
+            re.I,
+        ):
+            continue
+
+        title = ""
+
+        hm = re.search(
+            r"<h1\b[^>]*>(.*?)</h1>",
+            detail_html,
+            re.I | re.S,
+        )
+
+        if hm:
+            title = re.sub(
+                r"\s+",
+                " ",
+                _html_text(hm.group(1)),
+            ).strip()
+
+        if not title:
+            tm = re.search(
+                r"<title[^>]*>(.*?)</title>",
+                detail_html,
+                re.I | re.S,
+            )
+            if tm:
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    _html_text(tm.group(1)),
+                ).strip()
+
+        if not title:
+            continue
+
+        # Remove common Teamtailor title suffixes if present.
+        title = re.sub(
+            r"\s*-\s*Huawei Ireland Research Centre.*$",
+            "",
+            title,
+            flags=re.I,
+        ).strip()
+
+        location = "Ireland"
+
+        for city in ("Dublin", "Cork", "Galway"):
+            if re.search(rf"\b{city}\b", body, re.I):
+                location = f"{city}, Ireland"
+                break
+
+        canonical = href.split("?")[0].rstrip("/")
+
+        results[canonical.lower()] = {
             "company": company,
             "ats": "teamtailor",
             "title": title[:300],
             "location": location,
-            "url": href,
+            "url": canonical,
             "updated_at": None,
-            "description_text": chunk[:5000],
+            "description_text": body[:5000],
         }
-
-    if not results and HAS_PLAYWRIGHT:
-        try:
-            rows = _browser_board_collect(
-                company,
-                [source_url],
-                ("/jobs/",),
-                default_location="Dublin, Ireland",
-                max_scrolls=50,
-                require_ireland=True,
-                source_tag="teamtailor",
-            )
-            for job in rows:
-                href = (job.get("url") or "").split("?")[0]
-                if re.search(r'/jobs/\d+-', href):
-                    results[href.rstrip("/").lower()] = job
-        except Exception as exc:
-            print(f"  ! Huawei fallback failed: {exc}")
 
     print(f"  Huawei Ireland Research Centre: {len(results)} jobs")
     return list(results.values())
-
 
 def scrape_ge_healthcare():
     company = "GE HealthCare"
@@ -10440,8 +10513,420 @@ def scrape_guidewire():
     )
     return list(results.values())
 
+
+def scrape_susquehanna():
+    company = "Susquehanna"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Susquehanna: Playwright unavailable")
+        return []
+
+    sources = [
+        "https://careers.sig.com/jobs",
+        "https://careers.sig.com/dublin/jobs",
+        "https://careers.sig.com/recent-graduate/jobs",
+        "https://careers.sig.com/operations/jobs",
+    ]
+
+    results = {}
+    candidates = set()
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1600},
+                locale="en-IE",
+            )
+
+            for source in sources:
+                try:
+                    page.goto(source, wait_until="domcontentloaded", timeout=90000)
+                    page.wait_for_timeout(1000)
+                except Exception:
+                    continue
+
+                stagnant = 0
+                previous = 0
+
+                for _ in range(80):
+                    links = page.locator('a[href*="/jobs/"]')
+
+                    for i in range(links.count()):
+                        try:
+                            raw = links.nth(i).get_attribute("href") or ""
+                            href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                        except Exception:
+                            continue
+
+                        # IMPORTANT: SIG uses many prefixes before /jobs/<id>:
+                        # /dublin/jobs/10661
+                        # /dublin-software-engineering/jobs/9986
+                        # /jobs/10928
+                        if not re.search(r"/jobs/\d+(?:\?|$)", href, re.I):
+                            continue
+
+                        candidates.add(href)
+
+                    clicked = False
+                    for selector in (
+                        'button:has-text("Load more")',
+                        'button:has-text("Show more")',
+                        'a:has-text("Next")',
+                        'button:has-text("Next")',
+                    ):
+                        try:
+                            btn = page.locator(selector)
+                            if btn.count() and btn.first.is_visible():
+                                btn.first.click(timeout=1200)
+                                page.wait_for_timeout(350)
+                                clicked = True
+                                break
+                        except Exception:
+                            pass
+
+                    page.mouse.wheel(0, 5000)
+                    page.wait_for_timeout(250)
+
+                    current = len(candidates)
+                    stagnant = stagnant + 1 if current == previous else 0
+                    previous = current
+
+                    if stagnant >= 8 and not clicked:
+                        break
+
+            # Validate every candidate on the actual SIG detail page.
+            for href in sorted(candidates):
+                try:
+                    detail = page.context.new_page()
+                    detail.goto(href, wait_until="domcontentloaded", timeout=60000)
+                    detail.wait_for_timeout(200)
+
+                    body = _browser_text(detail.locator("body"))
+                    h1 = detail.locator("h1")
+                    title = (
+                        re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
+                        if h1.count()
+                        else ""
+                    )
+
+                    detail.close()
+                except Exception:
+                    continue
+
+                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+                    continue
+
+                if not re.search(r"\bDublin\s*,\s*Ireland\b", body, re.I):
+                    continue
+
+                if not title:
+                    continue
+
+                canonical = href.split("?")[0]
+
+                results[canonical.rstrip("/").lower()] = {
+                    "company": company,
+                    "ats": "direct-browser",
+                    "title": title[:300],
+                    "location": "Dublin, Ireland",
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": body[:5000],
+                }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Susquehanna browser scrape failed: {exc}")
+
+    print(
+        f"  Susquehanna browser: {len(candidates)} details discovered; "
+        f"{len(results)} Dublin jobs"
+    )
+    return list(results.values())
+
+def scrape_schneider_electric():
+    company = "Schneider Electric"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Schneider Electric: Playwright unavailable")
+        return []
+
+    sources = [
+        "https://careers.se.com/jobs",
+        "https://careers.se.com/uk-ireland",
+        "https://careers.se.com/search-results",
+    ]
+
+    # Current official Ireland detail pages also act as fallback discovery seeds.
+    candidates = {
+        "https://careers.se.com/jobs/126368?lang=en-us",
+        "https://careers.se.com/jobs/125322?lang=en-us",
+        "https://careers.se.com/jobs/125816?lang=en-us",
+        "https://careers.se.com/jobs/116619?lang=en-us",
+    }
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1600},
+                locale="en-IE",
+            )
+
+            for source in sources:
+                try:
+                    page.goto(source, wait_until="domcontentloaded", timeout=90000)
+                    page.wait_for_timeout(1000)
+                except Exception:
+                    continue
+
+                # Try entering Ireland into any visible search/location field.
+                for selector in (
+                    'input[placeholder*="location" i]',
+                    'input[aria-label*="location" i]',
+                    'input[placeholder*="search" i]',
+                ):
+                    try:
+                        inp = page.locator(selector)
+                        if inp.count() and inp.first.is_visible():
+                            inp.first.fill("Ireland")
+                            page.wait_for_timeout(250)
+                            break
+                    except Exception:
+                        pass
+
+                for selector in (
+                    'button:has-text("Search")',
+                    'button[type="submit"]',
+                ):
+                    try:
+                        btn = page.locator(selector)
+                        if btn.count() and btn.first.is_visible():
+                            btn.first.click(timeout=1200)
+                            page.wait_for_timeout(500)
+                            break
+                    except Exception:
+                        pass
+
+                stagnant = 0
+                previous = 0
+
+                for _ in range(100):
+                    links = page.locator('a[href*="/jobs/"]')
+
+                    for i in range(links.count()):
+                        try:
+                            raw = links.nth(i).get_attribute("href") or ""
+                            href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                        except Exception:
+                            continue
+
+                        if not re.search(r"/jobs/\d+(?:\?|$)", href, re.I):
+                            continue
+
+                        candidates.add(href)
+
+                    clicked = False
+                    for selector in (
+                        'button:has-text("Load more")',
+                        'button:has-text("Show more")',
+                        'a:has-text("Next")',
+                        'button:has-text("Next")',
+                    ):
+                        try:
+                            btn = page.locator(selector)
+                            if btn.count() and btn.first.is_visible():
+                                btn.first.click(timeout=1200)
+                                page.wait_for_timeout(350)
+                                clicked = True
+                                break
+                        except Exception:
+                            pass
+
+                    page.mouse.wheel(0, 5000)
+                    page.wait_for_timeout(250)
+
+                    current = len(candidates)
+                    stagnant = stagnant + 1 if current == previous else 0
+                    previous = current
+
+                    if stagnant >= 8 and not clicked:
+                        break
+
+            # Detail validation is the source of truth.
+            for href in sorted(candidates):
+                try:
+                    detail = page.context.new_page()
+                    detail.goto(href, wait_until="domcontentloaded", timeout=60000)
+                    detail.wait_for_timeout(220)
+
+                    body = _browser_text(detail.locator("body"))
+                    h1 = detail.locator("h1")
+                    title = (
+                        re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
+                        if h1.count()
+                        else ""
+                    )
+
+                    detail.close()
+                except Exception:
+                    continue
+
+                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+                    continue
+
+                if not re.search(
+                    r"\bDublin\s*,\s*Ireland\b|\bCork\s*,\s*Ireland\b|"
+                    r"\bGalway\s*,\s*Ireland\b|\bIreland\b",
+                    body,
+                    re.I,
+                ):
+                    continue
+
+                if not title:
+                    continue
+
+                location = "Ireland"
+                for city in ("Dublin", "Cork", "Galway", "Limerick"):
+                    if re.search(rf"\b{city}\b", body, re.I):
+                        location = f"{city}, Ireland"
+                        break
+
+                canonical = href.split("?")[0]
+
+                results[canonical.rstrip("/").lower()] = {
+                    "company": company,
+                    "ats": "direct-browser",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": body[:5000],
+                }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Schneider Electric browser scrape failed: {exc}")
+
+    print(
+        f"  Schneider Electric browser: {len(candidates)} details discovered; "
+        f"{len(results)} Ireland jobs"
+    )
+    return list(results.values())
+
+
+def scrape_heineken():
+    company = "HEINEKEN"
+    source_url = "https://careers.theheinekencompany.com/HEINEKEN-Ireland"
+
+    sess = _session()
+    if not sess:
+        print("  ! HEINEKEN: HTTP session unavailable")
+        return []
+
+    results = {}
+
+    try:
+        r = sess.get(
+            source_url,
+            timeout=30,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+    except Exception as exc:
+        print(f"  ! HEINEKEN Ireland careers failed: {exc}")
+        return []
+
+    if r.status_code != 200:
+        print(f"  ! HEINEKEN Ireland careers HTTP {r.status_code}")
+        return []
+
+    html_text = r.text or ""
+    body = _html_text(html_text)
+
+    # HEINEKEN's Ireland board can legitimately have no live vacancies.
+    if re.search(
+        r"\bNo jobs on tap right now\b|\bno jobs\b|\bno open positions\b",
+        body,
+        re.I,
+    ):
+        print("  HEINEKEN Ireland careers: 0 jobs (official board currently empty)")
+        return []
+
+    # SuccessFactors-style canonical detail URLs.
+    for m in re.finditer(
+        r'<a[^>]+href=["\']([^"\']*/job/[^"\']+/\d+/?)["\'][^>]*>(.*?)</a>',
+        html_text,
+        re.I | re.S,
+    ):
+        href = urllib.parse.urljoin(
+            source_url,
+            m.group(1),
+        ).split("#")[0]
+
+        start = max(0, m.start() - 1600)
+        end = min(len(html_text), m.end() + 2000)
+        card_text = _html_text(html_text[start:end])
+
+        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", card_text, re.I):
+            continue
+
+        if not re.search(
+            r"\bIreland\b|\bDublin\b|\bCork\b",
+            card_text,
+            re.I,
+        ):
+            continue
+
+        title = re.sub(
+            r"\s+",
+            " ",
+            _html_text(m.group(2)),
+        ).strip()
+
+        if not title or title.lower() in {
+            "view job",
+            "apply now",
+            "learn more",
+        }:
+            continue
+
+        location = "Ireland"
+
+        for city in ("Dublin", "Cork"):
+            if re.search(rf"\b{city}\b", card_text, re.I):
+                location = f"{city}, Ireland"
+                break
+
+        canonical = href.split("?")[0].rstrip("/")
+
+        results[canonical.lower()] = {
+            "company": company,
+            "ats": "successfactors",
+            "title": title[:300],
+            "location": location,
+            "url": canonical,
+            "updated_at": None,
+            "description_text": card_text[:5000],
+        }
+
+    print(f"  HEINEKEN Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     fn={
+        "Heineken Ireland": scrape_heineken,
+        "Heineken": scrape_heineken,
+        "HEINEKEN": scrape_heineken,
+        "Huawei Ireland": scrape_huawei,
         "Guidewire Software": scrape_guidewire,
         "Guidewire": scrape_guidewire,
         "Honeywell": scrape_honeywell,
@@ -11071,6 +11556,11 @@ def main():
                     identity_pairs.sort()
                     query_key = "&".join(f"{k}={v}" for k, v in identity_pairs)
                     url_key = f"{base_url}?{query_key}"
+                if company in ("Susquehanna", "SIG", "Susquehanna International Group"):
+                    return scrape_susquehanna()
+                if company in ("Schneider Electric", "Schneider"):
+                    return scrape_schneider_electric()
+
                 elif company_key == _company_key("Google"):
                     # Google collector currently uses a result-page URL for
                     # each visible job. Multiple vacancies therefore share
