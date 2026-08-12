@@ -8644,8 +8644,239 @@ def scrape_pepsico():
     print(f"  PepsiCo Ireland careers: {len(results)} jobs")
     return list(results.values())
 
+
+def scrape_ryanair():
+    company = "Ryanair"
+    source_urls = [
+        "https://careers.ryanair.com/jobs/?ryanair-jobs-location=22038",  # Dublin
+        "https://careers.ryanair.com/jobs/?ryanair-jobs-location=22020",  # Dublin Airport
+    ]
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Ryanair: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1400}, locale="en-IE")
+
+            for source_url in source_urls:
+                page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+                page.wait_for_timeout(1200)
+
+                cards = page.locator(".job")
+
+                for i in range(cards.count()):
+                    card = cards.nth(i)
+
+                    try:
+                        title = re.sub(r"\s+", " ", _browser_text(card.locator(".job__title").first)).strip()
+                    except Exception:
+                        title = ""
+
+                    try:
+                        link = card.locator("a.job__link").first
+                        raw = link.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    try:
+                        card_text = _browser_text(card)
+                    except Exception:
+                        card_text = title
+
+                    if not title:
+                        continue
+                    if href.rstrip("/") == "https://careers.ryanair.com/jobs":
+                        continue
+
+                    if re.search(r"\bBelfast\b|\bNorthern Ireland\b", card_text, re.I):
+                        continue
+                    if not re.search(r"\bDublin\b|\bIreland\b", card_text, re.I):
+                        continue
+
+                    location = "Ireland"
+                    if re.search(r"\bDublin Airport\b", card_text, re.I):
+                        location = "Dublin Airport, Ireland"
+                    elif re.search(r"\bDublin\b", card_text, re.I):
+                        location = "Dublin, Ireland"
+
+                    canonical = href.split("?")[0]
+                    results[canonical.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": location,
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": card_text[:5000],
+                    }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Ryanair clean Ireland scrape failed: {exc}")
+
+    print(f"  Ryanair clean Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+def scrape_sp_global():
+    company = "S&P Global"
+    locations_url = "https://careers.spglobal.com/jobs/locations"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! S&P Global: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1440, "height": 1400}, locale="en-IE")
+
+            page.goto(locations_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(1400)
+
+            target_urls = []
+
+            # Prefer the official Dublin city link exposed by the locations page.
+            dublin_links = page.locator('a:has-text("Dublin")')
+
+            for i in range(dublin_links.count()):
+                try:
+                    raw = dublin_links.nth(i).get_attribute("href") or ""
+                    href = urllib.parse.urljoin(page.url, raw)
+                except Exception:
+                    continue
+
+                if "spglobal.com" in href.lower():
+                    target_urls.append(href)
+
+            # If Dublin is not a direct link, use the generic jobs page as fallback.
+            if not target_urls:
+                target_urls = ["https://careers.spglobal.com/jobs"]
+
+            seen_detail = set()
+
+            for target_url in target_urls[:5]:
+                try:
+                    page.goto(target_url, wait_until="domcontentloaded", timeout=90000)
+                    page.wait_for_timeout(1400)
+                except Exception:
+                    continue
+
+                stagnant = 0
+                prev = 0
+
+                for _ in range(80):
+                    links = page.locator('a[href*="/jobs/"]')
+
+                    for i in range(links.count()):
+                        try:
+                            raw = links.nth(i).get_attribute("href") or ""
+                            href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                        except Exception:
+                            continue
+
+                        if not re.search(r"/jobs/\d+(?:/|$|\?)", href):
+                            continue
+                        if href in seen_detail:
+                            continue
+
+                        seen_detail.add(href)
+
+                        try:
+                            detail = page.context.new_page()
+                            detail.goto(href, wait_until="domcontentloaded", timeout=60000)
+                            detail.wait_for_timeout(350)
+                            body = _browser_text(detail.locator("body"))
+
+                            h1 = detail.locator("h1")
+                            title = (
+                                re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
+                                if h1.count()
+                                else ""
+                            )
+                            detail.close()
+                        except Exception:
+                            continue
+
+                        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+                            continue
+                        if not re.search(r"\bDublin\b|\bIreland\b", body, re.I):
+                            continue
+
+                        if not title:
+                            lines = [
+                                re.sub(r"\s+", " ", x).strip()
+                                for x in body.splitlines()
+                                if 5 <= len(x.strip()) <= 220
+                            ]
+                            title = next(
+                                (x for x in lines if x.lower() not in {"apply now", "save job", "share"}),
+                                "",
+                            )
+
+                        if not title:
+                            continue
+
+                        location = "Dublin, Ireland" if re.search(r"\bDublin\b", body, re.I) else "Ireland"
+
+                        results[href.rstrip("/").lower()] = {
+                            "company": company,
+                            "ats": "phenom",
+                            "title": title[:300],
+                            "location": location,
+                            "url": href,
+                            "updated_at": None,
+                            "description_text": body[:5000],
+                        }
+
+                    clicked = False
+                    for selector in (
+                        'button:has-text("Load more")',
+                        'button:has-text("Show more")',
+                        'a:has-text("Next")',
+                        'button:has-text("Next")',
+                    ):
+                        try:
+                            nxt = page.locator(selector)
+                            if nxt.count() and nxt.first.is_visible():
+                                nxt.first.click(timeout=1200)
+                                page.wait_for_timeout(400)
+                                clicked = True
+                                break
+                        except Exception:
+                            pass
+
+                    page.mouse.wheel(0, 3200)
+                    page.wait_for_timeout(250)
+
+                    cur = len(seen_detail)
+                    stagnant = stagnant + 1 if cur == prev else 0
+                    prev = cur
+
+                    if stagnant >= 8 and not clicked:
+                        break
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! S&P Global Dublin scrape failed: {exc}")
+
+    print(f"  S&P Global Dublin careers v2: {len(results)} jobs")
+    return list(results.values())
+
 def scrape_direct_company(company: str):
     fn={
+        "S&P": scrape_sp_global,
+        "S&P Global": scrape_sp_global,
+        "Ryanair": scrape_ryanair,
         "Coca-Cola HBC": scrape_coca_cola,
         "The Coca-Cola Company": scrape_coca_cola,
         "Coca-Cola": scrape_coca_cola,
