@@ -10051,8 +10051,400 @@ def scrape_revenue_ie():
     return list(results.values())
 
 
+
+def scrape_honeywell():
+    import json as _json
+
+    company = "Honeywell"
+    landing = "https://careers.honeywell.com/en/sites/Honeywell/jobs?mode=location"
+    oracle_base = "https://ibqbjb.fa.ocs.oraclecloud.com"
+    site = "CX_1"
+    api = f"{oracle_base}/hcmRestApi/resources/latest/recruitingCEJobRequisitions"
+
+    sess = _session()
+    if not sess:
+        print("  ! Honeywell: HTTP session unavailable")
+        return []
+
+    results = {}
+
+    # Query Oracle Recruiting directly with Ireland/Cork/Dublin terms.
+    for keyword in ("Ireland", "Dublin", "Cork", "Waterford"):
+        offset = 0
+
+        while offset < 500:
+            finder = (
+                f"findReqs;siteNumber={site},"
+                f"limit=25,offset={offset},"
+                "sortBy=POSTING_DATES_DESC,"
+                f"keyword={urllib.parse.quote(keyword)}"
+            )
+
+            params = {
+                "onlyData": "true",
+                "expand": (
+                    "requisitionList.workLocation,"
+                    "requisitionList.otherWorkLocations,"
+                    "requisitionList.secondaryLocations,"
+                    "requisitionList.requisitionFlexFields"
+                ),
+                "finder": finder,
+            }
+
+            try:
+                r = sess.get(
+                    api,
+                    params=params,
+                    timeout=40,
+                    headers={
+                        "User-Agent": "Mozilla/5.0",
+                        "Accept": "application/json",
+                        "Accept-Language": "en-IE,en;q=0.9",
+                        "Referer": landing,
+                    },
+                )
+            except Exception:
+                break
+
+            if r.status_code != 200:
+                break
+
+            try:
+                data = r.json()
+            except Exception:
+                break
+
+            items = data.get("items") or []
+            if not items:
+                break
+
+            rows = []
+            for item in items:
+                if not isinstance(item, dict):
+                    continue
+                reqs = item.get("requisitionList") or []
+                if isinstance(reqs, dict):
+                    reqs = [reqs]
+                if isinstance(reqs, list):
+                    rows.extend(x for x in reqs if isinstance(x, dict))
+
+            if not rows:
+                break
+
+            new_count = 0
+
+            for row in rows:
+                blob = _json.dumps(row, ensure_ascii=False)
+
+                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
+                    continue
+
+                if not re.search(
+                    r"\bIreland\b|\bDublin\b|\bCork\b|\bWaterford\b|\bGalway\b",
+                    blob,
+                    re.I,
+                ):
+                    continue
+
+                title = str(
+                    row.get("Title")
+                    or row.get("title")
+                    or row.get("RequisitionTitle")
+                    or row.get("requisitionTitle")
+                    or row.get("JobTitle")
+                    or ""
+                ).strip()
+
+                req_id = str(
+                    row.get("Id")
+                    or row.get("id")
+                    or row.get("RequisitionId")
+                    or row.get("requisitionId")
+                    or row.get("RequisitionNumber")
+                    or row.get("requisitionNumber")
+                    or row.get("ReqNumber")
+                    or ""
+                ).strip()
+
+                if not title:
+                    continue
+
+                # Oracle sometimes supplies the navigation URL directly.
+                external = str(
+                    row.get("ExternalUrl")
+                    or row.get("externalUrl")
+                    or row.get("JobUrl")
+                    or row.get("jobUrl")
+                    or ""
+                ).strip()
+
+                if external:
+                    href = urllib.parse.urljoin("https://careers.honeywell.com", external)
+                elif req_id:
+                    href = f"https://careers.honeywell.com/en/sites/Honeywell/job/{req_id}"
+                else:
+                    continue
+
+                location = "Ireland"
+                for city in ("Dublin", "Cork", "Waterford", "Galway"):
+                    if re.search(rf"\b{city}\b", blob, re.I):
+                        location = f"{city}, Ireland"
+                        break
+
+                key = href.split("?")[0].rstrip("/").lower()
+
+                if key not in results:
+                    new_count += 1
+
+                results[key] = {
+                    "company": company,
+                    "ats": "oracle",
+                    "title": title[:300],
+                    "location": location,
+                    "url": href.split("?")[0],
+                    "updated_at": None,
+                    "description_text": blob[:5000],
+                }
+
+            if len(rows) < 25:
+                break
+
+            offset += 25
+
+            if new_count == 0 and offset >= 100:
+                break
+
+    # Browser fallback: the official search page is server/browser accessible
+    # even if Oracle changes finder semantics.
+    if not results and HAS_PLAYWRIGHT:
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+                page = browser.new_page(
+                    viewport={"width": 1440, "height": 1400},
+                    locale="en-IE",
+                )
+
+                for keyword in ("Ireland", "Dublin", "Cork", "Waterford"):
+                    url = (
+                        "https://careers.honeywell.com/en/sites/Honeywell/jobs"
+                        "?mode=location&keyword="
+                        + urllib.parse.quote(keyword)
+                    )
+
+                    try:
+                        page.goto(url, wait_until="domcontentloaded", timeout=90000)
+                        page.wait_for_timeout(1400)
+                    except Exception:
+                        continue
+
+                    links = page.locator('a[href*="/sites/Honeywell/job/"]')
+
+                    for i in range(links.count()):
+                        a = links.nth(i)
+                        try:
+                            href = urllib.parse.urljoin(
+                                page.url,
+                                a.get_attribute("href") or "",
+                            ).split("#")[0]
+                        except Exception:
+                            continue
+
+                        try:
+                            detail = page.context.new_page()
+                            detail.goto(href, wait_until="domcontentloaded", timeout=60000)
+                            detail.wait_for_timeout(250)
+                            body = _browser_text(detail.locator("body"))
+                            h1 = detail.locator("h1")
+                            title = (
+                                re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
+                                if h1.count()
+                                else ""
+                            )
+                            detail.close()
+                        except Exception:
+                            continue
+
+                        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+                            continue
+                        if not re.search(
+                            r"\bIreland\b|\bDublin\b|\bCork\b|\bWaterford\b|\bGalway\b",
+                            body,
+                            re.I,
+                        ):
+                            continue
+                        if not title:
+                            continue
+
+                        location = "Ireland"
+                        for city in ("Dublin", "Cork", "Waterford", "Galway"):
+                            if re.search(rf"\b{city}\b", body, re.I):
+                                location = f"{city}, Ireland"
+                                break
+
+                        results[href.rstrip("/").lower()] = {
+                            "company": company,
+                            "ats": "oracle-browser",
+                            "title": title[:300],
+                            "location": location,
+                            "url": href,
+                            "updated_at": None,
+                            "description_text": body[:5000],
+                        }
+
+                browser.close()
+
+        except Exception as exc:
+            print(f"  ! Honeywell browser fallback failed: {exc}")
+
+    print(f"  Honeywell verified Ireland careers v2: {len(results)} jobs")
+    return list(results.values())
+
+def scrape_guidewire():
+    company = "Guidewire"
+    source_url = "https://www.guidewire.com/about/careers/jobs"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Guidewire: Playwright unavailable")
+        return []
+
+    results = {}
+    seen = set()
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1600},
+                locale="en-IE",
+            )
+
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(1400)
+
+            stagnant = 0
+            previous = 0
+
+            # Discover all current detail links. The board currently has >100
+            # global jobs, so keep loading/scrolling until no new links appear.
+            for _ in range(140):
+                links = page.locator('a[href*="/about/careers/jobs/"]')
+
+                for i in range(links.count()):
+                    try:
+                        raw = links.nth(i).get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    if href.rstrip("/") == source_url.rstrip("/"):
+                        continue
+
+                    if not re.search(
+                        r"/about/careers/jobs/.+",
+                        href,
+                        re.I,
+                    ):
+                        continue
+
+                    seen.add(href)
+
+                clicked = False
+
+                for selector in (
+                    'button:has-text("Load more")',
+                    'button:has-text("Show more")',
+                    'button:has-text("View more")',
+                    'a:has-text("Next")',
+                    'button:has-text("Next")',
+                ):
+                    try:
+                        btn = page.locator(selector)
+                        if btn.count() and btn.first.is_visible():
+                            btn.first.click(timeout=1200)
+                            page.wait_for_timeout(450)
+                            clicked = True
+                            break
+                    except Exception:
+                        pass
+
+                page.mouse.wheel(0, 5000)
+                page.wait_for_timeout(300)
+
+                current = len(seen)
+                stagnant = stagnant + 1 if current == previous else 0
+                previous = current
+
+                if stagnant >= 10 and not clicked:
+                    break
+
+            # Validate every discovered detail page. This avoids depending on
+            # whatever location text Guidewire chooses to show on listing cards.
+            for href in sorted(seen):
+                try:
+                    detail = page.context.new_page()
+                    detail.goto(href, wait_until="domcontentloaded", timeout=60000)
+                    detail.wait_for_timeout(220)
+
+                    body = _browser_text(detail.locator("body"))
+                    h1 = detail.locator("h1")
+                    title = (
+                        re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
+                        if h1.count()
+                        else ""
+                    )
+
+                    detail.close()
+                except Exception:
+                    continue
+
+                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+                    continue
+
+                if not re.search(
+                    r"\bDublin\b|\bIreland\b",
+                    body,
+                    re.I,
+                ):
+                    continue
+
+                if not title:
+                    continue
+
+                location = (
+                    "Dublin, Ireland"
+                    if re.search(r"\bDublin\b", body, re.I)
+                    else "Ireland"
+                )
+
+                key = href.rstrip("/").lower()
+
+                results[key] = {
+                    "company": company,
+                    "ats": "direct-browser",
+                    "title": title[:300],
+                    "location": location,
+                    "url": href,
+                    "updated_at": None,
+                    "description_text": body[:5000],
+                }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Guidewire exhaustive Ireland scrape failed: {exc}")
+
+    print(
+        f"  Guidewire exhaustive careers: {len(seen)} details checked; "
+        f"{len(results)} Ireland jobs"
+    )
+    return list(results.values())
+
 def scrape_direct_company(company: str):
     fn={
+        "Guidewire Software": scrape_guidewire,
+        "Guidewire": scrape_guidewire,
+        "Honeywell": scrape_honeywell,
         "Irish Revenue": scrape_revenue_ie,
         "Revenue": scrape_revenue_ie,
         "Revenue.ie": scrape_revenue_ie,
