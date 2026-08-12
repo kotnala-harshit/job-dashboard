@@ -7890,10 +7890,182 @@ def scrape_sap():
 
 def scrape_siemens():
     company = "Siemens"
-    source_url = "https://jobs.siemens.com/en_US/externaljobs/SearchJobs/"
+    search_url = "https://jobs.siemens.com/en_US/externaljobs/SearchJobs/"
+
+    # Verified live Ireland roles used as fallback seeds when the search UI
+    # changes or Avature does not render filters in headless mode.
+    seed_urls = [
+        "https://jobs.siemens.com/en_US/externaljobs/JobDetail/516755",
+        "https://jobs.siemens.com/en_US/externaljobs/JobDetail/503420",
+        "https://jobs.siemens.com/en_US/externaljobs/JobDetail/515676",
+    ]
 
     if not HAS_PLAYWRIGHT:
         print("  ! Siemens: Playwright unavailable")
+        return []
+
+    results = {}
+
+    def add_job(page, href):
+        href = href.split("#")[0]
+        try:
+            detail = page.context.new_page()
+            detail.goto(href, wait_until="domcontentloaded", timeout=60000)
+            detail.wait_for_timeout(500)
+            body = _browser_text(detail.locator("body"))
+            h1 = detail.locator("h1")
+            title = _browser_text(h1.first).strip() if h1.count() else ""
+            detail.close()
+        except Exception:
+            return
+
+        if re.search(r"\bBelfast\b|\bNorthern Ireland\b", body, re.I):
+            return
+        if not re.search(r"\bIreland\b|\bDublin\b|\bClare\b", body, re.I):
+            return
+
+        if not title:
+            lines = [
+                re.sub(r"\s+", " ", x).strip()
+                for x in body.splitlines()
+                if 5 <= len(x.strip()) <= 220
+            ]
+            title = next(
+                (x for x in lines if x.lower() not in {"apply now", "share", "email"}),
+                "",
+            )
+
+        if not title:
+            return
+
+        location = "Ireland"
+        for city in ("Dublin", "Clare", "Swords"):
+            if re.search(rf"\b{city}\b", body, re.I):
+                location = f"{city}, Ireland"
+                break
+
+        results[href.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "avature",
+            "title": re.sub(r"\s+", " ", title).strip()[:300],
+            "location": location,
+            "url": href,
+            "updated_at": None,
+            "description_text": body[:5000],
+        }
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1300},
+                locale="en-IE",
+            )
+
+            page.goto(search_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(2000)
+
+            # Try the current search UI first. Different Siemens deployments
+            # have used keyword/location inputs with slightly different labels.
+            filled = False
+            for selector in (
+                'input[placeholder*="Location" i]',
+                'input[aria-label*="Location" i]',
+                'input[name*="location" i]',
+                'input[placeholder*="Search" i]',
+            ):
+                try:
+                    inp = page.locator(selector)
+                    if inp.count() and inp.first.is_visible():
+                        inp.first.fill("Ireland")
+                        filled = True
+                        break
+                except Exception:
+                    pass
+
+            if filled:
+                for selector in (
+                    'button:has-text("Search")',
+                    'button[type="submit"]',
+                    'input[type="submit"]',
+                ):
+                    try:
+                        btn = page.locator(selector)
+                        if btn.count() and btn.first.is_visible():
+                            btn.first.click(timeout=1500)
+                            page.wait_for_timeout(1500)
+                            break
+                    except Exception:
+                        pass
+
+            # Collect whatever result links are now visible. We validate every
+            # detail page, so false positives are filtered out.
+            seen_links = set()
+            stagnant = 0
+            previous = 0
+
+            for _ in range(100):
+                links = page.locator('a[href*="/externaljobs/JobDetail/"]')
+
+                for i in range(links.count()):
+                    try:
+                        raw = links.nth(i).get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw)
+                    except Exception:
+                        continue
+
+                    if href in seen_links:
+                        continue
+                    seen_links.add(href)
+                    add_job(page, href)
+
+                clicked = False
+                for selector in (
+                    'a:has-text("Next")',
+                    'button:has-text("Next")',
+                    'a[rel="next"]',
+                    'button:has-text("Load more")',
+                    'button:has-text("Show more")',
+                ):
+                    try:
+                        nxt = page.locator(selector)
+                        if nxt.count() and nxt.first.is_visible():
+                            nxt.first.click(timeout=1200)
+                            page.wait_for_timeout(500)
+                            clicked = True
+                            break
+                    except Exception:
+                        pass
+
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(300)
+
+                current = len(seen_links)
+                stagnant = stagnant + 1 if current == previous else 0
+                previous = current
+                if stagnant >= 7 and not clicked:
+                    break
+
+            # Fallback/current verified Ireland seeds.
+            for href in seed_urls:
+                if href not in seen_links:
+                    add_job(page, href)
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Siemens Ireland v2 scrape failed: {exc}")
+
+    print(f"  Siemens verified Ireland careers v2: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_musgrave():
+    company = "Musgrave"
+    source_url = "https://musgravegroup.com/careers/vacancies/"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Musgrave: Playwright unavailable")
         return []
 
     results = {}
@@ -7902,37 +8074,48 @@ def scrape_siemens():
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
             page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
-
             page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
-            page.wait_for_timeout(2200)
+            page.wait_for_timeout(2500)
 
-            # Search page can contain 999+ results. Walk pages and keep only Ireland.
             stagnant = 0
-            prev = 0
+            previous = 0
 
-            for _ in range(180):
-                links = page.locator('a[href*="/externaljobs/JobDetail/"]')
+            for _ in range(100):
+                anchors = page.locator("a[href]")
 
-                for i in range(links.count()):
-                    a = links.nth(i)
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
                     try:
                         raw = a.get_attribute("href") or ""
                         href = urllib.parse.urljoin(page.url, raw).split("#")[0]
                     except Exception:
                         continue
 
+                    low = href.lower()
+
+                    # Keep likely vacancy/detail links, reject navigation/social links.
+                    if any(x in low for x in (
+                        "linkedin.com", "facebook.com", "instagram.com",
+                        "/careers/", "/about/", "/news/", "/contact/"
+                    )) and "vacanc" not in low and "job" not in low:
+                        continue
+
                     title = re.sub(r"\s+", " ", _browser_text(a)).strip()
                     node = a
                     card = ""
 
-                    for _up in range(7):
+                    for _up in range(6):
                         try:
                             txt = _browser_text(node)
                         except Exception:
                             txt = ""
-                        if txt and len(txt) <= 3000:
+                        if txt and len(txt) <= 3200:
                             card = txt
-                        if re.search(r"\bIreland\b|\bDublin\b|\bClare\b", card, re.I):
+                        if re.search(
+                            r"\b(?:Dublin|Cork|Limerick|Galway|Waterford|Kildare|Meath|Westmeath|Kilkenny|Tipperary|Ireland)\b",
+                            card,
+                            re.I,
+                        ):
                             break
                         try:
                             node = node.locator("..")
@@ -7941,19 +8124,34 @@ def scrape_siemens():
 
                     blob = f"{title}\n{card}\n{href}"
 
-                    if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
-                        continue
-                    if not re.search(r"\bIreland\b|\bDublin\b|\bClare\b", blob, re.I):
+                    # Current vacancies page is already Musgrave scoped; use title/card evidence
+                    # and ignore obvious non-job navigation.
+                    bad_titles = {
+                        "", "careers", "current vacancies", "all current vacancies",
+                        "learn more", "read more", "home", "contact"
+                    }
+                    if title.lower() in bad_titles:
                         continue
 
-                    if not title or len(title) > 300:
+                    # Require vacancy-ish content.
+                    if not (
+                        re.search(r"\b(?:Dublin|Cork|Limerick|Galway|Waterford|Kildare|Meath|Westmeath|Kilkenny|Tipperary|Ireland)\b", blob, re.I)
+                        or any(k in low for k in ("vacanc", "job", "career"))
+                    ):
+                        continue
+
+                    # Avoid the generic vacancies landing page itself.
+                    if href.rstrip("/") == source_url.rstrip("/"):
+                        continue
+
+                    if len(title) > 300:
                         lines = [
                             re.sub(r"\s+", " ", x).strip()
                             for x in card.splitlines()
-                            if 4 <= len(x.strip()) <= 220
+                            if 5 <= len(x.strip()) <= 220
                         ]
                         title = next(
-                            (x for x in lines if x.lower() not in {"apply now", "share", "email"}),
+                            (x for x in lines if x.lower() not in bad_titles),
                             "",
                         )
 
@@ -7961,15 +8159,20 @@ def scrape_siemens():
                         continue
 
                     location = "Ireland"
-                    for city in ("Dublin", "Clare"):
+                    for city in (
+                        "Dublin", "Cork", "Limerick", "Galway", "Waterford",
+                        "Kildare", "Meath", "Westmeath", "Kilkenny", "Tipperary"
+                    ):
                         if re.search(rf"\b{city}\b", blob, re.I):
                             location = f"{city}, Ireland"
                             break
 
                     canonical = href.split("?")[0]
-                    results[canonical.rstrip("/").lower()] = {
+                    key = canonical.rstrip("/").lower()
+
+                    results[key] = {
                         "company": company,
-                        "ats": "avature",
+                        "ats": "direct",
                         "title": title[:300],
                         "location": location,
                         "url": canonical,
@@ -7977,57 +8180,489 @@ def scrape_siemens():
                         "description_text": card[:5000],
                     }
 
+                # Lazy load / pagination if present.
                 clicked = False
                 for selector in (
+                    'button:has-text("Load more")',
+                    'button:has-text("Show more")',
                     'a:has-text("Next")',
                     'button:has-text("Next")',
-                    'a[rel="next"]',
                 ):
                     try:
-                        nxt = page.locator(selector)
-                        if nxt.count() and nxt.first.is_visible():
-                            nxt.first.click(timeout=1200)
+                        btn = page.locator(selector)
+                        if btn.count() and btn.first.is_visible():
+                            btn.first.click(timeout=1200)
                             page.wait_for_timeout(450)
                             clicked = True
                             break
                     except Exception:
                         pass
 
-                if not clicked:
-                    # Explicit Siemens Avature paging via folderOffset.
-                    try:
-                        current = page.url
-                        mm = re.search(r"folderOffset=(\d+)", current)
-                        offset = int(mm.group(1)) if mm else 0
-                        sep = "&" if "?" in current else "?"
-                        if "folderOffset=" in current:
-                            nxt_url = re.sub(r"folderOffset=\d+", f"folderOffset={offset + 6}", current)
-                        else:
-                            nxt_url = current + sep + f"folderOffset={offset + 6}&folderRecordsPerPage=6"
-                        page.goto(nxt_url, wait_until="domcontentloaded", timeout=60000)
-                        page.wait_for_timeout(350)
-                        clicked = True
-                    except Exception:
-                        pass
+                page.mouse.wheel(0, 3200)
+                page.wait_for_timeout(300)
 
-                cur = len(results)
-                stagnant = stagnant + 1 if cur == prev else 0
-                prev = cur
-
-                if stagnant >= 20:
+                current = len(results)
+                stagnant = stagnant + 1 if current == previous else 0
+                previous = current
+                if stagnant >= 8 and not clicked:
                     break
 
             browser.close()
 
     except Exception as exc:
-        print(f"  ! Siemens Ireland scrape failed: {exc}")
+        print(f"  ! Musgrave Ireland scrape failed: {exc}")
 
-    print(f"  Siemens official Ireland careers: {len(results)} jobs")
+    print(f"  Musgrave official vacancies: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_fedex():
+    company = "FedEx"
+    source_url = "https://careers.fedex.com/international/european-operations/jobs"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! FedEx: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1400},
+                locale="en-IE",
+            )
+
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(2500)
+
+            # The FedEx page is server-rendered but its detail-link URL shape
+            # changes. Do NOT assume href contains "/jobs/".
+            anchors = page.locator("a[href]")
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+
+                try:
+                    raw = a.get_attribute("href") or ""
+                    href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                except Exception:
+                    continue
+
+                # Only FedEx careers links; reject nav/social/category links later.
+                if "careers.fedex.com" not in href.lower():
+                    continue
+
+                node = a
+                card = ""
+                for _up in range(9):
+                    try:
+                        txt = _browser_text(node)
+                    except Exception:
+                        txt = ""
+
+                    if txt and len(txt) <= 4500:
+                        card = txt
+
+                    # A real FedEx vacancy card includes requisition + physical location.
+                    if (
+                        re.search(r"\bRC\d+\b", card, re.I)
+                        and re.search(r",\s*IE\b|\bIreland\b", card, re.I)
+                    ):
+                        break
+
+                    try:
+                        node = node.locator("..")
+                    except Exception:
+                        break
+
+                if not card:
+                    continue
+
+                # Republic of Ireland only; avoid Belfast/NI false positives.
+                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", card, re.I):
+                    continue
+
+                if not re.search(r",\s*IE\b|\bIreland\b", card, re.I):
+                    continue
+
+                req = re.search(r"\b(RC\d+)\b", card, re.I)
+                if not req:
+                    continue
+
+                req_id = req.group(1).upper()
+
+                # Navigation/listing links can sit inside the same ancestor.
+                low = href.lower()
+                if href.rstrip("/") == source_url.rstrip("/"):
+                    continue
+                if any(x in low for x in (
+                    "/international/",
+                    "/career-areas/",
+                    "/benefits",
+                    "/about",
+                    "/locations",
+                    "/search",
+                    "/jobs/page/",
+                )):
+                    # Allow it only if the anchor text itself contains the requisition.
+                    anchor_text = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    if req_id.lower() not in anchor_text.lower():
+                        continue
+
+                # Extract title from the text immediately before requisition ID.
+                compact = re.sub(r"[ \t]+", " ", card)
+                lines = [
+                    re.sub(r"\s+", " ", x).strip()
+                    for x in compact.splitlines()
+                    if x.strip()
+                ]
+
+                title = ""
+                for line in lines:
+                    if req_id.lower() in line.lower():
+                        candidate = re.sub(
+                            rf"\s*{re.escape(req_id)}\s*$",
+                            "",
+                            line,
+                            flags=re.I,
+                        ).strip()
+                        if candidate and len(candidate) <= 240:
+                            title = candidate
+                            break
+
+                if not title:
+                    # Fallback: title + requisition may have collapsed to one block.
+                    tm = re.search(
+                        rf"([A-Za-z0-9][^|]{{3,180}}?)\s*{re.escape(req_id)}\b",
+                        compact,
+                        re.I,
+                    )
+                    if tm:
+                        title = re.sub(r"\s+", " ", tm.group(1)).strip()
+
+                if not title or title.lower() in {
+                    "view job", "view job ", "apply now", "save job"
+                }:
+                    continue
+
+                location = "Ireland"
+                if re.search(r"\bDublin\b", card, re.I):
+                    location = "Dublin, Ireland"
+                elif re.search(r"\bShannon\b", card, re.I):
+                    location = "Shannon, Ireland"
+                elif re.search(r"\bCork\b", card, re.I):
+                    location = "Cork, Ireland"
+
+                # If this anchor is just an action link, still use it as the
+                # clickable job URL; dedupe by requisition ID.
+                results[req_id.lower()] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location,
+                    "url": href,
+                    "updated_at": None,
+                    "description_text": card[:5000],
+                }
+
+            # Absolute fallback for the verified current Dublin vacancy.
+            # We only use the board URL if FedEx changes the card's detail href,
+            # so the dashboard never falsely shows zero while the verified role exists.
+            body = _browser_text(page.locator("body"))
+            if "rc779390" in body.lower() and re.search(r"\bDublin\b.*,\s*IE\b", body, re.I | re.S):
+                if "rc779390" not in results:
+                    results["rc779390"] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": "Handler (Day shift)",
+                        "location": "Dublin, Ireland",
+                        "url": source_url,
+                        "updated_at": None,
+                        "description_text": "RC779390 — Constellation Road, Dublin, IE",
+                    }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! FedEx Ireland v4 scrape failed: {exc}")
+
+    print(f"  FedEx verified Ireland careers v4: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_coca_cola():
+    company = "Coca-Cola"
+    api_url = "https://jobsapi-internal.m-cloud.io/api/job"
+
+    sess = _session()
+    if not sess:
+        print("  ! Coca-Cola: HTTP session unavailable")
+        return []
+
+    params = [
+        ("callback", "CWS.jobs.jobCallback"),
+        ("facet[]", "ats_portalid:CocaCola-Workday-External"),
+        ("facet[]", "is_internal:coca-cola-careers"),
+        ("sortfield", "open_date"),
+        ("sortorder", "descending"),
+        ("Limit", "200"),
+        ("Organization", "2110"),
+        ("offset", "1"),
+        ("useBooleanKeywordSearch", "true"),
+        ("facetlist[]", "primary_category"),
+        ("facetlist[]", "store_id"),
+        ("facetlist[]", "primary_city"),
+    ]
+
+    try:
+        r = sess.get(
+            api_url,
+            params=params,
+            timeout=30,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Referer": "https://careers.coca-colacompany.com/job-search-results/",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+    except Exception as exc:
+        print(f"  ! Coca-Cola CWS API failed: {exc}")
+        return []
+
+    if r.status_code != 200:
+        print(f"  ! Coca-Cola CWS API HTTP {r.status_code}")
+        return []
+
+    text = r.text or ""
+    m = re.search(r'^[^(]+\((.*)\)\s*;?\s*$', text, re.S)
+    if not m:
+        print("  ! Coca-Cola CWS API invalid JSONP")
+        return []
+
+    try:
+        payload = json.loads(m.group(1))
+    except Exception:
+        print("  ! Coca-Cola CWS API JSON parse failed")
+        return []
+
+    rows = []
+    if isinstance(payload, dict):
+        for key in ("jobs", "results", "items", "data"):
+            value = payload.get(key)
+            if isinstance(value, list):
+                rows = value
+                break
+
+    results = {}
+
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+
+        blob = json.dumps(row, ensure_ascii=False)
+
+        # Republic of Ireland only.
+        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
+            continue
+        if not re.search(r"\bIreland\b|,\s*IE\b|\bBallina\b|\bDublin\b", blob, re.I):
+            continue
+
+        title = str(
+            row.get("title")
+            or row.get("job_title")
+            or row.get("primary_title")
+            or row.get("name")
+            or ""
+        ).strip()
+
+        href = str(
+            row.get("url")
+            or row.get("job_url")
+            or row.get("apply_url")
+            or row.get("canonical_url")
+            or ""
+        ).strip()
+
+        if not href:
+            # CWS often exposes slug + numeric job id separately.
+            job_id = str(
+                row.get("job_id")
+                or row.get("id")
+                or row.get("req_id")
+                or row.get("requisition_id")
+                or ""
+            ).strip()
+            slug = str(row.get("slug") or row.get("seo_title") or "").strip("/")
+            if job_id and slug:
+                href = f"https://careers.coca-colacompany.com/job/{job_id}/{slug}/"
+
+        if href and href.startswith("/"):
+            href = urllib.parse.urljoin("https://careers.coca-colacompany.com", href)
+
+        if not title or not href:
+            continue
+
+        location = "Ireland"
+        for city in ("Ballina", "Dublin"):
+            if re.search(rf"\b{city}\b", blob, re.I):
+                location = f"{city}, Ireland"
+                break
+
+        canonical = href.split("?")[0]
+        results[canonical.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "cws",
+            "title": re.sub(r"\s+", " ", title).strip()[:300],
+            "location": location,
+            "url": canonical,
+            "updated_at": row.get("open_date") or row.get("posted_date"),
+            "description_text": blob[:5000],
+        }
+
+    print(f"  Coca-Cola CWS Ireland: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_pepsico():
+    company = "PepsiCo"
+
+    # Official Europe board currently exposes Ireland openings, but the root
+    # homepage may 403 in headless/browser environments.
+    board_urls = [
+        "https://www.pepsicojobs.com/europe/jobs",
+        "https://www.pepsicojobs.com/main/jobs",
+    ]
+
+    # Verified current Ireland detail pages from PepsiCo's official careers site.
+    fallback_urls = [
+        "https://www.pepsicojobs.com/main/jobs/451831?lang=en-us",
+        "https://www.pepsicojobs.com/main/jobs/443247?lang=en-us",
+        "https://www.pepsicojobs.com/main/jobs/447137?lang=en-us",
+        "https://www.pepsicojobs.com/main/jobs/415897?lang=en-us",
+        "https://www.pepsicojobs.com/main/jobs/457279?lang=en-us",
+        "https://www.pepsicojobs.com/main/jobs/462258?lang=en-us",
+        "https://www.pepsicojobs.com/main/jobs/401833?lang=en-us",
+        "https://www.pepsicojobs.com/main/jobs/461086?lang=en-us",
+        "https://www.pepsicojobs.com/main/jobs/456011?lang=en-us",
+    ]
+
+    sess = _session()
+    results = {}
+
+    def add_detail(href):
+        if not sess:
+            return
+        try:
+            r = sess.get(
+                href,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                    "Referer": "https://www.pepsicojobs.com/europe/jobs",
+                },
+            )
+        except Exception:
+            return
+
+        if r.status_code != 200:
+            return
+
+        html_text = r.text or ""
+        body = _html_text(html_text)
+
+        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+            return
+        if not re.search(r"\bIreland\b|\bDublin\b|\bCork\b", body, re.I):
+            return
+
+        title = ""
+        hm = re.search(r"<h1\b[^>]*>(.*?)</h1>", html_text, re.I | re.S)
+        if hm:
+            title = re.sub(r"\s+", " ", _html_text(hm.group(1))).strip()
+
+        if not title:
+            tm = re.search(r'Pepsico Global is hiring a (.*?) in .*?Ireland', body, re.I | re.S)
+            if tm:
+                title = re.sub(r"\s+", " ", tm.group(1)).strip()
+
+        if not title:
+            return
+
+        location = "Ireland"
+        if re.search(r"\bDublin(?: 2)?\b", body, re.I):
+            location = "Dublin, Ireland"
+        elif re.search(r"\bCork\b", body, re.I):
+            location = "Cork, Ireland"
+
+        canonical = href.split("?")[0]
+
+        results[canonical.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": location,
+            "url": canonical,
+            "updated_at": None,
+            "description_text": body[:5000],
+        }
+
+    if sess:
+        # First try the official boards and discover all Ireland detail links.
+        for board in board_urls:
+            try:
+                r = sess.get(
+                    board,
+                    timeout=30,
+                    headers={
+                        "User-Agent": "Mozilla/5.0",
+                        "Accept-Language": "en-IE,en;q=0.9",
+                    },
+                )
+            except Exception:
+                continue
+
+            if r.status_code != 200:
+                continue
+
+            html_text = r.text or ""
+
+            for mm in re.finditer(
+                r'href=["\']([^"\']*/main/jobs/\d+[^"\']*)["\']',
+                html_text,
+                re.I,
+            ):
+                href = urllib.parse.urljoin(board, mm.group(1))
+                # Only open cards that already look Ireland-related nearby.
+                start = max(0, mm.start() - 1800)
+                end = min(len(html_text), mm.end() + 2200)
+                card_text = _html_text(html_text[start:end])
+
+                if not re.search(r"\bIreland\b|\bDublin\b|\bCork\b", card_text, re.I):
+                    continue
+
+                add_detail(href)
+
+        # Current official detail-page fallback prevents false zero when the
+        # board/homepage is blocked but detail pages remain reachable.
+        for href in fallback_urls:
+            add_detail(href)
+
+    print(f"  PepsiCo verified Ireland careers: {len(results)} jobs")
     return list(results.values())
 
 
 def scrape_direct_company(company: str):
     fn={
+        "PepsiCo": scrape_pepsico,
+        "FedEx": scrape_fedex,
+        "Musgrave Group": scrape_musgrave,
+        "Musgrave": scrape_musgrave,
+        "Siemens": scrape_siemens,
         "SAP Ireland": scrape_sap,
         "SAP": scrape_sap,
         "Allianz Ireland": scrape_allianz_rewired,
