@@ -8872,8 +8872,686 @@ def scrape_sp_global():
     print(f"  S&P Global Dublin careers v2: {len(results)} jobs")
     return list(results.values())
 
+
+def scrape_abb():
+    company = "ABB"
+    source_url = "https://careers.abb/global/en/search-results"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! ABB: Playwright unavailable")
+        return []
+
+    results = {}
+    seen = set()
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1400},
+                locale="en-IE",
+            )
+
+            # ABB Phenom pagination is ?from=0,10,20...
+            for offset in range(0, 500, 10):
+                url = source_url if offset == 0 else f"{source_url}?from={offset}&s=1"
+
+                try:
+                    page.goto(url, wait_until="domcontentloaded", timeout=90000)
+                    page.wait_for_timeout(1000)
+                except Exception:
+                    continue
+
+                links = page.locator('a[href*="/global/en/job/"]')
+
+                if links.count() == 0 and offset > 0:
+                    break
+
+                new_on_page = 0
+
+                for i in range(links.count()):
+                    a = links.nth(i)
+
+                    try:
+                        raw = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    if not re.search(r"/global/en/job/JR\d+/", href, re.I):
+                        continue
+                    if href in seen:
+                        continue
+
+                    seen.add(href)
+                    new_on_page += 1
+
+                    # Validate on the detail page; search results are global.
+                    try:
+                        detail = page.context.new_page()
+                        detail.goto(href, wait_until="domcontentloaded", timeout=60000)
+                        detail.wait_for_timeout(350)
+
+                        body = _browser_text(detail.locator("body"))
+
+                        h1 = detail.locator("h1")
+                        title = (
+                            re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
+                            if h1.count()
+                            else ""
+                        )
+
+                        detail.close()
+                    except Exception:
+                        continue
+
+                    if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+                        continue
+
+                    if not re.search(
+                        r"\bIreland\b|\bDublin\b|\bDundalk\b|\bCork\b|\bGalway\b",
+                        body,
+                        re.I,
+                    ):
+                        continue
+
+                    if not title:
+                        # Use the listing anchor as fallback.
+                        try:
+                            title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                        except Exception:
+                            title = ""
+
+                    if not title:
+                        continue
+
+                    location = "Ireland"
+
+                    for city in ("Dublin", "Dundalk", "Cork", "Galway"):
+                        if re.search(rf"\b{city}\b", body, re.I):
+                            location = f"{city}, Ireland"
+                            break
+
+                    results[href.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "phenom",
+                        "title": title[:300],
+                        "location": location,
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": body[:5000],
+                    }
+
+                # Once ABB has no unseen job links, we've exhausted paging.
+                if offset > 0 and new_on_page == 0:
+                    break
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! ABB Ireland scrape failed: {exc}")
+
+    print(f"  ABB verified Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_aecom():
+    company = "AECOM"
+    base_url = "https://europe.aecom.jobs/locations/irl/jobs/"
+
+    sess = _session()
+    if not sess:
+        print("  ! AECOM: HTTP session unavailable")
+        return []
+
+    results = {}
+
+    for page_no in range(1, 30):
+        url = base_url if page_no == 1 else f"{base_url}?page={page_no}"
+
+        try:
+            r = sess.get(
+                url,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+        except Exception:
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        html_text = r.text or ""
+
+        # AECOM job detail links on the Europe board.
+        matches = list(re.finditer(
+            r'<a[^>]+href=["\']([^"\']+/job/[^"\']+)["\'][^>]*>(.*?)</a>',
+            html_text,
+            re.I | re.S,
+        ))
+
+        if not matches and page_no > 1:
+            break
+
+        page_found = 0
+
+        for m in matches:
+            href = urllib.parse.urljoin(url, m.group(1)).split("#")[0]
+
+            start = max(0, m.start() - 1800)
+            end = min(len(html_text), m.end() + 2200)
+            card_text = _html_text(html_text[start:end])
+
+            # Republic of Ireland only.
+            if re.search(r"\bNorthern Ireland\b|\bBelfast\b", card_text, re.I):
+                continue
+
+            if not re.search(
+                r"\bIRL\b|\bIreland\b|\bDublin\b|\bCork\b|\bGalway\b",
+                card_text,
+                re.I,
+            ):
+                continue
+
+            title = re.sub(r"\s+", " ", _html_text(m.group(2))).strip()
+
+            if not title or title.lower() in {
+                "view job", "apply now", "learn more", "read more"
+            }:
+                lines = [
+                    re.sub(r"\s+", " ", x).strip()
+                    for x in card_text.splitlines()
+                    if 5 <= len(x.strip()) <= 220
+                ]
+                title = next(
+                    (
+                        x for x in lines
+                        if x.lower() not in {
+                            "view job", "apply now", "learn more", "read more",
+                            "jobs in irl"
+                        }
+                    ),
+                    "",
+                )
+
+            if not title:
+                continue
+
+            location = "Ireland"
+
+            for city in ("Dublin", "Cork", "Galway"):
+                if re.search(rf"\b{city}\b", card_text, re.I):
+                    location = f"{city}, Ireland"
+                    break
+
+            canonical = href.split("?")[0]
+
+            results[canonical.rstrip("/").lower()] = {
+                "company": company,
+                "ats": "direct",
+                "title": title[:300],
+                "location": location,
+                "url": canonical,
+                "updated_at": None,
+                "description_text": card_text[:5000],
+            }
+            page_found += 1
+
+        if page_no > 1 and page_found == 0:
+            break
+
+    print(f"  AECOM official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_laya_healthcare():
+    company = "Laya Healthcare"
+    source_url = (
+        "https://careers.axa.com/careers-home/jobs"
+        "?page=1&tags3=Laya%20Healthcare%20Ltd"
+    )
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Laya Healthcare: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1400},
+                locale="en-IE",
+            )
+
+            for page_no in range(1, 25):
+                url = (
+                    "https://careers.axa.com/careers-home/jobs"
+                    f"?page={page_no}&tags3=Laya%20Healthcare%20Ltd"
+                )
+
+                page.goto(url, wait_until="domcontentloaded", timeout=90000)
+                page.wait_for_timeout(1100)
+
+                links = page.locator('a[href*="/careers-home/jobs/"]')
+                new_count = 0
+
+                for i in range(links.count()):
+                    a = links.nth(i)
+                    try:
+                        raw = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    if not re.search(r"/careers-home/jobs/\d+", href):
+                        continue
+
+                    try:
+                        title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    except Exception:
+                        title = ""
+
+                    node = a
+                    card = ""
+                    for _up in range(6):
+                        try:
+                            txt = _browser_text(node)
+                        except Exception:
+                            txt = ""
+                        if txt and len(txt) <= 3200:
+                            card = txt
+                        if re.search(r"\bIreland\b|\bCork\b|\bLittle Island\b", card, re.I):
+                            break
+                        try:
+                            node = node.locator("..")
+                        except Exception:
+                            break
+
+                    blob = f"{title}\n{card}"
+
+                    # Exact Laya-filtered board; still reject NI/Belfast.
+                    if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
+                        continue
+
+                    if not title or len(title) > 300:
+                        lines = [
+                            re.sub(r"\s+", " ", x).strip()
+                            for x in card.splitlines()
+                            if 5 <= len(x.strip()) <= 220
+                        ]
+                        title = next(
+                            (
+                                x for x in lines
+                                if x.lower() not in {
+                                    "apply now", "view job", "save job",
+                                    "laya healthcare ltd"
+                                }
+                            ),
+                            "",
+                        )
+
+                    if not title:
+                        continue
+
+                    location = "Ireland"
+                    if re.search(r"\bLittle Island\b", blob, re.I):
+                        location = "Little Island, Cork, Ireland"
+                    elif re.search(r"\bCork\b", blob, re.I):
+                        location = "Cork, Ireland"
+                    elif re.search(r"\bDublin\b", blob, re.I):
+                        location = "Dublin, Ireland"
+
+                    canonical = href.split("?")[0]
+                    key = canonical.rstrip("/").lower()
+
+                    if key not in results:
+                        new_count += 1
+
+                    results[key] = {
+                        "company": company,
+                        "ats": "phenom",
+                        "title": title[:300],
+                        "location": location,
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+                if page_no > 1 and new_count == 0:
+                    break
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Laya exact AXA filter scrape failed: {exc}")
+
+    print(f"  Laya Healthcare exact AXA filter: {len(results)} jobs")
+    return list(results.values())
+
+def scrape_axa():
+    company = "AXA"
+    ireland_entry = "https://www.axa.ie/careers/"
+    jobs_url = "https://careers.axa.com/careers-home/jobs"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! AXA: Playwright unavailable")
+        return []
+
+    results = {}
+    seen = set()
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1400},
+                locale="en-IE",
+            )
+
+            # AXA Ireland page is the canonical Irish careers entry point.
+            # It may 403 under automation, so use it for provenance and then
+            # crawl the official AXA jobs board, validating Republic of Ireland.
+            try:
+                page.goto(ireland_entry, wait_until="domcontentloaded", timeout=30000)
+                page.wait_for_timeout(500)
+            except Exception:
+                pass
+
+            for page_no in range(1, 60):
+                url = f"{jobs_url}?page={page_no}"
+
+                try:
+                    page.goto(url, wait_until="domcontentloaded", timeout=90000)
+                    page.wait_for_timeout(900)
+                except Exception:
+                    continue
+
+                links = page.locator('a[href*="/careers-home/jobs/"]')
+                unseen_on_page = 0
+
+                for i in range(links.count()):
+                    try:
+                        raw = links.nth(i).get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                    except Exception:
+                        continue
+
+                    if not re.search(r"/careers-home/jobs/\d+", href):
+                        continue
+                    if href in seen:
+                        continue
+
+                    seen.add(href)
+                    unseen_on_page += 1
+
+                    try:
+                        detail = page.context.new_page()
+                        detail.goto(href, wait_until="domcontentloaded", timeout=60000)
+                        detail.wait_for_timeout(300)
+                        body = _browser_text(detail.locator("body"))
+                        h1 = detail.locator("h1")
+                        title = (
+                            re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
+                            if h1.count()
+                            else ""
+                        )
+                        detail.close()
+                    except Exception:
+                        continue
+
+                    if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+                        continue
+
+                    if not re.search(r"\bIreland\b|\bDublin\b|\bCork\b", body, re.I):
+                        continue
+
+                    # Exact Laya board handles these separately.
+                    if re.search(r"\bLaya Healthcare(?: Ltd)?\b", body, re.I):
+                        continue
+
+                    if not title:
+                        continue
+
+                    location = "Ireland"
+                    if re.search(r"\bDublin\b", body, re.I):
+                        location = "Dublin, Ireland"
+                    elif re.search(r"\bCork\b", body, re.I):
+                        location = "Cork, Ireland"
+
+                    results[href.rstrip("/").lower()] = {
+                        "company": company,
+                        "ats": "phenom",
+                        "title": title[:300],
+                        "location": location,
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": body[:5000],
+                    }
+
+                if page_no > 1 and unseen_on_page == 0:
+                    break
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! AXA Ireland v2 scrape failed: {exc}")
+
+    print(f"  AXA Ireland verified careers v2: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_ntt_data():
+    company = "NTT DATA"
+    base = "https://careers-inc.nttdata.com"
+
+    sess = _session()
+    if not sess:
+        print("  ! NTT DATA: HTTP session unavailable")
+        return []
+
+    # Search Ireland/Dublin on NTT DATA's official SuccessFactors board.
+    search_urls = [
+        f"{base}/search/?q=&locationsearch=Ireland",
+        f"{base}/search/?q=&locationsearch=Dublin",
+    ]
+
+    results = {}
+
+    for source_url in search_urls:
+        try:
+            r = sess.get(
+                source_url,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+        except Exception:
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        html_text = r.text or ""
+
+        # SuccessFactors detail links are /job/<city>-<slug>/<id>/
+        for m in re.finditer(
+            r'<a[^>]+href=["\']([^"\']*/job/[^"\']+/\d+/?)["\'][^>]*>(.*?)</a>',
+            html_text,
+            re.I | re.S,
+        ):
+            href = urllib.parse.urljoin(source_url, m.group(1)).split("#")[0]
+
+            start = max(0, m.start() - 1600)
+            end = min(len(html_text), m.end() + 2000)
+            card_text = _html_text(html_text[start:end])
+
+            if re.search(r"\bNorthern Ireland\b|\bBelfast\b", card_text, re.I):
+                continue
+
+            if not re.search(r"\bIreland\b|\bDublin\b", card_text, re.I):
+                continue
+
+            title = re.sub(r"\s+", " ", _html_text(m.group(2))).strip()
+
+            if not title or title.lower() in {"view job", "apply now"}:
+                lines = [
+                    re.sub(r"\s+", " ", x).strip()
+                    for x in card_text.splitlines()
+                    if 5 <= len(x.strip()) <= 220
+                ]
+                title = next(
+                    (
+                        x for x in lines
+                        if x.lower() not in {
+                            "view job", "apply now", "search jobs"
+                        }
+                    ),
+                    "",
+                )
+
+            if not title:
+                continue
+
+            location = "Dublin, Ireland" if re.search(r"\bDublin\b", card_text, re.I) else "Ireland"
+            canonical = href.split("?")[0]
+
+            results[canonical.rstrip("/").lower()] = {
+                "company": company,
+                "ats": "successfactors",
+                "title": title[:300],
+                "location": location,
+                "url": canonical,
+                "updated_at": None,
+                "description_text": card_text[:5000],
+            }
+
+    print(f"  NTT DATA official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_qualcomm():
+    company = "Qualcomm"
+
+    # Qualcomm's public careers redirect to Workday. Query the official External board.
+    base = "https://qualcomm.wd12.myworkdayjobs.com"
+    board = "External"
+    api = f"{base}/wday/cxs/qualcomm/{board}/jobs"
+
+    sess = _session()
+    if not sess:
+        print("  ! Qualcomm: HTTP session unavailable")
+        return []
+
+    results = {}
+    offset = 0
+
+    while offset < 1000:
+        payload = {
+            "appliedFacets": {},
+            "limit": 20,
+            "offset": offset,
+            "searchText": "Ireland",
+        }
+
+        try:
+            r = sess.post(
+                api,
+                json=payload,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                    "Referer": f"{base}/en-US/{board}",
+                },
+            )
+        except Exception:
+            break
+
+        if r.status_code != 200:
+            break
+
+        try:
+            data = r.json()
+        except Exception:
+            break
+
+        rows = data.get("jobPostings") or []
+        if not rows:
+            break
+
+        new_count = 0
+
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+
+            blob = json.dumps(row, ensure_ascii=False)
+
+            if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
+                continue
+
+            if not re.search(r"\bIreland\b|\bCork\b|\bIRL\b", blob, re.I):
+                continue
+
+            title = str(row.get("title") or "").strip()
+            external = str(row.get("externalPath") or "").strip()
+
+            if not title or not external:
+                continue
+
+            href = urllib.parse.urljoin(f"{base}/en-US/{board}/", external)
+            location = "Cork, Ireland" if re.search(r"\bCork\b", blob, re.I) else "Ireland"
+
+            key = href.split("?")[0].rstrip("/").lower()
+            if key not in results:
+                new_count += 1
+
+            results[key] = {
+                "company": company,
+                "ats": "workday",
+                "title": title[:300],
+                "location": location,
+                "url": href.split("?")[0],
+                "updated_at": None,
+                "description_text": blob[:5000],
+            }
+
+        offset += len(rows)
+
+        total = data.get("total")
+        if isinstance(total, int) and offset >= total:
+            break
+        if new_count == 0 and offset > 100:
+            break
+
+    print(f"  Qualcomm Workday Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     fn={
+        "Qualcomm": scrape_qualcomm,
+        "NTT DATA Services": scrape_ntt_data,
+        "NTT Data": scrape_ntt_data,
+        "NTT DATA": scrape_ntt_data,
+        "AXA Ireland": scrape_axa,
+        "AXA": scrape_axa,
+        "Laya": scrape_laya_healthcare,
+        "Laya Healthcare": scrape_laya_healthcare,
+        "AECOM": scrape_aecom,
+        "ABB": scrape_abb,
         "S&P": scrape_sp_global,
         "S&P Global": scrape_sp_global,
         "Ryanair": scrape_ryanair,
