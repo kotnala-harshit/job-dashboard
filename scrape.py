@@ -9540,8 +9540,281 @@ def scrape_qualcomm():
     return list(results.values())
 
 
+
+def scrape_ptsb():
+    company = "PTSB"
+    careers = "https://www.ptsb.ie/about-us/careers/"
+    sess = _session()
+
+    if not sess:
+        print("  ! PTSB: HTTP session unavailable")
+        return []
+
+    results = {}
+
+    try:
+        r = sess.get(
+            careers,
+            timeout=30,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+        html_text = r.text or ""
+    except Exception as exc:
+        print(f"  ! PTSB careers discovery failed: {exc}")
+        return []
+
+    core_links = re.findall(
+        r'href=["\']([^"\']*my\.corehr\.com[^"\']*)["\']',
+        html_text,
+        re.I,
+    )
+    core_links = [
+        urllib.parse.urljoin(careers, x.replace("&amp;", "&"))
+        for x in core_links
+    ]
+
+    if not core_links:
+        print("  PTSB CoreHR official careers: 0 jobs")
+        return []
+
+    core_url = core_links[0]
+
+    try:
+        r = sess.get(
+            core_url,
+            timeout=40,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+                "Referer": careers,
+            },
+        )
+        html_text = r.text or ""
+    except Exception as exc:
+        print(f"  ! PTSB CoreHR failed: {exc}")
+        return []
+
+    for m in re.finditer(
+        r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+        html_text,
+        re.I | re.S,
+    ):
+        href = urllib.parse.urljoin(
+            r.url,
+            m.group(1).replace("&amp;", "&"),
+        )
+        title = re.sub(
+            r"\s+",
+            " ",
+            _html_text(m.group(2)),
+        ).strip()
+
+        blob = f"{title} {href}".lower()
+
+        if not any(x in blob for x in (
+            "vacan",
+            "job",
+            "recruit",
+            "position",
+        )):
+            continue
+
+        if not title:
+            continue
+
+        if title.lower() in {
+            "search for jobs",
+            "jobs",
+            "careers",
+            "login",
+            "register",
+            "home",
+        }:
+            continue
+
+        key = href.rstrip("/").lower() + "|" + title.lower()
+
+        results[key] = {
+            "company": company,
+            "ats": "corehr",
+            "title": title[:300],
+            "location": "Ireland",
+            "url": href,
+            "updated_at": None,
+            "description_text": title,
+        }
+
+    print(f"  PTSB CoreHR official careers: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_publicjobs():
+    company = "publicjobs.ie"
+    board = (
+        "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/"
+        "appcentre-ext/brand-4/xf-423dd989250d/"
+        "candidate/jobboard/vacancy/3/adv/"
+    )
+
+    sess = _session()
+
+    if not sess:
+        print("  ! publicjobs.ie: HTTP session unavailable")
+        return []
+
+    results = {}
+    queue = [board]
+    seen_pages = set()
+
+    while queue and len(seen_pages) < 80:
+        url = queue.pop(0)
+
+        if url in seen_pages:
+            continue
+
+        seen_pages.add(url)
+
+        try:
+            r = sess.get(
+                url,
+                timeout=40,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-GB,en;q=0.9",
+                },
+            )
+        except Exception:
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        html_text = r.text or ""
+
+        for m in re.finditer(
+            r'<a[^>]+href=["\']([^"\']*/vacancy/\d+[^"\']*)["\'][^>]*>(.*?)</a>',
+            html_text,
+            re.I | re.S,
+        ):
+            href = urllib.parse.urljoin(
+                r.url,
+                m.group(1).replace("&amp;", "&"),
+            ).split("#")[0]
+
+            title = re.sub(
+                r"\s+",
+                " ",
+                _html_text(m.group(2)),
+            ).strip()
+
+            card_html = html_text[
+                max(0, m.start() - 1800):
+                min(len(html_text), m.end() + 1800)
+            ]
+            card_text = _html_text(card_html)
+
+            if not title or title.lower() in {
+                "job details",
+                "full details",
+                "apply",
+                "more details",
+            }:
+                lines = [
+                    re.sub(r"\s+", " ", x).strip()
+                    for x in card_text.splitlines()
+                    if 5 <= len(x.strip()) <= 250
+                ]
+
+                title = next(
+                    (
+                        x for x in lines
+                        if x.lower() not in {
+                            "job details",
+                            "full details",
+                            "apply",
+                            "more details",
+                        }
+                    ),
+                    title,
+                )
+
+            if not title:
+                continue
+
+            if re.search(
+                r"\bNorthern Ireland\b|\bAntrim\b|\bFermanagh\b|\bTyrone\b",
+                card_text,
+                re.I,
+            ):
+                continue
+
+            location = "Ireland"
+
+            counties = re.findall(
+                r"\b(Dublin|Cork|Galway|Limerick|Kildare|Donegal|Louth|Mayo|"
+                r"Westmeath|Kilkenny|Waterford|Sligo|Wicklow|Roscommon|Carlow|"
+                r"Cavan|Offaly|Longford|Kerry|Laois|Tipperary|Clare|Leitrim|"
+                r"Meath|Wexford|Monaghan)\b",
+                card_text,
+                re.I,
+            )
+
+            if counties:
+                uniq = list(dict.fromkeys(x.title() for x in counties))
+                location = ", ".join(uniq[:4]) + ", Ireland"
+            elif re.search(r"\bNationwide\b", card_text, re.I):
+                location = "Nationwide, Ireland"
+
+            key = href.rstrip("/").lower()
+
+            results[key] = {
+                "company": company,
+                "ats": "oleeo",
+                "title": title[:300],
+                "location": location,
+                "url": href,
+                "updated_at": None,
+                "description_text": card_text[:5000],
+            }
+
+        for raw in re.findall(
+            r'href=["\']([^"\']+)["\']',
+            html_text,
+            re.I,
+        ):
+            href = urllib.parse.urljoin(
+                r.url,
+                raw.replace("&amp;", "&"),
+            ).split("#")[0]
+
+            if "publicjobs.tal.net/" not in href:
+                continue
+
+            if "/candidate/jobboard/" not in href:
+                continue
+
+            if href in seen_pages or href in queue:
+                continue
+
+            if re.search(r"(page|start|offset|adv)", href, re.I):
+                queue.append(href)
+
+    print(f"  publicjobs Oleeo official board: {len(results)} jobs")
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     fn={
+        "publicjobs": scrape_publicjobs,
+        "Public Jobs": scrape_publicjobs,
+        "publicjobs.ie": scrape_publicjobs,
+        "permanent tsb": scrape_ptsb,
+        "Permanent TSB": scrape_ptsb,
+        "PTSB": scrape_ptsb,
         "Qualcomm": scrape_qualcomm,
         "NTT DATA Services": scrape_ntt_data,
         "NTT Data": scrape_ntt_data,
