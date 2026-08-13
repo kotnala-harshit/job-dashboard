@@ -9116,128 +9116,161 @@ def scrape_aecom():
 
 def scrape_laya_healthcare():
     company = "Laya Healthcare"
-    source_url = (
+    search_url = (
         "https://careers.axa.com/careers-home/jobs"
         "?page=1&tags3=Laya%20Healthcare%20Ltd"
     )
 
-    if not HAS_PLAYWRIGHT:
+    if not sync_playwright:
         print("  ! Laya Healthcare: Playwright unavailable")
         return []
 
     results = {}
+    detail_urls = set()
 
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(
-                viewport={"width": 1440, "height": 1400},
+            context = browser.new_context(
                 locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 Chrome/124 Safari/537.36"
+                ),
             )
 
-            for page_no in range(1, 25):
-                url = (
-                    "https://careers.axa.com/careers-home/jobs"
-                    f"?page={page_no}&tags3=Laya%20Healthcare%20Ltd"
+            # Exact official AXA group filter for Laya Healthcare Ltd.
+            for page_no in range(1, 8):
+                url = re.sub(
+                    r"([?&])page=\d+",
+                    rf"\g<1>page={page_no}",
+                    search_url,
                 )
 
-                page.goto(url, wait_until="domcontentloaded", timeout=90000)
-                page.wait_for_timeout(1100)
+                page = context.new_page()
 
-                links = page.locator('a[href*="/careers-home/jobs/"]')
-                new_count = 0
+                try:
+                    page.goto(
+                        url,
+                        wait_until="domcontentloaded",
+                        timeout=90000,
+                    )
+                    page.wait_for_timeout(3500)
 
-                for i in range(links.count()):
-                    a = links.nth(i)
+                    links = page.locator("a").evaluate_all(
+                        """els => els.map(a => ({
+                            href: a.href || "",
+                            text: (a.innerText || "").trim()
+                        }))"""
+                    )
+                except Exception:
+                    page.close()
+                    continue
+
+                before = len(detail_urls)
+
+                for item in links:
+                    href = str(item.get("href") or "")
+                    if re.search(
+                        r"careers\.axa\.com/careers-home/jobs/\d+",
+                        href,
+                        re.I,
+                    ):
+                        detail_urls.add(href.split("#")[0])
+
+                page.close()
+
+                if page_no > 1 and len(detail_urls) == before:
+                    break
+
+            for href in sorted(detail_urls):
+                page = context.new_page()
+
+                try:
+                    page.goto(
+                        href,
+                        wait_until="domcontentloaded",
+                        timeout=70000,
+                    )
+                    page.wait_for_timeout(1200)
+                    body = page.locator("body").inner_text(timeout=15000)
+                except Exception:
+                    page.close()
+                    continue
+
+                # Exact company validation prevents AXA roles leaking into Laya.
+                if not re.search(r"\bLaya Healthcare Ltd\b", body, re.I):
+                    page.close()
+                    continue
+
+                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+                    page.close()
+                    continue
+
+                if not re.search(
+                    r"\bIreland\b|\bLittle Island\b|\bCork\b",
+                    body,
+                    re.I,
+                ):
+                    page.close()
+                    continue
+
+                title = ""
+
+                try:
+                    h1 = page.locator("h1")
+                    if h1.count():
+                        title = h1.first.inner_text().strip()
+                except Exception:
+                    pass
+
+                if not title:
                     try:
-                        raw = a.get_attribute("href") or ""
-                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
-                    except Exception:
-                        continue
-
-                    if not re.search(r"/careers-home/jobs/\d+", href):
-                        continue
-
-                    try:
-                        title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                        title = page.title()
                     except Exception:
                         title = ""
 
-                    node = a
-                    card = ""
-                    for _up in range(6):
-                        try:
-                            txt = _browser_text(node)
-                        except Exception:
-                            txt = ""
-                        if txt and len(txt) <= 3200:
-                            card = txt
-                        if re.search(r"\bIreland\b|\bCork\b|\bLittle Island\b", card, re.I):
-                            break
-                        try:
-                            node = node.locator("..")
-                        except Exception:
-                            break
+                title = re.sub(
+                    r"\s+in\s+.*?Ireland.*$",
+                    "",
+                    title,
+                    flags=re.I,
+                ).strip()
 
-                    blob = f"{title}\n{card}"
+                if not title:
+                    page.close()
+                    continue
 
-                    # Exact Laya-filtered board; still reject NI/Belfast.
-                    if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
-                        continue
+                location = "Ireland"
+                if re.search(r"\bLittle Island\b", body, re.I):
+                    location = "Little Island, Cork, Ireland"
+                elif re.search(r"\bCork\b", body, re.I):
+                    location = "Cork, Ireland"
 
-                    if not title or len(title) > 300:
-                        lines = [
-                            re.sub(r"\s+", " ", x).strip()
-                            for x in card.splitlines()
-                            if 5 <= len(x.strip()) <= 220
-                        ]
-                        title = next(
-                            (
-                                x for x in lines
-                                if x.lower() not in {
-                                    "apply now", "view job", "save job",
-                                    "laya healthcare ltd"
-                                }
-                            ),
-                            "",
-                        )
+                canonical = page.url.split("#")[0]
 
-                    if not title:
-                        continue
+                results[canonical.lower()] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": body[:5000],
+                }
 
-                    location = "Ireland"
-                    if re.search(r"\bLittle Island\b", blob, re.I):
-                        location = "Little Island, Cork, Ireland"
-                    elif re.search(r"\bCork\b", blob, re.I):
-                        location = "Cork, Ireland"
-                    elif re.search(r"\bDublin\b", blob, re.I):
-                        location = "Dublin, Ireland"
-
-                    canonical = href.split("?")[0]
-                    key = canonical.rstrip("/").lower()
-
-                    if key not in results:
-                        new_count += 1
-
-                    results[key] = {
-                        "company": company,
-                        "ats": "phenom",
-                        "title": title[:300],
-                        "location": location,
-                        "url": canonical,
-                        "updated_at": None,
-                        "description_text": card[:5000],
-                    }
-
-                if page_no > 1 and new_count == 0:
-                    break
+                page.close()
 
             browser.close()
 
     except Exception as exc:
-        print(f"  ! Laya exact AXA filter scrape failed: {exc}")
+        print(f"  ! Laya Healthcare scrape failed: {exc}")
 
-    print(f"  Laya Healthcare exact AXA filter: {len(results)} jobs")
+    print(
+        f"  Laya Healthcare official AXA careers: "
+        f"{len(results)} jobs from {len(detail_urls)} details"
+    )
     return list(results.values())
 
 def scrape_axa():
