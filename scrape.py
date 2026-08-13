@@ -9395,13 +9395,24 @@ def scrape_aecom():
     return out
 
 def scrape_laya_healthcare():
+    """
+    Laya Healthcare Ireland jobs from the official AXA careers board,
+    filtered specifically to Laya Healthcare Ltd + Ireland.
+    """
     company = "Laya Healthcare"
-    search_url = (
+
+    board = (
         "https://careers.axa.com/careers-home/jobs"
-        "?page=1&tags3=Laya%20Healthcare%20Ltd"
+        "?page=1"
+        "&tags3=Laya%20Healthcare%20Ltd"
+        "&location=Ireland"
+        "&woe=12"
+        "&regionCode=IE"
+        "&stretchUnit=MILES"
+        "&stretch=10"
     )
 
-    if not sync_playwright:
+    if not HAS_PLAYWRIGHT:
         print("  ! Laya Healthcare: Playwright unavailable")
         return []
 
@@ -9411,6 +9422,7 @@ def scrape_laya_healthcare():
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
+
             context = browser.new_context(
                 locale="en-IE",
                 viewport={"width": 1440, "height": 1600},
@@ -9420,127 +9432,218 @@ def scrape_laya_healthcare():
                 ),
             )
 
-            # Exact official AXA group filter for Laya Healthcare Ltd.
-            for page_no in range(1, 8):
-                url = re.sub(
-                    r"([?&])page=\d+",
-                    rf"\g<1>page={page_no}",
-                    search_url,
+            page = context.new_page()
+
+            # The board sometimes loads slowly / partially, so don't let
+            # networkidle block the scraper.
+            try:
+                page.goto(
+                    board,
+                    wait_until="domcontentloaded",
+                    timeout=45000,
                 )
+            except Exception:
+                pass
 
-                page = context.new_page()
+            page.wait_for_timeout(5000)
 
+            # Collect current filtered results.
+            for _ in range(8):
                 try:
-                    page.goto(
-                        url,
-                        wait_until="domcontentloaded",
-                        timeout=90000,
-                    )
-                    page.wait_for_timeout(3500)
-
                     links = page.locator("a").evaluate_all(
                         """els => els.map(a => ({
                             href: a.href || "",
-                            text: (a.innerText || "").trim()
+                            text: (a.innerText || a.textContent || "").trim()
                         }))"""
                     )
-                except Exception:
-                    page.close()
-                    continue
 
-                before = len(detail_urls)
+                    for item in links:
+                        href = str(item.get("href") or "")
 
-                for item in links:
-                    href = str(item.get("href") or "")
-                    if re.search(
-                        r"careers\.axa\.com/careers-home/jobs/\d+",
-                        href,
-                        re.I,
-                    ):
+                        if not re.search(
+                            r"https://careers\.axa\.com/"
+                            r"(?:careers-home/|axa-uk-careers/)?jobs/\d+",
+                            href,
+                            re.I,
+                        ):
+                            continue
+
                         detail_urls.add(href.split("#")[0])
 
-                page.close()
-
-                if page_no > 1 and len(detail_urls) == before:
-                    break
-
-            for href in sorted(detail_urls):
-                page = context.new_page()
-
-                try:
-                    page.goto(
-                        href,
-                        wait_until="domcontentloaded",
-                        timeout=70000,
-                    )
-                    page.wait_for_timeout(1200)
-                    body = page.locator("body").inner_text(timeout=15000)
-                except Exception:
-                    page.close()
-                    continue
-
-                # Exact company validation prevents AXA roles leaking into Laya.
-                if not re.search(r"\bLaya Healthcare Ltd\b", body, re.I):
-                    page.close()
-                    continue
-
-                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
-                    page.close()
-                    continue
-
-                if not re.search(
-                    r"\bIreland\b|\bLittle Island\b|\bCork\b",
-                    body,
-                    re.I,
-                ):
-                    page.close()
-                    continue
-
-                title = ""
-
-                try:
-                    h1 = page.locator("h1")
-                    if h1.count():
-                        title = h1.first.inner_text().strip()
                 except Exception:
                     pass
 
-                if not title:
+                try:
+                    page.mouse.wheel(0, 5000)
+                    page.wait_for_timeout(1000)
+                except Exception:
+                    break
+
+            # Also inspect rendered HTML because some cards are not exposed
+            # cleanly as normal anchors.
+            try:
+                html_text = page.content()
+            except Exception:
+                html_text = ""
+
+            patterns = [
+                r'https://careers\.axa\.com/careers-home/jobs/\d+[^"\'<> ]*',
+                r'https://careers\.axa\.com/axa-uk-careers/jobs/\d+[^"\'<> ]*',
+                r'https://careers\.axa\.com/jobs/\d+[^"\'<> ]*',
+                r'["\'](/careers-home/jobs/\d+[^"\']*)["\']',
+                r'["\'](/jobs/\d+[^"\']*)["\']',
+            ]
+
+            for pattern in patterns:
+                for m in re.finditer(pattern, html_text, re.I):
+                    href = urllib.parse.urljoin(
+                        "https://careers.axa.com",
+                        m.group(1),
+                    )
+                    href = href.replace("&amp;", "&")
+                    detail_urls.add(href.split("#")[0])
+
+            page.close()
+
+            # Detail pages are the authoritative check. Never rely solely
+            # on the querystring filter.
+            for href in sorted(detail_urls):
+                detail = context.new_page()
+
+                try:
                     try:
-                        title = page.title()
+                        detail.goto(
+                            href,
+                            wait_until="domcontentloaded",
+                            timeout=30000,
+                        )
                     except Exception:
-                        title = ""
+                        pass
 
-                title = re.sub(
-                    r"\s+in\s+.*?Ireland.*$",
-                    "",
-                    title,
-                    flags=re.I,
-                ).strip()
+                    detail.wait_for_timeout(1200)
 
-                if not title:
-                    page.close()
-                    continue
+                    try:
+                        body = detail.locator("body").inner_text(timeout=7000)
+                    except Exception:
+                        body = ""
 
-                location = "Ireland"
-                if re.search(r"\bLittle Island\b", body, re.I):
-                    location = "Little Island, Cork, Ireland"
-                elif re.search(r"\bCork\b", body, re.I):
-                    location = "Cork, Ireland"
+                    if not body:
+                        detail.close()
+                        continue
 
-                canonical = page.url.split("#")[0]
+                    # Must actually belong to Laya Healthcare Ltd.
+                    if not re.search(
+                        r"\bLaya\s+Healthcare\s+Ltd\b",
+                        body,
+                        re.I,
+                    ):
+                        detail.close()
+                        continue
 
-                results[canonical.lower()] = {
-                    "company": company,
-                    "ats": "direct",
-                    "title": title[:300],
-                    "location": location,
-                    "url": canonical,
-                    "updated_at": None,
-                    "description_text": body[:5000],
-                }
+                    # Must be Republic of Ireland.
+                    if not re.search(
+                        r"\bIreland\b|\bIE\b",
+                        body,
+                        re.I,
+                    ):
+                        detail.close()
+                        continue
 
-                page.close()
+                    # Exclude Northern Ireland if it ever leaks into results.
+                    if re.search(
+                        r"\bNorthern Ireland\b|\bBelfast\b",
+                        body,
+                        re.I,
+                    ):
+                        detail.close()
+                        continue
+
+                    title = ""
+
+                    # H1 is normally the cleanest title.
+                    try:
+                        h1 = detail.locator("h1")
+                        if h1.count():
+                            title = (h1.first.inner_text() or "").strip()
+                    except Exception:
+                        pass
+
+                    if not title:
+                        try:
+                            title = (detail.title() or "").strip()
+                        except Exception:
+                            title = ""
+
+                    title = re.sub(r"\s+", " ", title).strip()
+
+                    title = re.sub(
+                        r"\s+in\s+.*?\|\s*AXA\s*$",
+                        "",
+                        title,
+                        flags=re.I,
+                    ).strip()
+
+                    title = re.sub(
+                        r"\s*\|\s*AXA\s*$",
+                        "",
+                        title,
+                        flags=re.I,
+                    ).strip()
+
+                    if not title or title.lower() in {
+                        "jobs",
+                        "careers",
+                        "job details",
+                        "learn more",
+                    }:
+                        detail.close()
+                        continue
+
+                    location = "Ireland"
+
+                    if re.search(
+                        r"\bLittle Island\b",
+                        body,
+                        re.I,
+                    ):
+                        location = "Little Island, Cork, Ireland"
+                    elif re.search(r"\bCork\b", body, re.I):
+                        location = "Cork, Ireland"
+                    elif re.search(r"\bDublin\b", body, re.I):
+                        location = "Dublin, Ireland"
+                    elif re.search(r"\bGalway\b", body, re.I):
+                        location = "Galway, Ireland"
+
+                    # Normalise all AXA URL variants to careers-home.
+                    m = re.search(r"/jobs/(\d+)", detail.url or href)
+                    if not m:
+                        detail.close()
+                        continue
+
+                    job_id = m.group(1)
+
+                    canonical = (
+                        "https://careers.axa.com/"
+                        f"careers-home/jobs/{job_id}?lang=en-us"
+                    )
+
+                    results[job_id] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": location,
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": body[:5000],
+                    }
+
+                except Exception:
+                    pass
+
+                try:
+                    detail.close()
+                except Exception:
+                    pass
 
             browser.close()
 
@@ -9548,10 +9651,13 @@ def scrape_laya_healthcare():
         print(f"  ! Laya Healthcare scrape failed: {exc}")
 
     print(
-        f"  Laya Healthcare official AXA careers: "
+        f"  Laya Healthcare official Ireland careers: "
         f"{len(results)} jobs from {len(detail_urls)} details"
     )
+
     return list(results.values())
+
+
 
 def scrape_axa():
     company = "AXA"
