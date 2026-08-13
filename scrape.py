@@ -7819,80 +7819,142 @@ def scrape_allianz_rewired():
 
 
 def scrape_bnp_paribas_rewired():
+    """
+    BNP Paribas Ireland jobs from official bnpparibas.ie vacancies page.
+    """
     company = "BNP Paribas"
-    source_url = "https://group.bnpparibas/en/careers/all-job-offers/dublin"
+    base = "https://www.bnpparibas.ie"
+    source = f"{base}/en/join-us/vacancies/"
 
-    if not HAS_PLAYWRIGHT:
-        print("  ! BNP Paribas: Playwright unavailable")
+    sess = _session()
+    if not sess:
+        print("  ! BNP Paribas: HTTP session unavailable")
         return []
+
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/124.0.0.0 Safari/537.36"
+        ),
+        "Accept-Language": "en-IE,en;q=0.9",
+    }
+
+    try:
+        r = sess.get(source, headers=headers, timeout=30)
+    except Exception as exc:
+        print(f"  ! BNP Paribas Ireland page failed: {exc}")
+        return []
+
+    if r.status_code != 200:
+        print(f"  ! BNP Paribas Ireland page HTTP {r.status_code}")
+        return []
+
+    html_text = r.text or ""
+
+    # Only genuine BNP Ireland job-detail URLs.
+    detail_urls = {}
+
+    for m in re.finditer(
+        r'href=["\']([^"\']*/en/jobs/[^"\']+/?)["\']',
+        html_text,
+        re.I,
+    ):
+        href = urllib.parse.urljoin(source, m.group(1))
+        href = href.split("#")[0].split("?")[0]
+
+        if not re.match(
+            r"^https://(?:www\.)?bnpparibas\.ie/en/jobs/[^/]+/?$",
+            href,
+            re.I,
+        ):
+            continue
+
+        detail_urls[href.lower()] = href
 
     results = {}
 
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
-            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
-            page.wait_for_timeout(2200)
+    for href in detail_urls.values():
+        try:
+            rr = sess.get(href, headers=headers, timeout=30)
+        except Exception:
+            continue
 
-            # BNP detail links use /careers/job-offer/<slug>.
-            links = page.locator('a[href*="/careers/job-offer/"]')
+        if rr.status_code != 200:
+            continue
 
-            for i in range(links.count()):
-                a = links.nth(i)
-                try:
-                    raw = a.get_attribute("href") or ""
-                    href = urllib.parse.urljoin(page.url, raw).split("#")[0]
-                except Exception:
-                    continue
+        detail_html = rr.text or ""
+        body = _html_text(detail_html)
 
-                title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+        title = ""
 
-                if not title:
-                    node = a
-                    card = ""
-                    for _up in range(5):
-                        try:
-                            card = _browser_text(node)
-                        except Exception:
-                            card = ""
-                        if card:
-                            break
-                        try:
-                            node = node.locator("..")
-                        except Exception:
-                            break
+        for pattern in [
+            r'<h1[^>]*>(.*?)</h1>',
+            r'<meta[^>]+property=["\']og:title["\'][^>]+content=["\']([^"\']+)',
+            r'<title[^>]*>(.*?)</title>',
+        ]:
+            m = re.search(pattern, detail_html, re.I | re.S)
+            if m:
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    _html_text(m.group(1)),
+                ).strip()
+                break
 
-                    lines = [
-                        re.sub(r"\s+", " ", x).strip()
-                        for x in card.splitlines()
-                        if 5 <= len(x.strip()) <= 220
-                    ]
-                    title = next(
-                        (x for x in lines if x.lower() not in {"apply now","permanent","full time"}),
-                        "",
-                    )
+        if not title:
+            continue
 
-                if not title:
-                    continue
+        title = re.sub(
+            r"\s*[-–|]\s*Ireland\s*$",
+            "",
+            title,
+            flags=re.I,
+        ).strip()
 
-                canonical = href.split("?")[0]
-                results[canonical.rstrip("/").lower()] = {
-                    "company": company,
-                    "ats": "direct",
-                    "title": title[:300],
-                    "location": "Dublin, Ireland",
-                    "url": canonical,
-                    "updated_at": None,
-                    "description_text": "",
-                }
+        # Require actual Ireland job-location evidence.
+        location = "Ireland"
 
-            browser.close()
+        loc_match = re.search(
+            r"\bLocation\s*:\s*([^\n\r]{1,200})",
+            body,
+            re.I,
+        )
 
-    except Exception as exc:
-        print(f"  ! BNP Paribas v3 scrape failed: {exc}")
+        loc_text = loc_match.group(1).strip() if loc_match else body[:1500]
 
-    print(f"  BNP Paribas Dublin board v3: {len(results)} jobs")
+        if re.search(r"\bGalway\b", loc_text, re.I) and re.search(
+            r"\bDublin\b", loc_text, re.I
+        ):
+            location = "Dublin / Galway, Ireland"
+        elif re.search(r"\bGalway\b", loc_text, re.I):
+            location = "Galway, Ireland"
+        elif re.search(r"\bDublin\b", loc_text, re.I):
+            location = "Dublin, Ireland"
+        elif re.search(r"\bIE-Dublin\b", body, re.I):
+            location = "Dublin, Ireland"
+        elif not re.search(r"\bIreland\b", body, re.I):
+            continue
+
+        canonical = href
+        if not canonical.endswith("/"):
+            canonical += "/"
+
+        results[canonical.lower()] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": location,
+            "url": canonical,
+            "updated_at": None,
+            "description_text": body[:5000],
+        }
+
+    print(
+        f"  BNP Paribas official Ireland careers: "
+        f"{len(results)} jobs from {len(detail_urls)} details"
+    )
+
     return list(results.values())
 
 
