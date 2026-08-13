@@ -9002,125 +9002,102 @@ def scrape_sp_global():
 
 def scrape_abb():
     company = "ABB"
-    source_url = "https://careers.abb/global/en/search-results"
+    url = "https://careers.abb/global/en/search-results"
 
-    if not HAS_PLAYWRIGHT:
+    if not sync_playwright:
         print("  ! ABB: Playwright unavailable")
         return []
 
     results = {}
-    seen = set()
 
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(
-                viewport={"width": 1440, "height": 1400},
-                locale="en-IE",
+            page = browser.new_page()
+
+            page.goto(url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(5000)
+
+            links = page.locator("a").evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || "").trim()
+                }))"""
             )
 
-            # ABB Phenom pagination is ?from=0,10,20...
-            for offset in range(0, 500, 10):
-                url = source_url if offset == 0 else f"{source_url}?from={offset}&s=1"
+            candidates = set()
+
+            for item in links:
+                href = str(item.get("href") or "")
+                if "/global/en/job/" in href:
+                    candidates.add(href.split("#")[0])
+
+            for href in sorted(candidates):
+                detail = browser.new_page()
 
                 try:
-                    page.goto(url, wait_until="domcontentloaded", timeout=90000)
-                    page.wait_for_timeout(1000)
+                    detail.goto(
+                        href,
+                        wait_until="domcontentloaded",
+                        timeout=60000
+                    )
+                    detail.wait_for_timeout(1200)
+                    body = detail.locator("body").inner_text(timeout=10000)
                 except Exception:
+                    detail.close()
                     continue
 
-                links = page.locator('a[href*="/global/en/job/"]')
+                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+                    detail.close()
+                    continue
 
-                if links.count() == 0 and offset > 0:
-                    break
+                if not re.search(
+                    r"\bDublin\b|\bCork\b|\bIreland\b",
+                    body,
+                    re.I
+                ):
+                    detail.close()
+                    continue
 
-                new_on_page = 0
+                title = ""
 
-                for i in range(links.count()):
-                    a = links.nth(i)
+                try:
+                    h1 = detail.locator("h1")
+                    if h1.count():
+                        title = h1.first.inner_text().strip()
+                except Exception:
+                    pass
 
-                    try:
-                        raw = a.get_attribute("href") or ""
-                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
-                    except Exception:
-                        continue
+                if not title:
+                    detail.close()
+                    continue
 
-                    if not re.search(r"/global/en/job/JR\d+/", href, re.I):
-                        continue
-                    if href in seen:
-                        continue
+                location = "Ireland"
 
-                    seen.add(href)
-                    new_on_page += 1
+                if re.search(r"\bDublin\b", body, re.I):
+                    location = "Dublin, Ireland"
+                elif re.search(r"\bCork\b", body, re.I):
+                    location = "Cork, Ireland"
 
-                    # Validate on the detail page; search results are global.
-                    try:
-                        detail = page.context.new_page()
-                        detail.goto(href, wait_until="domcontentloaded", timeout=60000)
-                        detail.wait_for_timeout(350)
+                results[href] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location,
+                    "url": href,
+                    "updated_at": None,
+                    "description_text": body[:5000],
+                }
 
-                        body = _browser_text(detail.locator("body"))
-
-                        h1 = detail.locator("h1")
-                        title = (
-                            re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
-                            if h1.count()
-                            else ""
-                        )
-
-                        detail.close()
-                    except Exception:
-                        continue
-
-                    if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
-                        continue
-
-                    if not re.search(
-                        r"\bIreland\b|\bDublin\b|\bDundalk\b|\bCork\b|\bGalway\b",
-                        body,
-                        re.I,
-                    ):
-                        continue
-
-                    if not title:
-                        # Use the listing anchor as fallback.
-                        try:
-                            title = re.sub(r"\s+", " ", _browser_text(a)).strip()
-                        except Exception:
-                            title = ""
-
-                    if not title:
-                        continue
-
-                    location = "Ireland"
-
-                    for city in ("Dublin", "Dundalk", "Cork", "Galway"):
-                        if re.search(rf"\b{city}\b", body, re.I):
-                            location = f"{city}, Ireland"
-                            break
-
-                    results[href.rstrip("/").lower()] = {
-                        "company": company,
-                        "ats": "phenom",
-                        "title": title[:300],
-                        "location": location,
-                        "url": href,
-                        "updated_at": None,
-                        "description_text": body[:5000],
-                    }
-
-                # Once ABB has no unseen job links, we've exhausted paging.
-                if offset > 0 and new_on_page == 0:
-                    break
+                detail.close()
 
             browser.close()
 
     except Exception as exc:
-        print(f"  ! ABB Ireland scrape failed: {exc}")
+        print(f"  ! ABB scrape failed: {exc}")
 
-    print(f"  ABB verified Ireland careers: {len(results)} jobs")
+    print(f"  ABB official Ireland: {len(results)} jobs")
     return list(results.values())
-
 
 
 def scrape_aecom():
