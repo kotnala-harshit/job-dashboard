@@ -6903,98 +6903,121 @@ def scrape_wipro():
     return list(results.values())
 
 def scrape_vodafone():
-    company = "Vodafone"
-    source_url = "https://opportunities.vodafone.com/search/?q=&locationsearch=Ireland"
+    company = "Vodafone Ireland"
+    search_urls = [
+        "https://opportunities.vodafone.com/search/?q=&locationsearch=Ireland",
+        "https://opportunities.vodafone.com/search/?q=&locationsearch=Dublin",
+        "https://opportunities.vodafone.com/",
+    ]
 
-    if not HAS_PLAYWRIGHT:
-        print("  ! Vodafone: Playwright unavailable")
+    sess = _session()
+    if not sess:
+        print("  ! Vodafone Ireland: HTTP session unavailable")
         return []
 
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept-Language": "en-IE,en;q=0.9",
+    }
+
+    detail_urls = set()
     results = {}
 
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(
-                viewport={"width": 1440, "height": 1300},
-                locale="en-IE",
+    for url in search_urls:
+        try:
+            r = sess.get(url, headers=headers, timeout=30)
+        except Exception:
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        html_text = r.text or ""
+
+        for m in re.finditer(
+            r'href=["\']([^"\']*/job/[^"\']+/\d+/?)["\']',
+            html_text,
+            re.I,
+        ):
+            detail_urls.add(
+                urllib.parse.urljoin(url, m.group(1)).split("#")[0]
             )
 
-            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
-            page.wait_for_timeout(1500)
+        for m in re.finditer(
+            r'https://opportunities\.vodafone\.com/job/[^"\'<>\s]+/\d+/?',
+            html_text,
+            re.I,
+        ):
+            detail_urls.add(m.group(0))
 
-            stagnant = 0
-            prev = 0
+    for url in sorted(detail_urls):
+        try:
+            r = sess.get(url, headers=headers, timeout=30)
+        except Exception:
+            continue
 
-            for _ in range(80):
-                anchors = page.locator('a[href*="/job/"]')
+        if r.status_code != 200:
+            continue
 
-                for i in range(anchors.count()):
-                    a = anchors.nth(i)
+        html_text = r.text or ""
+        body = _html_text(html_text)
 
-                    try:
-                        raw = a.get_attribute("href") or ""
-                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
-                    except Exception:
-                        continue
+        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+            continue
 
-                    if "/job/" not in href:
-                        continue
+        if not re.search(
+            r"\bDublin\b|\bIreland\b",
+            body,
+            re.I,
+        ):
+            continue
 
-                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
-                    if not title:
-                        continue
+        title = ""
 
-                    # The source page is already filtered to Ireland.
-                    location = "Dublin, Ireland" if (
-                        "/Dublin-" in href
-                        or re.search(r"\bDublin\b", title, re.I)
-                    ) else "Ireland"
+        m = re.search(r"<h1[^>]*>(.*?)</h1>", html_text, re.I | re.S)
+        if m:
+            title = re.sub(r"\s+", " ", _html_text(m.group(1))).strip()
 
-                    results[href.rstrip("/").lower()] = {
-                        "company": company,
-                        "ats": "successfactors",
-                        "title": title[:300],
-                        "location": location,
-                        "url": href,
-                        "updated_at": None,
-                        "description_text": "",
-                    }
+        if not title:
+            m = re.search(
+                r"<title[^>]*>(.*?)</title>",
+                html_text,
+                re.I | re.S,
+            )
+            if m:
+                title = re.sub(r"\s+", " ", _html_text(m.group(1))).strip()
+                title = re.sub(
+                    r"\s+Job Details.*$",
+                    "",
+                    title,
+                    flags=re.I,
+                ).strip()
 
-                # SuccessFactors pagination.
-                clicked = False
-                for selector in (
-                    'a:has-text("Next")',
-                    'button:has-text("Next")',
-                    'a[rel="next"]',
-                ):
-                    try:
-                        nxt = page.locator(selector)
-                        if nxt.count() and nxt.first.is_visible():
-                            nxt.first.click(timeout=1200)
-                            page.wait_for_timeout(450)
-                            clicked = True
-                            break
-                    except Exception:
-                        pass
+        if not title:
+            continue
 
-                page.mouse.wheel(0, 3000)
-                page.wait_for_timeout(250)
+        location = "Ireland"
+        if re.search(r"\bDublin\b", body, re.I):
+            location = "Dublin, Ireland"
 
-                cur = len(results)
-                stagnant = stagnant + 1 if cur == prev else 0
-                prev = cur
+        canonical = url.split("?")[0]
 
-                if stagnant >= 6 and not clicked:
-                    break
+        results[canonical] = {
+            "company": company,
+            "ats": "successfactors",
+            "title": title[:300],
+            "location": location,
+            "url": canonical,
+            "updated_at": None,
+            "description_text": body[:5000],
+        }
 
-            browser.close()
-
-    except Exception as exc:
-        print(f"  ! Vodafone Ireland scrape failed: {exc}")
-
-    print(f"  Vodafone Ireland SuccessFactors: {len(results)} jobs")
+    print(
+        f"  Vodafone Ireland official careers: "
+        f"{len(results)} jobs from {len(detail_urls)} discovered links"
+    )
     return list(results.values())
+
 
 def scrape_wells_fargo():
     company = "Wells Fargo"
