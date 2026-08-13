@@ -8987,150 +8987,296 @@ def scrape_ryanair():
 
 def scrape_sp_global():
     company = "S&P Global"
-    locations_url = "https://careers.spglobal.com/jobs/locations"
 
     if not HAS_PLAYWRIGHT:
         print("  ! S&P Global: Playwright unavailable")
         return []
 
+    base = (
+        "https://careers.spglobal.com/jobs"
+        "?location=Ireland"
+        "&woe=12"
+        "&regionCode=IE"
+        "&stretchUnit=MILES"
+        "&stretch=10"
+    )
+
     results = {}
+    discovered = {}
 
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1400}, locale="en-IE")
 
-            page.goto(locations_url, wait_until="domcontentloaded", timeout=90000)
-            page.wait_for_timeout(1400)
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/124.0.0.0 Safari/537.36"
+                ),
+            )
 
-            target_urls = []
+            page = context.new_page()
 
-            # Prefer the official Dublin city link exposed by the locations page.
-            dublin_links = page.locator('a:has-text("Dublin")')
+            # Ireland board pagination.
+            # Stop as soon as a page gives no new job IDs.
+            for page_num in range(1, 15):
+                url = f"{base}&page={page_num}"
 
-            for i in range(dublin_links.count()):
                 try:
-                    raw = dublin_links.nth(i).get_attribute("href") or ""
-                    href = urllib.parse.urljoin(page.url, raw)
-                except Exception:
-                    continue
+                    resp = page.goto(
+                        url,
+                        wait_until="domcontentloaded",
+                        timeout=60000,
+                    )
+                    page.wait_for_timeout(1800)
+                except Exception as exc:
+                    print(
+                        f"  ! S&P Global page {page_num} failed: {exc}"
+                    )
+                    break
 
-                if "spglobal.com" in href.lower():
-                    target_urls.append(href)
+                if resp and resp.status >= 400:
+                    print(
+                        f"  ! S&P Global page {page_num} HTTP "
+                        f"{resp.status}"
+                    )
+                    break
 
-            # If Dublin is not a direct link, use the generic jobs page as fallback.
-            if not target_urls:
-                target_urls = ["https://careers.spglobal.com/jobs"]
+                before = len(discovered)
 
-            seen_detail = set()
-
-            for target_url in target_urls[:5]:
+                # DOM links first.
                 try:
-                    page.goto(target_url, wait_until="domcontentloaded", timeout=90000)
-                    page.wait_for_timeout(1400)
+                    links = page.locator("a").evaluate_all(
+                        """els => els.map(a => ({
+                            href: a.href || "",
+                            text: (
+                                a.innerText ||
+                                a.textContent ||
+                                ""
+                            ).trim()
+                        }))"""
+                    )
                 except Exception:
-                    continue
+                    links = []
 
-                stagnant = 0
-                prev = 0
+                for item in links:
+                    href = str(item.get("href") or "")
+                    text = re.sub(
+                        r"\s+",
+                        " ",
+                        str(item.get("text") or "")
+                    ).strip()
 
-                for _ in range(80):
-                    links = page.locator('a[href*="/jobs/"]')
+                    m = re.search(
+                        r"https?://careers\.spglobal\.com/jobs/"
+                        r"(\d+)(?:[/?#]|$)",
+                        href,
+                        re.I,
+                    )
+                    if not m:
+                        continue
 
-                    for i in range(links.count()):
-                        try:
-                            raw = links.nth(i).get_attribute("href") or ""
-                            href = urllib.parse.urljoin(page.url, raw).split("#")[0]
-                        except Exception:
-                            continue
+                    job_id = m.group(1)
 
-                        if not re.search(r"/jobs/\d+(?:/|$|\?)", href):
-                            continue
-                        if href in seen_detail:
-                            continue
+                    canonical = (
+                        f"https://careers.spglobal.com/jobs/{job_id}"
+                        "?lang=en-us"
+                    )
 
-                        seen_detail.add(href)
-
-                        try:
-                            detail = page.context.new_page()
-                            detail.goto(href, wait_until="domcontentloaded", timeout=60000)
-                            detail.wait_for_timeout(350)
-                            body = _browser_text(detail.locator("body"))
-
-                            h1 = detail.locator("h1")
-                            title = (
-                                re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
-                                if h1.count()
-                                else ""
-                            )
-                            detail.close()
-                        except Exception:
-                            continue
-
-                        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
-                            continue
-                        if not re.search(r"\bDublin\b|\bIreland\b", body, re.I):
-                            continue
-
-                        if not title:
-                            lines = [
-                                re.sub(r"\s+", " ", x).strip()
-                                for x in body.splitlines()
-                                if 5 <= len(x.strip()) <= 220
-                            ]
-                            title = next(
-                                (x for x in lines if x.lower() not in {"apply now", "save job", "share"}),
-                                "",
-                            )
-
-                        if not title:
-                            continue
-
-                        location = "Dublin, Ireland" if re.search(r"\bDublin\b", body, re.I) else "Ireland"
-
-                        results[href.rstrip("/").lower()] = {
-                            "company": company,
-                            "ats": "phenom",
-                            "title": title[:300],
-                            "location": location,
-                            "url": href,
-                            "updated_at": None,
-                            "description_text": body[:5000],
+                    if job_id not in discovered:
+                        discovered[job_id] = {
+                            "url": canonical,
+                            "card_text": text,
                         }
 
-                    clicked = False
-                    for selector in (
-                        'button:has-text("Load more")',
-                        'button:has-text("Show more")',
-                        'a:has-text("Next")',
-                        'button:has-text("Next")',
-                    ):
-                        try:
-                            nxt = page.locator(selector)
-                            if nxt.count() and nxt.first.is_visible():
-                                nxt.first.click(timeout=1200)
-                                page.wait_for_timeout(400)
-                                clicked = True
-                                break
-                        except Exception:
-                            pass
+                # Also inspect raw page HTML because some Phenom-style
+                # boards hydrate job URLs into JSON rather than anchors.
+                try:
+                    html_text = page.content()
+                except Exception:
+                    html_text = ""
 
-                    page.mouse.wheel(0, 3200)
-                    page.wait_for_timeout(250)
+                patterns = [
+                    r'https?://careers\.spglobal\.com/jobs/'
+                    r'(\d+)(?:\?[^"\'<> ]*)?',
 
-                    cur = len(seen_detail)
-                    stagnant = stagnant + 1 if cur == prev else 0
-                    prev = cur
+                    r'["\'](/jobs/(\d+)'
+                    r'(?:\?[^"\']*)?)["\']',
+                ]
 
-                    if stagnant >= 8 and not clicked:
-                        break
+                for m in re.finditer(patterns[0], html_text, re.I):
+                    job_id = m.group(1)
+                    discovered.setdefault(
+                        job_id,
+                        {
+                            "url": (
+                                "https://careers.spglobal.com/jobs/"
+                                f"{job_id}?lang=en-us"
+                            ),
+                            "card_text": "",
+                        },
+                    )
+
+                for m in re.finditer(patterns[1], html_text, re.I):
+                    job_id = m.group(2)
+                    discovered.setdefault(
+                        job_id,
+                        {
+                            "url": (
+                                "https://careers.spglobal.com/jobs/"
+                                f"{job_id}?lang=en-us"
+                            ),
+                            "card_text": "",
+                        },
+                    )
+
+                new_count = len(discovered) - before
+
+                if new_count == 0:
+                    if page_num == 1:
+                        print(
+                            "  ! S&P Global Ireland board returned "
+                            "no job links"
+                        )
+                    break
+
+            # Detail pages: only Ireland-board jobs.
+            for job_id, item in discovered.items():
+                detail = context.new_page()
+
+                try:
+                    resp = detail.goto(
+                        item["url"],
+                        wait_until="domcontentloaded",
+                        timeout=45000,
+                    )
+                    detail.wait_for_timeout(700)
+
+                    if resp and resp.status >= 400:
+                        detail.close()
+                        continue
+
+                    body = detail.locator("body").inner_text(
+                        timeout=10000
+                    )
+                    body = re.sub(r"\r", "", body)
+
+                except Exception:
+                    detail.close()
+                    continue
+
+                # Ireland validation.
+                # Accept Dublin or explicit Ireland locations,
+                # including multi-location roles.
+                location = ""
+
+                loc_patterns = [
+                    r"\bDublin,\s*Ireland\b",
+                    r"\bDublin\b[^\\n]{0,80}\bIreland\b",
+                    r"\bIreland\b",
+                ]
+
+                if not any(
+                    re.search(pattern, body, re.I)
+                    for pattern in loc_patterns
+                ):
+                    detail.close()
+                    continue
+
+                # Prefer H1 for title.
+                title = ""
+
+                try:
+                    title = detail.locator("h1").first.inner_text(
+                        timeout=3000
+                    ).strip()
+                except Exception:
+                    pass
+
+                if not title:
+                    try:
+                        title = detail.title()
+                    except Exception:
+                        title = ""
+
+                title = re.sub(r"\s+", " ", title).strip()
+
+                title = re.sub(
+                    r"\s+(?:in|at)\s+.*?\|\s*S&P Global.*$",
+                    "",
+                    title,
+                    flags=re.I,
+                ).strip()
+
+                title = re.sub(
+                    r"\s*\|\s*S&P Global.*$",
+                    "",
+                    title,
+                    flags=re.I,
+                ).strip()
+
+                if not title:
+                    title = item.get("card_text", "").strip()
+
+                if not title:
+                    detail.close()
+                    continue
+
+                # Capture location line from top portion of page.
+                top = "\n".join(body.splitlines()[:80])
+
+                multi = re.search(
+                    r"([A-Za-z .'-]+,\s*Ireland"
+                    r"(?:\s*;\s*[A-Za-z .'-]+,\s*Ireland)*)",
+                    top,
+                    re.I,
+                )
+
+                if multi:
+                    location = re.sub(
+                        r"\s+",
+                        " ",
+                        multi.group(1)
+                    ).strip()
+                elif re.search(
+                    r"\bDublin,\s*Ireland\b",
+                    top,
+                    re.I,
+                ):
+                    location = "Dublin, Ireland"
+                else:
+                    location = "Ireland"
+
+                canonical = (
+                    f"https://careers.spglobal.com/jobs/{job_id}"
+                    "?lang=en-us"
+                )
+
+                results[job_id] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location[:200],
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": body[:5000],
+                }
+
+                detail.close()
 
             browser.close()
 
     except Exception as exc:
-        print(f"  ! S&P Global Dublin scrape failed: {exc}")
+        print(f"  ! S&P Global Ireland scrape failed: {exc}")
 
-    print(f"  S&P Global Dublin careers v2: {len(results)} jobs")
+    print(
+        f"  S&P Global official Ireland careers: "
+        f"{len(results)} jobs from {len(discovered)} details"
+    )
+
     return list(results.values())
 
 
