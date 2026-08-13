@@ -8078,174 +8078,246 @@ def scrape_sap():
 
 
 def scrape_siemens():
-    company = "Siemens"
-    search_url = "https://jobs.siemens.com/en_US/externaljobs/SearchJobs/"
+    """
+    Siemens Ireland jobs from the official Siemens Careers Marketplace.
 
-    # Verified live Ireland roles used as fallback seeds when the search UI
-    # changes or Avature does not render filters in headless mode.
-    seed_urls = [
-        "https://jobs.siemens.com/en_US/externaljobs/JobDetail/516755",
-        "https://jobs.siemens.com/en_US/externaljobs/JobDetail/503420",
-        "https://jobs.siemens.com/en_US/externaljobs/JobDetail/515676",
-    ]
+    Uses the Ireland-filtered SearchJobs page:
+    country filter id 812128.
+    """
+    company = "Siemens"
 
     if not HAS_PLAYWRIGHT:
         print("  ! Siemens: Playwright unavailable")
         return []
 
+    base = "https://jobs.siemens.com"
+    search_url = (
+        "https://jobs.siemens.com/en_US/externaljobs/SearchJobs/"
+        "?42414=%5B812128%5D"
+        "&42414_format=17570"
+        "&listFilterMode=1"
+        "&folderRecordsPerPage=100"
+    )
+
     results = {}
-
-    def add_job(page, href):
-        href = href.split("#")[0]
-        try:
-            detail = page.context.new_page()
-            detail.goto(href, wait_until="domcontentloaded", timeout=60000)
-            detail.wait_for_timeout(500)
-            body = _browser_text(detail.locator("body"))
-            h1 = detail.locator("h1")
-            title = _browser_text(h1.first).strip() if h1.count() else ""
-            detail.close()
-        except Exception:
-            return
-
-        if re.search(r"\bBelfast\b|\bNorthern Ireland\b", body, re.I):
-            return
-        if not re.search(r"\bIreland\b|\bDublin\b|\bClare\b", body, re.I):
-            return
-
-        if not title:
-            lines = [
-                re.sub(r"\s+", " ", x).strip()
-                for x in body.splitlines()
-                if 5 <= len(x.strip()) <= 220
-            ]
-            title = next(
-                (x for x in lines if x.lower() not in {"apply now", "share", "email"}),
-                "",
-            )
-
-        if not title:
-            return
-
-        location = "Ireland"
-        for city in ("Dublin", "Clare", "Swords"):
-            if re.search(rf"\b{city}\b", body, re.I):
-                location = f"{city}, Ireland"
-                break
-
-        results[href.rstrip("/").lower()] = {
-            "company": company,
-            "ats": "avature",
-            "title": re.sub(r"\s+", " ", title).strip()[:300],
-            "location": location,
-            "url": href,
-            "updated_at": None,
-            "description_text": body[:5000],
-        }
 
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(
-                viewport={"width": 1440, "height": 1300},
+
+            context = browser.new_context(
                 locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/124.0 Safari/537.36"
+                ),
             )
 
-            page.goto(search_url, wait_until="domcontentloaded", timeout=90000)
-            page.wait_for_timeout(2000)
+            page = context.new_page()
 
-            # Try the current search UI first. Different Siemens deployments
-            # have used keyword/location inputs with slightly different labels.
-            filled = False
-            for selector in (
-                'input[placeholder*="Location" i]',
-                'input[aria-label*="Location" i]',
-                'input[name*="location" i]',
-                'input[placeholder*="Search" i]',
-            ):
+            # Siemens paginates with folderOffset.
+            for offset in range(0, 1000, 100):
+                url = search_url
+                if offset:
+                    url += f"&folderOffset={offset}"
+
                 try:
-                    inp = page.locator(selector)
-                    if inp.count() and inp.first.is_visible():
-                        inp.first.fill("Ireland")
-                        filled = True
-                        break
+                    resp = page.goto(
+                        url,
+                        wait_until="domcontentloaded",
+                        timeout=90000,
+                    )
+                    page.wait_for_timeout(2500)
                 except Exception:
-                    pass
-
-            if filled:
-                for selector in (
-                    'button:has-text("Search")',
-                    'button[type="submit"]',
-                    'input[type="submit"]',
-                ):
-                    try:
-                        btn = page.locator(selector)
-                        if btn.count() and btn.first.is_visible():
-                            btn.first.click(timeout=1500)
-                            page.wait_for_timeout(1500)
-                            break
-                    except Exception:
-                        pass
-
-            # Collect whatever result links are now visible. We validate every
-            # detail page, so false positives are filtered out.
-            seen_links = set()
-            stagnant = 0
-            previous = 0
-
-            for _ in range(100):
-                links = page.locator('a[href*="/externaljobs/JobDetail/"]')
-
-                for i in range(links.count()):
-                    try:
-                        raw = links.nth(i).get_attribute("href") or ""
-                        href = urllib.parse.urljoin(page.url, raw)
-                    except Exception:
-                        continue
-
-                    if href in seen_links:
-                        continue
-                    seen_links.add(href)
-                    add_job(page, href)
-
-                clicked = False
-                for selector in (
-                    'a:has-text("Next")',
-                    'button:has-text("Next")',
-                    'a[rel="next"]',
-                    'button:has-text("Load more")',
-                    'button:has-text("Show more")',
-                ):
-                    try:
-                        nxt = page.locator(selector)
-                        if nxt.count() and nxt.first.is_visible():
-                            nxt.first.click(timeout=1200)
-                            page.wait_for_timeout(500)
-                            clicked = True
-                            break
-                    except Exception:
-                        pass
-
-                page.mouse.wheel(0, 3000)
-                page.wait_for_timeout(300)
-
-                current = len(seen_links)
-                stagnant = stagnant + 1 if current == previous else 0
-                previous = current
-                if stagnant >= 7 and not clicked:
                     break
 
-            # Fallback/current verified Ireland seeds.
-            for href in seed_urls:
-                if href not in seen_links:
-                    add_job(page, href)
+                if resp and resp.status >= 400:
+                    print(f"  ! Siemens page HTTP {resp.status}")
+                    break
+
+                try:
+                    body = page.locator("body").inner_text(timeout=10000)
+                except Exception:
+                    body = ""
+
+                # If the country filter failed, do not accidentally collect
+                # the global Siemens board.
+                if offset == 0 and not re.search(
+                    r"\bIreland\b",
+                    body,
+                    re.I,
+                ):
+                    print("  ! Siemens Ireland filter returned no Ireland content")
+                    break
+
+                links = page.locator("a").evaluate_all(
+                    """els => els.map(a => ({
+                        href: a.href || "",
+                        text: (a.innerText || "").trim(),
+                        parent: (a.parentElement && a.parentElement.innerText || "").trim(),
+                        grandparent: (
+                            a.parentElement &&
+                            a.parentElement.parentElement &&
+                            a.parentElement.parentElement.innerText || ""
+                        ).trim()
+                    }))"""
+                )
+
+                found_this_page = 0
+
+                for item in links:
+                    href = (item.get("href") or "").strip()
+                    title = re.sub(
+                        r"\s+",
+                        " ",
+                        (item.get("text") or "").strip()
+                    )
+
+                    m = re.search(
+                        r"/externaljobs/JobDetail/(\d+)",
+                        href,
+                        re.I,
+                    )
+                    if not m:
+                        continue
+
+                    job_id = m.group(1)
+
+                    # Nearby card text normally contains:
+                    # title, location, Job ID, field of work.
+                    card = "\n".join([
+                        item.get("text") or "",
+                        item.get("parent") or "",
+                        item.get("grandparent") or "",
+                    ])
+
+                    card = re.sub(r"[ \t]+", " ", card)
+
+                    if not re.search(r"\bIreland\b", card, re.I):
+                        continue
+
+                    # Siemens commonly uses "Learn more" as the anchor text,
+                    # while the actual job title sits elsewhere in the card.
+                    if (
+                        not title
+                        or len(title) < 2
+                        or re.fullmatch(r"Learn more", title, re.I)
+                    ):
+                        lines = [
+                            re.sub(r"\s+", " ", x).strip()
+                            for x in card.splitlines()
+                            if x.strip()
+                        ]
+
+                        title = ""
+
+                        for line in lines:
+                            if re.fullmatch(r"Learn more", line, re.I):
+                                continue
+                            if re.search(r"\bJob ID\b", line, re.I):
+                                continue
+                            if re.fullmatch(r"Ireland", line, re.I):
+                                continue
+                            if re.fullmatch(
+                                r"(Dublin|Galway|Cork|Swords|Shannon|"
+                                r"Limerick|Waterford|Kilkenny|Kildare)"
+                                r"(?:\s+\1)?(?:,?\s+Ireland)?",
+                                line,
+                                re.I,
+                            ):
+                                continue
+                            if re.search(
+                                r"^(Dublin|Galway|Cork|Swords|Shannon|"
+                                r"Limerick|Waterford|Kilkenny|Kildare)\b.*\bIreland\b$",
+                                line,
+                                re.I,
+                            ):
+                                continue
+
+                            # Avoid generic navigation / CTA text.
+                            if line.lower() in {
+                                "apply now",
+                                "save job",
+                                "share",
+                                "external jobs",
+                                "search jobs",
+                                "job search",
+                            }:
+                                continue
+
+                            if len(line) >= 4:
+                                title = line
+                                break
+
+                    if not title:
+                        continue
+
+                    location = "Ireland"
+
+                    # Siemens cards commonly render:
+                    # Dublin Dublin Ireland
+                    city_patterns = [
+                        ("Dublin", r"\bDublin\b"),
+                        ("Galway", r"\bGalway\b"),
+                        ("Cork", r"\bCork\b"),
+                        ("Limerick", r"\bLimerick\b"),
+                        ("Swords", r"\bSwords\b"),
+                        ("Shannon", r"\bShannon\b"),
+                        ("Waterford", r"\bWaterford\b"),
+                        ("Kilkenny", r"\bKilkenny\b"),
+                        ("Kildare", r"\bKildare\b"),
+                    ]
+
+                    cities = []
+                    for city, pattern in city_patterns:
+                        if re.search(pattern, card, re.I):
+                            cities.append(city)
+
+                    if len(cities) == 1:
+                        location = f"{cities[0]}, Ireland"
+                    elif len(cities) > 1:
+                        location = " / ".join(cities) + ", Ireland"
+
+                    canonical = (
+                        f"{base}/en_US/externaljobs/JobDetail/{job_id}"
+                    )
+
+                    results[job_id] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": location[:200],
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+                    found_this_page += 1
+
+                # No more filtered results.
+                if offset > 0 and found_this_page == 0:
+                    break
+
+                # Search result text sometimes tells us we've reached the end.
+                m_range = re.search(
+                    r"(\d+)\s*-\s*(\d+)\s+of\s+(\d+)",
+                    body,
+                    re.I,
+                )
+                if m_range:
+                    end = int(m_range.group(2))
+                    total = int(m_range.group(3))
+                    if end >= total:
+                        break
 
             browser.close()
 
     except Exception as exc:
-        print(f"  ! Siemens Ireland v2 scrape failed: {exc}")
+        print(f"  ! Siemens scrape failed: {exc}")
 
-    print(f"  Siemens verified Ireland careers v2: {len(results)} jobs")
+    print(f"  Siemens official Ireland careers: {len(results)} jobs")
     return list(results.values())
 
 
