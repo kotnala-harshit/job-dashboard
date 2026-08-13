@@ -10876,8 +10876,101 @@ def scrape_heineken():
     return list(results.values())
 
 
+def scrape_walkers():
+    company = "Walkers Ireland"
+    base = "https://careers.walkersglobal.com"
+
+    sess = _session()
+    if not sess:
+        print("  ! Walkers Ireland: HTTP session unavailable")
+        return []
+
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept-Language": "en-IE,en;q=0.9",
+    }
+
+    results = {}
+
+    for startrow in (0, 30, 60, 90):
+        if startrow == 0:
+            url = f"{base}/search/?q=&sortColumn=referencedate&sortDirection=desc"
+        else:
+            url = (
+                f"{base}/search/?q=&sortColumn=referencedate"
+                f"&sortDirection=desc&startrow={startrow}"
+            )
+
+        try:
+            r = sess.get(url, headers=headers, timeout=30)
+        except Exception:
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        html_text = r.text or ""
+
+        found_on_page = 0
+
+        for m in re.finditer(
+            r'<a[^>]+href=["\']([^"\']*/job/[^"\']+/\d+/?)["\'][^>]*>(.*?)</a>',
+            html_text,
+            re.I | re.S,
+        ):
+            href = urllib.parse.urljoin(url, m.group(1)).split("#")[0]
+
+            if "/job/Dublin-" not in href:
+                continue
+
+            start = max(0, m.start() - 1600)
+            end = min(len(html_text), m.end() + 1800)
+            card = _html_text(html_text[start:end])
+
+            if not re.search(
+                r"\bDublin,\s*IE\b|\bDublin\b.*\bIE\b",
+                card,
+                re.I | re.S,
+            ):
+                continue
+
+            title = re.sub(
+                r"\s+",
+                " ",
+                _html_text(m.group(2)),
+            ).strip()
+
+            if not title or title.lower() in {
+                "view job",
+                "apply now",
+                "search jobs",
+            }:
+                continue
+
+            canonical = href.split("?")[0].rstrip("/")
+
+            results[canonical.lower()] = {
+                "company": company,
+                "ats": "successfactors",
+                "title": title[:300],
+                "location": "Dublin, Ireland",
+                "url": canonical,
+                "updated_at": None,
+                "description_text": card[:5000],
+            }
+
+            found_on_page += 1
+
+        if startrow > 0 and found_on_page == 0:
+            break
+
+    print(f"  Walkers Ireland official careers: {len(results)} jobs")
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     fn={
+        "Walkers Ireland": scrape_walkers,
         "Heineken Ireland": scrape_heineken,
         "Heineken": scrape_heineken,
         "HEINEKEN": scrape_heineken,
@@ -11322,7 +11415,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('AECOM', 'Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL', 'Huawei Ireland', 'Honeywell', 'Revenue', 'Public Jobs / Civil Service', 'NTT DATA', 'Ryanair', 'Coca-Cola HBC Ireland', 'PepsiCo', 'Musgrave Group (SuperValu / Centra)', 'SAP', 'Allianz Ireland', 'Susquehanna International Group (SIG)', 'Schneider Electric', 'Heineken Ireland'):
+    for company in ('AECOM', 'Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL', 'Huawei Ireland', 'Honeywell', 'Revenue', 'Public Jobs / Civil Service', 'NTT DATA', 'Ryanair', 'Coca-Cola HBC Ireland', 'PepsiCo', 'Musgrave Group (SuperValu / Centra)', 'SAP', 'Allianz Ireland', 'Susquehanna International Group (SIG)', 'Schneider Electric', 'Heineken Ireland', 'Walkers Ireland'):
         if not _targeted(company):
             continue
         try:
