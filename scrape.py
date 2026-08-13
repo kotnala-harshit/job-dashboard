@@ -10447,119 +10447,110 @@ def scrape_guidewire():
 
 
 def scrape_susquehanna():
-    company = "Susquehanna"
+    company = "Susquehanna International Group (SIG)"
+    base = "https://careers.sig.com/dublin/jobs"
 
-    if not HAS_PLAYWRIGHT:
+    if not sync_playwright:
         print("  ! Susquehanna: Playwright unavailable")
         return []
 
-    sources = [
-        "https://careers.sig.com/jobs",
-        "https://careers.sig.com/dublin/jobs",
-        "https://careers.sig.com/recent-graduate/jobs",
-        "https://careers.sig.com/operations/jobs",
-    ]
-
     results = {}
-    candidates = set()
+    detail_urls = set()
 
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(
+            context = browser.new_context(
                 viewport={"width": 1440, "height": 1600},
                 locale="en-IE",
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 Chrome/124 Safari/537.36"
+                ),
             )
 
-            for source in sources:
+            page = context.new_page()
+            page.goto(base, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(4000)
+
+            for _ in range(12):
                 try:
-                    page.goto(source, wait_until="domcontentloaded", timeout=90000)
-                    page.wait_for_timeout(1000)
-                except Exception:
-                    continue
-
-                stagnant = 0
-                previous = 0
-
-                for _ in range(80):
-                    links = page.locator('a[href*="/jobs/"]')
-
-                    for i in range(links.count()):
-                        try:
-                            raw = links.nth(i).get_attribute("href") or ""
-                            href = urllib.parse.urljoin(page.url, raw).split("#")[0]
-                        except Exception:
-                            continue
-
-                        # IMPORTANT: SIG uses many prefixes before /jobs/<id>:
-                        # /dublin/jobs/10661
-                        # /dublin-software-engineering/jobs/9986
-                        # /jobs/10928
-                        if not re.search(r"/jobs/\d+(?:\?|$)", href, re.I):
-                            continue
-
-                        candidates.add(href)
-
-                    clicked = False
-                    for selector in (
-                        'button:has-text("Load more")',
-                        'button:has-text("Show more")',
-                        'a:has-text("Next")',
-                        'button:has-text("Next")',
-                    ):
-                        try:
-                            btn = page.locator(selector)
-                            if btn.count() and btn.first.is_visible():
-                                btn.first.click(timeout=1200)
-                                page.wait_for_timeout(350)
-                                clicked = True
-                                break
-                        except Exception:
-                            pass
-
-                    page.mouse.wheel(0, 5000)
-                    page.wait_for_timeout(250)
-
-                    current = len(candidates)
-                    stagnant = stagnant + 1 if current == previous else 0
-                    previous = current
-
-                    if stagnant >= 8 and not clicked:
-                        break
-
-            # Validate every candidate on the actual SIG detail page.
-            for href in sorted(candidates):
-                try:
-                    detail = page.context.new_page()
-                    detail.goto(href, wait_until="domcontentloaded", timeout=60000)
-                    detail.wait_for_timeout(200)
-
-                    body = _browser_text(detail.locator("body"))
-                    h1 = detail.locator("h1")
-                    title = (
-                        re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
-                        if h1.count()
-                        else ""
+                    links = page.locator("a").evaluate_all(
+                        """els => els.map(a => a.href || "")"""
                     )
-
-                    detail.close()
                 except Exception:
+                    links = []
+
+                for href in links:
+                    href = str(href or "")
+                    if not href.startswith("https://careers.sig.com/"):
+                        continue
+                    if re.search(r"/jobs/\d+(?:\?|$)", href):
+                        detail_urls.add(href.split("#")[0])
+
+                try:
+                    page.mouse.wheel(0, 5000)
+                    page.wait_for_timeout(1200)
+                except Exception:
+                    break
+
+            for href in sorted(detail_urls):
+                detail = context.new_page()
+
+                try:
+                    detail.goto(
+                        href,
+                        wait_until="domcontentloaded",
+                        timeout=60000,
+                    )
+                    detail.wait_for_timeout(1000)
+                    body = detail.locator("body").inner_text(timeout=15000)
+                except Exception:
+                    try:
+                        detail.close()
+                    except Exception:
+                        pass
                     continue
 
-                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
+                if not re.search(
+                    r"\bDublin,\s*Ireland\b|\bDublin\b.*\bIreland\b",
+                    body,
+                    re.I | re.S,
+                ):
+                    detail.close()
                     continue
 
-                if not re.search(r"\bDublin\s*,\s*Ireland\b", body, re.I):
-                    continue
+                title = ""
+
+                try:
+                    h1 = detail.locator("h1")
+                    if h1.count():
+                        title = h1.first.inner_text().strip()
+                except Exception:
+                    pass
 
                 if not title:
+                    try:
+                        title = detail.title()
+                    except Exception:
+                        title = ""
+
+                title = re.sub(
+                    r"\s+in\s+Dublin,\s*Ireland.*$",
+                    "",
+                    title,
+                    flags=re.I,
+                ).strip()
+
+                if not title:
+                    detail.close()
                     continue
 
-                canonical = href.split("?")[0]
+                canonical = detail.url.split("?")[0]
 
-                results[canonical.rstrip("/").lower()] = {
+                results[canonical.lower()] = {
                     "company": company,
-                    "ats": "direct-browser",
+                    "ats": "direct",
                     "title": title[:300],
                     "location": "Dublin, Ireland",
                     "url": canonical,
@@ -10567,16 +10558,19 @@ def scrape_susquehanna():
                     "description_text": body[:5000],
                 }
 
+                detail.close()
+
             browser.close()
 
     except Exception as exc:
-        print(f"  ! Susquehanna browser scrape failed: {exc}")
+        print(f"  ! Susquehanna Playwright scrape failed: {exc}")
 
     print(
-        f"  Susquehanna browser: {len(candidates)} details discovered; "
-        f"{len(results)} Dublin jobs"
+        f"  Susquehanna official Dublin careers: "
+        f"{len(results)} jobs from {len(detail_urls)} details"
     )
     return list(results.values())
+
 
 def scrape_schneider_electric():
     company = "Schneider Electric"
