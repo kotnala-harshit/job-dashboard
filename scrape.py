@@ -8079,10 +8079,14 @@ def scrape_sap():
 
 def scrape_siemens():
     """
-    Siemens Ireland jobs from the official Siemens Careers Marketplace.
+    Siemens jobs from the official Ireland-filtered Careers Marketplace board.
 
-    Uses the Ireland-filtered SearchJobs page:
-    country filter id 812128.
+    Important:
+    - The board contains explicit Ireland jobs.
+    - It can also contain "Multiple Locations" jobs whose Ireland eligibility
+      is only visible in the listing/detail content.
+    - Therefore discover from the Ireland-filtered board, then validate each
+      candidate rather than rejecting "Multiple Locations".
     """
     company = "Siemens"
 
@@ -8090,8 +8094,7 @@ def scrape_siemens():
         print("  ! Siemens: Playwright unavailable")
         return []
 
-    base = "https://jobs.siemens.com"
-    search_url = (
+    board = (
         "https://jobs.siemens.com/en_US/externaljobs/SearchJobs/"
         "?42414=%5B812128%5D"
         "&42414_format=17570"
@@ -8107,7 +8110,7 @@ def scrape_siemens():
 
             context = browser.new_context(
                 locale="en-IE",
-                viewport={"width": 1440, "height": 1600},
+                viewport={"width": 1440, "height": 1800},
                 user_agent=(
                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                     "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -8117,207 +8120,289 @@ def scrape_siemens():
 
             page = context.new_page()
 
-            # Siemens paginates with folderOffset.
-            for offset in range(0, 1000, 100):
-                url = search_url
-                if offset:
-                    url += f"&folderOffset={offset}"
-
-                try:
-                    resp = page.goto(
-                        url,
-                        wait_until="domcontentloaded",
-                        timeout=90000,
-                    )
-                    page.wait_for_timeout(2500)
-                except Exception:
-                    break
-
-                if resp and resp.status >= 400:
-                    print(f"  ! Siemens page HTTP {resp.status}")
-                    break
-
-                try:
-                    body = page.locator("body").inner_text(timeout=10000)
-                except Exception:
-                    body = ""
-
-                # If the country filter failed, do not accidentally collect
-                # the global Siemens board.
-                if offset == 0 and not re.search(
-                    r"\bIreland\b",
-                    body,
-                    re.I,
-                ):
-                    print("  ! Siemens Ireland filter returned no Ireland content")
-                    break
-
-                links = page.locator("a").evaluate_all(
-                    """els => els.map(a => ({
-                        href: a.href || "",
-                        text: (a.innerText || "").trim(),
-                        parent: (a.parentElement && a.parentElement.innerText || "").trim(),
-                        grandparent: (
-                            a.parentElement &&
-                            a.parentElement.parentElement &&
-                            a.parentElement.parentElement.innerText || ""
-                        ).trim()
-                    }))"""
+            try:
+                page.goto(
+                    board,
+                    wait_until="domcontentloaded",
+                    timeout=90000,
                 )
+            except Exception as exc:
+                print(f"  ! Siemens board load warning: {exc}")
 
-                found_this_page = 0
+            page.wait_for_timeout(5000)
 
-                for item in links:
-                    href = (item.get("href") or "").strip()
-                    title = re.sub(
-                        r"\s+",
-                        " ",
-                        (item.get("text") or "").strip()
+            # Load everything the filtered board currently exposes.
+            for _ in range(8):
+                try:
+                    page.mouse.wheel(0, 5000)
+                    page.wait_for_timeout(700)
+                except Exception:
+                    break
+
+            candidates = {}
+
+            links = page.locator('a[href*="/externaljobs/JobDetail/"]')
+
+            for i in range(links.count()):
+                link = links.nth(i)
+
+                try:
+                    href = link.get_attribute("href") or ""
+                    title = (link.inner_text() or "").strip()
+                except Exception:
+                    continue
+
+                if not href:
+                    continue
+
+                href = urllib.parse.urljoin(page.url, href)
+                href = href.split("#")[0]
+
+                m = re.search(r"/JobDetail/(\d+)", href, re.I)
+                if not m:
+                    continue
+
+                job_id = m.group(1)
+
+                # Capture the surrounding Siemens result-card text.
+                # This normally contains location + Job ID.
+                try:
+                    card_text = link.evaluate(
+                        r"""
+                        el => {
+                            let n = el;
+                            for (let i = 0; i < 7 && n; i++, n = n.parentElement) {
+                                const t = (n.innerText || "").trim();
+                                if (
+                                    t.includes("Job ID:") ||
+                                    t.includes("Job ID :") ||
+                                    t.includes("Multiple Locations")
+                                ) {
+                                    return t;
+                                }
+                            }
+                            return (el.parentElement?.innerText || el.innerText || "").trim();
+                        }
+                        """
                     )
+                except Exception:
+                    card_text = title
 
-                    m = re.search(
-                        r"/externaljobs/JobDetail/(\d+)",
-                        href,
-                        re.I,
-                    )
-                    if not m:
-                        continue
+                # Sometimes duplicated links have better surrounding text,
+                # so retain the richest version.
+                old = candidates.get(job_id)
 
-                    job_id = m.group(1)
+                item = {
+                    "id": job_id,
+                    "title": title,
+                    "url": href,
+                    "listing_text": card_text or "",
+                }
 
-                    # Nearby card text normally contains:
-                    # title, location, Job ID, field of work.
-                    card = "\n".join([
-                        item.get("text") or "",
-                        item.get("parent") or "",
-                        item.get("grandparent") or "",
-                    ])
+                if (
+                    old is None
+                    or len(item["listing_text"]) > len(old["listing_text"])
+                ):
+                    candidates[job_id] = item
 
-                    card = re.sub(r"[ \t]+", " ", card)
+            board_text = ""
+            try:
+                board_text = page.locator("body").inner_text()
+            except Exception:
+                pass
 
-                    if not re.search(r"\bIreland\b", card, re.I):
-                        continue
-
-                    # Siemens commonly uses "Learn more" as the anchor text,
-                    # while the actual job title sits elsewhere in the card.
-                    if (
-                        not title
-                        or len(title) < 2
-                        or re.fullmatch(r"Learn more", title, re.I)
-                    ):
-                        lines = [
-                            re.sub(r"\s+", " ", x).strip()
-                            for x in card.splitlines()
-                            if x.strip()
-                        ]
-
-                        title = ""
-
-                        for line in lines:
-                            if re.fullmatch(r"Learn more", line, re.I):
-                                continue
-                            if re.search(r"\bJob ID\b", line, re.I):
-                                continue
-                            if re.fullmatch(r"Ireland", line, re.I):
-                                continue
-                            if re.fullmatch(
-                                r"(Dublin|Galway|Cork|Swords|Shannon|"
-                                r"Limerick|Waterford|Kilkenny|Kildare)"
-                                r"(?:\s+\1)?(?:,?\s+Ireland)?",
-                                line,
-                                re.I,
-                            ):
-                                continue
-                            if re.search(
-                                r"^(Dublin|Galway|Cork|Swords|Shannon|"
-                                r"Limerick|Waterford|Kilkenny|Kildare)\b.*\bIreland\b$",
-                                line,
-                                re.I,
-                            ):
-                                continue
-
-                            # Avoid generic navigation / CTA text.
-                            if line.lower() in {
-                                "apply now",
-                                "save job",
-                                "share",
-                                "external jobs",
-                                "search jobs",
-                                "job search",
-                            }:
-                                continue
-
-                            if len(line) >= 4:
-                                title = line
-                                break
-
-                    if not title:
-                        continue
-
-                    location = "Ireland"
-
-                    # Siemens cards commonly render:
-                    # Dublin Dublin Ireland
-                    city_patterns = [
-                        ("Dublin", r"\bDublin\b"),
-                        ("Galway", r"\bGalway\b"),
-                        ("Cork", r"\bCork\b"),
-                        ("Limerick", r"\bLimerick\b"),
-                        ("Swords", r"\bSwords\b"),
-                        ("Shannon", r"\bShannon\b"),
-                        ("Waterford", r"\bWaterford\b"),
-                        ("Kilkenny", r"\bKilkenny\b"),
-                        ("Kildare", r"\bKildare\b"),
-                    ]
-
-                    cities = []
-                    for city, pattern in city_patterns:
-                        if re.search(pattern, card, re.I):
-                            cities.append(city)
-
-                    if len(cities) == 1:
-                        location = f"{cities[0]}, Ireland"
-                    elif len(cities) > 1:
-                        location = " / ".join(cities) + ", Ireland"
-
-                    canonical = (
-                        f"{base}/en_US/externaljobs/JobDetail/{job_id}"
-                    )
-
-                    results[job_id] = {
-                        "company": company,
-                        "ats": "direct",
-                        "title": title[:300],
-                        "location": location[:200],
-                        "url": canonical,
-                        "updated_at": None,
-                        "description_text": card[:5000],
+            # Fallback discovery if Siemens changes link nesting.
+            for job_id in re.findall(
+                r"\bJob ID:\s*(\d{5,})\b",
+                board_text,
+                re.I,
+            ):
+                if job_id not in candidates:
+                    candidates[job_id] = {
+                        "id": job_id,
+                        "title": "",
+                        "url": (
+                            "https://jobs.siemens.com/"
+                            f"en_US/externaljobs/JobDetail/{job_id}"
+                        ),
+                        "listing_text": "",
                     }
 
-                    found_this_page += 1
+            for job_id, item in candidates.items():
+                href = item["url"]
+                title = item["title"].strip()
+                listing_text = item["listing_text"] or ""
 
-                # No more filtered results.
-                if offset > 0 and found_this_page == 0:
-                    break
+                detail_text = ""
+                detail_title = ""
 
-                # Search result text sometimes tells us we've reached the end.
-                m_range = re.search(
-                    r"(\d+)\s*-\s*(\d+)\s+of\s+(\d+)",
-                    body,
-                    re.I,
+                detail = context.new_page()
+
+                try:
+                    try:
+                        detail.goto(
+                            href,
+                            wait_until="domcontentloaded",
+                            timeout=45000,
+                        )
+                    except Exception:
+                        # Do not lose a valid Ireland listing just because
+                        # Siemens detail navigation is temporarily slow.
+                        pass
+
+                    detail.wait_for_timeout(1800)
+
+                    try:
+                        detail_text = detail.locator("body").inner_text()
+                    except Exception:
+                        detail_text = ""
+
+                    # Prefer the actual detail H1 when available.
+                    for selector in (
+                        "h1",
+                        '[data-automation-id="jobPostingHeader"]',
+                        ".job-title",
+                    ):
+                        try:
+                            loc = detail.locator(selector)
+                            if loc.count():
+                                value = (loc.first.inner_text() or "").strip()
+                                if value and len(value) < 300:
+                                    detail_title = value
+                                    break
+                        except Exception:
+                            pass
+
+                finally:
+                    detail.close()
+
+                combined = "\n".join(
+                    x for x in (listing_text, detail_text) if x
                 )
-                if m_range:
-                    end = int(m_range.group(2))
-                    total = int(m_range.group(3))
-                    if end >= total:
-                        break
+
+                # Ireland must appear in the actual job's listing/detail
+                # content. Do not count Northern Ireland by itself.
+                ireland = bool(
+                    re.search(
+                        r"\bIreland\b|"
+                        r"\bDublin\b|"
+                        r"\bGalway\b|"
+                        r"\bCork\b|"
+                        r"\bLimerick\b|"
+                        r"\bShannon\b|"
+                        r"\bSwords\b|"
+                        r"\bRepublic of Ireland\b",
+                        combined,
+                        re.I,
+                    )
+                )
+
+                northern_only = bool(
+                    re.search(
+                        r"\bNorthern Ireland\b|"
+                        r"\bBelfast\b",
+                        combined,
+                        re.I,
+                    )
+                ) and not bool(
+                    re.search(
+                        r"\bDublin\b|"
+                        r"\bGalway\b|"
+                        r"\bCork\b|"
+                        r"\bLimerick\b|"
+                        r"\bShannon\b|"
+                        r"\bRepublic of Ireland\b|"
+                        r"(?<!Northern )\bIreland\b",
+                        combined,
+                        re.I,
+                    )
+                )
+
+                if not ireland or northern_only:
+                    continue
+
+                # Prefer the title discovered from the Siemens results board.
+                # Detail pages can expose cookie/privacy modal headings as <h1>.
+                bad_detail_titles = {
+                    "we value your privacy",
+                    "privacy",
+                    "cookie settings",
+                    "cookies",
+                    "careers marketplace",
+                    "job search",
+                    "siemens",
+                }
+
+                if (
+                    detail_title
+                    and detail_title.strip().lower() not in bad_detail_titles
+                    and not re.search(
+                        r"privacy|cookie|consent|preferences",
+                        detail_title,
+                        re.I,
+                    )
+                ):
+                    title = detail_title
+
+                # Ignore generic link labels.
+                if not title or title.lower() in {
+                    "learn more",
+                    "apply",
+                    "apply now",
+                    "view job",
+                    "job details",
+                }:
+                    # Recover title from board text immediately before Job ID.
+                    m = re.search(
+                        rf"([^\n]{{3,250}})\n[^\n]*Job ID:\s*{re.escape(job_id)}\b",
+                        board_text,
+                        re.I,
+                    )
+                    if m:
+                        title = m.group(1).strip()
+
+                if not title:
+                    title = f"Siemens Job {job_id}"
+
+                # Normalise location conservatively.
+                if re.search(r"\bDublin\b", combined, re.I):
+                    location = "Dublin, Ireland"
+                elif re.search(r"\bGalway\b", combined, re.I):
+                    location = "Galway, Ireland"
+                elif re.search(r"\bCork\b", combined, re.I):
+                    location = "Cork, Ireland"
+                elif re.search(r"\bLimerick\b", combined, re.I):
+                    location = "Limerick, Ireland"
+                elif re.search(r"\bShannon\b", combined, re.I):
+                    location = "Shannon, Ireland"
+                else:
+                    location = "Ireland"
+
+                canonical = (
+                    "https://jobs.siemens.com/"
+                    f"en_US/externaljobs/JobDetail/{job_id}"
+                )
+
+                results[job_id] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": combined[:5000],
+                }
 
             browser.close()
 
     except Exception as exc:
-        print(f"  ! Siemens scrape failed: {exc}")
+        print(f"  ! Siemens Ireland scrape failed: {exc}")
 
-    print(f"  Siemens official Ireland careers: {len(results)} jobs")
+    print(
+        f"  Siemens official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
     return list(results.values())
 
 
