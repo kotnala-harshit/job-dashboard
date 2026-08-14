@@ -447,11 +447,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "CitySwift": {
-    "platform": "greenhouse",
-    "slug": "cityswift",
-    "probe_version": 35
-  },
   "ClickUp": {
     "platform": "ashby",
     "slug": "clickup",
@@ -2490,6 +2485,11 @@
   "Zendesk": {
     "platform": "pinpoint",
     "slug": "zendesk",
+    "probe_version": 35
+  },
+  "CitySwift": {
+    "platform": "greenhouse",
+    "slug": "cityswift",
     "probe_version": 35
   },
   "Publift": {
