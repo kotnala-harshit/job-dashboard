@@ -5693,108 +5693,149 @@ def scrape_hp():
 
 def scrape_jacobs():
     company = "Jacobs"
-    urls = [
-        "https://careers.jacobs.com/en_US/careers/SearchJobs",
-    ]
-    results = {}
+    source = (
+        "https://careers.jacobs.com/en_US/careers/SearchJobs/"
+        "?4182=%5B76407%5D"
+        "&4182_format=4422"
+        "&listFilterMode=1"
+        "&jobRecordsPerPage=10&"
+    )
 
     if not HAS_PLAYWRIGHT:
         print("  ! Jacobs: Playwright unavailable")
         return []
 
+    results = {}
+
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
-            for url in urls:
-                page.goto(url, wait_until="domcontentloaded", timeout=90000)
-                page.wait_for_timeout(2200)
-                _dismiss_cookie_banner(page)
 
-                # Search "Ireland" or "Dublin" if a search field is available.
-                for selector in (
-                    'input[placeholder*="location" i]',
-                    'input[aria-label*="location" i]',
-                    'input[name*="location" i]',
-                    'input[placeholder*="keyword" i]',
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+            page.wait_for_timeout(4000)
+
+            links = page.locator("a").evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            discovered = {}
+
+            for item in links:
+                href = str(item.get("href") or "").strip()
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    str(item.get("text") or ""),
+                ).strip()
+
+                if not re.search(
+                    r"careers\.jacobs\.com/en_US/careers/JobDetail/.+/\d+",
+                    href,
+                    re.I,
                 ):
-                    try:
-                        inp = page.locator(selector)
-                        if inp.count():
-                            inp.first.fill("Ireland")
-                            try:
-                                inp.first.press("Enter")
-                            except Exception:
-                                pass
-                            page.wait_for_timeout(1500)
-                            break
-                    except Exception:
-                        pass
+                    continue
 
-                stagnant, previous = 0, 0
-                for _ in range(80):
-                    anchors = page.locator('a[href*="/careers/JobDetail/"]')
-                    for i in range(anchors.count()):
-                        a = anchors.nth(i)
-                        try:
-                            href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
-                        except Exception:
-                            continue
-                        title = _browser_text(a).strip()
-                        node, card = a, ""
-                        for _up in range(7):
-                            try:
-                                node = node.locator("..")
-                                candidate = _browser_text(node)
-                            except Exception:
-                                break
-                            if candidate and len(candidate) <= 2600:
-                                card = candidate
-                            if card and region_ok(card):
-                                break
-                        evidence = f"{title} {card} {href}"
-                        if not region_ok(evidence):
-                            continue
-                        if not title or len(title) > 300:
-                            lines = [x.strip() for x in card.splitlines() if 4 <= len(x.strip()) <= 220]
-                            title = lines[0] if lines else ""
-                        if not title:
-                            continue
-                        key = href.split("?")[0].rstrip("/").lower()
-                        results[key] = {
-                            "company": company,
-                            "ats": "direct",
-                            "title": title[:300],
-                            "location": _browser_location(card, "Ireland"),
-                            "url": href.split("?")[0],
-                            "updated_at": None,
-                            "description_text": card[:5000],
-                        }
+                if not title:
+                    continue
 
-                    for label in ("Load more", "Show more", "Next"):
-                        try:
-                            btn = page.get_by_role("button", name=label, exact=False)
-                            if btn.count() and btn.first.is_visible():
-                                btn.first.click(timeout=1200)
-                                page.wait_for_timeout(450)
-                                break
-                        except Exception:
-                            pass
+                # Exclude obvious Northern Ireland jobs.
+                if re.search(
+                    r"\bBelfast\b|\bNorthern Ireland\b",
+                    title,
+                    re.I,
+                ):
+                    continue
 
-                    page.mouse.wheel(0, 3000)
-                    page.wait_for_timeout(350)
-                    current = len(results)
-                    stagnant = stagnant + 1 if current == previous else 0
-                    previous = current
-                    if stagnant >= 8:
-                        break
+                m = re.search(r"/(\d+)(?:[/?#]|$)", href, re.I)
+                if not m:
+                    continue
+
+                job_id = m.group(1)
+
+                discovered[job_id] = {
+                    "title": title,
+                    "href": href.split("#")[0],
+                }
+
+            for job_id, item in discovered.items():
+                title = item["title"]
+                canonical = item["href"]
+
+                location = "Ireland"
+                description = ""
+
+                if re.search(r"\bDublin\b", title, re.I):
+                    location = "Dublin, Ireland"
+                elif re.search(r"\bCork\b", title, re.I):
+                    location = "Cork, Ireland"
+                elif re.search(r"\bGalway\b", title, re.I):
+                    location = "Galway, Ireland"
+
+                detail = context.new_page()
+
+                try:
+                    detail.goto(
+                        canonical,
+                        wait_until="domcontentloaded",
+                        timeout=45000,
+                    )
+                    detail.wait_for_timeout(700)
+
+                    body = detail.locator("body").inner_text(
+                        timeout=10000
+                    )
+                    description = body[:5000]
+
+                    # Improve location from detail content.
+                    if re.search(r"\bDublin\b", body, re.I):
+                        location = "Dublin, Ireland"
+                    elif re.search(r"\bCork\b", body, re.I):
+                        location = "Cork, Ireland"
+                    elif re.search(r"\bGalway\b", body, re.I):
+                        location = "Galway, Ireland"
+                    elif re.search(r"\bLimerick\b", body, re.I):
+                        location = "Limerick, Ireland"
+
+                except Exception:
+                    pass
+
+                detail.close()
+
+                results[job_id] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": description,
+                }
+
             browser.close()
+
     except Exception as exc:
-        print(f"  ! Jacobs browser scrape failed: {exc}")
+        print(f"  ! Jacobs scrape failed: {exc}")
 
-    print(f"  Jacobs official Ireland careers: {len(results)} jobs")
+    print(
+        f"  Jacobs official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
     return list(results.values())
-
 
 
 def scrape_agilent():
