@@ -5478,12 +5478,12 @@ def scrape_arup():
 
 def scrape_hcltech():
     company = "HCLTech"
-    source_urls = [
-        "https://careers.hcltech.com/search/?q=&locationsearch=Ireland",
-        "https://careers.hcltech.com/search/?q=&locationsearch=Dublin",
-        "https://careers.hcltech.com/search/?q=&locationsearch=Cork",
-        "https://careers.hcltech.com/search/?q=&locationsearch=Carlow",
-    ]
+    source = (
+        "https://careers.hcltech.com/go/NonTPDemand/9558355/"
+        "?markerViewed=&carouselIndex="
+        "&facetFilters=%7B%22custCountryRegion%22%3A%5B%22Ireland%22%5D%7D"
+        "&pageNumber=0"
+    )
 
     if not HAS_PLAYWRIGHT:
         print("  ! HCLTech: Playwright unavailable")
@@ -5494,76 +5494,113 @@ def scrape_hcltech():
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
 
-            for source_url in source_urls:
-                try:
-                    page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
-                    page.wait_for_timeout(1800)
-                except Exception:
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 Chrome/124 Safari/537.36"
+                ),
+            )
+
+            page = context.new_page()
+            page.goto(source, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(4000)
+
+            links = page.locator("a").evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            discovered = {}
+
+            for item in links:
+                href = str(item.get("href") or "")
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    str(item.get("text") or ""),
+                ).strip()
+
+                if not re.search(
+                    r"careers\.hcltech\.com/job/.+/\d+-en_US",
+                    href,
+                    re.I,
+                ):
                     continue
 
-                anchors = page.locator('a[href*="/job/"]')
+                if not title:
+                    continue
 
-                for i in range(anchors.count()):
-                    a = anchors.nth(i)
-                    try:
-                        raw = a.get_attribute("href") or ""
-                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
-                    except Exception:
-                        continue
+                m = re.search(r"/(\d+)-en_US(?:$|[?#])", href, re.I)
+                if not m:
+                    continue
 
-                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
-                    if not title:
-                        continue
+                job_id = m.group(1)
 
-                    node = a
-                    card = ""
-                    for _up in range(6):
-                        try:
-                            candidate = _browser_text(node)
-                        except Exception:
-                            candidate = ""
-                        if candidate and len(candidate) <= 2600:
-                            card = candidate
-                        if re.search(r"\b(?:Ireland|Dublin|Cork|Carlow)\b", card, re.I):
-                            break
-                        try:
-                            node = node.locator("..")
-                        except Exception:
-                            break
+                discovered[job_id] = {
+                    "title": title,
+                    "href": href.split("#")[0],
+                }
 
-                    blob = f"{title}\n{card}\n{href}"
+            for job_id, item in discovered.items():
+                title = item["title"]
+                href = item["href"]
+                location = "Ireland"
+                description = ""
 
-                    # Exclude Northern Ireland / Belfast.
-                    if re.search(r"\bBelfast\b|\bNorthern Ireland\b", blob, re.I):
-                        continue
-                    if not re.search(r"\b(?:Ireland|Dublin|Cork|Carlow)\b", blob, re.I):
-                        continue
+                detail = context.new_page()
 
-                    location = "Ireland"
-                    for city in ("Dublin", "Cork", "Carlow", "Galway", "Limerick"):
-                        if re.search(rf"\b{city}\b", blob, re.I):
-                            location = f"{city}, Ireland"
-                            break
+                try:
+                    detail.goto(
+                        href,
+                        wait_until="domcontentloaded",
+                        timeout=45000,
+                    )
+                    detail.wait_for_timeout(700)
 
-                    results[href.rstrip("/").lower()] = {
-                        "company": company,
-                        "ats": "successfactors",
-                        "title": title[:300],
-                        "location": location,
-                        "url": href,
-                        "updated_at": None,
-                        "description_text": card[:5000],
-                    }
+                    body = detail.locator("body").inner_text(timeout=10000)
+                    description = body[:5000]
+
+                    if re.search(r"\bDublin\b", body, re.I):
+                        location = "Dublin, Ireland"
+                    elif re.search(r"\bCork\b", body, re.I):
+                        location = "Cork, Ireland"
+                    elif re.search(r"\bGalway\b", body, re.I):
+                        location = "Galway, Ireland"
+                    elif re.search(r"\bLimerick\b", body, re.I):
+                        location = "Limerick, Ireland"
+
+                except Exception:
+                    pass
+
+                detail.close()
+
+                results[job_id] = {
+                    "company": company,
+                    "ats": "successfactors",
+                    "title": title[:300],
+                    "location": location,
+                    "url": href,
+                    "updated_at": None,
+                    "description_text": description,
+                }
 
             browser.close()
 
     except Exception as exc:
-        print(f"  ! HCLTech Ireland scrape failed: {exc}")
+        print(f"  ! HCLTech scrape failed: {exc}")
 
-    print(f"  HCLTech official Ireland careers: {len(results)} jobs")
+    print(
+        f"  HCLTech official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
     return list(results.values())
+
 
 def scrape_hp():
     company = "HP (Hewlett-Packard)"
