@@ -11682,6 +11682,7 @@ def scrape_direct_company(company: str):
         "Guidewire Software": scrape_guidewire,
         "Guidewire": scrape_guidewire,
         "Honeywell": scrape_honeywell,
+        "Irish Life": scrape_irish_life,
         "Irish Revenue": scrape_revenue_ie,
         "Revenue": scrape_revenue_ie,
         "Revenue.ie": scrape_revenue_ie,
@@ -12060,6 +12061,92 @@ def _parallel_collect(tasks, results, errors, workers=None):
 def _content_hash(job):
     raw = "|".join(str(job.get(k) or "") for k in ("company","title","location","url","updated_at","description_text"))
     return hashlib.sha1(raw.encode("utf-8", "ignore")).hexdigest()
+
+
+def scrape_irish_life():
+    company = "Irish Life"
+    source = "https://life-careers.com/irishlife/go/irishlife/3805801"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Irish Life: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+            )
+
+            page.goto(source, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(4000)
+
+            links = page.locator("a").evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            for item in links:
+                href = str(item.get("href") or "").strip()
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    str(item.get("text") or ""),
+                ).strip()
+
+                if "/irishlife/job/" not in href.lower():
+                    continue
+                if not title:
+                    continue
+
+                m = re.search(r"/(\d+)/?(?:[?#].*)?$", href)
+                if not m:
+                    continue
+
+                job_id = m.group(1)
+                canonical = href.split("#")[0]
+
+                path = urllib.parse.unquote(
+                    urllib.parse.urlparse(canonical).path
+                )
+
+                location = "Ireland"
+
+                if re.search(r"/job/Dublin-", path, re.I):
+                    location = "Dublin, Ireland"
+                elif re.search(r"/job/Dundalk-", path, re.I):
+                    location = "Dundalk, Ireland"
+                elif re.search(r"/job/Cork-", path, re.I):
+                    location = "Cork, Ireland"
+                elif re.search(r"/job/Galway-", path, re.I):
+                    location = "Galway, Ireland"
+                elif re.search(r"/job/Limerick-", path, re.I):
+                    location = "Limerick, Ireland"
+                elif re.search(r"/job/Nationwide-", path, re.I):
+                    location = "Ireland"
+
+                results[job_id] = {
+                    "company": company,
+                    "ats": "successfactors",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": "",
+                }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Irish Life scrape failed: {exc}")
+
+    print(f"  Irish Life official careers: {len(results)} jobs")
+    return list(results.values())
 
 def main():
     profile = load_candidate_profile()
