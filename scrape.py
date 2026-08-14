@@ -10774,252 +10774,244 @@ def scrape_revenue_ie():
 
 
 def scrape_honeywell():
-    import json as _json
-
     company = "Honeywell"
-    landing = "https://careers.honeywell.com/en/sites/Honeywell/jobs?mode=location"
-    oracle_base = "https://ibqbjb.fa.ocs.oraclecloud.com"
-    site = "CX_1"
-    api = f"{oracle_base}/hcmRestApi/resources/latest/recruitingCEJobRequisitions"
+    source = (
+        "https://ibqbjb.fa.ocs.oraclecloud.com/hcmUI/"
+        "CandidateExperience/en/sites/Honeywell/jobs"
+        "?location=Ireland"
+        "&locationId=300000000469476"
+        "&locationLevel=country"
+        "&mode=location"
+    )
 
-    sess = _session()
-    if not sess:
-        print("  ! Honeywell: HTTP session unavailable")
+    if not HAS_PLAYWRIGHT:
+        print("  ! Honeywell: Playwright unavailable")
         return []
 
     results = {}
 
-    # Query Oracle Recruiting directly with Ireland/Cork/Dublin terms.
-    for keyword in ("Ireland", "Dublin", "Cork", "Waterford"):
-        offset = 0
+    def clean(x):
+        return re.sub(r"\s+", " ", str(x or "")).strip()
 
-        while offset < 500:
-            finder = (
-                f"findReqs;siteNumber={site},"
-                f"limit=25,offset={offset},"
-                "sortBy=POSTING_DATES_DESC,"
-                f"keyword={urllib.parse.quote(keyword)}"
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 Chrome/124 Safari/537.36"
+                ),
             )
 
-            params = {
-                "onlyData": "true",
-                "expand": (
-                    "requisitionList.workLocation,"
-                    "requisitionList.otherWorkLocations,"
-                    "requisitionList.secondaryLocations,"
-                    "requisitionList.requisitionFlexFields"
-                ),
-                "finder": finder,
-            }
+            page = context.new_page()
 
-            try:
-                r = sess.get(
-                    api,
-                    params=params,
-                    timeout=40,
-                    headers={
-                        "User-Agent": "Mozilla/5.0",
-                        "Accept": "application/json",
-                        "Accept-Language": "en-IE,en;q=0.9",
-                        "Referer": landing,
-                    },
-                )
-            except Exception:
-                break
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+            page.wait_for_timeout(5000)
 
-            if r.status_code != 200:
-                break
+            # Oracle job boards often render the useful title/location in
+            # surrounding card text while the <a> itself has no visible text.
+            cards = page.locator(
+                'a[href*="/sites/Honeywell/job/"]'
+            )
 
-            try:
-                data = r.json()
-            except Exception:
-                break
+            count = cards.count()
 
-            items = data.get("items") or []
-            if not items:
-                break
+            for i in range(count):
+                link = cards.nth(i)
 
-            rows = []
-            for item in items:
-                if not isinstance(item, dict):
-                    continue
-                reqs = item.get("requisitionList") or []
-                if isinstance(reqs, dict):
-                    reqs = [reqs]
-                if isinstance(reqs, list):
-                    rows.extend(x for x in reqs if isinstance(x, dict))
-
-            if not rows:
-                break
-
-            new_count = 0
-
-            for row in rows:
-                blob = _json.dumps(row, ensure_ascii=False)
-
-                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
+                try:
+                    href = link.get_attribute("href") or ""
+                except Exception:
                     continue
 
-                if not re.search(
-                    r"\bIreland\b|\bDublin\b|\bCork\b|\bWaterford\b|\bGalway\b",
-                    blob,
-                    re.I,
-                ):
+                if not href:
                     continue
 
-                title = str(
-                    row.get("Title")
-                    or row.get("title")
-                    or row.get("RequisitionTitle")
-                    or row.get("requisitionTitle")
-                    or row.get("JobTitle")
-                    or ""
+                href = urllib.parse.urljoin(page.url, href)
+
+                m = re.search(r"/job/(\d+)/", href, re.I)
+                if not m:
+                    continue
+
+                job_id = m.group(1)
+
+                # Walk upward until we get a useful job-card-sized text block.
+                card_text = ""
+
+                try:
+                    card_text = link.evaluate(
+                        """el => {
+                            let n = el;
+                            for (let i = 0; i < 8 && n; i++, n = n.parentElement) {
+                                const t = (n.innerText || "").trim();
+                                if (
+                                    t.length >= 15 &&
+                                    t.length <= 2000 &&
+                                    (
+                                        /Ireland/i.test(t) ||
+                                        /Dublin|Cork|Galway|Limerick/i.test(t)
+                                    )
+                                ) {
+                                    return t;
+                                }
+                            }
+                            return "";
+                        }"""
+                    )
+                except Exception:
+                    card_text = ""
+
+                card_text = clean(card_text)
+
+                if not card_text:
+                    try:
+                        card_text = clean(
+                            link.evaluate(
+                                """el => {
+                                    let n = el;
+                                    for (let i = 0; i < 8 && n; i++, n = n.parentElement) {
+                                        const t = (n.innerText || "").trim();
+                                        if (t.length >= 10 && t.length <= 2500) {
+                                            return t;
+                                        }
+                                    }
+                                    return "";
+                                }"""
+                            )
+                        )
+                    except Exception:
+                        card_text = ""
+
+                if not card_text:
+                    continue
+
+                # Oracle cards are often flattened into one line:
+                # TITLE LOCATION (Hybrid) POSTING DATE...
+                #
+                # Strip everything beginning with location/work-mode/date metadata.
+                title = card_text
+
+                title = re.split(
+                    r"\s+(?="
+                    r"(?:Dublin|Cork|Galway|Limerick|Ireland)"
+                    r"(?:,\s*(?:Co\.\s*)?[A-Za-z .'-]+)?"
+                    r"(?:,\s*Ireland)?\b"
+                    r"|(?:On-site|Hybrid|Remote)\b"
+                    r"|POSTING\s+DATE\b"
+                    r"|BE\s+THE\s+FIRST\s+TO\s+APPLY\b"
+                    r"|TRENDING\b"
+                    r")",
+                    title,
+                    maxsplit=1,
+                    flags=re.I,
+                )[0].strip()
+
+                title = re.sub(
+                    r"\s+(?:On-site|Hybrid|Remote).*$",
+                    "",
+                    title,
+                    flags=re.I,
                 ).strip()
 
-                req_id = str(
-                    row.get("Id")
-                    or row.get("id")
-                    or row.get("RequisitionId")
-                    or row.get("requisitionId")
-                    or row.get("RequisitionNumber")
-                    or row.get("requisitionNumber")
-                    or row.get("ReqNumber")
-                    or ""
+                title = re.sub(
+                    r"\s+POSTING\s+DATE.*$",
+                    "",
+                    title,
+                    flags=re.I,
                 ).strip()
+
+                if not title:
+                    for attr in ("aria-label", "title"):
+                        try:
+                            candidate = clean(link.get_attribute(attr))
+                        except Exception:
+                            candidate = ""
+
+                        candidate = re.sub(
+                            r"^(?:view|open|apply for)\s+",
+                            "",
+                            candidate,
+                            flags=re.I,
+                        ).strip()
+
+                        if candidate:
+                            title = candidate
+                            break
 
                 if not title:
                     continue
 
-                # Oracle sometimes supplies the navigation URL directly.
-                external = str(
-                    row.get("ExternalUrl")
-                    or row.get("externalUrl")
-                    or row.get("JobUrl")
-                    or row.get("jobUrl")
-                    or ""
-                ).strip()
+                # Sometimes the title exists in an aria-label/title attr.
+                if not title:
+                    for attr in ("aria-label", "title"):
+                        try:
+                            candidate = clean(link.get_attribute(attr))
+                        except Exception:
+                            candidate = ""
 
-                if external:
-                    href = urllib.parse.urljoin("https://careers.honeywell.com", external)
-                elif req_id:
-                    href = f"https://careers.honeywell.com/en/sites/Honeywell/job/{req_id}"
-                else:
+                        candidate = re.sub(
+                            r"^(view|open|apply for)\s+",
+                            "",
+                            candidate,
+                            flags=re.I,
+                        ).strip()
+
+                        if candidate:
+                            title = candidate
+                            break
+
+                if not title:
                     continue
 
+                # -----------------------------------------------------
+                # Location extraction
+                # -----------------------------------------------------
                 location = "Ireland"
-                for city in ("Dublin", "Cork", "Waterford", "Galway"):
-                    if re.search(rf"\b{city}\b", blob, re.I):
-                        location = f"{city}, Ireland"
-                        break
 
-                key = href.split("?")[0].rstrip("/").lower()
+                if re.search(r"\bDublin\b", card_text, re.I):
+                    location = "Dublin, Ireland"
+                elif re.search(r"\bCork\b", card_text, re.I):
+                    location = "Cork, Ireland"
+                elif re.search(r"\bGalway\b", card_text, re.I):
+                    location = "Galway, Ireland"
+                elif re.search(r"\bLimerick\b", card_text, re.I):
+                    location = "Limerick, Ireland"
 
-                if key not in results:
-                    new_count += 1
+                canonical = (
+                    "https://ibqbjb.fa.ocs.oraclecloud.com/hcmUI/"
+                    "CandidateExperience/en/sites/Honeywell/job/"
+                    f"{job_id}/"
+                )
 
-                results[key] = {
+                results[job_id] = {
                     "company": company,
                     "ats": "oracle",
                     "title": title[:300],
                     "location": location,
-                    "url": href.split("?")[0],
+                    "url": canonical,
                     "updated_at": None,
-                    "description_text": blob[:5000],
+                    "description_text": card_text[:5000],
                 }
 
-            if len(rows) < 25:
-                break
+            browser.close()
 
-            offset += 25
+    except Exception as exc:
+        print(f"  ! Honeywell scrape failed: {exc}")
 
-            if new_count == 0 and offset >= 100:
-                break
+    print(
+        f"  Honeywell official Ireland careers: "
+        f"{len(results)} jobs"
+    )
 
-    # Browser fallback: the official search page is server/browser accessible
-    # even if Oracle changes finder semantics.
-    if not results and HAS_PLAYWRIGHT:
-        try:
-            with sync_playwright() as pw:
-                browser = pw.chromium.launch(headless=True)
-                page = browser.new_page(
-                    viewport={"width": 1440, "height": 1400},
-                    locale="en-IE",
-                )
-
-                for keyword in ("Ireland", "Dublin", "Cork", "Waterford"):
-                    url = (
-                        "https://careers.honeywell.com/en/sites/Honeywell/jobs"
-                        "?mode=location&keyword="
-                        + urllib.parse.quote(keyword)
-                    )
-
-                    try:
-                        page.goto(url, wait_until="domcontentloaded", timeout=90000)
-                        page.wait_for_timeout(1400)
-                    except Exception:
-                        continue
-
-                    links = page.locator('a[href*="/sites/Honeywell/job/"]')
-
-                    for i in range(links.count()):
-                        a = links.nth(i)
-                        try:
-                            href = urllib.parse.urljoin(
-                                page.url,
-                                a.get_attribute("href") or "",
-                            ).split("#")[0]
-                        except Exception:
-                            continue
-
-                        try:
-                            detail = page.context.new_page()
-                            detail.goto(href, wait_until="domcontentloaded", timeout=60000)
-                            detail.wait_for_timeout(250)
-                            body = _browser_text(detail.locator("body"))
-                            h1 = detail.locator("h1")
-                            title = (
-                                re.sub(r"\s+", " ", _browser_text(h1.first)).strip()
-                                if h1.count()
-                                else ""
-                            )
-                            detail.close()
-                        except Exception:
-                            continue
-
-                        if re.search(r"\bNorthern Ireland\b|\bBelfast\b", body, re.I):
-                            continue
-                        if not re.search(
-                            r"\bIreland\b|\bDublin\b|\bCork\b|\bWaterford\b|\bGalway\b",
-                            body,
-                            re.I,
-                        ):
-                            continue
-                        if not title:
-                            continue
-
-                        location = "Ireland"
-                        for city in ("Dublin", "Cork", "Waterford", "Galway"):
-                            if re.search(rf"\b{city}\b", body, re.I):
-                                location = f"{city}, Ireland"
-                                break
-
-                        results[href.rstrip("/").lower()] = {
-                            "company": company,
-                            "ats": "oracle-browser",
-                            "title": title[:300],
-                            "location": location,
-                            "url": href,
-                            "updated_at": None,
-                            "description_text": body[:5000],
-                        }
-
-                browser.close()
-
-        except Exception as exc:
-            print(f"  ! Honeywell browser fallback failed: {exc}")
-
-    print(f"  Honeywell verified Ireland careers v2: {len(results)} jobs")
     return list(results.values())
+
 
 def scrape_guidewire():
     company = "Guidewire"
