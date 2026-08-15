@@ -10609,111 +10609,126 @@ def scrape_publicjobs():
 
 def scrape_medtronic():
     company = "Medtronic"
-    base = "https://jobs.medtronic.com"
-    board = "External"
-    api = f"{base}/wday/cxs/medtronic/{board}/jobs"
 
     sess = _session()
     if not sess:
         print("  ! Medtronic: HTTP session unavailable")
         return []
 
+    api = (
+        "https://medtronic.wd1.myworkdayjobs.com/"
+        "wday/cxs/medtronic/MedtronicCareers/jobs"
+    )
+
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+
     results = {}
     offset = 0
+    limit = 20
 
-    while offset < 1000:
-        payload = {
-            "appliedFacets": {},
-            "limit": 20,
-            "offset": offset,
-            "searchText": "Ireland",
-        }
+    try:
+        while offset < 500:
+            payload = {
+                "appliedFacets": {
+                    "locationCountry": [
+                        "04a05835925f45b3a59406a2a6b72c8a"
+                    ]
+                },
+                "limit": limit,
+                "offset": offset,
+                "searchText": ""
+            }
 
-        try:
             r = sess.post(
                 api,
                 json=payload,
+                headers=headers,
                 timeout=30,
-                headers={
-                    "User-Agent": "Mozilla/5.0",
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "Accept-Language": "en-IE,en;q=0.9",
-                    "Referer": f"{base}/en-US/{board}",
-                },
             )
-        except Exception:
-            break
 
-        if r.status_code != 200:
-            break
+            if r.status_code != 200:
+                print(f"  ! Medtronic Workday HTTP {r.status_code}")
+                break
 
-        try:
             data = r.json()
-        except Exception:
-            break
+            postings = data.get("jobPostings") or []
 
-        rows = data.get("jobPostings") or []
-        if not rows:
-            break
+            if not postings:
+                break
 
-        new_count = 0
+            for job in postings:
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    str(job.get("title") or "")
+                ).strip()
 
-        for row in rows:
-            if not isinstance(row, dict):
-                continue
+                external_path = str(
+                    job.get("externalPath") or ""
+                ).strip()
 
-            blob = json.dumps(row, ensure_ascii=False)
+                locations = job.get("locationsText") or ""
+                locations = re.sub(
+                    r"\s+",
+                    " ",
+                    str(locations),
+                ).strip()
 
-            if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
-                continue
+                if not title or not external_path:
+                    continue
 
-            if not re.search(
-                r"\bIreland\b|\bGalway\b|\bDublin\b|\bAthlone\b|\bTullamore\b",
-                blob,
-                re.I,
-            ):
-                continue
+                if not re.search(r"\bIreland\b", locations, re.I):
+                    continue
 
-            title = str(row.get("title") or "").strip()
-            external = str(row.get("externalPath") or "").strip()
+                location = "Ireland"
 
-            if not title or not external:
-                continue
+                if re.search(r"\bGalway\b", locations, re.I):
+                    location = "Galway, Ireland"
+                elif re.search(r"\bDublin\b", locations, re.I):
+                    location = "Dublin, Ireland"
+                elif re.search(r"\bAthlone\b", locations, re.I):
+                    location = "Athlone, Ireland"
+                elif re.search(r"\bCork\b", locations, re.I):
+                    location = "Cork, Ireland"
 
-            href = urllib.parse.urljoin(f"{base}/en-US/{board}/", external)
-            location = "Ireland"
+                url = urllib.parse.urljoin(
+                    "https://medtronic.wd1.myworkdayjobs.com",
+                    external_path,
+                )
 
-            for city in ("Galway", "Dublin", "Athlone", "Tullamore"):
-                if re.search(rf"\b{city}\b", blob, re.I):
-                    location = f"{city}, Ireland"
-                    break
+                m = re.search(r"_(R\d+)(?:-\d+)?$", external_path)
+                key = m.group(1) if m else url.lower()
 
-            key = href.split("?")[0].rstrip("/").lower()
-            if key not in results:
-                new_count += 1
+                results[key] = {
+                    "company": company,
+                    "ats": "workday",
+                    "title": title[:300],
+                    "location": location,
+                    "url": url,
+                    "updated_at": None,
+                    "description_text": locations[:5000],
+                }
 
-            results[key] = {
-                "company": company,
-                "ats": "workday",
-                "title": title[:300],
-                "location": location,
-                "url": href.split("?")[0],
-                "updated_at": None,
-                "description_text": blob[:5000],
-            }
+            total = data.get("total")
 
-        offset += len(rows)
+            offset += limit
 
-        total = data.get("total")
-        if isinstance(total, int) and offset >= total:
-            break
-        if new_count == 0 and offset > 100:
-            break
+            if isinstance(total, int) and offset >= total:
+                break
 
-    print(f"  Medtronic Workday Ireland careers: {len(results)} jobs")
+    except Exception as exc:
+        print(f"  ! Medtronic scrape failed: {exc}")
+
+    print(
+        f"  Medtronic official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
     return list(results.values())
-
 
 
 def scrape_revenue_ie():
@@ -11851,6 +11866,7 @@ def scrape_direct_company(company: str):
         "Revenue": scrape_revenue_ie,
         "Revenue.ie": scrape_revenue_ie,
         "Medtronic": scrape_medtronic,
+        "UPS Ireland": scrape_ups,
         "publicjobs": scrape_publicjobs,
         "Public Jobs": scrape_publicjobs,
         "publicjobs.ie": scrape_publicjobs,
@@ -12311,6 +12327,290 @@ def scrape_irish_life():
         print(f"  ! Irish Life scrape failed: {exc}")
 
     print(f"  Irish Life official careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_ups():
+    company = "UPS Ireland"
+
+    source = (
+        "https://www.jobs-ups.com/global/en/search-results"
+        "?p=ChIJ5QX6zvnKd0gRYREw9umce3I"
+        "&location=Ireland%2C%20Shefford%2C%20UK"
+        "&latitude=53.40833676721639"
+        "&longitude=-6.160288504069749"
+    )
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! UPS Ireland: Playwright unavailable")
+        return []
+
+    results = {}
+    discovered = {}
+
+    def clean(value):
+        return re.sub(r"\s+", " ", str(value or "")).strip()
+
+    def normalize_location(text):
+        text = clean(text)
+
+        city_map = [
+            ("Dublin", "Dublin, Ireland"),
+            ("Swords", "Swords, Ireland"),
+            ("Finglas", "Dublin, Ireland"),
+            ("Santry", "Dublin, Ireland"),
+            ("Ballymount", "Dublin, Ireland"),
+            ("Blanchardstown", "Dublin, Ireland"),
+            ("Cork", "Cork, Ireland"),
+            ("Little Island", "Little Island, Cork, Ireland"),
+            ("Galway", "Galway, Ireland"),
+            ("Limerick", "Limerick, Ireland"),
+            ("Shannon", "Shannon, Ireland"),
+            ("Athlone", "Athlone, Ireland"),
+            ("Kilkenny", "Kilkenny, Ireland"),
+            ("Waterford", "Waterford, Ireland"),
+            ("Wexford", "Wexford, Ireland"),
+            ("Drogheda", "Drogheda, Ireland"),
+            ("Dundalk", "Dundalk, Ireland"),
+            ("Naas", "Naas, Ireland"),
+            ("Kildare", "Kildare, Ireland"),
+        ]
+
+        for needle, normalized in city_map:
+            if re.search(
+                rf"\b{re.escape(needle)}\b",
+                text,
+                re.I,
+            ):
+                return normalized
+
+        return "Ireland"
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 Chrome/124 Safari/537.36"
+                ),
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+            page.wait_for_timeout(4500)
+
+            links = page.locator("a").evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            for item in links:
+                href = clean(item.get("href"))
+                title = clean(item.get("text"))
+
+                m = re.search(
+                    r"jobs-ups\.com/global/en/job/"
+                    r"(R\d+)/",
+                    href,
+                    re.I,
+                )
+
+                if not m:
+                    continue
+
+                if not title:
+                    continue
+
+                job_id = m.group(1).upper()
+
+                discovered[job_id] = {
+                    "title": title,
+                    "url": href.split("?")[0].split("#")[0],
+                }
+
+            page.close()
+
+            for job_id, item in discovered.items():
+                title = item["title"]
+                canonical = item["url"]
+
+                detail = context.new_page()
+
+                body = ""
+                html_text = ""
+
+                try:
+                    detail.goto(
+                        canonical,
+                        wait_until="domcontentloaded",
+                        timeout=60000,
+                    )
+                    detail.wait_for_timeout(1000)
+
+                    body = detail.locator("body").inner_text(
+                        timeout=15000
+                    )
+
+                    html_text = detail.content()
+
+                except Exception:
+                    detail.close()
+                    continue
+
+                # -------------------------------------------------
+                # Prefer structured JobPosting location data.
+                # -------------------------------------------------
+                structured_location = ""
+                ireland_confirmed = False
+
+                scripts = re.findall(
+                    r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>'
+                    r'(.*?)</script>',
+                    html_text,
+                    re.I | re.S,
+                )
+
+                for script in scripts:
+                    raw = script.replace("\\/", "/")
+
+                    # Explicit country validation.
+                    if re.search(
+                        r'"addressCountry"\s*:\s*'
+                        r'(?:"IE"|"Ireland"|'
+                        r'\{[^{}]*"name"\s*:\s*"Ireland")',
+                        raw,
+                        re.I | re.S,
+                    ):
+                        ireland_confirmed = True
+
+                    # Capture useful city/locality text.
+                    mloc = re.search(
+                        r'"addressLocality"\s*:\s*"([^"]+)"',
+                        raw,
+                        re.I,
+                    )
+
+                    if mloc:
+                        structured_location += " " + mloc.group(1)
+
+                    mregion = re.search(
+                        r'"addressRegion"\s*:\s*"([^"]+)"',
+                        raw,
+                        re.I,
+                    )
+
+                    if mregion:
+                        structured_location += " " + mregion.group(1)
+
+                # -------------------------------------------------
+                # Fallback to visible detail text.
+                # -------------------------------------------------
+
+                # Republic of Ireland evidence.
+                republic_evidence = re.search(
+                    r"\bIreland\b|"
+                    r"\bRepublic of Ireland\b|"
+                    r"\bDublin\b|"
+                    r"\bCork\b|"
+                    r"\bGalway\b|"
+                    r"\bLimerick\b|"
+                    r"\bShannon\b|"
+                    r"\bAthlone\b|"
+                    r"\bKildare\b|"
+                    r"\bNaas\b|"
+                    r"\bSwords\b|"
+                    r"\bDundalk\b|"
+                    r"\bDrogheda\b|"
+                    r"\bWaterford\b|"
+                    r"\bKilkenny\b|"
+                    r"\bWexford\b",
+                    body,
+                    re.I,
+                )
+
+                # Strong UK/NI-only evidence.
+                uk_evidence = re.search(
+                    r"\bUnited Kingdom\b|"
+                    r"\bShefford\b|"
+                    r"\bEngland\b|"
+                    r"\bScotland\b|"
+                    r"\bWales\b|"
+                    r"\bBelfast\b|"
+                    r"\bNorthern Ireland\b",
+                    body,
+                    re.I,
+                )
+
+                if not ireland_confirmed:
+                    if not republic_evidence:
+                        detail.close()
+                        continue
+
+                    # Reject pages whose only location evidence is UK/NI.
+                    if uk_evidence and not re.search(
+                        r"\bDublin\b|"
+                        r"\bCork\b|"
+                        r"\bGalway\b|"
+                        r"\bLimerick\b|"
+                        r"\bShannon\b|"
+                        r"\bAthlone\b|"
+                        r"\bKildare\b|"
+                        r"\bNaas\b|"
+                        r"\bSwords\b|"
+                        r"\bDundalk\b|"
+                        r"\bDrogheda\b|"
+                        r"\bWaterford\b|"
+                        r"\bKilkenny\b|"
+                        r"\bWexford\b",
+                        body,
+                        re.I,
+                    ):
+                        detail.close()
+                        continue
+
+                location_source = (
+                    structured_location + " " + body[:4000]
+                )
+
+                location = normalize_location(
+                    location_source
+                )
+
+                results[job_id] = {
+                    "company": company,
+                    "ats": "phenom",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": body[:5000],
+                }
+
+                detail.close()
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! UPS Ireland scrape failed: {exc}")
+
+    print(
+        f"  UPS official Ireland careers: "
+        f"{len(results)} jobs from "
+        f"{len(discovered)} search results"
+    )
+
     return list(results.values())
 
 def main():
