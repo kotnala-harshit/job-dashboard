@@ -11713,6 +11713,129 @@ def scrape_walkers():
     return list(results.values())
 
 
+def scrape_mckinsey():
+    company = "McKinsey & Company"
+    source = (
+        "https://www.mckinsey.com/careers/search-jobs"
+        "?locations=Dublin&cities=Dublin"
+    )
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! McKinsey: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            # McKinsey currently fails/empties under normal headless mode.
+            # Headed Chromium + HTTP/2 disabled is the working path.
+            browser = pw.chromium.launch(
+                headless=False,
+                args=[
+                    "--disable-http2",
+                    "--disable-blink-features=AutomationControlled",
+                ],
+            )
+
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/124.0.0.0 Safari/537.36"
+                ),
+            )
+
+            context.add_init_script(
+                """
+                Object.defineProperty(
+                    navigator,
+                    'webdriver',
+                    {get: () => undefined}
+                );
+                """
+            )
+
+            page = context.new_page()
+
+            try:
+                page.goto(
+                    source,
+                    wait_until="commit",
+                    timeout=90000,
+                )
+            except Exception as exc:
+                print(f"  McKinsey navigation warning: {exc}")
+
+            try:
+                page.wait_for_selector(
+                    'a[href*="/careers/search-jobs/jobs/"]',
+                    timeout=45000,
+                )
+            except Exception:
+                pass
+
+            page.wait_for_timeout(5000)
+
+            links = page.locator(
+                'a[href*="/careers/search-jobs/jobs/"]'
+            ).evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            for item in links:
+                href = str(item.get("href") or "").strip()
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    str(item.get("text") or ""),
+                ).strip()
+
+                if not href or not title:
+                    continue
+
+                if not re.search(
+                    r"^https://www\.mckinsey\.com/"
+                    r"careers/search-jobs/jobs/",
+                    href,
+                    re.I,
+                ):
+                    continue
+
+                canonical = href.split("?")[0].split("#")[0]
+
+                m = re.search(r"-([0-9]+)$", canonical)
+                job_id = m.group(1) if m else canonical.lower()
+
+                results[job_id] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": "Dublin, Ireland",
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": "",
+                }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! McKinsey scrape failed: {exc}")
+
+    print(
+        f"  McKinsey official Dublin careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     fn={
         "Walkers Ireland": scrape_walkers,
@@ -11798,6 +11921,7 @@ def scrape_direct_company(company: str):
         "A&L Goodbody": scrape_algoodbody,
         "Agilent Technologies": scrape_agilent,
         "Jacobs": scrape_jacobs,
+        "McKinsey & Company": scrape_mckinsey,
         "HP (Hewlett-Packard)": scrape_hp,
         "Arup": scrape_arup,
         "Deutsche Bank": scrape_deutsche_bank,
