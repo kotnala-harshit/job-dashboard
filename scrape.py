@@ -11867,6 +11867,8 @@ def scrape_direct_company(company: str):
         "Revenue.ie": scrape_revenue_ie,
         "Medtronic": scrape_medtronic,
         "UPS Ireland": scrape_ups,
+        "Three Ireland": scrape_three_ireland,
+        "TK Maxx Ireland": scrape_tjx_ireland,
         "publicjobs": scrape_publicjobs,
         "Public Jobs": scrape_publicjobs,
         "publicjobs.ie": scrape_publicjobs,
@@ -12609,6 +12611,259 @@ def scrape_ups():
         f"  UPS official Ireland careers: "
         f"{len(results)} jobs from "
         f"{len(discovered)} search results"
+    )
+
+    return list(results.values())
+
+
+def scrape_three_ireland():
+    company = "Three Ireland"
+    source = (
+        "https://three-ireland.csod.com/ux/ats/careersite/5/home"
+        "?c=three-ireland&country=ie"
+    )
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! Three Ireland: Playwright unavailable")
+        return []
+
+    results = {}
+
+    def clean(x):
+        return re.sub(r"\s+", " ", str(x or "")).strip()
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+            page.wait_for_timeout(4000)
+
+            links = page.locator("a").evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            for item in links:
+                href = clean(item.get("href"))
+                title = clean(item.get("text"))
+
+                m = re.search(
+                    r"/careersite/5/home/requisition/(\d+)",
+                    href,
+                    re.I,
+                )
+
+                if not m or not title:
+                    continue
+
+                req_id = m.group(1)
+                canonical = href.split("#")[0]
+
+                location = "Ireland"
+
+                # Titles expose many retail locations directly.
+                location_map = [
+                    ("Drogheda", "Drogheda, Ireland"),
+                    ("Sligo", "Sligo, Ireland"),
+                    ("Mary Street", "Dublin, Ireland"),
+                    ("Navan", "Navan, Ireland"),
+                    ("Limerick", "Limerick, Ireland"),
+                    ("Athlone", "Athlone, Ireland"),
+                    ("Patrick St", "Cork, Ireland"),
+                    ("Tralee", "Tralee, Ireland"),
+                    ("Bray", "Bray, Ireland"),
+                    ("Mahon Point", "Cork, Ireland"),
+                    ("Dublin", "Dublin, Ireland"),
+                    ("Cork", "Cork, Ireland"),
+                    ("Galway", "Galway, Ireland"),
+                ]
+
+                for needle, normalized in location_map:
+                    if re.search(
+                        rf"\b{re.escape(needle)}\b",
+                        title,
+                        re.I,
+                    ):
+                        location = normalized
+                        break
+
+                results[req_id] = {
+                    "company": company,
+                    "ats": "csod",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": "",
+                }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Three Ireland scrape failed: {exc}")
+
+    print(
+        f"  Three Ireland official careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
+def scrape_tjx_ireland():
+    company = "TK Maxx Ireland"
+    source = (
+        "https://jobs.tjx.com/global/en/search-results"
+        "?keywords="
+        "&p=ChIJ-ydAXOS6WUgRCPTbzjQSfM8"
+        "&location=Ireland"
+    )
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! TK Maxx Ireland: Playwright unavailable")
+        return []
+
+    results = {}
+    discovered = {}
+
+    def clean(x):
+        return re.sub(r"\s+", " ", str(x or "")).strip()
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+            page.wait_for_timeout(4000)
+
+            links = page.locator("a").evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            for item in links:
+                href = clean(item.get("href"))
+                title = clean(item.get("text"))
+
+                m = re.search(
+                    r"jobs\.tjx\.com/global/en/job/"
+                    r"(REQ\d+)/",
+                    href,
+                    re.I,
+                )
+
+                if not m or not title:
+                    continue
+
+                job_id = m.group(1).upper()
+
+                discovered[job_id] = {
+                    "title": title,
+                    "url": href.split("#")[0],
+                }
+
+            page.close()
+
+            # Detail pages improve city/location accuracy.
+            for job_id, item in discovered.items():
+                title = item["title"]
+                canonical = item["url"]
+
+                location = "Ireland"
+                description = ""
+
+                detail = context.new_page()
+
+                try:
+                    detail.goto(
+                        canonical,
+                        wait_until="domcontentloaded",
+                        timeout=45000,
+                    )
+                    detail.wait_for_timeout(600)
+
+                    body = detail.locator("body").inner_text(
+                        timeout=10000
+                    )
+                    description = body[:5000]
+
+                    city_map = [
+                        ("Dublin", "Dublin, Ireland"),
+                        ("Cork", "Cork, Ireland"),
+                        ("Galway", "Galway, Ireland"),
+                        ("Limerick", "Limerick, Ireland"),
+                        ("Waterford", "Waterford, Ireland"),
+                        ("Kilkenny", "Kilkenny, Ireland"),
+                        ("Sligo", "Sligo, Ireland"),
+                        ("Athlone", "Athlone, Ireland"),
+                        ("Drogheda", "Drogheda, Ireland"),
+                        ("Navan", "Navan, Ireland"),
+                        ("Tralee", "Tralee, Ireland"),
+                        ("Letterkenny", "Letterkenny, Ireland"),
+                        ("Wexford", "Wexford, Ireland"),
+                    ]
+
+                    for needle, normalized in city_map:
+                        if re.search(
+                            rf"\b{re.escape(needle)}\b",
+                            body,
+                            re.I,
+                        ):
+                            location = normalized
+                            break
+
+                except Exception:
+                    pass
+
+                detail.close()
+
+                results[job_id] = {
+                    "company": company,
+                    "ats": "phenom",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": description,
+                }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! TK Maxx Ireland scrape failed: {exc}")
+
+    print(
+        f"  TK Maxx Ireland official careers: "
+        f"{len(results)} jobs"
     )
 
     return list(results.values())
