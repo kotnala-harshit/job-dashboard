@@ -1632,11 +1632,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Red Hat": {
-    "platform": "workday",
-    "slug": "redhat|wd5|jobs",
-    "probe_version": 35
-  },
   "Refinitiv (LSEG)": {
     "platform": "none",
     "slug": null,
@@ -1727,11 +1722,6 @@
     "slug": "salesforce|wd12|External_Career_Site",
     "probe_version": 35
   },
-  "Sanofi": {
-    "platform": "workday",
-    "slug": "sanofi|wd3|SanofiCareers",
-    "probe_version": 35
-  },
   "SAP": {
     "platform": "none",
     "slug": null,
@@ -1807,11 +1797,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Smith & Nephew": {
-    "platform": "workday",
-    "slug": "smithnephew|wd5|External",
-    "probe_version": 35
-  },
   "Smurfit Westrock": {
     "platform": "none",
     "slug": null,
@@ -1885,11 +1870,6 @@
   "SumUp": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Sun Life Ireland": {
-    "platform": "workday",
-    "slug": "sunlife|wd3|Experienced-Jobs",
     "probe_version": 35
   },
   "Supply Wisdom": {
@@ -2052,19 +2032,9 @@
     "slug": null,
     "probe_version": 35
   },
-  "Travelers": {
-    "platform": "workday",
-    "slug": "travelers|wd5|External",
-    "probe_version": 35
-  },
   "Trellix": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Trend Micro": {
-    "platform": "workday",
-    "slug": "trendmicro|wd3|External",
     "probe_version": 35
   },
   "Twilio": {
@@ -2085,11 +2055,6 @@
   "Uisce \u00c9ireann (Irish Water)": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Unilever Ireland": {
-    "platform": "workday",
-    "slug": "unilever|wd3|Unilever_Experienced_Professionals",
     "probe_version": 35
   },
   "Uniphar Group": {
@@ -2190,11 +2155,6 @@
   "Workato": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Workday": {
-    "platform": "workday",
-    "slug": "workday|wd5|Workday",
     "probe_version": 35
   },
   "WorkFusion": {
@@ -2472,11 +2432,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Workhuman": {
-    "platform": "workday",
-    "slug": "workhuman|wd1|WorkhumanCareers",
-    "probe_version": 35
-  },
   "Zendesk": {
     "platform": "pinpoint",
     "slug": "zendesk",
@@ -2495,6 +2450,51 @@
   "Publift": {
     "platform": "smartrecruiters",
     "slug": "job-widget",
+    "probe_version": 35
+  },
+  "Red Hat": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Sanofi": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Smith & Nephew": {
+    "platform": "pinpoint",
+    "slug": "smith",
+    "probe_version": 35
+  },
+  "Sun Life Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Travelers": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Trend Micro": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Unilever Ireland": {
+    "platform": "greenhouse",
+    "slug": "unilever",
+    "probe_version": 35
+  },
+  "Workday": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Workhuman": {
+    "platform": "ashby",
+    "slug": "workhuman",
     "probe_version": 35
   },
   "__probe_version__": 35
