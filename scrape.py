@@ -12205,6 +12205,172 @@ def scrape_smbc_aviation_capital():
 
     return list(results.values())
 
+def scrape_johnson_johnson():
+    company = "Johnson & Johnson"
+
+    api = (
+        "https://jj.wd5.myworkdayjobs.com/"
+        "wday/cxs/jj/JJ/jobs"
+    )
+
+    sess = _session()
+
+    if not sess:
+        print("  ! Johnson & Johnson: HTTP session unavailable")
+        return []
+
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+
+    results = {}
+    offset = 0
+    limit = 20
+
+    try:
+        while offset < 2000:
+            payload = {
+                "appliedFacets": {},
+                "limit": limit,
+                "offset": offset,
+                "searchText": "",
+            }
+
+            r = sess.post(
+                api,
+                json=payload,
+                headers=headers,
+                timeout=30,
+            )
+
+            if r.status_code != 200:
+                print(
+                    f"  ! Johnson & Johnson Workday HTTP "
+                    f"{r.status_code}"
+                )
+                break
+
+            data = r.json()
+            postings = data.get("jobPostings") or []
+
+            if not postings:
+                break
+
+            for job in postings:
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    str(job.get("title") or ""),
+                ).strip()
+
+                external_path = str(
+                    job.get("externalPath") or ""
+                ).strip()
+
+                locations = re.sub(
+                    r"\s+",
+                    " ",
+                    str(job.get("locationsText") or ""),
+                ).strip()
+
+                if not title or not external_path:
+                    continue
+
+                # Only Republic of Ireland postings.
+                if not re.search(
+                    r"\bIreland\b|"
+                    r"\bIE0\d+\b",
+                    locations,
+                    re.I,
+                ):
+                    continue
+
+                # Explicitly reject Northern Ireland-only results.
+                if (
+                    re.search(
+                        r"\bNorthern Ireland\b|\bBelfast\b",
+                        locations,
+                        re.I,
+                    )
+                    and not re.search(
+                        r"\bDublin\b|\bCork\b|\bGalway\b|"
+                        r"\bLimerick\b|\bMayo\b|\bWestport\b|"
+                        r"\bRingaskiddy\b",
+                        locations,
+                        re.I,
+                    )
+                ):
+                    continue
+
+                location = "Ireland"
+
+                city_map = [
+                    ("Dublin", "Dublin, Ireland"),
+                    ("Ringaskiddy", "Ringaskiddy, Cork, Ireland"),
+                    ("Cork", "Cork, Ireland"),
+                    ("Galway", "Galway, Ireland"),
+                    ("Limerick", "Limerick, Ireland"),
+                    ("Westport", "Westport, Mayo, Ireland"),
+                    ("Mayo", "Mayo, Ireland"),
+                ]
+
+                for needle, normalized in city_map:
+                    if re.search(
+                        rf"\b{re.escape(needle)}\b",
+                        locations,
+                        re.I,
+                    ):
+                        location = normalized
+                        break
+
+                url = urllib.parse.urljoin(
+                    "https://jj.wd5.myworkdayjobs.com",
+                    external_path,
+                )
+
+                m = re.search(
+                    r"(R-\d+)",
+                    external_path,
+                    re.I,
+                )
+
+                key = (
+                    m.group(1).upper()
+                    if m
+                    else url.lower()
+                )
+
+                results[key] = {
+                    "company": company,
+                    "ats": "workday",
+                    "title": title[:300],
+                    "location": location,
+                    "url": url,
+                    "updated_at": None,
+                    "description_text": locations,
+                }
+
+            total = data.get("total")
+            offset += limit
+
+            if isinstance(total, int) and offset >= total:
+                break
+
+    except Exception as exc:
+        print(
+            f"  ! Johnson & Johnson Workday scrape failed: "
+            f"{exc}"
+        )
+
+    print(
+        f"  Johnson & Johnson official Workday Ireland: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
 def scrape_direct_company(company: str):
     fn={
         "Walkers Ireland": scrape_walkers,
@@ -12311,7 +12477,7 @@ def scrape_direct_company(company: str):
         "ServiceNow": scrape_servicenow,
         "Boston Scientific": scrape_boston_scientific,
         "DXC Technology": scrape_dxc,
-        "Johnson & Johnson": scrape_jnj,
+        "Johnson & Johnson": scrape_johnson_johnson,
         "Johnson Controls": scrape_johnson_controls,
         "Dropbox": scrape_dropbox,
         "Zscaler": scrape_zscaler,
