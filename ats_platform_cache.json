@@ -2262,11 +2262,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Cadence Design Systems": {
-    "platform": "personio",
-    "slug": "cadence",
-    "probe_version": 35
-  },
   "Concentrix (Ireland)": {
     "platform": "greenhouse",
     "slug": "ireland",
@@ -2490,6 +2485,11 @@
   "PwC Ireland": {
     "platform": "none",
     "slug": null,
+    "probe_version": 35
+  },
+  "Cadence Design Systems": {
+    "platform": "workday",
+    "slug": "cadence|wd1|External_Careers",
     "probe_version": 35
   },
   "Publift": {
