@@ -11851,6 +11851,360 @@ def scrape_mckinsey():
     return list(results.values())
 
 
+def scrape_smbc_aviation_capital():
+    company = "SMBC Aviation Capital"
+
+    source = (
+        "https://smbcaviationcapital.groupgti.com/"
+        "VacancyPosting/Search#!/"
+    )
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! SMBC Aviation Capital: Playwright unavailable")
+        return []
+
+    results = {}
+
+    def clean(value):
+        return re.sub(
+            r"\s+",
+            " ",
+            str(value or ""),
+        ).strip()
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(
+                headless=True,
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                ],
+            )
+
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={
+                    "width": 1440,
+                    "height": 1600,
+                },
+                user_agent=(
+                    "Mozilla/5.0 "
+                    "(Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) "
+                    "Chrome/124.0.0.0 Safari/537.36"
+                ),
+            )
+
+            page = context.new_page()
+
+            try:
+                page.goto(
+                    source,
+                    wait_until="domcontentloaded",
+                    timeout=90000,
+                )
+            except Exception as exc:
+                print(
+                    "  ! SMBC Aviation Capital "
+                    f"navigation warning: {exc}"
+                )
+
+            # GroupGTI is an Angular/hash-routed application.
+            # Give the vacancy list time to hydrate.
+            try:
+                page.wait_for_timeout(7000)
+            except Exception:
+                pass
+
+            # --------------------------------------------------
+            # Collect visible links first.
+            # --------------------------------------------------
+            try:
+                links = page.locator("a").evaluate_all(
+                    """els => els.map(a => ({
+                        href: a.href || "",
+                        text: (
+                            a.innerText ||
+                            a.textContent ||
+                            ""
+                        ).trim()
+                    }))"""
+                )
+            except Exception:
+                links = []
+
+            candidates = {}
+
+            for item in links:
+                href = clean(item.get("href"))
+                title = clean(item.get("text"))
+
+                if not href or not title:
+                    continue
+
+                if "smbcaviationcapital.groupgti.com" not in href.lower():
+                    continue
+
+                # GroupGTI vacancy links can use hash routing,
+                # VacancyPosting routes or vacancy identifiers.
+                if not re.search(
+                    r"VacancyPosting|vacancy|job",
+                    href,
+                    re.I,
+                ):
+                    continue
+
+                if re.search(
+                    r"/Search(?:#|/|$)",
+                    href,
+                    re.I,
+                ):
+                    continue
+
+                key = href
+
+                candidates[key] = {
+                    "title": title,
+                    "url": href,
+                }
+
+            # --------------------------------------------------
+            # Fallback: inspect the rendered page text and DOM
+            # attributes. GroupGTI sometimes renders job actions
+            # with Angular handlers rather than normal hrefs.
+            # --------------------------------------------------
+            try:
+                html_text = page.content()
+            except Exception:
+                html_text = ""
+
+            # Capture URLs embedded in Angular-generated markup.
+            for m in re.finditer(
+                r'https?://smbcaviationcapital\.groupgti\.com/'
+                r'[^"\'<> ]*VacancyPosting[^"\'<> ]+',
+                html_text,
+                re.I,
+            ):
+                href = (
+                    m.group(0)
+                    .replace("&amp;", "&")
+                    .rstrip("'\"")
+                )
+
+                if re.search(
+                    r"/Search(?:#|/|$)",
+                    href,
+                    re.I,
+                ):
+                    continue
+
+                candidates.setdefault(
+                    href,
+                    {
+                        "title": "",
+                        "url": href,
+                    },
+                )
+
+            # --------------------------------------------------
+            # Capture vacancy-card text.
+            # This is also useful when a job doesn't have a
+            # conventional anchor.
+            # --------------------------------------------------
+            try:
+                body = page.locator("body").inner_text(
+                    timeout=15000
+                )
+            except Exception:
+                body = ""
+
+            # --------------------------------------------------
+            # Detail validation.
+            # Only retain Ireland/Dublin roles.
+            # --------------------------------------------------
+            for idx, item in enumerate(
+                list(candidates.values())
+            ):
+                canonical = item["url"]
+                title = clean(item["title"])
+
+                detail_text = ""
+                detail_title = ""
+
+                detail = context.new_page()
+
+                try:
+                    detail.goto(
+                        canonical,
+                        wait_until="domcontentloaded",
+                        timeout=45000,
+                    )
+                    detail.wait_for_timeout(800)
+
+                    detail_text = detail.locator(
+                        "body"
+                    ).inner_text(timeout=10000)
+
+                    try:
+                        detail_title = clean(
+                            detail.locator("h1").first.inner_text(
+                                timeout=3000
+                            )
+                        )
+                    except Exception:
+                        pass
+
+                except Exception:
+                    pass
+
+                detail.close()
+
+                evidence = (
+                    title + " "
+                    + detail_title + " "
+                    + detail_text
+                )
+
+                if not re.search(
+                    r"\bIreland\b|\bDublin\b",
+                    evidence,
+                    re.I,
+                ):
+                    continue
+
+                if detail_title:
+                    title = detail_title
+
+                if not title:
+                    continue
+
+                # Reject common non-job UI strings.
+                if title.lower() in {
+                    "vacancy list",
+                    "search",
+                    "apply",
+                    "view vacancy",
+                    "more details",
+                }:
+                    continue
+
+                location = "Ireland"
+
+                if re.search(
+                    r"\bDublin\b",
+                    evidence,
+                    re.I,
+                ):
+                    location = "Dublin, Ireland"
+
+                # Extract a stable vacancy ID when possible.
+                id_match = re.search(
+                    r"(?:vacancy|posting|job)"
+                    r"[^0-9]{0,20}"
+                    r"([0-9]{3,})",
+                    canonical,
+                    re.I,
+                )
+
+                key = (
+                    id_match.group(1)
+                    if id_match
+                    else canonical.lower()
+                )
+
+                results[key] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": detail_text[:5000],
+                }
+
+            # --------------------------------------------------
+            # If there are no conventional detail URLs, use the
+            # rendered vacancy cards directly.
+            # --------------------------------------------------
+            if not results and body:
+                blocks = re.split(
+                    r"\n{2,}",
+                    body,
+                )
+
+                for block in blocks:
+                    block = clean(block)
+
+                    if len(block) < 15:
+                        continue
+
+                    if not re.search(
+                        r"\bDublin\b|\bIreland\b",
+                        block,
+                        re.I,
+                    ):
+                        continue
+
+                    if not re.search(
+                        r"analyst|associate|manager|"
+                        r"executive|engineer|legal|"
+                        r"finance|accountant|leasing|"
+                        r"commercial|operations|"
+                        r"risk|technical|vacancy",
+                        block,
+                        re.I,
+                    ):
+                        continue
+
+                    # Use the first sensible line/phrase as title.
+                    title = block.split(" | ")[0].strip()
+
+                    if len(title) > 300:
+                        title = title[:300]
+
+                    key = re.sub(
+                        r"[^a-z0-9]+",
+                        "-",
+                        title.lower(),
+                    ).strip("-")
+
+                    if not key:
+                        continue
+
+                    results[key] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title,
+                        "location": (
+                            "Dublin, Ireland"
+                            if re.search(
+                                r"\bDublin\b",
+                                block,
+                                re.I,
+                            )
+                            else "Ireland"
+                        ),
+                        "url": source,
+                        "updated_at": None,
+                        "description_text": block[:5000],
+                    }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(
+            f"  ! SMBC Aviation Capital scrape failed: {exc}"
+        )
+
+    print(
+        "  SMBC Aviation Capital official careers: "
+        f"{len(results)} Ireland jobs"
+    )
+
+    return list(results.values())
+
 def scrape_direct_company(company: str):
     fn={
         "Walkers Ireland": scrape_walkers,
@@ -11945,6 +12299,7 @@ def scrape_direct_company(company: str):
         "Arup": scrape_arup,
         "Deutsche Bank": scrape_deutsche_bank,
         "SMBC Group": scrape_smbc_group,
+        "SMBC Aviation Capital": scrape_smbc_aviation_capital,
         "Harvey Nash": scrape_harvey_nash,
         "ING": scrape_ing,
         "Bank of America": scrape_bank_of_america,
@@ -12927,7 +13282,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('AECOM', 'Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL', 'Huawei Ireland', 'Honeywell', 'Revenue', 'Public Jobs / Civil Service', 'NTT DATA', 'Ryanair', 'Coca-Cola HBC Ireland', 'PepsiCo', 'Musgrave Group (SuperValu / Centra)', 'SAP', 'Allianz Ireland', 'Susquehanna International Group (SIG)', 'Schneider Electric', 'Heineken Ireland', 'Walkers Ireland', 'ABB', 'Laya Healthcare', 'Irish Life', 'McKinsey & Company', 'Medtronic', 'UPS Ireland', 'Three Ireland', 'TK Maxx Ireland', 'Siemens', 'S&P Global'):
+    for company in ('AECOM', 'Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL', 'Huawei Ireland', 'Honeywell', 'Revenue', 'Public Jobs / Civil Service', 'NTT DATA', 'Ryanair', 'Coca-Cola HBC Ireland', 'PepsiCo', 'Musgrave Group (SuperValu / Centra)', 'SAP', 'Allianz Ireland', 'Susquehanna International Group (SIG)', 'Schneider Electric', 'Heineken Ireland', 'Walkers Ireland', 'ABB', 'Laya Healthcare', 'Irish Life', 'McKinsey & Company', 'Medtronic', 'UPS Ireland', 'Three Ireland', 'TK Maxx Ireland', 'Siemens', 'S&P Global', 'SMBC Aviation Capital'):
         if not _targeted(company):
             continue
         try:
