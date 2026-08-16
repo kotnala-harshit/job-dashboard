@@ -1853,6 +1853,7 @@ def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages
                 "company": company,
                 "ats": "workday",
                 "title": title,
+                "raw_location": location,
                 "location": location,
                 "url": url,
                 "updated_at": j.get("postedOn"),
@@ -2954,7 +2955,8 @@ def scrape_oracle_candidate_experience(
                 "company": company,
                 "ats": "oracle",
                 "title": title,
-                "location": location or "Ireland",
+                "raw_location": location,
+                "location": location,
                 "url": job_url,
                 "updated_at": j.get("PostedDate") or j.get("PostingStartDate"),
                 "closing_date": j.get("PostingEndDate"),
@@ -3905,10 +3907,23 @@ def scrape_tiktok():
                     evidence = f"{title} {card} {href}"
                     if not title or not re.search(r"Dublin|Ireland", evidence, re.I):
                         continue
+                    raw_location = _browser_location(card, "")
+                    if not re.search(
+                        r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford|Kilkenny|Athlone)\b",
+                        raw_location,
+                        re.I,
+                    ):
+                        continue
+
                     results[href] = {
-                        "company": "TikTok", "ats": "direct", "title": title[:300],
-                        "location": _browser_location(card, "Dublin, Ireland"),
-                        "url": href, "updated_at": None, "description_text": card[:5000],
+                        "company": "TikTok",
+                        "ats": "direct",
+                        "title": title[:300],
+                        "raw_location": raw_location,
+                        "location": raw_location,
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": card[:5000],
                     }
                 for label in ("Load more", "Show more", "See more", "More jobs"):
                     try:
@@ -11851,13 +11866,13 @@ def scrape_mckinsey():
     return list(results.values())
 
 
+
+
+
 def scrape_smbc_aviation_capital():
     company = "SMBC Aviation Capital"
-
-    source = (
-        "https://smbcaviationcapital.groupgti.com/"
-        "VacancyPosting/Search#!/"
-    )
+    source_url = "https://smbcaviationcapital.groupgti.com/VacancyPosting/Search#!/"
+    base = "https://smbcaviationcapital.groupgti.com"
 
     if not HAS_PLAYWRIGHT:
         print("  ! SMBC Aviation Capital: Playwright unavailable")
@@ -11865,345 +11880,99 @@ def scrape_smbc_aviation_capital():
 
     results = {}
 
-    def clean(value):
-        return re.sub(
-            r"\s+",
-            " ",
-            str(value or ""),
-        ).strip()
-
     try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(
-                headless=True,
-                args=[
-                    "--disable-blink-features=AutomationControlled",
-                ],
-            )
-
-            context = browser.new_context(
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1200},
                 locale="en-IE",
-                viewport={
-                    "width": 1440,
-                    "height": 1600,
-                },
-                user_agent=(
-                    "Mozilla/5.0 "
-                    "(Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 "
-                    "(KHTML, like Gecko) "
-                    "Chrome/124.0.0.0 Safari/537.36"
-                ),
             )
 
-            page = context.new_page()
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+            page.wait_for_timeout(5000)
 
-            try:
-                page.goto(
-                    source,
-                    wait_until="domcontentloaded",
-                    timeout=90000,
-                )
-            except Exception as exc:
-                print(
-                    "  ! SMBC Aviation Capital "
-                    f"navigation warning: {exc}"
-                )
+            cards = page.locator("div.list-group.pointer")
 
-            # GroupGTI is an Angular/hash-routed application.
-            # Give the vacancy list time to hydrate.
-            try:
-                page.wait_for_timeout(7000)
-            except Exception:
-                pass
-
-            # --------------------------------------------------
-            # Collect visible links first.
-            # --------------------------------------------------
-            try:
-                links = page.locator("a").evaluate_all(
-                    """els => els.map(a => ({
-                        href: a.href || "",
-                        text: (
-                            a.innerText ||
-                            a.textContent ||
-                            ""
-                        ).trim()
-                    }))"""
-                )
-            except Exception:
-                links = []
-
-            candidates = {}
-
-            for item in links:
-                href = clean(item.get("href"))
-                title = clean(item.get("text"))
-
-                if not href or not title:
-                    continue
-
-                if "smbcaviationcapital.groupgti.com" not in href.lower():
-                    continue
-
-                # GroupGTI vacancy links can use hash routing,
-                # VacancyPosting routes or vacancy identifiers.
-                if not re.search(
-                    r"VacancyPosting|vacancy|job",
-                    href,
-                    re.I,
-                ):
-                    continue
-
-                if re.search(
-                    r"/Search(?:#|/|$)",
-                    href,
-                    re.I,
-                ):
-                    continue
-
-                key = href
-
-                candidates[key] = {
-                    "title": title,
-                    "url": href,
-                }
-
-            # --------------------------------------------------
-            # Fallback: inspect the rendered page text and DOM
-            # attributes. GroupGTI sometimes renders job actions
-            # with Angular handlers rather than normal hrefs.
-            # --------------------------------------------------
-            try:
-                html_text = page.content()
-            except Exception:
-                html_text = ""
-
-            # Capture URLs embedded in Angular-generated markup.
-            for m in re.finditer(
-                r'https?://smbcaviationcapital\.groupgti\.com/'
-                r'[^"\'<> ]*VacancyPosting[^"\'<> ]+',
-                html_text,
-                re.I,
-            ):
-                href = (
-                    m.group(0)
-                    .replace("&amp;", "&")
-                    .rstrip("'\"")
-                )
-
-                if re.search(
-                    r"/Search(?:#|/|$)",
-                    href,
-                    re.I,
-                ):
-                    continue
-
-                candidates.setdefault(
-                    href,
-                    {
-                        "title": "",
-                        "url": href,
-                    },
-                )
-
-            # --------------------------------------------------
-            # Capture vacancy-card text.
-            # This is also useful when a job doesn't have a
-            # conventional anchor.
-            # --------------------------------------------------
-            try:
-                body = page.locator("body").inner_text(
-                    timeout=15000
-                )
-            except Exception:
-                body = ""
-
-            # --------------------------------------------------
-            # Detail validation.
-            # Only retain Ireland/Dublin roles.
-            # --------------------------------------------------
-            for idx, item in enumerate(
-                list(candidates.values())
-            ):
-                canonical = item["url"]
-                title = clean(item["title"])
-
-                detail_text = ""
-                detail_title = ""
-
-                detail = context.new_page()
+            for i in range(cards.count()):
+                card = cards.nth(i)
 
                 try:
-                    detail.goto(
-                        canonical,
-                        wait_until="domcontentloaded",
-                        timeout=45000,
-                    )
-                    detail.wait_for_timeout(800)
-
-                    detail_text = detail.locator(
-                        "body"
-                    ).inner_text(timeout=10000)
-
-                    try:
-                        detail_title = clean(
-                            detail.locator("h1").first.inner_text(
-                                timeout=3000
-                            )
-                        )
-                    except Exception:
-                        pass
-
+                    title = card.locator("h3").first.inner_text().strip()
                 except Exception:
-                    pass
-
-                detail.close()
-
-                evidence = (
-                    title + " "
-                    + detail_title + " "
-                    + detail_text
-                )
-
-                if not re.search(
-                    r"\bIreland\b|\bDublin\b",
-                    evidence,
-                    re.I,
-                ):
                     continue
-
-                if detail_title:
-                    title = detail_title
 
                 if not title:
                     continue
 
-                # Reject common non-job UI strings.
-                if title.lower() in {
-                    "vacancy list",
-                    "search",
-                    "apply",
-                    "view vacancy",
-                    "more details",
-                }:
+                try:
+                    meta = card.locator("p.text-medium").first.inner_text().strip()
+                except Exception:
+                    meta = ""
+
+                # Example:
+                # IT | Dublin | 2026
+                parts = [
+                    re.sub(r"\s+", " ", x).strip()
+                    for x in meta.split("|")
+                ]
+
+                raw_location = parts[1] if len(parts) >= 2 else ""
+
+                # Republic of Ireland only.
+                if not re.search(r"\bDublin\b|\bIreland\b", raw_location, re.I):
                     continue
 
-                location = "Ireland"
-
-                if re.search(
-                    r"\bDublin\b",
-                    evidence,
-                    re.I,
-                ):
-                    location = "Dublin, Ireland"
-
-                # Extract a stable vacancy ID when possible.
-                id_match = re.search(
-                    r"(?:vacancy|posting|job)"
-                    r"[^0-9]{0,20}"
-                    r"([0-9]{3,})",
-                    canonical,
-                    re.I,
+                location = (
+                    "Dublin, Ireland"
+                    if re.search(r"\bDublin\b", raw_location, re.I)
+                    else "Ireland"
                 )
 
-                key = (
-                    id_match.group(1)
-                    if id_match
-                    else canonical.lower()
-                )
+                detail = card.locator('a[href$="/viewdetails"]').first
 
-                results[key] = {
+                if detail.count() == 0:
+                    continue
+
+                href = detail.get_attribute("href") or ""
+                if not href:
+                    continue
+
+                url = urllib.parse.urljoin(base, href)
+
+                try:
+                    description = card.inner_text().strip()
+                except Exception:
+                    description = ""
+
+                # Vacancy ID is the numeric segment before /viewdetails.
+                id_match = re.search(r"/(\d+)/viewdetails/?$", href)
+                req_id = id_match.group(1) if id_match else href
+
+                results[req_id] = {
                     "company": company,
                     "ats": "direct",
                     "title": title[:300],
                     "location": location,
-                    "url": canonical,
+                    "url": url,
                     "updated_at": None,
-                    "description_text": detail_text[:5000],
+                    "description_text": description[:5000],
+                    "requisition_id": req_id,
                 }
 
-            # --------------------------------------------------
-            # If there are no conventional detail URLs, use the
-            # rendered vacancy cards directly.
-            # --------------------------------------------------
-            if not results and body:
-                blocks = re.split(
-                    r"\n{2,}",
-                    body,
-                )
-
-                for block in blocks:
-                    block = clean(block)
-
-                    if len(block) < 15:
-                        continue
-
-                    if not re.search(
-                        r"\bDublin\b|\bIreland\b",
-                        block,
-                        re.I,
-                    ):
-                        continue
-
-                    if not re.search(
-                        r"analyst|associate|manager|"
-                        r"executive|engineer|legal|"
-                        r"finance|accountant|leasing|"
-                        r"commercial|operations|"
-                        r"risk|technical|vacancy",
-                        block,
-                        re.I,
-                    ):
-                        continue
-
-                    # Use the first sensible line/phrase as title.
-                    title = block.split(" | ")[0].strip()
-
-                    if len(title) > 300:
-                        title = title[:300]
-
-                    key = re.sub(
-                        r"[^a-z0-9]+",
-                        "-",
-                        title.lower(),
-                    ).strip("-")
-
-                    if not key:
-                        continue
-
-                    results[key] = {
-                        "company": company,
-                        "ats": "direct",
-                        "title": title,
-                        "location": (
-                            "Dublin, Ireland"
-                            if re.search(
-                                r"\bDublin\b",
-                                block,
-                                re.I,
-                            )
-                            else "Ireland"
-                        ),
-                        "url": source,
-                        "updated_at": None,
-                        "description_text": block[:5000],
-                    }
-
-            context.close()
             browser.close()
 
     except Exception as exc:
-        print(
-            f"  ! SMBC Aviation Capital scrape failed: {exc}"
-        )
+        print(f"  ! SMBC Aviation Capital scrape failed: {exc}")
+        return []
 
-    print(
-        "  SMBC Aviation Capital official careers: "
-        f"{len(results)} Ireland jobs"
-    )
+    out = list(results.values())
+    print(f"  SMBC Aviation Capital official Dublin careers: {len(out)} jobs")
+    return out
 
-    return list(results.values())
 
 def scrape_johnson_johnson():
     company = "Johnson & Johnson"
@@ -13577,7 +13346,421 @@ def main():
             f"{dropped_non_curated} jobs from companies not in ireland_companies.csv"
         )
 
+
     results = filtered_results
+
+    # ============================================================
+    # GLOBAL REPUBLIC OF IRELAND EMPLOYMENT-LOCATION GATE
+    #
+    # Applies to EVERY company and EVERY source.
+    #
+    # IMPORTANT:
+    # - Structured job location is authoritative.
+    # - Description text must NEVER make a foreign job look Irish.
+    # - Multi-location jobs stay if Republic of Ireland is one
+    #   explicitly offered work location.
+    # - Belfast / Northern Ireland alone is rejected.
+    # - Generic EMEA/Europe/worldwide remote is NOT enough unless
+    #   Ireland is explicitly present in the structured location.
+    # ============================================================
+
+    _ROI_PLACES = (
+        "dublin", "cork", "galway", "limerick", "waterford",
+        "kilkenny", "sligo", "athlone", "drogheda", "dundalk",
+        "navan", "naas", "kildare", "wexford", "tralee", "bray",
+        "westport", "mayo", "ringaskiddy", "shannon",
+        "letterkenny", "swords", "clonee", "leixlip", "maynooth",
+        "carlow", "tipperary", "clare", "meath", "wicklow",
+        "laois", "offaly", "longford", "roscommon", "monaghan",
+        "cavan", "donegal", "westmeath", "louth", "killarney",
+        "ennis", "mullingar", "portlaoise", "tullamore",
+        "ballina", "castlebar", "little island",
+    )
+
+    _SELF_EMPLOYED_MARKERS = (
+        "self-employed",
+        "self employed",
+        "freelance",
+        "freelancer",
+        "independent contractor",
+    )
+
+    _REMOTE_MARKERS = (
+        "remote",
+        "home based",
+        "home-based",
+        "work from home",
+        "virtual",
+    )
+
+    def _norm_structured_location(value):
+        return re.sub(
+            r"\s+",
+            " ",
+            str(value or ""),
+        ).strip().lower()
+
+    def _job_can_be_worked_from_ireland(job):
+        loc = _norm_structured_location(job.get("location"))
+        title = _norm_structured_location(job.get("title"))
+        employment = _norm_structured_location(
+            job.get("employment_type")
+        )
+
+        # Stamp 1G employee roles only; not self-employment.
+        if any(
+            marker in f"{title} {employment}"
+            for marker in _SELF_EMPLOYED_MARKERS
+        ):
+            return False, "self-employed/freelance"
+
+        if not loc:
+            return False, "missing structured location"
+
+        # Any explicit Republic of Ireland city/county is enough,
+        # even where foreign alternatives also exist.
+        #
+        # KEEP examples:
+        # London OR Dublin
+        # Paris; Cork, Ireland
+        # Amsterdam; Dublin
+        if any(place in loc for place in _ROI_PLACES):
+            return True, "Republic of Ireland location"
+
+        if "republic of ireland" in loc:
+            return True, "Republic of Ireland location"
+
+        # Northern Ireland is outside the Republic.
+        if "northern ireland" in loc or "belfast" in loc:
+            return False, "Northern Ireland / UK"
+
+        # ATS country value "Ireland" means Republic of Ireland
+        # unless NI was explicitly detected above.
+        if re.search(r"\bireland\b", loc):
+            return True, "Ireland location"
+
+        # Remote alone does not prove an Irish employing location.
+        if any(marker in loc for marker in _REMOTE_MARKERS):
+            return False, "remote without explicit Ireland"
+
+        return False, "no Republic of Ireland work location"
+
+    _ireland_kept = []
+    _ireland_rejected = []
+
+    for _job in results:
+        _allowed, _reason = _job_can_be_worked_from_ireland(_job)
+
+        if _allowed:
+            _job["ireland_work_eligible"] = True
+            _job["ireland_work_reason"] = _reason
+            _ireland_kept.append(_job)
+        else:
+            _job["ireland_work_eligible"] = False
+            _job["ireland_work_reason"] = _reason
+            _ireland_rejected.append(_job)
+
+    print(
+        "Global Ireland employment-location gate: "
+        f"{len(_ireland_kept)} kept, "
+        f"{len(_ireland_rejected)} rejected"
+    )
+
+    if _ireland_rejected:
+        for _job in _ireland_rejected[:40]:
+            print(
+                "  -",
+                _job.get("company"),
+                "|",
+                _job.get("title"),
+                "|",
+                _job.get("location"),
+                "|",
+                _job.get("ireland_work_reason"),
+            )
+
+        if len(_ireland_rejected) > 40:
+            print(
+                f"  ... {len(_ireland_rejected) - 40} more rejected jobs"
+            )
+
+    results = _ireland_kept
+
+    # ============================================================
+    # STAMP 1G / REPUBLIC OF IRELAND EMPLOYMENT ELIGIBILITY GATE
+    #
+    # Dashboard policy:
+    #
+    # A job is retained only when its STRUCTURED location makes it
+    # possible to perform the employment while based in the
+    # Republic of Ireland.
+    #
+    # IMPORTANT:
+    #   Description/body text is NEVER used to establish location.
+    #   Boilerplate often mentions Dublin even for US/UK jobs.
+    #
+    # Examples:
+    #   Dublin                         -> keep
+    #   London OR Dublin               -> keep
+    #   Paris; Cork, Ireland           -> keep
+    #   Ireland / United Kingdom       -> keep
+    #   San Jose                       -> drop
+    #   Belfast                        -> drop
+    #   Northern Ireland               -> drop
+    #   Remote - Ireland               -> keep
+    #   Remote EMEA                    -> ambiguous -> drop
+    #
+    # Graduate Stamp 1G also does not permit self-employment, so
+    # explicitly freelance / self-employed roles are removed.
+    # ============================================================
+
+    _ROI_CITIES_COUNTIES = (
+        "dublin",
+        "cork",
+        "galway",
+        "limerick",
+        "waterford",
+        "kilkenny",
+        "sligo",
+        "athlone",
+        "drogheda",
+        "dundalk",
+        "navan",
+        "naas",
+        "kildare",
+        "wexford",
+        "tralee",
+        "bray",
+        "westport",
+        "mayo",
+        "ringaskiddy",
+        "shannon",
+        "letterkenny",
+        "swords",
+        "clonee",
+        "leixlip",
+        "maynooth",
+        "carlow",
+        "tipperary",
+        "clare",
+        "meath",
+        "wicklow",
+        "laois",
+        "offaly",
+        "longford",
+        "roscommon",
+        "monaghan",
+        "cavan",
+        "donegal",
+        "westmeath",
+        "louth",
+        "clare",
+        "killarney",
+        "ennis",
+        "mullingar",
+        "portlaoise",
+        "tullamore",
+        "ballina",
+        "castlebar",
+        "little island",
+    )
+
+    _SELF_EMPLOYED_MARKERS = (
+        "self-employed",
+        "self employed",
+        "freelance",
+        "freelancer",
+        "independent contractor",
+    )
+
+    def _norm_job_location(value):
+        return re.sub(
+            r"\s+",
+            " ",
+            str(value or ""),
+        ).strip().lower()
+
+    def _roi_structured_location(location):
+        """
+        Return True only where the structured job location explicitly
+        offers a Republic of Ireland work location.
+
+        Foreign alternatives do NOT invalidate an otherwise valid Irish
+        option:
+            London OR Dublin       -> True
+            Amsterdam; Dublin     -> True
+            Paris; Cork           -> True
+        """
+
+        loc = _norm_job_location(location)
+
+        if not loc:
+            return False
+
+        # Explicit ROI city/county beats foreign alternatives.
+        if any(place in loc for place in _ROI_CITIES_COUNTIES):
+            return True
+
+        # "Republic of Ireland" is unambiguous.
+        if "republic of ireland" in loc:
+            return True
+
+        # Northern Ireland / Belfast alone is outside ROI.
+        if (
+            "northern ireland" in loc
+            or "belfast" in loc
+        ):
+            return False
+
+        # Most ATS systems use the country value "Ireland" for ROI.
+        #
+        # This also deliberately retains:
+        #     Ireland / United Kingdom
+        #     Ireland or Germany
+        #
+        # because Ireland is an offered employment location.
+        if re.search(r"\bireland\b", loc):
+            return True
+
+        return False
+
+    def _explicit_ireland_remote(location):
+        """
+        Remote employment is accepted only where the STRUCTURED location
+        itself explicitly associates the job with Ireland.
+
+        We deliberately do NOT treat generic:
+            Remote - EMEA
+            Europe Remote
+            Worldwide Remote
+        as automatically Ireland-eligible because the employer may lack
+        an Irish employing entity/payroll arrangement.
+        """
+
+        loc = _norm_job_location(location)
+
+        if not loc:
+            return False
+
+        remote = bool(
+            re.search(
+                r"\bremote\b|"
+                r"\bhome[- ]based\b|"
+                r"\bwork from home\b|"
+                r"\bvirtual\b",
+                loc,
+                re.I,
+            )
+        )
+
+        if not remote:
+            return False
+
+        # Explicit Irish remote location.
+        if (
+            "ireland" in loc
+            or any(place in loc for place in _ROI_CITIES_COUNTIES)
+        ):
+            # Again exclude NI-only.
+            if (
+                ("northern ireland" in loc or "belfast" in loc)
+                and not any(
+                    place in loc
+                    for place in _ROI_CITIES_COUNTIES
+                )
+            ):
+                return False
+
+            return True
+
+        return False
+
+    def _stamp1g_employment_allowed(job):
+        """
+        Conservative dashboard eligibility test for a graduate Stamp 1G
+        holder residing in the Republic of Ireland.
+
+        This is an employment-location filter, not immigration/legal
+        advice and not a guarantee that an employer will hire any
+        particular candidate.
+        """
+
+        loc = _norm_job_location(job.get("location"))
+        title = re.sub(
+            r"\s+",
+            " ",
+            str(job.get("title") or ""),
+        ).strip().lower()
+
+        employment = re.sub(
+            r"\s+",
+            " ",
+            str(job.get("employment_type") or ""),
+        ).strip().lower()
+
+        # Stamp 1G graduates may be employees but may not operate a
+        # business / be self-employed.
+        employment_text = f"{title} {employment}"
+
+        if any(
+            marker in employment_text
+            for marker in _SELF_EMPLOYED_MARKERS
+        ):
+            return False, "self-employed/freelance"
+
+        # Authoritative structured location says Ireland is available.
+        if _roi_structured_location(loc):
+            return True, "Ireland work location"
+
+        # Explicit Ireland-based remote location.
+        if _explicit_ireland_remote(loc):
+            return True, "Ireland remote"
+
+        # No description-text fallback. This is intentional.
+        return False, "no explicit Republic of Ireland work location"
+
+    _stamp1g_kept = []
+    _stamp1g_rejected = []
+
+    for _job in results:
+        _allowed, _reason = _stamp1g_employment_allowed(_job)
+
+        if _allowed:
+            _job["stamp1g_eligible"] = True
+            _job["stamp1g_reason"] = _reason
+            _stamp1g_kept.append(_job)
+        else:
+            _job["stamp1g_eligible"] = False
+            _job["stamp1g_reason"] = _reason
+            _stamp1g_rejected.append(_job)
+
+    print(
+        "Stamp 1G Ireland-location gate: "
+        f"{len(_stamp1g_kept)} kept, "
+        f"{len(_stamp1g_rejected)} rejected"
+    )
+
+    if _stamp1g_rejected:
+        print("  Rejected location examples:")
+
+        for _job in _stamp1g_rejected[:30]:
+            print(
+                "   -",
+                _job.get("company"),
+                "|",
+                _job.get("title"),
+                "|",
+                _job.get("location"),
+                "|",
+                _job.get("stamp1g_reason"),
+            )
+
+        if len(_stamp1g_rejected) > 30:
+            print(
+                f"   ... {len(_stamp1g_rejected) - 30} more"
+            )
+
+    results = _stamp1g_kept
 
     # Source-priority de-duplication. Direct employer/ATS records win over
     # aggregator copies of the same vacancy.
