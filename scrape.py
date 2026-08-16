@@ -14446,6 +14446,100 @@ def main():
             "careers_url": item.get("careers_url"),
         })
 
+    # ------------------------------------------------------------
+    # Persistent connector/job history.
+    #
+    # A company becomes "proven working" once it has produced at least one
+    # qualifying Ireland job.  That proof survives later zero-job runs.
+    # company_history.json is intentionally separate from data.json so a new
+    # scrape cannot erase historical positive evidence.
+    # ------------------------------------------------------------
+    history_path = "company_history.json"
+    history_start_date = "2026-08-16"
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    try:
+        with open(history_path, "r") as f:
+            company_history = json.load(f)
+        if not isinstance(company_history, dict):
+            company_history = {}
+    except (FileNotFoundError, json.JSONDecodeError, TypeError):
+        company_history = {}
+
+    history_companies = company_history.setdefault("companies", {})
+    company_history.setdefault("tracking_started", history_start_date)
+
+    current_jobs_by_company = {}
+    for job in results:
+        company_name = job.get("company")
+        if not company_name:
+            continue
+        current_jobs_by_company.setdefault(company_name, []).append(job)
+
+    def _history_job_key(job):
+        # Prefer stable IDs/URLs; fall back to a deterministic composite.
+        for key in ("id", "job_id", "requisition_id", "url", "apply_url"):
+            value = job.get(key)
+            if value:
+                return str(value)
+        return " | ".join([
+            str(job.get("company") or ""),
+            str(job.get("title") or ""),
+            str(job.get("location") or job.get("ireland_area") or ""),
+        ])
+
+    # Only positive evidence mutates "proven working".  Therefore a partial or
+    # targeted run can never downgrade companies that were proven previously.
+    for company_name, jobs_now in current_jobs_by_company.items():
+        entry = history_companies.setdefault(company_name, {})
+        entry.setdefault("first_working_seen", now_iso)
+        entry["last_working_seen"] = now_iso
+        entry["ever_working"] = True
+
+        seen_jobs = entry.get("seen_job_keys", [])
+        if not isinstance(seen_jobs, list):
+            seen_jobs = []
+        seen_set = set(str(x) for x in seen_jobs)
+
+        for job in jobs_now:
+            seen_set.add(_history_job_key(job))
+
+        entry["seen_job_keys"] = sorted(seen_set)
+        entry["distinct_jobs_seen"] = len(seen_set)
+        entry["current_live_jobs"] = len(jobs_now)
+
+    # Current count may become zero, but historical proof remains true.
+    # Do this only for registry companies represented by this dashboard.
+    for registry_item in company_registry:
+        company_name = registry_item.get("company")
+        if not company_name:
+            continue
+        entry = history_companies.get(company_name)
+        if entry and entry.get("ever_working"):
+            entry["current_live_jobs"] = len(current_jobs_by_company.get(company_name, []))
+
+    proven_working_companies = sorted(
+        name
+        for name, entry in history_companies.items()
+        if isinstance(entry, dict) and entry.get("ever_working")
+    )
+
+    historical_distinct_jobs_seen = sum(
+        int(entry.get("distinct_jobs_seen", 0) or 0)
+        for entry in history_companies.values()
+        if isinstance(entry, dict)
+    )
+
+    company_history["updated_at"] = now_iso
+    company_history["proven_working_company_count"] = len(proven_working_companies)
+    company_history["historical_distinct_jobs_seen"] = historical_distinct_jobs_seen
+
+    try:
+        with open(history_path, "w") as f:
+            json.dump(company_history, f, indent=2)
+    except Exception as exc:
+        print(f"  ! Could not write {history_path}: {exc}")
+
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "scrape_mode": SCRAPE_MODE,
@@ -14469,6 +14563,21 @@ def main():
         "source_counts": source_counts,
         "companies_with_live_jobs": len(company_job_counts),
         "company_job_counts": company_job_counts,
+        "history_tracking_started": history_start_date,
+        "proven_working_company_count": len(proven_working_companies),
+        "proven_working_companies": proven_working_companies,
+        "historical_distinct_jobs_seen": historical_distinct_jobs_seen,
+        "company_history": {
+            name: {
+                "ever_working": bool(entry.get("ever_working")),
+                "first_working_seen": entry.get("first_working_seen"),
+                "last_working_seen": entry.get("last_working_seen"),
+                "current_live_jobs": int(entry.get("current_live_jobs", 0) or 0),
+                "distinct_jobs_seen": int(entry.get("distinct_jobs_seen", 0) or 0),
+            }
+            for name, entry in history_companies.items()
+            if isinstance(entry, dict)
+        },
         "coverage_diagnostics": coverage_diagnostics,
         "connector_health": CONNECTOR_HEALTH,
         "live_zero_companies": [
