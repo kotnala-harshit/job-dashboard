@@ -5984,129 +5984,80 @@ def scrape_aiven():
 
 def scrape_amd():
     company = "Advanced Micro Devices (AMD)"
-
-    seeds = [
-        "86726",
-        "87939",
-        "86391",
-        "84561",
-        "80963",
-        "75360",
-        "75333",
-        "87119",
-    ]
+    source_url = (
+        "https://careers.amd.com/careers-home/jobs"
+        "?page=1"
+        "&lat=53.40816280642651"
+        "&lng=-6.160405686640319"
+        "&radiusUnit=MILES"
+        "&radius=10"
+    )
 
     if not HAS_PLAYWRIGHT:
-        print("  ! AMD: Playwright unavailable")
         return []
 
     results = {}
 
     try:
         with sync_playwright() as pw:
-            browser = pw.chromium.launch(
-                headless=True,
-                args=["--disable-blink-features=AutomationControlled"],
-            )
-            page = browser.new_page(
-                viewport={"width": 1440, "height": 1200},
-                locale="en-IE",
-            )
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(locale="en-IE")
+            page.goto(source_url, wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_timeout(4000)
+            _dismiss_cookie_banner(page)
 
-            for jid in seeds:
-                href = (
-                    f"https://careers.amd.com/careers-home/jobs/"
-                    f"{jid}?lang=en-us"
-                )
+            anchors = page.locator('a[href*="/careers-home/jobs/"]')
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+                href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+
+                m = re.search(r"/careers-home/jobs/(\d+)", href, re.I)
+                if not m:
+                    continue
 
                 try:
-                    page.goto(
-                        href,
-                        wait_until="domcontentloaded",
-                        timeout=60000,
-                    )
-                    page.wait_for_timeout(800)
-                    body = _browser_text(page.locator("body"))
+                    card = _browser_text(
+                        a.locator("xpath=ancestor::*[self::li or self::article or self::div][1]")
+                    ) or ""
                 except Exception:
+                    card = _browser_text(a) or ""
+
+                card = re.sub(r"\s+", " ", card).strip()
+
+                if not re.search(r"\bDublin\b|\bIreland\b", card, re.I):
                     continue
 
-                # Validate across the whole job page; AMD often puts location
-                # below banners/components rather than within the first 80 lines.
-                if not re.search(r"\bIreland\b", body, re.I):
-                    continue
-
-                # Require explicit Irish city/location wording to avoid footer hits.
-                if not re.search(
-                    r"\b(?:Dublin|Cork)\s*,\s*Ireland\b|"
-                    r"\bDublin or Cork,\s*Ireland\b",
-                    body,
-                    re.I,
+                title = re.sub(r"\s+", " ", _browser_text(a) or "").strip()
+                if (
+                    not title
+                    or len(title) > 300
+                    or title.lower() in {
+                        "skip to main content",
+                        "careers",
+                        "jobs",
+                        "search jobs",
+                    }
                 ):
                     continue
 
-                title = ""
-                try:
-                    h1 = page.locator("h1")
-                    if h1.count():
-                        title = _browser_text(h1.first).strip()
-                except Exception:
-                    pass
-
-                if not title:
-                    # AMD detail pages have the title before CAROUSEL_PARAGRAPH.
-                    lines = [
-                        re.sub(r"\s+", " ", x).strip()
-                        for x in body.splitlines()
-                        if 4 <= len(x.strip()) <= 220
-                    ]
-                    for line in lines:
-                        low = line.lower()
-                        if low in {
-                            "back",
-                            "apply",
-                            "fraud alert",
-                            "carousel_paragraph",
-                            "job_description.share.html",
-                        }:
-                            continue
-                        if re.search(
-                            r"\b(?:Dublin|Cork)\s*,\s*Ireland\b",
-                            line,
-                            re.I,
-                        ):
-                            continue
-                        title = line
-                        break
-
-                if not title:
-                    continue
-
-                if re.search(r"\bCork\s*,\s*Ireland\b", body, re.I):
-                    location = "Cork, Ireland"
-                elif re.search(r"\bDublin\s*,\s*Ireland\b", body, re.I):
-                    location = "Dublin, Ireland"
-                else:
-                    location = "Dublin or Cork, Ireland"
-
-                results[jid] = {
+                results[m.group(1)] = {
                     "company": company,
                     "ats": "direct",
-                    "title": re.sub(r"\s+", " ", title).strip()[:300],
-                    "location": location,
-                    "url": href,
+                    "title": title[:300],
+                    "location": "Dublin, Ireland",
+                    "url": href.split("#")[0],
                     "updated_at": None,
-                    "description_text": body[:5000],
+                    "description_text": card[:5000],
                 }
 
             browser.close()
 
     except Exception as exc:
-        print(f"  ! AMD canonical detail scrape failed: {exc}")
+        print(f"  ! AMD scrape failed: {exc}")
 
-    print(f"  AMD canonical Ireland details: {len(results)} jobs")
+    print(f"  AMD official Dublin careers: {len(results)} jobs")
     return list(results.values())
-
-
 def scrape_aer_lingus():
     company = "Aer Lingus"
     url = "https://www.aerlingus.com/careers/careers-on-the-ground/ground-operations/"
@@ -12424,21 +12375,150 @@ def scrape_applied_materials():
 
 
 def scrape_arcadis_ireland():
-    return _false_zero_browser_jobs(
-        "Arcadis",
-        "https://careers.arcadis.com/locations/ie/",
-        ("careers.arcadis.com",),
+    company = "Arcadis"
+    source_url = (
+        "https://jobs.arcadis.com/careers"
+        "?domain=arcadis.com"
+        "&start=0"
+        "&location=Dublin%2C+Dublin%2C+Ireland"
+        "&pid=563671531437150"
+        "&sort_by=distance"
+        "&filter_distance=80"
+        "&filter_include_remote=1"
+        "&filter_include_relocation=0"
     )
 
+    if not HAS_PLAYWRIGHT:
+        return []
 
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(locale="en-IE")
+            page.goto(source_url, wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_timeout(5000)
+            _dismiss_cookie_banner(page)
+
+            for _ in range(6):
+                page.mouse.wheel(0, 4000)
+                page.wait_for_timeout(500)
+
+            anchors = page.locator("a[href]")
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+                href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+
+                if "jobs.arcadis.com" not in href.lower():
+                    continue
+
+                # Only actual Arcadis job-detail pages.
+                if "/careers/job/" not in href.lower():
+                    continue
+
+                try:
+                    node = a.locator("xpath=ancestor::*[self::li or self::article or self::div][1]")
+                    card = re.sub(r"\s+", " ", _browser_text(node) or "").strip()
+                except Exception:
+                    card = ""
+
+                evidence = f"{card} {href}"
+
+                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", evidence, re.I):
+                    continue
+                if not re.search(r"\bDublin\b|\bIreland\b", evidence, re.I):
+                    continue
+
+                title = re.sub(r"\s+", " ", _browser_text(a) or "").strip()
+                if not title or len(title) > 300:
+                    continue
+
+                results[href.split("#")[0]] = {
+                    "company": company,
+                    "ats": "eightfold",
+                    "title": title[:300],
+                    "location": "Dublin, Ireland" if re.search(r"\bDublin\b", evidence, re.I) else "Ireland",
+                    "url": href.split("#")[0],
+                    "updated_at": None,
+                    "description_text": card[:5000],
+                }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Arcadis scrape failed: {exc}")
+
+    print(f"  Arcadis official Ireland careers: {len(results)} jobs")
+    return list(results.values())
 def scrape_baker_tilly_ireland():
-    return _false_zero_browser_jobs(
-        "Baker Tilly Ireland",
-        "https://www.bakertilly.ie/careers/vacancies",
-        ("bakertilly.ie",),
-    )
+    company = "Baker Tilly Ireland"
+    source_url = "https://www.bakertilly.ie/careers/vacancies"
 
+    if not HAS_PLAYWRIGHT:
+        return []
 
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page(locale="en-IE")
+            page.goto(source_url, wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_timeout(2500)
+            _dismiss_cookie_banner(page)
+
+            anchors = page.locator('a[href*="/vacancies/"]')
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+                href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                path = urllib.parse.urlparse(href).path.rstrip("/")
+
+                if not path.startswith("/vacancies/"):
+                    continue
+
+                title = re.sub(r"\s+", " ", _browser_text(a) or "").strip()
+                title = re.sub(r"\s+Details and application\s*$", "", title, flags=re.I).strip()
+
+                try:
+                    card = re.sub(
+                        r"\s+",
+                        " ",
+                        _browser_text(
+                            a.locator("xpath=ancestor::*[self::li or self::article or self::div][1]")
+                        ) or "",
+                    ).strip()
+                except Exception:
+                    card = title
+
+                vacancy_evidence = f"{title} {path}"
+
+                if re.search(r"\bCork\b", vacancy_evidence, re.I):
+                    location = "Cork, Ireland"
+                elif re.search(r"\bDublin\b", vacancy_evidence, re.I):
+                    location = "Dublin, Ireland"
+                else:
+                    location = "Ireland"
+
+                results[href.split("?")[0]] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location,
+                    "url": href.split("?")[0],
+                    "updated_at": None,
+                    "description_text": card[:5000],
+                }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Baker Tilly scrape failed: {exc}")
+
+    print(f"  Baker Tilly Ireland official vacancies: {len(results)} jobs")
+    return list(results.values())
 def scrape_bausch_lomb_ireland():
     return _false_zero_browser_jobs(
         "Bausch + Lomb",
@@ -12451,6 +12531,9 @@ def scrape_bausch_lomb_ireland():
 
 def scrape_direct_company(company: str):
     fn={
+        "Baker Tilly Ireland": scrape_baker_tilly_ireland,
+        "Arcadis": scrape_arcadis_ireland,
+        "Advanced Micro Devices (AMD)": scrape_amd,
         "Applied Materials": scrape_applied_materials,
         "Bausch + Lomb": scrape_bausch_lomb_ireland,
         "Walkers Ireland": scrape_walkers,
