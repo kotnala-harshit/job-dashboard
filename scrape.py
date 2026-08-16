@@ -12140,8 +12140,319 @@ def scrape_johnson_johnson():
 
     return list(results.values())
 
+
+def _false_zero_browser_jobs(company, source_url, allowed_hosts):
+    """
+    Small conservative browser collector used by the false-zero repairs below.
+    A role is retained only when the rendered result card itself contains
+    Republic-of-Ireland location evidence.
+    """
+    if not HAS_PLAYWRIGHT:
+        print(f"  ! {company}: Playwright unavailable")
+        return []
+
+    results = {}
+
+    ireland_terms = re.compile(
+        r"\b("
+        r"Ireland|IE|IRL|"
+        r"Dublin|Cork|Galway|Limerick|Waterford|"
+        r"Leixlip|Kildare|Kilkenny|Athlone|Sligo|"
+        r"Donegal|Letterkenny|Clonmel|Shannon|"
+        r"Dundalk|Wexford|Carlow|Meath|Mayo"
+        r")\b",
+        re.I,
+    )
+
+    northern_ireland = re.compile(
+        r"\bNorthern Ireland\b|\bBelfast\b",
+        re.I,
+    )
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/126.0 Safari/537.36"
+                ),
+                locale="en-IE",
+            )
+
+            page = context.new_page()
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+
+            page.wait_for_timeout(3500)
+            _dismiss_cookie_banner(page)
+
+            # Give lazy-loaded boards a chance to populate.
+            for _ in range(5):
+                try:
+                    page.mouse.wheel(0, 4000)
+                except Exception:
+                    pass
+                page.wait_for_timeout(500)
+
+            anchors = page.locator("a[href]")
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+
+                try:
+                    raw_href = a.get_attribute("href") or ""
+                    label = re.sub(
+                        r"\s+",
+                        " ",
+                        _browser_text(a) or "",
+                    ).strip()
+                except Exception:
+                    continue
+
+                if not raw_href:
+                    continue
+
+                href = urllib.parse.urljoin(
+                    page.url,
+                    raw_href,
+                )
+
+                host = urllib.parse.urlparse(
+                    href
+                ).netloc.lower()
+
+                if not any(
+                    allowed.lower() in host
+                    for allowed in allowed_hosts
+                ):
+                    continue
+
+                path = urllib.parse.urlparse(
+                    href
+                ).path.lower()
+
+                # Reject navigation/search/apply-only links.
+                if not (
+                    "/job/" in path
+                    or "/jobs/" in path
+                    or "/vacanc" in path
+                    or "/career" in path
+                ):
+                    continue
+
+                if any(
+                    x in path
+                    for x in (
+                        "/search",
+                        "/locations/",
+                        "/location/",
+                        "/category/",
+                        "/talent",
+                        "/privacy",
+                    )
+                ):
+                    continue
+
+                card = ""
+
+                # Walk upward until we find enough nearby result-card text.
+                for level in range(1, 7):
+                    try:
+                        node = a.locator(
+                            f"xpath=ancestor::*[{level}]"
+                        )
+                        txt = re.sub(
+                            r"\s+",
+                            " ",
+                            _browser_text(node) or "",
+                        ).strip()
+
+                        if len(txt) > len(card):
+                            card = txt
+
+                        if (
+                            len(txt) >= 30
+                            and len(txt) <= 2500
+                            and ireland_terms.search(txt)
+                        ):
+                            card = txt
+                            break
+                    except Exception:
+                        pass
+
+                evidence = " ".join(
+                    [label, card, href]
+                )
+
+                if northern_ireland.search(evidence):
+                    continue
+
+                if not ireland_terms.search(evidence):
+                    continue
+
+                # Better title from nearby heading when anchor label is
+                # "Apply", "Read more", etc.
+                title = label
+
+                if (
+                    not title
+                    or title.lower() in {
+                        "apply",
+                        "apply now",
+                        "read more",
+                        "view job",
+                        "view details",
+                        "details",
+                        "learn more",
+                    }
+                    or len(title) > 300
+                ):
+                    try:
+                        parent = a.locator(
+                            "xpath=ancestor::*"
+                            "[self::li or self::article or self::div]"
+                            "[1]"
+                        )
+
+                        heading = parent.locator(
+                            "h1,h2,h3,h4"
+                        ).first
+
+                        candidate = re.sub(
+                            r"\s+",
+                            " ",
+                            _browser_text(heading) or "",
+                        ).strip()
+
+                        if candidate:
+                            title = candidate
+                    except Exception:
+                        pass
+
+                if not title or len(title) < 3:
+                    continue
+
+                # Strip common action suffixes.
+                title = re.sub(
+                    r"\s+(?:Apply now|Apply|Read More|View Job)$",
+                    "",
+                    title,
+                    flags=re.I,
+                ).strip()
+
+                # Conservative location normalisation.
+                location = "Ireland"
+
+                location_map = [
+                    ("Leixlip", "Leixlip, Kildare, Ireland"),
+                    ("Waterford", "Waterford, Ireland"),
+                    ("Dublin", "Dublin, Ireland"),
+                    ("Cork", "Cork, Ireland"),
+                    ("Galway", "Galway, Ireland"),
+                    ("Limerick", "Limerick, Ireland"),
+                    ("Kilkenny", "Kilkenny, Ireland"),
+                    ("Athlone", "Athlone, Ireland"),
+                    ("Sligo", "Sligo, Ireland"),
+                    ("Letterkenny", "Letterkenny, Ireland"),
+                    ("Clonmel", "Clonmel, Ireland"),
+                    ("Shannon", "Shannon, Ireland"),
+                    ("Dundalk", "Dundalk, Ireland"),
+                    ("Kildare", "Kildare, Ireland"),
+                ]
+
+                for token, normalized in location_map:
+                    if re.search(
+                        rf"\b{re.escape(token)}\b",
+                        evidence,
+                        re.I,
+                    ):
+                        location = normalized
+                        break
+
+                canonical = href.split("#")[0]
+
+                # Ignore application endpoints when a view/details URL
+                # should exist.
+                canonical = re.sub(
+                    r"/apply/?$",
+                    "",
+                    canonical,
+                    flags=re.I,
+                )
+
+                key = canonical.rstrip("/").lower()
+
+                results[key] = {
+                    "company": company,
+                    "ats": "direct-browser",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": card[:5000],
+                }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! {company} scrape failed: {exc}")
+        return []
+
+    out = list(results.values())
+
+    print(
+        f"  {company} verified official Ireland careers: "
+        f"{len(out)} jobs"
+    )
+
+    return out
+
+
+def scrape_applied_materials():
+    return _false_zero_browser_jobs(
+        "Applied Materials",
+        "https://jobs.appliedmaterials.com/location/"
+        "ireland-jobs/95/2963597/2",
+        ("jobs.appliedmaterials.com",),
+    )
+
+
+def scrape_arcadis_ireland():
+    return _false_zero_browser_jobs(
+        "Arcadis",
+        "https://careers.arcadis.com/locations/ie/",
+        ("careers.arcadis.com",),
+    )
+
+
+def scrape_baker_tilly_ireland():
+    return _false_zero_browser_jobs(
+        "Baker Tilly Ireland",
+        "https://www.bakertilly.ie/careers/vacancies",
+        ("bakertilly.ie",),
+    )
+
+
+def scrape_bausch_lomb_ireland():
+    return _false_zero_browser_jobs(
+        "Bausch + Lomb",
+        "https://careers.bauschlomb.com/search/"
+        "?q=&locationsearch=Ireland",
+        ("careers.bauschlomb.com",),
+    )
+
+
+
 def scrape_direct_company(company: str):
     fn={
+        "Applied Materials": scrape_applied_materials,
+        "Bausch + Lomb": scrape_bausch_lomb_ireland,
         "Walkers Ireland": scrape_walkers,
         "Heineken Ireland": scrape_heineken,
         "Heineken": scrape_heineken,
@@ -13217,7 +13528,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('AECOM', 'Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL', 'Huawei Ireland', 'Honeywell', 'Revenue', 'Public Jobs / Civil Service', 'NTT DATA', 'Ryanair', 'Coca-Cola HBC Ireland', 'PepsiCo', 'Musgrave Group (SuperValu / Centra)', 'SAP', 'Allianz Ireland', 'Susquehanna International Group (SIG)', 'Schneider Electric', 'Heineken Ireland', 'Walkers Ireland', 'ABB', 'Laya Healthcare', 'Irish Life', 'McKinsey & Company', 'Medtronic', 'UPS Ireland', 'Three Ireland', 'TK Maxx Ireland', 'Siemens', 'S&P Global', 'SMBC Aviation Capital'):
+    for company in ('AECOM', 'Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL', 'Huawei Ireland', 'Honeywell', 'Revenue', 'Public Jobs / Civil Service', 'NTT DATA', 'Ryanair', 'Coca-Cola HBC Ireland', 'PepsiCo', 'Musgrave Group (SuperValu / Centra)', 'SAP', 'Allianz Ireland', 'Susquehanna International Group (SIG)', 'Schneider Electric', 'Heineken Ireland', 'Walkers Ireland', 'ABB', 'Laya Healthcare', 'Irish Life', 'McKinsey & Company', 'Medtronic', 'UPS Ireland', 'Three Ireland', 'TK Maxx Ireland', 'Siemens', 'S&P Global', 'SMBC Aviation Capital', 'Advanced Micro Devices (AMD)', 'Applied Materials', 'Arcadis', 'Baker Tilly Ireland', 'Bausch + Lomb'):
         if not _targeted(company):
             continue
         try:
