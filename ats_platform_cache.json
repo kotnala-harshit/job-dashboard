@@ -177,11 +177,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "AstraZeneca": {
-    "platform": "eightfold",
-    "slug": "astrazeneca",
-    "probe_version": 35
-  },
   "AtkinsR\u00e9alis": {
     "platform": "none",
     "slug": null,
@@ -785,11 +780,6 @@
   "Fitch Ratings": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Fixify": {
-    "platform": "greenhouse",
-    "slug": "fixify",
     "probe_version": 35
   },
   "Flipdish": {
@@ -2417,11 +2407,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Apex Group": {
-    "platform": "greenhouse",
-    "slug": "apex",
-    "probe_version": 35
-  },
   "Aptiv": {
     "platform": "none",
     "slug": null,
@@ -2487,9 +2472,24 @@
     "slug": null,
     "probe_version": 35
   },
+  "Apex Group": {
+    "platform": "workday",
+    "slug": "theapexgroup|wd3|apexgroupcareers",
+    "probe_version": 35
+  },
+  "AstraZeneca": {
+    "platform": "eightfold",
+    "slug": "astrazeneca",
+    "probe_version": 35
+  },
   "Cadence Design Systems": {
     "platform": "workday",
     "slug": "cadence|wd1|External_Careers",
+    "probe_version": 35
+  },
+  "Fixify": {
+    "platform": "greenhouse",
+    "slug": "fixify",
     "probe_version": 35
   },
   "Publift": {

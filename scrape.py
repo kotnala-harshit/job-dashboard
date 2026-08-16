@@ -11861,6 +11861,7 @@ def scrape_direct_company(company: str):
         "Guidewire Software": scrape_guidewire,
         "Guidewire": scrape_guidewire,
         "Honeywell": scrape_honeywell,
+        "HCLTech": scrape_hcltech,
         "Irish Life": scrape_irish_life,
         "Irish Revenue": scrape_revenue_ie,
         "Revenue": scrape_revenue_ie,
@@ -12926,7 +12927,7 @@ def main():
 
     # Proprietary/direct company search surfaces. These are deliberately
     # conservative and only emit records with local Ireland context.
-    for company in ('AECOM', 'Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL', 'Huawei Ireland', 'Honeywell', 'Revenue', 'Public Jobs / Civil Service', 'NTT DATA', 'Ryanair', 'Coca-Cola HBC Ireland', 'PepsiCo', 'Musgrave Group (SuperValu / Centra)', 'SAP', 'Allianz Ireland', 'Susquehanna International Group (SIG)', 'Schneider Electric', 'Heineken Ireland', 'Walkers Ireland'):
+    for company in ('AECOM', 'Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL', 'Huawei Ireland', 'Honeywell', 'Revenue', 'Public Jobs / Civil Service', 'NTT DATA', 'Ryanair', 'Coca-Cola HBC Ireland', 'PepsiCo', 'Musgrave Group (SuperValu / Centra)', 'SAP', 'Allianz Ireland', 'Susquehanna International Group (SIG)', 'Schneider Electric', 'Heineken Ireland', 'Walkers Ireland', 'ABB', 'Laya Healthcare', 'Irish Life', 'McKinsey & Company', 'Medtronic', 'UPS Ireland', 'Three Ireland', 'TK Maxx Ireland', 'Siemens', 'S&P Global'):
         if not _targeted(company):
             continue
         try:
@@ -13118,12 +13119,10 @@ def main():
 
                 if identity_pairs:
                     identity_pairs.sort()
-                    query_key = "&".join(f"{k}={v}" for k, v in identity_pairs)
+                    query_key = "&".join(
+                        f"{k}={v}" for k, v in identity_pairs
+                    )
                     url_key = f"{base_url}?{query_key}"
-                if company in ("Susquehanna", "SIG", "Susquehanna International Group"):
-                    return scrape_susquehanna()
-                if company in ("Schneider Electric", "Schneider"):
-                    return scrape_schneider_electric()
 
                 elif company_key == _company_key("Google"):
                     # Google collector currently uses a result-page URL for
@@ -13132,6 +13131,7 @@ def main():
                     # valid Google jobs are not collapsed.
                     title_part = normalized_title(j.get("title"))
                     url_key = f"{base_url}#title={title_part}"
+
                 else:
                     url_key = base_url
 
