@@ -548,12 +548,15 @@ body{background:#f3f4f6!important}
       <option value="waterford">Waterford</option>
       <option value="kildare">Kildare</option>
       <option value="remote">Remote / Hybrid</option>
+      <option value="other">Other location</option>
     </select>
     <select id="fSector">
       <option value="">All sectors</option>
+      <option value="other">Other sector</option>
     </select>
     <select id="fSource">
       <option value="">All sources</option>
+      <option value="other">Other source</option>
     </select>
     <select id="fPosted">
       <option value="">Any time posted</option>
@@ -577,6 +580,7 @@ body{background:#f3f4f6!important}
     </select>
     <select id="fRoleFamily">
       <option value="">All role families</option>
+      <option value="Other">Other</option>
     </select>
     <select id="fExperience">
       <option value="">Any experience fit</option>
@@ -585,6 +589,7 @@ body{background:#f3f4f6!important}
       <option value="Stretch">Stretch</option>
       <option value="Overqualified">Overqualified</option>
       <option value="Too Senior">Too Senior</option>
+      <option value="Other">Other</option>
     </select>
 
     <select id="fEmployment">
@@ -601,6 +606,17 @@ body{background:#f3f4f6!important}
       <option value="Freelance / Consulting">Freelance / Consulting</option>
       <option value="Other / Unspecified">Other / Unspecified</option>
     </select>
+    <select id="fEmploymentLevel">
+      <option value="">All experience levels</option>
+      <option value="Internship">Internship</option>
+      <option value="Entry level">Entry level</option>
+      <option value="Associate">Associate</option>
+      <option value="Mid-Senior level">Mid-Senior level</option>
+      <option value="Director">Director</option>
+      <option value="Executive">Executive</option>
+      <option value="Not specified">Not specified</option>
+      <option value="Other">Other</option>
+    </select>
 
     <select id="fNew">
       <option value="">All postings</option>
@@ -611,6 +627,7 @@ body{background:#f3f4f6!important}
       <option value="sponsors">Mentions sponsorship</option>
       <option value="no_sponsorship">Says no sponsorship</option>
       <option value="not_mentioned">Not mentioned</option>
+      <option value="other">Other / unclear</option>
     </select>
     <select id="fSort">
       <option value="match">Best candidate match</option>
@@ -1038,11 +1055,11 @@ function setupInstantFilters() {
     'fSector',
     'fSource',
     'fPosted',
-
     'fEmployment',
     'fRadar',
     'fRoleFamily',
     'fExperience',
+    'fEmploymentLevel',
     'fNew',
     'fVisa',
     'fSort'
@@ -1052,30 +1069,26 @@ function setupInstantFilters() {
     const el = document.getElementById(id);
     if (!el) return;
 
-    // Remove marker left by any previous broken binding.
-    delete el.dataset.instantBound;
-
-    const eventName =
-      (el.tagName === 'INPUT' &&
-       (el.type === 'text' || el.type === 'search'))
-        ? 'input'
-        : 'change';
-
     if (el.dataset.finalInstantBound === '1') return;
     el.dataset.finalInstantBound = '1';
 
-    el.addEventListener(eventName, () => {
-      // Keep the two employment selectors synchronized if both exist.
-      }
+    const eventName =
+      el.tagName === 'INPUT' &&
+      (el.type === 'text' || el.type === 'search')
+        ? 'input'
+        : 'change';
 
+    el.addEventListener(eventName, () => {
       applyFilters();
     });
   });
 
-  // Enter in search always applies immediately.
+  // Search reacts while typing AND Enter works explicitly.
   const search = document.getElementById('fSearch');
+
   if (search && search.dataset.enterBound !== '1') {
     search.dataset.enterBound = '1';
+
     search.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -1093,6 +1106,7 @@ async function autoFetchJobs() {
     document.getElementById('liveStatus').textContent = '● live';
     document.getElementById('liveStatus').classList.remove('stale');
   } catch (err) {
+    console.error('Dashboard data load failed:', err);
     document.getElementById('liveStatus').textContent = '○ data.json unavailable';
     document.getElementById('liveStatus').classList.add('stale');
   }
@@ -1253,6 +1267,8 @@ function applyFilters() {
   const sort = document.getElementById('fSort').value;
 
   const employmentFilter = document.getElementById('fEmployment')?.value || '';
+  const employmentLevelFilter =
+    document.getElementById('fEmploymentLevel')?.value || '';
 
   let filtered = ALL_JOBS.filter(j => {
 
@@ -1290,6 +1306,7 @@ if (search) {
       if (!postedWithin(parsePostedDate(j.updated_at || j.posted_at_parsed), posted)) return false;
     }
     if (employmentFilter && classifyEmploymentType(j) !== employmentFilter) return false;
+    if (employmentLevelFilter && classifyEmploymentLevel(j) !== employmentLevelFilter) return false;
     return true;
   });
 
@@ -1326,6 +1343,8 @@ if (search) {
     const pm = personalJobMatch(j);
     const type = j.employment_type || employmentType(j.title);
     const typeLabel = { internship: 'Internship' }[type];
+    const employmentLevel = classifyEmploymentLevel(j);
+    const employmentLevelText = employmentLevelLabel(employmentLevel);
     const bucketLabel = recencyLabel(postedDate);
 
     const card = document.createElement('div');
@@ -1349,6 +1368,7 @@ if (search) {
         <span class="chip">${escapeHtml(j.ats || '')}</span>
         ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
         ${typeLabel ? `<span class="chip type">${typeLabel}</span>` : ''}
+        ${employmentLevelText ? `<span class="chip level-chip">${escapeHtml(employmentLevelText)}</span>` : ''}
         <span class="chip type">${escapeHtml(employmentTypeLabel(classifyEmploymentType(j)))}</span>
       </div>
       <div class="card-foot">
@@ -1413,6 +1433,146 @@ if (search) {
     document.getElementById('emptyState').textContent =
       ALL_JOBS.length ? 'No jobs match your filters.' : 'No jobs loaded yet — waiting for data.json.';
   }
+}
+
+
+
+
+function matchesOtherFilter(value, knownValues) {
+  const v = String(value || '').trim().toLowerCase();
+
+  if (!v) return false;
+
+  const known = (knownValues || []).map(x =>
+    String(x || '').trim().toLowerCase()
+  );
+
+  return !known.includes(v);
+}
+
+
+function classifyEmploymentLevel(job) {
+  const j = job || {};
+
+  // ----------------------------------------------------------
+  // Prefer structured data from source/scraper when available.
+  // ----------------------------------------------------------
+  const structured = [
+    j.employment_level,
+    j.experience_level,
+    j.seniority,
+    j.seniority_level,
+    j.job_level,
+    j.career_level,
+    j.level
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+    .trim();
+
+  const structuredMap = [
+    ['Internship', /\b(intern|internship|placement|co-?op)\b/i],
+    ['Entry level', /\b(entry|entry[- ]level|graduate|graduate programme|graduate program|junior|trainee|apprentice|apprenticeship)\b/i],
+    ['Associate', /\bassociate\b/i],
+    ['Director', /\b(director|director-level)\b/i],
+    ['Executive', /\b(executive leadership|c[- ]suite|vice president|vice-president|svp|evp|chief officer)\b/i],
+    ['Mid-Senior level', /\b(mid[- ]senior|mid senior|mid-level|senior|manager|principal|staff|lead)\b/i]
+  ];
+
+  if (structured) {
+    if (/\b(other|miscellaneous|misc|unclassified)\b/i.test(structured)) {
+      return 'Other';
+    }
+
+    for (const [level, pattern] of structuredMap) {
+      if (pattern.test(structured)) return level;
+    }
+  }
+
+  // ----------------------------------------------------------
+  // Conservative title-based fallback.
+  //
+  // Important:
+  // "Account Executive", "Sales Executive", etc. are NOT
+  // automatically classified as Executive-level.
+  // ----------------------------------------------------------
+  const title = String(j.title || '').trim();
+  const t = title.toLowerCase();
+
+  if (!t) return 'Not specified';
+
+  // Internship / placement
+  if (
+    /\b(intern|internship|industrial placement|student placement|co-?op)\b/i.test(t)
+  ) {
+    return 'Internship';
+  }
+
+  // Graduate / entry-level
+  if (
+    /\b(graduate|graduate programme|graduate program|new grad|entry[- ]level|junior|trainee|apprentice|apprenticeship)\b/i.test(t)
+  ) {
+    return 'Entry level';
+  }
+
+  // Executive leadership — deliberately strict.
+  if (
+    /\b(chief executive officer|chief financial officer|chief operating officer|chief technology officer|chief information officer|chief data officer|chief product officer|chief marketing officer|chief people officer)\b/i.test(t) ||
+    /\b(ceo|cfo|coo|cto|cio|cdo|cpo|cmo|chro)\b/i.test(t) ||
+    /\b(executive vice president|senior vice president|vice president|vice-president|svp|evp)\b/i.test(t) ||
+    /\b(managing director)\b/i.test(t)
+  ) {
+    return 'Executive';
+  }
+
+  // Director-level
+  if (
+    /\b(director|director of|head of)\b/i.test(t) &&
+    !/\bassistant director\b/i.test(t)
+  ) {
+    return 'Director';
+  }
+
+  // Associate
+  if (
+    /\bassociate\b/i.test(t) &&
+    !/\bassociate director\b/i.test(t)
+  ) {
+    return 'Associate';
+  }
+
+  // Mid / senior professional
+  if (
+    /\b(senior|sr\.?|lead|principal|staff|manager|management|architect)\b/i.test(t)
+  ) {
+    return 'Mid-Senior level';
+  }
+
+  // Explicit early-career analyst / assistant patterns.
+  if (
+    /\b(graduate analyst|junior analyst|entry level analyst|trainee analyst)\b/i.test(t)
+  ) {
+    return 'Entry level';
+  }
+
+  return 'Not specified';
+}
+
+
+function employmentLevelLabel(value) {
+  const labels = {
+    'Internship': 'Internship',
+    'Entry level': 'Entry level',
+    'Associate': 'Associate',
+    'Mid-Senior level': 'Mid-Senior',
+    'Director': 'Director',
+    'Executive': 'Executive',
+    'Other': 'Other',
+    'Not specified': 'Level not specified'
+  };
+
+  return labels[value] || value || 'Level not specified';
 }
 
 
