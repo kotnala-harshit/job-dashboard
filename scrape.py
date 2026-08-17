@@ -502,6 +502,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "ASL Aviation Holdings": "asl_aviation_official",
     "Auxilion": "auxilion_official",
     "BioMarin": "biomarin_official",
+    "CGI": "njoyn_official",
+    "Dawn Meats": "icims_official",
+    "Decathlon Ireland": "successfactors_official",
 }
 
 # Official Irish university vacancy boards use a shared collector.
@@ -14802,6 +14805,464 @@ def scrape_barclays_official():
 
 
 
+
+def scrape_decathlon_ireland():
+    """
+    Official Decathlon Ireland search.
+
+    The current Ireland board is server-rendered SuccessFactors-style HTML.
+    This collector returns genuine Republic-of-Ireland vacancies only.
+
+    Generic retail/frontline exclusions remain the responsibility of the
+    existing global relevance/employment filtering later in the pipeline.
+    """
+    company = "Decathlon Ireland"
+    source = (
+        "https://jobs.decathlon.co.uk/search/"
+        "?searchby=location"
+        "&createNewAlert=false"
+        "&q="
+        "&locationsearch=ireland"
+        "&geolocation="
+        "&optionsFacetsDD_customfield1="
+        "&optionsFacetsDD_customfield2="
+        "&optionsFacetsDD_dept="
+        "&optionsFacetsDD_zip="
+    )
+
+    sess = _session()
+    if not sess:
+        return []
+
+    try:
+        r = sess.get(
+            source,
+            timeout=30,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+        r.raise_for_status()
+        body = r.text or ""
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), source)
+        print(f"  ! Decathlon Ireland careers failed: {exc}")
+        return []
+
+    results = {}
+
+    # Search-result anchors have the stable:
+    # /job/<location>-<title>/<numeric-id>/
+    anchor_re = re.compile(
+        r'<a\b[^>]+href=["\']([^"\']*/job/[^"\']+/\d+/)["\'][^>]*>'
+        r'(.*?)</a>',
+        re.I | re.S,
+    )
+
+    matches = list(anchor_re.finditer(body))
+
+    for idx, m in enumerate(matches):
+        href = html.unescape(m.group(1))
+        title = re.sub(
+            r"\s+",
+            " ",
+            _html_text(m.group(2)),
+        ).strip()
+
+        if not title:
+            continue
+
+        url = urllib.parse.urljoin(source, href)
+
+        # Inspect HTML between this result and the next result. The rendered
+        # table contains the location immediately after the title.
+        start = m.end()
+        end = matches[idx + 1].start() if idx + 1 < len(matches) else min(
+            len(body),
+            start + 2500,
+        )
+
+        card_html = body[start:end]
+        card_text = re.sub(
+            r"\s+",
+            " ",
+            _html_text(card_html),
+        ).strip()
+
+        # Republic-of-Ireland board values currently render as e.g.
+        # "Limerick, IE, V94 VHK8" / "Dublin, IE, D01P2Y0".
+        loc = re.search(
+            r'\b(Dublin|Limerick|Cork|Galway|Waterford|Kildare|'
+            r'Kilkenny|Wexford|Athlone|Sligo|Drogheda|Naas|'
+            r'Tallaght|Blanchardstown)\s*,\s*IE\b'
+            r'(?:\s*,\s*([A-Z0-9 ]{3,10}))?',
+            card_text,
+            re.I,
+        )
+
+        # URL itself is a secondary Republic-of-Ireland check.
+        url_ireland = bool(
+            re.search(
+                r'/job/(?:Dublin|Limerick|Cork|Galway|Waterford|'
+                r'Kildare|Kilkenny|Wexford|Athlone|Sligo|'
+                r'Drogheda|Naas|Tallaght|Blanchardstown)-',
+                url,
+                re.I,
+            )
+        )
+
+        if not loc and not url_ireland:
+            continue
+
+        if loc:
+            city = loc.group(1)
+            location = f"{city}, Ireland"
+        else:
+            city_match = re.search(r"/job/([^-/]+)-", url, re.I)
+            city = city_match.group(1) if city_match else ""
+            location = f"{city}, Ireland" if city else "Ireland"
+
+        key = url.split("?")[0].rstrip("/").lower()
+
+        results[key] = {
+            "company": company,
+            "ats": "successfactors",
+            "title": title[:300],
+            "location": location,
+            "url": url.split("?")[0],
+            "updated_at": None,
+            "description_text": card_text[:5000],
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Ireland careers board loaded; {len(results)} Ireland vacancies found",
+        source,
+    )
+
+    print(
+        f"  Decathlon Ireland official careers: "
+        f"{len(results)} Ireland jobs"
+    )
+
+    return list(results.values())
+
+
+def scrape_cgi_ireland():
+    """
+    CGI Ireland / Njoyn.
+
+    CGI's Njoyn job board is currently protected by Radware Bot Manager.
+    Do NOT report a successful zero when the anti-bot validation page is
+    returned; that is connector failure / manual-check state.
+    """
+    company = "CGI"
+    source = (
+        "https://cgi.njoyn.com/CORP/xweb/xweb.asp"
+        "?NTKN=c&clid=21001&Page=joblisting"
+    )
+
+    sess = _session()
+    if not sess:
+        return []
+
+    try:
+        r = sess.get(
+            source,
+            timeout=30,
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/124.0.0.0 Safari/537.36"
+                ),
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+            allow_redirects=True,
+        )
+
+        body = r.text or ""
+        final_url = r.url or source
+
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), source)
+        print(f"  ! CGI Njoyn failed: {exc}")
+        return []
+
+    blocked = (
+        "validate.perfdrive.com" in final_url.lower()
+        or "botmanager_support@radware.com" in body.lower()
+        or "hcaptcha.com/1/api.js" in body.lower()
+    )
+
+    if blocked:
+        _mark_connector_health(
+            company,
+            False,
+            "Official Njoyn board blocked automated access via Radware Bot Manager",
+            source,
+        )
+        print(
+            "  ! CGI official Njoyn board blocked by Radware; "
+            "not treating as true zero"
+        )
+        return []
+
+    # Conservative fallback if CGI stops challenging requests in the future.
+    results = {}
+
+    for m in re.finditer(
+        r'<a\b[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+        body,
+        re.I | re.S,
+    ):
+        href = urllib.parse.urljoin(
+            final_url,
+            html.unescape(m.group(1)),
+        )
+
+        title = re.sub(
+            r"\s+",
+            " ",
+            _html_text(m.group(2)),
+        ).strip()
+
+        if not title or not href:
+            continue
+
+        blob = f"{title} {href}"
+
+        if not re.search(
+            r"\bIreland\b|\bDublin\b|\bCork\b|\bGalway\b",
+            blob,
+            re.I,
+        ):
+            continue
+
+        if not re.search(
+            r"job|position|posting|opportunity",
+            href + " " + title,
+            re.I,
+        ):
+            continue
+
+        key = href.split("#")[0].rstrip("/").lower()
+
+        results[key] = {
+            "company": company,
+            "ats": "njoyn",
+            "title": title[:300],
+            "location": (
+                "Dublin, Ireland"
+                if re.search(r"\bDublin\b", blob, re.I)
+                else "Ireland"
+            ),
+            "url": href.split("#")[0],
+            "updated_at": None,
+            "description_text": title,
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Njoyn board loaded; {len(results)} verified Ireland vacancies found",
+        source,
+    )
+
+    print(f"  CGI official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_dawn_meats():
+    """
+    Dawn Meats official iCIMS careers source.
+
+    The public URL currently serves the corporate/iCIMS wrapper rather than
+    job-result cards to a plain HTTP client. Do not convert this into a
+    false 'live zero'. We attempt to discover a real iCIMS job iframe or
+    job-detail URL first; otherwise connector health remains unavailable.
+    """
+    company = "Dawn Meats"
+
+    sources = [
+        "https://careers-dawnmeats.icims.com/jobs/search?pr=0&schemaId=&o=",
+        "https://careers-dawnmeats.icims.com/jobs/search?pr=1&schemaId=&o=",
+        "https://c-12895-20230316-www-dawnmeats-com.i.icims.com/careers/current-opportunities/",
+    ]
+
+    sess = _session()
+    if not sess:
+        return []
+
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 Chrome/124 Safari/537.36"
+        ),
+        "Accept-Language": "en-IE,en;q=0.9",
+    }
+
+    results = {}
+    loaded_any = False
+    actual_job_surface_seen = False
+
+    queue = list(sources)
+    seen_pages = set()
+
+    while queue and len(seen_pages) < 12:
+        url = queue.pop(0)
+
+        if url in seen_pages:
+            continue
+
+        seen_pages.add(url)
+
+        try:
+            r = sess.get(
+                url,
+                headers=headers,
+                timeout=30,
+                allow_redirects=True,
+            )
+            if r.status_code >= 400:
+                continue
+            loaded_any = True
+            body = r.text or ""
+            final_url = r.url or url
+        except Exception:
+            continue
+
+        # Discover explicit iCIMS iframe/src values if supplied by wrapper JS.
+        candidates = set()
+
+        for pattern in [
+            r'<iframe[^>]+src=["\']([^"\']+)["\']',
+            r'icimsFrame\.src\s*=\s*["\']([^"\']+)["\']',
+            r'["\'](https?://[^"\']*\.icims\.com/[^"\']*jobs[^"\']*)["\']',
+        ]:
+            for mm in re.finditer(pattern, body, re.I):
+                raw = html.unescape(mm.group(1))
+                raw = raw.replace("\\/", "/")
+                if raw.startswith("//"):
+                    raw = "https:" + raw
+                candidates.add(
+                    urllib.parse.urljoin(final_url, raw)
+                )
+
+        for candidate in candidates:
+            if candidate not in seen_pages and candidate not in queue:
+                queue.append(candidate)
+
+        # Actual iCIMS job details usually contain /jobs/<id>/<slug>/job
+        # or /jobs/<id>/... patterns.
+        job_matches = list(
+            re.finditer(
+                r'<a\b[^>]+href=["\']([^"\']*/jobs/'
+                r'(\d+)(?:/[^"\']*)?)["\'][^>]*>(.*?)</a>',
+                body,
+                re.I | re.S,
+            )
+        )
+
+        if job_matches:
+            actual_job_surface_seen = True
+
+        for m in job_matches:
+            href = urllib.parse.urljoin(
+                final_url,
+                html.unescape(m.group(1)),
+            )
+
+            title = re.sub(
+                r"\s+",
+                " ",
+                _html_text(m.group(3)),
+            ).strip()
+
+            # iCIMS renders a decorative "Job Title" label inside the anchor.
+            title = re.sub(r"^Job Title\s+", "", title, flags=re.I).strip()
+
+            if not title or len(title) < 4:
+                continue
+
+            # Inspect surrounding card for location.
+            left = max(0, m.start() - 1200)
+            right = min(len(body), m.end() + 1800)
+            card = re.sub(
+                r"\s+",
+                " ",
+                _html_text(body[left:right]),
+            ).strip()
+
+            ireland = re.search(
+                r"\bIreland\b|\bWaterford\b|\bKilkenny\b|"
+                r"\bMeath\b|\bWexford\b|\bCork\b|\bDublin\b|"
+                r"\bTipperary\b|\bWestmeath\b",
+                card,
+                re.I,
+            )
+
+            if not ireland:
+                continue
+
+            city = ""
+            lm = re.search(
+                r"\b(Waterford|Kilkenny|Wexford|Cork|Dublin|"
+                r"Tipperary|Meath|Westmeath)\b",
+                card,
+                re.I,
+            )
+            if lm:
+                city = lm.group(1)
+
+            location = f"{city}, Ireland" if city else "Ireland"
+
+            key = href.split("?")[0].rstrip("/").lower()
+
+            results[key] = {
+                "company": company,
+                "ats": "icims",
+                "title": title[:300],
+                "location": location,
+                "url": href.split("?")[0],
+                "updated_at": None,
+                "description_text": card[:5000],
+            }
+
+    if results:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official iCIMS board returned {len(results)} verified Ireland jobs",
+            sources[0],
+        )
+    elif actual_job_surface_seen:
+        # Board itself was genuinely reached, so this may legitimately be zero.
+        _mark_connector_health(
+            company,
+            True,
+            "Official iCIMS vacancy surface loaded but no Republic-of-Ireland vacancies were verified",
+            sources[0],
+        )
+    else:
+        # Corporate footer mentioning Waterford is NOT vacancy evidence.
+        _mark_connector_health(
+            company,
+            False,
+            "iCIMS wrapper loaded but actual job-result surface was not exposed",
+            sources[0],
+        )
+
+    print(
+        f"  Dawn Meats official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     if company in UNIVERSITY_CAREER_PAGES:
         return scrape_university_official(company)
@@ -14950,6 +15411,9 @@ def scrape_direct_company(company: str):
         "Musgrave Group (SuperValu / Centra)": scrape_musgrave,
         "Susquehanna International Group (SIG)": scrape_susquehanna,
         "Schneider Electric": scrape_schneider_electric,
+        "CGI": scrape_cgi_ireland,
+        "Dawn Meats": scrape_dawn_meats,
+        "Decathlon Ireland": scrape_decathlon_ireland,
     }.get(company)
     return fn() if fn else []
 
