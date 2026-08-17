@@ -101,7 +101,7 @@ PERSONIO_COMPANIES = [
     "dilloneustace",
 ]
 
-PINPOINT_COMPANIES = ['ericsson', 'ptsb', 'kpmg', 'greencore', 'arcadis', 'zendesk', 'synopsys', 'nutanix', 'virgin', 'terumo', 'smith']
+PINPOINT_COMPANIES = ['ericsson', 'kpmg', 'greencore', 'arcadis', 'zendesk', 'synopsys', 'nutanix', 'virgin', 'terumo', 'smith']
 
 # ---------------------------------------------------------------------------
 # JSON-LD structured-data scraper -- universal fallback for the ~500-company
@@ -491,6 +491,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "BNP Paribas Ireland": "bnp_paribas_official",
     "AIG": "aig_workday",
     "Barclays": "barclays_workday",
+    "PM Group": "pmgroup_official",
+    "Motorola Solutions": "motorola_workday",
+    "PTSB": "ptsb_corehr",
     "AMCS Group": "amcs_official",
     "Avolon": "avolon_official",
     "ASL Aviation Holdings": "asl_aviation_official",
@@ -10377,110 +10380,273 @@ def scrape_qualcomm():
 
 
 def scrape_ptsb():
+    """Scrape current PTSB vacancies from the official CoreHR POST search."""
     company = "PTSB"
-    careers = "https://www.ptsb.ie/about-us/careers/"
-    sess = _session()
 
+    form_url = (
+        "https://my.corehr.com/pls/ptsbrecruit/"
+        "erq_search_package.search_form"
+        "?p_company=1000&p_internal_external=E"
+    )
+
+    search_url = (
+        "https://my.corehr.com/pls/ptsbrecruit/"
+        "erq_search_version_4.start_search_with_params"
+    )
+
+    sess = _session()
     if not sess:
         print("  ! PTSB: HTTP session unavailable")
         return []
 
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept-Language": "en-IE,en;q=0.9",
+    }
+
+    # Prime CoreHR cookies/session.
+    try:
+        prime = sess.get(form_url, headers=headers, timeout=30)
+        prime.raise_for_status()
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), form_url)
+        print(f"  ! PTSB CoreHR form failed: {exc}")
+        return []
+
+    payload = {
+        "p_company": "1000",
+        "p_internal_external": "E",
+        "p_display_in_irish": "N",
+        "p_recruitment_id": "",
+        "p_position_type": "ALLOPTIONS",
+        "p_competition_type": "ALLOPTIONS",
+        "p_keywords": "",
+        "p_force_type": "E",
+        "p_search_company": "",
+        "p_position": "",
+        "p_department": "",
+        "p_management_unit": "",
+        "p_description": "",
+        "p_location": "",
+        "p_division": "",
+        "p_pay_scale": "",
+        "p_user_field1": "",
+        "p_user_field2": "",
+        "p_user_field3": "",
+        "p_user_field4": "",
+        "p_user_field5": "",
+        "p_emp_status": "",
+        "p_emp_substatus": "",
+        "p_category": "",
+        "p_sub_category": "",
+        "p_job_category": "",
+    }
+
+    try:
+        r = sess.post(
+            search_url,
+            data=payload,
+            headers={
+                **headers,
+                "Referer": prime.url,
+            },
+            timeout=40,
+        )
+        r.raise_for_status()
+        html_text = r.text or ""
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), search_url)
+        print(f"  ! PTSB CoreHR search failed: {exc}")
+        return []
+
+    # CoreHR search results can expose recruitment IDs in hrefs,
+    # javascript/form values, or hidden fields.
+    recruitment_ids = set(
+        re.findall(
+            r"p_recruitment_id(?:=|%3D|['\"\s:=]+)(\d{5,})",
+            html_text,
+            re.I,
+        )
+    )
+
+    recruitment_ids.update(
+        re.findall(
+            r"name=[\"']p_recruitment_id[\"'][^>]+value=[\"'](\d{5,})",
+            html_text,
+            re.I,
+        )
+    )
+
+    recruitment_ids.update(
+        re.findall(
+            r"value=[\"'](\d{5,})[\"'][^>]+name=[\"']p_recruitment_id[\"']",
+            html_text,
+            re.I,
+        )
+    )
+
     results = {}
 
-    try:
-        r = sess.get(
-            careers,
-            timeout=30,
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept-Language": "en-IE,en;q=0.9",
-            },
+    for rid in sorted(recruitment_ids):
+        detail_url = (
+            "https://my.corehr.com/pls/ptsbrecruit/"
+            "erq_jobspec_version_4.display_form"
+            "?p_applicant_no="
+            "&p_company=1000"
+            "&p_display_apply_ind=Y"
+            "&p_display_in_irish=N"
+            "&p_form_profile_detail="
+            "&p_internal_external=E"
+            "&p_process_type="
+            f"&p_recruitment_id={rid}"
+            "&p_refresh_search=Y"
         )
-        html_text = r.text or ""
-    except Exception as exc:
-        print(f"  ! PTSB careers discovery failed: {exc}")
-        return []
 
-    core_links = re.findall(
-        r'href=["\']([^"\']*my\.corehr\.com[^"\']*)["\']',
-        html_text,
-        re.I,
-    )
-    core_links = [
-        urllib.parse.urljoin(careers, x.replace("&amp;", "&"))
-        for x in core_links
-    ]
+        try:
+            rr = sess.get(
+                detail_url,
+                headers={
+                    **headers,
+                    "Referer": r.url,
+                },
+                timeout=30,
+            )
 
-    if not core_links:
-        print("  PTSB CoreHR official careers: 0 jobs")
-        return []
+            if rr.status_code != 200:
+                continue
 
-    core_url = core_links[0]
+            text = re.sub(
+                r"\s+",
+                " ",
+                _html_text(rr.text or ""),
+            ).strip()
 
-    try:
-        r = sess.get(
-            core_url,
-            timeout=40,
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept-Language": "en-IE,en;q=0.9",
-                "Referer": careers,
-            },
-        )
-        html_text = r.text or ""
-    except Exception as exc:
-        print(f"  ! PTSB CoreHR failed: {exc}")
-        return []
+            # Ignore expired/no-longer-live vacancy IDs.
+            if (
+                not text
+                or re.search(
+                    r"(?:vacancy.*(?:closed|expired)|"
+                    r"no longer available|appointment.*closed)",
+                    text,
+                    re.I,
+                )
+            ):
+                continue
 
-    for m in re.finditer(
-        r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
-        html_text,
-        re.I | re.S,
-    ):
-        href = urllib.parse.urljoin(
-            r.url,
-            m.group(1).replace("&amp;", "&"),
-        )
-        title = re.sub(
-            r"\s+",
-            " ",
-            _html_text(m.group(2)),
-        ).strip()
+            # Try to infer a proper vacancy title.
+            title = ""
 
-        blob = f"{title} {href}".lower()
+            soup_title = re.search(
+                r"<title[^>]*>(.*?)</title>",
+                rr.text or "",
+                re.I | re.S,
+            )
 
-        if not any(x in blob for x in (
-            "vacan",
-            "job",
-            "recruit",
-            "position",
-        )):
+            headings = re.findall(
+                r"<h[1-4][^>]*>(.*?)</h[1-4]>",
+                rr.text or "",
+                re.I | re.S,
+            )
+
+            for raw in headings:
+                candidate = re.sub(
+                    r"\s+",
+                    " ",
+                    _html_text(raw),
+                ).strip()
+
+                if candidate and candidate.lower() not in {
+                    "vacancy details",
+                    "applicant options",
+                    "search appointments",
+                }:
+                    title = candidate
+                    break
+
+            # CoreHR commonly links the actual Job Description document.
+            doc_labels = re.findall(
+                r'<a[^>]+href=["\'][^"\']+["\'][^>]*>(.*?)</a>',
+                rr.text or "",
+                re.I | re.S,
+            )
+
+            if not title:
+                for raw in doc_labels:
+                    candidate = re.sub(
+                        r"\s+",
+                        " ",
+                        _html_text(raw),
+                    ).strip()
+
+                    if (
+                        candidate
+                        and candidate.lower()
+                        not in {
+                            "job description",
+                            "return to search",
+                            "login",
+                            "register",
+                        }
+                        and len(candidate) > 4
+                    ):
+                        title = candidate
+                        break
+
+            if not title and soup_title:
+                candidate = re.sub(
+                    r"\s+",
+                    " ",
+                    _html_text(soup_title.group(1)),
+                ).strip()
+
+                if candidate.lower() != "vacancy details":
+                    title = candidate
+
+            if not title:
+                title = f"PTSB Vacancy {rid}"
+
+            location = "Ireland"
+
+            loc = re.search(
+                r"\b("
+                r"Dublin|Cork|Galway|Limerick|Waterford|"
+                r"Kildare|Kilkenny|Wexford|Athlone|Sligo|"
+                r"Meath|Louth|Tipperary"
+                r")\b",
+                text,
+                re.I,
+            )
+
+            if loc:
+                location = f"{loc.group(1)}, Ireland"
+
+            results[rid] = {
+                "company": company,
+                "ats": "corehr",
+                "title": title[:300],
+                "location": location,
+                "url": detail_url,
+                "updated_at": None,
+                "description_text": text[:7000],
+            }
+
+        except Exception:
             continue
 
-        if not title:
-            continue
-
-        if title.lower() in {
-            "search for jobs",
-            "jobs",
-            "careers",
-            "login",
-            "register",
-            "home",
-        }:
-            continue
-
-        key = href.rstrip("/").lower() + "|" + title.lower()
-
-        results[key] = {
-            "company": company,
-            "ats": "corehr",
-            "title": title[:300],
-            "location": "Ireland",
-            "url": href,
-            "updated_at": None,
-            "description_text": title,
-        }
+    if results:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official PTSB CoreHR search completed: {len(results)} live vacancies",
+            search_url,
+        )
+    else:
+        _mark_connector_health(
+            company,
+            True,
+            "Official PTSB CoreHR search completed successfully; no current external vacancies returned",
+            search_url,
+        )
 
     print(f"  PTSB CoreHR official careers: {len(results)} jobs")
     return list(results.values())
@@ -13484,6 +13650,618 @@ def scrape_university_official(company: str):
     return jobs
 
 
+
+def scrape_pm_group_official():
+    """
+    Strict PM Group Republic-of-Ireland collector.
+
+    PM Group's Jibe/iCIMS detail pages expose schema.org JobPosting JSON-LD.
+    We trust structured vacancy metadata instead of matching Ireland in
+    navigation/footer/body boilerplate.
+    """
+    import json as _json
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    from bs4 import BeautifulSoup
+
+    company = "PM Group"
+    base = "https://careers.pmgroup-global.com/careers/jobs"
+
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept-Language": "en-IE,en;q=0.9",
+    }
+
+    # PM Group IDs currently occupy this namespace.
+    #
+    # We retain a bounded window rather than guessing forever.
+    # Structured JSON-LD validation makes foreign/expired IDs harmless.
+    candidate_ids = range(10800, 13051)
+
+    ireland_names = {
+        "ireland",
+        "republic of ireland",
+        "dublin",
+        "cork",
+        "galway",
+        "limerick",
+        "waterford",
+        "kildare",
+        "kilkenny",
+        "carlow",
+        "athlone",
+        "dundalk",
+        "mayo",
+        "roscommon",
+        "tipperary",
+        "leinster",
+    }
+
+    def parse_one(jid):
+        sess = _session()
+        if not sess:
+            return None
+
+        url = f"{base}/{jid}?lang=en-us"
+
+        try:
+            r = sess.get(
+                url,
+                headers=headers,
+                timeout=12,
+                allow_redirects=True,
+            )
+        except Exception:
+            return None
+
+        if r.status_code != 200:
+            return None
+
+        soup = BeautifulSoup(r.text or "", "html.parser")
+
+        posting = None
+
+        for script in soup.find_all("script", type="application/ld+json"):
+            raw = script.string or script.get_text("", strip=True)
+
+            if not raw:
+                continue
+
+            try:
+                obj = _json.loads(raw)
+            except Exception:
+                continue
+
+            candidates = obj if isinstance(obj, list) else [obj]
+
+            for candidate in candidates:
+                if (
+                    isinstance(candidate, dict)
+                    and str(candidate.get("@type", "")).lower()
+                    == "jobposting"
+                ):
+                    posting = candidate
+                    break
+
+            if posting:
+                break
+
+        if not posting:
+            return None
+
+        title = re.sub(
+            r"\s+",
+            " ",
+            str(posting.get("title") or ""),
+        ).strip()
+
+        if not title:
+            return None
+
+        # ----------------------------------------------------
+        # Structured location
+        # ----------------------------------------------------
+        job_locations = posting.get("jobLocation") or []
+
+        if isinstance(job_locations, dict):
+            job_locations = [job_locations]
+
+        valid_locations = []
+
+        for item in job_locations:
+            if not isinstance(item, dict):
+                continue
+
+            address = item.get("address") or {}
+
+            if not isinstance(address, dict):
+                continue
+
+            locality = str(
+                address.get("addressLocality") or ""
+            ).strip()
+
+            region = str(
+                address.get("addressRegion") or ""
+            ).strip()
+
+            country = address.get("addressCountry") or ""
+
+            if isinstance(country, dict):
+                country = (
+                    country.get("name")
+                    or country.get("@id")
+                    or ""
+                )
+
+            country = str(country).strip()
+
+            combined = " ".join(
+                x for x in (locality, region, country) if x
+            ).lower()
+
+            # Strict ROI.
+            if (
+                "ireland" not in combined
+                and not any(x in combined for x in ireland_names)
+            ):
+                continue
+
+            if "northern ireland" in combined or "belfast" in combined:
+                continue
+
+            if locality:
+                valid_locations.append(f"{locality}, Ireland")
+            elif region:
+                valid_locations.append(f"{region}, Ireland")
+            else:
+                valid_locations.append("Ireland")
+
+        # Some Jibe JobPosting blocks omit jobLocation but encode location
+        # canonically in the HTML document title:
+        # "Senior Automation Engineer in Dublin, Ireland | PM Group"
+        if not valid_locations:
+            page_title = (
+                soup.title.get_text(" ", strip=True)
+                if soup.title else ""
+            )
+
+            m = re.search(
+                r"\bin\s+([^|]+?,\s*Ireland)\s*\|\s*PM Group",
+                page_title,
+                re.I,
+            )
+
+            if m and not re.search(
+                r"\b(?:Belfast|Northern Ireland)\b",
+                m.group(1),
+                re.I,
+            ):
+                valid_locations.append(
+                    re.sub(r"\s+", " ", m.group(1)).strip()
+                )
+
+        if not valid_locations:
+            return None
+
+        # ----------------------------------------------------
+        # Description
+        # ----------------------------------------------------
+        description_html = str(posting.get("description") or "")
+        description_text = re.sub(
+            r"\s+",
+            " ",
+            BeautifulSoup(
+                description_html,
+                "html.parser",
+            ).get_text(" ", strip=True),
+        ).strip()
+
+        # ----------------------------------------------------
+        # Employment type
+        # ----------------------------------------------------
+        raw_type = posting.get("employmentType")
+
+        if isinstance(raw_type, list):
+            raw_type = " ".join(str(x) for x in raw_type)
+
+        raw_type = str(raw_type or "")
+
+        full_text = " ".join([
+            raw_type,
+            description_text[:2000],
+            soup.title.get_text(" ", strip=True) if soup.title else "",
+        ])
+
+        employment_type = None
+
+        if re.search(r"\bpermanent\b", full_text, re.I):
+            employment_type = "full_time"
+        elif re.search(
+            r"\b(?:fixed[- ]term|contract)\b",
+            full_text,
+            re.I,
+        ):
+            employment_type = "contract"
+        elif re.search(r"\btemporary\b", full_text, re.I):
+            employment_type = "temporary"
+
+        # ----------------------------------------------------
+        # Work mode + category from the compact rendered
+        # vacancy metadata. These are enrichment only.
+        # ----------------------------------------------------
+        body_text = re.sub(
+            r"\s+",
+            " ",
+            soup.get_text(" ", strip=True),
+        ).strip()
+
+        work_mode = None
+
+        # Look near title / start of the vacancy, not whole footer.
+        head_text = body_text[:3500]
+
+        if re.search(r"\bHybrid\b", head_text, re.I):
+            work_mode = "hybrid"
+        elif re.search(r"\bOnsite\b|\bOn-site\b", head_text, re.I):
+            work_mode = "onsite"
+        elif re.search(r"\bRemote\b", head_text, re.I):
+            work_mode = "remote"
+
+        category = None
+
+        cat = re.search(
+            r"\b("
+            r"Architecture|CQV|CSV|Construction|"
+            r"Contracts Administration|Design|Digital|EHS|"
+            r"Engineering|Facilities Management|H&S|IS|"
+            r"Marketing/Business Development|"
+            r"Planning & Scheduling|Procurement|"
+            r"Project Management|Project Services|Quality|"
+            r"Quantity Surveyors"
+            r")\b",
+            head_text,
+            re.I,
+        )
+
+        if cat:
+            category = cat.group(1)
+
+        clean_url = str(posting.get("url") or url).strip()
+
+        return {
+            "company": company,
+            "ats": "jibe_icims",
+            "title": title[:300],
+            "location": valid_locations[0],
+            "url": clean_url,
+            "updated_at": posting.get("datePosted"),
+            "closing_date": posting.get("validThrough"),
+            "description_text": description_text[:7000],
+            "employment_type": employment_type,
+            "work_mode": work_mode,
+            "job_category": category,
+            "requisition_id": str(jid),
+        }
+
+    results = {}
+
+    # Parallel because most IDs are expired/non-job responses.
+    with ThreadPoolExecutor(max_workers=18) as pool:
+        futures = {
+            pool.submit(parse_one, jid): jid
+            for jid in candidate_ids
+        }
+
+        for future in as_completed(futures):
+            try:
+                job = future.result()
+            except Exception:
+                job = None
+
+            if not job:
+                continue
+
+            key = (
+                str(job.get("requisition_id") or "")
+                or str(job.get("url") or "").lower()
+            )
+
+            results[key] = job
+
+    _mark_connector_health(
+        company,
+        True,
+        "PM Group official JobPosting JSON-LD validation completed",
+        base,
+    )
+
+    jobs = sorted(
+        results.values(),
+        key=lambda j: int(j.get("requisition_id") or 0),
+        reverse=True,
+    )
+
+    print(
+        f"  PM Group official Ireland careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+
+
+def scrape_barclays_official():
+    """
+    Barclays Ireland collector.
+
+    Workday remains useful, but Barclays' public Radancy careers search can
+    expose Ireland vacancies that have not appeared through the Workday query.
+    Union both first-party sources and deduplicate by requisition / URL / title.
+    """
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin
+
+    company = "Barclays"
+    source = "https://search.jobs.barclays/search-jobs/Ireland"
+
+    results = {}
+
+    # --------------------------------------------------------
+    # Source 1: existing validated Workday collector
+    # --------------------------------------------------------
+    try:
+        workday_jobs = scrape_workday(
+            company,
+            "barclays",
+            "wd3",
+            "External_Career_Site_Barclays",
+            max_pages=25,
+            search_text="Ireland",
+        )
+
+        for job in workday_jobs:
+            url = str(job.get("url") or "")
+            req = str(job.get("requisition_id") or "")
+
+            m = re.search(
+                r"_(JR-[A-Za-z0-9-]+)(?:[-/?]|$)",
+                url,
+                re.I,
+            )
+
+            if not req and m:
+                req = m.group(1)
+
+            key = (
+                req.lower()
+                if req
+                else url.lower()
+            )
+
+            job["company"] = company
+            results[key] = job
+
+    except Exception as exc:
+        print(f"  ! Barclays Workday layer: {exc}")
+
+    # --------------------------------------------------------
+    # Source 2: Barclays official Ireland search
+    # --------------------------------------------------------
+    sess = _session()
+
+    if sess:
+        try:
+            r = sess.get(
+                source,
+                timeout=35,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+
+            if r.status_code == 200:
+                soup = BeautifulSoup(r.text or "", "html.parser")
+
+                for a in soup.find_all("a", href=True):
+                    title = re.sub(
+                        r"\s+",
+                        " ",
+                        a.get_text(" ", strip=True),
+                    ).strip()
+
+                    if not title or len(title) < 4:
+                        continue
+
+                    href = urljoin(
+                        r.url,
+                        a.get("href") or "",
+                    )
+
+                    # Barclays job-detail URLs typically contain /job/.
+                    if not re.search(
+                        r"(?:/job/|/jobs/)",
+                        href,
+                        re.I,
+                    ):
+                        continue
+
+                    node = a
+                    card = title
+
+                    for _ in range(5):
+                        node = getattr(node, "parent", None)
+                        if not node:
+                            break
+
+                        text = re.sub(
+                            r"\s+",
+                            " ",
+                            node.get_text(" ", strip=True),
+                        ).strip()
+
+                        if 20 <= len(text) <= 1800:
+                            card = text
+
+                    if not re.search(
+                        r"\b(?:Dublin|Ireland)\b",
+                        card,
+                        re.I,
+                    ):
+                        continue
+
+                    if re.search(
+                        r"\b(?:Belfast|Northern Ireland)\b",
+                        card,
+                        re.I,
+                    ):
+                        continue
+
+                    location = "Dublin, Ireland"
+
+                    loc = re.search(
+                        r"\b(Dublin|Cork|Galway|Limerick|Waterford)"
+                        r"(?:,\s*Ireland|\s*\(Ireland\))",
+                        card,
+                        re.I,
+                    )
+
+                    if loc:
+                        location = f"{loc.group(1)}, Ireland"
+
+                    # Prevent menu/navigation links from becoming jobs.
+                    if title.lower() in {
+                        "ireland",
+                        "dublin",
+                        "search jobs",
+                        "view all jobs",
+                        "jobs",
+                        "careers",
+                    }:
+                        continue
+
+                    # Fetch detail page for canonical title where possible.
+                    description = card
+                    final_title = title
+                    final_url = href
+
+                    try:
+                        rr = sess.get(
+                            href,
+                            timeout=20,
+                            headers={
+                                "User-Agent": "Mozilla/5.0",
+                                "Accept-Language": "en-IE,en;q=0.9",
+                                "Referer": source,
+                            },
+                        )
+
+                        if rr.status_code == 200:
+                            ss = BeautifulSoup(
+                                rr.text or "",
+                                "html.parser",
+                            )
+
+                            h1 = ss.find("h1")
+
+                            if h1:
+                                candidate = re.sub(
+                                    r"\s+",
+                                    " ",
+                                    h1.get_text(" ", strip=True),
+                                ).strip()
+
+                                if candidate:
+                                    final_title = candidate
+
+                            description = re.sub(
+                                r"\s+",
+                                " ",
+                                ss.get_text(" ", strip=True),
+                            ).strip()[:7000]
+
+                            final_url = rr.url
+
+                    except Exception:
+                        pass
+
+                    req = ""
+
+                    m = re.search(
+                        r"\b(?:JR-)?\d{6,}\b",
+                        final_url + " " + description[:1500],
+                        re.I,
+                    )
+
+                    if m:
+                        req = m.group(0)
+
+                    # Dedupe against Workday by normalized title when a
+                    # requisition ID is unavailable/different.
+                    title_key = re.sub(
+                        r"[^a-z0-9]+",
+                        " ",
+                        final_title.lower(),
+                    ).strip()
+
+                    existing_key = None
+
+                    for k, existing in results.items():
+                        existing_title = re.sub(
+                            r"[^a-z0-9]+",
+                            " ",
+                            str(existing.get("title") or "").lower(),
+                        ).strip()
+
+                        if (
+                            existing_title == title_key
+                            and title_key
+                        ):
+                            existing_key = k
+                            break
+
+                    if existing_key:
+                        continue
+
+                    key = (
+                        req.lower()
+                        if req
+                        else final_url.lower()
+                    )
+
+                    results[key] = {
+                        "company": company,
+                        "ats": "barclays_official",
+                        "title": final_title[:300],
+                        "location": location,
+                        "url": final_url,
+                        "updated_at": None,
+                        "description_text": description,
+                        "requisition_id": req or None,
+                    }
+
+                _mark_connector_health(
+                    company,
+                    True,
+                    "Barclays official Ireland search + Workday loaded",
+                    source,
+                )
+
+        except Exception as exc:
+            print(f"  ! Barclays official Ireland page: {exc}")
+
+    jobs = list(results.values())
+
+    print(
+        f"  Barclays official Ireland careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+
 def scrape_direct_company(company: str):
     if company in UNIVERSITY_CAREER_PAGES:
         return scrape_university_official(company)
@@ -13601,11 +14379,13 @@ def scrape_direct_company(company: str):
             max_pages=25,
             search_text="Ireland",
         ),
-        "Barclays": lambda: scrape_workday(
-            "Barclays",
-            "barclays",
-            "wd3",
-            "External_Career_Site_Barclays",
+        "Barclays": scrape_barclays_official,
+        "PM Group": scrape_pm_group_official,
+        "Motorola Solutions": lambda: scrape_workday(
+            "Motorola Solutions",
+            "motorolasolutions",
+            "wd5",
+            "Careers",
             max_pages=25,
             search_text="Ireland",
         ),
