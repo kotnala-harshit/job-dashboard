@@ -625,6 +625,8 @@ body{background:#f3f4f6!important}
     </select>
     <div class="loadctrl">
       <span id="liveStatus" class="live-dot">● live</span>
+      <button id="searchEnterBtn" type="button" onclick="applyFilters()">Search / Enter</button>
+      <button id="refreshNowBtn" type="button" onclick="autoFetchJobs()">Refresh now</button>
     </div>
   </div>
 </div>
@@ -1033,37 +1035,65 @@ function loadData(data) {
 }
 
 function setupInstantFilters() {
-  let renderTimer = null;
+  const ids = [
+    'fSearch',
+    'fCompany',
+    'fLocation',
+    'fSector',
+    'fSource',
+    'fPosted',
+    'fType',
+    'fEmployment',
+    'fRadar',
+    'fRoleFamily',
+    'fExperience',
+    'fNew',
+    'fVisa',
+    'fSort'
+  ];
 
-  const applyImmediately = () => {
-    if (renderTimer) clearTimeout(renderTimer);
-    renderTimer = setTimeout(() => {
-      render();
-    }, 20);
-  };
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
 
-  // Search reacts while typing.
-  const q = document.getElementById('q');
-  if (q) {
-    q.addEventListener('input', applyImmediately);
-    q.addEventListener('search', applyImmediately);
-    q.addEventListener('change', applyImmediately);
-    q.addEventListener('keydown', e => {
+    // Remove marker left by any previous broken binding.
+    delete el.dataset.instantBound;
+
+    const eventName =
+      (el.tagName === 'INPUT' &&
+       (el.type === 'text' || el.type === 'search'))
+        ? 'input'
+        : 'change';
+
+    if (el.dataset.finalInstantBound === '1') return;
+    el.dataset.finalInstantBound = '1';
+
+    el.addEventListener(eventName, () => {
+      // Keep the two employment selectors synchronized if both exist.
+      if (id === 'fEmployment' || id === 'fType') {
+        const otherId = id === 'fEmployment' ? 'fType' : 'fEmployment';
+        const other = document.getElementById(otherId);
+
+        if (other && [...other.options].some(o => o.value === el.value)) {
+          other.value = el.value;
+        }
+      }
+
+      applyFilters();
+    });
+  });
+
+  // Enter in search always applies immediately.
+  const search = document.getElementById('fSearch');
+  if (search && search.dataset.enterBound !== '1') {
+    search.dataset.enterBound = '1';
+    search.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        applyImmediately();
+        applyFilters();
       }
     });
   }
-
-  // Every dashboard select applies the instant the user changes it.
-  document.querySelectorAll(
-    '#fCompany, #fLocation, #fSector, #fSource, #fRecency, #fRadar, ' +
-    '#fRoleFamily, #fExperience, #fEmployment, #fNew, #fVisa, #fSort'
-  ).forEach(el => {
-    el.addEventListener('change', applyImmediately);
-    el.addEventListener('input', applyImmediately);
-  });
 }
 
 async function autoFetchJobs() {
@@ -1223,7 +1253,9 @@ function applyFilters() {
   const sector = document.getElementById('fSector').value;
   const source = document.getElementById('fSource').value;
   const posted = document.getElementById('fPosted').value;
-  const type = document.getElementById('fType').value;
+  const type =
+    (document.getElementById('fEmployment')?.value || '') ||
+    (document.getElementById('fType')?.value || '');
   const radar = document.getElementById('fRadar').value;
   const roleFamily = document.getElementById('fRoleFamily').value;
   const expFit = document.getElementById('fExperience').value;
