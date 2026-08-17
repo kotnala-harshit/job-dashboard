@@ -458,6 +458,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "Arup": "arup_official",
     "Deutsche Bank": "deutsche_bank_official",
     "SMBC Group": "smbc_successfactors",
+    "Fidelity International": "fidelity_workday",
+    "Bloomberg": "bloomberg_avature",
+    "Bank of Ireland": "bank_of_ireland_official",
     "Harvey Nash": "harvey_nash_official",
     "ING": "ing_official",
     "Bank of America": "bank_of_america_browser",
@@ -4702,6 +4705,373 @@ def scrape_capgemini():
     return list(results.values())
 
 
+
+def scrape_fidelity_international():
+    """
+    Fidelity International official Workday Ireland collector.
+
+    Uses the official Ireland country facet:
+      tenant = fil
+      host   = wd3
+      site   = 001
+    """
+    company = "Fidelity International"
+    base = "https://fil.wd3.myworkdayjobs.com"
+    site = "001"
+    api = f"{base}/wday/cxs/fil/{site}/jobs"
+    ireland_id = "04a05835925f45b3a59406a2a6b72c8a"
+
+    sess = _session()
+    if not sess:
+        print("  ! Fidelity International: HTTP session unavailable")
+        return []
+
+    results = {}
+    offset = 0
+
+    while offset < 500:
+        payload = {
+            "appliedFacets": {
+                "locationCountry": [ireland_id]
+            },
+            "limit": 20,
+            "offset": offset,
+            "searchText": "",
+        }
+
+        try:
+            r = sess.post(
+                api,
+                json=payload,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                    "Referer": f"{base}/{site}",
+                },
+            )
+            if r.status_code != 200:
+                print(f"  ! Fidelity Workday HTTP {r.status_code}")
+                break
+            data = r.json()
+        except Exception as exc:
+            print(f"  ! Fidelity Workday failed: {exc}")
+            break
+
+        rows = data.get("jobPostings") or []
+        if not rows:
+            break
+
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+
+            title = str(row.get("title") or "").strip()
+            external_path = str(row.get("externalPath") or "").strip()
+            bullets = row.get("bulletFields") or []
+
+            if not title or not external_path:
+                continue
+
+            blob = " ".join(str(x) for x in bullets)
+
+            # Ireland facet is already authoritative, but keep an extra ROI gate.
+            if re.search(r"\b(?:Belfast|Northern Ireland)\b", blob, re.I):
+                continue
+
+            public_url = f"{base}/{site}{external_path}"
+            detail_api = f"{base}/wday/cxs/fil/{site}{external_path}"
+
+            location = "Dublin, Ireland"
+            description_text = blob
+            updated_at = None
+            employment_type = None
+
+            try:
+                dr = sess.get(
+                    detail_api,
+                    timeout=25,
+                    headers={
+                        "User-Agent": "Mozilla/5.0",
+                        "Accept": "application/json",
+                        "Accept-Language": "en-IE,en;q=0.9",
+                        "Referer": f"{base}/{site}",
+                    },
+                )
+                if dr.status_code == 200:
+                    detail = dr.json()
+                    info = detail.get("jobPostingInfo") or {}
+
+                    loc = str(info.get("location") or "").strip()
+                    if loc:
+                        location = loc
+
+                    desc = str(
+                        info.get("jobDescription")
+                        or info.get("description")
+                        or ""
+                    )
+                    if desc:
+                        description_text = desc
+
+                    updated_at = (
+                        info.get("startDate")
+                        or info.get("postedOn")
+                        or None
+                    )
+
+                    job_time = str(info.get("timeType") or "")
+                    worker_type = str(info.get("workerSubType") or "")
+
+                    typetext = f"{job_time} {worker_type}".lower()
+                    if "fixed" in typetext or "temp" in typetext or "ftc" in title.lower():
+                        employment_type = "contract"
+                    elif "full" in typetext or "permanent" in typetext:
+                        employment_type = "full_time"
+
+            except Exception:
+                pass
+
+            if re.search(r"\bDublin\b", f"{location} {blob}", re.I):
+                location = "Dublin, Ireland"
+            elif not re.search(r"\bIreland\b", location, re.I):
+                location = "Ireland"
+
+            key = public_url.split("?")[0].rstrip("/").lower()
+
+            results[key] = {
+                "company": company,
+                "ats": "workday",
+                "title": title[:300],
+                "location": location[:160],
+                "url": public_url,
+                "updated_at": updated_at,
+                "description_text": description_text[:7000],
+                "employment_type": employment_type,
+                "requisition_id": (
+                    bullets[1] if len(bullets) > 1 else ""
+                ),
+            }
+
+        offset += len(rows)
+
+        total = data.get("total")
+        if isinstance(total, int) and offset >= total:
+            break
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Fidelity International Workday returned {len(results)} Ireland jobs",
+        f"{base}/{site}",
+    )
+
+    print(f"  Fidelity International official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+
+def scrape_bloomberg():
+    """
+    Bloomberg official Avature Ireland collector.
+
+    Uses Bloomberg's live filtered Avature board and paginates with jobOffset.
+    """
+    company = "Bloomberg"
+    base = "https://bloomberg.avature.net"
+    search_base = (
+        f"{base}/careers/SearchJobs/"
+        "?1845=%5B162465%5D"
+        "&1845_format=3996"
+        "&listFilterMode=1"
+        "&jobRecordsPerPage=12"
+    )
+
+    sess = _session()
+    if not sess:
+        print("  ! Bloomberg: HTTP session unavailable")
+        return []
+
+    results = {}
+    seen_ids = set()
+
+    for offset in range(0, 600, 12):
+        url = f"{search_base}&jobOffset={offset}"
+
+        try:
+            r = sess.get(
+                url,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+            if r.status_code != 200:
+                print(f"  ! Bloomberg Avature HTTP {r.status_code}")
+                break
+            html_text = r.text or ""
+        except Exception as exc:
+            print(f"  ! Bloomberg Avature failed: {exc}")
+            break
+
+        before = len(seen_ids)
+
+        matches = re.findall(
+            r'https?://bloomberg\.avature\.net/careers/JobDetail/([^/"<>]+)/(\d+)',
+            html_text,
+            re.I,
+        )
+
+        # Also allow relative detail URLs.
+        matches += re.findall(
+            r'href=["\']/careers/JobDetail/([^/"\']+)/(\d+)["\']',
+            html_text,
+            re.I,
+        )
+
+        for slug, job_id in matches:
+            if job_id in seen_ids:
+                continue
+            seen_ids.add(job_id)
+
+            detail_url = f"{base}/careers/JobDetail/{slug}/{job_id}"
+
+            title = re.sub(r"[-_]+", " ", slug)
+            title = re.sub(r"\s+", " ", title).strip()
+            location = "Dublin, Ireland"
+            description_text = ""
+
+            try:
+                dr = sess.get(
+                    detail_url,
+                    timeout=25,
+                    headers={
+                        "User-Agent": "Mozilla/5.0",
+                        "Accept-Language": "en-IE,en;q=0.9",
+                        "Referer": url,
+                    },
+                )
+
+                if dr.status_code == 200:
+                    dhtml = dr.text or ""
+
+                    # Bloomberg Avature detail pages may use an H1 containing
+                    # only the company name ("Bloomberg"). Prefer structured
+                    # page metadata and fall back to the canonical URL slug.
+                    candidates = []
+
+                    for pattern in [
+                        r'<meta[^>]+property=["\']og:title["\'][^>]+content=["\']([^"\']+)',
+                        r'<meta[^>]+name=["\']twitter:title["\'][^>]+content=["\']([^"\']+)',
+                        r'<title\b[^>]*>(.*?)</title>',
+                    ]:
+                        mm = re.search(pattern, dhtml, re.I | re.S)
+                        if mm:
+                            candidates.append(
+                                re.sub(
+                                    r"\s+",
+                                    " ",
+                                    _html_text(mm.group(1)),
+                                ).strip()
+                            )
+
+                    hm = re.search(
+                        r'<h1\b[^>]*>(.*?)</h1>',
+                        dhtml,
+                        re.I | re.S,
+                    )
+                    if hm:
+                        candidates.append(
+                            re.sub(
+                                r"\s+",
+                                " ",
+                                _html_text(hm.group(1)),
+                            ).strip()
+                        )
+
+                    for candidate in candidates:
+                        candidate = re.sub(
+                            r"\s*[-|]\s*Bloomberg.*$",
+                            "",
+                            candidate,
+                            flags=re.I,
+                        ).strip()
+
+                        if (
+                            candidate
+                            and candidate.lower() not in {
+                                "bloomberg",
+                                "careers",
+                                "search jobs",
+                                "jobs",
+                            }
+                            and len(candidate) >= 4
+                        ):
+                            title = candidate
+                            break
+
+                    # Final authoritative fallback: the Avature URL slug is
+                    # already the actual job title.
+                    if not title or title.lower() == "bloomberg":
+                        title = re.sub(r"[-_]+", " ", slug)
+                        title = re.sub(r"\s+", " ", title).strip()
+
+                    description_text = re.sub(
+                        r"\s+",
+                        " ",
+                        _html_text(dhtml),
+                    ).strip()
+
+                    # This filtered board is Dublin/Ireland, but reject
+                    # clearly non-Ireland detail pages just in case.
+                    if re.search(
+                        r"\b(?:London|New York|Hong Kong|Singapore|Sydney)\b",
+                        description_text,
+                        re.I,
+                    ) and not re.search(
+                        r"\b(?:Dublin|Ireland)\b",
+                        description_text,
+                        re.I,
+                    ):
+                        continue
+
+                    if re.search(r"\bDublin\b", description_text, re.I):
+                        location = "Dublin, Ireland"
+                    elif re.search(r"\bIreland\b", description_text, re.I):
+                        location = "Ireland"
+
+            except Exception:
+                pass
+
+            key = detail_url.lower()
+
+            results[key] = {
+                "company": company,
+                "ats": "avature",
+                "title": title[:300],
+                "location": location,
+                "url": detail_url,
+                "updated_at": None,
+                "description_text": description_text[:7000],
+            }
+
+        if len(seen_ids) == before:
+            break
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Bloomberg Avature returned {len(results)} Ireland jobs",
+        search_base,
+    )
+
+    print(f"  Bloomberg official Avature Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
 def scrape_blackrock():
     """
     BlackRock official Dublin collector.
@@ -4901,32 +5271,161 @@ def scrape_blackrock():
 
 
 def scrape_bank_of_ireland():
-    jobs = _browser_board_collect(
-        "Bank of Ireland",
-        ["https://careers.bankofireland.com/jobs/search"],
-        ("careers.bankofireland.com/jobs/",),
-        default_location="Ireland",
-        max_scrolls=20,
-        require_ireland=False,
+    """
+    Bank of Ireland official Ireland careers collector.
+
+    The official country-filtered board is server-rendered, so collect
+    canonical /jobs/<slug> links directly and paginate normally.
+    """
+    company = "Bank of Ireland"
+    base = "https://careers.bankofireland.com"
+
+    sess = _session()
+    if not sess:
+        print("  ! Bank of Ireland: HTTP session unavailable")
+        return []
+
+    results = {}
+
+    for page_no in range(1, 60):
+        search_url = (
+            f"{base}/jobs/search"
+            f"?page={page_no}"
+            "&country_codes%5B%5D=IE"
+            "&query="
+        )
+
+        try:
+            r = sess.get(
+                search_url,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+            if r.status_code != 200:
+                print(f"  ! Bank of Ireland page {page_no} HTTP {r.status_code}")
+                break
+            html_text = r.text or ""
+        except Exception as exc:
+            print(f"  ! Bank of Ireland careers failed: {exc}")
+            break
+
+        before = len(results)
+
+        links = re.findall(
+            r'href=["\'](https://careers\.bankofireland\.com/jobs/[^"\'?#]+)["\']',
+            html_text,
+            re.I,
+        )
+
+        links += [
+            base + x
+            for x in re.findall(
+                r'href=["\'](/jobs/[^"\'?#]+)["\']',
+                html_text,
+                re.I,
+            )
+        ]
+
+        for href in links:
+            href = href.rstrip("/")
+
+            if "/jobs/search" in href:
+                continue
+
+            key = href.lower()
+            if key in results:
+                continue
+
+            slug = href.rsplit("/", 1)[-1]
+            title = re.sub(r"[-_]+", " ", slug)
+            title = re.sub(r"\s+", " ", title).strip()
+
+            # Remove trailing location words from slug-derived fallback.
+            title = re.sub(
+                r"\s+(?:dublin|cork|galway|limerick|waterford)\s+ireland$",
+                "",
+                title,
+                flags=re.I,
+            ).strip()
+
+            location = "Ireland"
+            description_text = ""
+
+            try:
+                dr = sess.get(
+                    href,
+                    timeout=25,
+                    headers={
+                        "User-Agent": "Mozilla/5.0",
+                        "Accept-Language": "en-IE,en;q=0.9",
+                        "Referer": search_url,
+                    },
+                )
+
+                if dr.status_code == 200:
+                    dhtml = dr.text or ""
+
+                    hm = re.search(
+                        r'<h1\b[^>]*>(.*?)</h1>',
+                        dhtml,
+                        re.I | re.S,
+                    )
+                    if hm:
+                        clean = re.sub(
+                            r"\s+",
+                            " ",
+                            _html_text(hm.group(1)),
+                        ).strip()
+                        if clean:
+                            title = clean
+
+                    description_text = re.sub(
+                        r"\s+",
+                        " ",
+                        _html_text(dhtml),
+                    ).strip()
+
+                    if re.search(r"\bDublin\b", description_text, re.I):
+                        location = "Dublin, Ireland"
+                    elif re.search(r"\bCork\b", description_text, re.I):
+                        location = "Cork, Ireland"
+                    elif re.search(r"\bGalway\b", description_text, re.I):
+                        location = "Galway, Ireland"
+                    elif re.search(r"\bLimerick\b", description_text, re.I):
+                        location = "Limerick, Ireland"
+
+            except Exception:
+                pass
+
+            if not title:
+                continue
+
+            results[key] = {
+                "company": company,
+                "ats": "bankofireland_official",
+                "title": title[:300],
+                "location": location,
+                "url": href,
+                "updated_at": None,
+                "description_text": description_text[:7000],
+            }
+
+        if len(results) == before:
+            break
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Bank of Ireland official board returned {len(results)} Ireland jobs",
+        f"{base}/jobs/search?country_codes%5B%5D=IE",
     )
-    cleaned=[]; seen=set()
-    for j in jobs:
-        title=(j.get("title") or "").strip(); url=(j.get("url") or "").strip()
-        text=f"{title} {j.get('description_text') or ''} {url}".lower()
-        if not title or title.lower().startswith("skip to") or "#jobs_search_results" in url:
-            continue
-        irish=bool(re.search(r"\b(dublin|cork|galway|limerick|waterford|kilkenny|ireland)\b", text))
-        uk_only=bool(re.search(r"\b(bristol|london|belfast|england|scotland|wales|united kingdom|\buk\b)\b", text)) and not bool(re.search(r"\b(dublin|cork|galway|limerick|waterford|kilkenny|ireland)\b", text))
-        if not irish or uk_only: continue
-        key=url.split("#",1)[0].rstrip("/").lower()
-        if key in seen: continue
-        seen.add(key)
-        if "dublin" in text: j["location"]="Dublin, Ireland"
-        elif "cork" in text: j["location"]="Cork, Ireland"
-        elif "galway" in text: j["location"]="Galway, Ireland"
-        else: j["location"]="Ireland"
-        cleaned.append(j)
-    return cleaned
+
+    print(f"  Bank of Ireland official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
 
 
 def scrape_ing():
@@ -14365,6 +14864,8 @@ def scrape_direct_company(company: str):
         "Accenture": scrape_accenture,
         "Citi": scrape_citi,
         "Apple": scrape_apple,
+        "Fidelity International": scrape_fidelity_international,
+        "Bloomberg": scrape_bloomberg,
         "BlackRock": scrape_blackrock,
         "Bank of Ireland": scrape_bank_of_ireland,
         "Google": scrape_google,
