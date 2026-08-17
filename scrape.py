@@ -465,6 +465,10 @@ DIRECT_COMPANY_CONNECTORS = {
     "ABB": "abb_official",
     "AXA Ireland": "axa_official",
     "BNP Paribas Ireland": "bnp_paribas_official",
+    "AIG": "aig_workday",
+    "Barclays": "barclays_workday",
+    "Auxilion": "auxilion_official",
+    "BioMarin": "biomarin_official",
 }
 
 # Exact enterprise-platform mappings learned from validated public career-site
@@ -12580,6 +12584,253 @@ def scrape_bnp_paribas_ireland():
 
     return jobs
 
+
+
+def scrape_auxilion_official():
+    company = "Auxilion"
+    source = "https://www.auxilion.com/auxilion-careers"
+
+    session = requests.Session()
+    if session is None:
+        return []
+
+    try:
+        r = session.get(
+            source,
+            timeout=25,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+        r.raise_for_status()
+
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        candidates = {}
+        for a in soup.find_all("a", href=True):
+            href = urllib.parse.urljoin(source, a.get("href"))
+            if "/careers/" not in href:
+                continue
+            if href.rstrip("/") == source.rstrip("/"):
+                continue
+
+            canonical = href.split("?")[0].split("#")[0]
+
+            try:
+                rr = session.get(
+                    canonical,
+                    timeout=20,
+                    headers={"User-Agent": "Mozilla/5.0"},
+                )
+                if rr.status_code >= 400:
+                    continue
+
+                detail = BeautifulSoup(rr.text, "html.parser")
+                text = re.sub(r"\s+", " ", detail.get_text(" ", strip=True))
+
+                # Require the job page itself to contain an Ireland location.
+                if not re.search(
+                    r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford)\b",
+                    text,
+                    re.I,
+                ):
+                    continue
+
+                title = ""
+                h1 = detail.find("h1")
+                if h1:
+                    title = re.sub(r"\s+", " ", h1.get_text(" ", strip=True)).strip()
+
+                if not title:
+                    title = re.sub(
+                        r"[-_]+",
+                        " ",
+                        canonical.rstrip("/").split("/")[-1]
+                    ).title()
+
+                if not title or title.lower() in {
+                    "careers",
+                    "auxilion careers",
+                    "find out more",
+                }:
+                    continue
+
+                if re.search(r"\bDublin\b", text, re.I):
+                    location = "Dublin, Ireland"
+                elif re.search(r"\bCork\b", text, re.I):
+                    location = "Cork, Ireland"
+                elif re.search(r"\bGalway\b", text, re.I):
+                    location = "Galway, Ireland"
+                elif re.search(r"\bLimerick\b", text, re.I):
+                    location = "Limerick, Ireland"
+                elif re.search(r"\bWaterford\b", text, re.I):
+                    location = "Waterford, Ireland"
+                else:
+                    location = "Ireland"
+
+                candidates[canonical.lower()] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": text[:5000],
+                }
+
+            except Exception:
+                continue
+
+        _mark_connector_health(
+            company,
+            True,
+            f"Official Auxilion careers page loaded; {len(candidates)} Ireland jobs",
+            source,
+        )
+
+        print(f"  Auxilion official Ireland careers: {len(candidates)} jobs")
+        return list(candidates.values())
+
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), source)
+        print(f"  ! Auxilion scrape failed: {exc}")
+        return []
+
+
+def scrape_biomarin_official():
+    company = "BioMarin"
+    source = "https://www.biomarin.com/careers/jobs/"
+
+    session = requests.Session()
+    if session is None:
+        return []
+
+    try:
+        r = session.get(
+            source,
+            timeout=25,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+        r.raise_for_status()
+
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        job_links = set()
+
+        for a in soup.find_all("a", href=True):
+            href = urllib.parse.urljoin(source, a.get("href"))
+            if re.search(r"https://www\.biomarin\.com/job/[^/?#]+/?$", href, re.I):
+                job_links.add(href.split("?")[0].split("#")[0])
+
+        results = {}
+
+        for href in sorted(job_links):
+            try:
+                rr = session.get(
+                    href,
+                    timeout=20,
+                    headers={"User-Agent": "Mozilla/5.0"},
+                )
+                if rr.status_code >= 400:
+                    continue
+
+                detail = BeautifulSoup(rr.text, "html.parser")
+                text = re.sub(r"\s+", " ", detail.get_text(" ", strip=True))
+
+                title = ""
+                h1 = detail.find("h1")
+                if h1:
+                    title = re.sub(r"\s+", " ", h1.get_text(" ", strip=True)).strip()
+
+                if not title:
+                    title = re.sub(
+                        r"[-_]+",
+                        " ",
+                        href.rstrip("/").split("/")[-1]
+                    ).title()
+
+                # IMPORTANT:
+                # determine location from title/header/top job section only,
+                # NOT from the entire page, which may mention Ireland globally.
+                top_chunks = []
+
+                if h1:
+                    top_chunks.append(h1.parent.get_text(" ", strip=True)[:2500])
+
+                main = detail.find("main")
+                if main:
+                    top_chunks.append(main.get_text(" ", strip=True)[:3500])
+
+                top_text = re.sub(r"\s+", " ", " ".join(top_chunks))
+
+                # Strong positive Ireland signals.
+                city_match = re.search(
+                    r"\b(Cork|Dublin|Galway|Limerick|Waterford|Shanbally)\b"
+                    r"(?:,\s*Ireland)?",
+                    top_text,
+                    re.I,
+                )
+
+                ireland_match = re.search(
+                    r"\bIreland\b",
+                    top_text,
+                    re.I,
+                )
+
+                # Strong foreign-location signals near job header.
+                foreign_match = re.search(
+                    r"\b(?:United States|USA|US -|San Rafael|California|"
+                    r"Paris|France|Germany|Spain|Italy|Switzerland|Canada|"
+                    r"Netherlands|Belgium|Singapore|Japan|China|Australia)\b",
+                    top_text,
+                    re.I,
+                )
+
+                if not (city_match or ireland_match):
+                    continue
+
+                # Reject obvious foreign job locations even if generic page
+                # content elsewhere mentions Ireland.
+                if foreign_match and not city_match:
+                    continue
+
+                if city_match:
+                    city = city_match.group(1).title()
+                    location = f"{city}, Ireland"
+                else:
+                    location = "Ireland"
+
+                canonical = href.rstrip("/") + "/"
+
+                results[canonical.lower()] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": text[:5000],
+                }
+
+            except Exception:
+                continue
+
+        _mark_connector_health(
+            company,
+            True,
+            f"Official BioMarin careers page loaded; {len(results)} Ireland jobs",
+            source,
+        )
+
+        print(f"  BioMarin official Ireland careers: {len(results)} jobs")
+        return list(results.values())
+
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), source)
+        print(f"  ! BioMarin scrape failed: {exc}")
+        return []
+
+
 def scrape_direct_company(company: str):
     fn={
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
@@ -12687,6 +12938,24 @@ def scrape_direct_company(company: str):
         "AIB (Allied Irish Banks)": scrape_aib,
         "Central Bank of Ireland": scrape_central_bank_ireland,
         "BNP Paribas Ireland": scrape_bnp_paribas_ireland,
+        "AIG": lambda: scrape_workday(
+            "AIG",
+            "aig",
+            "wd1",
+            "aig",
+            max_pages=25,
+            search_text="Ireland",
+        ),
+        "Barclays": lambda: scrape_workday(
+            "Barclays",
+            "barclays",
+            "wd3",
+            "External_Career_Site_Barclays",
+            max_pages=25,
+            search_text="Ireland",
+        ),
+        "Auxilion": scrape_auxilion_official,
+        "BioMarin": scrape_biomarin_official,
         "BNP Paribas": scrape_bnp_paribas_rewired,
         "Capgemini": scrape_capgemini,
         "ServiceNow": scrape_servicenow,
