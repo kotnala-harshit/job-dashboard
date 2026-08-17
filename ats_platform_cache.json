@@ -117,6 +117,11 @@
     "slug": "amazon",
     "probe_version": 35
   },
+  "Anthropic": {
+    "platform": "greenhouse",
+    "slug": "anthropic",
+    "probe_version": 35
+  },
   "Aon": {
     "platform": "eightfold",
     "slug": "aon",
@@ -2132,6 +2137,11 @@
     "slug": "canto",
     "probe_version": 35
   },
+  "LearnUpon": {
+    "platform": "greenhouse",
+    "slug": "learnupon",
+    "probe_version": 35
+  },
   "Coinbase": {
     "platform": "greenhouse",
     "slug": "coinbase",
@@ -2487,11 +2497,6 @@
     "slug": "databricks",
     "probe_version": 35
   },
-  "Publift": {
-    "platform": "smartrecruiters",
-    "slug": "job-widget",
-    "probe_version": 35
-  },
   "Bloomberg": {
     "platform": "none",
     "slug": null,
@@ -2522,19 +2527,9 @@
     "slug": "cyberark",
     "probe_version": 35
   },
-  "LearnUpon": {
-    "platform": "greenhouse",
-    "slug": "learnupon",
-    "probe_version": 35
-  },
   "Pure Storage": {
     "platform": "greenhouse",
     "slug": "purestorage",
-    "probe_version": 35
-  },
-  "Anthropic": {
-    "platform": "greenhouse",
-    "slug": "anthropic",
     "probe_version": 35
   },
   "Trinity College Dublin": {
@@ -2558,8 +2553,8 @@
     "probe_version": 35
   },
   "Dublin City University (DCU)": {
-    "platform": "none",
-    "slug": null,
+    "platform": "greenhouse",
+    "slug": "dublin",
     "probe_version": 35
   },
   "University of Galway": {
@@ -2828,13 +2823,13 @@
     "probe_version": 35
   },
   "Harvey Nash Ireland": {
-    "platform": "none",
-    "slug": null,
+    "platform": "ashby",
+    "slug": "harvey",
     "probe_version": 35
   },
   "Harvey Norman Ireland": {
-    "platform": "none",
-    "slug": null,
+    "platform": "ashby",
+    "slug": "harvey",
     "probe_version": 35
   },
   "Hays Ireland": {
@@ -2858,8 +2853,8 @@
     "probe_version": 35
   },
   "JD Sports Ireland": {
-    "platform": "none",
-    "slug": null,
+    "platform": "greenhouse",
+    "slug": "jdsports",
     "probe_version": 35
   },
   "John Paul Construction": {
@@ -2888,8 +2883,8 @@
     "probe_version": 35
   },
   "Life Style Sports": {
-    "platform": "none",
-    "slug": null,
+    "platform": "lever",
+    "slug": "life",
     "probe_version": 35
   },
   "Maldron Hotels": {
@@ -2898,8 +2893,8 @@
     "probe_version": 35
   },
   "Manpower Ireland": {
-    "platform": "none",
-    "slug": null,
+    "platform": "recruitee",
+    "slug": "manpower",
     "probe_version": 35
   },
   "Marks & Spencer Ireland": {
@@ -2913,8 +2908,8 @@
     "probe_version": 35
   },
   "McDonald's Ireland": {
-    "platform": "none",
-    "slug": null,
+    "platform": "personio",
+    "slug": "mcdonalds",
     "probe_version": 35
   },
   "Mitie Ireland": {
@@ -2923,23 +2918,18 @@
     "probe_version": 35
   },
   "Morgan McKinley": {
-    "platform": "none",
-    "slug": null,
+    "platform": "pinpoint",
+    "slug": "morganmckinley",
     "probe_version": 35
   },
   "Next Ireland": {
-    "platform": "none",
-    "slug": null,
+    "platform": "pinpoint",
+    "slug": "next",
     "probe_version": 35
   },
   "Press Up Hospitality Group": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Primark / Penneys": {
-    "platform": "smartrecruiters",
-    "slug": "external-referrals",
     "probe_version": 35
   },
   "RCSI": {
@@ -2993,8 +2983,18 @@
     "probe_version": 35
   },
   "Waterstones Ireland": {
-    "platform": "none",
-    "slug": null,
+    "platform": "pinpoint",
+    "slug": "waterstones",
+    "probe_version": 35
+  },
+  "Publift": {
+    "platform": "smartrecruiters",
+    "slug": "job-widget",
+    "probe_version": 35
+  },
+  "Primark / Penneys": {
+    "platform": "smartrecruiters",
+    "slug": "external-referrals",
     "probe_version": 35
   },
   "__probe_version__": 35
