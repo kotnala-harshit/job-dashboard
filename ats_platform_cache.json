@@ -327,11 +327,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "C&C Group": {
-    "platform": "greenhouse",
-    "slug": "cc",
-    "probe_version": 35
-  },
   "CACEIS": {
     "platform": "pinpoint",
     "slug": "caceis",
@@ -2490,6 +2485,11 @@
   "Block": {
     "platform": "greenhouse",
     "slug": "block",
+    "probe_version": 35
+  },
+  "C&C Group": {
+    "platform": "greenhouse",
+    "slug": "cc",
     "probe_version": 35
   },
   "Publift": {
