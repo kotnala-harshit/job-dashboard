@@ -469,6 +469,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Barclays": "barclays_workday",
     "AMCS Group": "amcs_official",
     "Avolon": "avolon_official",
+    "ASL Aviation Holdings": "asl_aviation_official",
     "Auxilion": "auxilion_official",
     "BioMarin": "biomarin_official",
 }
@@ -13147,6 +13148,258 @@ def scrape_avolon_official():
         return []
 
 
+
+def scrape_asl_aviation_official():
+    """Strict ASL Aviation Ireland vacancy scraper.
+
+    A vacancy is accepted only when its own detail page explicitly labels
+    the location as an Irish city. Corporate boilerplate mentioning Dublin
+    or Ireland is never sufficient.
+    """
+    import re
+    import requests
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin
+
+    company = "ASL Aviation Holdings"
+    base = (
+        "https://cezanneondemand.intervieweb.it/"
+        "aslaviationgroup/en/career"
+    )
+
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 Chrome/124 Safari/537.36"
+        )
+    }
+
+    session = requests.Session()
+    session.headers.update(headers)
+
+    try:
+        r = session.get(base, timeout=30)
+
+        if r.status_code != 200:
+            _mark_connector_health(
+                company,
+                False,
+                f"ASL careers returned HTTP {r.status_code}",
+                base,
+            )
+            return []
+
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        vacancy_urls = set()
+
+        for a in soup.find_all("a", href=True):
+            href = urljoin(r.url, a.get("href") or "")
+            href = href.split("#")[0].split("?")[0]
+
+            if re.match(
+                r"^https://cezanneondemand\.intervieweb\.it/"
+                r"aslaviationgroup/jobs/"
+                r"[^/?#]+-\d+/en/?$",
+                href,
+                re.I,
+            ):
+                vacancy_urls.add(href.rstrip("/") + "/")
+
+        jobs = []
+        seen = set()
+
+        # IMPORTANT:
+        # Only explicit vacancy-level location labels count.
+        #
+        # Examples:
+        #   Location Swords Ireland
+        #   Location Dublin Ireland
+        #   Location Shannon Ireland
+        explicit_location_re = re.compile(
+            r"\bLocation\s*[:\-]?\s*"
+            r"(Swords|Dublin|Shannon|Cork|Galway|Limerick|Waterford)"
+            r"\s*,?\s*Ireland\b",
+            re.I,
+        )
+
+        generic_slugs = (
+            "candidature-spontanee",
+            "spontaneous",
+            "internships-stages",
+        )
+
+        for href in sorted(vacancy_urls):
+            try:
+                slug = href.rstrip("/").split("/")[-2].lower()
+
+                # Generic talent-pool / non-specific vacancy pages do not
+                # belong in the live Ireland-job feed.
+                if any(x in slug for x in generic_slugs):
+                    continue
+
+                rr = session.get(href, timeout=25)
+
+                if rr.status_code != 200:
+                    continue
+
+                ss = BeautifulSoup(rr.text, "html.parser")
+
+                text = re.sub(
+                    r"\s+",
+                    " ",
+                    ss.get_text(" ", strip=True),
+                ).strip()
+
+                # ------------------------------------------------------
+                # STRICT LOCATION VALIDATION
+                # ------------------------------------------------------
+                #
+                # Do not accept:
+                #   "headquartered in Dublin, Ireland"
+                #   "ASL Airlines Ireland"
+                #   footer/corporate descriptions
+                #
+                # The vacancy itself must expose a Location field.
+                location_match = explicit_location_re.search(text)
+
+                if not location_match:
+                    continue
+
+                city = location_match.group(1).title()
+                location = f"{city}, Ireland"
+
+                # ------------------------------------------------------
+                # TITLE
+                # ------------------------------------------------------
+                #
+                # Intervieweb's visible H1 can be Login / application form,
+                # so URL slug is more reliable and vacancy-specific.
+                clean_slug = re.sub(
+                    r"-\d+$",
+                    "",
+                    slug,
+                )
+
+                title = clean_slug.replace("-", " ").strip()
+
+                # Preserve common technical abbreviations.
+                words = []
+                for word in title.split():
+                    low = word.lower()
+
+                    if low in {
+                        "b1",
+                        "b2",
+                        "b1b2",
+                        "b737",
+                        "b747",
+                        "pnc",
+                        "hf",
+                    }:
+                        words.append(word.upper())
+                    else:
+                        words.append(word.capitalize())
+
+                title = " ".join(words)
+
+                if not title:
+                    continue
+
+                # ------------------------------------------------------
+                # EMPLOYMENT TYPE
+                # ------------------------------------------------------
+                employment_type = None
+
+                # Only inspect a limited vacancy-focused window around the
+                # explicit Location field rather than the whole corporate page.
+                loc_start = max(0, location_match.start() - 2500)
+                loc_end = min(len(text), location_match.end() + 5000)
+                vacancy_window = text[loc_start:loc_end]
+
+                if re.search(
+                    r"\bfull[- ]?time\b",
+                    vacancy_window,
+                    re.I,
+                ):
+                    employment_type = "Full Time"
+
+                elif re.search(
+                    r"\bpart[- ]?time\b",
+                    vacancy_window,
+                    re.I,
+                ):
+                    employment_type = "Part Time"
+
+                elif re.search(
+                    r"\b(?:contract|fixed[- ]term|temporary)\b",
+                    vacancy_window,
+                    re.I,
+                ):
+                    employment_type = "Contract"
+
+                canonical = href.rstrip("/") + "/"
+
+                if canonical.lower() in seen:
+                    continue
+
+                seen.add(canonical.lower())
+
+                jobs.append({
+                    "company": company,
+                    "ats": "intervieweb",
+                    "title": title[:300],
+                    "location": location,
+                    "raw_location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "employment_type": employment_type,
+                    "description_text": vacancy_window[:12000],
+                })
+
+            except Exception:
+                continue
+
+        jobs.sort(
+            key=lambda x: (
+                x.get("location") or "",
+                x.get("title") or "",
+            )
+        )
+
+        _mark_connector_health(
+            company,
+            True,
+            (
+                "Official ASL Intervieweb careers board loaded; "
+                f"{len(jobs)} explicitly Ireland-labelled vacancies"
+            ),
+            base,
+        )
+
+        print(
+            f"  ASL Aviation official Ireland careers: "
+            f"{len(jobs)} jobs"
+        )
+
+        return jobs
+
+    except Exception as exc:
+        _mark_connector_health(
+            company,
+            False,
+            f"ASL careers error: {exc}",
+            base,
+        )
+
+        print(
+            f"  ! ASL Aviation Ireland scrape failed: {exc}"
+        )
+
+        return []
+
+
+
 def scrape_direct_company(company: str):
     fn={
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
@@ -13272,6 +13525,7 @@ def scrape_direct_company(company: str):
         ),
         "AMCS Group": scrape_amcs_official,
         "Avolon": scrape_avolon_official,
+        "ASL Aviation Holdings": scrape_asl_aviation_official,
         "Auxilion": scrape_auxilion_official,
         "BioMarin": scrape_biomarin_official,
         "BNP Paribas": scrape_bnp_paribas_rewired,
