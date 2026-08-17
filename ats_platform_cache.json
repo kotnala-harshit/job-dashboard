@@ -272,11 +272,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Block": {
-    "platform": "greenhouse",
-    "slug": "block",
-    "probe_version": 35
-  },
   "BNP Paribas Ireland": {
     "platform": "none",
     "slug": null,
@@ -2490,6 +2485,11 @@
   "Fixify": {
     "platform": "greenhouse",
     "slug": "fixify",
+    "probe_version": 35
+  },
+  "Block": {
+    "platform": "greenhouse",
+    "slug": "block",
     "probe_version": 35
   },
   "Publift": {
