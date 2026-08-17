@@ -462,6 +462,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "Heineken Ireland": "heineken_successfactors",
 
     "AECOM": "aecom_official",
+    "ABB": "abb_official",
+    "AXA Ireland": "axa_official",
+    "BNP Paribas Ireland": "bnp_paribas_official",
 }
 
 # Exact enterprise-platform mappings learned from validated public career-site
@@ -7989,44 +7992,77 @@ def scrape_bnp_paribas_rewired():
             for title in live_titles:
                 url = ""
 
-                escaped_title = re.escape(title)
+                # Prefer the DOM node for this exact title and inspect its nearby
+                # ancestors/links first. This prevents two vacancies from inheriting
+                # the same URL from a broad HTML window.
+                try:
+                    locator = page.get_by_text(title, exact=True).first
+                    if locator.count():
+                        node = locator
 
-                # Search a local HTML window around the title.
-                m = re.search(
-                    escaped_title,
-                    html_text,
-                    re.I,
-                )
+                        for _ in range(6):
+                            try:
+                                links = node.locator("a").evaluate_all(
+                                    """els => els.map(a => a.href || a.getAttribute('href') || '')"""
+                                )
+                            except Exception:
+                                links = []
 
-                if m:
-                    start = max(0, m.start() - 2500)
-                    end = min(len(html_text), m.end() + 2500)
-                    chunk = html_text[start:end]
+                            for href in links:
+                                if href and "/en/jobs/" in href:
+                                    url = urllib.parse.urljoin(source, href)
+                                    break
 
-                    url_match = re.search(
-                        r'https?://www\.bnpparibas\.ie/en/jobs/'
-                        r'[a-z0-9\-]+/?',
-                        chunk,
-                        re.I,
-                    )
+                            if url:
+                                break
 
-                    if not url_match:
-                        url_match = re.search(
+                            try:
+                                href = node.get_attribute("href")
+                            except Exception:
+                                href = None
+
+                            if href and "/en/jobs/" in href:
+                                url = urllib.parse.urljoin(source, href)
+                                break
+
+                            try:
+                                node = node.locator("..")
+                            except Exception:
+                                break
+                except Exception:
+                    pass
+
+                # HTML fallback only if the exact DOM card did not expose a link.
+                if not url:
+                    escaped_title = re.escape(title)
+                    m = re.search(escaped_title, html_text, re.I)
+
+                    if m:
+                        start = max(0, m.start() - 1200)
+                        end = min(len(html_text), m.end() + 1200)
+                        chunk = html_text[start:end]
+
+                        matches = re.findall(
+                            r'https?://www\.bnpparibas\.ie/en/jobs/[a-z0-9\-]+/?|'
                             r'["\'](/en/jobs/[a-z0-9\-]+/?)["\']',
                             chunk,
                             re.I,
                         )
 
-                    if url_match:
-                        candidate = url_match.group(1)
+                        if matches:
+                            candidate = matches[0]
+                            if isinstance(candidate, tuple):
+                                candidate = next((x for x in candidate if x), "")
+                            if not candidate:
+                                mm = re.search(
+                                    r'https?://www\.bnpparibas\.ie/en/jobs/[a-z0-9\-]+/?',
+                                    chunk,
+                                    re.I,
+                                )
+                                candidate = mm.group(0) if mm else ""
 
-                        if candidate.startswith("/"):
-                            url = (
-                                "https://www.bnpparibas.ie"
-                                + candidate
-                            )
-                        else:
-                            url = candidate
+                            if candidate:
+                                url = urllib.parse.urljoin(source, candidate)
 
                 # DOM ancestor fallback.
                 if not url:
@@ -12529,6 +12565,21 @@ def scrape_bausch_lomb_ireland():
 
 
 
+
+def scrape_bnp_paribas_ireland():
+    """Registry-normalised wrapper around the existing BNP Paribas scraper."""
+    jobs = scrape_bnp_paribas_rewired() or []
+
+    for job in jobs:
+        job["company"] = "BNP Paribas Ireland"
+
+    # Mirror connector health under the registry's canonical company name.
+    existing = CONNECTOR_HEALTH.get("BNP Paribas")
+    if existing:
+        CONNECTOR_HEALTH["BNP Paribas Ireland"] = dict(existing)
+
+    return jobs
+
 def scrape_direct_company(company: str):
     fn={
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
@@ -12635,6 +12686,7 @@ def scrape_direct_company(company: str):
         "Cognizant": scrape_cognizant,
         "AIB (Allied Irish Banks)": scrape_aib,
         "Central Bank of Ireland": scrape_central_bank_ireland,
+        "BNP Paribas Ireland": scrape_bnp_paribas_ireland,
         "BNP Paribas": scrape_bnp_paribas_rewired,
         "Capgemini": scrape_capgemini,
         "ServiceNow": scrape_servicenow,
