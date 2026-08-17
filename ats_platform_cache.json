@@ -2497,11 +2497,6 @@
     "slug": "databricks",
     "probe_version": 35
   },
-  "Publift": {
-    "platform": "smartrecruiters",
-    "slug": "job-widget",
-    "probe_version": 35
-  },
   "Bloomberg": {
     "platform": "none",
     "slug": null,
@@ -2937,11 +2932,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Primark / Penneys": {
-    "platform": "smartrecruiters",
-    "slug": "external-referrals",
-    "probe_version": 35
-  },
   "RCSI": {
     "platform": "none",
     "slug": null,
@@ -2995,6 +2985,16 @@
   "Waterstones Ireland": {
     "platform": "pinpoint",
     "slug": "waterstones",
+    "probe_version": 35
+  },
+  "Publift": {
+    "platform": "smartrecruiters",
+    "slug": "job-widget",
+    "probe_version": 35
+  },
+  "Primark / Penneys": {
+    "platform": "smartrecruiters",
+    "slug": "external-referrals",
     "probe_version": 35
   },
   "__probe_version__": 35
