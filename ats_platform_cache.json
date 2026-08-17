@@ -1842,11 +1842,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Tenable": {
-    "platform": "greenhouse",
-    "slug": "tenableinc",
-    "probe_version": 35
-  },
   "Teneo Ireland": {
     "platform": "none",
     "slug": null,
@@ -2990,6 +2985,11 @@
   "Publift": {
     "platform": "smartrecruiters",
     "slug": "job-widget",
+    "probe_version": 35
+  },
+  "Tenable": {
+    "platform": "greenhouse",
+    "slug": "tenableinc",
     "probe_version": 35
   },
   "Primark / Penneys": {
