@@ -2492,9 +2492,509 @@
     "slug": "cc",
     "probe_version": 35
   },
+  "Databricks": {
+    "platform": "greenhouse",
+    "slug": "databricks",
+    "probe_version": 35
+  },
   "Publift": {
     "platform": "smartrecruiters",
     "slug": "job-widget",
+    "probe_version": 35
+  },
+  "Bloomberg": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Boston Consulting Group (BCG)": {
+    "platform": "greenhouse",
+    "slug": "boston",
+    "probe_version": 35
+  },
+  "Bain & Company": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "CrowdStrike": {
+    "platform": "workday",
+    "slug": "crowdstrike|wd5|crowdstrikecareers",
+    "probe_version": 35
+  },
+  "Veeam": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "CyberArk": {
+    "platform": "pinpoint",
+    "slug": "cyberark",
+    "probe_version": 35
+  },
+  "Pure Storage": {
+    "platform": "greenhouse",
+    "slug": "purestorage",
+    "probe_version": 35
+  },
+  "Trinity College Dublin": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "University College Cork (UCC)": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "University College Dublin (UCD)": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Box": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Dublin City University (DCU)": {
+    "platform": "greenhouse",
+    "slug": "dublin",
+    "probe_version": 35
+  },
+  "University of Galway": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "University of Limerick (UL)": {
+    "platform": "greenhouse",
+    "slug": "universityoflimerick",
+    "probe_version": 35
+  },
+  "Carrier": {
+    "platform": "workday",
+    "slug": "carrier|wd5|jobs",
+    "probe_version": 35
+  },
+  "Maynooth University": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Munster Technological University (MTU)": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "RCSI University of Medicine and Health Sciences": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Technological University Dublin (TU Dublin)": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "KLA Corporation": {
+    "platform": "workday",
+    "slug": "kla|wd1|Search",
+    "probe_version": 35
+  },
+  "Micron Technology": {
+    "platform": "eightfold",
+    "slug": "micron",
+    "probe_version": 35
+  },
+  "Monday.com": {
+    "platform": "personio",
+    "slug": "monday",
+    "probe_version": 35
+  },
+  "Western Digital": {
+    "platform": "smartrecruiters",
+    "slug": "WesternDigital",
+    "probe_version": 35
+  },
+  "Atlantic Technological University (ATU)": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Canva": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "SentinelOne": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "South East Technological University (SETU)": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Technological University of the Shannon (TUS)": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Lonza": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Bio-Rad Laboratories": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Bruker": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "CPL Resources": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Fastly": {
+    "platform": "greenhouse",
+    "slug": "fastly",
+    "probe_version": 35
+  },
+  "Biotronik": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Tandem Diabetes Care": {
+    "platform": "workday",
+    "slug": "tandemdiabetes|wd12|tandemdiabetes",
+    "probe_version": 35
+  },
+  "ABP Food Group": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Adecco Ireland": {
+    "platform": "recruitee",
+    "slug": "adecco",
+    "probe_version": 35
+  },
+  "Aldi Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Applegreen": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Approach People Recruitment": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Aramark Ireland": {
+    "platform": "recruitee",
+    "slug": "aramark",
+    "probe_version": 35
+  },
+  "B&Q Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "BAM Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Bidvest Noonan": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Boots Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Brightwater": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Brown Thomas Arnotts": {
+    "platform": "pinpoint",
+    "slug": "brown",
+    "probe_version": 35
+  },
+  "Carbery Group": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Circle K Ireland": {
+    "platform": "workday",
+    "slug": "circlek|wd3|CircleKStoreJobs",
+    "probe_version": 35
+  },
+  "Clayton Hotels": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Collen Construction": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Compass Group Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Cpl": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Currys Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Dairygold": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Dawn Meats": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Decathlon Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Designer Group": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Dornan": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Dunnes Stores": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Eason": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Flynn": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "FRS Recruitment": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "H&M Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Halfords Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Harvey Nash Ireland": {
+    "platform": "ashby",
+    "slug": "harvey",
+    "probe_version": 35
+  },
+  "Harvey Norman Ireland": {
+    "platform": "ashby",
+    "slug": "harvey",
+    "probe_version": 35
+  },
+  "Hays Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Holland & Barrett Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "IKEA Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Intersport Elverys": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "JD Sports Ireland": {
+    "platform": "greenhouse",
+    "slug": "jdsports",
+    "probe_version": 35
+  },
+  "John Paul Construction": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Jones Engineering": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "JYSK Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Kepak Group": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Lidl Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Life Style Sports": {
+    "platform": "lever",
+    "slug": "life",
+    "probe_version": 35
+  },
+  "Maldron Hotels": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Manpower Ireland": {
+    "platform": "recruitee",
+    "slug": "manpower",
+    "probe_version": 35
+  },
+  "Marks & Spencer Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "McCabes Pharmacy": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "McDonald's Ireland": {
+    "platform": "personio",
+    "slug": "mcdonalds",
+    "probe_version": 35
+  },
+  "Mitie Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Morgan McKinley": {
+    "platform": "pinpoint",
+    "slug": "morganmckinley",
+    "probe_version": 35
+  },
+  "Next Ireland": {
+    "platform": "pinpoint",
+    "slug": "next",
+    "probe_version": 35
+  },
+  "Press Up Hospitality Group": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Primark / Penneys": {
+    "platform": "smartrecruiters",
+    "slug": "external-referrals",
+    "probe_version": 35
+  },
+  "RCSI": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Reperio Human Capital": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Securitas Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Sigmar Recruitment": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Smyths Toys Superstores": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Sodexo Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Storm3": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Suir Engineering": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Superdrug Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Trinity College Dublin (TCD)": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Waterstones Ireland": {
+    "platform": "pinpoint",
+    "slug": "waterstones",
     "probe_version": 35
   },
   "__probe_version__": 35
