@@ -4703,22 +4703,201 @@ def scrape_capgemini():
 
 
 def scrape_blackrock():
-    jobs = _browser_board_collect(
-        "BlackRock",
-        [
-            "https://careers.blackrock.com/location/dublin-jobs/45831/2963597-7521314-2964574/4",
-            "https://careers.blackrock.com/search-jobs?location=Dublin%2C%20Ireland",
-        ],
-        ("careers.blackrock.com/job/dublin/",),
-        default_location="Dublin, Ireland",
-        max_scrolls=30,
-        require_ireland=False,
+    """
+    BlackRock official Dublin collector.
+
+    TalentBrew's generic ?location= query can return global results.
+    Use the canonical Dublin location route exposed by BlackRock's own
+    location facets.
+    """
+    company = "BlackRock"
+
+    source = (
+        "https://careers.blackrock.com/location/"
+        "dublin-jobs/45831/2963597-7521314-2964574/4"
     )
-    for j in jobs:
-        title = (j.get("title") or "").strip()
-        j["title"] = re.split(r"\s*Location:\s*", title, maxsplit=1, flags=re.I)[0].strip()
-        j["location"] = "Dublin, Ireland"
-    return jobs
+
+    sess = _session()
+    if not sess:
+        return []
+
+    try:
+        r = sess.get(
+            source,
+            timeout=30,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+        r.raise_for_status()
+        html_text = r.text or ""
+    except Exception as exc:
+        print(f"  ! BlackRock Dublin page failed: {exc}")
+        return []
+
+    results = {}
+
+    # TalentBrew job paths look like:
+    # /job/dublin/<slug>/45831/<id>
+    pattern = re.compile(
+        r'href=["\']'
+        r'([^"\']*/job/dublin/[^"\']+/45831/\d+)'
+        r'["\']',
+        re.I,
+    )
+
+    for m in pattern.finditer(html_text):
+        href = html.unescape(m.group(1))
+
+        if href.startswith("/"):
+            href = "https://careers.blackrock.com" + href
+
+        href = href.split("?")[0]
+
+        # Nearby HTML usually contains title/location/team.
+        lo = max(0, m.start() - 2500)
+        hi = min(len(html_text), m.end() + 3500)
+        card_html = html_text[lo:hi]
+        card_text = re.sub(
+            r"\s+",
+            " ",
+            _html_text(card_html),
+        ).strip()
+
+        if not re.search(r"\bDublin\b", card_text, re.I):
+            continue
+
+        # Try title from anchor/card.
+        title = ""
+
+        tm = re.search(
+            r'<a[^>]+href=["\'][^"\']*'
+            + re.escape(
+                urllib.parse.urlparse(href).path
+            )
+            + r'[^"\']*["\'][^>]*>(.*?)</a>',
+            card_html,
+            re.I | re.S,
+        )
+
+        if tm:
+            title = re.sub(
+                r"\s+",
+                " ",
+                _html_text(tm.group(1)),
+            ).strip()
+
+        if not title:
+            tm = re.search(
+                r'<h[1-4][^>]*>(.*?)</h[1-4]>',
+                card_html,
+                re.I | re.S,
+            )
+            if tm:
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    _html_text(tm.group(1)),
+                ).strip()
+
+        # Detail page gives cleaner title/description.
+        detail_text = card_text
+
+        try:
+            dr = sess.get(
+                href,
+                timeout=25,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                    "Referer": source,
+                },
+            )
+
+            if dr.status_code == 200:
+                dhtml = dr.text or ""
+                detail_text = re.sub(
+                    r"\s+",
+                    " ",
+                    _html_text(dhtml),
+                ).strip()
+
+                hm = re.search(
+                    r'<h1\b[^>]*>(.*?)</h1>',
+                    dhtml,
+                    re.I | re.S,
+                )
+
+                if hm:
+                    clean = re.sub(
+                        r"\s+",
+                        " ",
+                        _html_text(hm.group(1)),
+                    ).strip()
+                    if clean:
+                        title = clean
+
+                if not title:
+                    tm = re.search(
+                        r'<title\b[^>]*>(.*?)</title>',
+                        dhtml,
+                        re.I | re.S,
+                    )
+                    if tm:
+                        title = re.sub(
+                            r"\s+",
+                            " ",
+                            _html_text(tm.group(1)),
+                        ).strip()
+
+        except Exception:
+            pass
+
+        title = re.sub(
+            r"\s+Location:.*$",
+            "",
+            title,
+            flags=re.I,
+        ).strip()
+
+        title = re.sub(
+            r"\s*\|\s*BlackRock.*$",
+            "",
+            title,
+            flags=re.I,
+        ).strip()
+
+        if not title:
+            continue
+
+        validation = f"{card_text} {detail_text}"
+
+        if not re.search(r"\bDublin\b", validation, re.I):
+            continue
+
+        key = href.rstrip("/").lower()
+
+        results[key] = {
+            "company": company,
+            "ats": "talentbrew",
+            "title": title[:300],
+            "location": "Dublin, Ireland",
+            "url": href,
+            "updated_at": None,
+            "description_text": detail_text[:7000],
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        f"BlackRock Dublin TalentBrew page returned {len(results)} jobs",
+        source,
+    )
+
+    print(f"  BlackRock official Dublin careers: {len(results)} jobs")
+    return list(results.values())
+
 
 
 def scrape_bank_of_ireland():
@@ -9279,298 +9458,178 @@ def scrape_ryanair():
     return list(results.values())
 
 def scrape_sp_global():
-    company = "S&P Global"
+    """
+    S&P Global official Workday Ireland collector.
 
-    if not HAS_PLAYWRIGHT:
-        print("  ! S&P Global: Playwright unavailable")
+    Workday search cards can use a non-Ireland PRIMARY location for
+    multi-location roles, so use the official Ireland country facet and
+    validate the full Workday job-detail JSON.
+    """
+    company = "S&P Global"
+    base = "https://spgi.wd5.myworkdayjobs.com"
+    site = "SPGI_Careers"
+    api = f"{base}/wday/cxs/spgi/{site}/jobs"
+
+    IRELAND_COUNTRY_ID = "04a05835925f45b3a59406a2a6b72c8a"
+
+    sess = _session()
+    if not sess:
         return []
 
-    base = (
-        "https://careers.spglobal.com/jobs"
-        "?location=Ireland"
-        "&woe=12"
-        "&regionCode=IE"
-        "&stretchUnit=MILES"
-        "&stretch=10"
-    )
-
     results = {}
-    discovered = {}
+    offset = 0
 
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
+    while offset < 500:
+        payload = {
+            "appliedFacets": {
+                "Location_Country": [IRELAND_COUNTRY_ID]
+            },
+            "limit": 20,
+            "offset": offset,
+            "searchText": "",
+        }
 
-            context = browser.new_context(
-                locale="en-IE",
-                viewport={"width": 1440, "height": 1600},
-                user_agent=(
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/124.0.0.0 Safari/537.36"
-                ),
+        try:
+            r = sess.post(
+                api,
+                json=payload,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                    "Referer": f"{base}/{site}",
+                },
+            )
+            if r.status_code != 200:
+                break
+            data = r.json()
+        except Exception as exc:
+            print(f"  ! S&P Global Workday search failed: {exc}")
+            break
+
+        rows = data.get("jobPostings") or []
+        if not rows:
+            break
+
+        for row in rows:
+            external_path = str(row.get("externalPath") or "").strip()
+            if not external_path:
+                continue
+
+            detail_url = (
+                f"{base}/wday/cxs/spgi/{site}"
+                f"{external_path}"
             )
 
-            page = context.new_page()
-
-            # Ireland board pagination.
-            # Stop as soon as a page gives no new job IDs.
-            for page_num in range(1, 15):
-                url = f"{base}&page={page_num}"
-
-                try:
-                    resp = page.goto(
-                        url,
-                        wait_until="domcontentloaded",
-                        timeout=60000,
-                    )
-                    page.wait_for_timeout(1800)
-                except Exception as exc:
-                    print(
-                        f"  ! S&P Global page {page_num} failed: {exc}"
-                    )
-                    break
-
-                if resp and resp.status >= 400:
-                    print(
-                        f"  ! S&P Global page {page_num} HTTP "
-                        f"{resp.status}"
-                    )
-                    break
-
-                before = len(discovered)
-
-                # DOM links first.
-                try:
-                    links = page.locator("a").evaluate_all(
-                        """els => els.map(a => ({
-                            href: a.href || "",
-                            text: (
-                                a.innerText ||
-                                a.textContent ||
-                                ""
-                            ).trim()
-                        }))"""
-                    )
-                except Exception:
-                    links = []
-
-                for item in links:
-                    href = str(item.get("href") or "")
-                    text = re.sub(
-                        r"\s+",
-                        " ",
-                        str(item.get("text") or "")
-                    ).strip()
-
-                    m = re.search(
-                        r"https?://careers\.spglobal\.com/jobs/"
-                        r"(\d+)(?:[/?#]|$)",
-                        href,
-                        re.I,
-                    )
-                    if not m:
-                        continue
-
-                    job_id = m.group(1)
-
-                    canonical = (
-                        f"https://careers.spglobal.com/jobs/{job_id}"
-                        "?lang=en-us"
-                    )
-
-                    if job_id not in discovered:
-                        discovered[job_id] = {
-                            "url": canonical,
-                            "card_text": text,
-                        }
-
-                # Also inspect raw page HTML because some Phenom-style
-                # boards hydrate job URLs into JSON rather than anchors.
-                try:
-                    html_text = page.content()
-                except Exception:
-                    html_text = ""
-
-                patterns = [
-                    r'https?://careers\.spglobal\.com/jobs/'
-                    r'(\d+)(?:\?[^"\'<> ]*)?',
-
-                    r'["\'](/jobs/(\d+)'
-                    r'(?:\?[^"\']*)?)["\']',
-                ]
-
-                for m in re.finditer(patterns[0], html_text, re.I):
-                    job_id = m.group(1)
-                    discovered.setdefault(
-                        job_id,
-                        {
-                            "url": (
-                                "https://careers.spglobal.com/jobs/"
-                                f"{job_id}?lang=en-us"
-                            ),
-                            "card_text": "",
-                        },
-                    )
-
-                for m in re.finditer(patterns[1], html_text, re.I):
-                    job_id = m.group(2)
-                    discovered.setdefault(
-                        job_id,
-                        {
-                            "url": (
-                                "https://careers.spglobal.com/jobs/"
-                                f"{job_id}?lang=en-us"
-                            ),
-                            "card_text": "",
-                        },
-                    )
-
-                new_count = len(discovered) - before
-
-                if new_count == 0:
-                    if page_num == 1:
-                        print(
-                            "  ! S&P Global Ireland board returned "
-                            "no job links"
-                        )
-                    break
-
-            # Detail pages: only Ireland-board jobs.
-            for job_id, item in discovered.items():
-                detail = context.new_page()
-
-                try:
-                    resp = detail.goto(
-                        item["url"],
-                        wait_until="domcontentloaded",
-                        timeout=45000,
-                    )
-                    detail.wait_for_timeout(700)
-
-                    if resp and resp.status >= 400:
-                        detail.close()
-                        continue
-
-                    body = detail.locator("body").inner_text(
-                        timeout=10000
-                    )
-                    body = re.sub(r"\r", "", body)
-
-                except Exception:
-                    detail.close()
-                    continue
-
-                # Ireland validation.
-                # Accept Dublin or explicit Ireland locations,
-                # including multi-location roles.
-                location = ""
-
-                loc_patterns = [
-                    r"\bDublin,\s*Ireland\b",
-                    r"\bDublin\b[^\\n]{0,80}\bIreland\b",
-                    r"\bIreland\b",
-                ]
-
-                if not any(
-                    re.search(pattern, body, re.I)
-                    for pattern in loc_patterns
-                ):
-                    detail.close()
-                    continue
-
-                # Prefer H1 for title.
-                title = ""
-
-                try:
-                    title = detail.locator("h1").first.inner_text(
-                        timeout=3000
-                    ).strip()
-                except Exception:
-                    pass
-
-                if not title:
-                    try:
-                        title = detail.title()
-                    except Exception:
-                        title = ""
-
-                title = re.sub(r"\s+", " ", title).strip()
-
-                title = re.sub(
-                    r"\s+(?:in|at)\s+.*?\|\s*S&P Global.*$",
-                    "",
-                    title,
-                    flags=re.I,
-                ).strip()
-
-                title = re.sub(
-                    r"\s*\|\s*S&P Global.*$",
-                    "",
-                    title,
-                    flags=re.I,
-                ).strip()
-
-                if not title:
-                    title = item.get("card_text", "").strip()
-
-                if not title:
-                    detail.close()
-                    continue
-
-                # Capture location line from top portion of page.
-                top = "\n".join(body.splitlines()[:80])
-
-                multi = re.search(
-                    r"([A-Za-z .'-]+,\s*Ireland"
-                    r"(?:\s*;\s*[A-Za-z .'-]+,\s*Ireland)*)",
-                    top,
-                    re.I,
+            try:
+                dr = sess.get(
+                    detail_url,
+                    timeout=25,
+                    headers={
+                        "User-Agent": "Mozilla/5.0",
+                        "Accept": "application/json",
+                        "Accept-Language": "en-IE,en;q=0.9",
+                        "Referer": f"{base}/{site}",
+                    },
                 )
 
-                if multi:
-                    location = re.sub(
-                        r"\s+",
-                        " ",
-                        multi.group(1)
-                    ).strip()
-                elif re.search(
-                    r"\bDublin,\s*Ireland\b",
-                    top,
-                    re.I,
-                ):
-                    location = "Dublin, Ireland"
-                else:
-                    location = "Ireland"
+                if dr.status_code != 200:
+                    continue
 
-                canonical = (
-                    f"https://careers.spglobal.com/jobs/{job_id}"
-                    "?lang=en-us"
+                detail = dr.json()
+            except Exception:
+                continue
+
+            info = detail.get("jobPostingInfo") or {}
+
+            title = (
+                info.get("title")
+                or row.get("title")
+                or ""
+            ).strip()
+
+            location = str(info.get("location") or "")
+            additional = info.get("additionalLocations") or []
+
+            if isinstance(additional, list):
+                additional_text = " ".join(
+                    str(x.get("location") if isinstance(x, dict) else x)
+                    for x in additional
                 )
+            else:
+                additional_text = str(additional)
 
-                results[job_id] = {
-                    "company": company,
-                    "ats": "direct",
-                    "title": title[:300],
-                    "location": location[:200],
-                    "url": canonical,
-                    "updated_at": None,
-                    "description_text": body[:5000],
-                }
+            desc = str(
+                info.get("jobDescription")
+                or info.get("description")
+                or ""
+            )
 
-                detail.close()
+            blob = (
+                f"{title} {location} {additional_text} "
+                f"{desc} {detail_url}"
+            )
 
-            browser.close()
+            if re.search(
+                r"\b(?:Belfast|Northern Ireland)\b",
+                blob,
+                re.I,
+            ):
+                continue
 
-    except Exception as exc:
-        print(f"  ! S&P Global Ireland scrape failed: {exc}")
+            if not re.search(
+                r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford)\b",
+                blob,
+                re.I,
+            ):
+                continue
 
-    print(
-        f"  S&P Global official Ireland careers: "
-        f"{len(results)} jobs from {len(discovered)} details"
+            public_url = base + "/" + site + external_path
+
+            key = public_url.split("?")[0].rstrip("/").lower()
+            if key in results:
+                continue
+
+            if re.search(r"\bDublin\b", blob, re.I):
+                clean_location = "Dublin, Ireland"
+            elif re.search(r"\bCork\b", blob, re.I):
+                clean_location = "Cork, Ireland"
+            else:
+                clean_location = "Ireland"
+
+            results[key] = {
+                "company": company,
+                "ats": "workday",
+                "title": title[:300],
+                "location": clean_location,
+                "url": public_url,
+                "updated_at": info.get("startDate"),
+                "description_text": desc[:7000],
+                "requisition_id": (
+                    (row.get("bulletFields") or [""])[0]
+                    if row.get("bulletFields")
+                    else ""
+                ),
+            }
+
+        offset += len(rows)
+
+        total = data.get("total")
+        if isinstance(total, int) and offset >= total:
+            break
+
+    _mark_connector_health(
+        company,
+        True,
+        f"S&P Global Workday Ireland facet returned {len(results)} jobs",
+        f"{base}/{site}",
     )
 
+    print(f"  S&P Global official Workday Ireland: {len(results)} jobs")
     return list(results.values())
+
 
 
 def scrape_abb():
@@ -10278,104 +10337,86 @@ def scrape_ntt_data():
 
 
 def scrape_qualcomm():
-    company = "Qualcomm"
+    """
+    Qualcomm official Ireland collector.
 
-    # Qualcomm's public careers redirect to Workday. Query the official External board.
-    base = "https://qualcomm.wd12.myworkdayjobs.com"
-    board = "External"
-    api = f"{base}/wday/cxs/qualcomm/{board}/jobs"
+    Qualcomm's current careers frontend is Eightfold-powered.
+    The previous Workday /External board now returns zero jobs.
+    """
+    company = "Qualcomm"
 
     sess = _session()
     if not sess:
-        print("  ! Qualcomm: HTTP session unavailable")
         return []
 
-    results = {}
-    offset = 0
+    jobs = []
 
-    while offset < 1000:
-        payload = {
-            "appliedFacets": {},
-            "limit": 20,
-            "offset": offset,
-            "searchText": "Ireland",
-        }
+    # First use the existing Eightfold adapter.
+    try:
+        jobs = _scrape_eightfold(
+            company,
+            "qualcomm",
+            sess,
+        ) or []
+    except Exception as exc:
+        print(f"  ! Qualcomm Eightfold adapter failed: {exc}")
+        jobs = []
 
-        try:
-            r = sess.post(
-                api,
-                json=payload,
-                timeout=30,
-                headers={
-                    "User-Agent": "Mozilla/5.0",
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "Accept-Language": "en-IE,en;q=0.9",
-                    "Referer": f"{base}/en-US/{board}",
-                },
-            )
-        except Exception:
-            break
+    out = []
+    seen = set()
 
-        if r.status_code != 200:
-            break
+    for job in jobs:
+        title = str(job.get("title") or "").strip()
+        location = str(job.get("location") or "").strip()
+        desc = str(job.get("description_text") or "")
+        url = str(job.get("url") or "").strip()
 
-        try:
-            data = r.json()
-        except Exception:
-            break
+        blob = f"{title} {location} {desc} {url}"
 
-        rows = data.get("jobPostings") or []
-        if not rows:
-            break
+        if re.search(
+            r"\b(?:Belfast|Northern Ireland)\b",
+            blob,
+            re.I,
+        ):
+            continue
 
-        new_count = 0
+        if not re.search(
+            r"\b(?:Ireland|Cork|Dublin)\b",
+            blob,
+            re.I,
+        ):
+            continue
 
-        for row in rows:
-            if not isinstance(row, dict):
-                continue
+        if not title or not url:
+            continue
 
-            blob = json.dumps(row, ensure_ascii=False)
+        key = url.split("?")[0].rstrip("/").lower()
+        if key in seen:
+            continue
+        seen.add(key)
 
-            if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
-                continue
+        item = dict(job)
+        item["company"] = company
+        item["ats"] = "eightfold"
 
-            if not re.search(r"\bIreland\b|\bCork\b|\bIRL\b", blob, re.I):
-                continue
+        if re.search(r"\bCork\b", blob, re.I):
+            item["location"] = "Cork, Ireland"
+        elif re.search(r"\bDublin\b", blob, re.I):
+            item["location"] = "Dublin, Ireland"
+        else:
+            item["location"] = "Ireland"
 
-            title = str(row.get("title") or "").strip()
-            external = str(row.get("externalPath") or "").strip()
+        out.append(item)
 
-            if not title or not external:
-                continue
+    _mark_connector_health(
+        company,
+        True,
+        f"Qualcomm Eightfold returned {len(out)} Ireland jobs",
+        "https://careers.qualcomm.com/careers",
+    )
 
-            href = urllib.parse.urljoin(f"{base}/en-US/{board}/", external)
-            location = "Cork, Ireland" if re.search(r"\bCork\b", blob, re.I) else "Ireland"
-
-            key = href.split("?")[0].rstrip("/").lower()
-            if key not in results:
-                new_count += 1
-
-            results[key] = {
-                "company": company,
-                "ats": "workday",
-                "title": title[:300],
-                "location": location,
-                "url": href.split("?")[0],
-                "updated_at": None,
-                "description_text": blob[:5000],
-            }
-
-        offset += len(rows)
-
-        total = data.get("total")
-        if isinstance(total, int) and offset >= total:
-            break
-        if new_count == 0 and offset > 100:
-            break
-
-    print(f"  Qualcomm Workday Ireland careers: {len(results)} jobs")
-    return list(results.values())
+    print(f"  Qualcomm Eightfold Ireland careers: {len(out)} jobs")
+    return out
 
 
 
