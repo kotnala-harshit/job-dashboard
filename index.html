@@ -560,13 +560,13 @@ body{background:#f3f4f6!important}
     </select>
     <select id="fPosted">
       <option value="">Any time posted</option>
-      <option value="1h">Last 1 hour</option>
-      <option value="3h">Last 3 hours</option>
-      <option value="6h">Last 6 hours</option>
-      <option value="12h">Last 12 hours</option>
-      <option value="24h">Last 24 hours</option>
-      <option value="7d">Last 7 days</option>
-      <option value="30d">Last 30 days</option>
+      <option value="24h">Past 24 hours</option>
+      <option value="3d">Past 3 days</option>
+      <option value="7d">Past 7 days</option>
+      <option value="14d">Past 14 days</option>
+      <option value="30d">Past 30 days</option>
+      <option value="older">Older than 30 days</option>
+      <option value="other">Other</option>
     </select>
 
     <select id="fRadar">
@@ -594,17 +594,12 @@ body{background:#f3f4f6!important}
 
     <select id="fEmployment">
       <option value="">All employment types</option>
-      <option value="Permanent">Permanent</option>
-      <option value="Full Time">Full-time</option>
-      <option value="Contract">Contract</option>
-      <option value="Temporary">Temporary</option>
-      <option value="Fixed Term">Fixed-term</option>
-      <option value="Internship">Internship</option>
-      <option value="Graduate">Graduate</option>
-      <option value="Apprenticeship">Apprenticeship</option>
-      <option value="Seasonal">Seasonal</option>
-      <option value="Freelance / Consulting">Freelance / Consulting</option>
-      <option value="Other / Unspecified">Other / Unspecified</option>
+      <option value="full_time">Full-time / Permanent</option>
+      <option value="contract">Contract / Fixed-term</option>
+      <option value="temporary">Temporary / Seasonal</option>
+      <option value="internship">Internship / Placement</option>
+      <option value="graduate">Graduate Programme</option>
+      <option value="other">Other</option>
     </select>
     <select id="fEmploymentLevel">
       <option value="">All experience levels</option>
@@ -946,11 +941,6 @@ function recencyBucket(date) {
   return 'older';
 }
 
-function postedWithin(date, filter) {
-  if (!filter) return true;
-  const limits = { '1h':1, '3h':3, '6h':6, '12h':12, '24h':24, '7d':168, '30d':720 };
-  return ageHours(date) <= (limits[filter] ?? Infinity);
-}
 
 function recencyLabel(date) {
   const h = ageHours(date);
@@ -1249,6 +1239,159 @@ function jobSearchScore(job, rawQuery) {
   return {score, matched, total: terms.length};
 }
 
+
+function getJobPostedDate(job) {
+  // IMPORTANT:
+  // updated_at / last_verified_at are scraper timestamps and must NOT make
+  // an old vacancy look newly posted.
+  //
+  // Priority:
+  //   1. actual parsed employer/source posting date
+  //   2. first time our dashboard saw the vacancy
+  //   3. updated_at only as a last-resort legacy fallback
+  const candidates = [
+    job.posted_at_parsed,
+    job.posted_at,
+    job.date_posted,
+    job.first_seen_at,
+    job.updated_at
+  ];
+
+  for (const value of candidates) {
+    if (!value) continue;
+    const d = new Date(value);
+    if (!Number.isNaN(d.getTime())) return d;
+  }
+
+  return null;
+}
+
+function postedWithin(dateValue, filterValue) {
+  // Empty value = "Any time posted" = NO FILTER.
+  if (!filterValue) return true;
+
+  const d = dateValue instanceof Date
+    ? dateValue
+    : (dateValue ? new Date(dateValue) : null);
+
+  if (!d || Number.isNaN(d.getTime())) return false;
+
+  const ageMs = Date.now() - d.getTime();
+
+  // Future timestamps caused by timezone/source errors should be treated
+  // as zero-age rather than incorrectly excluding the vacancy.
+  const ageHours = Math.max(0, ageMs / 3600000);
+
+  switch (String(filterValue).toLowerCase()) {
+    case '24h':
+    case 'today':
+    case '1d':
+      return ageHours <= 24;
+
+    case '3d':
+      return ageHours <= 72;
+
+    case '7d':
+    case 'week':
+      return ageHours <= 24 * 7;
+
+    case '14d':
+      return ageHours <= 24 * 14;
+
+    case '30d':
+    case 'month':
+      return ageHours <= 24 * 30;
+
+    case 'older':
+      return ageHours > 24 * 30;
+
+    case 'other':
+      // Jobs with a valid date that do not fit a named special bucket
+      // remain available rather than disappearing.
+      return true;
+
+    default:
+      return true;
+  }
+}
+
+function classifyEmploymentType(job) {
+  const raw = String(
+    job.employment_type ||
+    job.job_type ||
+    job.contract_type ||
+    ''
+  ).trim().toLowerCase();
+
+  const title = String(job.title || '').toLowerCase();
+  const description = String(job.description_text || '').toLowerCase();
+
+  // Metadata carries much more weight than title guessing.
+  const text = `${raw} ${title} ${description}`;
+
+  // Part-time jobs are intentionally excluded elsewhere from this dashboard,
+  // but retain classification here for defensive consistency.
+  if (
+    /\bpart[\s-]?time\b/.test(raw) ||
+    /\bpart[\s-]?time\b/.test(title)
+  ) return 'part_time';
+
+  if (
+    /\bintern(ship)?\b/.test(raw) ||
+    /\bplacement\b/.test(raw) ||
+    /\bintern(ship)?\b/.test(title) ||
+    /\bplacement\b/.test(title)
+  ) return 'internship';
+
+  if (
+    /\bgraduate\b/.test(raw) ||
+    /\bgraduate programme\b/.test(title) ||
+    /\bgraduate program\b/.test(title)
+  ) return 'graduate';
+
+  if (
+    /\btemporary\b/.test(raw) ||
+    /\btemp\b/.test(raw) ||
+    /\bseasonal\b/.test(raw) ||
+    /\btemporary\b/.test(title) ||
+    /\bseasonal\b/.test(title)
+  ) return 'temporary';
+
+  if (
+    /\bcontract(or)?\b/.test(raw) ||
+    /\bfixed[\s-]?term\b/.test(raw) ||
+    /\bftc\b/.test(raw) ||
+    /\bcontract\b/.test(title) ||
+    /\bfixed[\s-]?term\b/.test(title) ||
+    /\b\d+\s*month[s]?\s+ftc\b/.test(title) ||
+    /\bftc\b/.test(title)
+  ) return 'contract';
+
+  if (
+    /\bpermanent\b/.test(raw) ||
+    /\bfull[\s-]?time\b/.test(raw) ||
+    /\bregular\b/.test(raw) ||
+    /\bpermanent\b/.test(title) ||
+    /\bfull[\s-]?time\b/.test(title)
+  ) return 'full_time';
+
+  // Do not invent "Full Time" merely because no type was supplied.
+  return 'other';
+}
+
+function employmentTypeLabel(value) {
+  return {
+    full_time: 'Full-time / Permanent',
+    contract: 'Contract / Fixed-term',
+    temporary: 'Temporary / Seasonal',
+    internship: 'Internship / Placement',
+    graduate: 'Graduate Programme',
+    part_time: 'Part-time',
+    other: 'Other'
+  }[value] || 'Other';
+}
+
+
 function applyFilters() {
   const search = document.getElementById('fSearch').value.trim().toLowerCase();
   const company = document.getElementById('fCompany').value;
@@ -1287,7 +1430,6 @@ if (search) {
     }
     if (sector && (j.sector || 'Other') !== sector) return false;
     if (source && j.ats !== source) return false;
-    if (type && (j.employment_type || employmentType(j.title)) !== type) return false;
     if (isIgnored(j)) return false;
     if (roleFamily && j.role_family !== roleFamily) return false;
     if (expFit && personalJobMatch(j).experienceFit !== expFit) return false;
@@ -1302,9 +1444,7 @@ if (search) {
         if (newOnly === 'new' && !j.new_since_last_check) return false;
     const v = j.visa_sponsorship || 'not_mentioned';
     if (visa && v !== visa) return false;
-    if (posted) {
-      if (!postedWithin(parsePostedDate(j.updated_at || j.posted_at_parsed), posted)) return false;
-    }
+    if (posted && !postedWithin(getJobPostedDate(j), posted)) return false;
     if (employmentFilter && classifyEmploymentType(j) !== employmentFilter) return false;
     if (employmentLevelFilter && classifyEmploymentLevel(j) !== employmentLevelFilter) return false;
     return true;
@@ -1336,7 +1476,7 @@ if (search) {
   document.getElementById('emptyState').style.display = filtered.length ? 'none' : 'block';
 
   filtered.forEach(j => {
-    const postedDate = parsePostedDate(j.updated_at || j.posted_at_parsed);
+    const postedDate = getJobPostedDate(j);
     const bucket = recencyBucket(postedDate);
     const fresh = ageHours(postedDate) <= 24;
     const badge = visaLabel(j.visa_sponsorship || 'not_mentioned');
@@ -1599,115 +1739,7 @@ function isPartTimeJob(job) {
   );
 }
 
-function classifyEmploymentType(job) {
-  const raw = normalizeSearch([
-    job.employment_type,
-    job.employmentType,
-    job.job_type,
-    job.jobType,
-    job.type,
-    job.contract_type,
-    job.contractType,
-    job.title,
-    job.description_text,
-    job.description
-  ].filter(Boolean).join(' '));
 
-  if (!raw) return 'other';
-
-  if (
-    raw.includes('internship') ||
-    raw.includes('intern ') ||
-    raw.endsWith(' intern')
-  ) return 'internship';
-
-  if (
-    raw.includes('graduate programme') ||
-    raw.includes('graduate program') ||
-    raw.includes('graduate scheme') ||
-    raw.includes('graduate role') ||
-    raw.includes('graduate position') ||
-    raw.includes('graduate ')
-  ) return 'graduate';
-
-  if (
-    raw.includes('apprentice') ||
-    raw.includes('apprenticeship')
-  ) return 'apprenticeship';
-
-  if (
-    raw.includes('fixed term') ||
-    raw.includes('fixed-term') ||
-    raw.includes('fixedterm')
-  ) return 'fixed_term';
-
-  if (
-    raw.includes('temporary') ||
-    raw.includes('temp role') ||
-    raw.includes('temp contract') ||
-    raw.includes('temp position')
-  ) return 'temporary';
-
-  if (
-    raw.includes('contractor') ||
-    raw.includes('contract role') ||
-    raw.includes('contract position') ||
-    raw.includes('contract basis') ||
-    raw.includes('month contract') ||
-    raw.includes('months contract') ||
-    raw.includes('12-month') ||
-    raw.includes('6-month') ||
-    raw.includes('3-month') ||
-    raw.includes('contract ')
-  ) return 'contract';
-
-  if (
-    raw.includes('part time') ||
-    raw.includes('part-time') ||
-    raw.includes('parttime')
-  ) return 'part_time';
-
-  if (
-    raw.includes('seasonal')
-  ) return 'seasonal';
-
-  if (
-    raw.includes('freelance') ||
-    raw.includes('consultant contract') ||
-    raw.includes('independent contractor') ||
-    raw.includes('consulting basis')
-  ) return 'freelance';
-
-  if (
-    raw.includes('permanent') ||
-    raw.includes('regular employee') ||
-    raw.includes('regular position')
-  ) return 'permanent';
-
-  if (
-    raw.includes('full time') ||
-    raw.includes('full-time') ||
-    raw.includes('fulltime')
-  ) return 'full_time';
-
-  return 'other';
-}
-
-function employmentTypeLabel(value) {
-  return ({
-    permanent: 'Permanent',
-    full_time: 'Full-time',
-    contract: 'Contract',
-    temporary: 'Temporary',
-    fixed_term: 'Fixed-term',
-    internship: 'Internship',
-    graduate: 'Graduate',
-    apprenticeship: 'Apprenticeship',
-    seasonal: 'Seasonal',
-    freelance: 'Freelance / Consulting',
-    other: 'Other / Unspecified'
-  })[value] || 'Other / Unspecified';
-}
 
 function normalizeSearch(value) {
   return String(value || '')
