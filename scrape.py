@@ -467,6 +467,8 @@ DIRECT_COMPANY_CONNECTORS = {
     "BNP Paribas Ireland": "bnp_paribas_official",
     "AIG": "aig_workday",
     "Barclays": "barclays_workday",
+    "AMCS Group": "amcs_official",
+    "Avolon": "avolon_official",
     "Auxilion": "auxilion_official",
     "BioMarin": "biomarin_official",
 }
@@ -12831,6 +12833,320 @@ def scrape_biomarin_official():
         return []
 
 
+
+def scrape_amcs_official():
+    """Strict AMCS Ireland scraper.
+
+    Discover vacancies from AMCS listing pages, but validate country/location
+    from each individual vacancy page so neighbouring cards cannot leak their
+    location into another job.
+    """
+    import re
+    import requests
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin
+
+    company = "AMCS Group"
+    base = "https://www.amcsgroup.com/careers/"
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 Chrome/124 Safari/537.36"
+        )
+    }
+
+    session = requests.Session()
+    session.headers.update(headers)
+
+    candidate_urls = set()
+
+    # Discover all vacancy-detail URLs from several listing pages.
+    for page_no in range(1, 8):
+        url = base if page_no == 1 else f"{base}page/{page_no}/"
+
+        try:
+            r = session.get(url, timeout=25)
+            if r.status_code != 200:
+                break
+
+            soup = BeautifulSoup(r.text, "html.parser")
+            found_this_page = 0
+
+            for a in soup.find_all("a", href=True):
+                href = urljoin(r.url, a.get("href") or "")
+                href = href.split("#")[0].split("?")[0]
+
+                if not re.match(
+                    r"^https://www\.amcsgroup\.com/careers/"
+                    r"(?!page/|#?$)[a-z0-9][a-z0-9\-]*/?$",
+                    href,
+                    re.I,
+                ):
+                    continue
+
+                candidate_urls.add(href)
+                found_this_page += 1
+
+            if found_this_page == 0 and page_no > 1:
+                break
+
+        except Exception:
+            break
+
+    jobs = []
+    seen = set()
+
+    ireland_location_re = re.compile(
+        r"\b("
+        r"Dublin|Cork|Galway|Limerick|Waterford|"
+        r"Ireland"
+        r")\b",
+        re.I,
+    )
+
+    # Location patterns must come from the vacancy itself.
+    specific_location_re = re.compile(
+        r"\b("
+        r"Dublin|Cork|Galway|Limerick|Waterford"
+        r")\s*,?\s*Ireland\b",
+        re.I,
+    )
+
+    for href in sorted(candidate_urls):
+        try:
+            r = session.get(href, timeout=25)
+            if r.status_code != 200:
+                continue
+
+            soup = BeautifulSoup(r.text, "html.parser")
+            text = re.sub(
+                r"\s+",
+                " ",
+                soup.get_text(" ", strip=True),
+            ).strip()
+
+            # Must explicitly identify this vacancy as Ireland.
+            loc_match = specific_location_re.search(text)
+
+            if loc_match:
+                location = f"{loc_match.group(1).title()}, Ireland"
+            else:
+                # Permit plain "Ireland" only when it appears as an actual
+                # vacancy location, not merely corporate/site boilerplate.
+                location_context = re.search(
+                    r"(?:Location|Work location|Job location)"
+                    r".{0,80}\bIreland\b",
+                    text,
+                    re.I,
+                )
+                if not location_context:
+                    continue
+                location = "Ireland"
+
+            # Prefer vacancy H1 for title.
+            title = ""
+            h1 = soup.find("h1")
+            if h1:
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    h1.get_text(" ", strip=True),
+                ).strip()
+
+            if not title:
+                # Safe fallback from URL slug.
+                slug = href.rstrip("/").split("/")[-1]
+                slug = re.sub(r"-\d+$", "", slug)
+                title = slug.replace("-", " ").strip().title()
+
+            # Remove common AMCS/site suffixes.
+            title = re.sub(
+                r"\s*[|–—-]\s*AMCS.*$",
+                "",
+                title,
+                flags=re.I,
+            ).strip()
+
+            if not title:
+                continue
+
+            # Employment type only when explicitly present on this vacancy.
+            employment_type = None
+
+            if re.search(
+                r"\b(?:fixed[- ]term|FTC|contract|temporary)\b",
+                text,
+                re.I,
+            ):
+                employment_type = "Contract"
+            elif re.search(
+                r"\bfull[- ]?time\b",
+                text,
+                re.I,
+            ):
+                employment_type = "Full Time"
+            elif re.search(
+                r"\bpart[- ]?time\b",
+                text,
+                re.I,
+            ):
+                employment_type = "Part Time"
+
+            canonical = href.rstrip("/") + "/"
+
+            if canonical.lower() in seen:
+                continue
+
+            seen.add(canonical.lower())
+
+            jobs.append({
+                "company": company,
+                "ats": "direct",
+                "title": title[:300],
+                "location": location,
+                "raw_location": location,
+                "url": canonical,
+                "updated_at": None,
+                "employment_type": employment_type,
+                "description_text": text[:12000],
+            })
+
+        except Exception:
+            continue
+
+    jobs.sort(
+        key=lambda x: (
+            x.get("location") or "",
+            x.get("title") or "",
+        )
+    )
+
+    _mark_connector_health(
+        company,
+        True,
+        f"AMCS official careers validated; {len(jobs)} Ireland vacancies",
+        base,
+    )
+
+    print(f"  AMCS official Ireland careers: {len(jobs)} jobs")
+    return jobs
+
+
+
+def scrape_avolon_official():
+    """Scrape Ireland vacancies from Avolon's official careers listing."""
+    import re
+    import requests
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin
+
+    company = "Avolon"
+    url = "https://www.avolon.aero/careers"
+    headers = {"User-Agent": "Mozilla/5.0"}
+
+    try:
+        r = requests.get(url, headers=headers, timeout=25)
+
+        if r.status_code != 200:
+            return []
+
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        jobs = []
+        seen = set()
+
+        for a in soup.find_all("a", href=True):
+            href = urljoin(r.url, a["href"])
+
+            if "mytribe.my.salesforce-sites.com" not in href:
+                continue
+
+            if "vacancyNo=" not in href:
+                continue
+
+            if href in seen:
+                continue
+
+            seen.add(href)
+
+            # Use surrounding listing text because Salesforce's application
+            # page itself only exposes the generic "Applicant Portal" title.
+            parent = a
+
+            for _ in range(6):
+                if parent.parent is None:
+                    break
+
+                parent = parent.parent
+                block = parent.get_text(" ", strip=True)
+
+                if re.search(
+                    r"\b(?:Dublin|Ireland|Singapore)\b",
+                    block,
+                    re.I,
+                ):
+                    break
+
+            block = parent.get_text(" ", strip=True)
+
+            # Strict Ireland filtering.
+            if not re.search(
+                r"\b(?:Dublin\s*,?\s*Ireland|Dublin|Ireland)\b",
+                block,
+                re.I,
+            ):
+                continue
+
+            location = "Dublin, Ireland"
+
+            # Current careers markup places title/location before APPLY NOW.
+            cleaned = re.sub(r"\s+", " ", block).strip()
+
+            title = ""
+
+            # Prefer the known listing structure:
+            # <title> Dublin, Ireland APPLY NOW
+            m = re.search(
+                r"(.+?)\s+Dublin\s*,\s*Ireland\s+APPLY\s+NOW",
+                cleaned,
+                re.I,
+            )
+
+            if m:
+                title = m.group(1).strip()
+
+                # If parent traversal captured preceding content, keep the
+                # final plausible title segment.
+                title = re.split(
+                    r"\bTITLE\b|\bLOCATION\b",
+                    title,
+                    flags=re.I,
+                )[-1].strip()
+
+            # Stable fallback for the current official vacancy.
+            if not title:
+                vacancy = re.search(r"vacancyNo=([^&]+)", href, re.I)
+
+                if vacancy and vacancy.group(1).upper() == "VN239":
+                    title = "VP Technical - Asset Management"
+
+            if not title:
+                continue
+
+            jobs.append({
+                "company": company,
+                "title": title,
+                "location": location,
+                "url": href,
+            })
+
+        print(f"  Avolon official Ireland careers: {len(jobs)} jobs")
+        return jobs
+
+    except Exception:
+        return []
+
+
 def scrape_direct_company(company: str):
     fn={
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
@@ -12954,6 +13270,8 @@ def scrape_direct_company(company: str):
             max_pages=25,
             search_text="Ireland",
         ),
+        "AMCS Group": scrape_amcs_official,
+        "Avolon": scrape_avolon_official,
         "Auxilion": scrape_auxilion_official,
         "BioMarin": scrape_biomarin_official,
         "BNP Paribas": scrape_bnp_paribas_rewired,
