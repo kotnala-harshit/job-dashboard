@@ -1,8 +1,7 @@
 __pycache__/
 *.pyc
-*.bak
-*.backup
-*.broken-backup
-*before-*
-*.backup-*
 .DS_Store
+*.bak
+*.backup*
+*.broken-backup
+*.before-*

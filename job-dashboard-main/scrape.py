@@ -124,23 +124,21 @@ PINPOINT_COMPANIES = ['ericsson', 'ptsb', 'kpmg', 'greencore', 'arcadis', 'zende
 # scraper above.
 # ---------------------------------------------------------------------------
 
-MASTER_COMPANY_CSV = "ireland_job_radar_HARSHIT_MASTER.csv"
+JSONLD_CAREER_PAGES = [('A&L Goodbody', 'https://www.algoodbody.com/careers'), ('ABB', 'https://careers.abb/global/en'), ('Abbott', 'https://www.jobs.abbott/us/en/search-results?m=3&location=Ireland'), ('AbbVie', 'https://careers.abbvie.com/en/jobs?q=&options=&page=1&ln=Ireland&lr=100&li=IE'), ('Accenture', 'https://accenture.wd103.myworkdayjobs.com/AccentureCareers'), ('ActionPoint', 'https://www.actionpoint.ie/careers/'), ('Adobe', 'https://adobe.wd5.myworkdayjobs.com/external_experienced'), ('Advanced Micro Devices (AMD)', 'https://jobs.amd.com/go/Jobs-in-Ireland/8844800/'), ('AECOM', 'https://aecom.jobs/search-jobs/Ireland'), ('Aer Lingus', 'https://www.aerlingus.com/about-us/careers/'), ('AerCap', 'https://www.aercap.com/careers/'), ('Agilent Technologies', 'https://careers.agilent.com/'), ('AIB (Allied Irish Banks)', 'https://jobs.aib.ie/'), ('AIG', 'https://www.aig.com/careers'), ('Airbnb', 'https://careers.airbnb.com/'), ('AirNav Ireland', 'https://www.airnav.ie/careers'), ('Aiven', 'https://aiven.io/careers'), ('Akamai', 'https://www.akamai.com/careers'), ('Alexion Pharmaceuticals', 'https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2'), ('Alkermes', 'https://www.alkermes.com/careers'), ('Allianz Ireland', 'https://www.allianz.ie/about-allianz/careers.html'), ('Alter Domus', 'https://careers.alterdomus.com/'), ('Alvarez & Marsal', 'https://www.alvarezandmarsal.com/careers'), ('Amazon', 'https://www.amazon.jobs/en/locations/dublin-ireland'), ('AMCS Group', 'https://www.amcsgroup.com/careers/'), ('Amgen', 'https://careers.amgen.com/search-jobs/Ireland'), ('Amundi', 'https://about.amundi.com/Careers'), ('An Post', 'https://www.anpost.com/About/Careers'), ('Analog Devices', 'https://analogdevices.wd1.myworkdayjobs.com/External'), ('Anthropic', 'https://www.anthropic.com/careers'), ('Aon', 'https://aon.wd1.myworkdayjobs.com/AonCareers'), ('Apex Group', 'https://www.apexgroup.com/careers/'), ('Apple', 'https://jobs.apple.com/en-ie/search?location=ireland-IRL'), ('Applied Materials', 'https://www.appliedmaterials.com/us/en/careers.html'), ('Aptiv', 'https://www.aptiv.com/en/jobs/working-here/global-locations/ireland'), ('Arcadis', 'https://www.arcadis.com/en/careers'), ('Arista Networks', 'https://www.arista.com/en/careers'), ('Arthur Cox', 'https://www.arthurcox.com/careers/'), ('Arup', 'https://www.arup.com/careers'), ('ARYZTA Ireland', 'https://www.aryzta.com/careers/'), ('Asana', 'https://asana.com/careers'), ('ASL Aviation Holdings', 'https://www.aslaviationholdings.com/careers/'), ('ASML', 'https://www.asml.com/en/careers'), ('Astellas Pharma', 'https://www.astellas.com/en/careers'), ('AstraZeneca', 'https://careers.astrazeneca.com/search-jobs/Ireland'), ('AtkinsRéalis', 'https://careers.atkinsrealis.com/'), ('Atlas Copco Ireland', 'https://www.atlascopcogroup.com/en/careers'), ('Atlassian', 'https://www.atlassian.com/company/careers/jobs?location=Dublin'), ('Autodesk', 'https://autodesk.wd1.myworkdayjobs.com/Ext'), ('Auxilion', 'https://www.auxilion.com/auxilion-careers'), ('Avanade', 'https://www.avanade.com/en/career'), ('Aviva Ireland', 'https://www.aviva.ie/about/careers/'), ('Avolon', 'https://www.avolon.aero/careers'), ('AXA Ireland', 'https://www.axa.ie/careers/'), ('AXA XL', 'https://axaxl.com/careers'), ('Baker Tilly Ireland', 'https://www.bakertilly.ie/careers/'), ('Bank of America', 'https://careers.bankofamerica.com'), ('Bank of Ireland', 'https://www.bankofireland.com/about-bank-of-ireland/careers/'), ('Barclays', 'https://search.jobs.barclays/search-jobs/Ireland'), ('Bausch + Lomb', 'https://bauschhealth.wd1.myworkdayjobs.com/BauschHealthCareers'), ('Baxter International', 'https://jobs.baxter.com/search-jobs/Ireland'), ('Bayer', 'https://career.bayer.com/en/search-jobs/Ireland'), ('BDO Ireland', 'https://www.bdo.ie/en-gb/careers'), ('BearingPoint', 'https://bearingpoint.com/en/careers'), ('Becton Dickinson (BD)', 'https://bd.wd1.myworkdayjobs.com/BD_External'), ('BioMarin', 'https://www.biomarin.com/careers/jobs/'), ('BlackRock', 'https://careers.blackrock.com/search-jobs'), ('Block', 'https://block.xyz/careers'), ('BNP Paribas Ireland', 'https://group.bnpparibas/en/careers'), ('BNY', 'https://careers.bny.com'), ('Boehringer Ingelheim', 'https://www.boehringer-ingelheim.com/ie/careers'), ('Bord Gáis Energy', 'https://www.bordgaisenergy.ie/about-us/careers'), ('Bord na Móna', 'https://www.bordnamona.ie/careers/'), ('Boston Scientific', 'https://jobs.bostonscientific.com/search/?q=&locationsearch=Ireland'), ('Bristol Myers Squibb', 'https://careers.bms.com/us/en/search-results?m=3&location=Ireland'), ('Broadcom', 'https://broadcom.wd1.myworkdayjobs.com/External_Career'), ('Brown Brothers Harriman', 'https://careers.bbh.com/'), ('BT Ireland', 'https://www.bt.com/careers'), ('Bus Éireann', 'https://careers.buseireann.ie/'), ('ByrneWallace', 'https://byrnewallace.com/careers/'), ('C&C Group', 'https://www.candcgroupplc.com/careers/'), ('CACEIS', 'https://www.caceis.com/careers'), ('Cadence Design Systems', 'https://cadence.wd1.myworkdayjobs.com/External_Careers'), ('Cairn Homes', 'https://www.cairnhomes.com/careers/'), ('Canto', 'https://www.canto.com/careers/'), ('Cantor Fitzgerald Ireland', 'https://cantorfitzgerald.ie/about-us/careers/'), ('Capgemini', 'https://www.capgemini.com/careers/'), ('Carne Group', 'https://www.carnegroup.com/careers/'), ('CarTrawler', 'https://www.cartrawler.com/careers/'), ('Catalent', 'https://catalent.wd1.myworkdayjobs.com/External'), ('CBRE Ireland', 'https://www.cbre.ie/careers'), ('CDB Aviation', 'https://cdbaviation.aero/careers'), ('Central Bank of Ireland', 'https://www.centralbank.ie/careers'), ('CGI', 'https://cgi.com/en/careers'), ('Chargebee', 'https://www.chargebee.com/careers/'), ('Charles River Laboratories', 'https://jobs.criver.com/search-jobs/Ireland'), ('Check Point Software', 'https://www.checkpoint.com/careers/'), ('Chubb', 'https://careers.chubb.com/'), ('Cisco', 'https://jobs.cisco.com/main/jobs?location=Ireland'), ('Citco', 'https://www.citco.com/careers'), ('Citi', 'https://jobs.citi.com/search-jobs/Ireland'), ('Citrix', 'https://jobs.citrix.com/'), ('CitySwift', 'https://www.cityswift.com/careers'), ('ClickUp', 'https://clickup.com/careers'), ('Clio', 'https://www.clio.com/about/careers/'), ('Cloudflare', 'https://www.cloudflare.com/careers/jobs/'), ('CluneTech', 'https://www.clunetech.com/careers/'), ('Coca-Cola HBC Ireland', 'https://ie.coca-colahellenic.com/en/careers'), ('Codec', 'https://www.codec.ie/careers'), ('Cognizant', 'https://careers.cognizant.com/global/en'), ('Cohesity', 'https://www.cohesity.com/company/careers/'), ('Coillte', 'https://www.coillte.ie/about-us/careers/'), ('Coinbase', 'https://www.coinbase.com/careers/positions?location=dublin'), ('Coloplast', 'https://www.coloplast.com/about-us/careers/'), ('Concentrix (Ireland)', 'https://www.concentrix.com/careers/'), ('Convatec', 'https://www.convatecgroup.com/careers/'), ('Cook Medical', 'https://www.cookmedical.eu/careers/'), ('CRH', 'https://www.crh.com/careers'), ('Crusoe', 'https://www.crusoe.ai/careers'), ('Cubic³', 'https://www.cubic3.com/careers/'), ('Cushman & Wakefield Ireland', 'https://www.cushmanwakefield.com/en/ireland/careers'), ('CWSI', 'https://cwsisecurity.com/careers/'), ('daa (Dublin Airport Authority)', 'https://www.daa.ie/careers/'), ('DAE Capital', 'https://dubaiaerospace.com/careers'), ('Dalata Hotel Group', 'https://dalatahotelgroup.com/careers/'), ('Danaher Corporation', 'https://jobs.danaher.com/global/en/search-results?m=3&location=Ireland'), ('Daon', 'https://www.daon.com/careers/'), ('Datadog', 'https://www.datadoghq.com/careers/'), ('Datalex', 'https://datalex.com/careers'), ('DataStax', 'https://www.datastax.com/company/careers'), ('Davy', 'https://www.davy.ie/working-at-davy/opportunities'), ('DCC plc', 'https://www.dcc.ie/careers'), ('Dedalus', 'https://www.dedalus.com/global/en/careers/'), ('Dell Technologies', 'https://jobs.dell.com/location/ireland-jobs/375/2963597/2'), ('Deloitte Ireland', 'https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals'), ('DePuy Synthes', 'https://jobs.jnj.com/en/jobs/?search=Ireland'), ('Deutsche Bank', 'https://careers.db.com'), ('Dexcom', 'https://www.dexcom.com/en-IE/careers'), ('DHL Ireland', 'https://www.dhl.com/ie-en/home/careers.html'), ('Diageo Ireland', 'https://diageo.wd3.myworkdayjobs.com/Diageo_Careers'), ('Dillon Eustace', 'https://www.dilloneustace.com/careers'), ('DNV', 'https://www.dnv.com/careers/'), ('DocuSign', 'https://www.docusign.com/company/careers/jobs?location=Dublin'), ('DPS Group (Arcadis)', 'https://www.dpsgroupglobal.com/careers'), ('DraftKings', 'https://careers.draftkings.com'), ('Dropbox', 'https://www.dropbox.com/jobs/all-jobs'), ('DSV Ireland', 'https://www.dsv.com/en/careers'), ('Dublin Bus', 'https://www.dublinbus.ie/careers'), ('Dublin Port Company', 'https://www.dublinport.ie/careers/'), ('DXC Technology', 'https://dxc.wd1.myworkdayjobs.com/DXC_Jobs'), ('Dynatrace', 'https://www.dynatrace.com/careers/'), ('Eaton', 'https://eaton.wd5.myworkdayjobs.com/Eaton'), ('eBay', 'https://jobs.ebayinc.com/'), ('Edwards Lifesciences', 'https://edwards.wd1.myworkdayjobs.com/EdwardsCareers'), ('Eir', 'https://www.eir.ie/careers/'), ('EirGrid', 'https://www.eirgrid.ie/careers'), ('Ekco', 'https://www.ek.co/careers/'), ('Elavon', 'https://usbank.wd1.myworkdayjobs.com/Elavon_Careers'), ('Eli Lilly', 'https://be.gatekeeper.lilly.com/careers/search-jobs?location=Ireland'), ('Emerald Airlines', 'https://www.emeraldairlines.com/careers'), ('Emerson', 'https://www.emerson.com/en-us/careers'), ('Energia Group', 'https://www.energiagroup.com/careers'), ('Enterprise Ireland', 'https://www.enterprise-ireland.com/en/About-Us/Careers/'), ('Ergo', 'https://ergo.ie/careers'), ('Ericsson', 'https://jobs.ericsson.com/search/?q=&locationsearch=Ireland'), ('ESB', 'https://careers.esb.ie/'), ('ESW', 'https://esw.com/careers/'), ('Etsy', 'https://careers.etsy.com/global/en'), ('Eurofins Scientific', 'https://careers.eurofins.com/ie/'), ('Eversheds Sutherland Ireland', 'https://www.eversheds-sutherland.com/en/ireland/careers'), ('EXL', 'https://www.exlservice.com/careers'), ('Expleo', 'https://careers.expleo.com/'), ('Exyte', 'https://www.exyte.net/Careers'), ('EY Ireland', 'https://www.ey.com/en_ie/careers'), ('FactSet', 'https://careers.factset.com/'), ('Fastway Couriers Ireland', 'https://www.fastway.ie/careers/'), ('FBD Insurance', 'https://www.fbd.ie/about/careers/'), ('FedEx Express Ireland', 'https://careers.fedex.com/fedex/'), ('Fenergo', 'https://www.fenergo.com/careers'), ('Figma', 'https://www.figma.com/careers/'), ('Fidelity International', 'https://careers.fidelityinternational.com/'), ('Fidelity Investments', 'https://jobs.fidelity.com/location/ireland-jobs/2324/2963597/2'), ('FINEOS', 'https://www.fineos.com/careers/'), ('Fiserv', 'https://www.careers.fiserv.com/search-jobs/Ireland'), ('Fitch Ratings', 'https://www.fitchratings.com/careers'), ('Fixify', 'https://www.fixify.com/careers'), ('Flipdish', 'https://www.flipdish.com/ie/careers'), ('Flutter Entertainment', 'https://flutter.com/careers/'), ('Forcepoint', 'https://www.forcepoint.com/company/work-with-us'), ('Fortinet', 'https://jobs.fortinet.com/'), ('Forvis Mazars Ireland', 'https://www.mazars.ie/Home/Join-us/Our-job-offers'), ('Franklin Templeton', 'https://careers.franklintempleton.com/'), ('Freudenberg Medical', 'https://careers.freudenberg.com/'), ('FTI Consulting', 'https://www.fticonsulting.com/careers'), ('Fujitsu', 'https://fujitsu.com/ie/about/careers'), ('Fáilte Ireland', 'https://www.failteireland.ie/About-Us/Careers.aspx'), ('Gartner', 'https://jobs.gartner.com/locations/dublin/'), ('Gas Networks Ireland', 'https://www.gasnetworks.ie/about-us/careers/'), ('GE HealthCare', 'https://careers.gehealthcare.com/'), ('Gemini', 'https://www.gemini.com/careers'), ('Genesys', 'https://genesys.wd1.myworkdayjobs.com/Genesys'), ('Gilead Sciences', 'https://gilead.wd1.myworkdayjobs.com/gileadcareers'), ('Glanbia', 'https://glanbia.com/careers'), ('Glanbia / Tirlán', 'https://www.tirlan.com/careers'), ('GlaxoSmithKline (GSK)', 'https://jobs.gsk.com/search-jobs/Ireland'), ('Glen Dimplex', 'https://www.glendimplex.com/careers'), ('Glenveagh Properties', 'https://glenveagh.ie/careers'), ('Global Payments', 'https://jobs.globalpayments.com/'), ('Goldman Sachs', 'https://www.goldmansachs.com/careers/'), ('Gong', 'https://www.gong.io/careers/'), ('Goodbody', 'https://www.goodbody.ie/careers'), ('Google', 'https://www.google.com/about/careers/applications/jobs/results/?location=Ireland'), ('Grant Thornton Ireland', 'https://iegt.wd3.myworkdayjobs.com/GTI_External_Careers_Experienced_Hires_ROI'), ('Greencore', 'https://www.greencore.com/careers/'), ('GridBeyond', 'https://gridbeyond.com/careers/'), ('Guidewire', 'https://www.guidewire.com/about/careers'), ('Haleon', 'https://careers.haleon.com/careers/*/ireland_ireland?domain=haleon.com'), ('Harvey', 'https://www.harvey.ai/careers'), ('HCLTech', 'https://www.hcltech.com/careers'), ('Heineken Ireland', 'https://www.heinekenireland.ie/careers/'), ('Hewlett Packard Enterprise (HPE)', 'https://careers.hpe.com/us/en/search-results?m=3&location=Ireland'), ('HIQA', 'https://www.hiqa.ie/about-us/careers'), ('Hitachi Energy', 'https://www.hitachienergy.com/careers'), ('Hollister Incorporated', 'https://www.hollister.com/en/careers'), ('Honeywell', 'https://ibqbjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Honeywell/jobs'), ('Hostelworld', 'https://careers.hostelworldgroup.com/'), ('HP (Hewlett-Packard)', 'https://jobs.hp.com/search-jobs/Ireland'), ('HSBC Ireland', 'https://www.about.hsbc.ie/careers'), ('Deutsche Bank', 'https://careers.db.com/professionals/search-roles/'), ('SMBC Group', 'https://careersemea.smbcgroup.com/'), ('Harvey Nash', 'https://www.harveynash.ie/'), ('HSE (Health Service Executive)', 'https://about.hse.ie/jobs/job-search/'), ('Huawei Ireland', 'https://career.huawei.com/'), ('HubSpot', 'https://www.hubspot.com/careers/jobs?location=dublin'), ('IBM', 'https://www.ibm.com/careers/search?field_keyword_05[0]=Ireland'), ('ICON plc', 'https://careers.iconplc.com/search-jobs/Ireland'), ('IDA Ireland', 'https://www.idaireland.com/about-ida-ireland/careers'), ('Illumina', 'https://illumina.wd1.myworkdayjobs.com/illumina-careers'), ('Indeed', 'https://www.indeed.jobs/'), ('ING', 'https://careers.ing.com/en/location/dublin-jobs/2618/2963597-7521314-2964574/4'), ('Infineon Technologies', 'https://www.infineon.com/cms/en/careers/'), ('Infosys', 'https://www.infosys.com/careers.html'), ('Insulet Corporation', 'https://www.insulet.com/careers'), ('Integer Holdings', 'https://integer.net/careers/'), ('Integra LifeSciences', 'https://www.integralife.com/careers'), ('Integrity360', 'https://www.integrity360.com/careers'), ('Intel', 'https://jobs.intel.com/en/search-jobs/Ireland'), ('Intercom', 'https://www.intercom.com/careers'), ('Introba', 'https://www.introba.com/careers'), ('Invesco', 'https://careers.invesco.com/'), ('IQ-EQ', 'https://iqeq.com/careers/'), ('IQVIA', 'https://jobs.iqvia.com/search-jobs/Ireland'), ('Irish Aviation Authority', 'https://www.iaa.ie/careers'), ('Irish Distillers (Pernod Ricard)', 'https://www.irishdistillers.ie/careers/'), ('Irish Ferries', 'https://www.irishferries.com/uk-en/careers/'), ('Irish Life', 'https://www.irishlife.ie/about-us/careers'), ('Irish Rail (Iarnród Éireann)', 'https://www.irishrail.ie/en-ie/about-us/careers'), ('Isla Health', 'https://www.isla.health/careers'), ('Jabil', 'https://careers.jabil.com/'), ('Jacobs', 'https://www.jacobs.com/careers'), ('Jamf', 'https://www.jamf.com/careers/'), ('Jazz Pharmaceuticals', 'https://jazzpharma.wd5.myworkdayjobs.com/Jazz_Careers'), ('John Sisk & Son (Sisk Group)', 'https://www.johnsiskandson.com/careers'), ('Johnson & Johnson', 'https://jobs.jnj.com/en/jobs/?search=Ireland'), ('Johnson Controls', 'https://jobs.johnsoncontrols.com/'), ('JPMorgan Chase', 'https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/requisitions?location=Ireland'), ('Keelings', 'https://www.keelings.com/careers/'), ('Keeper Security', 'https://www.keepersecurity.com/company/careers/'), ('Kerry Group', 'https://jobs.kerry.com/search/?q=&locationsearch=Ireland'), ('Keysight Technologies', 'https://about.keysight.com/en/careers/'), ('Keywords Studios', 'https://www.keywordsstudios.com/en/careers/'), ('Kingspan Group', 'https://www.kingspan.com/group/careers'), ('Kirby Group Engineering', 'https://kirbygroup.com/careers/'), ('Kitman Labs', 'https://www.kitmanlabs.com/careers/'), ('Klaviyo', 'https://www.klaviyo.com/careers'), ('Korn Ferry', 'https://www.kornferry.com/careers'), ('KPMG Ireland', 'https://kpmg.com/ie/en/home/careers.html'), ('Kuehne+Nagel Ireland', 'https://jobs.kuehne-nagel.com/global/en/search-results?m=3&location=Ireland'), ('Kyndryl', 'https://www.kyndryl.com/us/en/careers'), ('Labcorp', 'https://careers.labcorp.com/global/en'), ('Lam Research', 'https://www.lamresearch.com/careers/'), ('Laya Healthcare', 'https://www.layahealthcare.ie/aboutus/careers/'), ('LearnUpon', 'https://www.learnupon.com/careers/'), ('LetsGetChecked', 'https://www.letsgetchecked.com/careers/'), ('Linesight', 'https://www.linesight.com/careers/'), ('LinkedIn', 'https://careers.linkedin.com/Locations/Dublin'), ('LK Shields', 'https://www.lkshields.ie/careers'), ('Logitech', 'https://www.logitech.com/en-us/careers'), ('Macquarie Group', 'https://www.macquarie.com/au/en/careers.html'), ('Maples Group Ireland', 'https://maples.com/careers'), ('Mars Ireland', 'https://careers.mars.com/'), ('Marsh McLennan', 'https://mmc.wd1.myworkdayjobs.com/MMC'), ('Marvell Technology', 'https://www.marvell.com/company/careers.html'), ('Mason Hayes & Curran', 'https://www.mhc.ie/careers'), ('Mastercard', 'https://mastercard.wd1.myworkdayjobs.com/CorporateCareers'), ('Matheson', 'https://www.matheson.com/careers'), ('McCann FitzGerald', 'https://www.mccannfitzgerald.com/careers'), ('McKinsey & Company', 'https://www.mckinsey.com/careers/search-jobs?locations=Dublin'), ('Mediahuis Ireland', 'https://www.mediahuis.ie/careers/'), ('Mediolanum International Funds', 'https://www.mifl.ie/careers/open-positions'), ('Medpace', 'https://www.medpace.com/careers/'), ('Medtronic', 'https://jobs.medtronic.com/search/?q=&locationsearch=Ireland'), ('Mercer', 'https://mmc.wd1.myworkdayjobs.com/MMC'), ('Merck Group', 'https://jobs.vibrantm.com/merck/go/Jobs-in-Ireland/8330701/'), ('Mercury Engineering', 'https://www.mercuryeng.com/careers/'), ('Merit Medical', 'https://www.merit.com/careers/'), ('Meta', 'https://www.metacareers.com/jobs?locations[0]=Dublin%2C%20Ireland'), ('Microchip Technology', 'https://careers.microchip.com/'), ('Microsoft', 'https://jobs.careers.microsoft.com/global/en/search?lc=Ireland'), ('MongoDB', 'https://www.mongodb.com/careers/jobs?location=Dublin%2C%20Ireland'), ('Monzo', 'https://monzo.com/careers'), ("Moody's", 'https://careers.moodys.com/'), ('Moonshot', 'https://moonshotteam.com/careers/'), ('Morgan Stanley', 'https://morganstanley.tal.net/vx/lang-en-GB/mobile-0/brand-2/user-home'), ('Morningstar', 'https://www.morningstar.com/careers'), ('Motorola Solutions', 'https://www.motorolasolutions.com/en_us/about/careers.html'), ('Mott MacDonald', 'https://www.mottmac.com/careers'), ('MSCI', 'https://www.msci.com/careers'), ('MSD', 'https://jobs.msd.com/ireland'), ('MSD (Merck Sharp & Dohme)', 'https://msd.wd5.myworkdayjobs.com/SearchJobs'), ('MUFG Investor Services', 'https://www.mufg-investorservices.com/careers/'), ('Musgrave Group (SuperValu / Centra)', 'https://www.musgravegroup.com/careers/'), ('Nestlé Ireland', 'https://www.nestlejobs.com/'), ('NetApp', 'https://www.netapp.com/company/careers/'), ('Noesis', 'https://www.noesis.pt/en/careers'), ('Nokia', 'https://www.nokia.com/careers/'), ('Nordic Aviation Capital', 'https://nordicaviationcapital.com/careers'), ('Northern Trust', 'https://northerntrust.wd1.myworkdayjobs.com/External_Careers'), ('Notion', 'https://www.notion.so/careers'), ('Novartis', 'https://www.novartis.com/careers/career-search?country%5B0%5D=IE'), ('NTMA', 'https://www.ntma.ie/about-the-ntma/careers/current-opportunities'), ('NTT DATA', 'https://careers.nttdata.com/'), ('Nutanix', 'https://www.nutanix.com/careers'), ('NXP Semiconductors', 'https://nxp.wd3.myworkdayjobs.com/careers'), ('OFX', 'https://www.ofx.com/en-ie/careers/'), ('Okta', 'https://www.okta.com/careers/'), ('Oliver Wyman', 'https://www.oliverwyman.com/careers.html'), ('One Identity', 'https://www.oneidentity.com/careers/'), ('OpenAI', 'https://openai.com/careers/'), ('OpenText', 'https://careers.opentext.com/'), ('Optum', 'https://www.optum.ie/careers.html'), ('Oracle', 'https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/requisitions?location=Ireland'), ('Ornua', 'https://www.ornua.com/careers/'), ('PA Consulting', 'https://www.paconsulting.com/careers'), ('Palo Alto Networks', 'https://jobs.paloaltonetworks.com/en/jobs/'), ('Park Place Technologies', 'https://www.parkplacetechnologies.com/company/careers/'), ('PayPal', 'https://paypal.wd1.myworkdayjobs.com/jobs'), ('Payrails', 'https://www.payrails.com/careers'), ('PepsiCo', 'https://www.pepsicojobs.com/'), ('Perrigo', 'https://careers.perrigo.com/'), ('Personio', 'https://www.personio.com/about-personio/careers/locations/dublin/'), ('Pfizer', 'https://pfizer.wd1.myworkdayjobs.com/PfizerCareers?locationCountry=0878e1d528b846e38b3940173bc5b43a'), ('Philip Lee', 'https://www.philiplee.ie/careers/'), ('PIMCO', 'https://careers.pimco.com/'), ('Ping Identity', 'https://www.pingidentity.com/en/company/careers.html'), ('Pinterest', 'https://www.pinterestcareers.com/en/jobs/?location=Dublin'), ('PM Group', 'https://www.pmgroup-global.com/careers/'), ('Port of Cork Company', 'https://www.portofcork.ie/careers/'), ('Proofpoint', 'https://www.proofpoint.com/us/company/careers'), ('Protiviti', 'https://www.protiviti.com/us-en/careers'), ('PTSB (Permanent TSB)', 'https://www.ptsb.ie/about-us/careers/'), ('Public Jobs / Civil Service', 'https://publicjobs.ie'), ('Publift', 'https://www.publift.com/careers'), ('PwC Ireland', 'https://pwc.wd3.myworkdayjobs.com/Global_Experienced_Careers'), ('Qashio', 'https://www.qashio.com/careers'), ('QIAGEN', 'https://www.qiagen.com/us/about-us/careers'), ('Qorvo', 'https://www.qorvo.com/careers'), ('Qualcomm', 'https://www.qualcomm.com/company/careers'), ('Qualtrics', 'https://www.qualtrics.com/careers/us/en/search-results?keywords=Dublin'), ('Quantexa', 'https://www.quantexa.com/careers/'), ('Quest Software', 'https://careers.quest.com/'), ('Qumulo', 'https://careers.qumulo.com/'), ('Rapid7', 'https://www.rapid7.com/careers/jobs/'), ('Red Hat', 'https://www.redhat.com/en/jobs'), ('Reddit', 'https://www.redditinc.com/careers'), ('Refinitiv (LSEG)', 'https://www.lseg.com/en/careers'), ('Regeneron', 'https://careers.regeneron.com/en/jobs/?location=Ireland'), ('Renesas Electronics', 'https://www.renesas.com/us/en/about/careers'), ('Research Ireland', 'https://www.researchireland.ie/'), ('ResMed', 'https://resmed.wd1.myworkdayjobs.com/ResMed_External_Careers'), ('Revenue', 'https://www.revenue.ie/en/corporate/information-about-revenue/careers/index.aspx'), ('Revvity (PerkinElmer)', 'https://jobs.revvity.com/'), ('Riot Games', 'https://www.riotgames.com/en/work-with-us/offices/dublin'), ('Rippling', 'https://www.rippling.com/careers'), ('Roche', 'https://www.roche.com/careers/jobs?country=Ireland'), ('Rockwell Automation', 'https://rockwellautomation.wd1.myworkdayjobs.com/External_Rockwell_Automation'), ('RoviSys', 'https://www.rovisys.com/careers'), ('RSA Insurance Ireland', 'https://www.rsagroup.ie/careers/'), ('RTÉ (Raidió Teilifís Éireann)', 'https://about.rte.ie/working-with-rte/vacancies/'), ('Rubrik', 'https://www.rubrik.com/company/careers'), ('RxSense', 'https://www.rxsense.com/careers/'), ('Ryanair', 'https://careers.ryanair.com/'), ('S&P Global', 'https://www.spglobal.com/en/careers/overview'), ('Sage', 'https://sage.com/en-ie/company/careers'), ('Salesforce', 'https://salesforce.wd12.myworkdayjobs.com/External_Career_Site'), ('Sanofi', 'https://sanofi.wd3.myworkdayjobs.com/SanofiCareers'), ('SAP', 'https://jobs.sap.com/search/?q=&locationsearch=Ireland'), ('Savills Ireland', 'https://careers.savills.ie/'), ('Schneider Electric', 'https://www.se.com/ww/en/about-us/careers/overview.jsp'), ('Seagate', 'https://www.seagate.com/careers/'), ('ServiceNow', 'https://careers.servicenow.com/jobs?location=Dublin%2C%20Ireland'), ('Shannon Airport Group', 'https://www.shannonairport.ie/about-us/careers/'), ('SHEIN', 'https://careers.sheingroup.com/'), ('Siemens', 'https://www.siemens.com/ie/en/company/jobs.html'), ('Siemens Healthineers', 'https://www.siemens-healthineers.com/careers'), ('Sky Ireland', 'https://careers.sky.com/job-search/?location=Ireland'), ('Slack', 'https://salesforce.wd12.myworkdayjobs.com/Slack'), ('Slalom', 'https://www.slalom.com/en/careers'), ('Smartling', 'https://www.smartling.com/careers/'), ('Smarttech247', 'https://www.smarttech247.com/careers/'), ('SMBC Aviation Capital', 'https://www.smbc.com/careers'), ('Smith & Nephew', 'https://www.smith-nephew.com/en-gb/careers'), ('Smurfit Westrock', 'https://www.smurfitwestrock.com/careers'), ('Snowflake', 'https://careers.snowflake.com/us/en/search-results?m=3&location=Ireland'), ('Societe Generale', 'https://careers.societegenerale.com/'), ('SolarWinds', 'https://jobs.solarwinds.com/'), ('Sophos', 'https://www.sophos.com/en-us/company/careers'), ('Spectrum.Life', 'https://www.spectrum.life/careers'), ('Splunk', 'https://www.splunk.com/en_us/careers.html'), ('Squarespace', 'https://www.squarespace.com/careers/jobs'), ('SSE Airtricity / SSE', 'https://careers.sse.com/search-jobs/Ireland'), ('Stantec', 'https://www.stantec.com/en/careers'), ('State Street', 'https://statestreet.wd1.myworkdayjobs.com/Global'), ('Stena Line Ireland', 'https://www.stenaline.com/careers/'), ('STMicroelectronics', 'https://www.st.com/content/st_com/en/about/careers.html'), ('Stripe', 'https://stripe.com/jobs'), ('Stryker', 'https://careers.stryker.com/en-US/search?keywords=&location=Ireland'), ('SumUp', 'https://www.sumup.com/careers/'), ('Sun Life Ireland', 'https://www.sunlife.ie/en/careers/'), ('Supply Wisdom', 'https://www.supplywisdom.com/careers'), ('Susquehanna International Group (SIG)', 'https://sig.com/careers/jobs/?location=dublin'), ('Syneos Health', 'https://www.syneoshealth.com/careers'), ('Synopsys', 'https://careers.synopsys.com/search-jobs'), ('Takeda', 'https://takeda.wd3.myworkdayjobs.com/External'), ('Taoglas', 'https://www.taoglas.com/careers/'), ('Tata Consultancy Services (TCS)', 'https://www.tcs.com/careers'), ('Taxback International', 'https://www.taxbackinternational.com/careers/'), ('Teagasc', 'https://www.teagasc.ie/about/opportunities/careers/'), ('Teamwork.com', 'https://www.teamwork.com/careers/'), ('Tech Mahindra', 'https://careers.techmahindra.com/'), ('Teleflex', 'https://teleflex.wd1.myworkdayjobs.com/TeleflexCareers'), ('Teleperformance (Ireland)', 'https://www.teleperformance.com/en-us/careers/'), ('Tenable', 'https://www.tenable.com/careers'), ('Teneo Ireland', 'https://www.teneo.com/careers/'), ('Terumo', 'https://www.terumo.com/careers'), ('Tesco Ireland', 'https://www.tesco-careers.com/search-jobs/?location=Ireland'), ('Tetra Tech', 'https://www.tetratech.com/careers'), ('Teva Pharmaceuticals', 'https://teva.wd1.myworkdayjobs.com/Teva_Careers'), ('Texas Instruments', 'https://careers.ti.com/'), ('The Doyle Collection', 'https://www.doylecollection.com/careers'), ('The Irish Times', 'https://www.irishtimes.com/about-us/careers/'), ('Thermo Fisher Scientific', 'https://jobs.thermofisher.com/global/en/search-results?m=3&location=Ireland'), ('Three Ireland', 'https://www.three.ie/about/careers.html'), ('TikTok', 'https://careers.tiktok.com/position?keyword=&location=Dublin%2C+Ireland'), ('Tines', 'https://www.tines.com/careers/'), ('TK Maxx Ireland', 'https://www.tjxjobs.com/'), ('Toast', 'https://pos.toasttab.com/careers'), ('Tourism Ireland', 'https://www.tourismireland.com/about-us/careers'), ('Trading 212', 'https://www.trading212.com/careers'), ('Trane Technologies', 'https://jobs.tranetechnologies.com/'), ('TransferMate', 'https://www.transfermate.com/careers/'), ('Transport Infrastructure Ireland', 'https://www.tii.ie/about/careers/'), ('Travelers', 'https://careers.travelers.com/'), ('Trellix', 'https://careers.trellix.com/'), ('Trend Micro', 'https://www.trendmicro.com/en_ie/about/careers.html'), ('Tricentis', 'https://www.tricentis.com/company/careers'), ('Twilio', 'https://www.twilio.com/en-us/company/jobs'), ('UBS', 'https://www.ubs.com/ie/en/careers.html'), ('Udemy', 'https://about.udemy.com/careers/'), ('Uisce Éireann (Irish Water)', 'https://www.water.ie/about/careers/'), ('Unilever Ireland', 'https://careers.unilever.com/'), ('Uniphar Group', 'https://uniphar.com/pharma/careers/'), ('UPS Ireland', 'https://www.jobs-ups.com/search-jobs/Ireland'), ('Veolia Ireland', 'https://www.veolia.ie/careers'), ('Version 1', 'https://www.version1.com/careers/'), ('VHI Healthcare', 'https://www.vhi.ie/about-us/careers'), ('Viatris', 'https://viatris.wd1.myworkdayjobs.com/ViatrisCareers'), ('Virgin Media Ireland', 'https://www.virginmedia.ie/careers/'), ('Visa', 'https://search.visa.com/careers?location=Ireland'), ('Vodafone Ireland', 'https://jobs.vodafone.com/search-jobs/Ireland'), ('Walkers Ireland', 'https://www.walkersglobal.com/index.php/careers'), ('Waters Corporation', 'https://www.waters.com/nextgen/ie/en/about-waters/careers.html'), ('Wayflyer', 'https://wayflyer.com/careers'), ('Waystone', 'https://www.waystone.com/careers/'), ('Wells Fargo', 'https://www.wellsfargojobs.com/'), ('West Pharmaceutical Services', 'https://careers.westpharma.com/'), ('William Fry', 'https://www.williamfry.com/careers/'), ('Willis Towers Watson (WTW)', 'https://wtw.wd1.myworkdayjobs.com/WTWCareers'), ('Winthrop Technologies', 'https://www.win-tech.ie/careers/'), ('Wipro', 'https://careers.wipro.com/'), ("Woodie's", 'https://www.woodies.ie/careers'), ('Workato', 'https://www.workato.com/careers'), ('Workday', 'https://workday.wd5.myworkdayjobs.com/Workday'), ('WorkFusion', 'https://www.workfusion.com/careers/'), ('Workhuman', 'https://workhuman.com/careers'), ('Workvivo', 'https://www.workvivo.com/careers/'), ('WSP', 'https://www.wsp.com/en-gb/careers'), ('WuXi Biologics', 'https://www.wuxibiologics.com/careers/'), ('Xenon arc', 'https://www.xenonarc.com/careers'), ('Zara / Inditex Ireland', 'https://www.inditexcareers.com/'), ('Zendesk', 'https://jobs.zendesk.com/us/en/search-results?keywords=Ireland'), ('Zimmer Biomet', 'https://zimmerbiomet.wd1.myworkdayjobs.com/Zimmer_Biomet_Careers'), ('Zscaler', 'https://www.zscaler.com/careers'), ('Zurich Insurance', 'https://www.zurich.ie/about-us/careers/')]
 
-UNIVERSITY_CAREER_PAGES = {
-    'Trinity College Dublin': {'url': 'https://jobs.tcd.ie', 'location': 'Dublin, Ireland'},
-    'University College Cork (UCC)': {'url': 'https://www.ucc.ie/en/hr/work-at-ucc/', 'location': 'Cork, Ireland'},
-    'University College Dublin (UCD)': {'url': 'https://www.ucd.ie/workatucd/jobs/', 'location': 'Dublin, Ireland'},
-    'Dublin City University (DCU)': {'url': 'https://www.dcu.ie/people/jobs', 'location': 'Dublin, Ireland'},
-    'University of Galway': {'url': 'https://www.universityofgalway.ie/about-us/jobs/', 'location': 'Galway, Ireland'},
-    'University of Limerick (UL)': {'url': 'https://www.ul.ie/hr/careers', 'location': 'Limerick, Ireland'},
-    'Maynooth University': {'url': 'https://www.maynoothuniversity.ie/human-resources/vacancies', 'location': 'Maynooth, Ireland'},
-    'Munster Technological University (MTU)': {'url': 'https://www.mtu.ie/vacancies/', 'location': 'Cork / Kerry, Ireland'},
-    'RCSI University of Medicine and Health Sciences': {'url': 'https://www.rcsi.com/careers/ireland', 'location': 'Dublin, Ireland'},
-    'Technological University Dublin (TU Dublin)': {'url': 'https://www.tudublin.ie/explore/jobs/current-vacancies/', 'location': 'Dublin, Ireland'},
-    'Atlantic Technological University (ATU)': {'url': 'https://www.atu.ie/jobs', 'location': 'Ireland'},
-    'South East Technological University (SETU)': {'url': 'https://www.setu.ie/about/vacancies', 'location': 'South East, Ireland'},
-    'Technological University of the Shannon (TUS)': {'url': 'https://tus.ie/hr/vacancies/', 'location': 'Midlands / Midwest, Ireland'},
-}
+# ---------------------------------------------------------------------------
+# Ireland company registry
+#
+# This is separate from the ATS connector lists. Every employer in this
+# registry remains visible even when its ATS returns zero jobs or errors.
+# Registry expanded with the uploaded 100-company Ireland career-page list.
+# ireland_job_radar_HARSHIT_MASTER.csv is the runtime source of truth; this embedded list is fallback-only.
+
+# This gives the dashboard the same "live matches + manual-check companies"
+# behaviour as the reference Job Radar.
+# ---------------------------------------------------------------------------
+
+IRELAND_COMPANY_REGISTRY = ['A&L Goodbody', 'ABB', 'Abbott', 'AbbVie', 'Accenture', 'ActionPoint', 'Adobe', 'Advanced Micro Devices (AMD)', 'AECOM', 'Aer Lingus', 'AerCap', 'Agilent Technologies', 'AIB (Allied Irish Banks)', 'AIG', 'Airbnb', 'AirNav Ireland', 'Aiven', 'Akamai', 'Alexion Pharmaceuticals', 'Alkermes', 'Allianz Ireland', 'Alter Domus', 'Alvarez & Marsal', 'Amazon', 'AMCS Group', 'Amgen', 'Amundi', 'An Post', 'Analog Devices', 'Anthropic', 'Aon', 'Apex Group', 'Apple', 'Applied Materials', 'Aptiv', 'Arcadis', 'Arista Networks', 'Arthur Cox', 'Arup', 'ARYZTA Ireland', 'Asana', 'ASL Aviation Holdings', 'ASML', 'Astellas Pharma', 'AstraZeneca', 'AtkinsRéalis', 'Atlas Copco Ireland', 'Atlassian', 'Autodesk', 'Auxilion', 'Avanade', 'Aviva Ireland', 'Avolon', 'AXA Ireland', 'AXA XL', 'Baker Tilly Ireland', 'Bank of America', 'Bank of Ireland', 'Barclays', 'Bausch + Lomb', 'Baxter International', 'Bayer', 'BDO Ireland', 'BearingPoint', 'Becton Dickinson (BD)', 'BioMarin', 'BlackRock', 'Block', 'BNP Paribas Ireland', 'BNY', 'Boehringer Ingelheim', 'Bord Gáis Energy', 'Bord na Móna', 'Boston Scientific', 'Bristol Myers Squibb', 'Broadcom', 'Brown Brothers Harriman', 'BT Ireland', 'Bus Éireann', 'ByrneWallace', 'C&C Group', 'CACEIS', 'Cadence Design Systems', 'Cairn Homes', 'Canto', 'Cantor Fitzgerald Ireland', 'Capgemini', 'Carne Group', 'CarTrawler', 'Catalent', 'CBRE Ireland', 'CDB Aviation', 'Central Bank of Ireland', 'CGI', 'Chargebee', 'Charles River Laboratories', 'Check Point Software', 'Chubb', 'Cisco', 'Citco', 'Citi', 'Citrix', 'CitySwift', 'ClickUp', 'Clio', 'Cloudflare', 'CluneTech', 'Coca-Cola HBC Ireland', 'Codec', 'Cognizant', 'Cohesity', 'Coillte', 'Coinbase', 'Coloplast', 'Concentrix (Ireland)', 'Convatec', 'Cook Medical', 'CRH', 'Crusoe', 'Cubic³', 'Cushman & Wakefield Ireland', 'CWSI', 'daa (Dublin Airport Authority)', 'DAE Capital', 'Dalata Hotel Group', 'Danaher Corporation', 'Daon', 'Datadog', 'Datalex', 'DataStax', 'Davy', 'DCC plc', 'Dedalus', 'Dell Technologies', 'Deloitte Ireland', 'DePuy Synthes', 'Deutsche Bank', 'Dexcom', 'DHL Ireland', 'Diageo Ireland', 'Dillon Eustace', 'DNV', 'DocuSign', 'DPS Group (Arcadis)', 'DraftKings', 'Dropbox', 'DSV Ireland', 'Dublin Bus', 'Dublin Port Company', 'DXC Technology', 'Dynatrace', 'Eaton', 'eBay', 'Edwards Lifesciences', 'Eir', 'EirGrid', 'Ekco', 'Elavon', 'Eli Lilly', 'Emerald Airlines', 'Emerson', 'Energia Group', 'Enterprise Ireland', 'Ergo', 'Ericsson', 'ESB', 'ESW', 'Etsy', 'Eurofins Scientific', 'Eversheds Sutherland Ireland', 'EXL', 'Expleo', 'Exyte', 'EY Ireland', 'FactSet', 'Fastway Couriers Ireland', 'FBD Insurance', 'FedEx Express Ireland', 'Fenergo', 'Figma', 'Fidelity International', 'Fidelity Investments', 'FINEOS', 'Fiserv', 'Fitch Ratings', 'Fixify', 'Flipdish', 'Flutter Entertainment', 'Forcepoint', 'Fortinet', 'Forvis Mazars Ireland', 'Franklin Templeton', 'Freudenberg Medical', 'FTI Consulting', 'Fujitsu', 'Fáilte Ireland', 'Gartner', 'Gas Networks Ireland', 'GE HealthCare', 'Gemini', 'Genesys', 'Gilead Sciences', 'Glanbia', 'Glanbia / Tirlán', 'GlaxoSmithKline (GSK)', 'Glen Dimplex', 'Glenveagh Properties', 'Global Payments', 'Goldman Sachs', 'Gong', 'Goodbody', 'Google', 'Grant Thornton Ireland', 'Greencore', 'GridBeyond', 'Guidewire', 'Haleon', 'Harvey', 'HCLTech', 'Heineken Ireland', 'Hewlett Packard Enterprise (HPE)', 'HIQA', 'Hitachi Energy', 'Hollister Incorporated', 'Honeywell', 'Hostelworld', 'HP (Hewlett-Packard)', 'HSBC Ireland', 'SMBC Group', 'Harvey Nash', 'HSE (Health Service Executive)', 'Huawei Ireland', 'HubSpot', 'IBM', 'ICON plc', 'IDA Ireland', 'Illumina', 'Indeed', 'ING', 'Infineon Technologies', 'Infosys', 'Insulet Corporation', 'Integer Holdings', 'Integra LifeSciences', 'Integrity360', 'Intel', 'Intercom', 'Introba', 'Invesco', 'IQ-EQ', 'IQVIA', 'Irish Aviation Authority', 'Irish Distillers (Pernod Ricard)', 'Irish Ferries', 'Irish Life', 'Irish Rail (Iarnród Éireann)', 'Isla Health', 'Jabil', 'Jacobs', 'Jamf', 'Jazz Pharmaceuticals', 'John Sisk & Son (Sisk Group)', 'Johnson & Johnson', 'Johnson Controls', 'JPMorgan Chase', 'Keelings', 'Keeper Security', 'Kerry Group', 'Keysight Technologies', 'Keywords Studios', 'Kingspan Group', 'Kirby Group Engineering', 'Kitman Labs', 'Klaviyo', 'Korn Ferry', 'KPMG Ireland', 'Kuehne+Nagel Ireland', 'Kyndryl', 'Labcorp', 'Lam Research', 'Laya Healthcare', 'LearnUpon', 'LetsGetChecked', 'Linesight', 'LinkedIn', 'LK Shields', 'Logitech', 'Macquarie Group', 'Maples Group Ireland', 'Mars Ireland', 'Marsh McLennan', 'Marvell Technology', 'Mason Hayes & Curran', 'Mastercard', 'Matheson', 'McCann FitzGerald', 'McKinsey & Company', 'Mediahuis Ireland', 'Mediolanum International Funds', 'Medpace', 'Medtronic', 'Mercer', 'Merck Group', 'Mercury Engineering', 'Merit Medical', 'Meta', 'Microchip Technology', 'Microsoft', 'MongoDB', 'Monzo', "Moody's", 'Moonshot', 'Morgan Stanley', 'Morningstar', 'Motorola Solutions', 'Mott MacDonald', 'MSCI', 'MSD', 'MSD (Merck Sharp & Dohme)', 'MUFG Investor Services', 'Musgrave Group (SuperValu / Centra)', 'Nestlé Ireland', 'NetApp', 'Noesis', 'Nokia', 'Nordic Aviation Capital', 'Northern Trust', 'Notion', 'Novartis', 'NTMA', 'NTT DATA', 'Nutanix', 'NXP Semiconductors', 'OFX', 'Okta', 'Oliver Wyman', 'One Identity', 'OpenAI', 'OpenText', 'Optum', 'Oracle', 'Ornua', 'PA Consulting', 'Palo Alto Networks', 'Park Place Technologies', 'PayPal', 'Payrails', 'PepsiCo', 'Perrigo', 'Personio', 'Pfizer', 'Philip Lee', 'PIMCO', 'Ping Identity', 'Pinterest', 'PM Group', 'Port of Cork Company', 'Proofpoint', 'Protiviti', 'PTSB (Permanent TSB)', 'Public Jobs / Civil Service', 'Publift', 'PwC Ireland', 'Qashio', 'QIAGEN', 'Qorvo', 'Qualcomm', 'Qualtrics', 'Quantexa', 'Quest Software', 'Qumulo', 'Rapid7', 'Red Hat', 'Reddit', 'Refinitiv (LSEG)', 'Regeneron', 'Renesas Electronics', 'Research Ireland', 'ResMed', 'Revenue', 'Revvity (PerkinElmer)', 'Riot Games', 'Rippling', 'Roche', 'Rockwell Automation', 'RoviSys', 'RSA Insurance Ireland', 'RTÉ (Raidió Teilifís Éireann)', 'Rubrik', 'RxSense', 'Ryanair', 'S&P Global', 'Sage', 'Salesforce', 'Sanofi', 'SAP', 'Savills Ireland', 'Schneider Electric', 'Seagate', 'ServiceNow', 'Shannon Airport Group', 'SHEIN', 'Siemens', 'Siemens Healthineers', 'Sky Ireland', 'Slack', 'Slalom', 'Smartling', 'Smarttech247', 'SMBC Aviation Capital', 'Smith & Nephew', 'Smurfit Westrock', 'Snowflake', 'Societe Generale', 'SolarWinds', 'Sophos', 'Spectrum.Life', 'Splunk', 'Squarespace', 'SSE Airtricity / SSE', 'Stantec', 'State Street', 'Stena Line Ireland', 'STMicroelectronics', 'Stripe', 'Stryker', 'SumUp', 'Sun Life Ireland', 'Supply Wisdom', 'Susquehanna International Group (SIG)', 'Syneos Health', 'Synopsys', 'Takeda', 'Taoglas', 'Tata Consultancy Services (TCS)', 'Taxback International', 'Teagasc', 'Teamwork.com', 'Tech Mahindra', 'Teleflex', 'Teleperformance (Ireland)', 'Tenable', 'Teneo Ireland', 'Terumo', 'Tesco Ireland', 'Tetra Tech', 'Teva Pharmaceuticals', 'Texas Instruments', 'The Doyle Collection', 'The Irish Times', 'Thermo Fisher Scientific', 'Three Ireland', 'TikTok', 'Tines', 'TK Maxx Ireland', 'Toast', 'Tourism Ireland', 'Trading 212', 'Trane Technologies', 'TransferMate', 'Transport Infrastructure Ireland', 'Travelers', 'Trellix', 'Trend Micro', 'Tricentis', 'Twilio', 'UBS', 'Udemy', 'Uisce Éireann (Irish Water)', 'Unilever Ireland', 'Uniphar Group', 'UPS Ireland', 'Veolia Ireland', 'Version 1', 'VHI Healthcare', 'Viatris', 'Virgin Media Ireland', 'Visa', 'Vodafone Ireland', 'Walkers Ireland', 'Waters Corporation', 'Wayflyer', 'Waystone', 'Wells Fargo', 'West Pharmaceutical Services', 'William Fry', 'Willis Towers Watson (WTW)', 'Winthrop Technologies', 'Wipro', "Woodie's", 'Workato', 'Workday', 'WorkFusion', 'Workhuman', 'Workvivo', 'WSP', 'WuXi Biologics', 'Xenon arc', 'Zara / Inditex Ireland', 'Zendesk', 'Zimmer Biomet', 'Zscaler', 'Zurich Insurance']
 
 CAREERS_URL_OVERRIDES = {
     "Apple": "https://jobs.apple.com/en-ie/search",
@@ -153,49 +151,68 @@ def _company_key(value: str) -> str:
     value = (value or "").lower().replace("&", "and")
     return re.sub(r"[^a-z0-9]+", "", value)
 
-def _load_company_master_rows():
-    """Single source of truth for the Ireland employer universe."""
-    import csv
-    try:
-        with open(MASTER_COMPANY_CSV, encoding="utf-8-sig", newline="") as f:
-            return [r for r in csv.DictReader(f) if (r.get("company_name") or "").strip()]
-    except Exception as exc:
-        print(f"  ! {MASTER_COMPANY_CSV} unavailable: {exc}")
-        return []
-
-
-def _load_company_master():
-    return [
-        (
-            (r.get("company_name") or "").strip(),
-            (r.get("career_url") or "").strip(),
-            ("university" if (r.get("sector") or "") == "Higher Education / Research" else (r.get("source_type") or "employer")).strip(),
-            (r.get("sector") or r.get("category") or "").strip(),
-        )
-        for r in _load_company_master_rows()
-        if str(r.get("include_in_scrape_registry", "yes")).strip().lower() in {"", "yes", "true", "1"}
-    ]
-
-
-def _load_company_master_metadata():
-    return {_company_key(r.get("company_name")): r for r in _load_company_master_rows()}
-
-
 def _registry_url_map():
-    out = {
-        _company_key(r.get("company_name")): (r.get("career_url") or "").strip()
-        for r in _load_company_master_rows()
-        if (r.get("company_name") or "").strip() and (r.get("career_url") or "").strip()
-    }
+    out = {}
+    for company, url in JSONLD_CAREER_PAGES:
+        key = _company_key(company)
+        if key:
+            out[key] = url
     for company, url in CAREERS_URL_OVERRIDES.items():
         out[_company_key(company)] = url
     return out
+
+UNIVERSITY_COMPANY_NAMES = {
+    "University College Cork (UCC)", "Trinity College Dublin (TCD)", "University College Dublin (UCD)",
+    "Dublin City University (DCU)", "University of Galway", "University of Limerick (UL)", "Maynooth University",
+    "Technological University Dublin (TU Dublin)", "Munster Technological University (MTU)",
+    "Atlantic Technological University (ATU)", "South East Technological University (SETU)",
+    "Technological University of the Shannon (TUS)", "RCSI University of Medicine and Health Sciences",
+}
+
+def _load_company_master():
+    """Load the Harshit-first Ireland master registry (single source of truth)."""
+    try:
+        import csv
+        with open("ireland_job_radar_HARSHIT_MASTER.csv", encoding="utf-8-sig", newline="") as f:
+            rows = list(csv.DictReader(f))
+        out = []
+        for r in rows:
+            name = (r.get("company_name") or "").strip()
+            include = str(r.get("include_in_scrape_registry", "yes")).strip().lower()
+            if not name or include not in {"yes", "true", "1", ""}:
+                continue
+            out.append((
+                name,
+                (r.get("career_url") or "").strip(),
+                (r.get("source_type") or "employer").strip() or "employer",
+                (r.get("sector") or r.get("category") or "").strip(),
+            ))
+        if out:
+            return out
+    except Exception as exc:
+        print(f"  ! Harshit company master unavailable, using embedded registry: {exc}")
+    return [(name, None, "employer", "") for name in IRELAND_COMPANY_REGISTRY]
+
+
+def _load_company_master_metadata():
+    """Dashboard priority/evidence metadata keyed by normalized company name."""
+    try:
+        import csv
+        with open("ireland_job_radar_HARSHIT_MASTER.csv", encoding="utf-8-sig", newline="") as f:
+            rows = list(csv.DictReader(f))
+        return {
+            _company_key(r.get("company_name")): r
+            for r in rows if (r.get("company_name") or "").strip()
+        }
+    except Exception:
+        return {}
 
 
 def build_company_registry(include_cache: bool = False):
     url_map = _registry_url_map()
     master_metadata = _load_company_master_metadata()
     connector_maps = [
+        ({_company_key(x): "direct" for x in UNIVERSITY_COMPANY_NAMES}),
         ({_company_key(x): "greenhouse" for x in GREENHOUSE_COMPANIES}),
         ({_company_key(x): "lever" for x in LEVER_COMPANIES}),
         ({_company_key(x): "ashby" for x in ASHBY_COMPANIES}),
@@ -276,12 +293,10 @@ def build_company_registry(include_cache: bool = False):
             "priority_tier": meta.get("priority_tier", ""),
             "profile_priority": meta.get("profile_priority", ""),
             "best_fit_role_families": meta.get("best_fit_role_families", ""),
-            "secondary_finance_score": meta.get("secondary_finance_score", ""),
             "dashboard_default_visibility": meta.get("dashboard_default_visibility", "visible"),
             "dashboard_optional_group": meta.get("dashboard_optional_group", "core_harshit"),
             "source_status": meta.get("source_status", ""),
-            "ireland_relevance_basis": meta.get("ireland_relevance_basis", ""),
-            "evidence_status": meta.get("evidence_status", ""),
+            "ireland_relevance_evidence": meta.get("ireland_relevance_evidence", ""),
         })
     return registry
 
@@ -497,9 +512,6 @@ DIRECT_COMPANY_CONNECTORS = {
     "Auxilion": "auxilion_official",
     "BioMarin": "biomarin_official",
 }
-
-# Official Irish university vacancy boards use a shared collector.
-DIRECT_COMPANY_CONNECTORS.update({name: "university_official" for name in UNIVERSITY_CAREER_PAGES})
 
 # Exact enterprise-platform mappings learned from validated public career-site
 # hosts. Unlike guessed ATS slugs, these are revalidated at runtime before use.
@@ -13427,65 +13439,77 @@ def scrape_asl_aviation_official():
 
 
 
+UNIVERSITY_CAREER_SOURCES = {
+    "University College Cork (UCC)": "https://my.corehr.com/pls/uccrecruit/erq_search_package.search_form?p_company=5023&p_internal_external=E",
+    "Trinity College Dublin (TCD)": "https://my.corehr.com/pls/trrecruit/erq_search_package.search_form?p_company=1&p_internal_external=E",
+    "University College Dublin (UCD)": "https://my.corehr.com/pls/ucdrecruit/erq_search_package.search_form?p_company=1&p_internal_external=E",
+    "Dublin City University (DCU)": "https://www.dcu.ie/people/jobs",
+    "University of Galway": "https://www.universityofgalway.ie/about-us/jobs/",
+    "University of Limerick (UL)": "https://www.ul.ie/hr/vacancies",
+    "Maynooth University": "https://www.maynoothuniversity.ie/human-resources/vacancies",
+    "Technological University Dublin (TU Dublin)": "https://www.tudublin.ie/explore/jobs/current-vacancies/",
+    "Munster Technological University (MTU)": "https://www.mtu.ie/vacancies/",
+    "Atlantic Technological University (ATU)": "https://www.atu.ie/jobs",
+    "South East Technological University (SETU)": "https://www.setu.ie/staff/recruitment",
+    "Technological University of the Shannon (TUS)": "https://tus.ie/hr/vacancies/",
+    "RCSI University of Medicine and Health Sciences": "https://www.rcsi.com/careers",
+}
+
+
 def scrape_university_official(company: str):
-    """Collect individual vacancies from an official Irish university job board."""
-    info = UNIVERSITY_CAREER_PAGES.get(company) or {}
-    source = info.get("url")
-    default_location = info.get("location") or "Ireland"
+    """Best-effort official vacancy collector for Republic of Ireland universities.
+
+    Uses only the university's own recruitment pages. It deliberately keeps all
+    university vacancy families; profile ranking/filtering happens later.
+    """
+    source = UNIVERSITY_CAREER_SOURCES.get(company)
     if not source:
         return []
-    from bs4 import BeautifulSoup
-    from urllib.parse import urljoin
-    generic = {"jobs","job","vacancies","vacancy","current vacancies","all vacancies","search jobs","search vacancies","search current vacancies","apply now","apply","careers","career opportunities","external vacancies","internal vacancies","view all","read more","more info","login"}
-    role_words = re.compile(r"\b(?:analyst|administrator|officer|manager|director|head|lead|specialist|coordinator|assistant|associate|consultant|developer|engineer|architect|technician|researcher|research|lecturer|professor|fellow|tutor|librarian|project|programme|finance|data|digital|technology|systems|operations|procurement|communications|marketing|adviser|advisor|executive)\b", re.I)
-    href_words = re.compile(r"(?:job|vacan|recruit|position|competition|apply|erecruit|corehr|jobs\.)", re.I)
-    results = {}
-    def consume(html_text, base_url):
-        soup = BeautifulSoup(html_text, "html.parser")
+    try:
+        import requests
+        from bs4 import BeautifulSoup
+        from urllib.parse import urljoin
+        sess = requests.Session()
+        sess.headers.update({"User-Agent": "Mozilla/5.0"})
+        r = sess.get(source, timeout=30, allow_redirects=True)
+        r.raise_for_status()
+        soup = BeautifulSoup(r.text, "html.parser")
+        out, seen = [], set()
+        generic = {"jobs", "vacancies", "current vacancies", "search", "apply", "apply now", "view", "more", "read more", "login", "register"}
         for a in soup.find_all("a", href=True):
             title = re.sub(r"\s+", " ", a.get_text(" ", strip=True)).strip()
-            if not title or len(title) < 5 or len(title) > 260 or title.lower() in generic:
+            href = urljoin(r.url, a.get("href"))
+            low = title.lower()
+            href_low = href.lower()
+            if not title or len(title) < 5 or low in generic:
                 continue
-            href = urljoin(base_url, a.get("href") or "")
-            if href.startswith(("mailto:", "javascript:")):
+            # Strong vacancy/detail hints. Avoid HR policy/navigation links.
+            if not (re.search(r"(?:vacan|job|recruit|position|competition|career)", href_low, re.I) or
+                    re.search(r"\b(?:analyst|manager|officer|administrator|developer|engineer|research|lecturer|professor|assistant|coordinator|specialist|director|technician|project|programme|program|finance|digital|data|systems|it)\b", title, re.I)):
                 continue
-            node=a; card=title
-            for _ in range(4):
-                node=getattr(node,"parent",None)
-                if not node: break
-                txt=re.sub(r"\s+"," ",node.get_text(" ",strip=True)).strip()
-                if txt and len(txt)<=2500: card=txt
-            if not role_words.search(title) and not (href_words.search(href) and re.search(r"(?:closing|close date|reference|ref\.?|salary|contract|full[- ]?time|part[- ]?time)",card,re.I)):
+            if re.search(r"(?:policy|procedure|guideline|faq|benefit|why work|how to apply|privacy|login|register)", low, re.I):
                 continue
-            if re.search(r"(?:privacy|cookie|policy|benefits|how to apply|candidate information|faq|contact)",title,re.I):
+            canonical = href.split("#")[0]
+            sig = (title.lower(), canonical.lower())
+            if sig in seen:
                 continue
-            clean=href.split("#")[0]
-            results[(title.lower(),clean.lower())]={"company":company,"ats":"university_direct","title":title[:300],"location":default_location,"url":clean,"updated_at":None,"description_text":card[:5000],"university_job":True}
-    try:
-        req=urllib.request.Request(source,headers={"User-Agent":"Mozilla/5.0"})
-        with urllib.request.urlopen(req,timeout=35) as r:
-            consume(r.read().decode("utf-8",errors="ignore"),r.geturl())
-        _mark_connector_health(company,True,"Official university vacancy source loaded",source)
+            seen.add(sig)
+            out.append({
+                "company": company, "ats": "university_official", "title": title[:300],
+                "location": "Ireland", "url": canonical, "updated_at": None,
+                "description_text": title,
+            })
+        _mark_connector_health(company, True, f"Official university careers page loaded; {len(out)} vacancy links", r.url)
+        print(f"  {company} official university careers: {len(out)} jobs")
+        return out
     except Exception as exc:
-        if HAS_PLAYWRIGHT:
-            try:
-                with sync_playwright() as pw:
-                    browser=pw.chromium.launch(headless=True); page=browser.new_page(locale="en-IE")
-                    page.goto(source,wait_until="domcontentloaded",timeout=60000); page.wait_for_timeout(2500)
-                    for _ in range(5): page.mouse.wheel(0,2500); page.wait_for_timeout(250)
-                    consume(page.content(),page.url); browser.close()
-                _mark_connector_health(company,True,"Official university vacancy source loaded in browser",source)
-            except Exception as browser_exc:
-                _mark_connector_health(company,False,str(browser_exc),source)
-        else:
-            _mark_connector_health(company,False,str(exc),source)
-    jobs=list(results.values())
-    print(f"  {company} university careers: {len(jobs)} jobs")
-    return jobs
+        _mark_connector_health(company, False, str(exc), source)
+        print(f"  ! {company} university scrape failed: {exc}")
+        return []
 
 
 def scrape_direct_company(company: str):
-    if company in UNIVERSITY_CAREER_PAGES:
+    if company in UNIVERSITY_CAREER_SOURCES:
         return scrape_university_official(company)
     fn={
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
@@ -14588,9 +14612,9 @@ def main():
             except Exception as e:
                 errors.append(f"phenom/{company}: {e}")
 
-    # Proprietary/direct company search surfaces. DIRECT_COMPANY_CONNECTORS is
-    # the source of truth, so new validated connectors cannot be forgotten here.
-    for company in DIRECT_COMPANY_CONNECTORS:
+    # Proprietary/direct company search surfaces. These are deliberately
+    # conservative and only emit records with local Ireland context.
+    for company in ('AECOM', 'Accenture', 'Citi', 'Apple', 'BlackRock', 'Bank of Ireland', 'Google', 'Microsoft', 'Meta', 'TikTok', 'Oracle', 'Red Hat', 'JPMorgan Chase', 'EY Ireland', 'KPMG Ireland', 'NetApp', 'Version 1', 'Grant Thornton Ireland', 'HSBC Ireland', 'ING', 'Bank of America', 'Cognizant', 'AIB (Allied Irish Banks)', 'Central Bank of Ireland', 'BNP Paribas', 'Capgemini', 'ServiceNow', 'Johnson & Johnson', 'Johnson Controls', 'Boston Scientific', 'Zscaler', 'Harvey Nash', 'SMBC Group', 'Deutsche Bank', 'Arup', 'HCLTech', 'HP (Hewlett-Packard)', 'Jacobs', 'Agilent Technologies', 'A&L Goodbody', 'Aiven', 'AstraZeneca', 'Becton Dickinson (BD)', 'Huawei', 'GE HealthCare', 'Aon', 'Hitachi Energy', 'IBM', 'DXC Technology', 'Wipro', 'Vodafone', 'Wells Fargo', 'Infosys', 'Tata Consultancy Services (TCS)', 'Dell Technologies', 'EXL', 'Huawei Ireland', 'Honeywell', 'Revenue', 'Public Jobs / Civil Service', 'NTT DATA', 'Ryanair', 'Coca-Cola HBC Ireland', 'PepsiCo', 'Musgrave Group (SuperValu / Centra)', 'SAP', 'Allianz Ireland', 'Susquehanna International Group (SIG)', 'Schneider Electric', 'Heineken Ireland', 'Walkers Ireland', 'ABB', 'Laya Healthcare', 'Irish Life', 'McKinsey & Company', 'Medtronic', 'UPS Ireland', 'Three Ireland', 'TK Maxx Ireland', 'Siemens', 'S&P Global', 'SMBC Aviation Capital', 'Advanced Micro Devices (AMD)', 'Applied Materials', 'Arcadis', 'Baker Tilly Ireland', 'Bausch + Lomb'):
         if not _targeted(company):
             continue
         try:
@@ -14600,6 +14624,17 @@ def main():
         except Exception as e:
             errors.append(f"direct/{company}: {e}")
         time.sleep(0.4)
+
+    # Official Republic of Ireland university career sources.
+    for company in UNIVERSITY_CAREER_SOURCES:
+        if not _targeted(company):
+            continue
+        try:
+            found = scrape_direct_company(company)
+            results.extend(found)
+            print(f"direct-university/{company}: {len(found)} Ireland jobs")
+        except Exception as e:
+            errors.append(f"direct-university/{company}: {e}")
 
     # Suman-style dynamic ATS discovery for companies not already wired into a
     # known connector. Confirmed mappings persist in ats_platform_cache.json.
@@ -14681,7 +14716,7 @@ def main():
         priority_rescued = rescue_priority_ireland_employers(results)
         results.extend(priority_rescued)
 
-        # The broader curated-company rescue remains FULL-only.
+        # The broader 500-company rescue remains FULL-only.
         if SCRAPE_MODE != "fast":
             rescue_registry = build_company_registry(include_cache=True)
             rescued = rescue_zero_companies_with_aggregators(results, rescue_registry)
@@ -14690,12 +14725,12 @@ def main():
         errors.append(f"zero-company targeted rescue: {e}")
 
 
-    # The committed Harshit master CSV is the SINGLE source of truth for the
-    # dashboard company universe.
+    # ireland_job_radar_HARSHIT_MASTER.csv is the SINGLE source of truth for the dashboard
+    # company universe.
     #
     # Apply this to EVERY source, including aggregators. Previously Jooble,
     # Adzuna and Careerjet were allowed to introduce adjacent employers that
-    # were not present in the master CSV, which caused removed/unwanted
+    # were not present in the Harshit master CSV, which caused removed/unwanted
     # companies to leak back into data.json and the HTML company filter.
     curated_keys = curated_company_key_set()
 
@@ -14716,7 +14751,7 @@ def main():
     if dropped_non_curated:
         print(
             f"CSV company-universe filter: dropped "
-            f"{dropped_non_curated} jobs from companies not in the master CSV"
+            f"{dropped_non_curated} jobs from companies not in the Harshit master CSV"
         )
 
 

@@ -536,6 +536,12 @@ body{background:#f3f4f6!important}
     <div class="search-wrap">
       <input id="fSearch" type="text" placeholder="Search jobs, companies, skills, e.g. JPM, Amazon, Power BI..." />
     </div>
+    <select id="fCompanyScope" title="Company priority scope">
+      <option value="core" selected>Harshit focus companies</option>
+      <option value="all">All tracked companies</option>
+      <option value="optional">Optional / lower priority</option>
+      <option value="university">Universities / higher education</option>
+    </select>
     <select id="fCompany">
       <option value="">All companies</option>
     </select>
@@ -548,29 +554,27 @@ body{background:#f3f4f6!important}
       <option value="waterford">Waterford</option>
       <option value="kildare">Kildare</option>
       <option value="remote">Remote / Hybrid</option>
+      <option value="other">Other location</option>
     </select>
     <select id="fSector">
       <option value="">All sectors</option>
+      <option value="other">Other sector</option>
     </select>
     <select id="fSource">
       <option value="">All sources</option>
+      <option value="other">Other source</option>
     </select>
     <select id="fPosted">
       <option value="">Any time posted</option>
-      <option value="1h">Last 1 hour</option>
-      <option value="3h">Last 3 hours</option>
-      <option value="6h">Last 6 hours</option>
-      <option value="12h">Last 12 hours</option>
-      <option value="24h">Last 24 hours</option>
-      <option value="7d">Last 7 days</option>
-      <option value="30d">Last 30 days</option>
+      <option value="24h">Past 24 hours</option>
+      <option value="3d">Past 3 days</option>
+      <option value="7d">Past 7 days</option>
+      <option value="14d">Past 14 days</option>
+      <option value="30d">Past 30 days</option>
+      <option value="older">Older than 30 days</option>
+      <option value="other">Other</option>
     </select>
-    <select id="fType">
-      <option value="">All employment types</option>
-      <option value="full_time">Full-time</option>
-      <option value="part_time">Part-time</option>
-      <option value="internship">Internship</option>
-    </select>
+
     <select id="fRadar">
       <option value="">All Ireland jobs</option>
       <option value="for_you">For You (backend profile)</option>
@@ -582,6 +586,7 @@ body{background:#f3f4f6!important}
     </select>
     <select id="fRoleFamily">
       <option value="">All role families</option>
+      <option value="Other">Other</option>
     </select>
     <select id="fExperience">
       <option value="">Any experience fit</option>
@@ -590,7 +595,30 @@ body{background:#f3f4f6!important}
       <option value="Stretch">Stretch</option>
       <option value="Overqualified">Overqualified</option>
       <option value="Too Senior">Too Senior</option>
+      <option value="Other">Other</option>
     </select>
+
+    <select id="fEmployment">
+      <option value="">All employment types</option>
+      <option value="full_time">Full-time / Permanent</option>
+      <option value="contract">Contract / Fixed-term</option>
+      <option value="temporary">Temporary / Seasonal</option>
+      <option value="internship">Internship / Placement</option>
+      <option value="graduate">Graduate Programme</option>
+      <option value="other">Other</option>
+    </select>
+    <select id="fEmploymentLevel">
+      <option value="">All experience levels</option>
+      <option value="Internship">Internship</option>
+      <option value="Entry level">Entry level</option>
+      <option value="Associate">Associate</option>
+      <option value="Mid-Senior level">Mid-Senior level</option>
+      <option value="Director">Director</option>
+      <option value="Executive">Executive</option>
+      <option value="Not specified">Not specified</option>
+      <option value="Other">Other</option>
+    </select>
+
     <select id="fNew">
       <option value="">All postings</option>
       <option value="new">New since last check</option>
@@ -600,6 +628,7 @@ body{background:#f3f4f6!important}
       <option value="sponsors">Mentions sponsorship</option>
       <option value="no_sponsorship">Says no sponsorship</option>
       <option value="not_mentioned">Not mentioned</option>
+      <option value="other">Other / unclear</option>
     </select>
     <select id="fSort">
       <option value="match">Best candidate match</option>
@@ -610,7 +639,8 @@ body{background:#f3f4f6!important}
     </select>
     <div class="loadctrl">
       <span id="liveStatus" class="live-dot">● live</span>
-      <button type="button" onclick="autoFetchJobs()">Refresh now</button>
+      <button id="searchEnterBtn" type="button" onclick="applyFilters()">Search / Enter</button>
+      <button id="refreshNowBtn" type="button" onclick="autoFetchJobs()">Refresh now</button>
     </div>
   </div>
 </div>
@@ -621,9 +651,11 @@ body{background:#f3f4f6!important}
       <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs</div>
       <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
       <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
-      <div id="tabZero" class="tab" onclick="showTab('zero')">Zero jobs scraped</div>
+      <div id="tabLiveZero" class="tab" onclick="showTab('livezero')">True zero jobs</div>
+      <div id="tabZero" class="tab" onclick="showTab('zero')">False zero / broken</div>
       <div id="tabSaved" class="tab" onclick="showTab('saved')">Saved</div>
       <div id="tabLiveCompanies" class="tab" onclick="showTab('livecompanies')">Companies with live jobs</div>
+      <div id="tabProvenCompanies" class="tab" onclick="showTab('provencompanies')">Proven working</div>
       <div id="tabApplications" class="tab" onclick="showTab('applications')">Applications</div>
     </div>
     <span id="resultCount">0 results</span>
@@ -643,6 +675,10 @@ body{background:#f3f4f6!important}
     <div id="manualGrid" class="dir-grid"></div>
   </div>
 
+  <div id="liveZeroPane">
+    <div id="liveZeroSummary" class="diag-summary"></div>
+    <div id="liveZeroGrid" class="dir-grid"></div>
+  </div>
   <div id="zeroPane">
     <div id="zeroSummary" class="diag-summary"></div>
     <div id="zeroGrid" class="dir-grid"></div>
@@ -658,6 +694,11 @@ body{background:#f3f4f6!important}
   <div id="liveCompaniesPane" style="display:none">
     <div id="liveCompaniesSummary" class="diag-summary"></div>
     <div id="liveCompaniesGrid" class="dir-grid"></div>
+  </div>
+
+  <div id="provenCompaniesPane" style="display:none">
+    <div id="provenCompaniesSummary" class="diag-summary"></div>
+    <div id="provenCompaniesGrid" class="dir-grid"></div>
   </div>
 
   <div id="applicationsPane">
@@ -686,6 +727,13 @@ const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 let ALL_JOBS = [];
 let ALL_MANUAL = [];
 let ALL_REGISTRY = [];
+let ALL_COVERAGE = [];
+let ALL_LIVE_ZERO = [];
+let COMPANY_HISTORY = {};
+let PROVEN_WORKING_COMPANIES = [];
+let HISTORY_TRACKING_STARTED = '2026-08-16';
+let HISTORICAL_DISTINCT_JOBS = 0;
+let CONNECTOR_HEALTH = {};
 let RAW_TOTAL = 0;
 
 
@@ -899,11 +947,6 @@ function recencyBucket(date) {
   return 'older';
 }
 
-function postedWithin(date, filter) {
-  if (!filter) return true;
-  const limits = { '1h':1, '3h':3, '6h':6, '12h':12, '24h':24, '7d':168, '30d':720 };
-  return ageHours(date) <= (limits[filter] ?? Infinity);
-}
 
 function recencyLabel(date) {
   const h = ageHours(date);
@@ -963,28 +1006,76 @@ function effectiveMatchScore(job) {
   return Number(job.candidate_match_score || 0);
 }
 
+function companyScopeValue() {
+  return document.getElementById('fCompanyScope')?.value || 'core';
+}
+function companyMeta(name) {
+  return ALL_REGISTRY.find(c => c.company === name) || {};
+}
+function isUniversityCompany(name) {
+  const m = companyMeta(name);
+  return /higher education|university/i.test(String(m.category || ''));
+}
+function companyScopeMatches(name) {
+  const scope = companyScopeValue();
+  const m = companyMeta(name);
+  const optional = m.dashboard_default_visibility === 'hidden' || m.dashboard_optional_group === 'lower_priority_companies';
+  if (scope === 'all') return true;
+  if (scope === 'optional') return optional;
+  if (scope === 'university') return isUniversityCompany(name);
+  return !optional;
+}
+function scopedRegistry() { return ALL_REGISTRY.filter(c => companyScopeMatches(c.company)); }
+function scopedJobs() { return ALL_JOBS.filter(j => companyScopeMatches(j.company)); }
+function scopedManualCompanies() { return ALL_MANUAL.filter(c => companyScopeMatches(c.company)); }
+function rebuildCompanyFilter() {
+  const select = document.getElementById('fCompany');
+  if (!select) return;
+  const current = select.value;
+  const names = [...scopedRegistry().map(c=>c.company), ...scopedJobs().map(j=>j.company), ...scopedManualCompanies().map(c=>c.company)].filter(Boolean);
+  fillSelect('fCompany', names);
+  select.value = [...select.options].some(o => o.value === current) ? current : '';
+}
+function updateScopeStats() {
+  const registry = scopedRegistry(), jobs = scopedJobs(), manual = scopedManualCompanies();
+  const directoryCount = new Set([...registry.filter(c=>c.careers_url||c.url).map(c=>c.company), ...manual.map(c=>c.company)]).size;
+  const a=document.getElementById('stCompanies'), b=document.getElementById('stLive'), c=document.getElementById('stManual');
+  if (a) a.textContent=registry.length; if (b) b.textContent=jobs.length; if (c) c.textContent=directoryCount;
+  const scope=document.getElementById('fCompanyScope');
+  if (scope) {
+    const core=ALL_REGISTRY.filter(c=>c.dashboard_default_visibility!=='hidden' && c.dashboard_optional_group!=='lower_priority_companies').length;
+    const optional=ALL_REGISTRY.length-core;
+    const universities=ALL_REGISTRY.filter(c=>/higher education|university/i.test(String(c.category||''))).length;
+    [...scope.options].forEach(o=>{
+      if(o.value==='core') o.textContent=`Harshit focus · ${core}`;
+      if(o.value==='all') o.textContent=`All tracked · ${ALL_REGISTRY.length}`;
+      if(o.value==='optional') o.textContent=`Optional / lower priority · ${optional}`;
+      if(o.value==='university') o.textContent=`Universities / higher education · ${universities}`;
+    });
+  }
+}
+
 function loadData(data) {
   const jobs = data.jobs || [];
   ALL_JOBS = data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs);
   ALL_MANUAL = data.manual_check_companies || [];
   ALL_REGISTRY = data.registry_companies || [];
+  ALL_COVERAGE = data.coverage_diagnostics || [];
+  ALL_LIVE_ZERO = data.live_zero_companies || ALL_COVERAGE.filter(x => x.state === 'live_zero');
+  COMPANY_HISTORY = data.company_history || {};
+  PROVEN_WORKING_COMPANIES = data.proven_working_companies || Object.keys(COMPANY_HISTORY).filter(
+    name => COMPANY_HISTORY[name] && COMPANY_HISTORY[name].ever_working
+  );
+  HISTORY_TRACKING_STARTED = data.history_tracking_started || '2026-08-16';
+  HISTORICAL_DISTINCT_JOBS = Number(data.historical_distinct_jobs_seen || 0);
+  CONNECTOR_HEALTH = data.connector_health || {};
   RAW_TOTAL = jobs.length;
 
   document.getElementById('genTime').textContent = data.generated_at
     ? ('Last updated: ' + new Date(data.generated_at).toLocaleString())
     : '';
-  document.getElementById('stLive').textContent = ALL_JOBS.length;
-  document.getElementById('stCompanies').textContent = data.total_companies_checked ?? '—';
-  const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
-  document.getElementById('stManual').textContent = directoryCount;
-
-  // Populate companies from the full registry, plus any live/manual records for backward compatibility.
-  const companyUniverse = [
-    ...ALL_REGISTRY.map(c => c.company),
-    ...ALL_JOBS.map(j => j.company),
-    ...ALL_MANUAL.map(c => c.company)
-  ];
-  fillSelect('fCompany', companyUniverse);
+  rebuildCompanyFilter();
+  updateScopeStats();
   fillSelect('fSector', ALL_JOBS.map(j => j.sector || 'Other'));
   fillSelect('fSource', ALL_JOBS.map(j => j.ats), v => v.charAt(0).toUpperCase() + v.slice(1));
 
@@ -993,24 +1084,55 @@ function loadData(data) {
 
 function setupInstantFilters() {
   const ids = [
-    'q','fCompany','fArea','fSector','fSource','fTime','fType',
-    'fRadar','fRoleFamily','fExperience','fVisa','fSort','fNew'
+    'fSearch',
+    'fCompanyScope',
+    'fCompany',
+    'fLocation',
+    'fSector',
+    'fSource',
+    'fPosted',
+    'fEmployment',
+    'fRadar',
+    'fRoleFamily',
+    'fExperience',
+    'fEmploymentLevel',
+    'fNew',
+    'fVisa',
+    'fSort'
   ];
 
   ids.forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
 
-    const eventName = (el.tagName === 'INPUT' && (el.type === 'text' || el.type === 'search')) ? 'input' : 'change';
+    if (el.dataset.finalInstantBound === '1') return;
+    el.dataset.finalInstantBound = '1';
 
-    // Prevent duplicate listeners if this function is ever called twice.
-    if (el.dataset.instantBound === '1') return;
-    el.dataset.instantBound = '1';
+    const eventName =
+      el.tagName === 'INPUT' &&
+      (el.type === 'text' || el.type === 'search')
+        ? 'input'
+        : 'change';
 
     el.addEventListener(eventName, () => {
+      if (id === 'fCompanyScope') { rebuildCompanyFilter(); updateScopeStats(); }
       applyFilters();
     });
   });
+
+  // Search reacts while typing AND Enter works explicitly.
+  const search = document.getElementById('fSearch');
+
+  if (search && search.dataset.enterBound !== '1') {
+    search.dataset.enterBound = '1';
+
+    search.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        applyFilters();
+      }
+    });
+  }
 }
 
 async function autoFetchJobs() {
@@ -1021,6 +1143,7 @@ async function autoFetchJobs() {
     document.getElementById('liveStatus').textContent = '● live';
     document.getElementById('liveStatus').classList.remove('stale');
   } catch (err) {
+    console.error('Dashboard data load failed:', err);
     document.getElementById('liveStatus').textContent = '○ data.json unavailable';
     document.getElementById('liveStatus').classList.add('stale');
   }
@@ -1163,6 +1286,159 @@ function jobSearchScore(job, rawQuery) {
   return {score, matched, total: terms.length};
 }
 
+
+function getJobPostedDate(job) {
+  // IMPORTANT:
+  // updated_at / last_verified_at are scraper timestamps and must NOT make
+  // an old vacancy look newly posted.
+  //
+  // Priority:
+  //   1. actual parsed employer/source posting date
+  //   2. first time our dashboard saw the vacancy
+  //   3. updated_at only as a last-resort legacy fallback
+  const candidates = [
+    job.posted_at_parsed,
+    job.posted_at,
+    job.date_posted,
+    job.first_seen_at,
+    job.updated_at
+  ];
+
+  for (const value of candidates) {
+    if (!value) continue;
+    const d = new Date(value);
+    if (!Number.isNaN(d.getTime())) return d;
+  }
+
+  return null;
+}
+
+function postedWithin(dateValue, filterValue) {
+  // Empty value = "Any time posted" = NO FILTER.
+  if (!filterValue) return true;
+
+  const d = dateValue instanceof Date
+    ? dateValue
+    : (dateValue ? new Date(dateValue) : null);
+
+  if (!d || Number.isNaN(d.getTime())) return false;
+
+  const ageMs = Date.now() - d.getTime();
+
+  // Future timestamps caused by timezone/source errors should be treated
+  // as zero-age rather than incorrectly excluding the vacancy.
+  const ageHours = Math.max(0, ageMs / 3600000);
+
+  switch (String(filterValue).toLowerCase()) {
+    case '24h':
+    case 'today':
+    case '1d':
+      return ageHours <= 24;
+
+    case '3d':
+      return ageHours <= 72;
+
+    case '7d':
+    case 'week':
+      return ageHours <= 24 * 7;
+
+    case '14d':
+      return ageHours <= 24 * 14;
+
+    case '30d':
+    case 'month':
+      return ageHours <= 24 * 30;
+
+    case 'older':
+      return ageHours > 24 * 30;
+
+    case 'other':
+      // Jobs with a valid date that do not fit a named special bucket
+      // remain available rather than disappearing.
+      return true;
+
+    default:
+      return true;
+  }
+}
+
+function classifyEmploymentType(job) {
+  const raw = String(
+    job.employment_type ||
+    job.job_type ||
+    job.contract_type ||
+    ''
+  ).trim().toLowerCase();
+
+  const title = String(job.title || '').toLowerCase();
+  const description = String(job.description_text || '').toLowerCase();
+
+  // Metadata carries much more weight than title guessing.
+  const text = `${raw} ${title} ${description}`;
+
+  // Part-time jobs are intentionally excluded elsewhere from this dashboard,
+  // but retain classification here for defensive consistency.
+  if (
+    /\bpart[\s-]?time\b/.test(raw) ||
+    /\bpart[\s-]?time\b/.test(title)
+  ) return 'part_time';
+
+  if (
+    /\bintern(ship)?\b/.test(raw) ||
+    /\bplacement\b/.test(raw) ||
+    /\bintern(ship)?\b/.test(title) ||
+    /\bplacement\b/.test(title)
+  ) return 'internship';
+
+  if (
+    /\bgraduate\b/.test(raw) ||
+    /\bgraduate programme\b/.test(title) ||
+    /\bgraduate program\b/.test(title)
+  ) return 'graduate';
+
+  if (
+    /\btemporary\b/.test(raw) ||
+    /\btemp\b/.test(raw) ||
+    /\bseasonal\b/.test(raw) ||
+    /\btemporary\b/.test(title) ||
+    /\bseasonal\b/.test(title)
+  ) return 'temporary';
+
+  if (
+    /\bcontract(or)?\b/.test(raw) ||
+    /\bfixed[\s-]?term\b/.test(raw) ||
+    /\bftc\b/.test(raw) ||
+    /\bcontract\b/.test(title) ||
+    /\bfixed[\s-]?term\b/.test(title) ||
+    /\b\d+\s*month[s]?\s+ftc\b/.test(title) ||
+    /\bftc\b/.test(title)
+  ) return 'contract';
+
+  if (
+    /\bpermanent\b/.test(raw) ||
+    /\bfull[\s-]?time\b/.test(raw) ||
+    /\bregular\b/.test(raw) ||
+    /\bpermanent\b/.test(title) ||
+    /\bfull[\s-]?time\b/.test(title)
+  ) return 'full_time';
+
+  // Do not invent "Full Time" merely because no type was supplied.
+  return 'other';
+}
+
+function employmentTypeLabel(value) {
+  return {
+    full_time: 'Full-time / Permanent',
+    contract: 'Contract / Fixed-term',
+    temporary: 'Temporary / Seasonal',
+    internship: 'Internship / Placement',
+    graduate: 'Graduate Programme',
+    part_time: 'Part-time',
+    other: 'Other'
+  }[value] || 'Other';
+}
+
+
 function applyFilters() {
   const search = document.getElementById('fSearch').value.trim().toLowerCase();
   const company = document.getElementById('fCompany').value;
@@ -1170,7 +1446,9 @@ function applyFilters() {
   const sector = document.getElementById('fSector').value;
   const source = document.getElementById('fSource').value;
   const posted = document.getElementById('fPosted').value;
-  const type = document.getElementById('fType').value;
+  const type =
+    (document.getElementById('fEmployment')?.value || '') ||
+    (document.getElementById('fType')?.value || '');
   const radar = document.getElementById('fRadar').value;
   const roleFamily = document.getElementById('fRoleFamily').value;
   const expFit = document.getElementById('fExperience').value;
@@ -1178,8 +1456,15 @@ function applyFilters() {
   const visa = document.getElementById('fVisa').value;
   const sort = document.getElementById('fSort').value;
 
-  let filtered = ALL_JOBS.filter(j => {
-    if (search) {
+  const employmentFilter = document.getElementById('fEmployment')?.value || '';
+  const employmentLevelFilter =
+    document.getElementById('fEmploymentLevel')?.value || '';
+
+  const dashboardJobs = scopedJobs();
+  let filtered = dashboardJobs.filter(j => {
+
+    if (isPartTimeJob(j) && !isProfileRelevantPartTime(j)) return false;
+if (search) {
       const relevance = jobSearchScore(j, search);
       // Multi-word searches can still surface highly relevant partial matches,
       // but require most terms to connect to the job.
@@ -1193,7 +1478,6 @@ function applyFilters() {
     }
     if (sector && (j.sector || 'Other') !== sector) return false;
     if (source && j.ats !== source) return false;
-    if (type && (j.employment_type || employmentType(j.title)) !== type) return false;
     if (isIgnored(j)) return false;
     if (roleFamily && j.role_family !== roleFamily) return false;
     if (expFit && personalJobMatch(j).experienceFit !== expFit) return false;
@@ -1208,9 +1492,9 @@ function applyFilters() {
         if (newOnly === 'new' && !j.new_since_last_check) return false;
     const v = j.visa_sponsorship || 'not_mentioned';
     if (visa && v !== visa) return false;
-    if (posted) {
-      if (!postedWithin(parsePostedDate(j.updated_at || j.posted_at_parsed), posted)) return false;
-    }
+    if (posted && !postedWithin(getJobPostedDate(j), posted)) return false;
+    if (employmentFilter && classifyEmploymentType(j) !== employmentFilter) return false;
+    if (employmentLevelFilter && classifyEmploymentLevel(j) !== employmentLevelFilter) return false;
     return true;
   });
 
@@ -1233,20 +1517,22 @@ function applyFilters() {
   }
 
   document.getElementById('resultCount').textContent =
-    filtered.length + ' of ' + ALL_JOBS.length + ' matches';
+    filtered.length + ' of ' + dashboardJobs.length + ' matches';
 
   const grid = document.getElementById('cardGrid');
   grid.innerHTML = '';
   document.getElementById('emptyState').style.display = filtered.length ? 'none' : 'block';
 
   filtered.forEach(j => {
-    const postedDate = parsePostedDate(j.updated_at || j.posted_at_parsed);
+    const postedDate = getJobPostedDate(j);
     const bucket = recencyBucket(postedDate);
     const fresh = ageHours(postedDate) <= 24;
     const badge = visaLabel(j.visa_sponsorship || 'not_mentioned');
     const pm = personalJobMatch(j);
     const type = j.employment_type || employmentType(j.title);
-    const typeLabel = { part_time: 'Part-time', internship: 'Internship' }[type];
+    const typeLabel = { internship: 'Internship' }[type];
+    const employmentLevel = classifyEmploymentLevel(j);
+    const employmentLevelText = employmentLevelLabel(employmentLevel);
     const bucketLabel = recencyLabel(postedDate);
 
     const card = document.createElement('div');
@@ -1270,6 +1556,8 @@ function applyFilters() {
         <span class="chip">${escapeHtml(j.ats || '')}</span>
         ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
         ${typeLabel ? `<span class="chip type">${typeLabel}</span>` : ''}
+        ${employmentLevelText ? `<span class="chip level-chip">${escapeHtml(employmentLevelText)}</span>` : ''}
+        <span class="chip type">${escapeHtml(employmentTypeLabel(classifyEmploymentType(j)))}</span>
       </div>
       <div class="card-foot">
         <span class="visa-badge ${badge.cls}">${escapeHtml(badge.text)}</span>
@@ -1298,14 +1586,20 @@ function applyFilters() {
   renderDirectory(search);
   renderDiagnostics(search);
   renderLiveCompanies(search);
+  renderProvenWorkingCompanies(search);
   document.getElementById('tabLive').textContent = `Live matches (${filtered.length})`;
   const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
   document.getElementById('tabDir').textContent = `Careers pages (${directoryCount})`;
 
   const manualCompanies = getManualCompanies();
+  const trueZeroCompanies = getTrueZeroCompanies();
   const zeroCompanies = getZeroJobCompanies();
+  const provenCompanies = getProvenWorkingCompanies();
+
   document.getElementById('tabManual').textContent = `Manual search needed (${manualCompanies.length})`;
-  document.getElementById('tabZero').textContent = `Zero jobs scraped (${zeroCompanies.length})`;
+  document.getElementById('tabLiveZero').textContent = `True zero jobs (${trueZeroCompanies.length})`;
+  document.getElementById('tabZero').textContent = `False zero / broken (${zeroCompanies.length})`;
+  document.getElementById('tabProvenCompanies').textContent = `Proven working (${provenCompanies.length})`;
 
   const selectedCompany = document.getElementById('fCompany').value;
   const selectedRegistry = ALL_REGISTRY.find(c => c.company === selectedCompany);
@@ -1329,8 +1623,190 @@ function applyFilters() {
   }
 }
 
+
+
+
+function matchesOtherFilter(value, knownValues) {
+  const v = String(value || '').trim().toLowerCase();
+
+  if (!v) return false;
+
+  const known = (knownValues || []).map(x =>
+    String(x || '').trim().toLowerCase()
+  );
+
+  return !known.includes(v);
+}
+
+
+function classifyEmploymentLevel(job) {
+  const j = job || {};
+
+  // ----------------------------------------------------------
+  // Prefer structured data from source/scraper when available.
+  // ----------------------------------------------------------
+  const structured = [
+    j.employment_level,
+    j.experience_level,
+    j.seniority,
+    j.seniority_level,
+    j.job_level,
+    j.career_level,
+    j.level
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+    .trim();
+
+  const structuredMap = [
+    ['Internship', /\b(intern|internship|placement|co-?op)\b/i],
+    ['Entry level', /\b(entry|entry[- ]level|graduate|graduate programme|graduate program|junior|trainee|apprentice|apprenticeship)\b/i],
+    ['Associate', /\bassociate\b/i],
+    ['Director', /\b(director|director-level)\b/i],
+    ['Executive', /\b(executive leadership|c[- ]suite|vice president|vice-president|svp|evp|chief officer)\b/i],
+    ['Mid-Senior level', /\b(mid[- ]senior|mid senior|mid-level|senior|manager|principal|staff|lead)\b/i]
+  ];
+
+  if (structured) {
+    if (/\b(other|miscellaneous|misc|unclassified)\b/i.test(structured)) {
+      return 'Other';
+    }
+
+    for (const [level, pattern] of structuredMap) {
+      if (pattern.test(structured)) return level;
+    }
+  }
+
+  // ----------------------------------------------------------
+  // Conservative title-based fallback.
+  //
+  // Important:
+  // "Account Executive", "Sales Executive", etc. are NOT
+  // automatically classified as Executive-level.
+  // ----------------------------------------------------------
+  const title = String(j.title || '').trim();
+  const t = title.toLowerCase();
+
+  if (!t) return 'Not specified';
+
+  // Internship / placement
+  if (
+    /\b(intern|internship|industrial placement|student placement|co-?op)\b/i.test(t)
+  ) {
+    return 'Internship';
+  }
+
+  // Graduate / entry-level
+  if (
+    /\b(graduate|graduate programme|graduate program|new grad|entry[- ]level|junior|trainee|apprentice|apprenticeship)\b/i.test(t)
+  ) {
+    return 'Entry level';
+  }
+
+  // Executive leadership — deliberately strict.
+  if (
+    /\b(chief executive officer|chief financial officer|chief operating officer|chief technology officer|chief information officer|chief data officer|chief product officer|chief marketing officer|chief people officer)\b/i.test(t) ||
+    /\b(ceo|cfo|coo|cto|cio|cdo|cpo|cmo|chro)\b/i.test(t) ||
+    /\b(executive vice president|senior vice president|vice president|vice-president|svp|evp)\b/i.test(t) ||
+    /\b(managing director)\b/i.test(t)
+  ) {
+    return 'Executive';
+  }
+
+  // Director-level
+  if (
+    /\b(director|director of|head of)\b/i.test(t) &&
+    !/\bassistant director\b/i.test(t)
+  ) {
+    return 'Director';
+  }
+
+  // Associate
+  if (
+    /\bassociate\b/i.test(t) &&
+    !/\bassociate director\b/i.test(t)
+  ) {
+    return 'Associate';
+  }
+
+  // Mid / senior professional
+  if (
+    /\b(senior|sr\.?|lead|principal|staff|manager|management|architect)\b/i.test(t)
+  ) {
+    return 'Mid-Senior level';
+  }
+
+  // Explicit early-career analyst / assistant patterns.
+  if (
+    /\b(graduate analyst|junior analyst|entry level analyst|trainee analyst)\b/i.test(t)
+  ) {
+    return 'Entry level';
+  }
+
+  return 'Not specified';
+}
+
+
+function employmentLevelLabel(value) {
+  const labels = {
+    'Internship': 'Internship',
+    'Entry level': 'Entry level',
+    'Associate': 'Associate',
+    'Mid-Senior level': 'Mid-Senior',
+    'Director': 'Director',
+    'Executive': 'Executive',
+    'Other': 'Other',
+    'Not specified': 'Level not specified'
+  };
+
+  return labels[value] || value || 'Level not specified';
+}
+
+
+function isProfileRelevantPartTime(job) {
+  const family = String(job?.role_family || '').toLowerCase();
+  if (family && !['other','unknown','none'].includes(family)) return true;
+  const text = [job?.title, job?.description_text, job?.description, job?.matched_skills]
+    .filter(Boolean).join(' ').toLowerCase();
+  return /\b(business analyst|data analyst|bi analyst|business intelligence|analytics|data engineer|data scientist|reporting analyst|erp|d365|dynamics 365|implementation|technology consultant|solutions architect|project|programme|program|product analyst|operations analyst|systems analyst|business systems|risk analyst|compliance analyst|financial analyst|data governance|power bi|tableau|sql|python|research data|digital transformation)\b/i.test(text);
+}
+
+function isPartTimeJob(job) {
+  const text = [
+    job?.employment_type,
+    job?.employmentType,
+    job?.job_type,
+    job?.jobType,
+    job?.type,
+    job?.title,
+    job?.description_text,
+    job?.description
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+
+  return (
+    /\bpart[\s-]?time\b/i.test(text) ||
+    /\bparttime\b/i.test(text) ||
+    /\bpart[\s-]?timer\b/i.test(text) ||
+    /\bpart[\s-]?time\s+(role|position|job|contract)\b/i.test(text)
+  );
+}
+
+
+
+function normalizeSearch(value) {
+  return String(value || '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
 function renderDirectory(search) {
-  search = (search || '').toLowerCase();
+  search = normalizeSearch(search);
   const selectedCompany = document.getElementById('fCompany').value;
   const grid = document.getElementById('dirGrid');
   grid.innerHTML = '';
@@ -1345,7 +1821,7 @@ function renderDirectory(search) {
   });
 
   Array.from(directoryMap.values())
-    .filter(c => (!selectedCompany || c.company === selectedCompany) && (!search || c.company.toLowerCase().includes(search)))
+    .filter(c => (!selectedCompany || c.company === selectedCompany) && (!search || normalizeSearch(c.company).includes(search)))
     .sort((a, b) => a.company.localeCompare(b.company))
     .forEach(c => {
       const card = document.createElement('div');
@@ -1409,7 +1885,7 @@ function renderLiveCompanies(search='') {
 
   const rows = getLiveCompanies().filter(c =>
     (!selectedCompany || c.company === selectedCompany) &&
-    (!search || c.company.toLowerCase().includes(search))
+    (!search || normalizeSearch(c.company).includes(search))
   );
 
   summary.textContent =
@@ -1463,19 +1939,136 @@ function getManualCompanies() {
   return Array.from(byName.values()).sort((a, b) => a.company.localeCompare(b.company));
 }
 
-function getZeroJobCompanies() {
-  const liveCounts = new Map();
-  ALL_JOBS.forEach(j => {
-    const name = j.company || '';
-    if (name) liveCounts.set(name, (liveCounts.get(name) || 0) + 1);
+function getCurrentLiveCompanyNames() {
+  return new Set(ALL_JOBS.map(j => j.company).filter(Boolean));
+}
+
+function getTrueZeroCompanies() {
+  const liveNames = getCurrentLiveCompanyNames();
+  const byName = new Map();
+
+  // Backend diagnostics are authoritative for explicitly verified healthy-zero.
+  ALL_LIVE_ZERO.forEach(c => {
+    if (!c || !c.company || liveNames.has(c.company)) return;
+    const registry = ALL_REGISTRY.find(r => r.company === c.company) || {};
+    byName.set(c.company, {
+      ...registry,
+      ...c,
+      url: c.careers_url || c.url || registry.careers_url || registry.url || ''
+    });
   });
 
-  // "Zero jobs scraped" means the company has an automatic connector/check,
-  // but the latest Ireland scrape returned no live jobs.
-  return ALL_REGISTRY
-    .filter(c => c.automatic === true && !liveCounts.has(c.company))
-    .map(c => ({ ...c, url: c.careers_url || c.url || '' }))
+  // A company that has previously produced valid jobs is also proven to have
+  // had a working job-level connector. If it is empty now, retain that proof.
+  PROVEN_WORKING_COMPANIES.forEach(name => {
+    if (!name || liveNames.has(name)) return;
+    const registry = ALL_REGISTRY.find(r => r.company === name);
+    if (!registry || registry.automatic !== true) return;
+    const hist = COMPANY_HISTORY[name] || {};
+    byName.set(name, {
+      ...registry,
+      history: hist,
+      state: 'historically_working_zero',
+      reason: 'Previously produced qualifying Ireland jobs; currently 0 live jobs',
+      url: registry.careers_url || registry.url || ''
+    });
+  });
+
+  return Array.from(byName.values())
     .sort((a, b) => a.company.localeCompare(b.company));
+}
+
+function getZeroJobCompanies() {
+  // False-zero/broken bucket:
+  // automatic connector + no current jobs + not independently/proven working.
+  const liveNames = getCurrentLiveCompanyNames();
+  const trueZeroNames = new Set(getTrueZeroCompanies().map(c => c.company));
+  const coverageByName = new Map(ALL_COVERAGE.map(x => [x.company, x]));
+
+  return ALL_REGISTRY
+    .filter(c =>
+      c.automatic === true &&
+      !liveNames.has(c.company) &&
+      !trueZeroNames.has(c.company)
+    )
+    .map(c => {
+      const diag = coverageByName.get(c.company) || {};
+      return {
+        ...c,
+        ...diag,
+        url: c.careers_url || c.url || diag.careers_url || ''
+      };
+    })
+    .sort((a, b) => a.company.localeCompare(b.company));
+}
+
+function getProvenWorkingCompanies() {
+  const liveCounts = new Map();
+  ALL_JOBS.forEach(j => {
+    if (j.company) liveCounts.set(j.company, (liveCounts.get(j.company) || 0) + 1);
+  });
+
+  return PROVEN_WORKING_COMPANIES
+    .map(name => {
+      const registry = ALL_REGISTRY.find(c => c.company === name) || {};
+      const hist = COMPANY_HISTORY[name] || {};
+      return {
+        ...registry,
+        company: name,
+        history: hist,
+        live_jobs: liveCounts.get(name) || 0,
+        url: registry.careers_url || registry.url || ''
+      };
+    })
+    .sort((a, b) => a.company.localeCompare(b.company));
+}
+
+function renderProvenWorkingCompanies(search='') {
+  search = normalizeSearch(search);
+  const selectedCompany = document.getElementById('fCompany')?.value || '';
+  const grid = document.getElementById('provenCompaniesGrid');
+  const summary = document.getElementById('provenCompaniesSummary');
+  if (!grid || !summary) return;
+
+  const all = getProvenWorkingCompanies();
+  const visible = all.filter(c =>
+    (!selectedCompany || c.company === selectedCompany) &&
+    (!search || normalizeSearch(c.company).includes(search))
+  );
+
+  summary.textContent =
+    `${visible.length} shown · ${all.length} companies proven working since ${HISTORY_TRACKING_STARTED} · ` +
+    `${HISTORICAL_DISTINCT_JOBS} distinct jobs observed cumulatively.`;
+
+  grid.innerHTML = '';
+
+  visible.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'dir-card';
+    if (c.url) card.onclick = () => window.open(c.url, '_blank', 'noopener');
+
+    const hist = c.history || {};
+    const firstSeen = hist.first_working_seen
+      ? new Date(hist.first_working_seen).toLocaleString()
+      : 'unknown';
+    const lastSeen = hist.last_working_seen
+      ? new Date(hist.last_working_seen).toLocaleString()
+      : 'unknown';
+
+    card.innerHTML = `
+      <div>
+        <div class="dir-name">${escapeHtml(c.company)}</div>
+        <div class="dir-plat">
+          ${c.live_jobs} live now ·
+          ${Number(hist.distinct_jobs_seen || 0)} distinct jobs seen ·
+          first proven ${escapeHtml(firstSeen)} ·
+          last positive ${escapeHtml(lastSeen)}
+        </div>
+      </div>
+      ${c.url ? '<span class="apply-hint">Open →</span>' : '<span class="status-chip">no URL</span>'}
+    `;
+    grid.appendChild(card);
+  });
 }
 
 function renderCompanyDiagnosticList(gridId, companies, search, selectedCompany, mode) {
@@ -1484,15 +2077,26 @@ function renderCompanyDiagnosticList(gridId, companies, search, selectedCompany,
 
   companies
     .filter(c => (!selectedCompany || c.company === selectedCompany) &&
-      (!search || c.company.toLowerCase().includes(search)))
+      (!search || normalizeSearch(c.company).includes(search)))
     .forEach(c => {
       const card = document.createElement('div');
       card.className = 'dir-card';
       if (c.url) card.onclick = () => window.open(c.url, '_blank', 'noopener');
 
+      const health = (typeof CONNECTOR_HEALTH !== 'undefined' && CONNECTOR_HEALTH[c.company])
+        ? CONNECTOR_HEALTH[c.company]
+        : null;
+      const history = COMPANY_HISTORY[c.company] || c.history || {};
+
       const detail = mode === 'manual'
         ? `${c.platform || 'manual-check'} · no working job-level connector`
-        : `${c.platform || 'automatic'} · checked automatically · 0 Ireland jobs returned`;
+        : mode === 'livezero'
+          ? (
+              history.ever_working
+                ? `${c.platform || 'official source'} · proven working previously · 0 Ireland jobs right now · ${Number(history.distinct_jobs_seen || 0)} jobs seen historically`
+                : `${c.platform || 'official source'} · source verified live · 0 Ireland jobs right now`
+            )
+          : `${c.platform || 'automatic'} · returned 0 jobs · ${c.reason || (health && health.note) || 'source/connector needs verification'}`;
 
       card.innerHTML = `
         <div>
@@ -1506,28 +2110,33 @@ function renderCompanyDiagnosticList(gridId, companies, search, selectedCompany,
 }
 
 function renderDiagnostics(search) {
-  search = (search || '').toLowerCase();
+  search = normalizeSearch(search);
   const selectedCompany = document.getElementById('fCompany').value;
 
   const manualCompanies = getManualCompanies();
+  const trueZeroCompanies = getTrueZeroCompanies();
   const zeroCompanies = getZeroJobCompanies();
 
-  const manualVisible = manualCompanies.filter(c =>
+  const visibleCount = companies => companies.filter(c =>
     (!selectedCompany || c.company === selectedCompany) &&
-    (!search || c.company.toLowerCase().includes(search))
+    (!search || normalizeSearch(c.company).includes(search))
   ).length;
-  const zeroVisible = zeroCompanies.filter(c =>
-    (!selectedCompany || c.company === selectedCompany) &&
-    (!search || c.company.toLowerCase().includes(search))
-  ).length;
+
+  const manualVisible = visibleCount(manualCompanies);
+  const trueZeroVisible = visibleCount(trueZeroCompanies);
+  const zeroVisible = visibleCount(zeroCompanies);
 
   document.getElementById('manualSummary').textContent =
     `${manualVisible} shown · ${manualCompanies.length} total companies require manual careers-page checking because no working automatic connector is currently available.`;
 
+  document.getElementById('liveZeroSummary').textContent =
+    `${trueZeroVisible} shown · ${trueZeroCompanies.length} true-zero companies: source is verified/proven working but currently has 0 qualifying Ireland jobs.`;
+
   document.getElementById('zeroSummary').textContent =
-    `${zeroVisible} shown · ${zeroCompanies.length} total automatically checked companies returned zero Ireland jobs in the latest scrape.`;
+    `${zeroVisible} shown · ${zeroCompanies.length} false-zero/broken companies: automatic connector is configured but its zero result is not yet trusted.`;
 
   renderCompanyDiagnosticList('manualGrid', manualCompanies, search, selectedCompany, 'manual');
+  renderCompanyDiagnosticList('liveZeroGrid', trueZeroCompanies, search, selectedCompany, 'livezero');
   renderCompanyDiagnosticList('zeroGrid', zeroCompanies, search, selectedCompany, 'zero');
 }
 
@@ -1535,20 +2144,25 @@ function showTab(which) {
   document.getElementById('livePane').style.display = which === 'live' ? 'block' : 'none';
   document.getElementById('directoryPane').style.display = which === 'dir' ? 'block' : 'none';
   document.getElementById('manualPane').style.display = which === 'manual' ? 'block' : 'none';
+  document.getElementById('liveZeroPane').style.display = which === 'livezero' ? 'block' : 'none';
   document.getElementById('zeroPane').style.display = which === 'zero' ? 'block' : 'none';
   document.getElementById('savedPane').style.display = which === 'saved' ? 'block' : 'none';
   document.getElementById('liveCompaniesPane').style.display = which === 'livecompanies' ? 'block' : 'none';
+  document.getElementById('provenCompaniesPane').style.display = which === 'provencompanies' ? 'block' : 'none';
   document.getElementById('applicationsPane').style.display = which === 'applications' ? 'block' : 'none';
 
   document.getElementById('tabLive').classList.toggle('active', which === 'live');
   document.getElementById('tabDir').classList.toggle('active', which === 'dir');
   document.getElementById('tabManual').classList.toggle('active', which === 'manual');
+  document.getElementById('tabLiveZero').classList.toggle('active', which === 'livezero');
   document.getElementById('tabZero').classList.toggle('active', which === 'zero');
   document.getElementById('tabSaved').classList.toggle('active', which === 'saved');
   document.getElementById('tabLiveCompanies').classList.toggle('active', which === 'livecompanies');
+  document.getElementById('tabProvenCompanies').classList.toggle('active', which === 'provencompanies');
   document.getElementById('tabApplications').classList.toggle('active', which === 'applications');
   if (which === 'saved') renderSaved();
   if (which === 'livecompanies') renderLiveCompanies(document.getElementById('q')?.value || '');
+  if (which === 'provencompanies') renderProvenWorkingCompanies(document.getElementById('q')?.value || '');
   if (which === 'applications') renderApplications();
 }
 

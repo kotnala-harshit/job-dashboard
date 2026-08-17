@@ -1415,7 +1415,7 @@ function applyFilters() {
 
   let filtered = ALL_JOBS.filter(j => {
 
-    if (isPartTimeJob(j)) return false;
+    if (isPartTimeJob(j) && !j.university_job && !isProfileRelevantPartTimeJob(j)) return false;
 if (search) {
       const relevance = jobSearchScore(j, search);
       // Multi-word searches can still surface highly relevant partial matches,
@@ -1715,6 +1715,13 @@ function employmentLevelLabel(value) {
   return labels[value] || value || 'Level not specified';
 }
 
+
+function isProfileRelevantPartTimeJob(job) {
+  const text = `${job.title || ''} ${job.role_family || ''} ${job.sector || ''}`.toLowerCase();
+  const relevant = /business analyst|data analyst|analytics|business intelligence|\bbi\b|erp|dynamics|d365|implementation|technology consultant|systems analyst|project|programme|transformation|operations analyst|product analyst|risk analyst|finance analyst|research data|data engineer|sql|power bi|tableau/;
+  const generic = /retail|barista|waiter|waitress|server|cashier|shop assistant|sales assistant|customer service|front of house|kitchen|warehouse operative|delivery driver|cleaner|security guard/;
+  return relevant.test(text) && !generic.test(text);
+}
 
 function isPartTimeJob(job) {
   const text = [
