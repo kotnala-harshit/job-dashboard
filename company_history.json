@@ -2,7 +2,7 @@
   "companies": {
     "Accenture": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "14496960",
@@ -34,6 +34,7 @@
         "R00327700",
         "R00327918",
         "R00329439",
+        "R00329453",
         "R00329613",
         "R00331059",
         "R00331806",
@@ -56,11 +57,13 @@
         "R00344229",
         "R00344234",
         "R00344582",
+        "R00345674",
         "R00345688",
         "R00345737",
         "R00345749",
         "R00345875",
         "R00346437",
+        "R00346503",
         "R00346571",
         "R00346952",
         "R00347125",
@@ -73,36 +76,41 @@
         "R00350503",
         "R00350616"
       ],
-      "distinct_jobs_seen": 67,
-      "current_live_jobs": 61
+      "distinct_jobs_seen": 70,
+      "current_live_jobs": 59
     },
     "Citi": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.citi.com/job/dublin/account-bank-payments-specialist/287/98742214336",
+        "https://jobs.citi.com/job/dublin/applications-development-technology-lead/287/99405693056",
         "https://jobs.citi.com/job/dublin/asset-servicing-custody-product-manager-vice-president/287/98857313152",
         "https://jobs.citi.com/job/dublin/business-execution-manager-services-vice-president/287/98562516480",
         "https://jobs.citi.com/job/dublin/cep-markets-governance-analyst-assistant-vice-president/287/99175512592",
+        "https://jobs.citi.com/job/dublin/digital-asset-platform-engineering-team-lead-svp/287/99405723920",
         "https://jobs.citi.com/job/dublin/director-cross-border-payments-global-product-manager/287/98789736192",
         "https://jobs.citi.com/job/dublin/editorial-strategist-and-thought-leadership-lead/287/97556535360",
         "https://jobs.citi.com/job/dublin/emea-financial-institutions-client-experience-team-leader/287/99357237664",
+        "https://jobs.citi.com/job/dublin/fund-accounting-manager/287/99391681712",
         "https://jobs.citi.com/job/dublin/marketing-effectiveness-senior-vice-president/287/94807170240",
         "https://jobs.citi.com/job/dublin/middle-office-core-trade-desk-manager-uk-and-europe-svp/287/93794962992",
         "https://jobs.citi.com/job/dublin/project-senior-lead/287/99340982992",
         "https://jobs.citi.com/job/dublin/securities-and-derivatives-analyst/287/99221526192",
         "https://jobs.citi.com/job/dublin/securities-and-derivatives-expert/287/98756022320",
         "https://jobs.citi.com/job/dublin/senior-full-stack-software-engineer-vp/287/99156636144",
+        "https://jobs.citi.com/job/dublin/senior-java-developer/287/96595096368",
+        "https://jobs.citi.com/job/dublin/services-sales-ai-pillar-execution-and-client-intelligence-lead-senior-vice-president/287/99391716384",
         "https://jobs.citi.com/job/dublin/stress-testing-analyst-avp/287/98881167264",
         "https://jobs.citi.com/job/dublin/transaction-manager/287/98904650336"
       ],
-      "distinct_jobs_seen": 15,
+      "distinct_jobs_seen": 20,
       "current_live_jobs": 15
     },
     "Apple": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.apple.com/en-ie/details/200642499-1418/software-automation-engineer-localisation-release-engineering",
@@ -149,11 +157,11 @@
         "https://jobs.apple.com/en-ie/details/200677262-1418/supply-demand-planner"
       ],
       "distinct_jobs_seen": 42,
-      "current_live_jobs": 42
+      "current_live_jobs": 41
     },
     "Google": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.google.com/about/careers/applications/jobs/results?location=Ireland&page=1",
@@ -164,15 +172,16 @@
         "https://www.google.com/about/careers/applications/jobs/results?location=Ireland&page=6"
       ],
       "distinct_jobs_seen": 6,
-      "current_live_jobs": 117
+      "current_live_jobs": 121
     },
     "Microsoft": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://apply.careers.microsoft.com/careers/apply?pid=1970393556938961",
         "https://apply.careers.microsoft.com/careers/apply?pid=1970393556958704",
+        "https://apply.careers.microsoft.com/careers/apply?pid=1970393556972084",
         "https://apply.careers.microsoft.com/careers/job/1970393556656762",
         "https://apply.careers.microsoft.com/careers/job/1970393556873205",
         "https://apply.careers.microsoft.com/careers/job/1970393556887861",
@@ -190,31 +199,34 @@
         "https://apply.careers.microsoft.com/careers/job/1970393556962155?hl=en",
         "https://apply.careers.microsoft.com/careers?location=Ireland%2C+Dublin&hl=en"
       ],
-      "distinct_jobs_seen": 18,
-      "current_live_jobs": 16
+      "distinct_jobs_seen": 19,
+      "current_live_jobs": 8
     },
     "Meta": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.metacareers.com/profile/job_details/1016577254585736",
+        "https://www.metacareers.com/profile/job_details/1043227431759679",
         "https://www.metacareers.com/profile/job_details/1226467007217742",
         "https://www.metacareers.com/profile/job_details/1364522142281307",
         "https://www.metacareers.com/profile/job_details/1372405674866054",
+        "https://www.metacareers.com/profile/job_details/1576090834171113",
         "https://www.metacareers.com/profile/job_details/1602849741433420",
         "https://www.metacareers.com/profile/job_details/1742230443497154",
+        "https://www.metacareers.com/profile/job_details/1757499218621634",
         "https://www.metacareers.com/profile/job_details/2195354808028299",
         "https://www.metacareers.com/profile/job_details/2294344027974556",
         "https://www.metacareers.com/profile/job_details/795618666909958",
         "https://www.metacareers.com/profile/job_details/970149276050954"
       ],
-      "distinct_jobs_seen": 10,
+      "distinct_jobs_seen": 13,
       "current_live_jobs": 10
     },
     "TikTok": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://lifeattiktok.com/search/7647904186668665093",
@@ -223,7 +235,10 @@
         "https://lifeattiktok.com/search/7657168357337139461",
         "https://lifeattiktok.com/search/7657170216476281141",
         "https://lifeattiktok.com/search/7657170468446046517",
+        "https://lifeattiktok.com/search/7657171457806879029",
+        "https://lifeattiktok.com/search/7657177808983050501",
         "https://lifeattiktok.com/search/7657185095510657333",
+        "https://lifeattiktok.com/search/7657187157036435765",
         "https://lifeattiktok.com/search/7657188674552236293",
         "https://lifeattiktok.com/search/7657197681270786357",
         "https://lifeattiktok.com/search/7657198065301932293",
@@ -231,12 +246,12 @@
         "https://lifeattiktok.com/search/7663003104644008197",
         "https://lifeattiktok.com/search/7665303674285525301"
       ],
-      "distinct_jobs_seen": 13,
+      "distinct_jobs_seen": 16,
       "current_live_jobs": 12
     },
     "EY Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.ey.com/ey/job/Alpharetta-Director-Technology-Risk-GA-30009/1417697233/",
@@ -340,8 +355,10 @@
         "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Automation-Test-Manager/1417890133/",
         "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Business-Analyst%2C-Senior-Consultant/1249538101/",
         "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Cyber-Security-Architect%2C-Senior-Manager-Manager/1418700733/",
+        "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Cybersecurity-Governance%2C-Risk%2C-and-Compliance-Senior-Associate-AM/1425758833/",
         "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Energy-Transition-ISEM-Future-Markets/1415399633/",
         "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Energy-Transition-Power-&-Utilities-Operational-Tech-Professionals/1415423533/",
+        "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Functional-manager-Senior-Manager-%28Salesforce-Services%29/1427327133/",
         "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Java-Engineer/1416315733/",
         "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Penetration-Tester%2C-Senior-Consultant-Assistant-Manager/1413768033/",
         "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-SAP-Materials-Management-Manager-Senior-Manager/1414282433/",
@@ -362,33 +379,37 @@
         "https://careers.ey.com/ey/job/Secaucus-Digital-Go-to-Market-Leader-NJ-07094/1416661033/",
         "https://careers.ey.com/ey/job/Waterford-Global-Coordination-Office-%28GCO%29-Assistant-Waterford/1414380733/"
       ],
-      "distinct_jobs_seen": 122,
+      "distinct_jobs_seen": 124,
       "current_live_jobs": 122
     },
     "NetApp": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.netapp.com/job/cork/client-executive/27600/94066098896",
         "https://careers.netapp.com/job/cork/firmware-and-embedded-systems-engineer/27600/96811457184",
         "https://careers.netapp.com/job/cork/investigations-specialist/27600/98000788992",
         "https://careers.netapp.com/job/cork/mgr-professional-services/27600/98518036384",
+        "https://careers.netapp.com/job/cork/people-consultant-french-speaking/27600/99388527920",
+        "https://careers.netapp.com/job/cork/people-consultant/27600/99388527872",
         "https://careers.netapp.com/job/cork/professional-services-engineer-french-speaker/27600/98508239824",
         "https://careers.netapp.com/job/cork/professional-services-engineer-german-speaker/27600/98508239792",
         "https://careers.netapp.com/job/cork/professional-services-engineer-spanish-speaker/27600/98508239856",
         "https://careers.netapp.com/job/cork/senior-network-systems-engineer/27600/99291607904",
         "https://careers.netapp.com/job/cork/system-software-engineer-c-c/27600/96546594576",
         "https://careers.netapp.com/job/ireland/cassandra-site-reliability-engineer/27600/96212333104",
+        "https://careers.netapp.com/job/ireland/client-executive/27600/94066098896",
         "https://careers.netapp.com/job/paris/renewal-specialist/27600/98920486656",
+        "https://careers.netapp.com/job/windsor/migration-and-modernization-business-development-manager/27600/99399224560",
         "https://careers.netapp.com/job/windsor/senior-sales-manager-data-services/27600/98082596000"
       ],
-      "distinct_jobs_seen": 12,
-      "current_live_jobs": 12
+      "distinct_jobs_seen": 16,
+      "current_live_jobs": 14
     },
     "Version 1": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.smartrecruiters.com/v1/companies/version1/postings/744000130548638",
@@ -437,6 +458,8 @@
         "https://api.smartrecruiters.com/v1/companies/version1/postings/744000143494229",
         "https://api.smartrecruiters.com/v1/companies/version1/postings/744000143546114",
         "https://api.smartrecruiters.com/v1/companies/version1/postings/744000143853405",
+        "https://api.smartrecruiters.com/v1/companies/version1/postings/744000144027327",
+        "https://api.smartrecruiters.com/v1/companies/version1/postings/744000144112969",
         "https://jobs.smartrecruiters.com/Version1/744000130548638-data-architect-microsoft-fabric?oga=true",
         "https://jobs.smartrecruiters.com/Version1/744000130550139-aspire-gsc-service-desk-level-1-level-2-analyst?oga=true",
         "https://jobs.smartrecruiters.com/Version1/744000133404791-co-creation-studio-lead-dublin-?oga=true",
@@ -448,12 +471,12 @@
         "https://jobs.smartrecruiters.com/Version1/744000141745904-cloud-infrastructure-engineer?oga=true",
         "https://jobs.smartrecruiters.com/Version1/744000142618300--net-developer?oga=true"
       ],
-      "distinct_jobs_seen": 56,
+      "distinct_jobs_seen": 58,
       "current_live_jobs": 56
     },
     "Infosys": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/148920BR",
@@ -461,11 +484,11 @@
         "https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/152085BR"
       ],
       "distinct_jobs_seen": 3,
-      "current_live_jobs": 3
+      "current_live_jobs": 2
     },
     "Wells Fargo": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.wellsfargojobs.com/en/jobs/r-551932/credit-risk-officer-senior-assistant-vice-president/",
@@ -476,7 +499,7 @@
     },
     "Cognizant": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.cognizant.com/global-en/jobs/46907/operator-with-spanish-latam/",
@@ -488,7 +511,7 @@
     },
     "Hitachi Energy": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.hitachienergy.com/careers/open-jobs/details/JID3-198401",
@@ -506,7 +529,7 @@
     },
     "Aon": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.aon.com/jobs/103488?lang=en-us",
@@ -518,7 +541,7 @@
     },
     "AstraZeneca": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.astrazeneca.com/job/dublin/associate-director-digital-diagnostics-and-ai/7684/99339687808",
@@ -533,7 +556,7 @@
     },
     "Bank of America": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.bankofamerica.com/en-us/job-detail/25049090/market-support-specialist-corporate-actions-dublin-ireland",
@@ -552,7 +575,7 @@
     },
     "Aiven": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://aiven.io/careers/job/4792883101",
@@ -565,7 +588,7 @@
     },
     "A&L Goodbody": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.algoodbody.com/careers/legalprofessionals/banking-finance-solicitor-finance",
@@ -595,7 +618,7 @@
     },
     "Jacobs": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.jacobs.com/en_US/careers/JobDetail/Archaeologist/43370",
@@ -614,21 +637,22 @@
     },
     "AIB (Allied Irish Banks)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.aib.ie/aib/job/Cork-Community-Branch-Manager%2C-Cobh%2C-Cork-IE/1367894157/",
         "https://jobs.aib.ie/aib/job/Cork-Community-Branch-Manager%2C-Kinsale%2C-Cork-IE/1367896557/",
         "https://jobs.aib.ie/aib/job/Dublin-Company-Secretary-Associate-IE/1369030857/",
         "https://jobs.aib.ie/aib/job/Dublin-Payroll-Specialist%2C-Dublin-IE/1369063657/",
+        "https://jobs.aib.ie/aib/job/Dublin-Senior-Quantitative-Analyst-Credit-Model-Validation-IE/1362553557/",
         "https://jobs.aib.ie/aib/job/Dublin-Senior-Quantitative-Risk-Analyst%2C-Risk-Analytics-IE/1361371957/"
       ],
-      "distinct_jobs_seen": 5,
-      "current_live_jobs": 5
+      "distinct_jobs_seen": 6,
+      "current_live_jobs": 6
     },
     "Boston Scientific": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.bostonscientific.com/job/Clonmel-Product-Builder-A2-TA/1404934400/",
@@ -637,14 +661,15 @@
         "https://jobs.bostonscientific.com/job/Galway-Associate-Project-Manager-G/1417735400/",
         "https://jobs.bostonscientific.com/job/Galway-Commercial-Capabilities-Graduate/1419992000/",
         "https://jobs.bostonscientific.com/job/Galway-Laboratory-Technician-S1-G/1417603900/",
+        "https://jobs.bostonscientific.com/job/Galway-Principal-Strategic-Sourcing-Specialist-G/1419473400/",
         "https://jobs.bostonscientific.com/job/Galway-Production-Supervisor-%28Nights%29-G/1417617600/"
       ],
-      "distinct_jobs_seen": 7,
-      "current_live_jobs": 7
+      "distinct_jobs_seen": 8,
+      "current_live_jobs": 8
     },
     "Johnson Controls": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.johnsoncontrols.com/job/WD30274018",
@@ -666,14 +691,18 @@
         "https://jobs.johnsoncontrols.com/job/WD30276394",
         "https://jobs.johnsoncontrols.com/job/WD30276484",
         "https://jobs.johnsoncontrols.com/job/WD30276675",
-        "https://jobs.johnsoncontrols.com/job/WD30276927"
+        "https://jobs.johnsoncontrols.com/job/WD30276927",
+        "https://jobs.johnsoncontrols.com/job/WD30277546",
+        "https://jobs.johnsoncontrols.com/job/WD30277548",
+        "https://jobs.johnsoncontrols.com/job/WD30277551",
+        "https://jobs.johnsoncontrols.com/job/WD30277554"
       ],
-      "distinct_jobs_seen": 20,
+      "distinct_jobs_seen": 24,
       "current_live_jobs": 20
     },
     "Revenue": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.revenue.ie/en/corporate/information-about-revenue/careers/career-opportunities.aspx",
@@ -684,7 +713,7 @@
     },
     "Ryanair": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.ryanair.com/jobs/airport-invoice-analyst/",
@@ -697,6 +726,7 @@
         "https://careers.ryanair.com/jobs/ground-handling-agent-dublin-airport/",
         "https://careers.ryanair.com/jobs/it-risk-and-compliance-consultant/",
         "https://careers.ryanair.com/jobs/junior-administrator-chargeback-department/",
+        "https://careers.ryanair.com/jobs/management-accountant/",
         "https://careers.ryanair.com/jobs/net-developer/",
         "https://careers.ryanair.com/jobs/product-manager-digital-department/",
         "https://careers.ryanair.com/jobs/ryanair-engineering-aircraft-mechanic-dublin-expression-of-interest/",
@@ -704,12 +734,12 @@
         "https://careers.ryanair.com/jobs/sheet-metal-worker-3/",
         "https://careers.ryanair.com/jobs/technical-training-instructor-regg/"
       ],
-      "distinct_jobs_seen": 16,
+      "distinct_jobs_seen": 17,
       "current_live_jobs": 16
     },
     "PepsiCo": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.pepsicojobs.com/main/jobs/401833",
@@ -723,9 +753,10 @@
     },
     "Musgrave Group (SuperValu / Centra)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
+        "https://musgravegroup.com/vacancy/business-development-manager/",
         "https://musgravegroup.com/vacancy/cafe-deli-assistant/",
         "https://musgravegroup.com/vacancy/centra-regional-support-manager/",
         "https://musgravegroup.com/vacancy/class-2-driver/",
@@ -737,6 +768,10 @@
         "https://musgravegroup.com/vacancy/deli-assistant-3/",
         "https://musgravegroup.com/vacancy/deli-assistant-4/",
         "https://musgravegroup.com/vacancy/deli-assistant-5/",
+        "https://musgravegroup.com/vacancy/deli-assistant-6/",
+        "https://musgravegroup.com/vacancy/deli-assistant-7/",
+        "https://musgravegroup.com/vacancy/deli-assistant-8/",
+        "https://musgravegroup.com/vacancy/deli-assistant-9/",
         "https://musgravegroup.com/vacancy/deli-assistant/",
         "https://musgravegroup.com/vacancy/employee-experience-co-ordinator/",
         "https://musgravegroup.com/vacancy/floor-supervisor/",
@@ -757,6 +792,7 @@
         "https://musgravegroup.com/vacancy/legal-counsel/",
         "https://musgravegroup.com/vacancy/new-business-acquisitions-manager/",
         "https://musgravegroup.com/vacancy/new-store-facilitator/",
+        "https://musgravegroup.com/vacancy/operation-team-leader/",
         "https://musgravegroup.com/vacancy/own-brand-product-developer/",
         "https://musgravegroup.com/vacancy/pricing-analyst/",
         "https://musgravegroup.com/vacancy/retail-assistant/",
@@ -764,17 +800,18 @@
         "https://musgravegroup.com/vacancy/store-manager/",
         "https://musgravegroup.com/vacancy/supervisor-2/",
         "https://musgravegroup.com/vacancy/supervisor/",
+        "https://musgravegroup.com/vacancy/trading-manager-assistant/",
         "https://musgravegroup.com/vacancy/transport-planning-manager/",
         "https://musgravegroup.com/vacancy/ux-ui-designer/",
         "https://musgravegroup.com/vacancy/value-strategy-and-promotions-manager/",
         "https://musgravegroup.com/vacancy/warehouse-operations-manager/"
       ],
-      "distinct_jobs_seen": 42,
-      "current_live_jobs": 42
+      "distinct_jobs_seen": 49,
+      "current_live_jobs": 49
     },
     "Susquehanna International Group (SIG)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.sig.com/dublin/jobs/10876",
@@ -793,7 +830,7 @@
     },
     "Schneider Electric": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.se.com/jobs/116619?lang=en-us",
@@ -805,21 +842,22 @@
     },
     "BNP Paribas Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.bnpparibas.ie/en/jobs/cash-management-sales-executive/",
+        "https://www.bnpparibas.ie/en/jobs/dealing-and-client-services-avp-transfer-agency/",
         "https://www.bnpparibas.ie/en/jobs/head-of-aviation-kyc-onboarding-premium-services/",
         "https://www.bnpparibas.ie/en/jobs/international-supply-chain-finance-implementation-manager/",
         "https://www.bnpparibas.ie/en/jobs/liquidity-specialist-for-ireland/",
         "https://www.bnpparibas.ie/en/jobs/senior-surveyor-associate-divisional-directorprofessional-services/"
       ],
-      "distinct_jobs_seen": 5,
-      "current_live_jobs": 5
+      "distinct_jobs_seen": 6,
+      "current_live_jobs": 6
     },
     "AMCS Group": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.amcsgroup.com/careers/finops-engineer-12-month-ftc-208335/",
@@ -850,7 +888,7 @@
     },
     "Auxilion": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.auxilion.com/careers/deskside-engineer-l2"
@@ -860,21 +898,22 @@
     },
     "BioMarin": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.biomarin.com/job/director-head-of-analytical-product-leads/",
         "https://www.biomarin.com/job/graduate-engineer/",
         "https://www.biomarin.com/job/graduate-scientist/",
         "https://www.biomarin.com/job/senior-manager-global-e2e-product-supply-planner/",
+        "https://www.biomarin.com/job/senior-manager-utilities-maintenance-operations/",
         "https://www.biomarin.com/job/sterile-manufacturing-technician/"
       ],
-      "distinct_jobs_seen": 5,
-      "current_live_jobs": 5
+      "distinct_jobs_seen": 6,
+      "current_live_jobs": 6
     },
     "Amazon": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "10374718",
@@ -1058,6 +1097,10 @@
         "10502291",
         "10502389",
         "10503914",
+        "10504956",
+        "10505276",
+        "10505643",
+        "10505648",
         "3095717",
         "3152883",
         "3170784",
@@ -1075,12 +1118,12 @@
         "3208058",
         "SF250121934"
       ],
-      "distinct_jobs_seen": 197,
-      "current_live_jobs": 197
+      "distinct_jobs_seen": 201,
+      "current_live_jobs": 195
     },
     "Squarespace": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "http://www.squarespace.com/about/careers?gh_jid=7796885",
@@ -1095,7 +1138,7 @@
     },
     "Pinterest": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.pinterestcareers.com/jobs/?gh_jid=7507652",
@@ -1110,14 +1153,15 @@
         "https://www.pinterestcareers.com/jobs/?gh_jid=8075678",
         "https://www.pinterestcareers.com/jobs/?gh_jid=8100299",
         "https://www.pinterestcareers.com/jobs/?gh_jid=8106377",
-        "https://www.pinterestcareers.com/jobs/?gh_jid=8112792"
+        "https://www.pinterestcareers.com/jobs/?gh_jid=8112792",
+        "https://www.pinterestcareers.com/jobs/?gh_jid=8128842"
       ],
-      "distinct_jobs_seen": 13,
-      "current_live_jobs": 13
+      "distinct_jobs_seen": 14,
+      "current_live_jobs": 12
     },
     "Asana": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.asana.com/jobs/apply/7477015?gh_jid=7477015",
@@ -1133,17 +1177,18 @@
     },
     "Airbnb": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
-        "https://careers.airbnb.com/positions/7946318?gh_jid=7946318"
+        "https://careers.airbnb.com/positions/7946318?gh_jid=7946318",
+        "https://careers.airbnb.com/positions/8071424?gh_jid=8071424"
       ],
-      "distinct_jobs_seen": 1,
-      "current_live_jobs": 1
+      "distinct_jobs_seen": 2,
+      "current_live_jobs": 2
     },
     "Coinbase": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.coinbase.com/careers/positions/8030686?gh_jid=8030686"
@@ -1153,7 +1198,7 @@
     },
     "Intercom": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/intercom/jobs/5082494",
@@ -1200,14 +1245,15 @@
         "https://job-boards.greenhouse.io/intercom/jobs/8055026",
         "https://job-boards.greenhouse.io/intercom/jobs/8068149",
         "https://job-boards.greenhouse.io/intercom/jobs/8081923",
-        "https://job-boards.greenhouse.io/intercom/jobs/8090570"
+        "https://job-boards.greenhouse.io/intercom/jobs/8090570",
+        "https://job-boards.greenhouse.io/intercom/jobs/8132076"
       ],
-      "distinct_jobs_seen": 45,
-      "current_live_jobs": 45
+      "distinct_jobs_seen": 46,
+      "current_live_jobs": 46
     },
     "Reddit": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/reddit/jobs/7909463",
@@ -1218,7 +1264,7 @@
     },
     "Twilio": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/twilio/jobs/7394811",
@@ -1231,14 +1277,15 @@
         "https://job-boards.greenhouse.io/twilio/jobs/8072907",
         "https://job-boards.greenhouse.io/twilio/jobs/8073683",
         "https://job-boards.greenhouse.io/twilio/jobs/8081664",
-        "https://job-boards.greenhouse.io/twilio/jobs/8108771"
+        "https://job-boards.greenhouse.io/twilio/jobs/8108771",
+        "https://job-boards.greenhouse.io/twilio/jobs/8112239"
       ],
-      "distinct_jobs_seen": 11,
-      "current_live_jobs": 11
+      "distinct_jobs_seen": 12,
+      "current_live_jobs": 9
     },
     "Datadog": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.datadoghq.com/detail/5283132/?gh_jid=5283132",
@@ -1264,14 +1311,15 @@
         "https://careers.datadoghq.com/detail/8080628/?gh_jid=8080628",
         "https://careers.datadoghq.com/detail/8094071/?gh_jid=8094071",
         "https://careers.datadoghq.com/detail/8096400/?gh_jid=8096400",
-        "https://careers.datadoghq.com/detail/8119493/?gh_jid=8119493"
+        "https://careers.datadoghq.com/detail/8119493/?gh_jid=8119493",
+        "https://careers.datadoghq.com/detail/8139277/?gh_jid=8139277"
       ],
-      "distinct_jobs_seen": 24,
+      "distinct_jobs_seen": 25,
       "current_live_jobs": 24
     },
     "HubSpot": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.hubspot.com/careers/jobs/5094673?gh_jid=5094673",
@@ -1316,7 +1364,7 @@
     },
     "Stripe": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://stripe.com/jobs/search?gh_jid=4921361",
@@ -1365,29 +1413,33 @@
         "https://stripe.com/jobs/search?gh_jid=8089815",
         "https://stripe.com/jobs/search?gh_jid=8094087",
         "https://stripe.com/jobs/search?gh_jid=8096788",
+        "https://stripe.com/jobs/search?gh_jid=8097801",
         "https://stripe.com/jobs/search?gh_jid=8114153",
         "https://stripe.com/jobs/search?gh_jid=8114157",
         "https://stripe.com/jobs/search?gh_jid=8119834",
         "https://stripe.com/jobs/search?gh_jid=8120185",
-        "https://stripe.com/jobs/search?gh_jid=8124304"
+        "https://stripe.com/jobs/search?gh_jid=8121659",
+        "https://stripe.com/jobs/search?gh_jid=8124304",
+        "https://stripe.com/jobs/search?gh_jid=8129702",
+        "https://stripe.com/jobs/search?gh_jid=8139202"
       ],
-      "distinct_jobs_seen": 51,
+      "distinct_jobs_seen": 55,
       "current_live_jobs": 51
     },
     "Qualtrics": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.qualtrics.com/careers/us/en/job/7792805?gh_jid=7792805",
         "https://www.qualtrics.com/careers/us/en/job/8020803?gh_jid=8020803"
       ],
       "distinct_jobs_seen": 2,
-      "current_live_jobs": 2
+      "current_live_jobs": 1
     },
     "Klaviyo": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.klaviyo.com/careers/jobs/7737859003?gh_jid=7737859003",
@@ -1406,11 +1458,11 @@
         "https://www.klaviyo.com/careers/jobs/7855799003?gh_jid=7855799003"
       ],
       "distinct_jobs_seen": 14,
-      "current_live_jobs": 14
+      "current_live_jobs": 13
     },
     "Okta": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.okta.com/company/careers/opportunity/7645881?gh_jid=7645881",
@@ -1429,7 +1481,7 @@
     },
     "Udemy": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://app.careerpuck.com/job-board/udemy/job/6101719004?gh_jid=6101719004",
@@ -1443,9 +1495,10 @@
     },
     "Toast": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
+        "https://careers.toasttab.com/jobs?gh_jid=7731560",
         "https://careers.toasttab.com/jobs?gh_jid=7742525",
         "https://careers.toasttab.com/jobs?gh_jid=7743831",
         "https://careers.toasttab.com/jobs?gh_jid=7760960",
@@ -1468,12 +1521,12 @@
         "https://careers.toasttab.com/jobs?gh_jid=8129949",
         "https://careers.toasttab.com/jobs?gh_jid=8129966"
       ],
-      "distinct_jobs_seen": 21,
+      "distinct_jobs_seen": 22,
       "current_live_jobs": 21
     },
     "Flipdish": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.eu.greenhouse.io/flipdish/jobs/4912878101"
@@ -1483,7 +1536,7 @@
     },
     "Tines": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/tines/jobs/6103937004",
@@ -1495,7 +1548,7 @@
     },
     "Notion": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/notion/06e1d3a8-2706-4ed9-9fe6-8b69607de18e",
@@ -1518,11 +1571,11 @@
         "https://jobs.ashbyhq.com/notion/fa089457-a22c-406f-9bc2-223656b87026"
       ],
       "distinct_jobs_seen": 18,
-      "current_live_jobs": 18
+      "current_live_jobs": 17
     },
     "MongoDB": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.mongodb.com/careers/job/?gh_jid=6984814",
@@ -1601,7 +1654,7 @@
     },
     "Zscaler": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/zscaler/jobs/5193258007"
@@ -1611,7 +1664,7 @@
     },
     "Wayflyer": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/wayflyer/5580000c-11fe-4570-a6ad-16d8638c1deb",
@@ -1627,7 +1680,7 @@
     },
     "ClickUp": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/clickup/1cb8eaf1-f7cd-4236-8695-6ba807a43512",
@@ -1643,7 +1696,7 @@
     },
     "OpenAI": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/openai/0331f23d-bb84-4931-b509-c0b91980f46c",
@@ -1670,7 +1723,7 @@
     },
     "Snowflake": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/snowflake/1965834b-f73d-4aeb-8c82-7338481201e4",
@@ -1680,14 +1733,15 @@
         "https://jobs.ashbyhq.com/snowflake/4fe8d816-0453-4d63-ae0a-2085a5a49101",
         "https://jobs.ashbyhq.com/snowflake/8084aa87-1033-468b-8de6-296bf42581b8",
         "https://jobs.ashbyhq.com/snowflake/bd1a8871-efac-4d72-b570-81bdb4244d51",
+        "https://jobs.ashbyhq.com/snowflake/d23bc607-27d8-48a9-8c12-a455b3c6a820",
         "https://jobs.ashbyhq.com/snowflake/e2a5504a-faa3-4193-8636-7942770a3b6c"
       ],
-      "distinct_jobs_seen": 8,
+      "distinct_jobs_seen": 9,
       "current_live_jobs": 8
     },
     "Genesys": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://genesys.wd1.myworkdayjobs.com/Genesys/job/Galway-Ireland/Software-Engineer_JR111912-2",
@@ -1703,7 +1757,7 @@
     },
     "Adobe": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://adobe.wd5.myworkdayjobs.com/external_experienced/job/Dublin/Manager--Accounting_R171179",
@@ -1714,7 +1768,7 @@
     },
     "Autodesk": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://autodesk.wd1.myworkdayjobs.com/Ext/job/Dublin-IRL/Fusion-Expansion-Sales-Rep---Czech_26WD99677-1",
@@ -1732,7 +1786,7 @@
     },
     "MSD (Merck Sharp & Dohme)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://msd.wd5.myworkdayjobs.com/SearchJobs/job/IRL---Dublin---Leopardstown-Red-Oak/Senior-Specialist--Technical-Project-Management_R411883-1",
@@ -1745,7 +1799,7 @@
     },
     "Sanofi": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Area-Engineering---Maintenance-Manager_R2868351",
@@ -1755,19 +1809,21 @@
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Maintenance-Technician_R2868345",
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Manufacturing-Operations-Manager_R2859395-1",
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Manufacturing-Operations-Specialist_R2867355",
+        "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Manufacturing-Operations-Specialist_R2868420",
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Manufacturing-Operations-Team-Leader_R2868049-1",
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Operations-Batch-Release-Team-Leader_R2867360-1",
+        "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Operations-Support-Team-Member_R2868421",
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Process-Engineer--24-7-_R2867469",
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Process-Engineer--Inspection--Device-Assembly--Packaging-_R2868350",
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Process-Engineer_R2866893-1",
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Waterford/Quality-Assurance-Specialist---Talent-Community_R2867051"
       ],
-      "distinct_jobs_seen": 13,
-      "current_live_jobs": 13
+      "distinct_jobs_seen": 15,
+      "current_live_jobs": 14
     },
     "Analog Devices": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Cork/Senior-Engineer--Embedded-Software_R264233",
@@ -1795,6 +1851,7 @@
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Developer-Community-Specialist_R262429",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Embedded-Systems-Engineer_R254526",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Engineer--Product-Engineering--Mfg-_R257011",
+        "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Engineer--Reliability-Engineering_R264623",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Equipment-Maintenance-Technician-Graduate_R260066",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Equipment-Maintenance-Technician_R260485-1",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Failure-Analysis-Technician_R264410",
@@ -1813,6 +1870,7 @@
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Principal-PM--Project---Program-Management--Eng-_R263632",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Principal-SW-Architect_R262855",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Principal-Test-Development-Engineer_R260578",
+        "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Principal-Test-Development-Engineer_R264752",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Principal-Test-Engineer---Product-Development_R262102",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Process-Development-Engineer---Magnetic-Sensors_R262665",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Product-Manager_R261437",
@@ -1847,12 +1905,12 @@
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Technician-2--Equipment-Maintenance_R263299",
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/Technician-2-Equipment-Maintenance_R260760"
       ],
-      "distinct_jobs_seen": 76,
-      "current_live_jobs": 76
+      "distinct_jobs_seen": 78,
+      "current_live_jobs": 75
     },
     "Cadence Design Systems": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://cadence.wd1.myworkdayjobs.com/External_Careers/job/CORK-01/Design-Engineering-Architect_R54684-1",
@@ -1870,7 +1928,7 @@
     },
     "Mastercard": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland-Mountain-View/Director--Data-engineering_R-279148",
@@ -1915,6 +1973,7 @@
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Manager--Product-Manager_R-287178",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Manager--Software-Engineering_R-286553-1",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Manager--Software-Engineering_R-287330",
+        "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Manager--Software-Engineering_R-288110",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Principal-DevOps-Engineer---Decision-Management-Platform_R-273402",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Principal-Information-Security-Engineer---Blockchain-Technology_R-277520",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Principal-Platform-Architect_R-276833",
@@ -1933,19 +1992,21 @@
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Senior-Software-Engineer_R-279224",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Senior-Software-Engineer_R-286725",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Senior-Specialist---Portfolio-Health_R-280306",
+        "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Senior-Specialist--Product-Experience-Design_R-288372",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Senior-Technical-Program-Manager_R-274022",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Sr-Specialist--Product-Management--Disputes_R-288060",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Technical-Program-Manager-II_R-284376",
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Vice-President---Founding-Technology-Lead--AI-Engineering---Consulting-Platforms_R-286593"
       ],
-      "distinct_jobs_seen": 64,
-      "current_live_jobs": 64
+      "distinct_jobs_seen": 66,
+      "current_live_jobs": 63
     },
     "Gilead Sciences": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
+        "https://gilead.wd1.myworkdayjobs.com/gileadcareers/job/Ireland---Cork/Assoc-Director--IT-Data-and-AI-Product-Owner_R0054258-1",
         "https://gilead.wd1.myworkdayjobs.com/gileadcareers/job/Ireland---Cork/Assoc-Director--Master-Production-Planner_R0051232-2",
         "https://gilead.wd1.myworkdayjobs.com/gileadcareers/job/Ireland---Cork/Cash-Management-Specialist_R0053880-1",
         "https://gilead.wd1.myworkdayjobs.com/gileadcareers/job/Ireland---Cork/Director--IT-Finance---Controlling--FICO-_R0053558-1",
@@ -1963,12 +2024,12 @@
         "https://gilead.wd1.myworkdayjobs.com/gileadcareers/job/Ireland---Dublin/Senior-Director--Global-Regulatory-Affairs-Liaison---Pediatric-Center-of-Excellence_R0046382",
         "https://gilead.wd1.myworkdayjobs.com/gileadcareers/job/Ireland---Dublin/Sr-Manager--Supply-Chain_R0050562"
       ],
-      "distinct_jobs_seen": 16,
+      "distinct_jobs_seen": 17,
       "current_live_jobs": 16
     },
     "Salesforce": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/AI-Builder--Emerging-Talent---Arabic-Market_JR343472",
@@ -2104,11 +2165,11 @@
         "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Territory-Account-Executive-SMB---Denmark_JR347784"
       ],
       "distinct_jobs_seen": 131,
-      "current_live_jobs": 131
+      "current_live_jobs": 129
     },
     "Elavon": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://usbank.wd1.myworkdayjobs.com/Elavon_Careers/job/Loughlinstown-Ireland/Senior-Finance-Business-Partner_2026-0024513-2",
@@ -2119,12 +2180,13 @@
     },
     "Deloitte Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Cork/Delivery-Centre---Administrator-Hybrid_117501",
         "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Cork/SAP-Supply-Chain-Consultant_117413",
         "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Actuarial-Life-Manager---Hybrid_117313",
+        "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Actuarial-Non-Life-Senior-Manager---Hybrid_117523-3",
         "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Actuarial-Non-Life-Senior-Manager-Manager---Hybrid_116543-3",
         "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Corporate-Finance-Manager---Real-Estate-Finance_117348",
         "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Credit-Risk-Modelling---Senior-Consultant_117221",
@@ -2161,12 +2223,12 @@
         "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Transformation-Office-Change-Consultant-Hybrid_117513",
         "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Value-Creation-Services---Senior-Manager_117040"
       ],
-      "distinct_jobs_seen": 38,
-      "current_live_jobs": 38
+      "distinct_jobs_seen": 39,
+      "current_live_jobs": 35
     },
     "Abbott": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Clonmel/Assembler--Permanent-Contract--2-Cycle-shift_31046901",
@@ -2200,6 +2262,7 @@
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Donegal-Town/Senior-Leadership-in-STEM--Shape-the-Future-of-Healthcare-Innovation_31133866",
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Donegal-Town/Senior-Manufacturing-Manager_31153406",
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Donegal-Town/Technical-Manager_31155007",
+        "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Dublin/Clinical-Specialist---Cardiac-Rhythm-Management_31159353",
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Dublin/Digital-Automation-Specialist---Finance--CFS-_31149134-1",
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Dublin/Finance-Internship_31155901",
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Dublin/Internship---IT_31155903",
@@ -2243,12 +2306,12 @@
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland--Kilkenny--Kilkenny-Business-and-Technology-Park/Senior-Manufacturing-Technician_31150778",
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland--Sligo--Finisklin-Road/Accountant_31157622"
       ],
-      "distinct_jobs_seen": 73,
-      "current_live_jobs": 73
+      "distinct_jobs_seen": 74,
+      "current_live_jobs": 74
     },
     "PIMCO": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://pimco.wd1.myworkdayjobs.com/pimco-careers/job/Dublin-IRL/Asset-Information-Associate--Senior-Associate_R106053",
@@ -2260,7 +2323,7 @@
     },
     "PwC Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://pwc.wd3.myworkdayjobs.com/Global_Experienced_Careers/job/Dublin---One-Spencer-Dock/Senior-Associate---Tax----Wexford--Waterford--Kilkenny--Limerick--Cork-_341885WD",
@@ -2315,7 +2378,7 @@
     },
     "Northern Trust": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Dublin-Ireland/Head-of-Client-Asset-Safety-and-Custody-Oversight_R151029",
@@ -2355,6 +2418,7 @@
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/HR-Advisor_R156566",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/HR-Advisor_R158643",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Implementation-Project-Manager_R157186-1",
+        "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/KYC-Analyst_R157046",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/KYC-Analyst_R157600",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/KYC-Periodic-Review-Team-Lead_R156769",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Lead--Technology-and-Cyber-Risk-Management-x-2_R155855",
@@ -2391,6 +2455,7 @@
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Senior-Consultant--Investor-Shared-Services--ISS--Change-and-Oversight---Europe_R142803",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Senior-Consultant--Private-Equity_R156996",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Senior-Consultant--Risk---Control-Self-Assessment--RCSA----Enterprise-Resilience_R154851",
+        "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Senior-Consultant--Strategic-Initiatives-and-Continuous-Improvement_R159484",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Senior-Information-Architect-Limerick_R155716",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Senior-KYC-Analyst_R159371-1",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Senior-Security-Specialist_R158315",
@@ -2402,12 +2467,12 @@
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Technical-Coordinator-Investor-AML_R152814",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Vendor-Management---Contract-Commercial-Governance_R154920"
       ],
-      "distinct_jobs_seen": 83,
-      "current_live_jobs": 83
+      "distinct_jobs_seen": 85,
+      "current_live_jobs": 84
     },
     "Arista Networks": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.smartrecruiters.com/v1/companies/aristanetworks/postings/744000001334065",
@@ -2423,14 +2488,15 @@
         "https://api.smartrecruiters.com/v1/companies/aristanetworks/postings/744000142509069",
         "https://api.smartrecruiters.com/v1/companies/aristanetworks/postings/744000142509789",
         "https://api.smartrecruiters.com/v1/companies/aristanetworks/postings/744000142857641",
-        "https://api.smartrecruiters.com/v1/companies/aristanetworks/postings/744000142867299"
+        "https://api.smartrecruiters.com/v1/companies/aristanetworks/postings/744000142867299",
+        "https://api.smartrecruiters.com/v1/companies/aristanetworks/postings/744000144151419"
       ],
-      "distinct_jobs_seen": 14,
+      "distinct_jobs_seen": 15,
       "current_live_jobs": 14
     },
     "Workday": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://workday.wd5.myworkdayjobs.com/Workday/job/Ireland-Dublin/Business-Development-Representative--Dutch-Speaking-_JR-0098604",
@@ -2460,7 +2526,7 @@
     },
     "Diageo Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/Dublin-Republic-of-Ireland/Process-Controller_JR1126255-2"
@@ -2470,7 +2536,7 @@
     },
     "State Street": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Cloud-Solution-Architect--Charles-River-Development--Vice-President_R-783870",
@@ -2484,8 +2550,13 @@
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Full-Stack-Engineer--Charles-River-Development--Assistant-Vice-President_R-789045/apply",
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Full-Stack-Software-Engineer---Team-Lead--Charles-River-Development--Assistant-Vice-President_R-783868",
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Full-Stack-Software-Engineer---Team-Lead--Charles-River-Development--Assistant-Vice-President_R-783868/apply",
+        "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Fund-Accounting---Alts---Senior-Associate_R-788689-1",
+        "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Fund-Accounting---Alts---Senior-Associate_R-788689-1/apply",
+        "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Fund-Accounting-Alternatives---Senior-Associate_R-788641-1/apply",
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Head-of-Security-Architecture-and-Assurance--Charles-River-Development--Vice-Presdient_R-795223",
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/IAM-IGA-UI-Developer--Officer_R-794069",
+        "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Infrastructure-Engineering--Assistance-Vice-President_R-794172",
+        "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Infrastructure-Engineering--Assistance-Vice-President_R-794172/apply",
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Managing-Director--Head-of-Ireland-Legal_R-794921",
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Post-Production-Support-Specialist--Charles-River-Development--Assistant-Vice-President_R-777497-1",
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Project-Management--AVP_R-794098-1",
@@ -2530,8 +2601,8 @@
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Kilkenny/Purple-Team-Exercise-Coordinator_R-788681",
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/OSLIRE-New-Century-House/Chief-Operating-Officer---Technology-Risk--Governance--Transformation---Client-Office--MD_R-795679/apply"
       ],
-      "distinct_jobs_seen": 56,
-      "current_live_jobs": 56
+      "distinct_jobs_seen": 61,
+      "current_live_jobs": 59
     },
     "Marsh McLennan": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
@@ -2572,7 +2643,7 @@
     },
     "Intel": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://intel.wd1.myworkdayjobs.com/External/job/Ireland-Leixlip/AI-Research-Engineer-Scientist--OpenVINO--NNCF-_JR0283759",
@@ -2594,11 +2665,11 @@
         "https://intel.wd1.myworkdayjobs.com/External/job/Ireland-Leixlip/WPM-SORT-MODULE-PROCESS-ENGINEER_JR0286448"
       ],
       "distinct_jobs_seen": 17,
-      "current_live_jobs": 17
+      "current_live_jobs": 15
     },
     "Aptiv": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS/job/Dublin-Ireland/SAP-Technical-Lead---Operations---Critical-Programs_J000699823",
@@ -2612,7 +2683,7 @@
     },
     "Becton Dickinson (BD)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://bdx.wd1.myworkdayjobs.com/EXTERNAL_CAREER_SITE_IRELAND/job/IRL-BD-and-CO-Dublin-South/ISC-E2E-Value-Stream-Project-Engineer_R-535472",
@@ -2630,7 +2701,7 @@
     },
     "AbbVie": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.smartrecruiters.com/v1/companies/abbvie/postings/3743990013615156",
@@ -2661,14 +2732,15 @@
         "https://api.smartrecruiters.com/v1/companies/abbvie/postings/3743990014561616",
         "https://api.smartrecruiters.com/v1/companies/abbvie/postings/3743990014600156",
         "https://api.smartrecruiters.com/v1/companies/abbvie/postings/3743990014604336",
-        "https://api.smartrecruiters.com/v1/companies/abbvie/postings/3743990014622659"
+        "https://api.smartrecruiters.com/v1/companies/abbvie/postings/3743990014622659",
+        "https://api.smartrecruiters.com/v1/companies/abbvie/postings/3743990014641411"
       ],
-      "distinct_jobs_seen": 29,
-      "current_live_jobs": 29
+      "distinct_jobs_seen": 30,
+      "current_live_jobs": 30
     },
     "PayPal": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://paypal.wd1.myworkdayjobs.com/jobs/job/Dublin-County-Dublin-Ireland/Sr-Machine-Learning-Engineer_R0128326-1"
@@ -2678,7 +2750,7 @@
     },
     "Agilent Technologies": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://agilent.wd5.myworkdayjobs.com/Agilent_Careers/job/Ireland-Little-Island-Euro-Hse/Qualification-Profile--Agilent-University-Coordinator-for-Customer-Training_4037553"
@@ -2688,7 +2760,7 @@
     },
     "ServiceNow": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.smartrecruiters.com/ServiceNow/744000130831250",
@@ -2702,7 +2774,7 @@
     },
     "Johnson & Johnson": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jj.wd5.myworkdayjobs.com/job/Dublin-Ireland/Sales-Specialist-Endomech-Energy---Johnson---Johnson-MedTech---Dublin---South-East_R-092145",
@@ -2710,6 +2782,7 @@
         "https://jj.wd5.myworkdayjobs.com/job/Galway-Ireland/Staff-Design-Quality-Engineer_R-091127",
         "https://jj.wd5.myworkdayjobs.com/job/Limerick-Ireland/Apprentice-Manufacturing-Technician_R-087141",
         "https://jj.wd5.myworkdayjobs.com/job/Limerick-Ireland/Lead-Data-Automation-and-Excellence_R-079494-2",
+        "https://jj.wd5.myworkdayjobs.com/job/Limerick-Ireland/Manufacturing-Engineering-Team-Lead--Repack-_R-094326",
         "https://jj.wd5.myworkdayjobs.com/job/Limerick-Ireland/Manufacturing-Manager_R-090633",
         "https://jj.wd5.myworkdayjobs.com/job/Limerick-Ireland/Moulding-Engineering-Team-Lead_R-088546",
         "https://jj.wd5.myworkdayjobs.com/job/Limerick-Ireland/Process-Technician--Operations-_R-083408",
@@ -2724,12 +2797,12 @@
         "https://jj.wd5.myworkdayjobs.com/job/Ringaskiddy-Cork-Ireland/Sr-Manager--Trade-Controls_R-091225-1",
         "https://jj.wd5.myworkdayjobs.com/job/Ringaskiddy-Cork-Ireland/Technology-Sr-Manager--EMEA-Commercial_R-078446-2"
       ],
-      "distinct_jobs_seen": 18,
-      "current_live_jobs": 18
+      "distinct_jobs_seen": 19,
+      "current_live_jobs": 12
     },
     "AECOM": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000140741139",
@@ -2762,14 +2835,18 @@
         "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000143254099",
         "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000143339319",
         "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000143360149",
-        "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000143468249"
+        "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000143468249",
+        "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000144102276",
+        "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000144110891",
+        "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000144113947",
+        "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000144116919"
       ],
-      "distinct_jobs_seen": 31,
-      "current_live_jobs": 31
+      "distinct_jobs_seen": 35,
+      "current_live_jobs": 33
     },
     "AIG": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/A-H-Travel-Complex-Adjuster_JR2600705",
@@ -2777,19 +2854,21 @@
         "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Casualty-Underwriter_JR2602993",
         "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Complex-Motor-Claims-Adjuster_JR2602593",
         "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Financial-Lines-Underwriter_JR2506136",
+        "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/GCM-Operations-Analyst_JR2602765",
         "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/IT-Systems-Analyst---EMEA-Change_JR2602702",
         "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Motor-Bodily-Injury-Adjuster_JR2600516",
         "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Motor-Bodily-Injury-Claims-Adjuster_JR2600224",
         "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/SailPoint-Engineer_JR2601689",
         "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Senior-Business-Analyst_JR2600851",
-        "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Senior-Property-Underwriter_JR2506790"
+        "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Senior-Property-Underwriter_JR2506790",
+        "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Treasury-Analyst_JR2602832"
       ],
-      "distinct_jobs_seen": 11,
-      "current_live_jobs": 11
+      "distinct_jobs_seen": 13,
+      "current_live_jobs": 13
     },
     "Barclays": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "88049448992",
@@ -2809,11 +2888,11 @@
         "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays/job/Dublin-Molesworth-Street/Head-of-Legal---Ireland_JR-0000125768"
       ],
       "distinct_jobs_seen": 15,
-      "current_live_jobs": 15
+      "current_live_jobs": 5
     },
     "Motorola Solutions": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Cork-Ireland-ZEI15/Senior-Software-Engineer_R67216",
@@ -2826,7 +2905,7 @@
     },
     "BearingPoint": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.eu.greenhouse.io/bearingpoint/jobs/4196152101",
@@ -2846,7 +2925,7 @@
     },
     "Kitman Labs": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.lever.co/kitmanlabs/79421225-0c72-4002-97c0-23ab7d7a5062",
@@ -2859,7 +2938,7 @@
     },
     "CrowdStrike": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/Ireland---Dublin/Software-Engineer-III---Foundry--Hybrid--IRE-_R29080",
@@ -2871,7 +2950,7 @@
     },
     "Apex Group": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Cork/Account-Manager---Fund-Accounting_JR-0024866-1",
@@ -2886,7 +2965,7 @@
     },
     "Canto": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/canto/jobs/5387778008?gh_jid=5387778008"
@@ -2896,7 +2975,7 @@
     },
     "CarTrawler": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.lever.co/cartrawler/2176d958-b6b3-4437-af9c-a9d6608773e9",
@@ -2914,7 +2993,7 @@
     },
     "Concentrix (Ireland)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/ireland/jobs/4031394003",
@@ -2931,7 +3010,7 @@
     },
     "Eurofins Scientific": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.smartrecruiters.com/v1/companies/Eurofins/postings/744000133265768",
@@ -2944,14 +3023,15 @@
         "https://api.smartrecruiters.com/v1/companies/Eurofins/postings/744000142147010",
         "https://api.smartrecruiters.com/v1/companies/Eurofins/postings/744000142897770",
         "https://api.smartrecruiters.com/v1/companies/Eurofins/postings/744000143051708",
-        "https://api.smartrecruiters.com/v1/companies/Eurofins/postings/744000143259664"
+        "https://api.smartrecruiters.com/v1/companies/Eurofins/postings/744000143259664",
+        "https://api.smartrecruiters.com/v1/companies/Eurofins/postings/744000144023500"
       ],
-      "distinct_jobs_seen": 11,
+      "distinct_jobs_seen": 12,
       "current_live_jobs": 11
     },
     "LearnUpon": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/learnupon/jobs/5675447002",
@@ -2968,7 +3048,7 @@
     },
     "Merit Medical": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://merit.wd503.myworkdayjobs.com/Merit/job/Galway-Ireland/Environmental--Health-and-Safety-Manager_JR116407-1",
@@ -2986,7 +3066,7 @@
     },
     "Pure Storage": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/purestorage/jobs/8046522"
@@ -2996,7 +3076,7 @@
     },
     "Tenable": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/tenableinc/jobs/4019356008",
@@ -3009,7 +3089,7 @@
     },
     "Anthropic": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/anthropic/jobs/5101169008",
@@ -3020,15 +3100,16 @@
         "https://job-boards.greenhouse.io/anthropic/jobs/5358118008",
         "https://job-boards.greenhouse.io/anthropic/jobs/5383708008",
         "https://job-boards.greenhouse.io/anthropic/jobs/5385762008",
+        "https://job-boards.greenhouse.io/anthropic/jobs/5391249008",
         "https://job-boards.greenhouse.io/anthropic/jobs/5391305008",
         "https://job-boards.greenhouse.io/anthropic/jobs/5391309008"
       ],
-      "distinct_jobs_seen": 10,
-      "current_live_jobs": 10
+      "distinct_jobs_seen": 11,
+      "current_live_jobs": 11
     },
     "CitySwift": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://cityswift.com/job-post/?gh_jid=7762442003",
@@ -3041,7 +3122,7 @@
     },
     "Crusoe": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/Crusoe/0932c95c-e8db-437c-9333-fcc37c659961",
@@ -3050,15 +3131,16 @@
         "https://jobs.ashbyhq.com/Crusoe/2b51201b-1830-4c3e-89ec-146fd34a52d7",
         "https://jobs.ashbyhq.com/Crusoe/36991347-adf7-4fd2-b0fb-b48bbf07d5ea",
         "https://jobs.ashbyhq.com/Crusoe/5ccfccf7-90f3-4a06-a8cd-dc0d2550ed81",
+        "https://jobs.ashbyhq.com/Crusoe/947726f2-0868-40ea-ba32-ff77d79102fc",
         "https://jobs.ashbyhq.com/Crusoe/aad1cd68-ef7e-4660-b021-dab5267d0bde",
         "https://jobs.ashbyhq.com/Crusoe/ae9cb957-cbc2-4c1a-93e8-2d01ff0a2247"
       ],
-      "distinct_jobs_seen": 8,
-      "current_live_jobs": 8
+      "distinct_jobs_seen": 9,
+      "current_live_jobs": 9
     },
     "KLA Corporation": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://kla.wd1.myworkdayjobs.com/Search/job/Dublin-Ireland/Customer-Support-Engineer_2529587",
@@ -3071,7 +3153,7 @@
     },
     "Circle K Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://circlek.wd3.myworkdayjobs.com/CircleKStoreJobs/job/30620-CIRCLE-K-PORTLAOISE/Customer-Assistant_R613159",
@@ -3083,7 +3165,7 @@
     },
     "Dillon Eustace": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "Dillon Eustace | Solicitor | Dublin"
@@ -3093,7 +3175,7 @@
     },
     "Ericsson": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ericsson.pinpointhq.com/en/postings/121c1a12-b678-47ee-bbac-22587f93f947"
@@ -3103,7 +3185,7 @@
     },
     "Codec": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://codec.pinpointhq.com/en/postings/0a1c1d81-c1df-48e9-929a-df22899dcaf5",
@@ -3126,23 +3208,27 @@
     },
     "Arthur Cox": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://arthurcox.pinpointhq.com/en/postings/20184bf3-e36b-4fa7-b66d-241f7227aa21",
+        "https://arthurcox.pinpointhq.com/en/postings/356bfaeb-24cd-49a2-80d8-40a80f264d66",
         "https://arthurcox.pinpointhq.com/en/postings/372e58d4-a252-4d0b-90a6-d6e9ff80eafb",
+        "https://arthurcox.pinpointhq.com/en/postings/820c41b2-fde1-417a-9913-0a97f67a7ff8",
         "https://arthurcox.pinpointhq.com/en/postings/86be76e0-ca39-496f-82bb-00881dbb5714",
+        "https://arthurcox.pinpointhq.com/en/postings/99b810cd-9e31-47f9-bcac-6d0bdf1b7ec8",
         "https://arthurcox.pinpointhq.com/en/postings/9ec85c51-2e2b-41f3-93d0-522f058339ab",
         "https://arthurcox.pinpointhq.com/en/postings/9ff97161-2933-4503-ae22-ada3a00ef383",
+        "https://arthurcox.pinpointhq.com/en/postings/a6f8aaaa-81fa-44bc-a079-6d686fa74784",
         "https://arthurcox.pinpointhq.com/en/postings/c0b2b47a-642b-4259-9e88-788dd335dc42",
         "https://arthurcox.pinpointhq.com/en/postings/cc29316e-b77b-4a62-bb54-e9f9ffd31a13"
       ],
-      "distinct_jobs_seen": 7,
-      "current_live_jobs": 7
+      "distinct_jobs_seen": 11,
+      "current_live_jobs": 11
     },
     "BDO Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://bdoireland.pinpointhq.com/en/postings/08a7d17b-9dfd-4f9e-857d-3aaa4c890f54",
@@ -3156,16 +3242,17 @@
         "https://bdoireland.pinpointhq.com/en/postings/fb028b14-71d9-454d-9823-04e397a133fb"
       ],
       "distinct_jobs_seen": 9,
-      "current_live_jobs": 9
+      "current_live_jobs": 8
     },
     "GE HealthCare": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Cork/Global-CapEx---Project-Delivery-Lead--PDx-_R4044091-1/apply",
         "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Cork/Global-Electrical-Engineering-Lead_R4043979/apply",
         "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Cork/Global-Indirect-Sourcing---Contracts-Lead--PDx-_R4044480-1/apply",
+        "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Cork/Manufacturing-Development-Scientist_R4041541-1/apply",
         "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Cork/Process-Engineer_R4044309-1/apply",
         "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Cork/Process-Operator_R4045041-1/apply",
         "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Cork/Process-Operator_R4045049-1/apply",
@@ -3173,12 +3260,12 @@
         "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Cork/Technical-Operations---Optimization-Lead_R4044931/apply",
         "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/IRL02-01-Dublin-86-88-Lower-Leeson-Street/Treasury-Controllership-Lead-Accountant_R4044929-1/apply"
       ],
-      "distinct_jobs_seen": 9,
-      "current_live_jobs": 9
+      "distinct_jobs_seen": 10,
+      "current_live_jobs": 10
     },
     "Cisco": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://cisco.wd5.myworkdayjobs.com/Cisco_Careers/job/Galway-Ireland/Java-Software-Engineer_2020502/apply",
@@ -3194,11 +3281,11 @@
         "https://cisco.wd5.myworkdayjobs.com/Cisco_Careers/job/Galway-Ireland/Software-Engineering-Technical-Leader_2020981/apply"
       ],
       "distinct_jobs_seen": 11,
-      "current_live_jobs": 11
+      "current_live_jobs": 10
     },
     "Fiserv": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/AWS-Cloud---Dev-Ops-Engineer_R-10373246/apply",
@@ -3223,11 +3310,11 @@
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Nenagh-Ireland/Software-Developer_R-10373021/apply"
       ],
       "distinct_jobs_seen": 20,
-      "current_live_jobs": 20
+      "current_live_jobs": 17
     },
     "Zimmer Biomet": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://career8.successfactors.com/careers?company=zimmerin01&loginFlowRequired=true&career_os=job_listing&career_ns=job_application&career_job_req_id=11846&_s.crb=25fvCmbM9Lad2rza%252fxJs%252fNp1mhY1RYUVrVIMdAiM2RI%253d"
@@ -3237,7 +3324,7 @@
     },
     "Danaher Corporation": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://danaher.wd1.myworkdayjobs.com/DanaherJobs/job/Dublin-Leinster-Ireland/Product-Sales-Specialist--AKTA-and-chromatography_R1314542/apply",
@@ -3249,21 +3336,22 @@
         "https://danaher.wd1.myworkdayjobs.com/DanaherJobs/job/OCallaghan-Mills-Ireland/Technician--Production-Operations--G4-Night-shift-_R1316297/apply"
       ],
       "distinct_jobs_seen": 7,
-      "current_live_jobs": 7
+      "current_live_jobs": 6
     },
     "Kerry Group": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
-        "https://career5.successfactors.eu/careers?company=kerryluxemP&career_ns=job_application&career_job_req_id=63905&jobPipeline=PhenomCareerSite"
+        "https://career5.successfactors.eu/careers?company=kerryluxemP&career_ns=job_application&career_job_req_id=63905&jobPipeline=PhenomCareerSite",
+        "https://career5.successfactors.eu/careers?company=kerryluxemP&career_ns=job_application&career_job_req_id=65932&jobPipeline=PhenomCareerSite"
       ],
-      "distinct_jobs_seen": 1,
+      "distinct_jobs_seen": 2,
       "current_live_jobs": 1
     },
     "DHL Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://dpdhlgroup.avature.net/jobs/ApplicationMethods?jobId=370550&source=careers.dhl.com",
@@ -3274,7 +3362,7 @@
     },
     "Kuehne+Nagel Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.kuehne-nagel.com/job/11436",
@@ -3285,37 +3373,39 @@
         "https://jobs.kuehne-nagel.com/job/16514"
       ],
       "distinct_jobs_seen": 6,
-      "current_live_jobs": 6
+      "current_live_jobs": 5
     },
     "Thermo Fisher Scientific": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/Athlone-Ireland/Project-Manager-I---Inhalation-Lab_R-01361483/apply",
+        "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/Athlone-Ireland/Scientist-II_R-01350753/apply",
         "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/Remote-Ireland/Data-Reviewer--Biopharma---Remote_R-01364274-1/apply",
         "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/Remote-Ireland/QC-Analytical-Data-Reviewer--LCMS---Remote_R-01364888/apply",
         "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/Remote-Ireland/QC-Analytical-Data-Reviewer--Pharma---Remote_R-01342158/apply"
       ],
-      "distinct_jobs_seen": 4,
+      "distinct_jobs_seen": 5,
       "current_live_jobs": 4
     },
     "Oracle": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "335680",
         "338288",
         "339693",
-        "341834"
+        "341834",
+        "343211"
       ],
-      "distinct_jobs_seen": 4,
+      "distinct_jobs_seen": 5,
       "current_live_jobs": 4
     },
     "EXL": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://fa-ewjt-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_2/job/11285/",
@@ -3341,23 +3431,28 @@
     },
     "Dell Technologies": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/294857/",
         "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/294862/",
+        "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/295677/",
         "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/295680/",
+        "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/295689/",
+        "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/295694/",
+        "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/296479/",
+        "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/296482/",
         "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/R285424/",
         "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/R286249/",
         "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/R286575/",
         "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/R288425/"
       ],
-      "distinct_jobs_seen": 7,
-      "current_live_jobs": 7
+      "distinct_jobs_seen": 12,
+      "current_live_jobs": 10
     },
     "Grant Thornton Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/GrantThorntonIrelandExperiencedHires/job/113805",
@@ -3413,14 +3508,16 @@
         "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/GrantThorntonIrelandExperiencedHires/job/115456",
         "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/GrantThorntonIrelandExperiencedHires/job/115526",
         "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/GrantThorntonIrelandExperiencedHires/job/115561",
-        "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/GrantThorntonIrelandExperiencedHires/job/115562"
+        "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/GrantThorntonIrelandExperiencedHires/job/115562",
+        "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/GrantThorntonIrelandExperiencedHires/job/115587",
+        "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/GrantThorntonIrelandExperiencedHires/job/115589"
       ],
-      "distinct_jobs_seen": 54,
-      "current_live_jobs": 54
+      "distinct_jobs_seen": 56,
+      "current_live_jobs": 55
     },
     "Honeywell": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ibqbjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Honeywell/job/149708/",
@@ -3433,7 +3530,7 @@
     },
     "Allianz Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.allianz.com/ie/en/job/101359/Internal-Audit-Manager-12-Month-Maternity-Contract",
@@ -3447,7 +3544,7 @@
     },
     "KPMG Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Associate-Director-Dispute-Advisory-Financial-Expert-Witness-Litigation-Support/3007",
@@ -3460,6 +3557,7 @@
         "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Corporate-Tax-Manager/2586",
         "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Corporate-Tax-Senior-Associate/2588",
         "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Creative-Proposal-Designer/3204",
+        "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Geospatial-Insights-Consultant/3187",
         "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Geospatial-Insights-Manager/3186",
         "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Global-Mobility-Employment-Tax-Associate-Director-Manager/3118",
         "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Global-Mobility-Employment-Tax-Senior-Associate/3119",
@@ -3489,12 +3587,12 @@
         "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Transaction-Services-Senior-Associate/3171",
         "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Turnaround-and-Restructuring-Manager-Associate-Director/3102"
       ],
-      "distinct_jobs_seen": 38,
-      "current_live_jobs": 38
+      "distinct_jobs_seen": 39,
+      "current_live_jobs": 37
     },
     "Tata Consultancy Services (TCS)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=CXAZAZB&sid=YYAZD&jid=BAZBFUAZU&a=dwVoVYfJngc%253d"
@@ -3504,7 +3602,7 @@
     },
     "Vodafone Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://opportunities.vodafone.com/job/Dublin-CX-through-AI-tools/1425748233/",
@@ -3517,15 +3615,17 @@
         "https://opportunities.vodafone.com/job/Dublin-Security-Architect-Cyber-Security/1403823633/",
         "https://opportunities.vodafone.com/job/Dublin-Senior-PO-Propositions-and-Product/1410837533/",
         "https://opportunities.vodafone.com/job/Dublin-Senior-Solution-Sales-Networking/1393820433/",
+        "https://opportunities.vodafone.com/job/Dublin-Solution-Sales-Specialist/1427577433/",
         "https://opportunities.vodafone.com/job/Liffey-Valley-Retail-Sales-Advisor-Part-Time/1374293833/",
-        "https://opportunities.vodafone.com/job/Retail-Advisor-Full-Time-%28Tallaght%29/1272847601/"
+        "https://opportunities.vodafone.com/job/Retail-Advisor-Full-Time-%28Tallaght%29/1272847601/",
+        "https://opportunities.vodafone.com/job/Retail-Advisor-Part-Time-%28Limerick-Crescent%29/1265814501/"
       ],
-      "distinct_jobs_seen": 12,
-      "current_live_jobs": 12
+      "distinct_jobs_seen": 14,
+      "current_live_jobs": 14
     },
     "Wipro": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.wipro.com/job/ADMINISTRATOR-L3/192502-en_US/"
@@ -3542,11 +3642,11 @@
         "https://careers.capgemini.com/job/Dublin-Solution-Architect/1419752533/"
       ],
       "distinct_jobs_seen": 2,
-      "current_live_jobs": 2
+      "current_live_jobs": 0
     },
     "Huawei Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://huaweiireland.teamtailor.com/jobs/4628889-2026-ai-research-intern-llms",
@@ -3569,7 +3669,7 @@
     },
     "Arup": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.arup.com/jobs/32779/other-jobs-matching/location-and-category",
@@ -3598,52 +3698,64 @@
     },
     "Public Jobs / Civil Service": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-4/xf-423dd989250d/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-4/xf-423dd989250d/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-4/xf-81e83c5cd56b/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-4/xf-81e83c5cd56b/candidate/jobboard/vacancy/6/adv/",
+        "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-4/xf-aee4653a5e04/candidate/jobboard/vacancy/3/adv/",
+        "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-4/xf-aee4653a5e04/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-4/xf-dbe2659e09a6/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-4/xf-dbe2659e09a6/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-6/xf-423dd989250d/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-6/xf-81e83c5cd56b/candidate/jobboard/vacancy/7/adv/",
+        "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-6/xf-aee4653a5e04/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-1/brand-6/xf-dbe2659e09a6/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-4/xf-423dd989250d/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-4/xf-423dd989250d/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-4/xf-81e83c5cd56b/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-4/xf-81e83c5cd56b/candidate/jobboard/vacancy/6/adv/",
+        "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-4/xf-aee4653a5e04/candidate/jobboard/vacancy/3/adv/",
+        "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-4/xf-aee4653a5e04/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-4/xf-dbe2659e09a6/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-4/xf-dbe2659e09a6/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-6/xf-423dd989250d/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-6/xf-81e83c5cd56b/candidate/jobboard/vacancy/7/adv/",
+        "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-6/xf-aee4653a5e04/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-en-GB/mobile-0/appcentre-ext/brand-6/xf-dbe2659e09a6/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-4/xf-423dd989250d/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-4/xf-423dd989250d/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-4/xf-81e83c5cd56b/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-4/xf-81e83c5cd56b/candidate/jobboard/vacancy/6/adv/",
+        "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-4/xf-aee4653a5e04/candidate/jobboard/vacancy/3/adv/",
+        "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-4/xf-aee4653a5e04/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-4/xf-dbe2659e09a6/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-4/xf-dbe2659e09a6/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-6/xf-423dd989250d/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-6/xf-81e83c5cd56b/candidate/jobboard/vacancy/7/adv/",
+        "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-6/xf-aee4653a5e04/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-1/brand-6/xf-dbe2659e09a6/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-4/xf-423dd989250d/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-4/xf-423dd989250d/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-4/xf-81e83c5cd56b/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-4/xf-81e83c5cd56b/candidate/jobboard/vacancy/6/adv/",
+        "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-4/xf-aee4653a5e04/candidate/jobboard/vacancy/3/adv/",
+        "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-4/xf-aee4653a5e04/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-4/xf-dbe2659e09a6/candidate/jobboard/vacancy/3/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-4/xf-dbe2659e09a6/candidate/jobboard/vacancy/6/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-6/xf-423dd989250d/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-6/xf-81e83c5cd56b/candidate/jobboard/vacancy/7/adv/",
+        "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-6/xf-aee4653a5e04/candidate/jobboard/vacancy/7/adv/",
         "https://publicjobs.tal.net/vx/lang-ga/mobile-0/appcentre-ext/brand-6/xf-dbe2659e09a6/candidate/jobboard/vacancy/7/adv/"
       ],
-      "distinct_jobs_seen": 36,
+      "distinct_jobs_seen": 48,
       "current_live_jobs": 24
     },
     "NTT DATA": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers-inc.nttdata.com/job/Columbus-Sales-Executive-III-OH-43085/1392912900/",
@@ -3661,18 +3773,19 @@
         "https://careers-inc.nttdata.com/job/Dublin-Senior-Business-Data-Analyst-Transact-system-D/1396348300/",
         "https://careers-inc.nttdata.com/job/Dublin-Senior-Solution-Architect-D/1419475400/",
         "https://careers-inc.nttdata.com/job/Dublin-Senior-Splunk-Developer-D/1404419000/",
+        "https://careers-inc.nttdata.com/job/Dublin-Senior-Techno-Functional-Business-Analyst-D/1420692400/",
         "https://careers-inc.nttdata.com/job/Dublin-Solution-Architect-Risk-and-Compliance-D/1386595100/",
         "https://careers-inc.nttdata.com/job/Dublin-Techno-Functional-Business-Analyst-D/1405194200/",
         "https://careers-inc.nttdata.com/job/dublin-Banking-Practice-Lead-AI-D/1415616400/",
         "https://careers-inc.nttdata.com/job/dublin-Senior-Business-Analyst-MortgagesLending-D/1416996000/",
         "https://careers-inc.nttdata.com/job/dublin-Senior-QA-Manager-Banking-D/1417072100/"
       ],
-      "distinct_jobs_seen": 20,
-      "current_live_jobs": 20
+      "distinct_jobs_seen": 21,
+      "current_live_jobs": 21
     },
     "Coca-Cola HBC Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.coca-colahellenic.com/en_US/careers/ProjectDetail/Business-Developer-Convenience-Meath-Midlands-temporary-to-Feb-2027/25932",
@@ -3683,7 +3796,7 @@
     },
     "SAP": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.sap.com/job/Dublin-24-Business-Processes-Principal-Consultant-D24WA02/1427118633/",
@@ -3709,7 +3822,7 @@
     },
     "PM Group": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "10888",
@@ -3799,11 +3912,11 @@
         "12753"
       ],
       "distinct_jobs_seen": 85,
-      "current_live_jobs": 85
+      "current_live_jobs": 83
     },
     "Avolon": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://mytribe.my.salesforce-sites.com/recruit/fRecruit__ApplyJob?vacancyNo=VN239"
@@ -3813,7 +3926,7 @@
     },
     "ASL Aviation Holdings": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://cezanneondemand.intervieweb.it/aslaviationgroup/jobs/engineering-safety-investigator-62950/en/"
@@ -3823,7 +3936,7 @@
     },
     "Trinity College Dublin": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://my.corehr.com/pls/coreportal_trp/"
@@ -3833,7 +3946,7 @@
     },
     "University College Cork (UCC)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://research.ucc.ie",
@@ -3850,7 +3963,7 @@
     },
     "Dublin City University (DCU)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.dcu.ie/People/Jobs/Why-work-at-DCU",
@@ -3872,7 +3985,7 @@
     },
     "University of Galway": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "http://www.lero.ie/",
@@ -3900,7 +4013,7 @@
     },
     "Munster Technological University (MTU)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.mtu.ie/about-mtu/university-executive/",
@@ -3926,7 +4039,7 @@
     },
     "RCSI University of Medicine and Health Sciences": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.rcsi.com/dublin/research-and-innovation/research",
@@ -3937,7 +4050,7 @@
     },
     "Technological University Dublin (TU Dublin)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://researchprofiles.tudublin.ie/",
@@ -3956,7 +4069,7 @@
     },
     "Atlantic Technological University (ATU)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://pure.atu.ie/",
@@ -3976,7 +4089,7 @@
     },
     "Technological University of the Shannon (TUS)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://tus.ie/engineering-and-technology/",
@@ -3992,7 +4105,7 @@
     },
     "Mercer": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://mmc.wd1.myworkdayjobs.com/MMC/job/Cork---Navigation/Technical-Delivery-Manager---Retirement-Solutions_R_359323",
@@ -4029,7 +4142,7 @@
     },
     "Fidelity International": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "J65285 Customer Service Representative (Evergreen) (Open)",
@@ -4041,7 +4154,7 @@
     },
     "Harvey Nash Ireland": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/harvey/3adf9734-7339-4b21-b361-96288a9a6224",
@@ -4063,7 +4176,7 @@
     },
     "JD Sports Ireland": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.eu.greenhouse.io/jdsports/jobs/4150790101"
@@ -4073,7 +4186,7 @@
     },
     "Bloomberg": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://bloomberg.avature.net/careers/JobDetail/Chief-Compliance-Officer-Bloomberg-Scores-Europe-Limited-BSEL/18276",
@@ -4096,18 +4209,20 @@
     },
     "Bank of Ireland": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
+        "https://careers.bankofireland.com/jobs/audit-manager-customer-domains-dublin-ireland",
         "https://careers.bankofireland.com/jobs/corporate-account-manager-new-ireland-assurance-dublin-ireland",
-        "https://careers.bankofireland.com/jobs/head-of-corporate-pensions-business-development-new-ireland-assurance-dublin-ireland"
+        "https://careers.bankofireland.com/jobs/head-of-corporate-pensions-business-development-new-ireland-assurance-dublin-ireland",
+        "https://careers.bankofireland.com/jobs/senior-audit-manager-new-ireland-wealth-insurance-dublin-ireland"
       ],
-      "distinct_jobs_seen": 2,
-      "current_live_jobs": 2
+      "distinct_jobs_seen": 4,
+      "current_live_jobs": 4
     },
     "Dawn Meats": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers-dawnmeats.icims.com/jobs/5237/maintenance-and-engineering-manager/job",
@@ -4126,14 +4241,15 @@
         "https://careers-dawnmeats.icims.com/jobs/5438/quality-control-operative/job",
         "https://careers-dawnmeats.icims.com/jobs/5442/maintenance-electrician/job",
         "https://careers-dawnmeats.icims.com/jobs/5443/maintenance-fitter/job",
-        "https://careers-dawnmeats.icims.com/jobs/5448/logistics-administrator/job"
+        "https://careers-dawnmeats.icims.com/jobs/5448/logistics-administrator/job",
+        "https://careers-dawnmeats.icims.com/jobs/5458/lamb-boning-hall-line-lead/job"
       ],
-      "distinct_jobs_seen": 17,
+      "distinct_jobs_seen": 18,
       "current_live_jobs": 17
     },
     "Decathlon Ireland": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-08-17T22:13:25.065760+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.decathlon.co.uk/job/Dublin-FT-Cycling-Workshop-technician-D01P2Y0/1406557933/",
@@ -4144,10 +4260,163 @@
       ],
       "distinct_jobs_seen": 5,
       "current_live_jobs": 5
+    },
+    "Irish Rail (Iarnr\u00f3d \u00c9ireann)": {
+      "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "ever_working": true,
+      "seen_job_keys": [
+        "https://www.irishrail.ie/en-ie/about-us/company-information/career-opportunities-at-iarnrod-eireann/revenue-management-analyst",
+        "https://www.irishrail.ie/en-ie/about-us/company-information/career-opportunities-at-iarnrod-eireann/security-enterprise-architect"
+      ],
+      "distinct_jobs_seen": 2,
+      "current_live_jobs": 2
+    },
+    "DPS Group (Arcadis)": {
+      "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "ever_working": true,
+      "seen_job_keys": [
+        "https://www.dpsgroupglobal.com/job/maintenance-planner/",
+        "https://www.dpsgroupglobal.com/job/mechanical-design-engineer-wastewater-treatment-projects-2/",
+        "https://www.dpsgroupglobal.com/job/mechanical-design-engineer-wastewater-treatment-projects/"
+      ],
+      "distinct_jobs_seen": 3,
+      "current_live_jobs": 3
+    },
+    "IBM": {
+      "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "ever_working": true,
+      "seen_job_keys": [
+        "https://careers.ibm.com/en_US/careers/JobDetail/Research-Scientist-Quantum-Algorithms-for-Differential-Equations/118888"
+      ],
+      "distinct_jobs_seen": 1,
+      "current_live_jobs": 1
+    },
+    "S&P Global": {
+      "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "ever_working": true,
+      "seen_job_keys": [
+        "328128",
+        "329627",
+        "330310"
+      ],
+      "distinct_jobs_seen": 3,
+      "current_live_jobs": 3
+    },
+    "JPMorgan Chase": {
+      "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "ever_working": true,
+      "seen_job_keys": [
+        "210727201",
+        "210763073",
+        "210766987",
+        "210767003",
+        "210769147",
+        "210769423",
+        "210770040",
+        "210776152",
+        "210778716",
+        "210778899"
+      ],
+      "distinct_jobs_seen": 10,
+      "current_live_jobs": 10
+    },
+    "Irish Life": {
+      "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "ever_working": true,
+      "seen_job_keys": [
+        "https://life-careers.com/irishlife/job/Dublin-Reward-Partner/1418858233/",
+        "https://life-careers.com/irishlife/job/Dundalk-Customer-Service-Representative-Dundalk/1246651601/",
+        "https://life-careers.com/irishlife/job/Dundalk-Financial-Adviser-Dundalk/1423376733/",
+        "https://life-careers.com/irishlife/job/Nationwide-Experienced-Financial-Adviser-Mullingar/1289999201/"
+      ],
+      "distinct_jobs_seen": 4,
+      "current_live_jobs": 4
+    },
+    "ESB": {
+      "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "ever_working": true,
+      "seen_job_keys": [
+        "https://careers.esb.ie/job/Co_-Dublin-Contracts-Negotiator%2C-ESB-Trading-D/1368641857/",
+        "https://careers.esb.ie/job/Dublin-Communication%2C-Engagement-and-People-Experience-Specialist-D/1369539057/",
+        "https://careers.esb.ie/job/Dublin-Electrical-Engineer-D/1353643557/",
+        "https://careers.esb.ie/job/Dublin-GF&C-Treasury-&-Group-Trading-Risk-Manager-D/1369729657/",
+        "https://careers.esb.ie/job/Dublin-OT-Cybersecurity-Senior-Professional-D/1368666557/",
+        "https://careers.esb.ie/job/Dublin-Planning-&-Reporting-Specialist-Lead-D/1369037657/",
+        "https://careers.esb.ie/job/Dublin-Qualified-Electricians-D/1368571157/",
+        "https://careers.esb.ie/job/Dublin-Region-Distributed-Generation-Site-Manager-%28Dublin%29%2C-Renewable-Operations-D/1368912357/",
+        "https://careers.esb.ie/job/Dublin-Risk-Manager%2C-Capital-Delivery-D/1368657757/",
+        "https://careers.esb.ie/job/Dublin-Safety-Data-&-Reporting-Lead-Safety%2C-Health-and-Wellbeing-LS/1368718357/",
+        "https://careers.esb.ie/job/Dublin-Site-Supervisor-D/1369265757/",
+        "https://careers.esb.ie/job/Dublin-Transmission-2030-Optimisation-Specialist-D/1368719057/",
+        "https://careers.esb.ie/job/ESB-Renewables-Operations-Cont-Renewables-Control-Centre-Operator-D/1368786357/",
+        "https://careers.esb.ie/job/F27-Dublin-and-travel-to-sites-Distributed-Generation-Mobilisation-Program-Delivery-%28Temporary-12-Months%29-D/1364582957/",
+        "https://careers.esb.ie/job/Flexible-Contractor-Safety-Compliance-Auditor-%28Station-Electrical-Civils%29-D/1369069757/",
+        "https://careers.esb.ie/job/South-East-region-Distributed-Generation-Site-Manager-%28South-East%29%2C-Renewable-Operations-KK/1363465457/",
+        "https://careers.esb.ie/job/Wilton%2C-Cork-Contact-Centre-Performance-Analyst-D/1367529357/"
+      ],
+      "distinct_jobs_seen": 17,
+      "current_live_jobs": 17
+    },
+    "BlackRock": {
+      "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "ever_working": true,
+      "seen_job_keys": [
+        "https://careers.blackrock.com/job/dublin/associate-private-credit-fund-accounting-pfs-dublin/45831/98511190064",
+        "https://careers.blackrock.com/job/dublin/associate-private-credit-fund-accounting-pfs-dublin/45831/98511190128"
+      ],
+      "distinct_jobs_seen": 2,
+      "current_live_jobs": 2
+    },
+    "SMBC Group": {
+      "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "last_working_seen": "2026-08-18T22:18:19.434578+00:00",
+      "ever_working": true,
+      "seen_job_keys": [
+        "https://careers.smbcgroup.com/smbc/job/Tralee-Application-Security-Engineer/1416514800/",
+        "https://careers.smbcgroup.com/smbc/job/Tralee-DevOps-Engineer/1417669400/",
+        "https://careers.smbcgroup.com/smbc/job/Tralee-Junior-Payment-&-Compliance-Application-Support-Engineer/1415600700/",
+        "https://careers.smbcgroup.com/smbc/job/Tralee-Power-Platform-Developer/1399341100/",
+        "https://careers.smbcgroup.com/smbc/job/Tralee-QA-Testing-Specialist-Data-Engineer/1412093700/",
+        "https://careers.smbcgroup.com/smbc/job/Tralee-Senior-Cyber-Security-Engineer/1415603600/",
+        "https://careers.smbcgroup.com/smbc/job/Tralee-Senior-Python-Engineer/1393668200/",
+        "https://careers.smbcgroup.com/smbc/job/Tralee-Senior-Storage-&-Data-Protection-Engineer/1395041300/",
+        "https://careers.smbcgroup.com/smbc/job/Tralee-Virtualization-Engineer/1382585400/",
+        "https://careersemea.smbcgroup.com/job/Dublin-AVP-Third-Party-Management-Outsourcing-Specialist-%28mfd%29-D-D02-KF20/1373244533/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Cloud-Engineer%2C-VP-D-D02-KF20/1415378433/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Corporate-Legal-Vice-President-D-D02-KF20/1406924633/",
+        "https://careersemea.smbcgroup.com/job/Dublin-FTC-6-months-Compliance-Assistant-Vice-President-D02-KF20/1422866833/",
+        "https://careersemea.smbcgroup.com/job/Dublin-IT-Security-Assistant-Vice-President-L-D02-KF20/1419823933/",
+        "https://careersemea.smbcgroup.com/job/Dublin-IT-Security-Vice-President-L-D02-KF20/1420343533/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Information-Technology-Cross-Function-Assistant-Vice-President-D-D02-KF20/1400917633/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Information-Technology-Cross-Function-Vice-President-D-D02-KF20/1400915533/",
+        "https://careersemea.smbcgroup.com/job/Dublin-PERM-OPPD-Enterprise-Business-Management-Vice-President-D02-KF20/1228190801/",
+        "https://careersemea.smbcgroup.com/job/Dublin-PERM-OPPD-Operational-Resilience-Test-Specialist-AVP-D02-KF20/1228191101/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Procurement-Platform-IT-Owner-VP-L-D02-KF20/1420339733/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Reconciliation-Technology-Specialist%2C-Delivery-Manager%2C-VP-D-D02-KF20/1369504733/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Site-Reliability-Engineering-%28SRE%29-Lead-VP-L-D02-KF20/1416693933/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Technology-Infrastructure-Assistant-Vice-President-D-D02-KF20/1401244133/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Temp-Information-Technology-Cross-Function-Assistant-Vice-President-D-D02-KF20/1410507633/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Temp-Information-Technology-Cross-Function-Vice-President-D-D02-KF20/1366911533/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Temp-PMO-Administrator-L-D02-KF20/1423848933/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Temp-TTR-Technical-Analyst-VP-L-D02-KF20/1419142033/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Temp-Technical-Data-Solution-Architect-%28VP%29-D-D02-KF20/1410500933/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Third-Party-Management-Oversight-Manager-Vice-President-%28mfd%29-D-D02-KF20/1364479733/",
+        "https://careersemea.smbcgroup.com/job/Dublin-Third-Party-Mgmt-Platform-IT-Owner-VP-L-D02-KF20/1420341533/"
+      ],
+      "distinct_jobs_seen": 30,
+      "current_live_jobs": 30
     }
   },
   "tracking_started": "2026-08-16",
-  "updated_at": "2026-08-17T22:13:25.065760+00:00",
-  "proven_working_company_count": 160,
-  "historical_distinct_jobs_seen": 2705
+  "updated_at": "2026-08-18T22:18:19.434578+00:00",
+  "proven_working_company_count": 169,
+  "historical_distinct_jobs_seen": 2893
 }
