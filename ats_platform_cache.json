@@ -2492,11 +2492,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Boston Consulting Group (BCG)": {
-    "platform": "greenhouse",
-    "slug": "boston",
-    "probe_version": 35
-  },
   "Bain & Company": {
     "platform": "none",
     "slug": null,
@@ -2982,14 +2977,19 @@
     "slug": "unilever|wd3|Unilever_Experienced_Professionals",
     "probe_version": 35
   },
+  "KLA Corporation": {
+    "platform": "workday",
+    "slug": "kla|wd1|Search",
+    "probe_version": 35
+  },
   "Publift": {
     "platform": "smartrecruiters",
     "slug": "job-widget",
     "probe_version": 35
   },
-  "KLA Corporation": {
-    "platform": "workday",
-    "slug": "kla|wd1|Search",
+  "Boston Consulting Group (BCG)": {
+    "platform": "greenhouse",
+    "slug": "boston",
     "probe_version": 35
   },
   "Primark / Penneys": {
