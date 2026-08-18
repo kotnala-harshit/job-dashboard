@@ -15618,6 +15618,541 @@ def scrape_marsh_mclennan_official():
     return list(results.values())
 
 
+
+# ============================================================================
+# LAST BATCH: IRISH RAIL + FORVIS MAZARS + ESB + DPS GROUP
+# ============================================================================
+
+def scrape_irish_rail():
+    """
+    Iarnród Éireann / Irish Rail official careers page.
+
+    Their official careers page is server-rendered and exposes current
+    opportunity pages directly, so collect those links rather than inventing
+    an ATS endpoint.
+    """
+    company = "Iarnród Éireann"
+    source_url = (
+        "https://www.irishrail.ie/en-ie/about-us/company-information/"
+        "career-opportunities-at-iarnrod-eireann"
+    )
+
+    page = _fetch_html(source_url) or ""
+    if not page:
+        try:
+            _mark_connector_health(
+                company,
+                False,
+                "Official Irish Rail careers page could not be loaded",
+                source_url,
+            )
+        except Exception:
+            pass
+        return []
+
+    results = {}
+    base = "https://www.irishrail.ie"
+
+    # Restrict links to the Career Opportunities section.
+    # Individual vacancy pages live beneath the same company-information area.
+    for m in re.finditer(
+        r'<a\b[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+        page,
+        re.I | re.S,
+    ):
+        href = html.unescape(m.group(1) or "").strip()
+        title = re.sub(
+            r"\s+",
+            " ",
+            html.unescape(_strip_html(m.group(2) or "")),
+        ).strip()
+
+        if not href or not title:
+            continue
+
+        low_title = title.lower()
+
+        # Ignore navigation/programme/general informational links.
+        if any(x in low_title for x in (
+            "career opportunities",
+            "graduate programme",
+            "apprenticeship programme",
+            "print page",
+            "company information",
+            "safety and security",
+        )):
+            continue
+
+        # Vacancy detail pages must stay under the careers opportunity path.
+        if "/career-opportunities-at-iarnrod-eireann/" not in href.lower():
+            continue
+
+        abs_url = _absolute_url(base, href)
+
+        if "irishrail.ie" not in abs_url.lower():
+            continue
+
+        # Current vacancy pages are exposed from the career-opportunities area.
+        evidence = f"{title} {href}".lower()
+
+        role_like = bool(re.search(
+            r"\b("
+            r"analyst|architect|engineer|manager|specialist|officer|"
+            r"administrator|supervisor|planner|technician|advisor|"
+            r"executive|controller|accountant|lead|director|coordinator|"
+            r"project|commercial|security|revenue"
+            r")\b",
+            evidence,
+            re.I,
+        ))
+
+        if not role_like:
+            continue
+
+        key = abs_url.split("#", 1)[0].rstrip("/").lower()
+        results[key] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": "Ireland",
+            "url": abs_url.split("#", 1)[0],
+            "updated_at": None,
+            "description_text": title,
+        }
+
+    try:
+        _mark_connector_health(
+            company,
+            bool(results),
+            (
+                f"Official Irish Rail careers page returned "
+                f"{len(results)} current opportunity links"
+            ),
+            source_url,
+        )
+    except Exception:
+        pass
+
+    print(f"  Iarnród Éireann official careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_esb():
+    """
+    ESB official SuccessFactors careers pages.
+
+    Parse both result pages and retain Republic-of-Ireland jobs only.
+    """
+    company = "ESB"
+    base = "https://careers.esb.ie"
+
+    urls = [
+        f"{base}/go/All-Jobs/882102/",
+        f"{base}/go/All-Jobs/882102/20/",
+        (
+            f"{base}/search/"
+            "?q=&q2=&alertId=&locationsearch=ireland"
+            "&title=&shifttype=&department=&location=dublin&date="
+        ),
+    ]
+
+    results = {}
+
+    for url in urls:
+        page = _fetch_html(url) or ""
+        if not page:
+            continue
+
+        # SAP SuccessFactors job links.
+        for m in re.finditer(
+            r'<a\b[^>]+href=["\']([^"\']*/job/[^"\']+)["\'][^>]*>'
+            r'(.*?)</a>',
+            page,
+            re.I | re.S,
+        ):
+            href = html.unescape(m.group(1) or "").strip()
+            title = re.sub(
+                r"\s+",
+                " ",
+                html.unescape(_strip_html(m.group(2) or "")),
+            ).strip()
+
+            if not href or not title:
+                continue
+
+            abs_url = _absolute_url(base, href)
+
+            # Pull surrounding row/card text for location validation.
+            start = max(0, m.start() - 1000)
+            end = min(len(page), m.end() + 1800)
+            card_html = page[start:end]
+            card_text = re.sub(
+                r"\s+",
+                " ",
+                html.unescape(_strip_html(card_html)),
+            ).strip()
+
+            # Republic of Ireland evidence from SuccessFactors locations.
+            if not re.search(
+                r"\b(?:IE|Ireland|Dublin|Cork|Galway|Limerick|"
+                r"Waterford|Athlone|Portlaoise|Santry|Finglas|"
+                r"Bandon|Leopardstown|Wilton)\b",
+                card_text,
+                re.I,
+            ):
+                continue
+
+            # Exclude explicit UK / Northern Ireland-only jobs.
+            if (
+                re.search(r"\b(?:Belfast|Northern Ireland|\bGB\b)\b",
+                          card_text, re.I)
+                and not re.search(r"\b(?:IE|Ireland)\b", card_text, re.I)
+            ):
+                continue
+
+            location = "Ireland"
+
+            lm = re.search(
+                r"\b("
+                r"Dublin|Cork|Galway|Limerick|Waterford|Athlone|"
+                r"Portlaoise|Santry|Finglas|Bandon|Leopardstown|Wilton"
+                r")\b[^|<]{0,80}\b(?:IE|Ireland)\b",
+                card_text,
+                re.I,
+            )
+            if lm:
+                city = lm.group(1).strip()
+                location = f"{city}, Ireland"
+
+            key = abs_url.split("?", 1)[0].rstrip("/").lower()
+            results[key] = {
+                "company": company,
+                "ats": "successfactors",
+                "title": title[:300],
+                "location": location,
+                "url": abs_url.split("?", 1)[0],
+                "updated_at": None,
+                "description_text": card_text[:5000],
+            }
+
+    try:
+        _mark_connector_health(
+            company,
+            bool(results),
+            f"Official ESB SuccessFactors board returned {len(results)} Ireland jobs",
+            urls[0],
+        )
+    except Exception:
+        pass
+
+    print(f"  ESB official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_forvis_mazars():
+    """
+    Forvis Mazars Ireland official People First board.
+
+    Use the user-validated Ireland search URL and collect only vacancy-detail
+    links whose surrounding result card contains Irish location evidence.
+    """
+    company = "Forvis Mazars"
+    source_url = (
+        "https://mazars.jobs.people-first.com/jobs/search"
+        "?distance=30&allLocations=false&q=&location=ireland"
+    )
+
+    page = _fetch_html(source_url) or ""
+
+    if not page:
+        try:
+            _mark_connector_health(
+                company,
+                False,
+                "Official Forvis Mazars People First board could not be loaded",
+                source_url,
+            )
+        except Exception:
+            pass
+        return []
+
+    results = {}
+    base = "https://mazars.jobs.people-first.com"
+
+    patterns = [
+        r'<a\b[^>]+href=["\']([^"\']*/jobs/[^"\']+)["\'][^>]*>(.*?)</a>',
+        r'<a\b[^>]+href=["\']([^"\']*/job/[^"\']+)["\'][^>]*>(.*?)</a>',
+    ]
+
+    for pattern in patterns:
+        for m in re.finditer(pattern, page, re.I | re.S):
+            href = html.unescape(m.group(1) or "").strip()
+            title = re.sub(
+                r"\s+",
+                " ",
+                html.unescape(_strip_html(m.group(2) or "")),
+            ).strip()
+
+            if not href or not title:
+                continue
+
+            if re.search(
+                r"\b(search|login|register|saved jobs|job alerts?)\b",
+                title,
+                re.I,
+            ):
+                continue
+
+            start = max(0, m.start() - 1200)
+            end = min(len(page), m.end() + 1800)
+            card = re.sub(
+                r"\s+",
+                " ",
+                html.unescape(_strip_html(page[start:end])),
+            ).strip()
+
+            evidence = f"{title} {card} {href}"
+
+            if not re.search(
+                r"\b(?:Ireland|Dublin|Cork|Galway|Limerick)\b",
+                evidence,
+                re.I,
+            ):
+                continue
+
+            abs_url = _absolute_url(base, href)
+            key = abs_url.split("?", 1)[0].rstrip("/").lower()
+
+            location = "Ireland"
+            lm = re.search(
+                r"\b(Dublin|Cork|Galway|Limerick),?\s*(?:Ireland)?\b",
+                evidence,
+                re.I,
+            )
+            if lm:
+                location = f"{lm.group(1).strip()}, Ireland"
+
+            results[key] = {
+                "company": company,
+                "ats": "people_first",
+                "title": title[:300],
+                "location": location,
+                "url": abs_url,
+                "updated_at": None,
+                "description_text": card[:5000],
+            }
+
+    try:
+        _mark_connector_health(
+            company,
+            bool(results),
+            (
+                f"Official Forvis Mazars People First board returned "
+                f"{len(results)} verified Ireland jobs"
+            ),
+            source_url,
+        )
+    except Exception:
+        pass
+
+    print(f"  Forvis Mazars official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_dps_group():
+    """
+    DPS Group official Ireland jobs page.
+
+    Collect only actual /job/... detail URLs and read the real job title
+    from each detail page instead of using generic 'SEE JOB DETAILS' text.
+    """
+    company = "DPS Group"
+    source_url = "https://www.dpsgroupglobal.com/careers/jobs/"
+
+    if not HAS_PLAYWRIGHT:
+        try:
+            _mark_connector_health(
+                company,
+                False,
+                "Official DPS Group jobs page requires JavaScript; Playwright unavailable",
+                source_url,
+            )
+        except Exception:
+            pass
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1400},
+            )
+
+            page = context.new_page()
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+            page.wait_for_timeout(5000)
+
+            links = page.locator("a").evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            candidates = {}
+
+            for item in links:
+                href = str(item.get("href") or "").strip()
+
+                # Real DPS vacancy pages only.
+                if not re.match(
+                    r"^https?://(?:www\.)?dpsgroupglobal\.com/job/[^/#?]+/?(?:[?#].*)?$",
+                    href,
+                    re.I,
+                ):
+                    continue
+
+                canonical = href.split("#", 1)[0].split("?", 1)[0]
+                candidates[canonical.rstrip("/").lower()] = canonical
+
+            for canonical in candidates.values():
+                detail = context.new_page()
+
+                try:
+                    resp = detail.goto(
+                        canonical,
+                        wait_until="domcontentloaded",
+                        timeout=45000,
+                    )
+                    detail.wait_for_timeout(800)
+
+                    if resp and resp.status >= 400:
+                        detail.close()
+                        continue
+
+                    body = detail.locator("body").inner_text(
+                        timeout=10000
+                    )
+                    body = re.sub(r"\r", "", body)
+
+                    # Republic of Ireland validation.
+                    if not re.search(
+                        r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford)\b",
+                        body,
+                        re.I,
+                    ):
+                        detail.close()
+                        continue
+
+                    title = ""
+
+                    try:
+                        title = detail.locator("h1").first.inner_text(
+                            timeout=3000
+                        ).strip()
+                    except Exception:
+                        pass
+
+                    if not title:
+                        try:
+                            title = detail.title()
+                        except Exception:
+                            title = ""
+
+                    title = re.sub(r"\s+", " ", title).strip()
+
+                    # Clean common site-name suffixes.
+                    title = re.sub(
+                        r"\s*[\|\-–—]\s*(?:DPS Group|DPS Engineering).*$",
+                        "",
+                        title,
+                        flags=re.I,
+                    ).strip()
+
+                    if not title:
+                        detail.close()
+                        continue
+
+                    # Reject navigation/generic labels.
+                    if title.lower() in {
+                        "see job details",
+                        "jobs",
+                        "careers",
+                        "dps group",
+                    }:
+                        detail.close()
+                        continue
+
+                    location = "Ireland"
+
+                    lm = re.search(
+                        r"\b(Dublin|Cork|Galway|Limerick|Waterford)"
+                        r"(?:,\s*(?:Co\.\s*)?[A-Za-z ]+)?"
+                        r"(?:,\s*Ireland)?\b",
+                        body,
+                        re.I,
+                    )
+                    if lm:
+                        location = f"{lm.group(1).strip()}, Ireland"
+
+                    key = canonical.rstrip("/").lower()
+
+                    results[key] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": location,
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": body[:5000],
+                    }
+
+                except Exception:
+                    pass
+                finally:
+                    try:
+                        detail.close()
+                    except Exception:
+                        pass
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        try:
+            _mark_connector_health(
+                company,
+                False,
+                f"Official DPS Group jobs page blocked/unavailable: {exc}",
+                source_url,
+            )
+        except Exception:
+            pass
+
+        print(f"  ! DPS Group scrape failed: {exc}")
+        return []
+
+    try:
+        _mark_connector_health(
+            company,
+            bool(results),
+            f"Official DPS Group careers page returned {len(results)} verified Ireland jobs",
+            source_url,
+        )
+    except Exception:
+        pass
+
+    print(f"  DPS Group official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     if company in UNIVERSITY_CAREER_PAGES:
         return scrape_university_official(company)
@@ -15637,6 +16172,14 @@ def scrape_direct_company(company: str):
         "Honeywell": scrape_honeywell,
         "HCLTech": scrape_hcltech,
         "Irish Life": scrape_irish_life,
+        "Iarnród Éireann": scrape_irish_rail,
+        "Irish Rail": scrape_irish_rail,
+        "Irish Rail (Iarnrod Eireann)": scrape_irish_rail,
+        "Forvis Mazars": scrape_forvis_mazars,
+        "Forvis Mazars Ireland": scrape_forvis_mazars,
+        "ESB": scrape_esb,
+        "DPS Group": scrape_dps_group,
+        "DPS Group (Arcadis)": scrape_dps_group,
         "Irish Revenue": scrape_revenue_ie,
         "Revenue": scrape_revenue_ie,
         "Revenue.ie": scrape_revenue_ie,
