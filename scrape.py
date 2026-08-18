@@ -3017,6 +3017,58 @@ def scrape_oracle_candidate_experience(
     return out
 
 
+
+def scrape_citco():
+    """
+    Citco official Ireland careers via Oracle Recruiting Candidate Experience.
+
+    Official tenant:
+      https://fa-euxc-saasfaprod1.fa.ocs.oraclecloud.com/
+      hcmUI/CandidateExperience/en/sites/CX_1/jobs
+
+    Reuses the generic Oracle CE REST collector so we avoid browser
+    automation whenever Oracle's public recruiting endpoint is available.
+    """
+    company = "Citco"
+    source = (
+        "https://fa-euxc-saasfaprod1.fa.ocs.oraclecloud.com/"
+        "hcmUI/CandidateExperience/en/sites/CX_1/jobs"
+        "?lastSelectedFacet=LOCATION_LEVEL1"
+        "&selectedLocationLevel1Facet=300000000431877"
+    )
+
+    try:
+        jobs = scrape_oracle_candidate_experience(
+            company,
+            "https://fa-euxc-saasfaprod1.fa.ocs.oraclecloud.com",
+            "CX_1",
+            "IE",
+        )
+    except Exception as exc:
+        print(f"  ! Citco Oracle collector failed: {exc}")
+        jobs = []
+
+    try:
+        _mark_connector_health(
+            company,
+            True,
+            (
+                f"Official Citco Oracle careers returned "
+                f"{len(jobs)} Republic of Ireland jobs"
+            ),
+            source,
+        )
+    except Exception:
+        pass
+
+    print(
+        f"  Citco Oracle Candidate Experience: "
+        f"{len(jobs)} Ireland jobs"
+    )
+
+    return jobs
+
+
 def scrape_jpmorgan():
     return scrape_oracle_candidate_experience(
         "JPMorgan Chase",
@@ -15263,6 +15315,309 @@ def scrape_dawn_meats():
     return list(results.values())
 
 
+
+
+def scrape_marsh_mclennan_official():
+    """
+    Marsh McLennan / Marsh official Ireland careers.
+
+    Official careers platform:
+        https://careers.marsh.com/global/en/search-results
+
+    Current site is Phenom-backed.
+    """
+
+    company = "Marsh McLennan"
+    source_url = "https://careers.marsh.com/global/en/search-results"
+
+    results = {}
+
+    # ------------------------------------------------------------
+    # 1. Prefer any existing generic Phenom collector already
+    #    present in this scraper.
+    # ------------------------------------------------------------
+    attempts = []
+
+    if "scrape_phenom" in globals():
+        attempts += [
+            lambda: scrape_phenom(company, "Marsh"),
+            lambda: scrape_phenom(company, "MAMCGLOBAL"),
+            lambda: scrape_phenom(company, "https://careers.marsh.com"),
+        ]
+
+    if "scrape_phenom_company" in globals():
+        attempts += [
+            lambda: scrape_phenom_company(company, "Marsh"),
+            lambda: scrape_phenom_company(company, "MAMCGLOBAL"),
+            lambda: scrape_phenom_company(company, "https://careers.marsh.com"),
+        ]
+
+    for attempt in attempts:
+        try:
+            rows = attempt() or []
+        except Exception:
+            continue
+
+        for job in rows:
+            if not isinstance(job, dict):
+                continue
+
+            title = str(job.get("title") or "").strip()
+            location = str(job.get("location") or "").strip()
+            url = str(job.get("url") or "").strip()
+            desc = str(job.get("description_text") or "")
+
+            if not title or not url:
+                continue
+
+            blob = f"{title} {location} {url} {desc}"
+
+            if re.search(r"\bNorthern Ireland\b|\bBelfast\b", blob, re.I):
+                continue
+
+            if not re.search(
+                r"\bIreland\b|\bDublin\b|\bCork\b|\bGalway\b|"
+                r"\bLimerick\b|\bWaterford\b|\bIE\b",
+                blob,
+                re.I,
+            ):
+                continue
+
+            key = url.split("#", 1)[0].rstrip("/").lower()
+
+            item = dict(job)
+            item["company"] = company
+            item["ats"] = "phenom"
+
+            if not location:
+                if re.search(r"\bDublin\b", blob, re.I):
+                    item["location"] = "Dublin, Ireland"
+                elif re.search(r"\bCork\b", blob, re.I):
+                    item["location"] = "Cork, Ireland"
+                else:
+                    item["location"] = "Ireland"
+
+            results[key] = item
+
+        if results:
+            break
+
+    # ------------------------------------------------------------
+    # 2. Browser-rendered fallback.
+    # ------------------------------------------------------------
+    if not results and HAS_PLAYWRIGHT:
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+
+                context = browser.new_context(
+                    locale="en-IE",
+                    viewport={"width": 1440, "height": 1500},
+                    user_agent=(
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/124.0.0.0 Safari/537.36"
+                    ),
+                )
+
+                page = context.new_page()
+
+                discovered = {}
+
+                urls = [
+                    source_url + "?keywords=Ireland",
+                    source_url + "?location=Ireland",
+                    source_url + "?from=0&s=1",
+                ]
+
+                for start_url in urls:
+                    try:
+                        page.goto(
+                            start_url,
+                            wait_until="domcontentloaded",
+                            timeout=60000,
+                        )
+                        page.wait_for_timeout(2500)
+                    except Exception:
+                        continue
+
+                    for offset in range(0, 300, 10):
+                        if offset:
+                            try:
+                                page.goto(
+                                    source_url + f"?from={offset}&s=1",
+                                    wait_until="domcontentloaded",
+                                    timeout=45000,
+                                )
+                                page.wait_for_timeout(1600)
+                            except Exception:
+                                break
+
+                        try:
+                            anchors = page.locator("a").evaluate_all(
+                                """els => els.map(a => ({
+                                    href: a.href || "",
+                                    text: (
+                                        a.innerText ||
+                                        a.textContent ||
+                                        ""
+                                    ).trim()
+                                }))"""
+                            )
+                        except Exception:
+                            anchors = []
+
+                        before = len(discovered)
+
+                        for a in anchors:
+                            href = str(a.get("href") or "").strip()
+                            title = re.sub(
+                                r"\s+",
+                                " ",
+                                str(a.get("text") or ""),
+                            ).strip()
+
+                            if not href or not title:
+                                continue
+
+                            if "careers.marsh.com" not in href.lower():
+                                continue
+
+                            if not re.search(
+                                r"/job/|/jobs/|jobdetail|job-detail",
+                                href,
+                                re.I,
+                            ):
+                                continue
+
+                            key = href.split("#", 1)[0].rstrip("/").lower()
+
+                            discovered[key] = {
+                                "url": href.split("#", 1)[0],
+                                "title": title,
+                            }
+
+                        if offset and len(discovered) == before:
+                            break
+
+                    if discovered:
+                        break
+
+                for key, seed in discovered.items():
+                    detail = context.new_page()
+
+                    try:
+                        resp = detail.goto(
+                            seed["url"],
+                            wait_until="domcontentloaded",
+                            timeout=45000,
+                        )
+                        detail.wait_for_timeout(700)
+
+                        if resp and resp.status >= 400:
+                            detail.close()
+                            continue
+
+                        body = detail.locator("body").inner_text(
+                            timeout=10000
+                        )
+                    except Exception:
+                        detail.close()
+                        continue
+
+                    body = re.sub(r"\r", "", body)
+
+                    if re.search(
+                        r"\bNorthern Ireland\b|\bBelfast\b",
+                        body,
+                        re.I,
+                    ):
+                        detail.close()
+                        continue
+
+                    if not re.search(
+                        r"\bIreland\b|\bDublin\b|\bCork\b|\bGalway\b|"
+                        r"\bLimerick\b|\bWaterford\b",
+                        body,
+                        re.I,
+                    ):
+                        detail.close()
+                        continue
+
+                    title = seed["title"]
+
+                    try:
+                        h1 = detail.locator("h1").first.inner_text(
+                            timeout=2500
+                        ).strip()
+                        if h1:
+                            title = h1
+                    except Exception:
+                        pass
+
+                    title = re.sub(r"\s+", " ", title).strip()
+
+                    if not title:
+                        detail.close()
+                        continue
+
+                    top = "\n".join(body.splitlines()[:100])
+
+                    location = "Ireland"
+
+                    lm = re.search(
+                        r"\b(Dublin|Cork|Galway|Limerick|Waterford)"
+                        r"(?:[^,\n]{0,30})?,?\s*Ireland\b",
+                        top,
+                        re.I,
+                    )
+
+                    if lm:
+                        location = lm.group(1).title() + ", Ireland"
+                    elif re.search(r"\bDublin\b", top, re.I):
+                        location = "Dublin, Ireland"
+                    elif re.search(r"\bCork\b", top, re.I):
+                        location = "Cork, Ireland"
+
+                    results[key] = {
+                        "company": company,
+                        "ats": "phenom",
+                        "title": title[:300],
+                        "location": location,
+                        "url": seed["url"],
+                        "updated_at": None,
+                        "description_text": body[:5000],
+                    }
+
+                    detail.close()
+
+                context.close()
+                browser.close()
+
+        except Exception as exc:
+            print(f"  ! Marsh McLennan browser fallback failed: {exc}")
+
+    try:
+        _mark_connector_health(
+            company,
+            bool(results),
+            (
+                f"Official Marsh Phenom board returned "
+                f"{len(results)} verified Ireland jobs"
+            ),
+            source_url,
+        )
+    except Exception:
+        pass
+
+    print(
+        f"  Marsh McLennan official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     if company in UNIVERSITY_CAREER_PAGES:
         return scrape_university_official(company)
@@ -15328,6 +15683,7 @@ def scrape_direct_company(company: str):
         "Fidelity International": scrape_fidelity_international,
         "Bloomberg": scrape_bloomberg,
         "BlackRock": scrape_blackrock,
+        "Citco": scrape_citco,
         "Bank of Ireland": scrape_bank_of_ireland,
         "Google": scrape_google,
         "Microsoft": scrape_microsoft,
@@ -15414,7 +15770,8 @@ def scrape_direct_company(company: str):
         "CGI": scrape_cgi_ireland,
         "Dawn Meats": scrape_dawn_meats,
         "Decathlon Ireland": scrape_decathlon_ireland,
-    }.get(company)
+            "Marsh McLennan": scrape_marsh_mclennan_official,
+}.get(company)
     return fn() if fn else []
 
 
@@ -16070,7 +16427,9 @@ def scrape_three_ireland():
     company = "Three Ireland"
     source = (
         "https://three-ireland.csod.com/ux/ats/careersite/5/home"
-        "?c=three-ireland&country=ie"
+        "?c=three-ireland"
+        "&lq=Ireland"
+        "&pl=ChIJ-ydAXOS6WUgRCPTbzjQSfM8"
     )
 
     if not HAS_PLAYWRIGHT:
