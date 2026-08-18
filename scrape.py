@@ -6076,7 +6076,7 @@ def scrape_harvey_nash():
 def scrape_smbc_group():
     company = "SMBC Group"
     urls = [
-        "https://careersemea.smbcgroup.com/search/?q=&locationsearch=Ireland",
+        "https://careersemea.smbcgroup.com/search/?createNewAlert=false&q=&locationsearch=ireland&optionsFacetsDD_country=&optionsFacetsDD_city=&optionsFacetsDD_department=",
         "https://careersemea.smbcgroup.com/search/?q=&locationsearch=Dublin",
         "https://careers.smbcgroup.com/smbc/search/?q=&locationsearch=Tralee",
     ]
