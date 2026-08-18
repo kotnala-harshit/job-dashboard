@@ -2582,11 +2582,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "KLA Corporation": {
-    "platform": "workday",
-    "slug": "kla|wd1|Search",
-    "probe_version": 35
-  },
   "Micron Technology": {
     "platform": "eightfold",
     "slug": "micron",
@@ -2990,6 +2985,11 @@
   "Publift": {
     "platform": "smartrecruiters",
     "slug": "job-widget",
+    "probe_version": 35
+  },
+  "KLA Corporation": {
+    "platform": "workday",
+    "slug": "kla|wd1|Search",
     "probe_version": 35
   },
   "Primark / Penneys": {
