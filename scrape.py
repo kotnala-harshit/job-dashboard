@@ -16154,6 +16154,24 @@ def scrape_dps_group():
 
 
 def scrape_direct_company(company: str):
+    # BEGIN SALE_READY_DIRECT_CONNECTORS
+    # Canonical/alias names that must use their verified official collectors.
+    _verified_direct_connectors = {
+        'Iarnród Éireann': scrape_irish_rail,
+        'Irish Rail (Iarnród Éireann)': scrape_irish_rail,
+        'Irish Life': scrape_irish_life,
+        'Forvis Mazars': scrape_forvis_mazars,
+        'ESB': scrape_esb,
+        'DPS Group': scrape_dps_group,
+        'SMBC Group': scrape_smbc_group,
+        'S&P Global': scrape_sp_global,
+        'JPMorgan Chase': scrape_jpmorgan,
+        'BlackRock': scrape_blackrock,
+    }
+    _direct_fn = _verified_direct_connectors.get(company)
+    if _direct_fn is not None:
+        return _direct_fn()
+    # END SALE_READY_DIRECT_CONNECTORS
     if company in UNIVERSITY_CAREER_PAGES:
         return scrape_university_official(company)
     fn={
