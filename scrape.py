@@ -286,7 +286,16 @@ def build_company_registry(include_cache: bool = False):
     return registry
 
 def curated_company_key_set():
-    return {_company_key(name) for name, _url, _source_type, _category in _load_company_master()}
+    keys = {
+        _company_key(name)
+        for name, _url, _source_type, _category in _load_company_master()
+    }
+
+    # Explicit validated employer that is distinct from
+    # "SMBC Aviation Capital" in the master CSV.
+    keys.add(_company_key("SMBC Group"))
+
+    return keys
 
 def is_curated_company_name(name: str) -> bool:
     key = _company_key(company_display_name(name))
@@ -335,7 +344,26 @@ def company_display_name(raw: str) -> str:
         "sig": "Susquehanna International Group (SIG)",
         "susquehannainternationalgroup": "Susquehanna International Group (SIG)",
         "heineken": "Heineken Ireland",
+        "iarnrdireann": "Irish Rail (Iarnród Éireann)",
+        "irishrail": "Irish Rail (Iarnród Éireann)",
+        "irishrailiarnrdireann": "Irish Rail (Iarnród Éireann)",
+        "forvismazars": "Forvis Mazars Ireland",
+        "forvismazarsireland": "Forvis Mazars Ireland",
+        "dpsgroup": "DPS Group (Arcadis)",
+        "dpsgrouparcadis": "DPS Group (Arcadis)",
+
+        # Canonical names required by the master Ireland company universe.
+        "iarnrdireann": "Irish Rail (Iarnród Éireann)",
+        "irishrail": "Irish Rail (Iarnród Éireann)",
+        "forvismazars": "Forvis Mazars Ireland",
+        "dpsgroup": "DPS Group (Arcadis)",
     }
+
+    # SMBC Group is a separately validated Ireland employer from
+    # SMBC Aviation Capital. Keep its official dashboard name.
+    if key == "smbcgroup":
+        return "SMBC Group"
+
     return aliases.get(key, raw)
 
 
@@ -412,6 +440,14 @@ def _mark_connector_health(company, live=True, note=None, url=None):
 # without failing the whole run; the dashboard then exposes it under
 # "Zero jobs scraped" for diagnosis.
 DIRECT_COMPANY_CONNECTORS = {
+    "Irish Rail (Iarnród Éireann)": "irish_rail",
+    "Irish Life": "irish_life",
+    "Forvis Mazars Ireland": "forvis_mazars",
+    "ESB": "esb",
+    "DPS Group (Arcadis)": "dps_group",
+    "S&P Global": "sp_global",
+    "JPMorgan Chase": "jpmorgan",
+    "BlackRock": "blackrock",
     "Accenture": "accenture",
     "Citi": "citi",
     "Apple": "apple",
@@ -15631,7 +15667,7 @@ def scrape_irish_rail():
     opportunity pages directly, so collect those links rather than inventing
     an ATS endpoint.
     """
-    company = "Iarnród Éireann"
+    company = "Irish Rail (Iarnród Éireann)"
     source_url = (
         "https://www.irishrail.ie/en-ie/about-us/company-information/"
         "career-opportunities-at-iarnrod-eireann"
@@ -15856,7 +15892,7 @@ def scrape_forvis_mazars():
     Use the user-validated Ireland search URL and collect only vacancy-detail
     links whose surrounding result card contains Irish location evidence.
     """
-    company = "Forvis Mazars"
+    company = "Forvis Mazars Ireland"
     source_url = (
         "https://mazars.jobs.people-first.com/jobs/search"
         "?distance=30&allLocations=false&q=&location=ireland"
@@ -15966,7 +16002,7 @@ def scrape_dps_group():
     Collect only actual /job/... detail URLs and read the real job title
     from each detail page instead of using generic 'SEE JOB DETAILS' text.
     """
-    company = "DPS Group"
+    company = "DPS Group (Arcadis)"
     source_url = "https://www.dpsgroupglobal.com/careers/jobs/"
 
     if not HAS_PLAYWRIGHT:
