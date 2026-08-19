@@ -2862,11 +2862,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Life Style Sports": {
-    "platform": "lever",
-    "slug": "life",
-    "probe_version": 35
-  },
   "Maldron Hotels": {
     "platform": "none",
     "slug": null,
@@ -2990,6 +2985,11 @@
   "Publift": {
     "platform": "smartrecruiters",
     "slug": "job-widget",
+    "probe_version": 35
+  },
+  "Life Style Sports": {
+    "platform": "lever",
+    "slug": "life",
     "probe_version": 35
   },
   "Primark / Penneys": {
