@@ -19705,5 +19705,808 @@ def scrape_direct_company(company, *args, **kwargs):
 
 # === WORKING_IRELAND_BATCH_END ===
 
+# === UVWT_FINAL_START ===
+
+def _uvwt_clean(value):
+    return re.sub(r"\s+", " ", str(value or "")).strip()
+
+
+def _uvwt_canonical(url):
+    try:
+        p = urllib.parse.urlsplit(url)
+        return urllib.parse.urlunsplit(
+            (p.scheme, p.netloc, p.path, "", "")
+        )
+    except Exception:
+        return url
+
+
+def _uvwt_location(text):
+    text = _uvwt_clean(text)
+
+    for city in (
+        "Dublin",
+        "Kilkenny",
+        "Cork",
+        "Galway",
+        "Limerick",
+        "Waterford",
+        "Swords",
+        "Blanchardstown",
+        "Liffey Valley",
+        "Tallaght",
+        "Naas",
+    ):
+        if re.search(
+            rf"\b{re.escape(city)}\b",
+            text,
+            re.I,
+        ):
+            return f"{city}, Ireland"
+
+    if re.search(r"\bremote\b", text, re.I):
+        return "Remote, Ireland"
+
+    return "Ireland"
+
+
+def _uvwt_browser_jobs(
+    company,
+    source_url,
+    job_pattern,
+    max_pages=20,
+):
+    try:
+        from playwright.sync_api import sync_playwright
+    except Exception as exc:
+        print(f"  ! {company}: Playwright unavailable: {exc}")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/139.0 Safari/537.36"
+                ),
+                locale="en-IE",
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=45000,
+            )
+
+            page.wait_for_timeout(2500)
+
+            try:
+                _dismiss_cookie_banner(page)
+            except Exception:
+                pass
+
+            seen_signatures = set()
+
+            for page_no in range(1, max_pages + 1):
+                for _ in range(4):
+                    page.mouse.wheel(0, 1800)
+                    page.wait_for_timeout(200)
+
+                before = len(results)
+                page_urls = []
+
+                anchors = page.locator("a[href]")
+
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+
+                    try:
+                        raw = a.get_attribute("href") or ""
+                    except Exception:
+                        continue
+
+                    if not raw:
+                        continue
+
+                    href = urllib.parse.urljoin(
+                        page.url,
+                        raw,
+                    ).split("#")[0]
+
+                    if not re.search(
+                        job_pattern,
+                        href,
+                        re.I,
+                    ):
+                        continue
+
+                    if "/apply?" in href.lower():
+                        continue
+
+                    canonical = _uvwt_canonical(href)
+                    page_urls.append(canonical)
+
+                    try:
+                        title = _uvwt_clean(
+                            a.inner_text(timeout=1000)
+                        )
+                    except Exception:
+                        title = ""
+
+                    if title.lower() in {
+                        "",
+                        "view job",
+                        "apply",
+                        "apply now",
+                        "details",
+                        "learn more",
+                    }:
+                        path = urllib.parse.urlsplit(
+                            canonical
+                        ).path.rstrip("/")
+
+                        slug = (
+                            path.split("/")[-1]
+                            if path
+                            else ""
+                        )
+
+                        title = _uvwt_clean(
+                            urllib.parse.unquote(slug)
+                            .replace("-", " ")
+                            .replace("_", " ")
+                        )
+
+                    if not title:
+                        continue
+
+                    try:
+                        card = a.evaluate(
+                            """el => {
+                                let n = el;
+
+                                for (
+                                    let i = 0;
+                                    i < 8 && n;
+                                    i++, n = n.parentElement
+                                ) {
+                                    const t = (n.innerText || '')
+                                        .replace(/\\s+/g, ' ')
+                                        .trim();
+
+                                    if (
+                                        t.length > 20 &&
+                                        t.length < 5000
+                                    ) {
+                                        return t;
+                                    }
+                                }
+
+                                return '';
+                            }"""
+                        )
+                    except Exception:
+                        card = title
+
+                    text = _uvwt_clean(card)
+
+                    results[canonical] = {
+                        "company": company,
+                        "ats": "official",
+                        "title": title[:300],
+                        "location": _uvwt_location(text),
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": text[:5000],
+                    }
+
+                signature = tuple(sorted(set(page_urls)))
+
+                print(
+                    f"    {company} page {page_no}: "
+                    f"+{len(results)-before} "
+                    f"/ total {len(results)}"
+                )
+
+                if not signature:
+                    break
+
+                if signature in seen_signatures:
+                    break
+
+                seen_signatures.add(signature)
+
+                next_link = None
+
+                selectors = (
+                    '[data-ph-at-id="pagination-next-link"]',
+                    'a[rel="next"]',
+                    'a[aria-label*="next" i]',
+                )
+
+                for selector in selectors:
+                    loc = page.locator(selector)
+
+                    if not loc.count():
+                        continue
+
+                    for j in range(loc.count()):
+                        try:
+                            if loc.nth(j).is_visible():
+                                next_link = loc.nth(j)
+                                break
+                        except Exception:
+                            pass
+
+                    if next_link is not None:
+                        break
+
+                if next_link is None:
+                    try:
+                        loc = page.get_by_role(
+                            "link",
+                            name=re.compile(
+                                r"^\s*Next\s*$",
+                                re.I,
+                            ),
+                        )
+
+                        if loc.count():
+                            next_link = loc.first
+                    except Exception:
+                        pass
+
+                if next_link is None:
+                    break
+
+                try:
+                    next_link.click(
+                        force=True,
+                        timeout=10000,
+                    )
+                    page.wait_for_timeout(1800)
+                except Exception:
+                    break
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! {company} browser scrape failed: {exc}")
+
+    jobs = list(results.values())
+
+    print(
+        f"  {company} official careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+def scrape_walkers():
+    company = "Walkers Ireland"
+
+    source = (
+        "https://careers.walkersglobal.com/search/"
+        "?createNewAlert=false"
+        "&q="
+        "&optionsFacetsDD_location="
+        "Dublin%2C+IE%2C+D01+W213"
+        "&optionsFacetsDD_title="
+    )
+
+    sess = _session()
+
+    if not sess:
+        print("  ! Walkers Ireland: HTTP session unavailable")
+        return []
+
+    results = {}
+
+    try:
+        from bs4 import BeautifulSoup
+
+        r = sess.get(
+            source,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+            timeout=30,
+        )
+
+        if r.status_code != 200:
+            print(
+                f"  ! Walkers Ireland HTTP "
+                f"{r.status_code}"
+            )
+            return []
+
+        soup = BeautifulSoup(
+            r.text,
+            "html.parser",
+        )
+
+        for a in soup.find_all("a", href=True):
+            href = urllib.parse.urljoin(
+                source,
+                a.get("href") or "",
+            )
+
+            if "/job/" not in href.lower():
+                continue
+
+            title = _uvwt_clean(
+                a.get_text(" ", strip=True)
+            )
+
+            if not title:
+                continue
+
+            canonical = _uvwt_canonical(href)
+
+            results[canonical] = {
+                "company": company,
+                "ats": "successfactors",
+                "title": title[:300],
+                "location": "Dublin, Ireland",
+                "url": canonical,
+                "updated_at": None,
+                "description_text": "Dublin, IE, D01 W213",
+            }
+
+    except Exception as exc:
+        print(f"  ! Walkers Ireland failed: {exc}")
+
+    jobs = list(results.values())
+
+    try:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official Walkers Dublin board returned {len(jobs)} jobs",
+            source,
+        )
+    except Exception:
+        pass
+
+    print(
+        f"  Walkers Ireland official careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+def scrape_ups():
+    company = "UPS Ireland"
+
+    source = (
+        "https://www.jobs-ups.com/global/en/search-results"
+        "?p=ChIJL6wn6oAOZ0gRoHExl6nHAAo"
+        "&location=Dublin%2C%20Ireland"
+    )
+
+    jobs = _uvwt_browser_jobs(
+        company,
+        source,
+        r"/global/en/job/",
+        max_pages=20,
+    )
+
+    cleaned = {}
+
+    for j in jobs:
+        text = " ".join([
+            str(j.get("location") or ""),
+            str(j.get("description_text") or ""),
+            str(j.get("url") or ""),
+        ])
+
+        if not re.search(
+            r"\bIreland\b|\bDublin\b",
+            text,
+            re.I,
+        ):
+            continue
+
+        cleaned[j["url"]] = j
+
+    jobs = list(cleaned.values())
+
+    try:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official UPS Dublin board returned {len(jobs)} jobs",
+            source,
+        )
+    except Exception:
+        pass
+
+    print(
+        f"  UPS Ireland official careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+def scrape_three_ireland():
+    company = "Three Ireland"
+
+    source = (
+        "https://three-ireland.csod.com/"
+        "ux/ats/careersite/5/home"
+        "?c=three-ireland"
+        "&country=ie"
+    )
+
+    try:
+        from playwright.sync_api import sync_playwright
+    except Exception as exc:
+        print(f"  ! Three Ireland: Playwright unavailable: {exc}")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/139.0 Safari/537.36"
+                ),
+                locale="en-IE",
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=45000,
+            )
+
+            page.wait_for_timeout(3500)
+
+            try:
+                _dismiss_cookie_banner(page)
+            except Exception:
+                pass
+
+            for _ in range(6):
+                page.mouse.wheel(0, 1800)
+                page.wait_for_timeout(250)
+
+            anchors = page.locator("a[href]")
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+
+                try:
+                    raw = a.get_attribute("href") or ""
+                except Exception:
+                    continue
+
+                if not raw:
+                    continue
+
+                href = urllib.parse.urljoin(
+                    page.url,
+                    raw,
+                ).split("#")[0]
+
+                # Cornerstone detail routes generally expose requisition/
+                # job-specific route parameters.
+                if not re.search(
+                    r"(?:job|requisition|position|ats)"
+                    r".*(?:id|req|job|position)",
+                    href,
+                    re.I,
+                ):
+                    continue
+
+                canonical = _uvwt_canonical(href)
+
+                try:
+                    title = _uvwt_clean(
+                        a.inner_text(timeout=1000)
+                    )
+                except Exception:
+                    title = ""
+
+                if not title:
+                    continue
+
+                if title.lower() in {
+                    "home",
+                    "careers",
+                    "search jobs",
+                    "job search",
+                    "three ireland",
+                    "view all jobs",
+                }:
+                    continue
+
+                try:
+                    card = a.evaluate(
+                        """el => {
+                            let n = el;
+
+                            for (
+                                let i = 0;
+                                i < 8 && n;
+                                i++, n = n.parentElement
+                            ) {
+                                const t = (n.innerText || '')
+                                    .replace(/\\s+/g, ' ')
+                                    .trim();
+
+                                if (
+                                    t.length > 20 &&
+                                    t.length < 5000
+                                ) {
+                                    return t;
+                                }
+                            }
+
+                            return '';
+                        }"""
+                    )
+                except Exception:
+                    card = title
+
+                text = _uvwt_clean(card)
+
+                results[canonical] = {
+                    "company": company,
+                    "ats": "cornerstone",
+                    "title": title[:300],
+                    "location": _uvwt_location(text),
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": text[:5000],
+                }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Three Ireland scrape failed: {exc}")
+
+    jobs = list(results.values())
+
+    try:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official Three Ireland CSOD returned {len(jobs)} jobs",
+            source,
+        )
+    except Exception:
+        pass
+
+    print(
+        f"  Three Ireland official careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+def scrape_vhi():
+    company = "Vhi"
+
+    source = "https://www1.vhi.ie/about/careers"
+
+    try:
+        from playwright.sync_api import sync_playwright
+    except Exception as exc:
+        print(f"  ! Vhi: Playwright unavailable: {exc}")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/139.0 Safari/537.36"
+                ),
+                locale="en-IE",
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=45000,
+            )
+
+            page.wait_for_timeout(3000)
+
+            try:
+                _dismiss_cookie_banner(page)
+            except Exception:
+                pass
+
+            frames = []
+
+            for frame in page.frames:
+                if frame not in frames:
+                    frames.append(frame)
+
+            for frame in frames:
+                try:
+                    anchors = frame.locator("a[href]")
+                    count = anchors.count()
+                except Exception:
+                    continue
+
+                for i in range(count):
+                    a = anchors.nth(i)
+
+                    try:
+                        raw = a.get_attribute("href") or ""
+                    except Exception:
+                        continue
+
+                    if not raw:
+                        continue
+
+                    href = urllib.parse.urljoin(
+                        frame.url or source,
+                        raw,
+                    ).split("#")[0]
+
+                    if (
+                        "candidatemanager.net"
+                        not in href.lower()
+                    ):
+                        continue
+
+                    try:
+                        title = _uvwt_clean(
+                            a.inner_text(timeout=1000)
+                        )
+                    except Exception:
+                        title = ""
+
+                    if not title:
+                        continue
+
+                    canonical = _uvwt_canonical(href)
+
+                    try:
+                        card = a.evaluate(
+                            """el => {
+                                let n = el;
+
+                                for (
+                                    let i = 0;
+                                    i < 7 && n;
+                                    i++, n = n.parentElement
+                                ) {
+                                    const t = (n.innerText || '')
+                                        .replace(/\\s+/g, ' ')
+                                        .trim();
+
+                                    if (
+                                        t.length > 20 &&
+                                        t.length < 4000
+                                    ) {
+                                        return t;
+                                    }
+                                }
+
+                                return '';
+                            }"""
+                        )
+                    except Exception:
+                        card = title
+
+                    text = _uvwt_clean(card)
+
+                    # Ignore generic CandidateManager account/nav links.
+                    if not (
+                        re.search(
+                            r"(vacanc|job|role|position|recruit)",
+                            canonical,
+                            re.I,
+                        )
+                        or re.search(
+                            r"(advisor|manager|analyst|engineer|"
+                            r"specialist|executive|nurse|doctor|"
+                            r"developer|consultant|officer|"
+                            r"administrator|associate)",
+                            text,
+                            re.I,
+                        )
+                    ):
+                        continue
+
+                    results[canonical] = {
+                        "company": company,
+                        "ats": "candidatemanager",
+                        "title": title[:300],
+                        "location": _uvwt_location(text),
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": text[:5000],
+                    }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Vhi scrape failed: {exc}")
+
+    jobs = list(results.values())
+
+    try:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official Vhi careers returned {len(jobs)} jobs",
+            source,
+        )
+    except Exception:
+        pass
+
+    print(
+        f"  Vhi official careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+# Preserve the currently tested dispatcher.
+_uvwt_previous_direct = scrape_direct_company
+
+
+def scrape_direct_company(company, *args, **kwargs):
+    overrides = {
+        "UPS Ireland": scrape_ups,
+        "UPS": scrape_ups,
+        "Vhi": scrape_vhi,
+        "VHI": scrape_vhi,
+        "Vhi Healthcare": scrape_vhi,
+        "Walkers Ireland": scrape_walkers,
+        "Walkers": scrape_walkers,
+        "Three Ireland": scrape_three_ireland,
+    }
+
+    fn = overrides.get(company)
+
+    if fn is not None:
+        return fn()
+
+    return _uvwt_previous_direct(
+        company,
+        *args,
+        **kwargs,
+    )
+
+
+# === UVWT_FINAL_END ===
+
 if __name__ == "__main__":
     main()
