@@ -2862,11 +2862,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Life Style Sports": {
-    "platform": "lever",
-    "slug": "life",
-    "probe_version": 35
-  },
   "Maldron Hotels": {
     "platform": "none",
     "slug": null,
@@ -2985,6 +2980,11 @@
   "Boston Consulting Group (BCG)": {
     "platform": "greenhouse",
     "slug": "boston",
+    "probe_version": 35
+  },
+  "Life Style Sports": {
+    "platform": "lever",
+    "slug": "life",
     "probe_version": 35
   },
   "Publift": {
