@@ -424,6 +424,9 @@ CONNECTOR_HEALTH = {}
 # Do NOT infer healthy-zero merely from an HTTP 200 response.
 VERIFIED_LIVE_ZERO_COMPANIES = {
     "Central Bank of Ireland",
+
+    "Qualcomm",
+    "HSBC Ireland",
 }
 
 def _mark_connector_health(company, live=True, note=None, url=None):
@@ -3247,6 +3250,7 @@ def _scrape_accenture_playwright():
 
     search_url = "https://www.accenture.com/ie-en/careers/jobsearch"
     results = {}
+    official_board_loaded = False
 
     try:
         with sync_playwright() as pw:
@@ -4142,6 +4146,7 @@ def scrape_hsbc():
                     )
                     page.wait_for_timeout(2500)
                     _dismiss_cookie_banner(page)
+                    official_board_loaded = True
                 except Exception as exc:
                     print(f"  ! HSBC page load failed: {exc}")
                     continue
@@ -4277,6 +4282,18 @@ def scrape_hsbc():
 
     except Exception as exc:
         print(f"  ! HSBC Ireland browser scrape failed: {exc}")
+
+    _mark_connector_health(
+        "HSBC Ireland",
+        official_board_loaded,
+        (
+            f"Official HSBC Ireland careers board loaded and returned "
+            f"{len(results)} qualifying Ireland jobs"
+            if official_board_loaded
+            else "Official HSBC Ireland careers board could not be verified"
+        ),
+        "https://apply.careers.hsbc.com/search/?q=&locationsearch=Ireland",
+    )
 
     print(
         f"  HSBC Ireland official careers: "
