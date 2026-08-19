@@ -20508,5 +20508,735 @@ def scrape_direct_company(company, *args, **kwargs):
 
 # === UVWT_FINAL_END ===
 
+# === VIATEL_APPLEGREEN_START ===
+
+def _va_clean(value):
+    return re.sub(
+        r"\s+",
+        " ",
+        str(value or ""),
+    ).strip()
+
+
+def _va_location(text):
+    text = _va_clean(text)
+
+    places = (
+        "Dublin",
+        "Dundalk",
+        "Limerick",
+        "Cork",
+        "Galway",
+        "Wicklow",
+        "Carlow",
+        "Cavan",
+        "Clonmel",
+        "Drogheda",
+        "Enfield",
+        "Ennis",
+        "Gorey",
+        "Kilcullen",
+        "Kilkenny",
+        "Leixlip",
+        "Letterkenny",
+        "Lusk",
+        "Mallow",
+        "Naas",
+        "Navan",
+        "Rathcoole",
+        "Rathnew",
+        "Swords",
+        "Tralee",
+        "Birdhill",
+        "Duleek",
+        "Dunshaughlin",
+        "Foxford",
+        "Hollyhill",
+        "Lemybrien",
+    )
+
+    for place in places:
+        if re.search(
+            rf"\b{re.escape(place)}\b",
+            text,
+            re.I,
+        ):
+            return f"{place}, Ireland"
+
+    if re.search(r"\bIreland\b", text, re.I):
+        return "Ireland"
+
+    return "Ireland"
+
+
+def scrape_viatel():
+    """
+    Viatel Technology Group official careers page.
+
+    Current live board exposes PeopleHR job-opening URLs directly.
+    """
+    company = "Viatel"
+
+    source = (
+        "https://www.viatel.com/"
+        "about/careers-at-viatel/#Jobs"
+    )
+
+    sess = _session()
+
+    if not sess:
+        print("  ! Viatel: HTTP session unavailable")
+        return []
+
+    results = {}
+
+    try:
+        from bs4 import BeautifulSoup
+
+        r = sess.get(
+            source.split("#")[0],
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+            timeout=30,
+        )
+
+        r.raise_for_status()
+
+        soup = BeautifulSoup(
+            r.text,
+            "html.parser",
+        )
+
+        for a in soup.find_all("a", href=True):
+            href = urllib.parse.urljoin(
+                r.url,
+                a.get("href") or "",
+            )
+
+            if not re.search(
+                r"^https://viatel\.peoplehr\.net/"
+                r"Pages/JobBoard/Opening\.aspx\?v="
+                r"[0-9a-f-]+$",
+                href,
+                re.I,
+            ):
+                continue
+
+            title = ""
+
+            # Try card/container text first because link itself says
+            # only "Learn More".
+            node = a
+
+            for _ in range(7):
+                node = getattr(node, "parent", None)
+
+                if node is None:
+                    break
+
+                text = _va_clean(
+                    node.get_text(
+                        " ",
+                        strip=True,
+                    )
+                )
+
+                if not text:
+                    continue
+
+                # Current official page displays:
+                # <job title> Learn More
+                m = re.search(
+                    r"(.{3,200}?)\s+Learn More\b",
+                    text,
+                    re.I,
+                )
+
+                if m:
+                    candidate = _va_clean(
+                        m.group(1)
+                    )
+
+                    # If parent contains several job cards,
+                    # take the tail nearest this link.
+                    candidate = re.split(
+                        r"(?:Our Open Roles|"
+                        r"Check out our Open Roles)",
+                        candidate,
+                        flags=re.I,
+                    )[-1]
+
+                    # Known displayed titles are short;
+                    # use final plausible line/chunk.
+                    chunks = [
+                        _va_clean(x)
+                        for x in re.split(
+                            r"\s{2,}|\n",
+                            candidate,
+                        )
+                        if _va_clean(x)
+                    ]
+
+                    if chunks:
+                        title = chunks[-1]
+
+                    if title:
+                        break
+
+            if not title or len(title) > 250:
+                # Resolve the PeopleHR detail page.
+                try:
+                    dr = sess.get(
+                        href,
+                        headers={
+                            "User-Agent": "Mozilla/5.0",
+                            "Referer": source,
+                        },
+                        timeout=25,
+                    )
+
+                    if dr.status_code == 200:
+                        ds = BeautifulSoup(
+                            dr.text,
+                            "html.parser",
+                        )
+
+                        for tag in ds.find_all(
+                            ["h1", "h2", "h3"]
+                        ):
+                            candidate = _va_clean(
+                                tag.get_text(
+                                    " ",
+                                    strip=True,
+                                )
+                            )
+
+                            if (
+                                candidate
+                                and candidate.lower()
+                                not in {
+                                    "job opening",
+                                    "job details",
+                                }
+                            ):
+                                title = candidate
+                                break
+                except Exception:
+                    pass
+
+            if not title:
+                continue
+
+            results[href] = {
+                "company": company,
+                "ats": "peoplehr",
+                "title": title[:300],
+                "location": _va_location(title),
+                "url": href,
+                "updated_at": None,
+                "description_text": "",
+            }
+
+    except Exception as exc:
+        print(f"  ! Viatel scrape failed: {exc}")
+
+    jobs = list(results.values())
+
+    try:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official Viatel PeopleHR board returned {len(jobs)} jobs",
+            source,
+        )
+    except Exception:
+        pass
+
+    print(
+        f"  Viatel official careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+def scrape_applegreen():
+    """
+    Applegreen official Rezoomo careers board.
+
+    The page initially renders 15 roles and exposes the remaining roles
+    through its Show More control, so use the rendered official board.
+    """
+    company = "Applegreen"
+
+    source = (
+        "https://applegreen-stores.rezoomo.com/jobs/"
+    )
+
+    results = {}
+
+    try:
+        from playwright.sync_api import sync_playwright
+
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(
+                headless=True
+            )
+
+            context = browser.new_context(
+                locale="en-IE",
+                user_agent=(
+                    "Mozilla/5.0 "
+                    "(Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) "
+                    "Chrome/139.0 Safari/537.36"
+                ),
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+
+            page.wait_for_timeout(2500)
+
+            # Rezoomo progressively reveals additional jobs.
+            for _ in range(20):
+                before = page.locator(
+                    'a[href*="/job/"]'
+                ).count()
+
+                buttons = [
+                    page.get_by_text(
+                        re.compile(
+                            r"Show more jobs",
+                            re.I,
+                        )
+                    ),
+                    page.get_by_role(
+                        "button",
+                        name=re.compile(
+                            r"Show more",
+                            re.I,
+                        ),
+                    ),
+                ]
+
+                clicked = False
+
+                for candidate in buttons:
+                    try:
+                        if candidate.count():
+                            for i in range(
+                                candidate.count()
+                            ):
+                                c = candidate.nth(i)
+
+                                if c.is_visible():
+                                    c.click(
+                                        force=True,
+                                        timeout=5000,
+                                    )
+                                    clicked = True
+                                    break
+                    except Exception:
+                        pass
+
+                    if clicked:
+                        break
+
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(700)
+
+                after = page.locator(
+                    'a[href*="/job/"]'
+                ).count()
+
+                if not clicked and after <= before:
+                    break
+
+                if after <= before:
+                    # one extra wait for async load
+                    page.wait_for_timeout(1200)
+
+                    after2 = page.locator(
+                        'a[href*="/job/"]'
+                    ).count()
+
+                    if after2 <= before:
+                        break
+
+            anchors = page.locator(
+                'a[href*="/job/"]'
+            )
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+
+                try:
+                    raw = a.get_attribute(
+                        "href"
+                    ) or ""
+                except Exception:
+                    continue
+
+                href = urllib.parse.urljoin(
+                    page.url,
+                    raw,
+                ).split("#")[0]
+
+                m = re.match(
+                    r"^https://applegreen-stores\.rezoomo\.com/"
+                    r"job/(\d+)/?$",
+                    href,
+                    re.I,
+                )
+
+                if not m:
+                    continue
+
+                canonical = (
+                    "https://applegreen-stores.rezoomo.com/"
+                    f"job/{m.group(1)}/"
+                )
+
+                try:
+                    text = _va_clean(
+                        a.inner_text(
+                            timeout=1000
+                        )
+                    )
+                except Exception:
+                    text = ""
+
+                if not text:
+                    continue
+
+                # Anchor text contains title + location + employment
+                # metadata. Strip from first obvious Irish location marker.
+                title = text
+
+                loc_match = re.search(
+                    r"\b("
+                    r"Dublin|Cork|Galway|Wicklow|Carlow|"
+                    r"Cavan|Clonmel|Drogheda|Enfield|Ennis|"
+                    r"Gorey|Hollyhill|Kilcullen|Kilkenny|"
+                    r"Leixlip|Lemybrien|Letterkenny|Lusk|"
+                    r"Mallow|Naas|Navan|Rathcoole|Rathnew|"
+                    r"Swords|Tralee|Birdhill|Duleek|"
+                    r"Dunshaughlin|Foxford|Ireland"
+                    r")\b",
+                    text,
+                    re.I,
+                )
+
+                if loc_match:
+                    title = _va_clean(
+                        text[:loc_match.start()]
+                    )
+
+                if not title:
+                    continue
+
+                results[canonical] = {
+                    "company": company,
+                    "ats": "rezoomo",
+                    "title": title[:300],
+                    "location": _va_location(
+                        text
+                    ),
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": text[:5000],
+                }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(
+            f"  ! Applegreen scrape failed: "
+            f"{exc}"
+        )
+
+    jobs = list(results.values())
+
+    try:
+        _mark_connector_health(
+            company,
+            True,
+            (
+                "Official Applegreen Rezoomo board "
+                f"returned {len(jobs)} jobs"
+            ),
+            source,
+        )
+    except Exception:
+        pass
+
+    print(
+        f"  Applegreen official careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+_va_previous_direct = scrape_direct_company
+
+
+def scrape_direct_company(company, *args, **kwargs):
+    overrides = {
+        "Viatel": scrape_viatel,
+        "Viatel Technology Group": scrape_viatel,
+
+        "Applegreen": scrape_applegreen,
+        "Applegreen Ireland": scrape_applegreen,
+    }
+
+    fn = overrides.get(company)
+
+    if fn is not None:
+        return fn()
+
+    return _va_previous_direct(
+        company,
+        *args,
+        **kwargs,
+    )
+
+
+# === VIATEL_APPLEGREEN_END ===
+
+# === VIATEL_FINAL_START ===
+
+def scrape_viatel():
+    company = "Viatel"
+    source = "https://www.viatel.com/about/careers-at-viatel/#Jobs"
+
+    results = {}
+
+    try:
+        from playwright.sync_api import sync_playwright
+
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                locale="en-IE",
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/151.0 Safari/537.36"
+                ),
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+
+            page.wait_for_timeout(2500)
+
+            # Scroll through the open-roles section.
+            for _ in range(6):
+                page.mouse.wheel(0, 1800)
+                page.wait_for_timeout(250)
+
+            anchors = page.locator(
+                'a[href*="viatel.peoplehr.net/Pages/JobBoard/Opening.aspx"]'
+            )
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+
+                try:
+                    href = a.get_attribute("href") or ""
+                except Exception:
+                    continue
+
+                if not href:
+                    continue
+
+                href = urllib.parse.urljoin(
+                    page.url,
+                    href,
+                ).split("#")[0]
+
+                if not re.search(
+                    r"^https://viatel\.peoplehr\.net/"
+                    r"Pages/JobBoard/Opening\.aspx\?v="
+                    r"[0-9a-f-]+$",
+                    href,
+                    re.I,
+                ):
+                    continue
+
+                title = ""
+
+                # The anchor text is just "Learn More"; inspect nearby card.
+                try:
+                    title = a.evaluate(
+                        """el => {
+                            let n = el;
+                            for (let i = 0; i < 7 && n; i++, n = n.parentElement) {
+                                const t = (n.innerText || '')
+                                  .replace(/\\s+/g, ' ')
+                                  .trim();
+
+                                if (!t) continue;
+
+                                const m = t.match(/(.{3,180}?)\\s+Learn More\\b/i);
+
+                                if (m && m[1]) {
+                                    const x = m[1]
+                                      .replace(/^.*?(Our Open Roles|Check out our Open Roles)\\s*/i, '')
+                                      .trim();
+
+                                    if (x) return x;
+                                }
+                            }
+                            return '';
+                        }"""
+                    )
+                except Exception:
+                    title = ""
+
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    str(title or ""),
+                ).strip()
+
+                # Fallback: load the PeopleHR detail page in the same browser.
+                if not title or len(title) > 220:
+                    detail = context.new_page()
+
+                    try:
+                        detail.goto(
+                            href,
+                            wait_until="domcontentloaded",
+                            timeout=40000,
+                        )
+
+                        detail.wait_for_timeout(1000)
+
+                        for selector in (
+                            "h1",
+                            "h2",
+                            "h3",
+                            ".job-title",
+                            "[class*='title']",
+                        ):
+                            try:
+                                loc = detail.locator(selector)
+
+                                for j in range(min(loc.count(), 10)):
+                                    candidate = re.sub(
+                                        r"\s+",
+                                        " ",
+                                        loc.nth(j).inner_text(timeout=800) or "",
+                                    ).strip()
+
+                                    if (
+                                        candidate
+                                        and candidate.lower()
+                                        not in {
+                                            "job opening",
+                                            "job details",
+                                            "careers",
+                                        }
+                                        and len(candidate) < 220
+                                    ):
+                                        title = candidate
+                                        break
+                            except Exception:
+                                pass
+
+                            if title:
+                                break
+
+                    except Exception:
+                        pass
+
+                    detail.close()
+
+                if not title:
+                    continue
+
+                loc_text = title
+
+                try:
+                    card_text = a.evaluate(
+                        """el => {
+                            let n = el;
+                            for (let i = 0; i < 6 && n; i++, n = n.parentElement) {
+                                const t = (n.innerText || '')
+                                  .replace(/\\s+/g, ' ')
+                                  .trim();
+
+                                if (t.length > 5 && t.length < 1000) {
+                                    return t;
+                                }
+                            }
+                            return '';
+                        }"""
+                    )
+                    loc_text += " " + str(card_text or "")
+                except Exception:
+                    pass
+
+                location = "Ireland"
+
+                if re.search(r"\bDundalk\b", loc_text, re.I):
+                    location = "Dundalk, Ireland"
+                elif re.search(r"\bDublin\b", loc_text, re.I):
+                    location = "Dublin, Ireland"
+                elif re.search(r"\bLimerick\b", loc_text, re.I):
+                    location = "Limerick, Ireland"
+
+                results[href] = {
+                    "company": company,
+                    "ats": "peoplehr",
+                    "title": title[:300],
+                    "location": location,
+                    "url": href,
+                    "updated_at": None,
+                    "description_text": str(loc_text)[:5000],
+                }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Viatel browser scrape failed: {exc}")
+
+    jobs = list(results.values())
+
+    try:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official Viatel PeopleHR board returned {len(jobs)} jobs",
+            source,
+        )
+    except Exception:
+        pass
+
+    print(f"  Viatel official careers: {len(jobs)} jobs")
+    return jobs
+
+
+# === VIATEL_FINAL_END ===
+
 if __name__ == "__main__":
     main()
