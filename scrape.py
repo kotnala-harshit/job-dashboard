@@ -567,6 +567,7 @@ KNOWN_PHENOM_MAPPINGS = {
     "Catalent": "careers.catalent.com|CATAUS",
     "Kerry Group": "jobs.kerry.com|KGUKGRGLOBAL",
     "DHL Ireland": "careers.dhl.com|DPDHGLOBAL",
+    "Marsh McLennan": "careers.marsh.com|MAMCGLOBAL",
     "Kuehne+Nagel Ireland": "jobs.kuehne-nagel.com|KUNAGLOBAL",
     "State Street": "careers.statestreet.com|STSTGLOBAL",
     "Thermo Fisher Scientific": "jobs.thermofisher.com|TFSCGLOBAL",
@@ -4700,101 +4701,259 @@ def scrape_bnp_paribas():
 
 
 def scrape_capgemini():
+    """
+    Capgemini official Ireland collector.
+
+    Uses the same public job-stream API used by Capgemini's official
+    Ireland-filtered job-search page.
+    """
     company = "Capgemini"
 
-    # Current Ireland SuccessFactors detail seeds. The careers site is
-    # server-rendered and exposes location/brand metadata on each detail page.
-    seeds = [
-        "https://careers.capgemini.com/job/Dublin-Solution-Architect/1419752533/",
-        "https://careers.capgemini.com/job/Dublin-SAP-Basis-Architect/1408005433/",
-    ]
+    source_url = (
+        "https://www.capgemini.com/careers/join-capgemini/job-search/"
+        "?page=1&size=11&country_code=ie-en%2Cen-ie"
+    )
+
+    api_url = (
+        "https://cg-jobstream-api.azurewebsites.net/api/job-search"
+    )
 
     sess = _session()
     if not sess:
         print("  ! Capgemini: HTTP session unavailable")
         return []
 
-    results = {}
-    queue = list(seeds)
-    seen = set()
-
-    while queue and len(seen) < 100:
-        href = queue.pop(0)
-        canonical = href.split("?")[0].rstrip("/") + "/"
-        if canonical.lower() in seen:
-            continue
-        seen.add(canonical.lower())
-
+    try:
+        r = sess.get(
+            api_url,
+            params={
+                "country_code": "ie-en,en-ie",
+                "page": 1,
+                "size": 100,
+            },
+            timeout=30,
+        )
+        r.raise_for_status()
+        payload = r.json()
+    except Exception as exc:
+        print(f"  ! Capgemini Ireland API failed: {exc}")
         try:
-            r = sess.get(
-                canonical,
-                timeout=30,
-                headers={
-                    "User-Agent": (
-                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                        "AppleWebKit/537.36 (KHTML, like Gecko) "
-                        "Chrome/140 Safari/537.36"
-                    ),
-                    "Accept-Language": "en-IE,en;q=0.9",
-                },
+            _mark_connector_health(
+                company,
+                False,
+                f"Capgemini Ireland API failed: {exc}",
+                source_url,
             )
         except Exception:
-            continue
+            pass
+        return []
 
-        if r.status_code != 200:
-            continue
+    # Locate the list of jobs defensively because the API wrapper may
+    # change while the individual job records remain the same.
+    rows = []
 
-        html_text = r.text or ""
-        text = _html_text(html_text)
+    if isinstance(payload, list):
+        rows = payload
 
-        # Crawl "Find similar jobs" / related official job links.
-        for mm in re.finditer(
-            r'href=["\']([^"\']+/job/[^"\']+/\d+/?)["\']',
-            html_text,
-            re.I,
+    elif isinstance(payload, dict):
+        for key in (
+            "jobs",
+            "results",
+            "items",
+            "data",
+            "jobSearchResult",
+            "job_search_result",
         ):
-            nxt = _absolute_url(canonical, mm.group(1)).split("?")[0]
-            if nxt.rstrip("/") + "/" not in queue and nxt.lower() not in seen:
-                queue.append(nxt.rstrip("/") + "/")
+            value = payload.get(key)
 
-        # Only Ireland roles.
-        ireland = bool(
-            re.search(r'\bLocation\s*:\s*Dublin,\s*IE\b', text, re.I)
-            or re.search(r'\bDublin,\s*IE\b', text, re.I)
-            or re.search(r'\bIreland\b', text[:6000], re.I)
+            if isinstance(value, list):
+                rows = value
+                break
+
+            if isinstance(value, dict):
+                for subkey in (
+                    "jobs",
+                    "results",
+                    "items",
+                    "data",
+                    "content",
+                ):
+                    sub = value.get(subkey)
+                    if isinstance(sub, list):
+                        rows = sub
+                        break
+
+            if rows:
+                break
+
+    # Last defensive search for a list of job-like dictionaries.
+    if not rows and isinstance(payload, dict):
+        def find_rows(obj):
+            if isinstance(obj, list):
+                if obj and all(isinstance(x, dict) for x in obj):
+                    score = 0
+                    for x in obj[:5]:
+                        keys = {str(k).lower() for k in x}
+                        if keys & {
+                            "title", "jobtitle", "job_title",
+                            "name", "jobname"
+                        }:
+                            score += 1
+                    if score:
+                        return obj
+
+                for x in obj:
+                    found = find_rows(x)
+                    if found:
+                        return found
+
+            elif isinstance(obj, dict):
+                for value in obj.values():
+                    found = find_rows(value)
+                    if found:
+                        return found
+
+            return []
+
+        rows = find_rows(payload)
+
+    results = []
+
+    def first(row, *keys):
+        for key in keys:
+            value = row.get(key)
+            if value not in (None, "", [], {}):
+                return value
+        return ""
+
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+
+        title = str(first(
+            row,
+            "title",
+            "jobTitle",
+            "job_title",
+            "name",
+            "jobName",
+        ) or "").strip()
+
+        location = first(
+            row,
+            "location",
+            "locations",
+            "city",
+            "jobLocation",
+            "job_location",
         )
-        if not ireland:
+
+        if isinstance(location, list):
+            location = ", ".join(
+                str(x.get("name") if isinstance(x, dict) else x)
+                for x in location
+                if x
+            )
+        elif isinstance(location, dict):
+            location = (
+                location.get("name")
+                or location.get("city")
+                or location.get("label")
+                or ""
+            )
+
+        location = str(location or "").strip()
+
+        job_id = str(first(
+            row,
+            "id",
+            "jobId",
+            "job_id",
+            "jobID",
+            "requisitionId",
+            "requisition_id",
+        ) or "").strip()
+
+        url = str(first(
+            row,
+            "url",
+            "jobUrl",
+            "job_url",
+            "link",
+            "applyUrl",
+            "apply_url",
+        ) or "").strip()
+
+        # Capgemini's official frontend currently exposes details as
+        # /jobs/<identifier>. Preserve API URLs when supplied; otherwise
+        # construct the official Capgemini detail route.
+        if url.startswith("/"):
+            url = "https://www.capgemini.com" + url
+
+        if not url and job_id:
+            url = "https://www.capgemini.com/jobs/" + job_id
+
+        # Country-filtered API should already contain Ireland only, but
+        # retain a defensive Ireland/Dublin check if location is supplied.
+        loc_low = location.lower()
+        if location and not any(
+            x in loc_low
+            for x in (
+                "ireland",
+                "dublin",
+                "cork",
+                "galway",
+                "limerick",
+                "waterford",
+                "kilkenny",
+                "athlone",
+            )
+        ):
             continue
 
-        hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', html_text, re.I | re.S)
-        title = _html_text(hm.group(1)).strip() if hm else ""
-        if not title:
-            tm = re.search(r'<title\b[^>]*>(.*?)</title>', html_text, re.I | re.S)
-            title = _html_text(tm.group(1)).strip() if tm else ""
-        title = re.sub(r'\s*Job Details.*$', '', title, flags=re.I).strip()
         if not title:
             continue
 
-        location = "Ireland"
-        lm = re.search(r'\b([A-Za-z .-]+),\s*IE\b', text, re.I)
-        if lm:
-            location = f"{lm.group(1).strip()}, Ireland"
-        elif re.search(r'\bDublin\b', text, re.I):
-            location = "Dublin, Ireland"
-
-        results[canonical.lower()] = {
+        results.append({
             "company": company,
-            "ats": "successfactors",
-            "title": title[:300],
-            "location": location,
-            "url": canonical,
-            "updated_at": None,
-            "description_text": text[:5000],
-        }
+            "title": title,
+            "location": location or "Ireland",
+            "url": url or source_url,
+        })
 
-    print(f"  Capgemini official Ireland careers: {len(results)} jobs")
-    return list(results.values())
+    # Deduplicate.
+    deduped = []
+    seen = set()
 
+    for job in results:
+        key = (
+            job.get("title", "").strip().lower(),
+            job.get("location", "").strip().lower(),
+            job.get("url", "").strip().lower(),
+        )
+
+        if key in seen:
+            continue
+
+        seen.add(key)
+        deduped.append(job)
+
+    try:
+        _mark_connector_health(
+            company,
+            bool(deduped),
+            f"Capgemini official Ireland API returned {len(deduped)} jobs",
+            source_url,
+        )
+    except Exception:
+        pass
+
+    print(
+        f"  Capgemini official Ireland careers: "
+        f"{len(deduped)} jobs"
+    )
+
+    return deduped
 
 
 def scrape_fidelity_international():
@@ -15353,6 +15512,23 @@ def scrape_dawn_meats():
 
 
 
+def scrape_dhl_ireland_official():
+    """DHL official Phenom Ireland collector using the validated Ireland search surface."""
+    company = "DHL Ireland"
+    source_url = (
+        "https://careers.dhl.com/global/en/search-results?keywords=&"
+        "p=ChIJ-ydAXOS6WUgRCPTbzjQSfM8&location=Ireland"
+    )
+    sess = _session()
+    jobs = _scrape_phenom(company, "careers.dhl.com|DPDHGLOBAL", sess) if sess else []
+    try:
+        _mark_connector_health(company, bool(jobs), f"Official DHL Phenom board returned {len(jobs)} Ireland jobs", source_url)
+    except Exception:
+        pass
+    print(f"  DHL Ireland official careers: {len(jobs)} jobs")
+    return jobs
+
+
 def scrape_marsh_mclennan_official():
     """
     Marsh McLennan / Marsh official Ireland careers.
@@ -15367,6 +15543,17 @@ def scrape_marsh_mclennan_official():
     source_url = "https://careers.marsh.com/global/en/search-results"
 
     results = {}
+
+    # Use the scraper's validated Phenom /widgets collector directly.
+    sess = _session()
+    if sess:
+        try:
+            for job in _scrape_phenom(company, "careers.marsh.com|MAMCGLOBAL", sess):
+                url = str(job.get("url") or "").strip()
+                if url:
+                    results[url.split("#", 1)[0].rstrip("/").lower()] = job
+        except Exception as exc:
+            print(f"  ! Marsh Phenom API failed: {exc}")
 
     # ------------------------------------------------------------
     # 1. Prefer any existing generic Phenom collector already
@@ -15388,7 +15575,7 @@ def scrape_marsh_mclennan_official():
             lambda: scrape_phenom_company(company, "https://careers.marsh.com"),
         ]
 
-    for attempt in attempts:
+    for attempt in ([] if results else attempts):
         try:
             rows = attempt() or []
         except Exception:
@@ -15900,14 +16087,26 @@ def scrape_forvis_mazars():
 
     page = _fetch_html(source_url) or ""
 
+    # People First may render vacancy cards client-side. Capture the rendered
+    # DOM when the plain HTTP response does not expose job links.
+    if HAS_PLAYWRIGHT and (not page or not re.search(r'href=["\'][^"\']*/jobs?/', page, re.I)):
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+                bp = browser.new_page(locale="en-IE", viewport={"width": 1440, "height": 1600})
+                bp.goto(source_url, wait_until="domcontentloaded", timeout=60000)
+                bp.wait_for_timeout(2500)
+                for _ in range(20):
+                    bp.mouse.wheel(0, 2600)
+                    bp.wait_for_timeout(300)
+                page = bp.content() or page
+                browser.close()
+        except Exception as exc:
+            print(f"  ! Forvis Mazars rendered search failed: {exc}")
+
     if not page:
         try:
-            _mark_connector_health(
-                company,
-                False,
-                "Official Forvis Mazars People First board could not be loaded",
-                source_url,
-            )
+            _mark_connector_health(company, False, "Official Forvis Mazars People First board could not be loaded", source_url)
         except Exception:
             pass
         return []
@@ -16366,6 +16565,7 @@ def scrape_direct_company(company: str):
         "Schneider Electric": scrape_schneider_electric,
         "CGI": scrape_cgi_ireland,
         "Dawn Meats": scrape_dawn_meats,
+        "DHL Ireland": scrape_dhl_ireland_official,
         "Decathlon Ireland": scrape_decathlon_ireland,
             "Marsh McLennan": scrape_marsh_mclennan_official,
 }.get(company)
