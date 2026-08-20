@@ -2982,6 +2982,11 @@
     "slug": "life",
     "probe_version": 35
   },
+  "Concentrix (Ireland)": {
+    "platform": "workday",
+    "slug": "cnx|wd1|external_global",
+    "probe_version": 35
+  },
   "Publift": {
     "platform": "smartrecruiters",
     "slug": "job-widget",
@@ -2990,11 +2995,6 @@
   "Primark / Penneys": {
     "platform": "smartrecruiters",
     "slug": "external-referrals",
-    "probe_version": 35
-  },
-  "Concentrix (Ireland)": {
-    "platform": "workday",
-    "slug": "cnx|wd1|external_global",
     "probe_version": 35
   },
   "__probe_version__": 35
