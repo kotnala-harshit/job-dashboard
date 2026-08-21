@@ -13257,126 +13257,405 @@ def _scrape_mckinsey_once():
 
 
 def scrape_mckinsey():
+    """
+    McKinsey Ireland connector.
+
+    McKinsey's public careers infrastructure may intermittently reject or
+    timeout automated requests. The connector therefore follows this policy:
+
+      1. Try the official McKinsey Dublin search headlessly.
+      2. If the official source responds, return the live Dublin jobs.
+      3. If the source is unavailable, recover previously verified official
+         McKinsey Dublin URLs from local Job Radar state.
+      4. Never launch a visible browser.
+      5. Never manufacture or hard-code vacancies.
+
+    A source failure is therefore not silently interpreted as authoritative
+    evidence that McKinsey has zero Dublin vacancies.
+    """
+
     company = "McKinsey & Company"
+
     source = (
         "https://www.mckinsey.com/careers/search-jobs"
         "?locations=Dublin&cities=Dublin"
     )
 
-    if not HAS_PLAYWRIGHT:
-        print("  ! McKinsey: Playwright unavailable")
-        return []
+    official_prefix = (
+        "https://www.mckinsey.com/"
+        "careers/search-jobs/jobs/"
+    )
 
     results = {}
+    source_available = False
+
+    # --------------------------------------------------------------
+    # 1. LIVE OFFICIAL SOURCE
+    # --------------------------------------------------------------
+
+    if HAS_PLAYWRIGHT:
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(
+                    headless=True,
+                    args=[
+                        "--disable-http2",
+                        "--disable-blink-features=AutomationControlled",
+                    ],
+                )
+
+                context = browser.new_context(
+                    locale="en-IE",
+                    viewport={
+                        "width": 1440,
+                        "height": 1600,
+                    },
+                    user_agent=(
+                        "Mozilla/5.0 "
+                        "(Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 "
+                        "(KHTML, like Gecko) "
+                        "Chrome/124.0.0.0 Safari/537.36"
+                    ),
+                )
+
+                context.add_init_script(
+                    """
+                    Object.defineProperty(
+                        navigator,
+                        'webdriver',
+                        {get: () => undefined}
+                    );
+                    """
+                )
+
+                page = context.new_page()
+
+                try:
+                    response = page.goto(
+                        source,
+                        wait_until="commit",
+                        timeout=45000,
+                    )
+
+                    if response is not None:
+                        status = response.status
+
+                        if 200 <= status < 400:
+                            source_available = True
+
+                except Exception as exc:
+                    print(
+                        "  ! McKinsey live source unavailable: "
+                        f"{exc}"
+                    )
+
+                if source_available:
+                    try:
+                        page.wait_for_selector(
+                            'a[href*="/careers/search-jobs/jobs/"]',
+                            timeout=30000,
+                        )
+                    except Exception:
+                        pass
+
+                    try:
+                        page.wait_for_timeout(3000)
+                    except Exception:
+                        pass
+
+                    try:
+                        links = page.locator(
+                            'a[href*="/careers/search-jobs/jobs/"]'
+                        ).evaluate_all(
+                            """els => els.map(a => ({
+                                href: a.href || "",
+                                text:
+                                    (
+                                        a.innerText ||
+                                        a.textContent ||
+                                        ""
+                                    ).trim()
+                            }))"""
+                        )
+                    except Exception:
+                        links = []
+
+                    for item in links:
+                        href = str(
+                            item.get("href") or ""
+                        ).strip()
+
+                        title = re.sub(
+                            r"\s+",
+                            " ",
+                            str(item.get("text") or ""),
+                        ).strip()
+
+                        if not href or not title:
+                            continue
+
+                        canonical = (
+                            href
+                            .split("?")[0]
+                            .split("#")[0]
+                        )
+
+                        if not canonical.startswith(
+                            official_prefix
+                        ):
+                            continue
+
+                        if (
+                            len(title) > 300
+                            or title.lower()
+                            in {
+                                "apply",
+                                "apply now",
+                                "learn more",
+                            }
+                        ):
+                            continue
+
+                        m = re.search(
+                            r"-([0-9]+)$",
+                            canonical,
+                        )
+
+                        job_id = (
+                            m.group(1)
+                            if m
+                            else canonical.lower()
+                        )
+
+                        results[job_id] = {
+                            "company": company,
+                            "ats": "direct",
+                            "title": title[:300],
+                            "location": "Dublin, Ireland",
+                            "url": canonical,
+                            "updated_at": None,
+                            "description_text": "",
+                        }
+
+                try:
+                    context.close()
+                except Exception:
+                    pass
+
+                try:
+                    browser.close()
+                except Exception:
+                    pass
+
+        except Exception as exc:
+            print(
+                "  ! McKinsey live scrape failed: "
+                f"{exc}"
+            )
+
+    else:
+        print(
+            "  ! McKinsey: Playwright unavailable"
+        )
+
+    # --------------------------------------------------------------
+    # 2. LIVE RESULT
+    # --------------------------------------------------------------
+
+    if results:
+        print(
+            f"  McKinsey official Dublin careers: "
+            f"{len(results)} live jobs"
+        )
+
+        return list(results.values())
+
+    # --------------------------------------------------------------
+    # 3. LAST-KNOWN-GOOD FALLBACK
+    #
+    # Only official McKinsey URLs already present in local Job Radar
+    # state are eligible. Nothing is fabricated here.
+    # --------------------------------------------------------------
+
+    fallback = {}
 
     try:
-        with sync_playwright() as pw:
-            # McKinsey may block automated requests intermittently.
-            # Production must remain headless and non-intrusive.
-            browser = pw.chromium.launch(
-                headless=True,
-                args=[
-                    "--disable-http2",
-                    "--disable-blink-features=AutomationControlled",
-                ],
-            )
+        import json
+        from pathlib import Path
 
-            context = browser.new_context(
-                locale="en-IE",
-                viewport={"width": 1440, "height": 1600},
-                user_agent=(
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/124.0.0.0 Safari/537.36"
-                ),
-            )
+        state_files = [
+            Path("data.json"),
+            Path("seen_jobs.json"),
+        ]
 
-            context.add_init_script(
-                """
-                Object.defineProperty(
-                    navigator,
-                    'webdriver',
-                    {get: () => undefined}
-                );
-                """
-            )
+        def _walk_mckinsey_state(obj):
+            if isinstance(obj, dict):
+                yield obj
 
-            page = context.new_page()
+                for value in obj.values():
+                    yield from _walk_mckinsey_state(
+                        value
+                    )
+
+            elif isinstance(obj, list):
+                for value in obj:
+                    yield from _walk_mckinsey_state(
+                        value
+                    )
+
+        for state_file in state_files:
+            if not state_file.exists():
+                continue
 
             try:
-                page.goto(
-                    source,
-                    wait_until="commit",
-                    timeout=90000,
-                )
-            except Exception as exc:
-                print(f"  McKinsey navigation warning: {exc}")
-
-            try:
-                page.wait_for_selector(
-                    'a[href*="/careers/search-jobs/jobs/"]',
-                    timeout=45000,
+                state = json.loads(
+                    state_file.read_text(
+                        encoding="utf-8"
+                    )
                 )
             except Exception:
-                pass
+                continue
 
-            page.wait_for_timeout(5000)
+            for item in _walk_mckinsey_state(
+                state
+            ):
+                if not isinstance(item, dict):
+                    continue
 
-            links = page.locator(
-                'a[href*="/careers/search-jobs/jobs/"]'
-            ).evaluate_all(
-                """els => els.map(a => ({
-                    href: a.href || "",
-                    text: (a.innerText || a.textContent || "").trim()
-                }))"""
-            )
+                item_company = str(
+                    item.get("company") or ""
+                ).strip()
 
-            for item in links:
-                href = str(item.get("href") or "").strip()
+                if (
+                    item_company.lower()
+                    != company.lower()
+                ):
+                    continue
+
+                url = str(
+                    item.get("url") or ""
+                ).strip()
+
+                if not url.startswith(
+                    official_prefix
+                ):
+                    continue
+
                 title = re.sub(
                     r"\s+",
                     " ",
-                    str(item.get("text") or ""),
+                    str(
+                        item.get("title")
+                        or ""
+                    ),
                 ).strip()
 
-                if not href or not title:
+                if not title:
                     continue
 
+                location = re.sub(
+                    r"\s+",
+                    " ",
+                    str(
+                        item.get("location")
+                        or ""
+                    ),
+                ).strip()
+
+                # Fallback is deliberately restricted to
+                # previously observed Ireland/Dublin records.
+                location_evidence = (
+                    location
+                    + " "
+                    + str(
+                        item.get(
+                            "description_text"
+                        )
+                        or ""
+                    )
+                )
+
                 if not re.search(
-                    r"^https://www\.mckinsey\.com/"
-                    r"careers/search-jobs/jobs/",
-                    href,
+                    r"\bDublin\b|\bIreland\b",
+                    location_evidence,
                     re.I,
                 ):
                     continue
 
-                canonical = href.split("?")[0].split("#")[0]
+                canonical = (
+                    url
+                    .split("?")[0]
+                    .split("#")[0]
+                )
 
-                m = re.search(r"-([0-9]+)$", canonical)
-                job_id = m.group(1) if m else canonical.lower()
+                m = re.search(
+                    r"-([0-9]+)$",
+                    canonical,
+                )
 
-                results[job_id] = {
+                job_id = (
+                    m.group(1)
+                    if m
+                    else canonical.lower()
+                )
+
+                fallback[job_id] = {
                     "company": company,
                     "ats": "direct",
                     "title": title[:300],
-                    "location": "Dublin, Ireland",
+                    "location": (
+                        location[:200]
+                        if location
+                        else "Dublin, Ireland"
+                    ),
                     "url": canonical,
-                    "updated_at": None,
-                    "description_text": "",
+                    "updated_at": (
+                        item.get("updated_at")
+                    ),
+                    "description_text": (
+                        str(
+                            item.get(
+                                "description_text"
+                            )
+                            or ""
+                        )[:5000]
+                    ),
                 }
 
-            context.close()
-            browser.close()
-
     except Exception as exc:
-        print(f"  ! McKinsey scrape failed: {exc}")
+        print(
+            "  ! McKinsey fallback read failed: "
+            f"{exc}"
+        )
 
-    print(
-        f"  McKinsey official Dublin careers: "
-        f"{len(results)} jobs"
-    )
+    if fallback:
+        print(
+            f"  ! McKinsey official source unavailable; "
+            f"using {len(fallback)} "
+            "previously verified official jobs"
+        )
 
-    return list(results.values())
+        return list(fallback.values())
+
+    # --------------------------------------------------------------
+    # 4. UNAVAILABLE != CONFIRMED ZERO
+    # --------------------------------------------------------------
+
+    if source_available:
+        print(
+            "  McKinsey official Dublin careers: "
+            "0 jobs returned by reachable source"
+        )
+    else:
+        print(
+            "  ! McKinsey source unavailable and "
+            "no last-known-good jobs available"
+        )
+
+    return []
+
+
 
 
 
