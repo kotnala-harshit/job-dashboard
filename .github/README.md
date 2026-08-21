@@ -46,3 +46,62 @@ The site does not upload these materials to the repository or job scraper.
 The underlying Ireland collection remains profile-agnostic. Personalization only changes ranking/filtering in the frontend.
 
 Users can always switch to **All Ireland jobs** to see the unfiltered corpus.
+
+<!-- REGISTRY_STATUS_START -->
+## 🇮🇪 Republic of Ireland Employer Registry
+
+The Ireland Job Radar currently uses a focused **250-company active employer registry** for Republic of Ireland opportunities.
+
+### Current registry
+
+| Category | Count |
+|---|---:|
+| Total companies in master registry | 600 |
+| Active companies | **250** |
+| Proven employers preserved | **173** |
+| Additional ROI target employers | **77** |
+| Inactive / reserve companies | 350 |
+
+The active registry was deliberately reduced from the full 600-company universe to improve relevance and focus while preserving every employer in the proven set.
+
+### Proven employer set
+
+All **173 proven employers** from the validated working set remain enabled. These are employers already demonstrated to return relevant Republic of Ireland vacancies through the job-radar pipeline.
+
+### Additional target employers
+
+A further **77 Republic of Ireland target employers** are enabled to expand coverage across areas including:
+
+- Data, analytics, AI and software
+- Technology and cybersecurity
+- Banking, financial services and fintech
+- Consulting and professional services
+- Pharma, biotechnology and medical devices
+- Engineering and manufacturing
+- Aviation, transport and infrastructure
+- Energy and utilities
+- Retail and major Irish employers
+- Public-sector and enterprise organizations
+
+This gives a final active universe of:
+
+**173 proven employers + 77 additional ROI targets = 250 active employers**
+
+### Scraping
+
+The scraper reads the `include_in_scrape_registry` field in:
+
+`ireland_job_radar_HARSHIT_MASTER.csv`
+
+Only companies enabled in that registry are included in the active scraping universe.
+
+The remaining companies stay in the master CSV as a reserve universe and can be re-enabled later without rebuilding the company database.
+
+### Deployment
+
+The project uses automated job-data refreshes while keeping the employer registry separately controlled through the master CSV.
+
+Registry configuration changes should therefore be reviewed independently from generated files such as `data.json` and `seen_jobs.json`.
+
+_Last registry configuration update: 21 August 2026._
+<!-- REGISTRY_STATUS_END -->
