@@ -2487,11 +2487,6 @@
     "slug": "cyberark",
     "probe_version": 35
   },
-  "Pure Storage": {
-    "platform": "greenhouse",
-    "slug": "purestorage",
-    "probe_version": 35
-  },
   "Trinity College Dublin": {
     "platform": "none",
     "slug": null,
@@ -2995,6 +2990,11 @@
   "Primark / Penneys": {
     "platform": "smartrecruiters",
     "slug": "external-referrals",
+    "probe_version": 35
+  },
+  "Pure Storage": {
+    "platform": "greenhouse",
+    "slug": "purestorage",
     "probe_version": 35
   },
   "__probe_version__": 35
