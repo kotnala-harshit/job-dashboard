@@ -6972,13 +6972,14 @@ def scrape_amd():
     source_url = (
         "https://careers.amd.com/careers-home/jobs"
         "?page=1"
-        "&lat=53.40816280642651"
-        "&lng=-6.160405686640319"
+        "&lat=53.40817182171206"
+        "&lng=-6.160333762722148"
         "&radiusUnit=MILES"
-        "&radius=10"
+        "&radius=50"
     )
 
     if not HAS_PLAYWRIGHT:
+        print("  ! AMD: Playwright unavailable")
         return []
 
     results = {}
@@ -6986,54 +6987,85 @@ def scrape_amd():
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(locale="en-IE")
-            page.goto(source_url, wait_until="domcontentloaded", timeout=60000)
-            page.wait_for_timeout(4000)
+
+            page = browser.new_page(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1800},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 Chrome/131 Safari/537.36"
+                ),
+            )
+
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+
+            page.wait_for_timeout(8000)
             _dismiss_cookie_banner(page)
 
             anchors = page.locator('a[href*="/careers-home/jobs/"]')
 
             for i in range(anchors.count()):
                 a = anchors.nth(i)
-                href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
 
-                m = re.search(r"/careers-home/jobs/(\d+)", href, re.I)
+                href = urllib.parse.urljoin(
+                    page.url,
+                    a.get_attribute("href") or "",
+                )
+
+                m = re.search(
+                    r"/careers-home/jobs/(\d+)",
+                    href,
+                    re.I,
+                )
+
                 if not m:
                     continue
 
                 try:
-                    card = _browser_text(
-                        a.locator("xpath=ancestor::*[self::li or self::article or self::div][1]")
-                    ) or ""
+                    card = a.locator(
+                        "xpath=ancestor::*[self::li or self::article or self::div][1]"
+                    )
+                    card_text = _browser_text(card) or ""
                 except Exception:
-                    card = _browser_text(a) or ""
+                    card_text = _browser_text(a) or ""
 
-                card = re.sub(r"\s+", " ", card).strip()
+                card_text = re.sub(r"\s+", " ", card_text).strip()
 
-                if not re.search(r"\bDublin\b|\bIreland\b", card, re.I):
+                if not re.search(r"\bDublin\b|\bIE,Dublin\b", card_text, re.I):
                     continue
 
-                title = re.sub(r"\s+", " ", _browser_text(a) or "").strip()
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    _browser_text(a) or "",
+                ).strip()
+
                 if (
                     not title
                     or len(title) > 300
                     or title.lower() in {
-                        "skip to main content",
-                        "careers",
+                        "apply now",
                         "jobs",
+                        "careers",
                         "search jobs",
                     }
                 ):
                     continue
 
-                results[m.group(1)] = {
+                job_id = m.group(1)
+
+                results[job_id] = {
                     "company": company,
                     "ats": "direct",
                     "title": title[:300],
                     "location": "Dublin, Ireland",
                     "url": href.split("#")[0],
                     "updated_at": None,
-                    "description_text": card[:5000],
+                    "description_text": card_text[:5000],
                 }
 
             browser.close()
@@ -7043,6 +7075,8 @@ def scrape_amd():
 
     print(f"  AMD official Dublin careers: {len(results)} jobs")
     return list(results.values())
+
+
 def scrape_aer_lingus():
     company = "Aer Lingus"
     url = "https://www.aerlingus.com/careers/careers-on-the-ground/ground-operations/"
@@ -11010,6 +11044,12 @@ def scrape_axa():
     return list(results.values())
 
 
+
+
+
+
+
+
 def scrape_ntt_data():
     company = "NTT DATA"
     base = "https://careers-inc.nttdata.com"
@@ -11614,6 +11654,309 @@ def scrape_publicjobs():
     print(f"  publicjobs Oleeo official board: {len(results)} jobs")
     return list(results.values())
 
+
+
+def scrape_axa_xl():
+    company = "AXA XL"
+
+    source_url = (
+        "https://careers.axa.com/careers-home/jobs"
+        "?tags3=AXA%20XL"
+        "&iisc=referral"
+        "&iis=axaxl_website"
+        "&iisn=axaxl_careers_page"
+        "&page=1"
+        "&lat=53.40820732213721"
+        "&lng=-6.16041279943103"
+        "&radiusUnit=MILES"
+        "&radius=10"
+    )
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! AXA XL: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            page = browser.new_page(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1800},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 Chrome/131 Safari/537.36"
+                ),
+            )
+
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+
+            page.wait_for_timeout(9000)
+
+            try:
+                _dismiss_cookie_banner(page)
+            except Exception:
+                pass
+
+            anchors = page.locator(
+                'a[href*="/careers-home/jobs/"]'
+            )
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+
+                href = urllib.parse.urljoin(
+                    page.url,
+                    a.get_attribute("href") or "",
+                )
+
+                m = re.search(
+                    r"/careers-home/jobs/(\d+)",
+                    href,
+                    re.I,
+                )
+
+                if not m:
+                    continue
+
+                card_text = ""
+
+                for level in range(1, 7):
+                    try:
+                        candidate = a.locator(
+                            f"xpath=ancestor::div[{level}]"
+                        )
+
+                        txt = re.sub(
+                            r"\s+",
+                            " ",
+                            _browser_text(candidate) or "",
+                        ).strip()
+
+                        if (
+                            "Req ID:" in txt
+                            and "Entity" in txt
+                            and "Location" in txt
+                        ):
+                            card_text = txt
+                            break
+                    except Exception:
+                        pass
+
+                if not card_text:
+                    continue
+
+                entity_match = re.search(
+                    r"\bEntity\s+(AXA Ireland|AXA XL)\b",
+                    card_text,
+                    re.I,
+                )
+
+                if not entity_match:
+                    continue
+
+                entity = entity_match.group(1).strip().lower()
+
+                if entity != "axa xl":
+                    continue
+
+                # "Multiple" is not enough evidence for ROI.
+                # Only retain explicitly Dublin IE jobs.
+                if not re.search(
+                    r"\bLocation\s+DUBLIN,\s*IE\b",
+                    card_text,
+                    re.I,
+                ):
+                    continue
+
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    _browser_text(a) or "",
+                ).strip()
+
+                if (
+                    not title
+                    or len(title) > 300
+                    or title.lower() == "apply now"
+                ):
+                    continue
+
+                job_id = m.group(1)
+
+                results[job_id] = {
+                    "company": company,
+                    "ats": "icims",
+                    "title": title[:300],
+                    "location": "Dublin, Ireland",
+                    "url": href.split("#")[0],
+                    "updated_at": None,
+                    "description_text": card_text[:5000],
+                }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! AXA XL scrape failed: {exc}")
+
+    print(
+        f"  AXA XL official Dublin careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
+
+
+def scrape_atkinsrealis():
+    company = "AtkinsRéalis"
+    source_url = "https://careers.atkinsrealis.com/en"
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! AtkinsRéalis: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            page = browser.new_page(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1800},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 Chrome/131 Safari/537.36"
+                ),
+            )
+
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+
+            page.wait_for_timeout(6000)
+            _dismiss_cookie_banner(page)
+
+            anchors = page.locator('a[href*="/en/jobs/"]')
+
+            urls = []
+
+            for i in range(anchors.count()):
+                href = urllib.parse.urljoin(
+                    page.url,
+                    anchors.nth(i).get_attribute("href") or "",
+                )
+
+                if re.search(r"/en/jobs/[^/?#]+-r-\d+", href, re.I):
+                    urls.append(href.split("#")[0])
+
+            urls = list(dict.fromkeys(urls))
+
+            for href in urls:
+                detail = context = None
+
+                try:
+                    detail = browser.new_page(
+                        locale="en-IE",
+                        viewport={"width": 1440, "height": 1800},
+                    )
+
+                    detail.goto(
+                        href,
+                        wait_until="domcontentloaded",
+                        timeout=60000,
+                    )
+
+                    detail.wait_for_timeout(1200)
+
+                    body = detail.locator("body").inner_text()
+
+                    if not re.search(r"\bIreland\b", body, re.I):
+                        detail.close()
+                        continue
+
+                    title = ""
+
+                    h1 = detail.locator("h1")
+
+                    if h1.count():
+                        title = re.sub(
+                            r"\s+",
+                            " ",
+                            h1.first.inner_text(),
+                        ).strip()
+
+                    if not title:
+                        slug = href.rstrip("/").split("/")[-1]
+                        title = slug.rsplit("-r-", 1)[0]
+                        title = title.replace("-", " ").title()
+
+                    cities = []
+
+                    for city in (
+                        "Dublin",
+                        "Cork",
+                        "Galway",
+                        "Sligo",
+                        "Waterford",
+                    ):
+                        if re.search(rf"\b{city}\b", body, re.I):
+                            cities.append(city)
+
+                    location = (
+                        ", ".join(cities) + ", Ireland"
+                        if cities
+                        else "Ireland"
+                    )
+
+                    m = re.search(r"-r-(\d+)", href, re.I)
+                    job_id = m.group(1) if m else href
+
+                    results[job_id] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": location[:200],
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": re.sub(
+                            r"\s+",
+                            " ",
+                            body,
+                        ).strip()[:5000],
+                    }
+
+                    detail.close()
+
+                except Exception:
+                    try:
+                        if detail:
+                            detail.close()
+                    except Exception:
+                        pass
+                    continue
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! AtkinsRéalis scrape failed: {exc}")
+
+    print(
+        f"  AtkinsRéalis official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
 
 
 def scrape_medtronic():
@@ -12858,6 +13201,10 @@ def scrape_mckinsey():
     )
 
     return list(results.values())
+
+
+
+
 
 
 
@@ -16429,6 +16776,8 @@ def scrape_direct_company(company: str):
     fn={
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
         "Arcadis": scrape_arcadis_ireland,
+        "AXA XL": scrape_axa_xl,
+        "AtkinsRéalis": scrape_atkinsrealis,
         "Advanced Micro Devices (AMD)": scrape_amd,
         "Applied Materials": scrape_applied_materials,
         "Bausch + Lomb": scrape_bausch_lomb_ireland,
@@ -19522,6 +19871,8 @@ def _working_batch_base_scrape_direct_company(company: str):
     fn={
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
         "Arcadis": scrape_arcadis_ireland,
+        "AXA XL": scrape_axa_xl,
+        "AtkinsRéalis": scrape_atkinsrealis,
         "Advanced Micro Devices (AMD)": scrape_amd,
         "Applied Materials": scrape_applied_materials,
         "Bausch + Lomb": scrape_bausch_lomb_ireland,
