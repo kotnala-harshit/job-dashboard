@@ -27,11 +27,6 @@
     "platform": "phenom",
     "slug": "jobs.kuehne-nagel.com|KUNAGLOBAL"
   },
-  "EY Ireland": {
-    "platform": "recruitee",
-    "slug": "ey",
-    "probe_version": 35
-  },
   "Google": {
     "platform": "none",
     "slug": null,
@@ -222,11 +217,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Baker Tilly Ireland": {
-    "platform": "recruitee",
-    "slug": "bakertilly",
-    "probe_version": 35
-  },
   "Bank of America": {
     "platform": "none",
     "slug": null,
@@ -295,11 +285,6 @@
   "Bord na M\u00f3na": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Boston Scientific": {
-    "platform": "eightfold",
-    "slug": "bostonscientific",
     "probe_version": 35
   },
   "Bristol Myers Squibb": {
@@ -2572,11 +2557,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Micron Technology": {
-    "platform": "eightfold",
-    "slug": "micron",
-    "probe_version": 35
-  },
   "Monday.com": {
     "platform": "personio",
     "slug": "monday",
@@ -2987,9 +2967,29 @@
     "slug": "cnx|wd1|external_global",
     "probe_version": 35
   },
+  "EY Ireland": {
+    "platform": "recruitee",
+    "slug": "ey",
+    "probe_version": 35
+  },
   "Publift": {
     "platform": "smartrecruiters",
     "slug": "job-widget",
+    "probe_version": 35
+  },
+  "Baker Tilly Ireland": {
+    "platform": "recruitee",
+    "slug": "bakertilly",
+    "probe_version": 35
+  },
+  "Micron Technology": {
+    "platform": "eightfold",
+    "slug": "micron",
+    "probe_version": 35
+  },
+  "Boston Scientific": {
+    "platform": "eightfold",
+    "slug": "bostonscientific",
     "probe_version": 35
   },
   "Primark / Penneys": {
