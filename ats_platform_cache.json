@@ -2972,11 +2972,6 @@
     "slug": "ey",
     "probe_version": 35
   },
-  "Publift": {
-    "platform": "smartrecruiters",
-    "slug": "job-widget",
-    "probe_version": 35
-  },
   "Baker Tilly Ireland": {
     "platform": "recruitee",
     "slug": "bakertilly",
@@ -2990,6 +2985,11 @@
   "Boston Scientific": {
     "platform": "eightfold",
     "slug": "bostonscientific",
+    "probe_version": 35
+  },
+  "Publift": {
+    "platform": "smartrecruiters",
+    "slug": "job-widget",
     "probe_version": 35
   },
   "Primark / Penneys": {
