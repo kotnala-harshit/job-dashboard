@@ -10896,152 +10896,205 @@ def scrape_laya_healthcare():
 
 def scrape_axa():
     company = "AXA Ireland"
-    url = "https://www.axa.ie/careers/"
+
+    source_url = (
+        "https://careers.axa.com/careers-home/jobs"
+        "?tags3=AXA%20Ireland"
+        "&page=1"
+        "&lat=53.3498"
+        "&lng=-6.2603"
+        "&radiusUnit=MILES"
+        "&radius=25"
+    )
 
     if not HAS_PLAYWRIGHT:
         print("  ! AXA Ireland: Playwright unavailable")
         return []
 
-    results = {}
+    best = {}
 
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
+    for attempt in range(1, 4):
+        results = {}
 
-            context = browser.new_context(
-                locale="en-IE",
-                viewport={"width": 1440, "height": 1800},
-                user_agent=(
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 Chrome/124 Safari/537.36"
-                ),
-            )
-
-            page = context.new_page()
-
-            page.goto(
-                url,
-                wait_until="domcontentloaded",
-                timeout=90000,
-            )
-
-            page.wait_for_timeout(5000)
-
-            body = page.locator("body").inner_text()
-
-            links = page.locator("a").evaluate_all(
-                """els => els.map(a => ({
-                    href: a.href || "",
-                    text: (a.innerText || a.textContent || "").trim()
-                }))"""
-            )
-
-            vacancy_links = []
-
-            for item in links:
-                href = str(item.get("href") or "")
-
-                m = re.search(
-                    r"https://www\.axa\.ie/careers/vacancies/(\d+)/?",
-                    href,
-                    re.I,
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(
+                    headless=True,
+                    args=[
+                        "--disable-blink-features=AutomationControlled",
+                    ],
                 )
 
-                if not m:
+                page = browser.new_page(
+                    locale="en-IE",
+                    viewport={"width": 1440, "height": 1800},
+                    user_agent=(
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 "
+                        "(KHTML, like Gecko) "
+                        "Chrome/131.0.0.0 Safari/537.36"
+                    ),
+                )
+
+                page.goto(
+                    source_url,
+                    wait_until="domcontentloaded",
+                    timeout=90000,
+                )
+
+                page.wait_for_timeout(9000)
+
+                try:
+                    _dismiss_cookie_banner(page)
+                except Exception:
+                    pass
+
+                title_text = ""
+
+                try:
+                    title_text = page.title()
+                except Exception:
+                    pass
+
+                if re.search(r"\b403\b|forbidden", title_text, re.I):
+                    print(
+                        f"  ! AXA Ireland attempt {attempt}: "
+                        f"blocked page ({title_text})"
+                    )
+                    browser.close()
                     continue
 
-                job_id = m.group(1)
-
-                canonical = (
-                    f"https://www.axa.ie/careers/vacancies/{job_id}/"
+                anchors = page.locator(
+                    'a[href*="/careers-home/jobs/"]'
                 )
 
-                vacancy_links.append((job_id, canonical))
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
 
-            vacancy_links = list(dict.fromkeys(vacancy_links))
+                    href = urllib.parse.urljoin(
+                        page.url,
+                        a.get_attribute("href") or "",
+                    )
 
-            # Parse cards directly from visible listing-page text.
-            pattern = re.compile(
-                r"(?P<title>[^\n]{3,250})\n+"
-                r"Department:\s*(?P<department>[^\n]+)\n+"
-                r"Location:\s*(?P<location>[^\n]+)\n+"
-                r"Closing date:\s*(?P<closing>[^\n]+)",
-                re.I,
+                    m = re.search(
+                        r"/careers-home/jobs/(\d+)",
+                        href,
+                        re.I,
+                    )
+
+                    if not m:
+                        continue
+
+                    card_text = ""
+
+                    for level in range(1, 7):
+                        try:
+                            candidate = a.locator(
+                                f"xpath=ancestor::div[{level}]"
+                            )
+
+                            txt = re.sub(
+                                r"\s+",
+                                " ",
+                                _browser_text(candidate) or "",
+                            ).strip()
+
+                            if (
+                                "Req ID:" in txt
+                                and "Entity" in txt
+                                and "Location" in txt
+                            ):
+                                card_text = txt
+                                break
+
+                        except Exception:
+                            pass
+
+                    if not card_text:
+                        continue
+
+                    entity_match = re.search(
+                        r"\bEntity\s+(AXA Ireland|AXA XL)\b",
+                        card_text,
+                        re.I,
+                    )
+
+                    if not entity_match:
+                        continue
+
+                    if (
+                        entity_match.group(1)
+                        .strip()
+                        .lower()
+                        != "axa ireland"
+                    ):
+                        continue
+
+                    if not re.search(
+                        r"\bLocation\s+DUBLIN,\s*IE\b",
+                        card_text,
+                        re.I,
+                    ):
+                        continue
+
+                    title = re.sub(
+                        r"\s+",
+                        " ",
+                        _browser_text(a) or "",
+                    ).strip()
+
+                    if (
+                        not title
+                        or len(title) > 300
+                        or title.lower() == "apply now"
+                    ):
+                        continue
+
+                    job_id = m.group(1)
+
+                    results[job_id] = {
+                        "company": company,
+                        "ats": "icims",
+                        "title": title[:300],
+                        "location": "Dublin, Ireland",
+                        "url": href.split("#")[0],
+                        "updated_at": None,
+                        "description_text": card_text[:5000],
+                    }
+
+                browser.close()
+
+        except Exception as exc:
+            print(
+                f"  ! AXA Ireland attempt {attempt} failed: "
+                f"{exc}"
             )
 
-            cards = list(pattern.finditer(body))
+        if len(results) > len(best):
+            best = results
 
-            # AXA page presents cards and vacancy links in the same order.
-            for idx, card in enumerate(cards):
-                if idx >= len(vacancy_links):
-                    break
-
-                job_id, canonical = vacancy_links[idx]
-
-                title = re.sub(
-                    r"\s+",
-                    " ",
-                    card.group("title"),
-                ).strip()
-
-                department = re.sub(
-                    r"\s+",
-                    " ",
-                    card.group("department"),
-                ).strip()
-
-                raw_location = re.sub(
-                    r"\s+",
-                    " ",
-                    card.group("location"),
-                ).strip()
-
-                closing = re.sub(
-                    r"\s+",
-                    " ",
-                    card.group("closing"),
-                ).strip()
-
-                # Normalize city capitalization only.
-                if re.search(r"\bDUBLIN\b", raw_location, re.I):
-                    location = "Dublin, Ireland"
-                elif re.search(r"\bCORK\b", raw_location, re.I):
-                    location = "Cork, Ireland"
-                elif re.search(r"\bGALWAY\b", raw_location, re.I):
-                    location = "Galway, Ireland"
-                elif re.search(r"\bIRELAND\b", raw_location, re.I):
-                    location = raw_location.title()
-                else:
-                    location = raw_location
-
-                description = (
-                    f"{title}\n"
-                    f"Department: {department}\n"
-                    f"Location: {raw_location}\n"
-                    f"Closing date: {closing}"
+        if results:
+            if attempt > 1:
+                print(
+                    f"  AXA Ireland recovered on attempt "
+                    f"{attempt}"
                 )
+            break
 
-                results[job_id] = {
-                    "company": company,
-                    "ats": "direct",
-                    "title": title[:300],
-                    "location": location[:200],
-                    "url": canonical,
-                    "updated_at": None,
-                    "description_text": description[:5000],
-                }
-
-            browser.close()
-
-    except Exception as exc:
-        print(f"  ! AXA Ireland scrape failed: {exc}")
+        if attempt < 3:
+            print(
+                f"  ! AXA Ireland attempt {attempt}: "
+                "0 jobs; retrying"
+            )
 
     print(
-        f"  AXA Ireland official AXA.ie careers: "
-        f"{len(results)} jobs"
+        f"  AXA Ireland official Dublin careers: "
+        f"{len(best)} jobs"
     )
 
-    return list(results.values())
+    return list(best.values())
+
+
 
 
 
@@ -13080,7 +13133,7 @@ def scrape_walkers():
     return list(results.values())
 
 
-def scrape_mckinsey():
+def _scrape_mckinsey_once():
     company = "McKinsey & Company"
     source = (
         "https://www.mckinsey.com/careers/search-jobs"
@@ -13201,6 +13254,133 @@ def scrape_mckinsey():
     )
 
     return list(results.values())
+
+
+def scrape_mckinsey():
+    company = "McKinsey & Company"
+    source = (
+        "https://www.mckinsey.com/careers/search-jobs"
+        "?locations=Dublin&cities=Dublin"
+    )
+
+    if not HAS_PLAYWRIGHT:
+        print("  ! McKinsey: Playwright unavailable")
+        return []
+
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            # McKinsey may block automated requests intermittently.
+            # Production must remain headless and non-intrusive.
+            browser = pw.chromium.launch(
+                headless=True,
+                args=[
+                    "--disable-http2",
+                    "--disable-blink-features=AutomationControlled",
+                ],
+            )
+
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/124.0.0.0 Safari/537.36"
+                ),
+            )
+
+            context.add_init_script(
+                """
+                Object.defineProperty(
+                    navigator,
+                    'webdriver',
+                    {get: () => undefined}
+                );
+                """
+            )
+
+            page = context.new_page()
+
+            try:
+                page.goto(
+                    source,
+                    wait_until="commit",
+                    timeout=90000,
+                )
+            except Exception as exc:
+                print(f"  McKinsey navigation warning: {exc}")
+
+            try:
+                page.wait_for_selector(
+                    'a[href*="/careers/search-jobs/jobs/"]',
+                    timeout=45000,
+                )
+            except Exception:
+                pass
+
+            page.wait_for_timeout(5000)
+
+            links = page.locator(
+                'a[href*="/careers/search-jobs/jobs/"]'
+            ).evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            for item in links:
+                href = str(item.get("href") or "").strip()
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    str(item.get("text") or ""),
+                ).strip()
+
+                if not href or not title:
+                    continue
+
+                if not re.search(
+                    r"^https://www\.mckinsey\.com/"
+                    r"careers/search-jobs/jobs/",
+                    href,
+                    re.I,
+                ):
+                    continue
+
+                canonical = href.split("?")[0].split("#")[0]
+
+                m = re.search(r"-([0-9]+)$", canonical)
+                job_id = m.group(1) if m else canonical.lower()
+
+                results[job_id] = {
+                    "company": company,
+                    "ats": "direct",
+                    "title": title[:300],
+                    "location": "Dublin, Ireland",
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": "",
+                }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! McKinsey scrape failed: {exc}")
+
+    print(
+        f"  McKinsey official Dublin careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
+
+
 
 
 
