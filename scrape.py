@@ -17795,9 +17795,47 @@ def discovery_value(job, now_dt=None):
 
 
 def job_state_identity(job):
-    stable_url = (job.get("url") or "").split("?")[0].rstrip("/").lower()
-    if stable_url:
-        return stable_url
+    raw_url = str(job.get("url") or "").strip()
+
+    if raw_url:
+        try:
+            parsed = urllib.parse.urlsplit(raw_url)
+            host = parsed.netloc.lower()
+            path = parsed.path.rstrip("/").lower()
+
+            # CandidateManager job-detail URLs use one shared path for every
+            # vacancy. The actual stable vacancy identity is carried in the
+            # query string, primarily by `jid`. Stripping the query therefore
+            # collapses every employer vacancy into one job.
+            if "candidatemanager.net" in host:
+                params = urllib.parse.parse_qs(
+                    parsed.query,
+                    keep_blank_values=True,
+                )
+
+                jid = (
+                    params.get("jid")
+                    or params.get("jobid")
+                    or params.get("job_id")
+                )
+
+                if jid and jid[0]:
+                    return (
+                        f"{host}{path}"
+                        f"?jid={str(jid[0]).strip().lower()}"
+                    )
+
+            stable_url = f"{host}{path}"
+
+            if stable_url:
+                return stable_url
+
+        except Exception:
+            stable_url = raw_url.split("?")[0].rstrip("/").lower()
+
+            if stable_url:
+                return stable_url
+
     return "|".join([
         _company_key(job.get("company", "")),
         normalized_title(job.get("title")),
