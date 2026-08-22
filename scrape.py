@@ -14,6 +14,7 @@ import urllib.request
 import urllib.error
 import urllib.parse
 import hashlib
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone, timedelta
 
@@ -690,16 +691,34 @@ IRISH_DOMESTIC_CAREER_PAGES = {
     "penneys / primark ireland", "bank of ireland", "ibm ireland", "sap ireland",
 }
 
-VISA_SPONSOR_KEYWORDS = [
-    "visa sponsorship", "sponsor visa", "will sponsor", "sponsorship available",
-    "employment permit", "work permit sponsorship", "stamp 1g", "stamp 1",
+# Visa / employment-permit language. Negative patterns are evaluated first so
+# phrases such as "no visa sponsorship" cannot be misclassified as positive.
+VISA_SPONSOR_PATTERNS = [
+    r"visa sponsorship (?:is |will be )?available",
+    r"will sponsor",
+    r"we (?:can|do|are able to) sponsor",
+    r"eligible for (?:visa |work permit )?sponsorship",
+    r"sponsorship (?:is )?available for (?:this|eligible) (?:role|candidates)",
+    r"provide(?:s)? immigration sponsorship",
+    r"support (?:a |an )?(?:critical skills )?employment permit",
+    r"open to sponsoring",
+    r"sponsor(?:ship)? (?:work permit|visa)s? for (?:this|the) role",
+    r"critical skills employment permit",
+    r"general employment permit",
 ]
-VISA_NO_SPONSOR_KEYWORDS = [
-    "no visa sponsorship", "no sponsorship", "unable to sponsor",
-    "will not sponsor", "cannot sponsor", "without sponsorship",
-    "must have the right to work", "right to work in ireland without restriction",
-    "eligible to work in ireland without",
+VISA_NO_SPONSOR_PATTERNS = [
+    r"unable to (?:offer|provide) (?:visa )?sponsorship",
+    r"(?:does not|do not|won't|will not|no) (?:currently )?(?:offer|provide) (?:visa )?sponsorship",
+    r"cannot sponsor",
+    r"without (?:the need for )?(?:visa )?sponsorship",
+    r"must (?:be|already be) (?:legally )?eligible to work .{0,50}without sponsorship",
+    r"no visa sponsorship (?:is )?available",
+    r"not able to sponsor",
+    r"sponsorship (?:is )?not (?:available|offered|provided)",
+    r"right to work in ireland without restriction",
 ]
+VISA_SPONSOR_RE = re.compile("|".join(VISA_SPONSOR_PATTERNS), re.IGNORECASE)
+VISA_NO_SPONSOR_RE = re.compile("|".join(VISA_NO_SPONSOR_PATTERNS), re.IGNORECASE)
 
 ADZUNA_COUNTRIES = ["ie"] if IRELAND_ONLY else ["gb", "ie", "de", "nl", "at", "es", "pl", "in", "sg", "au", "nz", "ca"]
 CAREERJET_LOCALES = ["en_IE"] if IRELAND_ONLY else ["en_GB", "en_IE", "en_US", "en_AU", "en_CA", "en_SG", "en_IN"]
@@ -783,15 +802,149 @@ def ireland_area(location: str) -> str:
     return "Ireland (other)"
 
 
+def classify_visa_sponsorship(*parts: str):
+    """Return (status, evidence_snippet) from job text.
+
+    Status is one of sponsors / no_sponsorship / not_mentioned.  The snippet
+    gives the dashboard a short auditable explanation instead of a black-box
+    flag. Silence remains neutral and is never treated as a rejection signal.
+    """
+    text = " ".join(_strip_html(p) for p in parts if p)
+    text = re.sub(r"\s+", " ", text).strip()
+    if not text:
+        return "not_mentioned", None
+
+    neg = VISA_NO_SPONSOR_RE.search(text)
+    if neg:
+        start = max(0, neg.start() - 55)
+        end = min(len(text), neg.end() + 70)
+        return "no_sponsorship", text[start:end].strip()
+
+    pos = VISA_SPONSOR_RE.search(text)
+    if pos:
+        start = max(0, pos.start() - 55)
+        end = min(len(text), pos.end() + 70)
+        return "sponsors", text[start:end].strip()
+
+    return "not_mentioned", None
+
+
 def visa_sponsorship_from_text(*parts: str) -> str:
-    text = " ".join(_strip_html(p) for p in parts if p).lower()
-    if not text.strip():
-        return "not_mentioned"
-    if any(k in text for k in VISA_NO_SPONSOR_KEYWORDS):
-        return "no_sponsorship"
-    if any(k in text for k in VISA_SPONSOR_KEYWORDS):
-        return "sponsors"
-    return "not_mentioned"
+    return classify_visa_sponsorship(*parts)[0]
+
+
+
+def notify_github_issue(jobs):
+    """Open one GitHub issue for high-value newly discovered jobs.
+
+    Local runs are a no-op because GITHUB_TOKEN/GITHUB_REPOSITORY are absent.
+    Notifications are selective: new + profile match >=55 + sponsorship signal.
+    """
+    token = os.environ.get("GITHUB_TOKEN")
+    repo = os.environ.get("GITHUB_REPOSITORY")
+    if not token or not repo:
+        return 0
+
+    positive_history = {"rare_positive", "occasional_positive", "frequent_positive"}
+    selected = []
+    for job in jobs or []:
+        if not job.get("new_since_last_check"):
+            continue
+        try:
+            score = int(job.get("candidate_match_score") or 0)
+        except Exception:
+            score = 0
+        if score < 55:
+            continue
+        hist = job.get("employer_sponsorship_history") or {}
+        if not (
+            job.get("visa_sponsorship") == "sponsors"
+            or int(job.get("official_permits_total") or 0) > 0
+            or hist.get("category") in positive_history
+        ):
+            continue
+        selected.append(job)
+
+    if not selected:
+        return 0
+
+    lines = []
+    for job in selected[:40]:
+        permit_total = int(job.get("official_permits_total") or 0)
+        hist = job.get("employer_sponsorship_history") or {}
+        visa_bits = []
+        if job.get("visa_sponsorship") == "sponsors":
+            visa_bits.append("posting mentions sponsorship")
+        if permit_total:
+            visa_bits.append(f"DETE permits: {permit_total}")
+        if hist.get("label"):
+            visa_bits.append(str(hist.get("label")))
+        lines.append(
+            f"- **{job.get('company','')}** — "
+            f"[{job.get('title','Untitled role')}]({job.get('url','')}) "
+            f"({job.get('location','Ireland')}) — "
+            f"match {score if False else int(job.get('candidate_match_score') or 0)}% — "
+            + ("; ".join(visa_bits) or "sponsorship signal")
+        )
+
+    body = "High-value new Ireland jobs found by Job Radar.\n\n" + "\n".join(lines)
+    if len(selected) > 40:
+        body += f"\n\n…and {len(selected) - 40} more qualifying jobs."
+
+    payload = json.dumps({
+        "title": "High-value Ireland job alert — " + datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC") + f" ({len(selected)})",
+        "body": body,
+    }).encode("utf-8")
+
+    req = urllib.request.Request(
+        f"https://api.github.com/repos/{repo}/issues",
+        data=payload,
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "Content-Type": "application/json",
+            "User-Agent": "ireland-job-radar",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            if getattr(resp, "status", 201) >= 300:
+                print(f"  ! GitHub issue notification HTTP {resp.status}")
+                return 0
+        print(f"GitHub issue notification: {len(selected)} high-value new jobs")
+        return len(selected)
+    except Exception as exc:
+        print(f"  ! GitHub issue notification failed: {exc}")
+        return 0
+
+def load_official_permit_stats(path="official_permit_stats.json"):
+    """Load monthly DETE permits-issued-to-companies evidence when present."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def sponsorship_history_label(stats):
+    """Summarize employer-level evidence without treating silence as negative."""
+    total = int(stats.get("total", 0) or 0)
+    sponsors = int(stats.get("sponsors", 0) or 0)
+    no_sponsorship = int(stats.get("no_sponsorship", 0) or 0)
+    if total < 5:
+        return {"label": f"Not enough history yet ({total} postings)", "category": "no_data"}
+    if sponsors == 0 and no_sponsorship == 0:
+        return {"label": f"No sponsorship language found ({total} postings)", "category": "no_data"}
+    if sponsors == 0 and no_sponsorship > 0:
+        return {"label": f"Explicitly rules out sponsorship in {no_sponsorship} of {total}", "category": "explicit_negative"}
+    ratio = sponsors / total
+    if ratio < 0.10:
+        return {"label": f"Rare sponsorship mentions ({sponsors} of {total})", "category": "rare_positive"}
+    if ratio < 0.40:
+        return {"label": f"Occasional sponsorship mentions ({sponsors} of {total})", "category": "occasional_positive"}
+    return {"label": f"Frequent sponsorship mentions ({sponsors} of {total})", "category": "frequent_positive"}
 
 
 def jsonld_page_is_ireland(company: str, url: str) -> bool:
@@ -2519,7 +2672,28 @@ def discover_and_scrape_manual(company_registry):
     print(f"Dynamic ATS discovery: {len(confirmed)} confirmed cached/discovered platforms; {fresh} new companies probed this run")
     return dynamic_jobs, confirmed
 
-def scrape_jsonld(company: str, url: str):
+JSONLD_CACHE_PATH = "jsonld_cache.json"
+JSONLD_NEGATIVE_CACHE_TTL_SECONDS = int(os.environ.get("JSONLD_NEGATIVE_CACHE_TTL_SECONDS", str(24 * 3600)))
+BROWSER_SCRAPE_CACHE_PATH = "browser_scrape_cache.json"
+BROWSER_SCRAPE_CACHE_TTL_SECONDS = int(os.environ.get("BROWSER_SCRAPE_CACHE_TTL_SECONDS", "600"))
+_SAFE_CACHE_LOCK = threading.Lock()
+
+def _load_safe_cache(path):
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+def _write_safe_cache(path, data):
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+    os.replace(tmp, path)
+
+
+def _scrape_jsonld_uncached(company: str, url: str):
     if not url:
         return []
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (job-dashboard-bot)"})
@@ -2574,6 +2748,26 @@ def scrape_jsonld(company: str, url: str):
                     "description_text": _strip_html(desc) if isinstance(desc, str) else "",
                 })
     return out
+
+
+def scrape_jsonld(company: str, url: str):
+    """Cache only recent confirmed-empty JSON-LD pages; positive pages stay fresh."""
+    if not url:
+        return []
+    key = hashlib.sha256(f"{_company_key(company)}|{url}".encode("utf-8")).hexdigest()
+    with _SAFE_CACHE_LOCK:
+        cache = _load_safe_cache(JSONLD_CACHE_PATH)
+        entry = cache.get(key) if isinstance(cache.get(key), dict) else None
+    if entry and not entry.get("has_data"):
+        age = time.time() - float(entry.get("checked_at") or 0)
+        if age < JSONLD_NEGATIVE_CACHE_TTL_SECONDS:
+            return []
+    jobs = _scrape_jsonld_uncached(company, url)
+    with _SAFE_CACHE_LOCK:
+        cache = _load_safe_cache(JSONLD_CACHE_PATH)
+        cache[key] = {"company": company, "url": url, "checked_at": time.time(), "has_data": bool(jobs)}
+        _write_safe_cache(JSONLD_CACHE_PATH, cache)
+    return jobs
 
 
 
@@ -4064,7 +4258,7 @@ def scrape_tiktok():
 
 
 
-def _browser_board_collect(company, urls, href_patterns, default_location="Ireland", max_scrolls=20,
+def _browser_board_collect_uncached(company, urls, href_patterns, default_location="Ireland", max_scrolls=20,
                            require_ireland=True, source_tag="direct"):
     """Generic Playwright collector for official career boards that block plain HTTP or render jobs client-side."""
     if not HAS_PLAYWRIGHT:
@@ -4154,6 +4348,38 @@ def _browser_board_collect(company, urls, href_patterns, default_location="Irela
     except Exception as exc:
         print(f"  ! {company} browser scrape failed: {exc}")
     return list(results.values())
+
+
+def _browser_board_collect(company, urls, href_patterns, default_location="Ireland", max_scrolls=20,
+                           require_ireland=True, source_tag="direct"):
+    """10-minute cache around the generic browser collector.
+
+    TTL is shorter than the 15-minute scheduled cadence, so scheduled runs remain fresh.
+    """
+    material = {
+        "company": company, "urls": list(urls or []), "href_patterns": list(href_patterns or []),
+        "default_location": default_location, "max_scrolls": max_scrolls,
+        "require_ireland": require_ireland, "source_tag": source_tag,
+    }
+    key = hashlib.sha256(json.dumps(material, sort_keys=True, default=str).encode("utf-8")).hexdigest()
+    with _SAFE_CACHE_LOCK:
+        cache = _load_safe_cache(BROWSER_SCRAPE_CACHE_PATH)
+        entry = cache.get(key) if isinstance(cache.get(key), dict) else None
+    if entry:
+        age = time.time() - float(entry.get("checked_at") or 0)
+        if age < BROWSER_SCRAPE_CACHE_TTL_SECONDS:
+            jobs = entry.get("jobs") or []
+            print(f"  {company}: browser cache hit ({age/60:.1f}m old)")
+            return jobs
+    jobs = _browser_board_collect_uncached(
+        company, urls, href_patterns, default_location=default_location, max_scrolls=max_scrolls,
+        require_ireland=require_ireland, source_tag=source_tag,
+    )
+    with _SAFE_CACHE_LOCK:
+        cache = _load_safe_cache(BROWSER_SCRAPE_CACHE_PATH)
+        cache[key] = {"company": company, "checked_at": time.time(), "jobs": jobs or []}
+        _write_safe_cache(BROWSER_SCRAPE_CACHE_PATH, cache)
+    return jobs
 
 
 def scrape_tiktok():
@@ -19245,9 +19471,11 @@ def main():
         j["country"] = "Ireland" if IRELAND_ONLY else country_from_location(j.get("location"))
         j["ireland_area"] = ireland_area(j.get("location"))
         description_text = j.get("description_text") or ""
-        j["visa_sponsorship"] = visa_sponsorship_from_text(
+        visa_status, visa_snippet = classify_visa_sponsorship(
             j.get("title"), j.get("location"), description_text,
         )
+        j["visa_sponsorship"] = visa_status
+        j["visa_snippet"] = visa_snippet
         # Generic CV/job matching metadata. No user-profile-specific title filtering.
         j["match_keywords"] = resume_match_keywords(
             j.get("title"), j.get("company"), j.get("sector"), j.get("location"), description_text
@@ -19510,6 +19738,104 @@ def main():
     except Exception as exc:
         print(f"  ! Could not write {history_path}: {exc}")
 
+    # ------------------------------------------------------------
+    # Persistent sponsorship history + official permit evidence.
+    # Count UNIQUE postings, not every 15-minute scan, so history remains
+    # meaningful as scrape frequency increases.
+    # ------------------------------------------------------------
+    sponsorship_history_path = "sponsorship_history.json"
+    try:
+        with open(sponsorship_history_path, encoding="utf-8") as f:
+            sponsorship_history = json.load(f)
+        if not isinstance(sponsorship_history, dict):
+            sponsorship_history = {}
+    except Exception:
+        sponsorship_history = {}
+
+    sponsorship_history.setdefault("tracking_started", now_iso)
+    sponsorship_jobs = sponsorship_history.setdefault("jobs", {})
+
+    for job in results:
+        key = _history_job_key(job)
+        status = job.get("visa_sponsorship") or "not_mentioned"
+        rec = sponsorship_jobs.get(key)
+        if not isinstance(rec, dict):
+            rec = {
+                "company": job.get("company"),
+                "title": job.get("title"),
+                "location": job.get("location"),
+                "url": job.get("url"),
+                "first_seen": job.get("first_seen_at") or now_iso,
+            }
+        rec.update({
+            "company": job.get("company"),
+            "title": job.get("title"),
+            "location": job.get("location"),
+            "url": job.get("url"),
+            "status": status,
+            "snippet": job.get("visa_snippet"),
+            "last_seen": now_iso,
+        })
+        sponsorship_jobs[key] = rec
+
+    sponsorship_company_counts = {}
+    for rec in sponsorship_jobs.values():
+        if not isinstance(rec, dict):
+            continue
+        company_name = str(rec.get("company") or "").strip()
+        if not company_name:
+            continue
+        stats = sponsorship_company_counts.setdefault(company_name, {
+            "sponsors": 0,
+            "no_sponsorship": 0,
+            "not_mentioned": 0,
+            "total": 0,
+        })
+        status = rec.get("status") or "not_mentioned"
+        if status not in {"sponsors", "no_sponsorship", "not_mentioned"}:
+            status = "not_mentioned"
+        stats[status] += 1
+        stats["total"] += 1
+
+    official_permit_stats = load_official_permit_stats()
+    company_sponsorship_history = {}
+    for company_name, counts in sponsorship_company_counts.items():
+        summary = sponsorship_history_label(counts)
+        permit = official_permit_stats.get(company_name) or {}
+        total = max(1, int(counts.get("total", 0) or 0))
+        explicit = int(counts.get("sponsors", 0) or 0) + int(counts.get("no_sponsorship", 0) or 0)
+        company_sponsorship_history[company_name] = {
+            **counts,
+            "sponsor_rate": round(int(counts.get("sponsors", 0) or 0) / total, 4),
+            "explicit_positive_rate": round(int(counts.get("sponsors", 0) or 0) / explicit, 4) if explicit else None,
+            "label": summary["label"],
+            "category": summary["category"],
+            "official_permits_total": int(permit.get("total_permits", 0) or 0),
+            "official_permits_by_year": permit.get("permits_by_year") or {},
+            "official_matched_employer_names": permit.get("matched_employer_names") or [],
+        }
+
+    sponsorship_history["companies"] = company_sponsorship_history
+    sponsorship_history["updated_at"] = now_iso
+    sponsorship_history["unique_postings_tracked"] = len(sponsorship_jobs)
+
+    try:
+        with open(sponsorship_history_path, "w", encoding="utf-8") as f:
+            json.dump(sponsorship_history, f, indent=2, ensure_ascii=False)
+    except Exception as exc:
+        print(f"  ! Could not write {sponsorship_history_path}: {exc}")
+
+    for job in results:
+        company_name = job.get("company") or ""
+        hist = company_sponsorship_history.get(company_name) or {
+            "sponsors": 0, "no_sponsorship": 0, "not_mentioned": 0,
+            "total": 0, "label": "No sponsorship history yet", "category": "no_data",
+            "official_permits_total": 0, "official_permits_by_year": {},
+        }
+        job["employer_sponsorship_history"] = hist
+        job["official_permits_total"] = int(hist.get("official_permits_total", 0) or 0)
+        job["official_permits_by_year"] = hist.get("official_permits_by_year") or {}
+
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "scrape_mode": SCRAPE_MODE,
@@ -19548,6 +19874,10 @@ def main():
             for name, entry in history_companies.items()
             if isinstance(entry, dict)
         },
+        "sponsorship_history_tracking_started": sponsorship_history.get("tracking_started"),
+        "sponsorship_unique_postings_tracked": len(sponsorship_jobs),
+        "company_sponsorship_history": company_sponsorship_history,
+        "official_permit_stats_company_count": len(official_permit_stats),
         "coverage_diagnostics": coverage_diagnostics,
         "connector_health": CONNECTOR_HEALTH,
         "live_zero_companies": [
@@ -19572,6 +19902,8 @@ def main():
 
     with open("data.json", "w") as f:
         json.dump(output, f, indent=2)
+
+    notify_github_issue(results)
 
     print(f"\nDone. {len(results)} matching jobs written to data.json ({len(errors)} companies errored).")
 

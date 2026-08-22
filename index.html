@@ -230,6 +230,9 @@
   }
   .visa-badge.sponsors { background: var(--teal-dim); color: var(--teal); border-color: #3fcf9a44; }
   .visa-badge.no { background: var(--rose-dim); color: var(--rose); border-color: #e2643b44; }
+  .visa-stack { display:flex; flex-direction:column; gap:4px; flex:1; min-width:0; }
+  .visa-history { font:10px var(--mono); color:var(--muted); line-height:1.35; }
+  .visa-history strong { color:var(--text); }
   .apply-hint { font-size: 11px; color: var(--amber); font-weight: 700; white-space: nowrap; }
 
   .empty {
@@ -630,9 +633,11 @@ body{background:#f3f4f6!important}
     </select>
     <select id="fVisa">
       <option value="">Any visa status</option>
-      <option value="sponsors">Mentions sponsorship</option>
-      <option value="no_sponsorship">Says no sponsorship</option>
-      <option value="not_mentioned">Not mentioned</option>
+      <option value="sponsors">Current job mentions sponsorship</option>
+      <option value="historical_sponsor">Employer has sponsorship history</option>
+      <option value="official_permits">Employer has official permit record</option>
+      <option value="no_sponsorship">Current job says no sponsorship</option>
+      <option value="not_mentioned">Current job does not mention visa</option>
       <option value="other">Other / unclear</option>
     </select>
     <label class="profile-match-toggle"
@@ -1447,7 +1452,10 @@ if (search) {
     if (profileMatchOnly && m < 55) return false;
         if (newOnly === 'new' && !j.new_since_last_check) return false;
     const v = j.visa_sponsorship || 'not_mentioned';
-    if (visa && v !== visa) return false;
+    const vh = j.employer_sponsorship_history || {};
+    if (visa === 'historical_sponsor' && Number(vh.sponsors || 0) <= 0) return false;
+    if (visa === 'official_permits' && Number(j.official_permits_total || vh.official_permits_total || 0) <= 0) return false;
+    if (visa && !['historical_sponsor','official_permits'].includes(visa) && v !== visa) return false;
     if (posted && !postedWithin(getJobPostedDate(j), posted)) return false;
     if (employmentFilter && classifyEmploymentType(j) !== employmentFilter) return false;
     if (employmentLevelFilter && classifyEmploymentLevel(j) !== employmentLevelFilter) return false;
@@ -1501,6 +1509,8 @@ if (search) {
     const bucket = recencyBucket(postedDate);
     const fresh = ageHours(postedDate) <= 24;
     const badge = visaLabel(j.visa_sponsorship || 'not_mentioned');
+    const visaHistory = j.employer_sponsorship_history || {};
+    const permitTotal = Number(j.official_permits_total || visaHistory.official_permits_total || 0);
     const pm = personalJobMatch(j);
     const type = j.employment_type || employmentType(j.title);
     const typeLabel = { internship: 'Internship' }[type];
@@ -1533,7 +1543,13 @@ if (search) {
         <span class="chip type">${escapeHtml(employmentTypeLabel(classifyEmploymentType(j)))}</span>
       </div>
       <div class="card-foot">
-        <span class="visa-badge ${badge.cls}">${escapeHtml(badge.text)}</span>
+        <div class="visa-stack">
+          <span class="visa-badge ${badge.cls}" title="${escapeHtml(j.visa_snippet || '')}">${escapeHtml(badge.text)}</span>
+          <div class="visa-history">
+            <strong>Employer history:</strong> ${escapeHtml(visaHistory.label || 'No sponsorship history yet')}
+            ${permitTotal > 0 ? ` · <strong>${permitTotal}</strong> official permits` : ''}
+          </div>
+        </div>
         <div style="display:flex;gap:6px;align-items:center;">
           <button type="button" class="save-btn ${isSaved(j) ? 'saved' : ''}" data-save-job="1">${isSaved(j) ? '✓ Saved' : 'Save'}</button>
           <button type="button" class="ignore-btn" data-ignore-job="1">Ignore</button>

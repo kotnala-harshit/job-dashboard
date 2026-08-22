@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: ireland-job-radar-refresh
@@ -39,6 +40,7 @@ jobs:
           JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
           CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
           ATS_PROBE_LIMIT: "100"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scrape.py
 
       - name: Commit generated state safely
@@ -56,6 +58,8 @@ jobs:
             job_state.json
             connector_cache.json
             ats_platform_cache.json
+            browser_scrape_cache.json
+            jsonld_cache.json
             sponsorship_history.json
             official_permit_stats.json
           )

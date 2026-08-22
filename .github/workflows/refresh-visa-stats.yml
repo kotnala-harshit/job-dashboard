@@ -1,0 +1,61 @@
+name: Refresh Ireland visa permit stats
+
+on:
+  schedule:
+    - cron: '23 5 1 * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ireland-visa-permit-stats
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install permit-stat dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests openpyxl
+      - name: Refresh official DETE permit statistics
+        run: |
+          python visa_stats.py \
+            --companies ireland_job_radar_HARSHIT_MASTER.csv \
+            --output official_permit_stats.json
+      - name: Commit permit stats safely
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "job-radar-bot"
+          git config user.email "actions@users.noreply.github.com"
+          tmp="$(mktemp)"
+          cp official_permit_stats.json "$tmp"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp "$tmp" official_permit_stats.json
+            git add official_permit_stats.json
+            if git diff --staged --quiet; then
+              echo "No permit-stat changes"
+              exit 0
+            fi
+            git commit -m "Refresh Ireland employment permit stats $(date -u +%Y-%m-%d)"
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+            cp official_permit_stats.json "$tmp" || true
+            sleep 5
+          done
+          echo "All push attempts failed"
+          exit 1
