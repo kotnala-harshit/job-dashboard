@@ -92,11 +92,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Airbnb": {
-    "platform": "greenhouse",
-    "slug": "airbnb",
-    "probe_version": 35
-  },
   "Aiven": {
     "platform": "pinpoint",
     "slug": "aiven",
@@ -1115,11 +1110,6 @@
   "Kirby Group Engineering": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Kitman Labs": {
-    "platform": "lever",
-    "slug": "kitmanlabs",
     "probe_version": 35
   },
   "Klaviyo": {
@@ -2995,6 +2985,16 @@
   "Apex Group": {
     "platform": "workday",
     "slug": "theapexgroup|wd3|apexgroupcareers",
+    "probe_version": 35
+  },
+  "Kitman Labs": {
+    "platform": "lever",
+    "slug": "kitmanlabs",
+    "probe_version": 35
+  },
+  "Airbnb": {
+    "platform": "greenhouse",
+    "slug": "airbnb",
     "probe_version": 35
   },
   "__probe_version__": 35
