@@ -429,6 +429,39 @@ button:active,.btn:active{transform:translateY(1px)}
   background:var(--panel)!important;color:var(--text)!important;
   box-shadow:inset 0 -2px 0 var(--text)!important;font-weight:650;
 }
+.profile-match-toggle{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-height:36px;
+  padding:0 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff;
+  cursor:pointer;
+  user-select:none;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:600;
+}
+
+.profile-match-toggle:hover{
+  border-color:var(--amber);
+}
+
+.profile-match-toggle input{
+  width:16px;
+  height:16px;
+  margin:0;
+  accent-color:var(--amber);
+  cursor:pointer;
+}
+
+.profile-match-count{
+  color:var(--muted);
+  font:10px var(--mono);
+}
+
 .filter-row,.filters{
   background:var(--panel)!important;border:1px solid var(--line)!important;
   border-radius:var(--radius)!important;padding:12px!important;
@@ -569,28 +602,6 @@ body{background:#f3f4f6!important}
       <option value="other">Other</option>
     </select>
 
-    <select id="fRadar">
-      <option value="">All Ireland jobs</option>
-      <option value="for_you">For You (backend profile)</option>
-      <option value="best">Best Matches (75+)</option>
-      <option value="new_today">New Today</option>
-      <option value="hidden">Hidden / Discovery Value</option>
-      <option value="graduate">Graduate Radar</option>
-      <option value="closing">Closing Soon</option>
-    </select>
-    <select id="fRoleFamily">
-      <option value="">All role families</option>
-      <option value="Other">Other</option>
-    </select>
-    <select id="fExperience">
-      <option value="">Any experience fit</option>
-      <option value="Strong">Strong</option>
-      <option value="Possible">Possible</option>
-      <option value="Stretch">Stretch</option>
-      <option value="Overqualified">Overqualified</option>
-      <option value="Too Senior">Too Senior</option>
-      <option value="Other">Other</option>
-    </select>
 
     <select id="fEmployment">
       <option value="">All employment types</option>
@@ -624,13 +635,16 @@ body{background:#f3f4f6!important}
       <option value="not_mentioned">Not mentioned</option>
       <option value="other">Other / unclear</option>
     </select>
-    <select id="fSort">
-      <option value="match">Best candidate match</option>
-      <option value="discovery">Highest discovery value</option>
-      <option value="date">Newest first</option>
-      <option value="company">Company A–Z</option>
-      <option value="title">Title A–Z</option>
-    </select>
+    <label class="profile-match-toggle"
+      title="Show jobs with at least 55% candidate match">
+      <input id="fProfileMatch"
+             type="checkbox"
+             onchange="applyFilters()" />
+      <span>Match my profile</span>
+      <span id="profileMatchCount"
+            class="profile-match-count"></span>
+    </label>
+
     <div class="loadctrl">
       <span id="liveStatus" class="live-dot">● live</span>
       <button id="searchEnterBtn" type="button" onclick="applyFilters()">Search / Enter</button>
@@ -1024,12 +1038,17 @@ function loadData(data) {
   const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
   document.getElementById('stManual').textContent = directoryCount;
 
-  // Populate companies from the full registry, plus any live/manual records for backward compatibility.
-  const companyUniverse = [
-    ...ALL_REGISTRY.map(c => c.company),
-    ...ALL_JOBS.map(j => j.company),
-    ...ALL_MANUAL.map(c => c.company)
-  ];
+  // The main company filter is intentionally restricted to the
+  // 250 employers enabled in include_in_scrape_registry.
+  // Reserve/inactive companies from the 600-company master must never
+  // leak into the user-facing "All companies" dropdown.
+  const ACTIVE_FILTER_COMPANIES = ["A&L Goodbody","AECOM","AIB (Allied Irish Banks)","AIG","AMCS Group","ASL Aviation Holdings","ASML","AXA Ireland","AXA XL","AbbVie","Abbott","Accenture","ActionPoint","Adobe","Advanced Micro Devices (AMD)","Aer Lingus","Agilent Technologies","AirNav Ireland","Airbnb","Aiven","Akamai","Alexion Pharmaceuticals","Alkermes","Allianz Ireland","Alter Domus","Amazon","Amundi","An Post","Analog Devices","Anthropic","Aon","Apex Group","Apple","Applied Materials","Aptiv","Arcadis","Arista Networks","Arthur Cox","Arup","Asana","Astellas Pharma","AstraZeneca","AtkinsRéalis","Atlantic Technological University (ATU)","Autodesk","Auxilion","Avanade","Aviva Ireland","Avolon","BDO Ireland","BNP Paribas Ireland","BT Ireland","Bain & Company","Baker Tilly Ireland","Bank of America","Bank of Ireland","Barclays","Bausch + Lomb","Baxter International","Bayer","BearingPoint","Becton Dickinson (BD)","BioMarin","BlackRock","Bloomberg","Boehringer Ingelheim","Bord Gáis Energy","Bord na Móna","Boston Scientific","Bristol Myers Squibb","Broadcom","Brown Brothers Harriman","Bus Éireann","CACEIS","CBRE Ireland","CGI","CRH","Cadence Design Systems","Canto","Capgemini","CarTrawler","Carne Group","Catalent","Central Bank of Ireland","Charles River Laboratories","Check Point Software","Chubb","Circle K Ireland","Cisco","Citco","Citi","CitySwift","ClickUp","Cloudflare","CluneTech","Coca-Cola HBC Ireland","Codec","Cognizant","Coinbase","Concentrix (Ireland)","CrowdStrike","Crusoe","CyberArk","DCC plc","DHL Ireland","DPS Group (Arcadis)","DXC Technology","Danaher Corporation","Databricks","Datadog","Datalex","Davy","Dawn Meats","Decathlon Ireland","Dell Technologies","Deloitte Ireland","Dexcom","Diageo Ireland","Dillon Eustace","DocuSign","Dublin City University (DCU)","Dynatrace","ESB","ESW","EXL","EY Ireland","Eaton","Ekco","Elavon","Eli Lilly","Energia Group","Enterprise Ireland","Ergo","Ericsson","Eurofins Scientific","Fenergo","Fidelity International","Fiserv","Flipdish","Forvis Mazars Ireland","Fujitsu","GE HealthCare","Genesys","Gilead Sciences","Google","Grant Thornton Ireland","GridBeyond","HCLTech","Harvey Nash Ireland","Hitachi Energy","Honeywell","Huawei Ireland","HubSpot","IBM","Infosys","Integrity360","Intel","Intercom","Irish Life","Irish Rail (Iarnród Éireann)","JD Sports Ireland","JPMorgan Chase","Jacobs","Johnson & Johnson","Johnson Controls","KLA Corporation","KPMG Ireland","Kerry Group","Kitman Labs","Klaviyo","Kuehne+Nagel Ireland","Kyndryl","LearnUpon","LetsGetChecked","MSD (Merck Sharp & Dohme)","Marsh McLennan","Mastercard","Medtronic","Mercer","Merit Medical","Meta","Microsoft","MongoDB","Motorola Solutions","Munster Technological University (MTU)","Musgrave Group (SuperValu / Centra)","NTT DATA","NetApp","Northern Trust","Notion","Okta","OpenAI","OpenText","Oracle","PIMCO","PM Group","PayPal","PepsiCo","Pfizer","Pinterest","Public Jobs / Civil Service","Pure Storage","PwC Ireland","Qualtrics","Quest Software","RCSI University of Medicine and Health Sciences","Red Hat","Reddit","Revenue","Roche","Ryanair","S&P Global","SAP","SMBC Aviation Capital","Salesforce","Sanofi","Schneider Electric","ServiceNow","Snowflake","SolarWinds","Squarespace","State Street","Stripe","Susquehanna International Group (SIG)","Tata Consultancy Services (TCS)","Technological University Dublin (TU Dublin)","Technological University of the Shannon (TUS)","Tenable","Tesco Ireland","Thermo Fisher Scientific","TikTok","Tines","Toast","Tricentis","Trinity College Dublin","Twilio","Udemy","University College Cork (UCC)","University of Galway","Veeam","Version 1","Vodafone Ireland","Wayflyer","Wells Fargo","Wipro","Workday","Zimmer Biomet","Zscaler","daa (Dublin Airport Authority)","eBay"];
+  const ACTIVE_FILTER_COMPANY_SET = new Set(ACTIVE_FILTER_COMPANIES);
+
+  // Keep all 250 active employers selectable even when a company has
+  // zero live jobs in the latest scrape. Its official careers-page
+  // fallback can therefore still be reached from the company filter.
+  const companyUniverse = ACTIVE_FILTER_COMPANIES;
   fillSelect('fCompany', companyUniverse);
   fillSelect('fSector', ALL_JOBS.map(j => j.sector || 'Other'));
   fillSelect('fSource', ALL_JOBS.map(j => j.ats), v => v.charAt(0).toUpperCase() + v.slice(1));
@@ -1046,13 +1065,9 @@ function setupInstantFilters() {
     'fSource',
     'fPosted',
     'fEmployment',
-    'fRadar',
-    'fRoleFamily',
-    'fExperience',
     'fEmploymentLevel',
     'fNew',
     'fVisa',
-    'fSort'
   ];
 
   ids.forEach(id => {
@@ -1106,12 +1121,8 @@ async function autoFetchJobs() {
 
 
 function populateRoleFamilies() {
-  const el = document.getElementById('fRoleFamily');
-  if (!el) return;
-  const current = el.value;
-  const families = [...new Set(ALL_JOBS.map(j => j.role_family).filter(x => x && x !== 'Other'))].sort();
-  el.innerHTML = '<option value="">All role families</option>' + families.map(x => `<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');
-  el.value = current;
+  // Role-family dropdown intentionally removed from dashboard.
+  return;
 }
 
 function closingSoon(j) {
@@ -1402,12 +1413,10 @@ function applyFilters() {
   const type =
     (document.getElementById('fEmployment')?.value || '') ||
     (document.getElementById('fType')?.value || '');
-  const radar = document.getElementById('fRadar').value;
-  const roleFamily = document.getElementById('fRoleFamily').value;
-  const expFit = document.getElementById('fExperience').value;
+  const profileMatchOnly =
+    document.getElementById('fProfileMatch')?.checked === true;
   const newOnly = document.getElementById('fNew').value;
   const visa = document.getElementById('fVisa').value;
-  const sort = document.getElementById('fSort').value;
 
   const employmentFilter = document.getElementById('fEmployment')?.value || '';
   const employmentLevelFilter =
@@ -1431,16 +1440,11 @@ if (search) {
     if (sector && (j.sector || 'Other') !== sector) return false;
     if (source && j.ats !== source) return false;
     if (isIgnored(j)) return false;
-    if (roleFamily && j.role_family !== roleFamily) return false;
-    if (expFit && personalJobMatch(j).experienceFit !== expFit) return false;
     const m = effectiveMatchScore(j);
-    const dscore = Number(j.discovery_score || 0);
-    if (radar === 'for_you' && m < 55) return false;
-    if (radar === 'best' && m < 75) return false;
-    if (radar === 'new_today' && ageHours(parsePostedDate(j.first_seen_at || j.updated_at || j.posted_at_parsed)) > 24) return false;
-    if (radar === 'hidden' && dscore < 65) return false;
-    if (radar === 'graduate' && !( /graduate|intern|entry|junior/i.test(j.title || '') || j.role_tier === 'A' && m >= 65)) return false;
-    if (radar === 'closing' && !closingSoon(j)) return false;
+
+    // Reuse the existing backend candidate-match score.
+    // This is the former "For You" threshold.
+    if (profileMatchOnly && m < 55) return false;
         if (newOnly === 'new' && !j.new_since_last_check) return false;
     const v = j.visa_sponsorship || 'not_mentioned';
     if (visa && v !== visa) return false;
@@ -1451,11 +1455,28 @@ if (search) {
   });
 
   const secondaryCompare = (a, b) => {
-    if (sort === 'match') return effectiveMatchScore(b)-effectiveMatchScore(a) || (b.discovery_score||0)-(a.discovery_score||0);
-    if (sort === 'discovery') return (b.discovery_score||0)-(a.discovery_score||0) || (b.candidate_match_score||0)-(a.candidate_match_score||0);
-    if (sort === 'company') return (a.company || '').localeCompare(b.company || '');
-    if (sort === 'title') return (a.title || '').localeCompare(b.title || '');
-    return new Date(b.updated_at || 0) - new Date(a.updated_at || 0);
+    if (profileMatchOnly) {
+      return (
+        effectiveMatchScore(b) - effectiveMatchScore(a) ||
+        Number(b.discovery_score || 0) - Number(a.discovery_score || 0) ||
+        new Date(b.updated_at || 0) - new Date(a.updated_at || 0)
+      );
+    }
+
+    return (
+      new Date(
+        b.updated_at ||
+        b.posted_at_parsed ||
+        b.first_seen_at ||
+        0
+      ) -
+      new Date(
+        a.updated_at ||
+        a.posted_at_parsed ||
+        a.first_seen_at ||
+        0
+      )
+    );
   };
 
   if (search) {
@@ -1539,6 +1560,18 @@ if (search) {
   renderDiagnostics(search);
   renderLiveCompanies(search);
   renderProvenWorkingCompanies(search);
+  const profileCountEl =
+    document.getElementById('profileMatchCount');
+
+  if (profileCountEl) {
+    const profileEligibleCount = ALL_JOBS.filter(
+      j => !isIgnored(j) && effectiveMatchScore(j) >= 55
+    ).length;
+
+    profileCountEl.textContent =
+      `(${profileEligibleCount})`;
+  }
+
   document.getElementById('tabLive').textContent = `Live matches (${filtered.length})`;
   const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
   document.getElementById('tabDir').textContent = `Careers pages (${directoryCount})`;
