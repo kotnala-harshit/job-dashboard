@@ -2427,19 +2427,9 @@
     "slug": null,
     "probe_version": 35
   },
-  "Apex Group": {
-    "platform": "workday",
-    "slug": "theapexgroup|wd3|apexgroupcareers",
-    "probe_version": 35
-  },
   "AstraZeneca": {
     "platform": "eightfold",
     "slug": "astrazeneca",
-    "probe_version": 35
-  },
-  "Cadence Design Systems": {
-    "platform": "workday",
-    "slug": "cadence|wd1|External_Careers",
     "probe_version": 35
   },
   "Fixify": {
@@ -2470,11 +2460,6 @@
   "Bain & Company": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "CrowdStrike": {
-    "platform": "workday",
-    "slug": "crowdstrike|wd5|crowdstrikecareers",
     "probe_version": 35
   },
   "Veeam": {
@@ -2680,11 +2665,6 @@
   "Carbery Group": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Circle K Ireland": {
-    "platform": "workday",
-    "slug": "circlek|wd3|CircleKStoreJobs",
     "probe_version": 35
   },
   "Clayton Hotels": {
@@ -2937,11 +2917,6 @@
     "slug": "unilever|wd3|Unilever_Experienced_Professionals",
     "probe_version": 35
   },
-  "KLA Corporation": {
-    "platform": "workday",
-    "slug": "kla|wd1|Search",
-    "probe_version": 35
-  },
   "Boston Consulting Group (BCG)": {
     "platform": "greenhouse",
     "slug": "boston",
@@ -2950,11 +2925,6 @@
   "Life Style Sports": {
     "platform": "lever",
     "slug": "life",
-    "probe_version": 35
-  },
-  "Concentrix (Ireland)": {
-    "platform": "workday",
-    "slug": "cnx|wd1|external_global",
     "probe_version": 35
   },
   "EY Ireland": {
@@ -2995,6 +2965,36 @@
   "Pure Storage": {
     "platform": "greenhouse",
     "slug": "purestorage",
+    "probe_version": 35
+  },
+  "CrowdStrike": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Apex Group": {
+    "platform": "greenhouse",
+    "slug": "apex",
+    "probe_version": 35
+  },
+  "Cadence Design Systems": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Concentrix (Ireland)": {
+    "platform": "greenhouse",
+    "slug": "ireland",
+    "probe_version": 35
+  },
+  "KLA Corporation": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Circle K Ireland": {
+    "platform": "pinpoint",
+    "slug": "circlek",
     "probe_version": 35
   },
   "__probe_version__": 35
