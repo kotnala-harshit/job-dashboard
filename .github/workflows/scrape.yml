@@ -2,7 +2,7 @@ name: Refresh Ireland Job Radar
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: '*/15 * * * *'
   workflow_dispatch: {}
 
 permissions:
