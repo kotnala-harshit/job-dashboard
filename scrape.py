@@ -3283,7 +3283,7 @@ def scrape_jpmorgan():
         "JPMorgan Chase",
         "https://jpmc.fa.oraclecloud.com",
         "CX_1001",
-        "IE",
+        "300000000289351",
     )
 
 
@@ -19174,6 +19174,23 @@ def main():
                         f"{k}={v}" for k, v in identity_pairs
                     )
                     url_key = f"{base_url}?{query_key}"
+
+                elif "candidatemanager.net" in parsed.netloc.lower():
+                    # CandidateManager vacancy pages share one path.
+                    # The stable vacancy identity is the jid query parameter.
+                    jid = (
+                        params.get("jid")
+                        or params.get("jobid")
+                        or params.get("job_id")
+                    )
+
+                    if jid and jid[0]:
+                        url_key = (
+                            f"{base_url}"
+                            f"?jid={str(jid[0]).strip().lower()}"
+                        )
+                    else:
+                        url_key = base_url
 
                 elif company_key == _company_key("Google"):
                     # Google collector currently uses a result-page URL for
