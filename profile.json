@@ -1,0 +1,168 @@
+{
+  "profile_id": "harshit-business-analytics-ie",
+  "version": 1,
+  "name": "Business Analytics / Data / Technology",
+  "experience_years": 3,
+  "preferred_locations": [
+    "Ireland",
+    "Dublin",
+    "Cork",
+    "Galway",
+    "Limerick"
+  ],
+  "role_families": {
+    "Business Analytics": {
+      "tier": "A",
+      "weight": 42,
+      "titles": [
+        "business analyst",
+        "business analytics",
+        "analytics consultant",
+        "data analyst",
+        "insights analyst",
+        "reporting analyst",
+        "commercial analyst",
+        "operations analyst",
+        "strategy analyst",
+        "product analyst"
+      ]
+    },
+    "Data & BI": {
+      "tier": "A",
+      "weight": 40,
+      "titles": [
+        "data analyst",
+        "bi analyst",
+        "business intelligence",
+        "power bi",
+        "data visualization",
+        "reporting developer",
+        "analytics engineer",
+        "data consultant"
+      ]
+    },
+    "Data Engineering": {
+      "tier": "A",
+      "weight": 35,
+      "titles": [
+        "data engineer",
+        "etl developer",
+        "analytics engineer",
+        "data platform",
+        "data integration",
+        "sql developer"
+      ]
+    },
+    "Technology Consulting": {
+      "tier": "A",
+      "weight": 36,
+      "titles": [
+        "technology consultant",
+        "digital consultant",
+        "management consultant",
+        "transformation consultant",
+        "erp consultant",
+        "implementation consultant",
+        "solutions consultant"
+      ]
+    },
+    "Product & Operations": {
+      "tier": "B",
+      "weight": 31,
+      "titles": [
+        "product analyst",
+        "product operations",
+        "business operations",
+        "operations analyst",
+        "program analyst",
+        "project analyst",
+        "process analyst"
+      ]
+    },
+    "Graduate & Entry": {
+      "tier": "A",
+      "weight": 38,
+      "titles": [
+        "graduate",
+        "graduate programme",
+        "graduate program",
+        "entry level",
+        "junior analyst",
+        "associate analyst",
+        "intern"
+      ]
+    }
+  },
+  "skills": {
+    "analytics": [
+      "SQL",
+      "Python",
+      "R",
+      "Excel",
+      "Power BI",
+      "Tableau",
+      "Data Analysis",
+      "Data Visualization",
+      "Statistics"
+    ],
+    "data": [
+      "ETL",
+      "Data Warehousing",
+      "Data Modeling",
+      "Data Quality",
+      "Snowflake",
+      "Databricks"
+    ],
+    "business": [
+      "Requirements Gathering",
+      "Stakeholder Management",
+      "Business Analysis",
+      "Process Mapping",
+      "UAT",
+      "Agile",
+      "Scrum"
+    ],
+    "technology": [
+      "AWS",
+      "Azure",
+      "Oracle",
+      "ERP",
+      "APIs",
+      "Git"
+    ]
+  },
+  "skill_aliases": {
+    "powerbi": "Power BI",
+    "power-bi": "Power BI",
+    "business intelligence": "Power BI",
+    "structured query language": "SQL",
+    "python3": "Python",
+    "extract transform load": "ETL",
+    "user acceptance testing": "UAT",
+    "requirements elicitation": "Requirements Gathering",
+    "stakeholder engagement": "Stakeholder Management",
+    "data warehouse": "Data Warehousing"
+  },
+  "seniority_penalties": {
+    "director": 28,
+    "vice president": 30,
+    "vp": 30,
+    "head of": 30,
+    "principal": 22,
+    "staff": 20,
+    "senior manager": 18
+  },
+  "negative_title_terms": [
+    "nurse",
+    "doctor",
+    "pharmacist",
+    "mechanic",
+    "electrician",
+    "driver",
+    "chef",
+    "warehouse operative",
+    "retail assistant",
+    "sales assistant",
+    "security guard"
+  ]
+}
