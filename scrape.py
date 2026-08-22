@@ -2954,107 +2954,276 @@ def _absolute_url(base: str, href: str) -> str:
 
 
 def scrape_oracle_candidate_experience(
-    company: str,
-    host: str,
-    site_number: str,
-    country_code: str = "IE",
-    max_pages: int = 12,
+    company="Oracle",
+    base_url=(
+        "https://eeho.fa.us2.oraclecloud.com"
+    ),
+    site_number="CX_45001",
+    location_id="300000000106938",
 ):
-    """Collect jobs from Oracle Recruiting Candidate Experience.
-
-    Oracle's public Candidate Experience UI is JavaScript-heavy, but its job
-    search uses the public recruitingCEJobRequisitions REST resource. This
-    adapter keeps the collection company-specific and Ireland-specific.
     """
-    base = host.rstrip("/")
-    endpoint = base + "/hcmRestApi/resources/latest/recruitingCEJobRequisitions"
-    out = []
-    seen = set()
-    limit = 100
+    Oracle Candidate Experience Ireland connector.
 
-    for page in range(max_pages):
-        offset = page * limit
-        finder = (
-            f"findReqs;siteNumber={site_number},"
-            f"workLocationCountryCode={country_code},"
-            f"limit={limit},offset={offset}"
+    Uses the official public Oracle HCM REST requisition search
+    endpoint discovered from the Candidate Experience careers page.
+    Collection is restricted to the Republic of Ireland location facet.
+    """
+    import json
+    import urllib.parse
+    import urllib.request
+
+    endpoint = (
+        f"{base_url}/hcmRestApi/resources/latest/"
+        "recruitingCEJobRequisitions"
+    )
+
+    finder = (
+        "findReqs;"
+        f"siteNumber={site_number},"
+        "facetsList="
+        "LOCATIONS;WORK_LOCATIONS;WORKPLACE_TYPES;"
+        "TITLES;CATEGORIES;ORGANIZATIONS;"
+        "POSTING_DATES;FLEX_FIELDS,"
+        "limit=100,"
+        f"locationId={location_id},"
+        "sortBy=POSTING_DATES_DESC"
+    )
+
+    params = {
+        "onlyData": "true",
+        "expand": (
+            "requisitionList.workLocation,"
+            "requisitionList.otherWorkLocations,"
+            "requisitionList.secondaryLocations,"
+            "flexFieldsFacet.values,"
+            "requisitionList.requisitionFlexFields"
+        ),
+        "finder": finder,
+    }
+
+    url = (
+        endpoint
+        + "?"
+        + urllib.parse.urlencode(
+            params,
+            safe=";,",
         )
-        params = {
-            "onlyData": "true",
-            "expand": "requisitionList",
-            "finder": finder,
-        }
-        url = endpoint + "?" + urllib.parse.urlencode(params, safe=";,")
-        data = fetch_json(url)
-        if not data:
-            break
+    )
 
-        rows = []
-        # Oracle CE commonly returns one search container whose requisitionList
-        # contains the visible jobs. Be tolerant of tenants that flatten it.
-        for item in data.get("items") or []:
-            reqs = item.get("requisitionList")
-            if isinstance(reqs, list):
-                rows.extend(reqs)
-            elif item.get("Title"):
-                rows.append(item)
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": (
+                "Mozilla/5.0 "
+                "(Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 "
+                "(KHTML, like Gecko) "
+                "Chrome/131.0.0.0 Safari/537.36"
+            ),
+            "Accept": "application/json",
+            "Accept-Language": "en-IE,en;q=0.9",
+        },
+    )
 
-        if not rows:
-            break
-
-        for j in rows:
-            title = str(j.get("Title") or j.get("title") or "").strip()
-            location = str(
-                j.get("PrimaryLocation")
-                or j.get("Location")
-                or j.get("location")
-                or ""
-            ).strip()
-            country = str(j.get("PrimaryLocationCountry") or "").upper()
-
-            # Keep explicit IE rows and any location that independently passes
-            # the project's strict Republic-of-Ireland location check.
-            if country not in {"IE", "IRL"} and not region_ok(location):
-                continue
-
-            req_id = (
-                j.get("Id")
-                or j.get("RequisitionId")
-                or j.get("RequisitionNumber")
-                or j.get("JobId")
-            )
-            if not title or req_id is None:
-                continue
-
-            req_id = str(req_id)
-            key = req_id
-            if key in seen:
-                continue
-            seen.add(key)
-
-            job_url = (
-                f"{base}/hcmUI/CandidateExperience/en/sites/"
-                f"{site_number}/job/{urllib.parse.quote(req_id)}/"
+    try:
+        with urllib.request.urlopen(
+            req,
+            timeout=45,
+        ) as response:
+            payload = json.loads(
+                response.read().decode(
+                    "utf-8",
+                    errors="replace",
+                )
             )
 
-            out.append({
+    except Exception as exc:
+        print(
+            "  ! Oracle Candidate Experience API failed:",
+            exc,
+        )
+        return []
+
+    items = payload.get("items") or []
+
+    if not items:
+        print(
+            "  ! Oracle Candidate Experience returned no search container"
+        )
+        return []
+
+    container = items[0] or {}
+
+    requisitions = (
+        container.get("requisitionList")
+        or container.get("RequisitionList")
+        or []
+    )
+
+    total = (
+        container.get("TotalJobsCount")
+        or container.get("totalJobsCount")
+        or len(requisitions)
+    )
+
+    jobs = []
+
+    def first_value(obj, names):
+        for name in names:
+            value = obj.get(name)
+
+            if value not in (
+                None,
+                "",
+                [],
+                {},
+            ):
+                return value
+
+        return None
+
+    for row in requisitions:
+        if not isinstance(row, dict):
+            continue
+
+        jid = first_value(
+            row,
+            [
+                "Id",
+                "ID",
+                "RequisitionId",
+                "RequisitionID",
+                "JobId",
+                "JobID",
+            ],
+        )
+
+        title = first_value(
+            row,
+            [
+                "Title",
+                "title",
+                "ExternalTitle",
+                "JobTitle",
+                "RequisitionTitle",
+            ],
+        )
+
+        if not jid or not title:
+            continue
+
+        location_parts = []
+
+        for field in [
+            "PrimaryLocation",
+            "Location",
+            "workLocation",
+            "WorkLocation",
+            "otherWorkLocations",
+            "secondaryLocations",
+        ]:
+            value = row.get(field)
+
+            if not value:
+                continue
+
+            if isinstance(value, str):
+                location_parts.append(value)
+
+            elif isinstance(value, dict):
+                for key in [
+                    "Name",
+                    "LocationName",
+                    "FormattedLocation",
+                    "Country",
+                    "City",
+                ]:
+                    if value.get(key):
+                        location_parts.append(
+                            str(value[key])
+                        )
+
+            elif isinstance(value, list):
+                for entry in value:
+                    if isinstance(entry, str):
+                        location_parts.append(entry)
+
+                    elif isinstance(entry, dict):
+                        for key in [
+                            "Name",
+                            "LocationName",
+                            "FormattedLocation",
+                            "Country",
+                            "City",
+                        ]:
+                            if entry.get(key):
+                                location_parts.append(
+                                    str(entry[key])
+                                )
+
+        location = " | ".join(
+            dict.fromkeys(
+                x.strip()
+                for x in location_parts
+                if str(x).strip()
+            )
+        )
+
+        if not location:
+            location = "Ireland"
+
+        job_url = (
+            f"{base_url}/hcmUI/"
+            "CandidateExperience/en/sites/"
+            f"jobsearch/job/{jid}/"
+            "?location=Ireland"
+            f"&locationId={location_id}"
+            "&locationLevel=country"
+            "&mode=location"
+        )
+
+        posted = first_value(
+            row,
+            [
+                "PostedDate",
+                "PostingStartDate",
+                "ExternalPostedStartDate",
+                "CreationDate",
+            ],
+        )
+
+        jobs.append(
+            {
                 "company": company,
-                "ats": "oracle",
-                "title": title,
-                "raw_location": location,
+                "title": str(title).strip(),
                 "location": location,
+                "country": "Ireland",
                 "url": job_url,
-                "updated_at": j.get("PostedDate") or j.get("PostingStartDate"),
-                "closing_date": j.get("PostingEndDate"),
-                "description_text": j.get("ShortDescriptionStr") or "",
-                "requisition_id": req_id,
-            })
+                "ats": "oracle",
+                "posted_at": posted,
+                "updated_at": posted,
+                "description_text": "",
+                "source": "Oracle Candidate Experience",
+            }
+        )
 
-        has_more = bool(data.get("hasMore"))
-        if not has_more and len(rows) < limit:
-            break
+    # De-duplicate by requisition URL.
+    deduped = {}
 
-    return out
+    for job in jobs:
+        deduped[job["url"]] = job
+
+    jobs = list(
+        deduped.values()
+    )
+
+    print(
+        f"  Oracle Candidate Experience Ireland: "
+        f"{len(jobs)} jobs "
+        f"(API total={total})"
+    )
+
+    return jobs
 
 
 
@@ -22050,3 +22219,7 @@ def scrape_viatel():
 
 if __name__ == "__main__":
     main()
+
+# =====================================================================
+# Targeted Ireland connectors: Oracle / IBM / Marsh
+# =====================================================================
