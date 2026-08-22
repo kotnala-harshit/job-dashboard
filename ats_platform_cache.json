@@ -2972,11 +2972,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Apex Group": {
-    "platform": "greenhouse",
-    "slug": "apex",
-    "probe_version": 35
-  },
   "Cadence Design Systems": {
     "platform": "none",
     "slug": null,
@@ -2995,6 +2990,11 @@
   "Circle K Ireland": {
     "platform": "pinpoint",
     "slug": "circlek",
+    "probe_version": 35
+  },
+  "Apex Group": {
+    "platform": "workday",
+    "slug": "theapexgroup|wd3|apexgroupcareers",
     "probe_version": 35
   },
   "__probe_version__": 35
