@@ -2187,11 +2187,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Reddit": {
-    "platform": "greenhouse",
-    "slug": "reddit",
-    "probe_version": 35
-  },
   "Analog Devices": {
     "platform": "none",
     "slug": null,
@@ -2995,6 +2990,11 @@
   "CarTrawler": {
     "platform": "lever",
     "slug": "cartrawler",
+    "probe_version": 35
+  },
+  "Reddit": {
+    "platform": "greenhouse",
+    "slug": "reddit",
     "probe_version": 35
   },
   "__probe_version__": 35
