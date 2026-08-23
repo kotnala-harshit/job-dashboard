@@ -362,11 +362,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Charles River Laboratories": {
-    "platform": "greenhouse",
-    "slug": "charles",
-    "probe_version": 35
-  },
   "Check Point Software": {
     "platform": "none",
     "slug": null,
@@ -2995,6 +2990,11 @@
   "Airbnb": {
     "platform": "greenhouse",
     "slug": "airbnb",
+    "probe_version": 35
+  },
+  "Charles River Laboratories": {
+    "platform": "greenhouse",
+    "slug": "charles",
     "probe_version": 35
   },
   "__probe_version__": 35
