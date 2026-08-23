@@ -332,11 +332,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "CarTrawler": {
-    "platform": "lever",
-    "slug": "cartrawler",
-    "probe_version": 35
-  },
   "CBRE Ireland": {
     "platform": "none",
     "slug": null,
@@ -2995,6 +2990,11 @@
   "Charles River Laboratories": {
     "platform": "greenhouse",
     "slug": "charles",
+    "probe_version": 35
+  },
+  "CarTrawler": {
+    "platform": "lever",
+    "slug": "cartrawler",
     "probe_version": 35
   },
   "__probe_version__": 35
