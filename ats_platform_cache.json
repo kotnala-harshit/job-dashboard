@@ -2277,6 +2277,11 @@
     "slug": "zendesk",
     "probe_version": 35
   },
+  "CitySwift": {
+    "platform": "greenhouse",
+    "slug": "cityswift",
+    "probe_version": 35
+  },
   "BearingPoint": {
     "platform": "greenhouse",
     "slug": "bearingpoint",
@@ -2990,11 +2995,6 @@
   "CarTrawler": {
     "platform": "lever",
     "slug": "cartrawler",
-    "probe_version": 35
-  },
-  "CitySwift": {
-    "platform": "greenhouse",
-    "slug": "cityswift",
     "probe_version": 35
   },
   "__probe_version__": 35
