@@ -432,6 +432,49 @@ button:disabled {{
     color: #aeb8c8;
     font-size: 13px;
 }}
+
+.remember-row {{
+    margin-top: 17px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}}
+
+.remember-label {{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+}}
+
+.remember-label input {{
+    width: auto;
+    margin: 0;
+}}
+
+#rememberDays {{
+    width: auto;
+    min-width: 105px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #394355;
+    background: #0c111a;
+    color: white;
+}}
+
+#rememberDays:disabled {{
+    opacity: .45;
+}}
+
+.remember-warning {{
+    margin-top: 9px;
+    color: #788498;
+    font-size: 12px;
+    line-height: 1.45;
+}}
 </style>
 </head>
 
@@ -469,6 +512,32 @@ Password
     autocomplete="current-password"
     required
 >
+
+<div class="remember-row">
+
+<label class="remember-label">
+<input
+    id="rememberDevice"
+    type="checkbox"
+>
+Remember this device
+</label>
+
+<select
+    id="rememberDays"
+    aria-label="Remember duration"
+    disabled
+>
+<option value="30">30 days</option>
+<option value="60">60 days</option>
+<option value="90">90 days</option>
+</select>
+
+</div>
+
+<div class="remember-warning">
+Use this only on a personal or trusted device.
+</div>
 
 <button id="submit" type="submit">
 Unlock dashboard
@@ -534,7 +603,339 @@ async function sha256Hex(value) {{
 }}
 
 
-async function unlock(username, password) {{
+
+const REMEMBER_DB_NAME =
+    "job-radar-auth";
+
+const REMEMBER_STORE_NAME =
+    "remembered-session";
+
+const REMEMBER_RECORD_ID =
+    "job-radar-login";
+
+
+function openRememberDatabase() {{
+
+    return new Promise(
+        (resolve, reject) => {{
+
+            const request =
+                indexedDB.open(
+                    REMEMBER_DB_NAME,
+                    1
+                );
+
+            request.onupgradeneeded =
+                event => {{
+
+                    const db =
+                        event.target.result;
+
+                    if (
+                        !db.objectStoreNames.contains(
+                            REMEMBER_STORE_NAME
+                        )
+                    ) {{
+                        db.createObjectStore(
+                            REMEMBER_STORE_NAME,
+                            {{
+                                keyPath: "id"
+                            }}
+                        );
+                    }}
+                }};
+
+            request.onsuccess =
+                () => resolve(
+                    request.result
+                );
+
+            request.onerror =
+                () => reject(
+                    request.error
+                );
+        }}
+    );
+}}
+
+
+async function saveRememberedLogin(
+    username,
+    password,
+    days
+) {{
+
+    const duration =
+        Number(days);
+
+    if (![30, 60, 90].includes(duration)) {{
+        throw new Error(
+            "Invalid remember-device duration"
+        );
+    }}
+
+    /*
+     * Non-extractable browser key.
+     * The raw wrapping key is not exposed to JavaScript.
+     */
+    const wrappingKey =
+        await crypto.subtle.generateKey(
+            {{
+                name: "AES-GCM",
+                length: 256
+            }},
+            false,
+            [
+                "encrypt",
+                "decrypt"
+            ]
+        );
+
+    const iv =
+        crypto.getRandomValues(
+            new Uint8Array(12)
+        );
+
+    const encryptedPassword =
+        await crypto.subtle.encrypt(
+            {{
+                name: "AES-GCM",
+                iv: iv
+            }},
+            wrappingKey,
+            new TextEncoder().encode(
+                password
+            )
+        );
+
+    const expiresAt =
+        Date.now() +
+        (
+            duration *
+            24 *
+            60 *
+            60 *
+            1000
+        );
+
+    const db =
+        await openRememberDatabase();
+
+    try {{
+
+        await new Promise(
+            (resolve, reject) => {{
+
+                const tx =
+                    db.transaction(
+                        REMEMBER_STORE_NAME,
+                        "readwrite"
+                    );
+
+                tx.objectStore(
+                    REMEMBER_STORE_NAME
+                ).put(
+                    {{
+                        id:
+                            REMEMBER_RECORD_ID,
+
+                        username:
+                            username,
+
+                        key:
+                            wrappingKey,
+
+                        iv:
+                            Array.from(iv),
+
+                        encryptedPassword:
+                            Array.from(
+                                new Uint8Array(
+                                    encryptedPassword
+                                )
+                            ),
+
+                        createdAt:
+                            Date.now(),
+
+                        expiresAt:
+                            expiresAt,
+
+                        durationDays:
+                            duration
+                    }}
+                );
+
+                tx.oncomplete =
+                    () => resolve();
+
+                tx.onerror =
+                    () => reject(
+                        tx.error
+                    );
+            }}
+        );
+
+    }} finally {{
+
+        db.close();
+
+    }}
+}}
+
+
+async function clearRememberedLogin() {{
+
+    try {{
+
+        const db =
+            await openRememberDatabase();
+
+        try {{
+
+            await new Promise(
+                (resolve, reject) => {{
+
+                    const tx =
+                        db.transaction(
+                            REMEMBER_STORE_NAME,
+                            "readwrite"
+                        );
+
+                    tx.objectStore(
+                        REMEMBER_STORE_NAME
+                    ).delete(
+                        REMEMBER_RECORD_ID
+                    );
+
+                    tx.oncomplete =
+                        () => resolve();
+
+                    tx.onerror =
+                        () => reject(
+                            tx.error
+                        );
+                }}
+            );
+
+        }} finally {{
+
+            db.close();
+
+        }}
+
+    }} catch (_) {{}}
+}}
+
+
+async function loadRememberedLogin() {{
+
+    let db = null;
+
+    try {{
+
+        db =
+            await openRememberDatabase();
+
+        const record =
+            await new Promise(
+                (resolve, reject) => {{
+
+                    const tx =
+                        db.transaction(
+                            REMEMBER_STORE_NAME,
+                            "readonly"
+                        );
+
+                    const request =
+                        tx.objectStore(
+                            REMEMBER_STORE_NAME
+                        ).get(
+                            REMEMBER_RECORD_ID
+                        );
+
+                    request.onsuccess =
+                        () => resolve(
+                            request.result || null
+                        );
+
+                    request.onerror =
+                        () => reject(
+                            request.error
+                        );
+                }}
+            );
+
+        if (!record) {{
+            return null;
+        }}
+
+        if (
+            !record.expiresAt ||
+            Date.now() >=
+                Number(record.expiresAt)
+        ) {{
+
+            db.close();
+            db = null;
+
+            await clearRememberedLogin();
+
+            return null;
+        }}
+
+        const decryptedPassword =
+            await crypto.subtle.decrypt(
+                {{
+                    name: "AES-GCM",
+                    iv:
+                        new Uint8Array(
+                            record.iv
+                        )
+                }},
+                record.key,
+                new Uint8Array(
+                    record.encryptedPassword
+                )
+            );
+
+        return {{
+            username:
+                record.username,
+
+            password:
+                new TextDecoder().decode(
+                    decryptedPassword
+                ),
+
+            expiresAt:
+                Number(record.expiresAt),
+
+            durationDays:
+                Number(
+                    record.durationDays
+                )
+        }};
+
+    }} catch (_) {{
+
+        return null;
+
+    }} finally {{
+
+        if (db) {{
+            db.close();
+        }}
+
+    }}
+}}
+
+
+async function unlock(
+    username,
+    password,
+    rememberDays = null
+) {{
 
     const normalizedUsername =
         username.trim().toLowerCase();
@@ -642,6 +1043,31 @@ async function unlock(username, password) {{
 
     }}
 
+    /*
+     * Only update remembered-device state after successful
+     * AES-GCM authentication/decryption.
+     *
+     * null = auto-login; preserve original expiry.
+     * 0    = manual login without remembering.
+     * 30/60/90 = save remembered device.
+     */
+    if (rememberDays !== null) {{
+
+        if (Number(rememberDays) > 0) {{
+
+            await saveRememberedLogin(
+                normalizedUsername,
+                password,
+                Number(rememberDays)
+            );
+
+        }} else {{
+
+            await clearRememberedLogin();
+
+        }}
+    }}
+
     const dashboard =
         new TextDecoder()
             .decode(plaintext);
@@ -727,9 +1153,28 @@ document
 
         try {{
 
+            const remember =
+                document
+                    .getElementById(
+                        "rememberDevice"
+                    )
+                    .checked;
+
+            const duration =
+                remember
+                    ? Number(
+                        document
+                            .getElementById(
+                                "rememberDays"
+                            )
+                            .value
+                    )
+                    : 0;
+
             await unlock(
                 username,
-                password
+                password,
+                duration
             );
 
             failures = 0;
@@ -757,6 +1202,77 @@ document
         }}
     }}
 );
+
+document
+.getElementById(
+    "rememberDevice"
+)
+.addEventListener(
+    "change",
+    event => {{
+
+        document
+            .getElementById(
+                "rememberDays"
+            )
+            .disabled =
+                !event.target.checked;
+    }}
+);
+
+
+(async () => {{
+
+    const loader =
+        document
+            .getElementById(
+                "loader"
+            );
+
+    const error =
+        document
+            .getElementById(
+                "error"
+            );
+
+    const remembered =
+        await loadRememberedLogin();
+
+    if (!remembered) {{
+        return;
+    }}
+
+    loader.textContent =
+        "Unlocking remembered device…";
+
+    loader.style.display =
+        "block";
+
+    try {{
+
+        /*
+         * null deliberately prevents successful visits
+         * from extending the original expiry date.
+         */
+        await unlock(
+            remembered.username,
+            remembered.password,
+            null
+        );
+
+    }} catch (_) {{
+
+        await clearRememberedLogin();
+
+        loader.style.display =
+            "none";
+
+        error.textContent =
+            "Saved login expired or credentials changed. Please sign in again.";
+    }}
+
+}})();
+
 
 </script>
 
