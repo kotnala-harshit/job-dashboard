@@ -286,21 +286,7 @@
   }
   .privacy-note { font-size:10.5px; color:var(--muted); }
 
-  .application-summary { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; }
-  .application-stat { border:1px solid var(--line); background:var(--panel); border-radius:7px; padding:7px 10px; font-family:var(--mono); font-size:11px; color:var(--muted); }
-  .application-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
-  .application-toolbar select, .application-toolbar button { background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; font:12px var(--mono); cursor:pointer; }
-  .application-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:10px; }
-  .application-card { border:1px solid var(--line); background:var(--panel); border-radius:8px; padding:14px; }
-  .application-card .app-title { font-weight:650; font-size:14px; line-height:1.35; margin:4px 0; }
-  .application-card .app-company { color:var(--amber); font-family:var(--mono); font-size:11px; text-transform:uppercase; }
-  .application-card .app-meta { color:var(--muted); font:11px var(--mono); margin:6px 0 10px; }
-  .application-card textarea { width:100%; min-height:54px; resize:vertical; background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:5px; padding:7px; font:11px var(--mono); }
-  .application-actions { display:flex; gap:7px; flex-wrap:wrap; align-items:center; margin-top:8px; }
-  .application-actions select, .application-actions button, .track-btn { background:transparent; color:var(--text); border:1px solid var(--line); border-radius:5px; padding:6px 8px; font:10.5px var(--mono); cursor:pointer; }
-  .track-btn { color:var(--amber); border-color:var(--amber); }
-  .track-btn.tracked { color:#74c991; border-color:#74c991; }
-  #applicationsPane { display:none; }
+
 
 
   .score-row { display:flex; gap:7px; flex-wrap:wrap; margin:8px 0; }
@@ -310,8 +296,7 @@
   .reason-row { font:10.5px var(--mono); color:var(--muted); margin-top:7px; line-height:1.5; }
   .reason-good { color:#74c991; }
   .reason-missing { color:#d3a761; }
-  .save-btn,.ignore-btn { background:transparent;color:var(--text);border:1px solid var(--line);border-radius:5px;padding:6px 8px;font:10.5px var(--mono);cursor:pointer; }
-  .save-btn.saved { color:#74c991;border-color:#74c991; }
+  .ignore-btn { background:transparent;color:var(--text);border:1px solid var(--line);border-radius:5px;padding:6px 8px;font:10.5px var(--mono);cursor:pointer; }
   .ignore-btn { color:var(--muted); }
 
 
@@ -895,172 +880,21 @@ let CURRENT_RENDER_LIMIT = INITIAL_JOB_RENDER_LIMIT;
 let CURRENT_TAB = 'live';
 
 
-const SAVED_KEY = 'ireland_job_dashboard_saved_v1';
 const IGNORED_KEY = 'ireland_job_dashboard_ignored_v1';
-let SAVED_JOBS = [];
 let IGNORED_JOBS = [];
 
 function loadRadarState() {
-  try { SAVED_JOBS = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch(e) { SAVED_JOBS = []; }
   try { IGNORED_JOBS = JSON.parse(localStorage.getItem(IGNORED_KEY) || '[]'); } catch(e) { IGNORED_JOBS = []; }
 }
 function jobId(j) { return String(j.url || `${j.company}|${j.title}|${j.location || ''}`); }
-function isSaved(j) { return SAVED_JOBS.some(x => x.id === jobId(j)); }
 function isIgnored(j) { return IGNORED_JOBS.includes(jobId(j)); }
-function toggleSaved(j) {
-  const id = jobId(j);
-  const existing = SAVED_JOBS.find(x => x.id === id);
-  if (existing) {
-    SAVED_JOBS = SAVED_JOBS.filter(x => x.id !== id);
-
-  } else {
-    const row = {id, company:j.company, title:j.title, location:j.location, url:j.url,
-      candidate_match_score:effectiveMatchScore(j), discovery_score:j.discovery_score,
-      saved_at:new Date().toISOString()};
-    SAVED_JOBS.unshift(row);
-
-  }
-  localStorage.setItem(SAVED_KEY, JSON.stringify(SAVED_JOBS));
-  renderSaved(); applyFilters();
-}
 function ignoreJob(j) {
   const id = jobId(j);
   if (!IGNORED_JOBS.includes(id)) IGNORED_JOBS.push(id);
   localStorage.setItem(IGNORED_KEY, JSON.stringify(IGNORED_JOBS));
 
   populateRoleFamilies();
-    applyFilters();
-}
-function renderSaved() {
-  const grid = document.getElementById('savedGrid');
-  const empty = document.getElementById('savedEmpty');
-  grid.innerHTML = '';
-  empty.style.display = SAVED_JOBS.length ? 'none' : 'block';
-  SAVED_JOBS.forEach(j => {
-    const card = document.createElement('div'); card.className='card';
-    card.onclick = () => j.url && window.open(j.url,'_blank','noopener');
-    card.innerHTML = `<div class="company">${escapeHtml(j.company)}</div><div class="title">${escapeHtml(j.title)}</div>
-      <div class="meta"><span class="chip">${escapeHtml(j.location || 'Ireland')}</span>
-      ${pm.score != null ? `<span class="score-badge match">${pm.score}% ${pm.personalized ? 'Personal Match' : 'Match'}</span>` : ''}</div>
-      <div class="card-footer"><button class="save-btn saved" data-unsave="1">Remove saved</button><span class="apply-hint">Open →</span></div>`;
-    const b=card.querySelector('[data-unsave]'); b.addEventListener('click',e=>{e.stopPropagation(); toggleSaved(j);});
-    grid.appendChild(card);
-  });
-  const tab=document.getElementById('tabSaved'); if(tab) tab.textContent=`Saved (${SAVED_JOBS.length})`;
-}
-
-const APPLICATIONS_KEY = 'ireland_job_dashboard_applications_v1';
-let APPLICATIONS = [];
-
-function loadApplications() {
-  try { APPLICATIONS = JSON.parse(localStorage.getItem(APPLICATIONS_KEY) || '[]'); }
-  catch (e) { APPLICATIONS = []; }
-}
-function saveApplications() {
-  localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
-
-}
-function applicationId(job) {
-  return String(job.url || `${job.company}|${job.title}|${job.location || ''}`);
-}
-function isTracked(job) {
-  const id = applicationId(job);
-  return APPLICATIONS.some(a => a.id === id);
-}
-function markApplied(job) {
-  const id = applicationId(job);
-  const existing = APPLICATIONS.find(a => a.id === id);
-  if (!existing) {
-    APPLICATIONS.unshift({
-      id,
-      company: job.company || '',
-      title: job.title || 'Untitled role',
-      location: job.location || job.ireland_area || 'Ireland',
-      url: job.url || '',
-      source: job.ats || '',
-      status: 'Applied',
-      applied_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      notes: ''
-    });
-  } else {
-    existing.status = existing.status || 'Applied';
-    existing.updated_at = new Date().toISOString();
-  }
-  saveApplications();
-
   applyFilters();
-}
-function updateApplication(id, field, value) {
-  const app = APPLICATIONS.find(a => a.id === id);
-  if (!app) return;
-  app[field] = value;
-  app.updated_at = new Date().toISOString();
-  saveApplications();
-
-}
-function removeApplication(id) {
-  const prior = APPLICATIONS.find(a => a.id === id);
-  APPLICATIONS = APPLICATIONS.filter(a => a.id !== id);
-
-  localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
-
-  applyFilters();
-}
-function exportApplications() {
-  const blob = new Blob([JSON.stringify(APPLICATIONS, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'job-applications.json';
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-function renderApplications() {
-  const grid = document.getElementById('applicationGrid');
-  const empty = document.getElementById('applicationsEmpty');
-  const filter = document.getElementById('applicationStatusFilter')?.value || '';
-  const statuses = ['Applied','Assessment','Interview','Offer','Rejected','Withdrawn'];
-  const apps = APPLICATIONS.filter(a => !filter || a.status === filter);
-
-  document.getElementById('applicationSummary').innerHTML =
-    statuses.map(s => `<span class="application-stat">${s}: ${APPLICATIONS.filter(a => a.status === s).length}</span>`).join('') +
-    `<span class="application-stat">Total: ${APPLICATIONS.length}</span>`;
-
-  grid.innerHTML = '';
-  empty.style.display = apps.length ? 'none' : 'block';
-
-  apps.forEach(a => {
-    const card = document.createElement('div');
-    card.className = 'application-card';
-    const date = a.applied_at ? new Date(a.applied_at).toLocaleDateString() : '';
-    card.innerHTML = `
-      <div class="app-company">${escapeHtml(a.company)}</div>
-      <div class="app-title">${escapeHtml(a.title)}</div>
-      <div class="app-meta">${escapeHtml(a.location || '')}${date ? ` · Applied ${escapeHtml(date)}` : ''}</div>
-      <textarea placeholder="Notes: recruiter, referral, interview date, follow-up..." data-notes-id="${escapeHtml(a.id)}">${escapeHtml(a.notes || '')}</textarea>
-      <div class="application-actions">
-        <select data-status-id="${escapeHtml(a.id)}">
-          ${statuses.map(s => `<option value="${s}" ${a.status === s ? 'selected' : ''}>${s}</option>`).join('')}
-        </select>
-        ${a.url ? `<button type="button" onclick="window.open('${escapeHtml(a.url)}','_blank','noopener')">Open job</button>` : ''}
-        <button type="button" data-remove-id="${escapeHtml(a.id)}">Remove</button>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-
-  grid.querySelectorAll('[data-status-id]').forEach(el =>
-    el.addEventListener('change', e => updateApplication(e.target.dataset.statusId, 'status', e.target.value))
-  );
-  grid.querySelectorAll('[data-notes-id]').forEach(el =>
-    el.addEventListener('change', e => updateApplication(e.target.dataset.notesId, 'notes', e.target.value))
-  );
-  grid.querySelectorAll('[data-remove-id]').forEach(el =>
-    el.addEventListener('click', e => removeApplication(e.target.dataset.removeId))
-  );
-
-  document.getElementById('tabApplications').textContent = `Applications (${APPLICATIONS.length})`;
 }
 
 const INTERNSHIP_KEYWORDS = ['intern', 'internship', 'working student', 'student job', 'placement', 'co-op', 'co op'];
