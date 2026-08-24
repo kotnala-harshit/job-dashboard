@@ -2516,5 +2516,2056 @@ setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
 })();
 </script>
 
+
+<!-- DYNAMIC_CV_MATCHER_V1 -->
+
+<style>
+
+#cvMatchPanel {
+    margin: 10px 24px 14px;
+    padding: 14px 16px;
+
+    border: 1px solid rgba(120, 130, 145, .25);
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.72);
+    backdrop-filter: blur(10px);
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+#cvMatchPanel .cv-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+#cvMatchPanel .cv-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: #15191f;
+}
+
+#cvMatchPanel .cv-subtitle {
+    margin-top: 3px;
+    font-size: 12px;
+    color: #6c7480;
+}
+
+#cvMatchPanel .cv-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    margin-top: 12px;
+}
+
+#cvMatchPanel input[type="file"] {
+    max-width: 310px;
+    font-size: 12px;
+}
+
+#cvMatchPanel button,
+#cvMatchPanel select {
+    min-height: 34px;
+
+    padding: 6px 10px;
+
+    border: 1px solid #d7dce2;
+    border-radius: 8px;
+
+    background: white;
+    color: #222831;
+
+    font: inherit;
+    font-size: 12px;
+}
+
+#cvMatchPanel button {
+    cursor: pointer;
+}
+
+#cvMatchPanel button:hover {
+    border-color: #aeb6c0;
+}
+
+#cvMatchStatus {
+    margin-top: 10px;
+
+    font-size: 12px;
+    line-height: 1.5;
+
+    color: #5f6874;
+}
+
+#cvProfileSummary {
+    display: none;
+
+    margin-top: 10px;
+    padding-top: 10px;
+
+    border-top: 1px solid rgba(120,130,145,.18);
+
+    font-size: 11px;
+    line-height: 1.55;
+
+    color: #65707c;
+}
+
+.cv-dynamic-result {
+    margin-top: 9px;
+    padding: 8px 9px;
+
+    border: 1px solid rgba(52, 177, 112, .22);
+    border-radius: 8px;
+
+    background: rgba(52, 177, 112, .055);
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.cv-dynamic-score-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.cv-dynamic-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 3px 7px;
+
+    border-radius: 999px;
+
+    background: #ecfbf2;
+    border: 1px solid #b9ebcc;
+
+    color: #22834b;
+
+    font-weight: 700;
+}
+
+.cv-dynamic-label {
+    color: #67717d;
+}
+
+.cv-dynamic-matches {
+    margin-top: 5px;
+    color: #39945f;
+}
+
+.cv-dynamic-gaps {
+    margin-top: 3px;
+    color: #aa7624;
+}
+
+.cv-hidden-by-threshold {
+    display: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+
+    #cvMatchPanel {
+        background: rgba(18,22,30,.82);
+        border-color: rgba(255,255,255,.12);
+    }
+
+    #cvMatchPanel .cv-title {
+        color: #eef2f7;
+    }
+
+    #cvMatchPanel .cv-subtitle,
+    #cvMatchStatus,
+    #cvProfileSummary {
+        color: #9ba5b2;
+    }
+
+    #cvMatchPanel button,
+    #cvMatchPanel select {
+        background: #161b23;
+        color: #eef2f7;
+        border-color: #343d49;
+    }
+
+}
+
+</style>
+
+
+<script>
+
+(() => {
+
+    "use strict";
+
+    const CV_MATCH_VERSION =
+        "DYNAMIC_CV_MATCHER_V1";
+
+    const skillCatalog = [
+
+        // Data / analytics
+        "python",
+        "sql",
+        "r",
+        "excel",
+        "tableau",
+        "power bi",
+        "powerbi",
+        "looker",
+        "qlik",
+        "pandas",
+        "numpy",
+        "scikit-learn",
+        "scikit",
+        "spark",
+        "pyspark",
+        "databricks",
+        "snowflake",
+        "bigquery",
+
+        // Cloud / data engineering
+        "aws",
+        "azure",
+        "gcp",
+        "google cloud",
+        "etl",
+        "elt",
+        "airflow",
+        "dbt",
+        "kafka",
+        "docker",
+        "kubernetes",
+
+        // Programming / engineering
+        "java",
+        "javascript",
+        "typescript",
+        "react",
+        "node",
+        "node.js",
+        "c#",
+        ".net",
+        "scala",
+        "git",
+        "github",
+        "rest api",
+        "api",
+
+        // Business / enterprise
+        "salesforce",
+        "sap",
+        "oracle",
+        "workday",
+        "servicenow",
+        "jira",
+        "confluence",
+        "crm",
+        "erp",
+
+        // Analytics concepts
+        "machine learning",
+        "artificial intelligence",
+        "ai",
+        "statistics",
+        "statistical",
+        "forecasting",
+        "predictive",
+        "data modelling",
+        "data modeling",
+        "data visualization",
+        "data visualisation",
+        "business intelligence",
+        "business analytics",
+        "data analytics",
+        "data analysis",
+
+        // Business functions
+        "consulting",
+        "strategy",
+        "operations",
+        "finance",
+        "financial analysis",
+        "risk",
+        "compliance",
+        "audit",
+        "project management",
+        "product management",
+        "business analysis",
+        "stakeholder management",
+        "requirements gathering",
+
+        // Delivery
+        "agile",
+        "scrum",
+        "kanban",
+        "project delivery"
+    ];
+
+
+    const roleTerms = [
+
+        "analyst",
+        "analytics",
+        "data",
+        "business",
+        "consultant",
+        "consulting",
+        "strategy",
+        "operations",
+        "finance",
+        "financial",
+        "risk",
+        "compliance",
+        "project",
+        "product",
+        "engineer",
+        "engineering",
+        "developer",
+        "software",
+        "cloud",
+        "sales",
+        "customer success",
+        "marketing",
+        "research",
+        "machine learning",
+        "ai"
+    ];
+
+
+    const stopWords = new Set([
+
+        "the","and","for","with","that","this","from",
+        "your","you","our","are","will","have","has",
+        "had","job","role","work","team","company",
+        "candidate","skills","skill","experience",
+        "years","year","including","within","across",
+        "using","into","about","more","their","they",
+        "them","who","what","when","where","which",
+        "while","also","all","any","but","not","can",
+        "may","must","should","would","could","an",
+        "as","at","be","by","in","is","it","of","on",
+        "or","to","we","i","us","a","professional",
+        "responsibilities","responsibility","required",
+        "requirements","education","summary"
+
+    ]);
+
+
+    let resumeProfile = null;
+
+    let originalCardOrder =
+        new Map();
+
+    let sortEnabled = false;
+
+
+    function normalize(value) {
+
+        return String(value || "")
+            .toLowerCase()
+            .replace(
+                /[^a-z0-9+#.\-]+/g,
+                " "
+            )
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+
+    function tokenise(value) {
+
+        return normalize(value)
+            .split(/\s+/)
+            .map(
+                token =>
+                    token.replace(
+                        /^[.\-]+|[.\-]+$/g,
+                        ""
+                    )
+            )
+            .filter(
+                token =>
+                    token.length >= 3 &&
+                    !stopWords.has(token) &&
+                    !/^\d+$/.test(token)
+            );
+    }
+
+
+    function dedupe(values) {
+
+        return [
+            ...new Set(
+                values.filter(Boolean)
+            )
+        ];
+    }
+
+
+    function detectSkills(text) {
+
+        const normalized =
+            normalize(text);
+
+        return dedupe(
+            skillCatalog.filter(
+                skill =>
+                    normalized.includes(
+                        normalize(skill)
+                    )
+            )
+        );
+    }
+
+
+    function detectExperienceYears(text) {
+
+        const normalized =
+            normalize(text);
+
+        const years = [];
+
+        const patterns = [
+
+            /(\d{1,2})\+?\s+years?\s+(?:of\s+)?experience/g,
+            /experience\s+(?:of\s+)?(\d{1,2})\+?\s+years?/g,
+            /(\d{1,2})\+?\s+yrs?\s+(?:of\s+)?experience/g
+
+        ];
+
+        for (const pattern of patterns) {
+
+            for (
+                const match of
+                normalized.matchAll(pattern)
+            ) {
+
+                const n =
+                    Number(match[1]);
+
+                if (
+                    Number.isFinite(n) &&
+                    n >= 0 &&
+                    n <= 40
+                ) {
+                    years.push(n);
+                }
+            }
+        }
+
+        return years.length
+            ? Math.max(...years)
+            : null;
+    }
+
+
+    function buildResumeProfile(text) {
+
+        const tokens =
+            tokenise(text);
+
+        const counts = {};
+
+        for (const token of tokens) {
+
+            counts[token] =
+                (counts[token] || 0) + 1;
+        }
+
+        const keywords =
+            Object.entries(counts)
+                .sort(
+                    (a, b) =>
+                        b[1] - a[1] ||
+                        a[0].localeCompare(
+                            b[0]
+                        )
+                )
+                .slice(0, 180)
+                .map(
+                    ([token]) => token
+                );
+
+        const skills =
+            detectSkills(text);
+
+        const normalized =
+            normalize(text);
+
+        const roles =
+            roleTerms.filter(
+                role =>
+                    normalized.includes(
+                        role
+                    )
+            );
+
+        return {
+
+            text:
+                String(text || ""),
+
+            normalized,
+
+            keywords,
+
+            skills,
+
+            roles:
+                dedupe(roles),
+
+            experienceYears:
+                detectExperienceYears(
+                    text
+                )
+
+        };
+    }
+
+
+    function scoreJobText(
+        jobText,
+        profile
+    ) {
+
+        const normalizedJob =
+            normalize(jobText);
+
+        const jobSkills =
+            detectSkills(jobText);
+
+        const matchedSkills =
+            profile.skills.filter(
+                skill =>
+                    normalizedJob.includes(
+                        normalize(skill)
+                    )
+            );
+
+        const missingSkills =
+            jobSkills.filter(
+                skill =>
+                    !profile.skills.includes(
+                        skill
+                    )
+            );
+
+        let keywordHits = 0;
+
+        for (
+            const keyword of
+            profile.keywords.slice(0, 120)
+        ) {
+
+            if (
+                keyword.length >= 3 &&
+                normalizedJob.includes(
+                    keyword
+                )
+            ) {
+                keywordHits += 1;
+            }
+        }
+
+
+        let roleHits = 0;
+
+        for (
+            const role of
+            profile.roles
+        ) {
+
+            if (
+                normalizedJob.includes(
+                    role
+                )
+            ) {
+                roleHits += 1;
+            }
+        }
+
+
+        let score = 0;
+
+
+        /*
+         * Skills are the strongest signal.
+         */
+        score +=
+            Math.min(
+                50,
+                matchedSkills.length * 8
+            );
+
+
+        /*
+         * General CV/job vocabulary overlap.
+         */
+        score +=
+            Math.min(
+                25,
+                keywordHits * 1.5
+            );
+
+
+        /*
+         * Role-family overlap.
+         */
+        score +=
+            Math.min(
+                20,
+                roleHits * 5
+            );
+
+
+        /*
+         * Give a small base score when meaningful overlap exists.
+         */
+        if (
+            matchedSkills.length ||
+            roleHits >= 1 ||
+            keywordHits >= 5
+        ) {
+            score += 5;
+        }
+
+
+        /*
+         * Penalise jobs whose identified technical requirements
+         * are mostly absent from the CV.
+         */
+        if (
+            jobSkills.length >= 3 &&
+            missingSkills.length >=
+                jobSkills.length * .75
+        ) {
+            score -= 8;
+        }
+
+
+        score =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    Math.round(score)
+                )
+            );
+
+
+        return {
+
+            score,
+
+            matchedSkills:
+                matchedSkills.slice(
+                    0,
+                    10
+                ),
+
+            missingSkills:
+                missingSkills.slice(
+                    0,
+                    8
+                ),
+
+            keywordHits,
+
+            roleHits
+
+        };
+    }
+
+
+    function loadExternalScript(
+        src,
+        testFn
+    ) {
+
+        return new Promise(
+            (resolve, reject) => {
+
+                if (
+                    typeof testFn ===
+                        "function" &&
+                    testFn()
+                ) {
+
+                    resolve();
+                    return;
+                }
+
+                const existing =
+                    Array.from(
+                        document.scripts
+                    )
+                    .find(
+                        script =>
+                            script.src === src
+                    );
+
+                if (existing) {
+
+                    existing.addEventListener(
+                        "load",
+                        () => resolve(),
+                        {
+                            once: true
+                        }
+                    );
+
+                    existing.addEventListener(
+                        "error",
+                        () =>
+                            reject(
+                                new Error(
+                                    "Parser failed to load"
+                                )
+                            ),
+                        {
+                            once: true
+                        }
+                    );
+
+                    return;
+                }
+
+                const script =
+                    document.createElement(
+                        "script"
+                    );
+
+                script.src =
+                    src;
+
+                script.async =
+                    true;
+
+                script.onload =
+                    () => resolve();
+
+                script.onerror =
+                    () =>
+                        reject(
+                            new Error(
+                                "Could not load parser library"
+                            )
+                        );
+
+                document.head.appendChild(
+                    script
+                );
+            }
+        );
+    }
+
+
+    async function extractTxt(file) {
+
+        return await file.text();
+    }
+
+
+    async function extractPdf(file) {
+
+        await loadExternalScript(
+            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
+            () =>
+                Boolean(
+                    window.pdfjsLib
+                )
+        );
+
+        if (!window.pdfjsLib) {
+
+            throw new Error(
+                "PDF parser unavailable"
+            );
+        }
+
+        window.pdfjsLib
+            .GlobalWorkerOptions
+            .workerSrc =
+                "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+        const bytes =
+            new Uint8Array(
+                await file.arrayBuffer()
+            );
+
+
+        const pdf =
+            await window.pdfjsLib
+                .getDocument({
+                    data: bytes
+                })
+                .promise;
+
+
+        const pages = [];
+
+
+        for (
+            let pageNumber = 1;
+            pageNumber <= pdf.numPages;
+            pageNumber++
+        ) {
+
+            const page =
+                await pdf.getPage(
+                    pageNumber
+                );
+
+            const content =
+                await page
+                    .getTextContent();
+
+
+            pages.push(
+                content.items
+                    .map(
+                        item =>
+                            item.str || ""
+                    )
+                    .join(" ")
+            );
+        }
+
+
+        return pages.join("\n");
+    }
+
+
+    async function extractDocx(file) {
+
+        await loadExternalScript(
+            "https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js",
+            () =>
+                Boolean(
+                    window.mammoth
+                )
+        );
+
+
+        if (!window.mammoth) {
+
+            throw new Error(
+                "DOCX parser unavailable"
+            );
+        }
+
+
+        const result =
+            await window.mammoth
+                .extractRawText({
+                    arrayBuffer:
+                        await file
+                            .arrayBuffer()
+                });
+
+
+        return result.value || "";
+    }
+
+
+    async function extractResumeText(
+        file
+    ) {
+
+        const name =
+            String(
+                file?.name || ""
+            )
+            .toLowerCase();
+
+
+        if (name.endsWith(".txt")) {
+
+            return await extractTxt(
+                file
+            );
+        }
+
+
+        if (name.endsWith(".pdf")) {
+
+            return await extractPdf(
+                file
+            );
+        }
+
+
+        if (name.endsWith(".docx")) {
+
+            return await extractDocx(
+                file
+            );
+        }
+
+
+        throw new Error(
+            "Unsupported file. Use TXT, PDF or DOCX."
+        );
+    }
+
+
+    function looksLikeJobCard(el) {
+
+        if (
+            !el ||
+            el === document.body
+        ) {
+            return false;
+        }
+
+
+        const text =
+            normalize(
+                el.innerText
+            );
+
+
+        if (
+            text.length < 30 ||
+            text.length > 5000
+        ) {
+            return false;
+        }
+
+
+        const rect =
+            el.getBoundingClientRect();
+
+
+        if (
+            rect.width < 180 ||
+            rect.width > 700
+        ) {
+            return false;
+        }
+
+
+        const signals = [
+
+            "open",
+            "match",
+            "discovery",
+            "visa",
+            "save",
+            "ignore",
+            "posted"
+
+        ];
+
+
+        const hits =
+            signals.filter(
+                signal =>
+                    text.includes(
+                        signal
+                    )
+            ).length;
+
+
+        return hits >= 2;
+    }
+
+
+    function findJobCards() {
+
+        const preferredSelectors = [
+
+            ".job-card",
+            ".job",
+            "[data-job-id]",
+            "[data-job]",
+            "article"
+
+        ];
+
+
+        let cards = [];
+
+
+        for (
+            const selector of
+            preferredSelectors
+        ) {
+
+            cards =
+                Array.from(
+                    document.querySelectorAll(
+                        selector
+                    )
+                )
+                .filter(
+                    looksLikeJobCard
+                );
+
+
+            if (cards.length >= 3) {
+
+                break;
+            }
+        }
+
+
+        if (cards.length < 3) {
+
+            cards =
+                Array.from(
+                    document.querySelectorAll(
+                        "div"
+                    )
+                )
+                .filter(
+                    looksLikeJobCard
+                );
+        }
+
+
+        /*
+         * Remove nested duplicates. Keep the smallest reasonable
+         * element representing each card.
+         */
+
+        cards =
+            cards.filter(
+                card =>
+                    !cards.some(
+                        other =>
+                            other !== card &&
+                            card.contains(
+                                other
+                            ) &&
+                            looksLikeJobCard(
+                                other
+                            )
+                    )
+            );
+
+
+        return cards;
+    }
+
+
+    function removeResult(card) {
+
+        card
+            .querySelectorAll(
+                ":scope > .cv-dynamic-result"
+            )
+            .forEach(
+                element =>
+                    element.remove()
+            );
+
+        card.removeAttribute(
+            "data-cv-score"
+        );
+
+        card.classList.remove(
+            "cv-hidden-by-threshold"
+        );
+    }
+
+
+    function renderResult(
+        card,
+        result
+    ) {
+
+        removeResult(card);
+
+
+        card.setAttribute(
+            "data-cv-score",
+            String(result.score)
+        );
+
+
+        const resultBox =
+            document.createElement(
+                "div"
+            );
+
+
+        resultBox.className =
+            "cv-dynamic-result";
+
+
+        const matches =
+            result.matchedSkills.length
+                ? result.matchedSkills
+                    .join(" · ")
+                : "General role / keyword overlap";
+
+
+        const gaps =
+            result.missingSkills.length
+                ? result.missingSkills
+                    .join(" · ")
+                : "No major detected skill gaps";
+
+
+        resultBox.innerHTML = `
+
+            <div class="cv-dynamic-score-row">
+
+                <span class="cv-dynamic-badge">
+                    ${result.score}% CV Match
+                </span>
+
+                <span class="cv-dynamic-label">
+                    Uploaded résumé
+                </span>
+
+            </div>
+
+            <div class="cv-dynamic-matches">
+                <strong>CV matched:</strong>
+                ${escapeHtml(matches)}
+            </div>
+
+            <div class="cv-dynamic-gaps">
+                <strong>Potential gaps:</strong>
+                ${escapeHtml(gaps)}
+            </div>
+        `;
+
+
+        /*
+         * Insert before the action/buttons area when possible.
+         */
+
+        const actionFix =
+            card.querySelector(
+                ".job-card-safe-actions"
+            );
+
+
+        if (actionFix) {
+
+            card.insertBefore(
+                resultBox,
+                actionFix
+            );
+
+        } else {
+
+            card.appendChild(
+                resultBox
+            );
+        }
+    }
+
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+        div.textContent =
+            String(value || "");
+
+        return div.innerHTML;
+    }
+
+
+    function rememberOriginalOrder(
+        cards
+    ) {
+
+        cards.forEach(
+            (card, index) => {
+
+                if (
+                    !originalCardOrder.has(
+                        card
+                    )
+                ) {
+
+                    originalCardOrder.set(
+                        card,
+                        index
+                    );
+                }
+            }
+        );
+    }
+
+
+    function applyThreshold() {
+
+        const selector =
+            document.getElementById(
+                "cvThreshold"
+            );
+
+
+        if (!selector) {
+            return;
+        }
+
+
+        const threshold =
+            Number(
+                selector.value || 0
+            );
+
+
+        for (
+            const card of
+            findJobCards()
+        ) {
+
+            const score =
+                Number(
+                    card.getAttribute(
+                        "data-cv-score"
+                    ) || 0
+                );
+
+
+            card.classList.toggle(
+                "cv-hidden-by-threshold",
+                Boolean(
+                    resumeProfile &&
+                    threshold > 0 &&
+                    score < threshold
+                )
+            );
+        }
+    }
+
+
+    function applySort() {
+
+        if (!resumeProfile) {
+            return;
+        }
+
+
+        const cards =
+            findJobCards();
+
+
+        if (!cards.length) {
+            return;
+        }
+
+
+        rememberOriginalOrder(
+            cards
+        );
+
+
+        const parent =
+            cards[0]
+                .parentElement;
+
+
+        if (!parent) {
+            return;
+        }
+
+
+        const sameParent =
+            cards.filter(
+                card =>
+                    card.parentElement ===
+                        parent
+            );
+
+
+        if (sameParent.length < 2) {
+            return;
+        }
+
+
+        const sorted =
+            [...sameParent]
+                .sort(
+                    (a, b) => {
+
+                        if (sortEnabled) {
+
+                            return (
+                                Number(
+                                    b.getAttribute(
+                                        "data-cv-score"
+                                    ) || 0
+                                )
+                                -
+                                Number(
+                                    a.getAttribute(
+                                        "data-cv-score"
+                                    ) || 0
+                                )
+                            );
+                        }
+
+
+                        return (
+                            (
+                                originalCardOrder
+                                    .get(a) ?? 0
+                            )
+                            -
+                            (
+                                originalCardOrder
+                                    .get(b) ?? 0
+                            )
+                        );
+                    }
+                );
+
+
+        sorted.forEach(
+            card =>
+                parent.appendChild(
+                    card
+                )
+        );
+    }
+
+
+    function scoreVisibleCards() {
+
+        if (!resumeProfile) {
+            return;
+        }
+
+
+        const cards =
+            findJobCards();
+
+
+        rememberOriginalOrder(
+            cards
+        );
+
+
+        for (
+            const card of cards
+        ) {
+
+            /*
+             * Exclude our previously generated result text.
+             */
+
+            const clone =
+                card.cloneNode(true);
+
+
+            clone
+                .querySelectorAll(
+                    ".cv-dynamic-result"
+                )
+                .forEach(
+                    el =>
+                        el.remove()
+                );
+
+
+            const result =
+                scoreJobText(
+                    clone.innerText,
+                    resumeProfile
+                );
+
+
+            renderResult(
+                card,
+                result
+            );
+        }
+
+
+        applyThreshold();
+
+        if (sortEnabled) {
+            applySort();
+        }
+
+
+        updateStatus(
+            `CV matching active — scored ${cards.length} visible jobs.`
+        );
+    }
+
+
+    function clearCvMode() {
+
+        resumeProfile =
+            null;
+
+        sortEnabled =
+            false;
+
+
+        for (
+            const card of
+            findJobCards()
+        ) {
+
+            removeResult(card);
+        }
+
+
+        const threshold =
+            document.getElementById(
+                "cvThreshold"
+            );
+
+
+        if (threshold) {
+            threshold.value =
+                "0";
+        }
+
+
+        const input =
+            document.getElementById(
+                "cvResumeFile"
+            );
+
+
+        if (input) {
+            input.value = "";
+        }
+
+
+        const summary =
+            document.getElementById(
+                "cvProfileSummary"
+            );
+
+
+        if (summary) {
+
+            summary.style.display =
+                "none";
+
+            summary.textContent =
+                "";
+        }
+
+
+        updateStatus(
+            "No CV loaded. Existing profile matching remains unchanged."
+        );
+
+
+        /*
+         * Restore original card ordering where possible.
+         */
+
+        const cards =
+            findJobCards();
+
+
+        if (cards.length) {
+
+            const parent =
+                cards[0]
+                    .parentElement;
+
+
+            if (parent) {
+
+                cards
+                    .filter(
+                        card =>
+                            card.parentElement ===
+                                parent
+                    )
+                    .sort(
+                        (a, b) =>
+                            (
+                                originalCardOrder
+                                    .get(a) ?? 0
+                            )
+                            -
+                            (
+                                originalCardOrder
+                                    .get(b) ?? 0
+                            )
+                    )
+                    .forEach(
+                        card =>
+                            parent.appendChild(
+                                card
+                            )
+                    );
+            }
+        }
+    }
+
+
+    function updateStatus(
+        message
+    ) {
+
+        const status =
+            document.getElementById(
+                "cvMatchStatus"
+            );
+
+
+        if (status) {
+
+            status.textContent =
+                message;
+        }
+    }
+
+
+    function showProfileSummary() {
+
+        const el =
+            document.getElementById(
+                "cvProfileSummary"
+            );
+
+
+        if (
+            !el ||
+            !resumeProfile
+        ) {
+            return;
+        }
+
+
+        const skills =
+            resumeProfile.skills.length
+                ? resumeProfile.skills
+                    .slice(0, 20)
+                    .join(" · ")
+                : "No catalogued skills detected";
+
+
+        const roles =
+            resumeProfile.roles.length
+                ? resumeProfile.roles
+                    .slice(0, 12)
+                    .join(" · ")
+                : "No clear role-family terms detected";
+
+
+        const experience =
+            resumeProfile.experienceYears !==
+                null
+                ? `${resumeProfile.experienceYears}+ years`
+                : "Not confidently detected";
+
+
+        el.innerHTML = `
+
+            <strong>Detected from CV:</strong><br>
+
+            Skills:
+            ${escapeHtml(skills)}
+            <br>
+
+            Role signals:
+            ${escapeHtml(roles)}
+            <br>
+
+            Experience:
+            ${escapeHtml(experience)}
+
+        `;
+
+
+        el.style.display =
+            "block";
+    }
+
+
+    async function handleResumeFile(
+        file
+    ) {
+
+        if (!file) {
+            return;
+        }
+
+        const MAX_CV_SIZE =
+            1 * 1024 * 1024; // 1 MiB
+
+        if (file.size > MAX_CV_SIZE) {
+
+            const actualMB =
+                (
+                    file.size /
+                    (1024 * 1024)
+                ).toFixed(2);
+
+            updateStatus(
+                `CV is ${actualMB} MB. ` +
+                `Maximum allowed size is 1 MB.`
+            );
+
+            const input =
+                document.getElementById(
+                    "cvResumeFile"
+                );
+
+            if (input) {
+                input.value = "";
+            }
+
+            resumeProfile = null;
+
+            return;
+        }
+
+
+
+        updateStatus(
+            `Reading ${file.name} locally in your browser…`
+        );
+
+
+        try {
+
+            const text =
+                await extractResumeText(
+                    file
+                );
+
+
+            if (
+                !text ||
+                text.trim().length < 100
+            ) {
+
+                throw new Error(
+                    "Not enough résumé text could be extracted."
+                );
+            }
+
+
+            resumeProfile =
+                buildResumeProfile(
+                    text
+                );
+
+
+            showProfileSummary();
+
+            scoreVisibleCards();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            resumeProfile =
+                null;
+
+
+            updateStatus(
+                `CV processing failed: ${
+                    error?.message ||
+                    String(error)
+                }`
+            );
+        }
+    }
+
+
+    function buildPanel() {
+
+        if (
+            document.getElementById(
+                "cvMatchPanel"
+            )
+        ) {
+            return;
+        }
+
+
+        const panel =
+            document.createElement(
+                "section"
+            );
+
+
+        panel.id =
+            "cvMatchPanel";
+
+
+        panel.innerHTML = `
+
+            <div class="cv-head">
+
+                <div>
+
+                    <div class="cv-title">
+                        Match jobs to an uploaded CV / résumé
+                    </div>
+
+                    <div class="cv-subtitle">
+                        Processed locally in this browser.
+                        Your existing profile matcher is not replaced.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="cv-controls">
+
+                <input
+                    id="cvResumeFile"
+                    type="file"
+                    accept=".txt,.pdf,.docx,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                >
+
+                <button
+                    id="cvSortButton"
+                    type="button"
+                    disabled
+                >
+                    Sort by CV match
+                </button>
+
+                <select
+                    id="cvThreshold"
+                    disabled
+                >
+                    <option value="0">
+                        Show all CV matches
+                    </option>
+
+                    <option value="50">
+                        Show 50%+ CV matches
+                    </option>
+
+                    <option value="60">
+                        Show 60%+ CV matches
+                    </option>
+
+                    <option value="70">
+                        Show 70%+ CV matches
+                    </option>
+                </select>
+
+                <button
+                    id="cvClearButton"
+                    type="button"
+                    disabled
+                >
+                    Clear CV
+                </button>
+
+            </div>
+
+
+            <div id="cvMatchStatus">
+                No CV loaded. Existing profile matching remains unchanged.
+            </div>
+
+            <div id="cvProfileSummary"></div>
+
+        `;
+
+
+        /*
+         * Place after the main filter/search controls where possible.
+         */
+
+        const likelyControls =
+            Array.from(
+                document.querySelectorAll(
+                    "div,section,header"
+                )
+            )
+            .find(
+                el => {
+
+                    const t =
+                        normalize(
+                            el.innerText
+                        );
+
+                    return (
+                        t.includes(
+                            "match my profile"
+                        )
+                        &&
+                        t.includes(
+                            "all companies"
+                        )
+                    );
+                }
+            );
+
+
+        if (
+            likelyControls &&
+            likelyControls.parentElement
+        ) {
+
+            likelyControls
+                .insertAdjacentElement(
+                    "afterend",
+                    panel
+                );
+
+        } else {
+
+            document.body
+                .insertBefore(
+                    panel,
+                    document.body
+                        .firstChild
+                );
+        }
+
+
+        const input =
+            panel.querySelector(
+                "#cvResumeFile"
+            );
+
+
+        const sort =
+            panel.querySelector(
+                "#cvSortButton"
+            );
+
+
+        const threshold =
+            panel.querySelector(
+                "#cvThreshold"
+            );
+
+
+        const clear =
+            panel.querySelector(
+                "#cvClearButton"
+            );
+
+
+        input.addEventListener(
+            "change",
+            async event => {
+
+                const file =
+                    event.target.files &&
+                    event.target.files[0];
+
+
+                await handleResumeFile(
+                    file
+                );
+
+
+                const active =
+                    Boolean(
+                        resumeProfile
+                    );
+
+
+                sort.disabled =
+                    !active;
+
+                threshold.disabled =
+                    !active;
+
+                clear.disabled =
+                    !active;
+            }
+        );
+
+
+        sort.addEventListener(
+            "click",
+            () => {
+
+                if (!resumeProfile) {
+                    return;
+                }
+
+
+                sortEnabled =
+                    !sortEnabled;
+
+
+                sort.textContent =
+                    sortEnabled
+                        ? "Restore job order"
+                        : "Sort by CV match";
+
+
+                applySort();
+            }
+        );
+
+
+        threshold.addEventListener(
+            "change",
+            applyThreshold
+        );
+
+
+        clear.addEventListener(
+            "click",
+            () => {
+
+                clearCvMode();
+
+                sort.disabled =
+                    true;
+
+                threshold.disabled =
+                    true;
+
+                clear.disabled =
+                    true;
+
+                sort.textContent =
+                    "Sort by CV match";
+            }
+        );
+    }
+
+
+    /*
+     * Re-score after dashboard filtering/render changes.
+     */
+
+    let rescoreTimer = null;
+
+
+    function scheduleRescore() {
+
+        if (!resumeProfile) {
+            return;
+        }
+
+
+        clearTimeout(
+            rescoreTimer
+        );
+
+
+        rescoreTimer =
+            setTimeout(
+                scoreVisibleCards,
+                250
+            );
+    }
+
+
+    function initialise() {
+
+        buildPanel();
+
+
+        const observer =
+            new MutationObserver(
+                mutations => {
+
+                    let meaningful =
+                        false;
+
+
+                    for (
+                        const mutation of
+                        mutations
+                    ) {
+
+                        for (
+                            const node of
+                            mutation.addedNodes
+                        ) {
+
+                            if (
+                                node.nodeType ===
+                                    Node.ELEMENT_NODE &&
+                                !node.classList?.contains(
+                                    "cv-dynamic-result"
+                                )
+                            ) {
+
+                                meaningful =
+                                    true;
+
+                                break;
+                            }
+                        }
+
+
+                        if (meaningful) {
+                            break;
+                        }
+                    }
+
+
+                    if (meaningful) {
+                        scheduleRescore();
+                    }
+                }
+            );
+
+
+        observer.observe(
+            document.body,
+            {
+                childList: true,
+                subtree: true
+            }
+        );
+
+
+        console.log(
+            `${CV_MATCH_VERSION} loaded`
+        );
+    }
+
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initialise,
+            {
+                once: true
+            }
+        );
+
+    } else {
+
+        initialise();
+
+    }
+
+})();
+
+</script>
+
 </body>
 </html>
