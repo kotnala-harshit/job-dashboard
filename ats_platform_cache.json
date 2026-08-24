@@ -2977,11 +2977,6 @@
     "slug": "theapexgroup|wd3|apexgroupcareers",
     "probe_version": 35
   },
-  "Kitman Labs": {
-    "platform": "lever",
-    "slug": "kitmanlabs",
-    "probe_version": 35
-  },
   "Airbnb": {
     "platform": "greenhouse",
     "slug": "airbnb",
@@ -2995,6 +2990,11 @@
   "CarTrawler": {
     "platform": "lever",
     "slug": "cartrawler",
+    "probe_version": 35
+  },
+  "Kitman Labs": {
+    "platform": "lever",
+    "slug": "kitmanlabs",
     "probe_version": 35
   },
   "__probe_version__": 35
