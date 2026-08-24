@@ -1,0 +1,110 @@
+name: Deploy Secure Job Radar
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "index.html"
+      - "data.json"
+      - "secure_build.py"
+      - "profile.json"
+      - "company_history.json"
+      - "seen_jobs.json"
+      - "sponsorship_history.json"
+      - "official_permit_stats.json"
+      - ".github/workflows/deploy-secure-pages.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: secure-github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install encryption dependency
+        run: |
+          python -m pip install --upgrade pip
+          pip install cryptography
+
+      - name: Build encrypted website
+        env:
+          SITE_USERNAME: ${{ secrets.SITE_USERNAME }}
+          SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+          SECURE_OUTPUT_DIR: secure_site
+        run: |
+          set -euo pipefail
+
+          if [ -z "$SITE_USERNAME" ]; then
+            echo "SITE_USERNAME secret is missing"
+            exit 1
+          fi
+
+          if [ ${#SITE_PASSWORD} -lt 16 ]; then
+            echo "SITE_PASSWORD must be at least 16 characters"
+            exit 1
+          fi
+
+          python secure_build.py
+
+      - name: Verify encrypted deployment artifact
+        run: |
+          set -euo pipefail
+
+          test -f secure_site/index.html
+          test -f secure_site/payload.json
+
+          for file in \
+            data.json \
+            profile.json \
+            company_history.json \
+            seen_jobs.json \
+            sponsorship_history.json \
+            official_permit_stats.json \
+            ireland_job_radar_HARSHIT_MASTER.csv
+          do
+            if [ -e "secure_site/$file" ]; then
+              echo "SECURITY FAILURE: plaintext $file found in deployment"
+              exit 1
+            fi
+          done
+
+          echo "PASS: secure deployment artifact contains no protected plaintext files"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload encrypted Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: secure_site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
