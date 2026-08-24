@@ -2179,5 +2179,342 @@ autoFetchJobs();
 setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
 </script>
 
+
+<!-- JOB_CARD_OVERLAP_FIX_V1 -->
+<style>
+
+/*
+ * Prevent long visa / employer-history metadata from colliding
+ * with the Save / Ignore / Mark applied / Open action row.
+ */
+
+.job-card-overlap-fixed {
+    display: flex !important;
+    flex-direction: column !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+
+    overflow: visible !important;
+}
+
+.job-card-overlap-fixed .job-card-safe-actions {
+    position: static !important;
+
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+
+    clear: both !important;
+
+    margin-top: 14px !important;
+    padding-top: 12px !important;
+
+    width: 100% !important;
+
+    flex-shrink: 0 !important;
+}
+
+.job-card-overlap-fixed .job-card-safe-meta {
+    position: static !important;
+
+    max-height: none !important;
+    height: auto !important;
+
+    overflow: visible !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+
+    line-height: 1.35 !important;
+
+    margin-bottom: 4px !important;
+}
+
+.job-card-overlap-fixed button,
+.job-card-overlap-fixed a {
+    flex-shrink: 0;
+}
+
+</style>
+
+<script>
+(() => {
+
+    const ACTION_WORDS = [
+        "save",
+        "ignore",
+        "mark applied",
+        "open"
+    ];
+
+    const META_WORDS = [
+        "employer history:",
+        "official permits",
+        "visa sponsorship",
+        "visa not mentioned",
+        "no sponsorship"
+    ];
+
+
+    function normalizedText(el) {
+        return String(
+            el?.innerText ||
+            el?.textContent ||
+            ""
+        )
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+    }
+
+
+    function looksLikeCard(el) {
+
+        if (!el || el === document.body) {
+            return false;
+        }
+
+        const text = normalizedText(el);
+
+        if (!text) {
+            return false;
+        }
+
+        const actionHits =
+            ACTION_WORDS.filter(
+                word => text.includes(word)
+            ).length;
+
+        /*
+         * Real job cards generally contain several of:
+         * Save, Ignore, Mark applied, Open.
+         */
+        if (actionHits < 2) {
+            return false;
+        }
+
+        const rect =
+            el.getBoundingClientRect();
+
+        return (
+            rect.width >= 180 &&
+            rect.width <= 700
+        );
+    }
+
+
+    function findCard(start) {
+
+        let el = start;
+
+        for (let i = 0; i < 10 && el; i++) {
+
+            if (looksLikeCard(el)) {
+                return el;
+            }
+
+            el = el.parentElement;
+        }
+
+        return null;
+    }
+
+
+    function findActionRow(card) {
+
+        const candidates =
+            Array.from(
+                card.querySelectorAll(
+                    "div,footer,section"
+                )
+            );
+
+        let best = null;
+        let bestHits = 0;
+
+        for (const el of candidates) {
+
+            const text =
+                normalizedText(el);
+
+            const hits =
+                ACTION_WORDS.filter(
+                    word => text.includes(word)
+                ).length;
+
+            /*
+             * Avoid selecting the whole card.
+             */
+            if (
+                hits >= 2 &&
+                el !== card &&
+                hits >= bestHits
+            ) {
+
+                /*
+                 * Prefer compact containers near the bottom.
+                 */
+                const childCount =
+                    el.children.length;
+
+                if (childCount <= 10) {
+                    best = el;
+                    bestHits = hits;
+                }
+            }
+        }
+
+        return best;
+    }
+
+
+    function markMetadata(card) {
+
+        const all =
+            Array.from(
+                card.querySelectorAll(
+                    "div,p,span,small"
+                )
+            );
+
+        for (const el of all) {
+
+            const text =
+                normalizedText(el);
+
+            if (
+                META_WORDS.some(
+                    word =>
+                        text.includes(word)
+                )
+            ) {
+                el.classList.add(
+                    "job-card-safe-meta"
+                );
+            }
+        }
+    }
+
+
+    function fixCard(card) {
+
+        if (!card) {
+            return;
+        }
+
+        card.classList.add(
+            "job-card-overlap-fixed"
+        );
+
+        markMetadata(card);
+
+        const actions =
+            findActionRow(card);
+
+        if (actions) {
+
+            actions.classList.add(
+                "job-card-safe-actions"
+            );
+        }
+    }
+
+
+    function fixAllCards() {
+
+        /*
+         * Start from the metadata blocks because those are
+         * the elements causing the overflow.
+         */
+        const candidates =
+            Array.from(
+                document.querySelectorAll(
+                    "div,p,span,small"
+                )
+            );
+
+        const cards =
+            new Set();
+
+        for (const el of candidates) {
+
+            const text =
+                normalizedText(el);
+
+            if (
+                !META_WORDS.some(
+                    word =>
+                        text.includes(word)
+                )
+            ) {
+                continue;
+            }
+
+            const card =
+                findCard(el);
+
+            if (card) {
+                cards.add(card);
+            }
+        }
+
+        cards.forEach(fixCard);
+    }
+
+
+    let scheduled = false;
+
+    function scheduleFix() {
+
+        if (scheduled) {
+            return;
+        }
+
+        scheduled = true;
+
+        requestAnimationFrame(() => {
+
+            scheduled = false;
+            fixAllCards();
+
+        });
+    }
+
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            scheduleFix,
+            { once: true }
+        );
+
+    } else {
+
+        scheduleFix();
+    }
+
+
+    /*
+     * Dashboard filters/renders cards dynamically, so re-run
+     * after DOM updates without interfering with existing code.
+     */
+    new MutationObserver(
+        scheduleFix
+    ).observe(
+        document.documentElement,
+        {
+            childList: true,
+            subtree: true
+        }
+    );
+
+})();
+</script>
+
 </body>
 </html>
