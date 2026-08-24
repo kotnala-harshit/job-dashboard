@@ -677,6 +677,17 @@ body{background:#f3f4f6!important}
   <div id="livePane">
     <div id="cardGrid" class="grid"></div>
     <div id="emptyState" class="empty">No jobs loaded yet — waiting for data.json.</div>
+
+    <div style="display:flex;justify-content:center;padding:22px 0;">
+      <button
+        id="loadMoreJobs"
+        class="resume-button"
+        type="button"
+        style="display:none;"
+      >
+        Load more jobs
+      </button>
+    </div>
   </div>
 
   <div id="directoryPane">
@@ -748,6 +759,12 @@ let HISTORY_TRACKING_STARTED = '2026-08-16';
 let HISTORICAL_DISTINCT_JOBS = 0;
 let CONNECTOR_HEALTH = {};
 let RAW_TOTAL = 0;
+
+/* DASHBOARD_ZERO_PERF_FIX_V1 */
+const INITIAL_JOB_RENDER_LIMIT = 200;
+const JOB_RENDER_STEP = 200;
+let CURRENT_RENDER_LIMIT = INITIAL_JOB_RENDER_LIMIT;
+let CURRENT_TAB = 'live';
 
 
 const SAVED_KEY = 'ireland_job_dashboard_saved_v1';
@@ -1498,13 +1515,52 @@ if (search) {
   }
 
   document.getElementById('resultCount').textContent =
-    filtered.length + ' of ' + ALL_JOBS.length + ' matches';
+    `${Math.min(filtered.length, CURRENT_RENDER_LIMIT)} shown · ` +
+    `${filtered.length} of ${ALL_JOBS.length} matches`;
+
+  const loadMoreButton =
+    document.getElementById('loadMoreJobs');
+
+  if (loadMoreButton) {
+
+    const remaining =
+      Math.max(
+        0,
+        filtered.length -
+        CURRENT_RENDER_LIMIT
+      );
+
+    loadMoreButton.style.display =
+      remaining > 0
+        ? 'inline-block'
+        : 'none';
+
+    loadMoreButton.textContent =
+      remaining > 0
+        ? `Load more (${Math.min(
+            JOB_RENDER_STEP,
+            remaining
+          )})`
+        : 'Load more jobs';
+  }
 
   const grid = document.getElementById('cardGrid');
   grid.innerHTML = '';
-  document.getElementById('emptyState').style.display = filtered.length ? 'none' : 'block';
 
-  filtered.forEach(j => {
+  document.getElementById('emptyState').style.display =
+    filtered.length ? 'none' : 'block';
+
+  /*
+   * Do not create ~3,000 rich job-card DOM trees at once.
+   * The complete filtered result is preserved; only rendering is paged.
+   */
+  const jobsToRender =
+    filtered.slice(
+      0,
+      CURRENT_RENDER_LIMIT
+    );
+
+  jobsToRender.forEach(j => {
     const postedDate = getJobPostedDate(j);
     const bucket = recencyBucket(postedDate);
     const fresh = ageHours(postedDate) <= 24;
@@ -1519,7 +1575,9 @@ if (search) {
     const bucketLabel = recencyLabel(postedDate);
 
     const card = document.createElement('div');
-    card.className = 'card ' + (fresh ? 'fresh' : '');
+    card.className =
+      'card job-card-overlap-fixed ' +
+      (fresh ? 'fresh' : '');
     card.onclick = () => j.url && window.open(j.url, '_blank', 'noopener');
     card.innerHTML = `
       ${j.new_since_last_check ? '<div class="new-ribbon">NEW</div>' : ''}
@@ -1543,14 +1601,14 @@ if (search) {
         <span class="chip type">${escapeHtml(employmentTypeLabel(classifyEmploymentType(j)))}</span>
       </div>
       <div class="card-foot">
-        <div class="visa-stack">
+        <div class="visa-stack job-card-safe-meta">
           <span class="visa-badge ${badge.cls}" title="${escapeHtml(j.visa_snippet || '')}">${escapeHtml(badge.text)}</span>
           <div class="visa-history">
             <strong>Employer history:</strong> ${escapeHtml(visaHistory.label || 'No sponsorship history yet')}
             ${permitTotal > 0 ? ` · <strong>${permitTotal}</strong> official permits` : ''}
           </div>
         </div>
-        <div style="display:flex;gap:6px;align-items:center;">
+        <div class="job-card-safe-actions" style="display:flex;gap:6px;align-items:center;">
           <button type="button" class="save-btn ${isSaved(j) ? 'saved' : ''}" data-save-job="1">${isSaved(j) ? '✓ Saved' : 'Save'}</button>
           <button type="button" class="ignore-btn" data-ignore-job="1">Ignore</button>
           <button type="button" class="track-btn ${isTracked(j) ? 'tracked' : ''}" data-track-job="1">${isTracked(j) ? '✓ Applied' : 'Mark applied'}</button>
@@ -1572,10 +1630,29 @@ if (search) {
     grid.appendChild(card);
   });
 
-  renderDirectory(search);
-  renderDiagnostics(search);
-  renderLiveCompanies(search);
-  renderProvenWorkingCompanies(search);
+  /*
+   * Secondary tabs are rendered only when visible.
+   * This avoids repeatedly rebuilding hundreds of hidden cards.
+   */
+  if (CURRENT_TAB === 'dir') {
+    renderDirectory(search);
+  }
+
+  if (
+    CURRENT_TAB === 'manual' ||
+    CURRENT_TAB === 'livezero' ||
+    CURRENT_TAB === 'zero'
+  ) {
+    renderDiagnostics(search);
+  }
+
+  if (CURRENT_TAB === 'livecompanies') {
+    renderLiveCompanies(search);
+  }
+
+  if (CURRENT_TAB === 'provencompanies') {
+    renderProvenWorkingCompanies(search);
+  }
   const profileCountEl =
     document.getElementById('profileMatchCount');
 
@@ -1944,62 +2021,89 @@ function getCurrentLiveCompanyNames() {
 }
 
 function getTrueZeroCompanies() {
+  /*
+   * TRUE ZERO is authoritative backend state only.
+   *
+   * Historical ever_working belongs in Proven working and must
+   * never promote configured_zero into this bucket.
+   */
   const liveNames = getCurrentLiveCompanyNames();
-  const byName = new Map();
 
-  // Backend diagnostics are authoritative for explicitly verified healthy-zero.
-  ALL_LIVE_ZERO.forEach(c => {
-    if (!c || !c.company || liveNames.has(c.company)) return;
-    const registry = ALL_REGISTRY.find(r => r.company === c.company) || {};
-    byName.set(c.company, {
-      ...registry,
-      ...c,
-      url: c.careers_url || c.url || registry.careers_url || registry.url || ''
-    });
-  });
+  const registryByName = new Map(
+    ALL_REGISTRY
+      .filter(c => c && c.company)
+      .map(c => [c.company, c])
+  );
 
-  // A company that has previously produced valid jobs is also proven to have
-  // had a working job-level connector. If it is empty now, retain that proof.
-  PROVEN_WORKING_COMPANIES.forEach(name => {
-    if (!name || liveNames.has(name)) return;
-    const registry = ALL_REGISTRY.find(r => r.company === name);
-    if (!registry || registry.automatic !== true) return;
-    const hist = COMPANY_HISTORY[name] || {};
-    byName.set(name, {
-      ...registry,
-      history: hist,
-      state: 'historically_working_zero',
-      reason: 'Previously produced qualifying Ireland jobs; currently 0 live jobs',
-      url: registry.careers_url || registry.url || ''
-    });
-  });
+  return ALL_COVERAGE
+    .filter(c =>
+      c &&
+      c.company &&
+      c.state === 'live_zero' &&
+      !liveNames.has(c.company)
+    )
+    .map(c => {
+      const registry =
+        registryByName.get(c.company) || {};
 
-  return Array.from(byName.values())
-    .sort((a, b) => a.company.localeCompare(b.company));
+      return {
+        ...registry,
+        ...c,
+        state: 'live_zero',
+        url:
+          c.careers_url ||
+          c.url ||
+          registry.careers_url ||
+          registry.url ||
+          ''
+      };
+    })
+    .sort(
+      (a, b) =>
+        a.company.localeCompare(b.company)
+    );
 }
 
 function getZeroJobCompanies() {
-  // False-zero/broken bucket:
-  // automatic connector + no current jobs + not independently/proven working.
+  /*
+   * FALSE ZERO / BROKEN means the backend explicitly classified
+   * the current connector result as configured_zero.
+   */
   const liveNames = getCurrentLiveCompanyNames();
-  const trueZeroNames = new Set(getTrueZeroCompanies().map(c => c.company));
-  const coverageByName = new Map(ALL_COVERAGE.map(x => [x.company, x]));
 
-  return ALL_REGISTRY
+  const registryByName = new Map(
+    ALL_REGISTRY
+      .filter(c => c && c.company)
+      .map(c => [c.company, c])
+  );
+
+  return ALL_COVERAGE
     .filter(c =>
-      c.automatic === true &&
-      !liveNames.has(c.company) &&
-      !trueZeroNames.has(c.company)
+      c &&
+      c.company &&
+      c.state === 'configured_zero' &&
+      !liveNames.has(c.company)
     )
     .map(c => {
-      const diag = coverageByName.get(c.company) || {};
+      const registry =
+        registryByName.get(c.company) || {};
+
       return {
+        ...registry,
         ...c,
-        ...diag,
-        url: c.careers_url || c.url || diag.careers_url || ''
+        state: 'configured_zero',
+        url:
+          c.careers_url ||
+          c.url ||
+          registry.careers_url ||
+          registry.url ||
+          ''
       };
     })
-    .sort((a, b) => a.company.localeCompare(b.company));
+    .sort(
+      (a, b) =>
+        a.company.localeCompare(b.company)
+    );
 }
 
 function getProvenWorkingCompanies() {
@@ -2141,6 +2245,7 @@ function renderDiagnostics(search) {
 }
 
 function showTab(which) {
+  CURRENT_TAB = which;
   document.getElementById('livePane').style.display = which === 'live' ? 'block' : 'none';
   document.getElementById('directoryPane').style.display = which === 'dir' ? 'block' : 'none';
   document.getElementById('manualPane').style.display = which === 'manual' ? 'block' : 'none';
@@ -2160,14 +2265,57 @@ function showTab(which) {
   document.getElementById('tabLiveCompanies').classList.toggle('active', which === 'livecompanies');
   document.getElementById('tabProvenCompanies').classList.toggle('active', which === 'provencompanies');
   document.getElementById('tabApplications').classList.toggle('active', which === 'applications');
-  if (which === 'saved') renderSaved();
-  if (which === 'livecompanies') renderLiveCompanies(document.getElementById('q')?.value || '');
-  if (which === 'provencompanies') renderProvenWorkingCompanies(document.getElementById('q')?.value || '');
-  if (which === 'applications') renderApplications();
+  const currentSearch =
+    document.getElementById('fSearch')?.value || '';
+
+  if (which === 'dir') {
+    renderDirectory(currentSearch);
+  }
+
+  if (
+    which === 'manual' ||
+    which === 'livezero' ||
+    which === 'zero'
+  ) {
+    renderDiagnostics(currentSearch);
+  }
+
+  if (which === 'saved') {
+    renderSaved();
+  }
+
+  if (which === 'livecompanies') {
+    renderLiveCompanies(currentSearch);
+  }
+
+  if (which === 'provencompanies') {
+    renderProvenWorkingCompanies(currentSearch);
+  }
+
+  if (which === 'applications') {
+    renderApplications();
+  }
 }
 
 function escapeHtml(str) {
   return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+
+const loadMoreJobsButton =
+  document.getElementById('loadMoreJobs');
+
+if (loadMoreJobsButton) {
+
+  loadMoreJobsButton.addEventListener(
+    'click',
+    () => {
+
+      CURRENT_RENDER_LIMIT +=
+        JOB_RENDER_STEP;
+
+      applyFilters();
+    }
+  );
 }
 
 loadRadarState();
@@ -2239,281 +2387,13 @@ setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
 </style>
 
 <script>
-(() => {
-
-    const ACTION_WORDS = [
-        "save",
-        "ignore",
-        "mark applied",
-        "open"
-    ];
-
-    const META_WORDS = [
-        "employer history:",
-        "official permits",
-        "visa sponsorship",
-        "visa not mentioned",
-        "no sponsorship"
-    ];
-
-
-    function normalizedText(el) {
-        return String(
-            el?.innerText ||
-            el?.textContent ||
-            ""
-        )
-        .replace(/\s+/g, " ")
-        .trim()
-        .toLowerCase();
-    }
-
-
-    function looksLikeCard(el) {
-
-        if (!el || el === document.body) {
-            return false;
-        }
-
-        const text = normalizedText(el);
-
-        if (!text) {
-            return false;
-        }
-
-        const actionHits =
-            ACTION_WORDS.filter(
-                word => text.includes(word)
-            ).length;
-
-        /*
-         * Real job cards generally contain several of:
-         * Save, Ignore, Mark applied, Open.
-         */
-        if (actionHits < 2) {
-            return false;
-        }
-
-        const rect =
-            el.getBoundingClientRect();
-
-        return (
-            rect.width >= 180 &&
-            rect.width <= 700
-        );
-    }
-
-
-    function findCard(start) {
-
-        let el = start;
-
-        for (let i = 0; i < 10 && el; i++) {
-
-            if (looksLikeCard(el)) {
-                return el;
-            }
-
-            el = el.parentElement;
-        }
-
-        return null;
-    }
-
-
-    function findActionRow(card) {
-
-        const candidates =
-            Array.from(
-                card.querySelectorAll(
-                    "div,footer,section"
-                )
-            );
-
-        let best = null;
-        let bestHits = 0;
-
-        for (const el of candidates) {
-
-            const text =
-                normalizedText(el);
-
-            const hits =
-                ACTION_WORDS.filter(
-                    word => text.includes(word)
-                ).length;
-
-            /*
-             * Avoid selecting the whole card.
-             */
-            if (
-                hits >= 2 &&
-                el !== card &&
-                hits >= bestHits
-            ) {
-
-                /*
-                 * Prefer compact containers near the bottom.
-                 */
-                const childCount =
-                    el.children.length;
-
-                if (childCount <= 10) {
-                    best = el;
-                    bestHits = hits;
-                }
-            }
-        }
-
-        return best;
-    }
-
-
-    function markMetadata(card) {
-
-        const all =
-            Array.from(
-                card.querySelectorAll(
-                    "div,p,span,small"
-                )
-            );
-
-        for (const el of all) {
-
-            const text =
-                normalizedText(el);
-
-            if (
-                META_WORDS.some(
-                    word =>
-                        text.includes(word)
-                )
-            ) {
-                el.classList.add(
-                    "job-card-safe-meta"
-                );
-            }
-        }
-    }
-
-
-    function fixCard(card) {
-
-        if (!card) {
-            return;
-        }
-
-        card.classList.add(
-            "job-card-overlap-fixed"
-        );
-
-        markMetadata(card);
-
-        const actions =
-            findActionRow(card);
-
-        if (actions) {
-
-            actions.classList.add(
-                "job-card-safe-actions"
-            );
-        }
-    }
-
-
-    function fixAllCards() {
-
-        /*
-         * Start from the metadata blocks because those are
-         * the elements causing the overflow.
-         */
-        const candidates =
-            Array.from(
-                document.querySelectorAll(
-                    "div,p,span,small"
-                )
-            );
-
-        const cards =
-            new Set();
-
-        for (const el of candidates) {
-
-            const text =
-                normalizedText(el);
-
-            if (
-                !META_WORDS.some(
-                    word =>
-                        text.includes(word)
-                )
-            ) {
-                continue;
-            }
-
-            const card =
-                findCard(el);
-
-            if (card) {
-                cards.add(card);
-            }
-        }
-
-        cards.forEach(fixCard);
-    }
-
-
-    let scheduled = false;
-
-    function scheduleFix() {
-
-        if (scheduled) {
-            return;
-        }
-
-        scheduled = true;
-
-        requestAnimationFrame(() => {
-
-            scheduled = false;
-            fixAllCards();
-
-        });
-    }
-
-
-    if (
-        document.readyState ===
-        "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            scheduleFix,
-            { once: true }
-        );
-
-    } else {
-
-        scheduleFix();
-    }
-
-
-    /*
-     * Dashboard filters/renders cards dynamically, so re-run
-     * after DOM updates without interfering with existing code.
-     */
-    new MutationObserver(
-        scheduleFix
-    ).observe(
-        document.documentElement,
-        {
-            childList: true,
-            subtree: true
-        }
-    );
-
-})();
+/*
+ * JOB_CARD_OVERLAP_FIX_V2
+ *
+ * Safety classes are now added during card creation.
+ * The previous document-wide MutationObserver was intentionally removed
+ * because every dashboard render caused it to scan thousands of nodes.
+ */
 </script>
 
 </body>
