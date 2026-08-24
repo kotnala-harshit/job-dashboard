@@ -2282,11 +2282,6 @@
     "slug": "cityswift",
     "probe_version": 35
   },
-  "BearingPoint": {
-    "platform": "greenhouse",
-    "slug": "bearingpoint",
-    "probe_version": 35
-  },
   "Red Hat": {
     "platform": "none",
     "slug": null,
@@ -2995,6 +2990,11 @@
   "Kitman Labs": {
     "platform": "lever",
     "slug": "kitmanlabs",
+    "probe_version": 35
+  },
+  "BearingPoint": {
+    "platform": "greenhouse",
+    "slug": "bearingpoint",
     "probe_version": 35
   },
   "__probe_version__": 35
