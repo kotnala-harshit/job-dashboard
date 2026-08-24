@@ -552,6 +552,160 @@ body{background:#f3f4f6!important}
 }
 
 </style>
+
+<style>
+/* JOB_CARD_READABILITY_FIX_V3 */
+
+/*
+ * Critical:
+ * metadata and action buttons must NEVER compete horizontally.
+ */
+.card .card-foot,
+.job-card-overlap-fixed .card-foot {
+    display: block !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin-top: auto !important;
+
+    overflow: visible !important;
+}
+
+
+/*
+ * Give visa/employer information the entire card width.
+ */
+.card .visa-stack,
+.job-card-overlap-fixed .visa-stack,
+.job-card-overlap-fixed .job-card-safe-meta {
+    display: block !important;
+
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+
+    flex: none !important;
+
+    margin: 0 0 10px 0 !important;
+
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+
+    overflow: visible !important;
+}
+
+
+/*
+ * The badge was previously being compressed into a ~10px column.
+ */
+.card .visa-badge,
+.job-card-overlap-fixed .visa-badge {
+    display: inline-block !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+
+    flex: none !important;
+
+    white-space: normal !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+
+    vertical-align: top !important;
+}
+
+
+/*
+ * Employer-history text must remain normal horizontal prose.
+ */
+.card .visa-history,
+.job-card-overlap-fixed .visa-history {
+    display: block !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+
+    writing-mode: horizontal-tb !important;
+
+    line-height: 1.45 !important;
+}
+
+
+/*
+ * The action row belongs BELOW metadata.
+ */
+.card .job-card-safe-actions,
+.job-card-overlap-fixed .job-card-safe-actions {
+    display: flex !important;
+
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+
+    justify-content: flex-start !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+
+    clear: both !important;
+
+    gap: 6px !important;
+
+    margin-top: 8px !important;
+    padding-top: 8px !important;
+}
+
+
+/*
+ * Let the card expand naturally with its content.
+ */
+.card,
+.job-card-overlap-fixed {
+    height: auto !important;
+    min-height: 0 !important;
+
+    overflow: visible !important;
+}
+
+
+/*
+ * Prevent any descendant metadata text from inheriting an accidental
+ * vertical writing mode or ultra-aggressive word breaking.
+ */
+.card-foot *,
+.visa-stack *,
+.visa-history *,
+.visa-badge * {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+}
+
+
+/*
+ * Safety for narrow cards.
+ */
+.card-foot {
+    overflow-wrap: break-word !important;
+}
+
+</style>
+
 </head>
 <body>
 
@@ -652,966 +806,6 @@ body{background:#f3f4f6!important}
 
     <div class="loadctrl">
       <span id="liveStatus" class="live-dot">● live</span>
-      <button id="searchEnterBtn" type="button" onclick="applyFilters()">Search / Enter</button>
-      <button id="refreshNowBtn" type="button" onclick="autoFetchJobs()">Refresh now</button>
-    </div>
-  </div>
-</div>
-
-<main>
-  <div class="subhead">
-    <div class="tabs">
-      <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs</div>
-      <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
-      <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
-      <div id="tabLiveZero" class="tab" onclick="showTab('livezero')">True zero jobs</div>
-      <div id="tabZero" class="tab" onclick="showTab('zero')">False zero / broken</div>
-      <div id="tabSaved" class="tab" onclick="showTab('saved')">Saved</div>
-      <div id="tabLiveCompanies" class="tab" onclick="showTab('livecompanies')">Companies with live jobs</div>
-      <div id="tabProvenCompanies" class="tab" onclick="showTab('provencompanies')">Proven working</div>
-      <div id="tabApplications" class="tab" onclick="showTab('applications')">Applications</div>
-    </div>
-    <span id="resultCount">0 results</span>
-  </div>
-
-  <div id="livePane">
-    <div id="cardGrid" class="grid"></div>
-    <div id="emptyState" class="empty">No jobs loaded yet — waiting for data.json.</div>
-
-    <div style="display:flex;justify-content:center;padding:22px 0;">
-      <button
-        id="loadMoreJobs"
-        class="resume-button"
-        type="button"
-        style="display:none;"
-      >
-        Load more jobs
-      </button>
-    </div>
-  </div>
-
-  <div id="directoryPane">
-    <div id="dirGrid" class="dir-grid"></div>
-  </div>
-
-  <div id="manualPane">
-    <div id="manualSummary" class="diag-summary"></div>
-    <div id="manualGrid" class="dir-grid"></div>
-  </div>
-
-  <div id="liveZeroPane">
-    <div id="liveZeroSummary" class="diag-summary"></div>
-    <div id="liveZeroGrid" class="dir-grid"></div>
-  </div>
-  <div id="zeroPane">
-    <div id="zeroSummary" class="diag-summary"></div>
-    <div id="zeroGrid" class="dir-grid"></div>
-  </div>
-
-
-  <div id="savedPane" style="display:none">
-    <div id="savedGrid" class="grid"></div>
-    <div id="savedEmpty" class="empty">No saved jobs yet.</div>
-  </div>
-
-
-  <div id="liveCompaniesPane" style="display:none">
-    <div id="liveCompaniesSummary" class="diag-summary"></div>
-    <div id="liveCompaniesGrid" class="dir-grid"></div>
-  </div>
-
-  <div id="provenCompaniesPane" style="display:none">
-    <div id="provenCompaniesSummary" class="diag-summary"></div>
-    <div id="provenCompaniesGrid" class="dir-grid"></div>
-  </div>
-
-  <div id="applicationsPane">
-    <div id="applicationSummary" class="application-summary"></div>
-    <div class="application-toolbar">
-      <select id="applicationStatusFilter" onchange="renderApplications()">
-        <option value="">All application statuses</option>
-        <option value="Applied">Applied</option>
-        <option value="Assessment">Assessment</option>
-        <option value="Interview">Interview</option>
-        <option value="Offer">Offer</option>
-        <option value="Rejected">Rejected</option>
-        <option value="Withdrawn">Withdrawn</option>
-      </select>
-      <button type="button" onclick="exportApplications()">Export applications</button>
-    </div>
-    <div id="applicationGrid" class="application-grid"></div>
-    <div id="applicationsEmpty" class="empty">No applications tracked yet. Use “Mark applied” on a job card after you apply.</div>
-  </div>
-
-</main>
-<script>
-const DATA_URL = './data.json';
-const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
-
-let ALL_JOBS = [];
-let ALL_MANUAL = [];
-let ALL_REGISTRY = [];
-let ALL_COVERAGE = [];
-let ALL_LIVE_ZERO = [];
-let COMPANY_HISTORY = {};
-let PROVEN_WORKING_COMPANIES = [];
-let HISTORY_TRACKING_STARTED = '2026-08-16';
-let HISTORICAL_DISTINCT_JOBS = 0;
-let CONNECTOR_HEALTH = {};
-let RAW_TOTAL = 0;
-
-/* DASHBOARD_ZERO_PERF_FIX_V1 */
-const INITIAL_JOB_RENDER_LIMIT = 200;
-const JOB_RENDER_STEP = 200;
-let CURRENT_RENDER_LIMIT = INITIAL_JOB_RENDER_LIMIT;
-let CURRENT_TAB = 'live';
-
-
-const SAVED_KEY = 'ireland_job_dashboard_saved_v1';
-const IGNORED_KEY = 'ireland_job_dashboard_ignored_v1';
-let SAVED_JOBS = [];
-let IGNORED_JOBS = [];
-
-function loadRadarState() {
-  try { SAVED_JOBS = JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch(e) { SAVED_JOBS = []; }
-  try { IGNORED_JOBS = JSON.parse(localStorage.getItem(IGNORED_KEY) || '[]'); } catch(e) { IGNORED_JOBS = []; }
-}
-function jobId(j) { return String(j.url || `${j.company}|${j.title}|${j.location || ''}`); }
-function isSaved(j) { return SAVED_JOBS.some(x => x.id === jobId(j)); }
-function isIgnored(j) { return IGNORED_JOBS.includes(jobId(j)); }
-function toggleSaved(j) {
-  const id = jobId(j);
-  const existing = SAVED_JOBS.find(x => x.id === id);
-  if (existing) {
-    SAVED_JOBS = SAVED_JOBS.filter(x => x.id !== id);
-
-  } else {
-    const row = {id, company:j.company, title:j.title, location:j.location, url:j.url,
-      candidate_match_score:effectiveMatchScore(j), discovery_score:j.discovery_score,
-      saved_at:new Date().toISOString()};
-    SAVED_JOBS.unshift(row);
-
-  }
-  localStorage.setItem(SAVED_KEY, JSON.stringify(SAVED_JOBS));
-  renderSaved(); applyFilters();
-}
-function ignoreJob(j) {
-  const id = jobId(j);
-  if (!IGNORED_JOBS.includes(id)) IGNORED_JOBS.push(id);
-  localStorage.setItem(IGNORED_KEY, JSON.stringify(IGNORED_JOBS));
-
-  populateRoleFamilies();
-    applyFilters();
-}
-function renderSaved() {
-  const grid = document.getElementById('savedGrid');
-  const empty = document.getElementById('savedEmpty');
-  grid.innerHTML = '';
-  empty.style.display = SAVED_JOBS.length ? 'none' : 'block';
-  SAVED_JOBS.forEach(j => {
-    const card = document.createElement('div'); card.className='card';
-    card.onclick = () => j.url && window.open(j.url,'_blank','noopener');
-    card.innerHTML = `<div class="company">${escapeHtml(j.company)}</div><div class="title">${escapeHtml(j.title)}</div>
-      <div class="meta"><span class="chip">${escapeHtml(j.location || 'Ireland')}</span>
-      ${pm.score != null ? `<span class="score-badge match">${pm.score}% ${pm.personalized ? 'Personal Match' : 'Match'}</span>` : ''}</div>
-      <div class="card-footer"><button class="save-btn saved" data-unsave="1">Remove saved</button><span class="apply-hint">Open →</span></div>`;
-    const b=card.querySelector('[data-unsave]'); b.addEventListener('click',e=>{e.stopPropagation(); toggleSaved(j);});
-    grid.appendChild(card);
-  });
-  const tab=document.getElementById('tabSaved'); if(tab) tab.textContent=`Saved (${SAVED_JOBS.length})`;
-}
-
-const APPLICATIONS_KEY = 'ireland_job_dashboard_applications_v1';
-let APPLICATIONS = [];
-
-function loadApplications() {
-  try { APPLICATIONS = JSON.parse(localStorage.getItem(APPLICATIONS_KEY) || '[]'); }
-  catch (e) { APPLICATIONS = []; }
-}
-function saveApplications() {
-  localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
-
-}
-function applicationId(job) {
-  return String(job.url || `${job.company}|${job.title}|${job.location || ''}`);
-}
-function isTracked(job) {
-  const id = applicationId(job);
-  return APPLICATIONS.some(a => a.id === id);
-}
-function markApplied(job) {
-  const id = applicationId(job);
-  const existing = APPLICATIONS.find(a => a.id === id);
-  if (!existing) {
-    APPLICATIONS.unshift({
-      id,
-      company: job.company || '',
-      title: job.title || 'Untitled role',
-      location: job.location || job.ireland_area || 'Ireland',
-      url: job.url || '',
-      source: job.ats || '',
-      status: 'Applied',
-      applied_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      notes: ''
-    });
-  } else {
-    existing.status = existing.status || 'Applied';
-    existing.updated_at = new Date().toISOString();
-  }
-  saveApplications();
-  renderApplications();
-  applyFilters();
-}
-function updateApplication(id, field, value) {
-  const app = APPLICATIONS.find(a => a.id === id);
-  if (!app) return;
-  app[field] = value;
-  app.updated_at = new Date().toISOString();
-  saveApplications();
-  renderApplications();
-}
-function removeApplication(id) {
-  const prior = APPLICATIONS.find(a => a.id === id);
-  APPLICATIONS = APPLICATIONS.filter(a => a.id !== id);
-
-  localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(APPLICATIONS));
-  renderApplications();
-  applyFilters();
-}
-function exportApplications() {
-  const blob = new Blob([JSON.stringify(APPLICATIONS, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'job-applications.json';
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-function renderApplications() {
-  const grid = document.getElementById('applicationGrid');
-  const empty = document.getElementById('applicationsEmpty');
-  const filter = document.getElementById('applicationStatusFilter')?.value || '';
-  const statuses = ['Applied','Assessment','Interview','Offer','Rejected','Withdrawn'];
-  const apps = APPLICATIONS.filter(a => !filter || a.status === filter);
-
-  document.getElementById('applicationSummary').innerHTML =
-    statuses.map(s => `<span class="application-stat">${s}: ${APPLICATIONS.filter(a => a.status === s).length}</span>`).join('') +
-    `<span class="application-stat">Total: ${APPLICATIONS.length}</span>`;
-
-  grid.innerHTML = '';
-  empty.style.display = apps.length ? 'none' : 'block';
-
-  apps.forEach(a => {
-    const card = document.createElement('div');
-    card.className = 'application-card';
-    const date = a.applied_at ? new Date(a.applied_at).toLocaleDateString() : '';
-    card.innerHTML = `
-      <div class="app-company">${escapeHtml(a.company)}</div>
-      <div class="app-title">${escapeHtml(a.title)}</div>
-      <div class="app-meta">${escapeHtml(a.location || '')}${date ? ` · Applied ${escapeHtml(date)}` : ''}</div>
-      <textarea placeholder="Notes: recruiter, referral, interview date, follow-up..." data-notes-id="${escapeHtml(a.id)}">${escapeHtml(a.notes || '')}</textarea>
-      <div class="application-actions">
-        <select data-status-id="${escapeHtml(a.id)}">
-          ${statuses.map(s => `<option value="${s}" ${a.status === s ? 'selected' : ''}>${s}</option>`).join('')}
-        </select>
-        ${a.url ? `<button type="button" onclick="window.open('${escapeHtml(a.url)}','_blank','noopener')">Open job</button>` : ''}
-        <button type="button" data-remove-id="${escapeHtml(a.id)}">Remove</button>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-
-  grid.querySelectorAll('[data-status-id]').forEach(el =>
-    el.addEventListener('change', e => updateApplication(e.target.dataset.statusId, 'status', e.target.value))
-  );
-  grid.querySelectorAll('[data-notes-id]').forEach(el =>
-    el.addEventListener('change', e => updateApplication(e.target.dataset.notesId, 'notes', e.target.value))
-  );
-  grid.querySelectorAll('[data-remove-id]').forEach(el =>
-    el.addEventListener('click', e => removeApplication(e.target.dataset.removeId))
-  );
-
-  document.getElementById('tabApplications').textContent = `Applications (${APPLICATIONS.length})`;
-}
-
-const INTERNSHIP_KEYWORDS = ['intern', 'internship', 'working student', 'student job', 'placement', 'co-op', 'co op'];
-const PART_TIME_KEYWORDS = ['part time', 'part-time', 'seasonal', 'temporary staff', 'christmas temp', 'weekend staff'];
-
-function employmentType(title) {
-  const t = (title || '').toLowerCase();
-  if (INTERNSHIP_KEYWORDS.some(k => t.includes(k))) return 'internship';
-  if (PART_TIME_KEYWORDS.some(k => t.includes(k))) return 'part_time';
-  return 'full_time';
-}
-
-function parsePostedDate(value) {
-  if (!value) return null;
-  const s = String(value).trim();
-  const iso = new Date(s);
-  if (!isNaN(iso.getTime())) return iso;
-  const sl = s.toLowerCase();
-  const now = new Date();
-  if (sl.includes('today')) return now;
-  if (sl.includes('yesterday')) return new Date(now - 24 * 3600 * 1000);
-  const m = sl.match(/(\d+)\+?\s*day/);
-  if (m) return new Date(now - parseInt(m[1], 10) * 24 * 3600 * 1000);
-  return null;
-}
-
-function ageHours(date) {
-  if (!date) return Infinity;
-  return Math.max(0, (Date.now() - date.getTime()) / 3600000);
-}
-
-function recencyBucket(date) {
-  const h = ageHours(date);
-  if (!isFinite(h)) return 'unknown';
-  if (h <= 1) return '1h';
-  if (h <= 3) return '3h';
-  if (h <= 6) return '6h';
-  if (h <= 12) return '12h';
-  if (h <= 24) return '24h';
-  if (h <= 7 * 24) return '7d';
-  if (h <= 30 * 24) return '30d';
-  return 'older';
-}
-
-
-function recencyLabel(date) {
-  const h = ageHours(date);
-  if (!isFinite(h)) return '';
-  if (h < 1) return 'Within 1h';
-  if (h <= 3) return 'Within 3h';
-  if (h <= 6) return 'Within 6h';
-  if (h <= 12) return 'Within 12h';
-  if (h <= 24) return 'Today';
-  if (h <= 7 * 24) return 'This week';
-  if (h <= 30 * 24) return 'This month';
-  return 'Older';
-}
-
-function irelandOnlyJobs(jobs) {
-  return jobs.filter(j => {
-    const c = (j.country || '').toLowerCase();
-    if (c === 'ireland') return true;
-    const loc = `${j.location || ''} ${j.ireland_area || ''}`.toLowerCase();
-    return loc.includes('ireland') || loc.includes('dublin') || loc.includes('cork')
-      || loc.includes('galway') || loc.includes('limerick') || loc.includes('remote');
-  });
-}
-
-function fillSelect(selectId, values, formatLabel) {
-  const select = document.getElementById(selectId);
-  const current = select.value;
-  while (select.options.length > 1) select.remove(1);
-  const unique = Array.from(new Set(values.filter(v => v && String(v).trim())));
-  unique.sort((a, b) => String(a).localeCompare(String(b)));
-  for (const v of unique) {
-    const opt = document.createElement('option');
-    opt.value = v;
-    opt.textContent = formatLabel ? formatLabel(v) : v;
-    select.appendChild(opt);
-  }
-  if (unique.includes(current)) select.value = current;
-}
-
-function visaLabel(status) {
-  if (status === 'sponsors') return { cls: 'sponsors', text: 'Mentions sponsorship' };
-  if (status === 'no_sponsorship') return { cls: 'no', text: 'No sponsorship stated' };
-  return { cls: '', text: 'Visa not mentioned' };
-}
-
-
-function personalJobMatch(job) {
-  return {
-    score: Number(job.candidate_match_score || 0),
-    reasons: Array.isArray(job.match_reasons) ? job.match_reasons : [],
-    missing: Array.isArray(job.missing_skills) ? job.missing_skills : [],
-    experienceFit: job.experience_fit || 'Unknown',
-    personalized: false
-  };
-}
-function effectiveMatchScore(job) {
-  return Number(job.candidate_match_score || 0);
-}
-
-function loadData(data) {
-  const jobs = data.jobs || [];
-  ALL_JOBS = data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs);
-  ALL_MANUAL = data.manual_check_companies || [];
-  ALL_REGISTRY = data.registry_companies || [];
-  ALL_COVERAGE = data.coverage_diagnostics || [];
-  ALL_LIVE_ZERO = data.live_zero_companies || ALL_COVERAGE.filter(x => x.state === 'live_zero');
-  COMPANY_HISTORY = data.company_history || {};
-  PROVEN_WORKING_COMPANIES = data.proven_working_companies || Object.keys(COMPANY_HISTORY).filter(
-    name => COMPANY_HISTORY[name] && COMPANY_HISTORY[name].ever_working
-  );
-  HISTORY_TRACKING_STARTED = data.history_tracking_started || '2026-08-16';
-  HISTORICAL_DISTINCT_JOBS = Number(data.historical_distinct_jobs_seen || 0);
-  CONNECTOR_HEALTH = data.connector_health || {};
-  RAW_TOTAL = jobs.length;
-
-  document.getElementById('genTime').textContent = data.generated_at
-    ? ('Last updated: ' + new Date(data.generated_at).toLocaleString())
-    : '';
-  document.getElementById('stLive').textContent = ALL_JOBS.length;
-  document.getElementById('stCompanies').textContent = data.total_companies_checked ?? '—';
-  const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
-  document.getElementById('stManual').textContent = directoryCount;
-
-  // The main company filter is intentionally restricted to the
-  // 250 employers enabled in include_in_scrape_registry.
-  // Reserve/inactive companies from the 600-company master must never
-  // leak into the user-facing "All companies" dropdown.
-  const ACTIVE_FILTER_COMPANIES = ["A&L Goodbody","AECOM","AIB (Allied Irish Banks)","AIG","AMCS Group","ASL Aviation Holdings","ASML","AXA Ireland","AXA XL","AbbVie","Abbott","Accenture","ActionPoint","Adobe","Advanced Micro Devices (AMD)","Aer Lingus","Agilent Technologies","AirNav Ireland","Airbnb","Aiven","Akamai","Alexion Pharmaceuticals","Alkermes","Allianz Ireland","Alter Domus","Amazon","Amundi","An Post","Analog Devices","Anthropic","Aon","Apex Group","Apple","Applied Materials","Aptiv","Arcadis","Arista Networks","Arthur Cox","Arup","Asana","Astellas Pharma","AstraZeneca","AtkinsRéalis","Atlantic Technological University (ATU)","Autodesk","Auxilion","Avanade","Aviva Ireland","Avolon","BDO Ireland","BNP Paribas Ireland","BT Ireland","Bain & Company","Baker Tilly Ireland","Bank of America","Bank of Ireland","Barclays","Bausch + Lomb","Baxter International","Bayer","BearingPoint","Becton Dickinson (BD)","BioMarin","BlackRock","Bloomberg","Boehringer Ingelheim","Bord Gáis Energy","Bord na Móna","Boston Scientific","Bristol Myers Squibb","Broadcom","Brown Brothers Harriman","Bus Éireann","CACEIS","CBRE Ireland","CGI","CRH","Cadence Design Systems","Canto","Capgemini","CarTrawler","Carne Group","Catalent","Central Bank of Ireland","Charles River Laboratories","Check Point Software","Chubb","Circle K Ireland","Cisco","Citco","Citi","CitySwift","ClickUp","Cloudflare","CluneTech","Coca-Cola HBC Ireland","Codec","Cognizant","Coinbase","Concentrix (Ireland)","CrowdStrike","Crusoe","CyberArk","DCC plc","DHL Ireland","DPS Group (Arcadis)","DXC Technology","Danaher Corporation","Databricks","Datadog","Datalex","Davy","Dawn Meats","Decathlon Ireland","Dell Technologies","Deloitte Ireland","Dexcom","Diageo Ireland","Dillon Eustace","DocuSign","Dublin City University (DCU)","Dynatrace","ESB","ESW","EXL","EY Ireland","Eaton","Ekco","Elavon","Eli Lilly","Energia Group","Enterprise Ireland","Ergo","Ericsson","Eurofins Scientific","Fenergo","Fidelity International","Fiserv","Flipdish","Forvis Mazars Ireland","Fujitsu","GE HealthCare","Genesys","Gilead Sciences","Google","Grant Thornton Ireland","GridBeyond","HCLTech","Harvey Nash Ireland","Hitachi Energy","Honeywell","Huawei Ireland","HubSpot","IBM","Infosys","Integrity360","Intel","Intercom","Irish Life","Irish Rail (Iarnród Éireann)","JD Sports Ireland","JPMorgan Chase","Jacobs","Johnson & Johnson","Johnson Controls","KLA Corporation","KPMG Ireland","Kerry Group","Kitman Labs","Klaviyo","Kuehne+Nagel Ireland","Kyndryl","LearnUpon","LetsGetChecked","MSD (Merck Sharp & Dohme)","Marsh McLennan","Mastercard","Medtronic","Mercer","Merit Medical","Meta","Microsoft","MongoDB","Motorola Solutions","Munster Technological University (MTU)","Musgrave Group (SuperValu / Centra)","NTT DATA","NetApp","Northern Trust","Notion","Okta","OpenAI","OpenText","Oracle","PIMCO","PM Group","PayPal","PepsiCo","Pfizer","Pinterest","Public Jobs / Civil Service","Pure Storage","PwC Ireland","Qualtrics","Quest Software","RCSI University of Medicine and Health Sciences","Red Hat","Reddit","Revenue","Roche","Ryanair","S&P Global","SAP","SMBC Aviation Capital","Salesforce","Sanofi","Schneider Electric","ServiceNow","Snowflake","SolarWinds","Squarespace","State Street","Stripe","Susquehanna International Group (SIG)","Tata Consultancy Services (TCS)","Technological University Dublin (TU Dublin)","Technological University of the Shannon (TUS)","Tenable","Tesco Ireland","Thermo Fisher Scientific","TikTok","Tines","Toast","Tricentis","Trinity College Dublin","Twilio","Udemy","University College Cork (UCC)","University of Galway","Veeam","Version 1","Vodafone Ireland","Wayflyer","Wells Fargo","Wipro","Workday","Zimmer Biomet","Zscaler","daa (Dublin Airport Authority)","eBay"];
-  const ACTIVE_FILTER_COMPANY_SET = new Set(ACTIVE_FILTER_COMPANIES);
-
-  // Keep all 250 active employers selectable even when a company has
-  // zero live jobs in the latest scrape. Its official careers-page
-  // fallback can therefore still be reached from the company filter.
-  const companyUniverse = ACTIVE_FILTER_COMPANIES;
-  fillSelect('fCompany', companyUniverse);
-  fillSelect('fSector', ALL_JOBS.map(j => j.sector || 'Other'));
-  fillSelect('fSource', ALL_JOBS.map(j => j.ats), v => v.charAt(0).toUpperCase() + v.slice(1));
-
-  applyFilters();
-}
-
-function setupInstantFilters() {
-  const ids = [
-    'fSearch',
-    'fCompany',
-    'fLocation',
-    'fSector',
-    'fSource',
-    'fPosted',
-    'fEmployment',
-    'fEmploymentLevel',
-    'fNew',
-    'fVisa',
-  ];
-
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    if (el.dataset.finalInstantBound === '1') return;
-    el.dataset.finalInstantBound = '1';
-
-    const eventName =
-      el.tagName === 'INPUT' &&
-      (el.type === 'text' || el.type === 'search')
-        ? 'input'
-        : 'change';
-
-    el.addEventListener(eventName, () => {
-      applyFilters();
-    });
-  });
-
-  // Search reacts while typing AND Enter works explicitly.
-  const search = document.getElementById('fSearch');
-
-  if (search && search.dataset.enterBound !== '1') {
-    search.dataset.enterBound = '1';
-
-    search.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        applyFilters();
-      }
-    });
-  }
-}
-
-async function autoFetchJobs() {
-  try {
-    const resp = await fetch(DATA_URL + '?t=' + Date.now(), { cache: 'no-store' });
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    loadData(await resp.json());
-    document.getElementById('liveStatus').textContent = '● live';
-    document.getElementById('liveStatus').classList.remove('stale');
-  } catch (err) {
-    console.error('Dashboard data load failed:', err);
-    document.getElementById('liveStatus').textContent = '○ data.json unavailable';
-    document.getElementById('liveStatus').classList.add('stale');
-  }
-}
-
-
-
-
-function populateRoleFamilies() {
-  // Role-family dropdown intentionally removed from dashboard.
-  return;
-}
-
-function closingSoon(j) {
-  if (!j.closing_date) return false;
-  const d = new Date(j.closing_date);
-  if (isNaN(d)) return false;
-  const days = (d - new Date()) / 86400000;
-  return days >= 0 && days <= 7;
-}
-
-
-function normalizeSearchText(value) {
-  return String(value || '')
-    .toLowerCase()
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9+#.]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-const SEARCH_ALIASES = {
-  'amzn': ['amazon'],
-  'amazon aws': ['amazon','aws'],
-  'jp morgan': ['jpmorgan','jpmorgan chase'],
-  'jpm': ['jpmorgan','jpmorgan chase'],
-  'jpmorgan': ['jpmorgan chase'],
-  'bi': ['business intelligence','bi'],
-  'powerbi': ['power bi'],
-  'data analytics': ['analytics','data analyst'],
-  'business analytics': ['business analyst','analytics'],
-  'sre': ['site reliability engineer','reliability'],
-  'swe': ['software engineer','software developer'],
-  'ml': ['machine learning'],
-  'ai': ['artificial intelligence','machine learning'],
-  'd365': ['dynamics 365','microsoft dynamics'],
-  'erp': ['enterprise resource planning','erp'],
-};
-
-function editDistanceAtMostOne(a, b) {
-  if (a === b) return true;
-  if (!a || !b || Math.abs(a.length - b.length) > 1) return false;
-  if (a.length < 4 || b.length < 4) return false;
-
-  let i = 0, j = 0, edits = 0;
-  while (i < a.length && j < b.length) {
-    if (a[i] === b[j]) { i++; j++; continue; }
-    if (++edits > 1) return false;
-    if (a.length > b.length) i++;
-    else if (b.length > a.length) j++;
-    else { i++; j++; }
-  }
-  if (i < a.length || j < b.length) edits++;
-  return edits <= 1;
-}
-
-function searchQueryTerms(raw) {
-  const q = normalizeSearchText(raw);
-  if (!q) return [];
-
-  // Expand common abbreviations/company aliases while retaining original terms.
-  const expanded = [q];
-  Object.entries(SEARCH_ALIASES).forEach(([alias, values]) => {
-    if (q === alias || q.includes(alias)) expanded.push(...values);
-  });
-
-  return [...new Set(
-    expanded.flatMap(x => normalizeSearchText(x).split(' ').filter(Boolean))
-  )];
-}
-
-function jobSearchScore(job, rawQuery) {
-  const terms = searchQueryTerms(rawQuery);
-  if (!terms.length) return {score: 0, matched: 0, total: 0};
-
-  const fields = {
-    title: normalizeSearchText(job.title),
-    company: normalizeSearchText(job.company),
-    location: normalizeSearchText((job.location || '') + ' ' + (job.ireland_area || '')),
-    role: normalizeSearchText(job.role_family),
-    sector: normalizeSearchText(job.sector),
-    skills: normalizeSearchText((job.match_keywords || []).join(' ') + ' ' + (job.matched_skills || []).join(' ')),
-  };
-
-  const wordSets = {};
-  Object.entries(fields).forEach(([k,v]) => wordSets[k] = v.split(' ').filter(Boolean));
-
-  let score = 0;
-  let matched = 0;
-
-  for (const term of terms) {
-    let best = 0;
-    const checks = [
-      ['title', 10], ['company', 9], ['location', 6],
-      ['role', 6], ['skills', 4], ['sector', 3]
-    ];
-
-    for (const [field, weight] of checks) {
-      const text = fields[field];
-      if (!text) continue;
-
-      if (text === term) best = Math.max(best, weight + 4);
-      else if (text.includes(term)) best = Math.max(best, weight);
-      else {
-        const words = wordSets[field];
-        if (words.some(w => w.startsWith(term) || term.startsWith(w))) {
-          best = Math.max(best, weight - 1);
-        } else if (words.some(w => editDistanceAtMostOne(term, w))) {
-          best = Math.max(best, Math.max(1, weight - 3));
-        }
-      }
-    }
-
-    if (best > 0) {
-      matched++;
-      score += best;
-    }
-  }
-
-  // Exact phrase gets a significant boost.
-  const phrase = normalizeSearchText(rawQuery);
-  if (phrase && fields.title.includes(phrase)) score += 18;
-  else if (phrase && fields.company.includes(phrase)) score += 15;
-
-  return {score, matched, total: terms.length};
-}
-
-
-function getJobPostedDate(job) {
-  // IMPORTANT:
-  // updated_at / last_verified_at are scraper timestamps and must NOT make
-  // an old vacancy look newly posted.
-  //
-  // Priority:
-  //   1. actual parsed employer/source posting date
-  //   2. first time our dashboard saw the vacancy
-  //   3. updated_at only as a last-resort legacy fallback
-  const candidates = [
-    job.posted_at_parsed,
-    job.posted_at,
-    job.date_posted,
-    job.first_seen_at,
-    job.updated_at
-  ];
-
-  for (const value of candidates) {
-    if (!value) continue;
-    const d = new Date(value);
-    if (!Number.isNaN(d.getTime())) return d;
-  }
-
-  return null;
-}
-
-function postedWithin(dateValue, filterValue) {
-  // Empty value = "Any time posted" = NO FILTER.
-  if (!filterValue) return true;
-
-  const d = dateValue instanceof Date
-    ? dateValue
-    : (dateValue ? new Date(dateValue) : null);
-
-  if (!d || Number.isNaN(d.getTime())) return false;
-
-  const ageMs = Date.now() - d.getTime();
-
-  // Future timestamps caused by timezone/source errors should be treated
-  // as zero-age rather than incorrectly excluding the vacancy.
-  const ageHours = Math.max(0, ageMs / 3600000);
-
-  switch (String(filterValue).toLowerCase()) {
-    case '24h':
-    case 'today':
-    case '1d':
-      return ageHours <= 24;
-
-    case '3d':
-      return ageHours <= 72;
-
-    case '7d':
-    case 'week':
-      return ageHours <= 24 * 7;
-
-    case '14d':
-      return ageHours <= 24 * 14;
-
-    case '30d':
-    case 'month':
-      return ageHours <= 24 * 30;
-
-    case 'older':
-      return ageHours > 24 * 30;
-
-    case 'other':
-      // Jobs with a valid date that do not fit a named special bucket
-      // remain available rather than disappearing.
-      return true;
-
-    default:
-      return true;
-  }
-}
-
-function classifyEmploymentType(job) {
-  const raw = String(
-    job.employment_type ||
-    job.job_type ||
-    job.contract_type ||
-    ''
-  ).trim().toLowerCase();
-
-  const title = String(job.title || '').toLowerCase();
-  const description = String(job.description_text || '').toLowerCase();
-
-  // Metadata carries much more weight than title guessing.
-  const text = `${raw} ${title} ${description}`;
-
-  // Part-time jobs are intentionally excluded elsewhere from this dashboard,
-  // but retain classification here for defensive consistency.
-  if (
-    /\bpart[\s-]?time\b/.test(raw) ||
-    /\bpart[\s-]?time\b/.test(title)
-  ) return 'part_time';
-
-  if (
-    /\bintern(ship)?\b/.test(raw) ||
-    /\bplacement\b/.test(raw) ||
-    /\bintern(ship)?\b/.test(title) ||
-    /\bplacement\b/.test(title)
-  ) return 'internship';
-
-  if (
-    /\bgraduate\b/.test(raw) ||
-    /\bgraduate programme\b/.test(title) ||
-    /\bgraduate program\b/.test(title)
-  ) return 'graduate';
-
-  if (
-    /\btemporary\b/.test(raw) ||
-    /\btemp\b/.test(raw) ||
-    /\bseasonal\b/.test(raw) ||
-    /\btemporary\b/.test(title) ||
-    /\bseasonal\b/.test(title)
-  ) return 'temporary';
-
-  if (
-    /\bcontract(or)?\b/.test(raw) ||
-    /\bfixed[\s-]?term\b/.test(raw) ||
-    /\bftc\b/.test(raw) ||
-    /\bcontract\b/.test(title) ||
-    /\bfixed[\s-]?term\b/.test(title) ||
-    /\b\d+\s*month[s]?\s+ftc\b/.test(title) ||
-    /\bftc\b/.test(title)
-  ) return 'contract';
-
-  if (
-    /\bpermanent\b/.test(raw) ||
-    /\bfull[\s-]?time\b/.test(raw) ||
-    /\bregular\b/.test(raw) ||
-    /\bpermanent\b/.test(title) ||
-    /\bfull[\s-]?time\b/.test(title)
-  ) return 'full_time';
-
-  // Do not invent "Full Time" merely because no type was supplied.
-  return 'other';
-}
-
-function employmentTypeLabel(value) {
-  return {
-    full_time: 'Full-time / Permanent',
-    contract: 'Contract / Fixed-term',
-    temporary: 'Temporary / Seasonal',
-    internship: 'Internship / Placement',
-    graduate: 'Graduate Programme',
-    part_time: 'Part-time',
-    other: 'Other'
-  }[value] || 'Other';
-}
-
-
-function applyFilters() {
-  const search = document.getElementById('fSearch').value.trim().toLowerCase();
-  const company = document.getElementById('fCompany').value;
-  const location = document.getElementById('fLocation').value;
-  const sector = document.getElementById('fSector').value;
-  const source = document.getElementById('fSource').value;
-  const posted = document.getElementById('fPosted').value;
-  const type =
-    (document.getElementById('fEmployment')?.value || '') ||
-    (document.getElementById('fType')?.value || '');
-  const profileMatchOnly =
-    document.getElementById('fProfileMatch')?.checked === true;
-  const newOnly = document.getElementById('fNew').value;
-  const visa = document.getElementById('fVisa').value;
-
-  const employmentFilter = document.getElementById('fEmployment')?.value || '';
-  const employmentLevelFilter =
-    document.getElementById('fEmploymentLevel')?.value || '';
-
-  let filtered = ALL_JOBS.filter(j => {
-
-    if (isPartTimeJob(j) && !j.university_job && !isProfileRelevantPartTimeJob(j)) return false;
-if (search) {
-      const relevance = jobSearchScore(j, search);
-      // Multi-word searches can still surface highly relevant partial matches,
-      // but require most terms to connect to the job.
-      const minimumTerms = relevance.total <= 2 ? 1 : Math.ceil(relevance.total * 0.6);
-      if (relevance.matched < minimumTerms || relevance.score <= 0) return false;
-    }
-    if (company && j.company !== company) return false;
-    if (location) {
-      const loc = ((j.location || '') + ' ' + (j.ireland_area || '')).toLowerCase();
-      if (!loc.includes(location)) return false;
-    }
-    if (sector && (j.sector || 'Other') !== sector) return false;
-    if (source && j.ats !== source) return false;
-    if (isIgnored(j)) return false;
-    const m = effectiveMatchScore(j);
-
-    // Reuse the existing backend candidate-match score.
-    // This is the former "For You" threshold.
-    if (profileMatchOnly && m < 55) return false;
-        if (newOnly === 'new' && !j.new_since_last_check) return false;
-    const v = j.visa_sponsorship || 'not_mentioned';
-    const vh = j.employer_sponsorship_history || {};
-    if (visa === 'historical_sponsor' && Number(vh.sponsors || 0) <= 0) return false;
-    if (visa === 'official_permits' && Number(j.official_permits_total || vh.official_permits_total || 0) <= 0) return false;
-    if (visa && !['historical_sponsor','official_permits'].includes(visa) && v !== visa) return false;
-    if (posted && !postedWithin(getJobPostedDate(j), posted)) return false;
-    if (employmentFilter && classifyEmploymentType(j) !== employmentFilter) return false;
-    if (employmentLevelFilter && classifyEmploymentLevel(j) !== employmentLevelFilter) return false;
-    return true;
-  });
-
-  const secondaryCompare = (a, b) => {
-    if (profileMatchOnly) {
-      return (
-        effectiveMatchScore(b) - effectiveMatchScore(a) ||
-        Number(b.discovery_score || 0) - Number(a.discovery_score || 0) ||
-        new Date(b.updated_at || 0) - new Date(a.updated_at || 0)
-      );
-    }
-
-    return (
-      new Date(
-        b.updated_at ||
-        b.posted_at_parsed ||
-        b.first_seen_at ||
-        0
-      ) -
-      new Date(
-        a.updated_at ||
-        a.posted_at_parsed ||
-        a.first_seen_at ||
-        0
-      )
-    );
-  };
-
-  if (search) {
-    filtered.sort((a,b) => {
-      const ra = jobSearchScore(a, search).score;
-      const rb = jobSearchScore(b, search).score;
-      return rb - ra || secondaryCompare(a,b);
-    });
-  } else {
-    filtered.sort(secondaryCompare);
-  }
-
-  document.getElementById('resultCount').textContent =
-    `${Math.min(filtered.length, CURRENT_RENDER_LIMIT)} shown · ` +
-    `${filtered.length} of ${ALL_JOBS.length} matches`;
-
-  const loadMoreButton =
-    document.getElementById('loadMoreJobs');
-
-  if (loadMoreButton) {
-
-    const remaining =
-      Math.max(
-        0,
-        filtered.length -
-        CURRENT_RENDER_LIMIT
-      );
-
-    loadMoreButton.style.display =
-      remaining > 0
-        ? 'inline-block'
-        : 'none';
-
-    loadMoreButton.textContent =
-      remaining > 0
-        ? `Load more (${Math.min(
-            JOB_RENDER_STEP,
-            remaining
-          )})`
-        : 'Load more jobs';
-  }
-
-  const grid = document.getElementById('cardGrid');
-  grid.innerHTML = '';
-
-  document.getElementById('emptyState').style.display =
-    filtered.length ? 'none' : 'block';
-
-  /*
-   * Do not create ~3,000 rich job-card DOM trees at once.
-   * The complete filtered result is preserved; only rendering is paged.
-   */
-  const jobsToRender =
-    filtered.slice(
-      0,
-      CURRENT_RENDER_LIMIT
-    );
-
-  jobsToRender.forEach(j => {
-    const postedDate = getJobPostedDate(j);
-    const bucket = recencyBucket(postedDate);
-    const fresh = ageHours(postedDate) <= 24;
-    const badge = visaLabel(j.visa_sponsorship || 'not_mentioned');
-    const visaHistory = j.employer_sponsorship_history || {};
-    const permitTotal = Number(j.official_permits_total || visaHistory.official_permits_total || 0);
-    const pm = personalJobMatch(j);
-    const type = j.employment_type || employmentType(j.title);
-    const typeLabel = { internship: 'Internship' }[type];
-    const employmentLevel = classifyEmploymentLevel(j);
-    const employmentLevelText = employmentLevelLabel(employmentLevel);
-    const bucketLabel = recencyLabel(postedDate);
-
-    const card = document.createElement('div');
-    card.className =
-      'card job-card-overlap-fixed ' +
-      (fresh ? 'fresh' : '');
-    card.onclick = () => j.url && window.open(j.url, '_blank', 'noopener');
-    card.innerHTML = `
-      ${j.new_since_last_check ? '<div class="new-ribbon">NEW</div>' : ''}
-      <div class="company">${escapeHtml(j.company)}</div>
-      <div class="title">${escapeHtml(j.title || 'Untitled role')}</div>
-      <div class="score-row">
-        ${j.candidate_match_score != null ? `<span class="score-badge match">${j.candidate_match_score}% Match</span>` : ''}
-        ${j.discovery_score != null ? `<span class="score-badge discovery">${j.discovery_score} Discovery</span>` : ''}
-        ${j.role_family && j.role_family !== 'Other' ? `<span class="chip">${escapeHtml(j.role_family)}</span>` : ''}
-        ${pm.experienceFit ? `<span class="chip">${escapeHtml(pm.experienceFit)}</span>` : ''}
-      </div>
-      ${(pm.reasons || []).length ? `<div class="reason-row"><span class="reason-good">Matched:</span> ${escapeHtml((pm.reasons || []).join(' · '))}</div>` : ''}
-      ${(pm.missing || []).length ? `<div class="reason-row"><span class="reason-missing">Potential gaps:</span> ${escapeHtml((pm.missing || []).join(' · '))}</div>` : ''}
-      <div class="meta">
-        <span class="chip">${escapeHtml(j.location || j.ireland_area || 'Ireland')}</span>
-        <span class="chip">${escapeHtml(j.sector || 'Other')}</span>
-        <span class="chip">${escapeHtml(j.ats || '')}</span>
-        ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
-        ${typeLabel ? `<span class="chip type">${typeLabel}</span>` : ''}
-        ${employmentLevelText ? `<span class="chip level-chip">${escapeHtml(employmentLevelText)}</span>` : ''}
-        <span class="chip type">${escapeHtml(employmentTypeLabel(classifyEmploymentType(j)))}</span>
-      </div>
-      <div class="card-foot">
-        <div class="visa-stack job-card-safe-meta">
-          <span class="visa-badge ${badge.cls}" title="${escapeHtml(j.visa_snippet || '')}">${escapeHtml(badge.text)}</span>
-          <div class="visa-history">
-            <strong>Employer history:</strong> ${escapeHtml(visaHistory.label || 'No sponsorship history yet')}
-            ${permitTotal > 0 ? ` · <strong>${permitTotal}</strong> official permits` : ''}
-          </div>
-        </div>
-        <div class="job-card-safe-actions" style="display:flex;gap:6px;align-items:center;">
-          <button type="button" class="save-btn ${isSaved(j) ? 'saved' : ''}" data-save-job="1">${isSaved(j) ? '✓ Saved' : 'Save'}</button>
-          <button type="button" class="ignore-btn" data-ignore-job="1">Ignore</button>
-          <button type="button" class="track-btn ${isTracked(j) ? 'tracked' : ''}" data-track-job="1">${isTracked(j) ? '✓ Applied' : 'Mark applied'}</button>
           <span class="apply-hint">Open →</span>
         </div>
       </div>
@@ -1676,7 +870,7 @@ if (search) {
 
   document.getElementById('tabManual').textContent = `Manual search needed (${manualCompanies.length})`;
   document.getElementById('tabLiveZero').textContent = `True zero jobs (${trueZeroCompanies.length})`;
-  document.getElementById('tabZero').textContent = `False zero / broken (${zeroCompanies.length})`;
+  document.getElementById('tabZero').textContent = `Needs verification (${zeroCompanies.length})`;
   document.getElementById('tabProvenCompanies').textContent = `Proven working (${provenCompanies.length})`;
 
   const selectedCompany = document.getElementById('fCompany').value;
@@ -2237,7 +1431,7 @@ function renderDiagnostics(search) {
     `${trueZeroVisible} shown · ${trueZeroCompanies.length} true-zero companies: source is verified/proven working but currently has 0 qualifying Ireland jobs.`;
 
   document.getElementById('zeroSummary').textContent =
-    `${zeroVisible} shown · ${zeroCompanies.length} false-zero/broken companies: automatic connector is configured but its zero result is not yet trusted.`;
+    `${zeroVisible} shown · ${zeroCompanies.length} companies returned 0 qualifying Ireland jobs, but that zero has not yet been independently verified.`;
 
   renderCompanyDiagnosticList('manualGrid', manualCompanies, search, selectedCompany, 'manual');
   renderCompanyDiagnosticList('liveZeroGrid', trueZeroCompanies, search, selectedCompany, 'livezero');
@@ -2251,20 +1445,16 @@ function showTab(which) {
   document.getElementById('manualPane').style.display = which === 'manual' ? 'block' : 'none';
   document.getElementById('liveZeroPane').style.display = which === 'livezero' ? 'block' : 'none';
   document.getElementById('zeroPane').style.display = which === 'zero' ? 'block' : 'none';
-  document.getElementById('savedPane').style.display = which === 'saved' ? 'block' : 'none';
   document.getElementById('liveCompaniesPane').style.display = which === 'livecompanies' ? 'block' : 'none';
   document.getElementById('provenCompaniesPane').style.display = which === 'provencompanies' ? 'block' : 'none';
-  document.getElementById('applicationsPane').style.display = which === 'applications' ? 'block' : 'none';
 
   document.getElementById('tabLive').classList.toggle('active', which === 'live');
   document.getElementById('tabDir').classList.toggle('active', which === 'dir');
   document.getElementById('tabManual').classList.toggle('active', which === 'manual');
   document.getElementById('tabLiveZero').classList.toggle('active', which === 'livezero');
   document.getElementById('tabZero').classList.toggle('active', which === 'zero');
-  document.getElementById('tabSaved').classList.toggle('active', which === 'saved');
   document.getElementById('tabLiveCompanies').classList.toggle('active', which === 'livecompanies');
   document.getElementById('tabProvenCompanies').classList.toggle('active', which === 'provencompanies');
-  document.getElementById('tabApplications').classList.toggle('active', which === 'applications');
   const currentSearch =
     document.getElementById('fSearch')?.value || '';
 
@@ -2280,10 +1470,6 @@ function showTab(which) {
     renderDiagnostics(currentSearch);
   }
 
-  if (which === 'saved') {
-    renderSaved();
-  }
-
   if (which === 'livecompanies') {
     renderLiveCompanies(currentSearch);
   }
@@ -2292,9 +1478,6 @@ function showTab(which) {
     renderProvenWorkingCompanies(currentSearch);
   }
 
-  if (which === 'applications') {
-    renderApplications();
-  }
 }
 
 function escapeHtml(str) {
@@ -2319,7 +1502,6 @@ if (loadMoreJobsButton) {
 }
 
 loadRadarState();
-loadApplications();
 renderSaved();
 renderApplications();
 setupInstantFilters();
@@ -2384,6 +1566,112 @@ setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
     flex-shrink: 0;
 }
 
+
+
+/* DASHBOARD_CARD_CLEANUP_V2 */
+
+/*
+ * The card footer must stack vertically.
+ *
+ * Previously:
+ *   visa metadata + width:100% action row
+ * lived inside a horizontal flex container.
+ *
+ * That squeezed the metadata down to a few pixels and caused
+ * words to render one character per line.
+ */
+.job-card-overlap-fixed .card-foot {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    gap: 10px !important;
+}
+
+
+/* Visa / employer information gets the full card width. */
+.job-card-overlap-fixed .visa-stack,
+.job-card-overlap-fixed .job-card-safe-meta {
+    display: flex !important;
+    flex-direction: column !important;
+
+    flex: none !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+
+    overflow: visible !important;
+
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+}
+
+
+/*
+ * Do not allow .visa-badge { flex:1 } to collapse against
+ * the actions row.
+ */
+.job-card-overlap-fixed .visa-badge {
+    flex: none !important;
+
+    display: block !important;
+
+    width: fit-content !important;
+    max-width: 100% !important;
+
+    white-space: normal !important;
+
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+}
+
+
+/* History should remain ordinary readable horizontal text. */
+.job-card-overlap-fixed .visa-history {
+    display: block !important;
+
+    width: 100% !important;
+
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+
+    line-height: 1.45 !important;
+}
+
+
+/* Actions get their own full-width row below metadata. */
+.job-card-overlap-fixed .job-card-safe-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+
+    align-items: center !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    margin-top: 2px !important;
+    padding-top: 10px !important;
+}
+
+
+/*
+ * Cards should grow naturally rather than forcing metadata into
+ * a fixed-height box.
+ */
+.job-card-overlap-fixed {
+    min-height: 0 !important;
+    height: auto !important;
+
+    overflow: visible !important;
+}
 </style>
 
 <script>
