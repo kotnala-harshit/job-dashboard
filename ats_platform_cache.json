@@ -2972,11 +2972,6 @@
     "slug": "airbnb",
     "probe_version": 35
   },
-  "Charles River Laboratories": {
-    "platform": "greenhouse",
-    "slug": "charles",
-    "probe_version": 35
-  },
   "BearingPoint": {
     "platform": "greenhouse",
     "slug": "bearingpoint",
@@ -2995,6 +2990,11 @@
   "CarTrawler": {
     "platform": "lever",
     "slug": "cartrawler",
+    "probe_version": 35
+  },
+  "Charles River Laboratories": {
+    "platform": "greenhouse",
+    "slug": "charles",
     "probe_version": 35
   },
   "__probe_version__": 35
