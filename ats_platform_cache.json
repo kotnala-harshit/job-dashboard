@@ -2987,14 +2987,14 @@
     "slug": "cartrawler",
     "probe_version": 35
   },
-  "Kitman Labs": {
-    "platform": "lever",
-    "slug": "kitmanlabs",
-    "probe_version": 35
-  },
   "BearingPoint": {
     "platform": "greenhouse",
     "slug": "bearingpoint",
+    "probe_version": 35
+  },
+  "Kitman Labs": {
+    "platform": "lever",
+    "slug": "kitmanlabs",
     "probe_version": 35
   },
   "__probe_version__": 35
