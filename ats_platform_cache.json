@@ -2977,11 +2977,6 @@
     "slug": "charles",
     "probe_version": 35
   },
-  "CarTrawler": {
-    "platform": "lever",
-    "slug": "cartrawler",
-    "probe_version": 35
-  },
   "BearingPoint": {
     "platform": "greenhouse",
     "slug": "bearingpoint",
@@ -2995,6 +2990,11 @@
   "Concentrix (Ireland)": {
     "platform": "workday",
     "slug": "cnx|wd1|external_global",
+    "probe_version": 35
+  },
+  "CarTrawler": {
+    "platform": "lever",
+    "slug": "cartrawler",
     "probe_version": 35
   },
   "__probe_version__": 35
