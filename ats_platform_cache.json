@@ -2952,11 +2952,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Concentrix (Ireland)": {
-    "platform": "greenhouse",
-    "slug": "ireland",
-    "probe_version": 35
-  },
   "KLA Corporation": {
     "platform": "none",
     "slug": null,
@@ -2995,6 +2990,11 @@
   "Kitman Labs": {
     "platform": "lever",
     "slug": "kitmanlabs",
+    "probe_version": 35
+  },
+  "Concentrix (Ireland)": {
+    "platform": "workday",
+    "slug": "cnx|wd1|external_global",
     "probe_version": 35
   },
   "__probe_version__": 35
