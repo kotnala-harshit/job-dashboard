@@ -2092,11 +2092,6 @@
     "slug": "astrazeneca",
     "probe_version": 35
   },
-  "Canto": {
-    "platform": "greenhouse",
-    "slug": "canto",
-    "probe_version": 35
-  },
   "LearnUpon": {
     "platform": "greenhouse",
     "slug": "learnupon",
@@ -2995,6 +2990,11 @@
   "Coinbase": {
     "platform": "greenhouse",
     "slug": "coinbase",
+    "probe_version": 35
+  },
+  "Canto": {
+    "platform": "greenhouse",
+    "slug": "canto",
     "probe_version": 35
   },
   "__probe_version__": 35
