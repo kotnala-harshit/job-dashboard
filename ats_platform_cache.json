@@ -2102,11 +2102,6 @@
     "slug": "learnupon",
     "probe_version": 35
   },
-  "Coinbase": {
-    "platform": "greenhouse",
-    "slug": "coinbase",
-    "probe_version": 35
-  },
   "Broadcom": {
     "platform": "none",
     "slug": null,
@@ -2995,6 +2990,11 @@
   "Charles River Laboratories": {
     "platform": "greenhouse",
     "slug": "charles",
+    "probe_version": 35
+  },
+  "Coinbase": {
+    "platform": "greenhouse",
+    "slug": "coinbase",
     "probe_version": 35
   },
   "__probe_version__": 35
