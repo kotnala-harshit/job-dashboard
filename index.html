@@ -702,6 +702,9 @@ body{background:#f3f4f6!important}
   border:1px solid var(--line);overflow:hidden
 }
 .company-avatar img{width:26px;height:26px;object-fit:contain;display:block}
+.company-identity{display:flex;align-items:center;gap:10px;min-width:0}
+.company-identity .company-avatar{width:34px;height:34px;flex-basis:34px}
+.company-identity .company-avatar img{width:22px;height:22px}
 .job-card-head .company{margin:1px 0 4px;color:#52525b!important;font-family:var(--sans)!important;letter-spacing:0!important;text-transform:none!important}
 .job-card-head .title{font-size:16px!important;line-height:1.35!important;color:#18181b!important}
 .score-row{margin:0!important;gap:6px!important}
@@ -1107,6 +1110,13 @@ function companyLogo(name) {
   } catch (_) {
     return escapeHtml(companyInitials(name));
   }
+}
+
+function companyIdentity(name, detail) {
+  return `<div class="company-identity">
+    <div class="company-avatar" aria-hidden="true">${companyLogo(name)}</div>
+    <div><div class="dir-name">${escapeHtml(name)}</div><div class="dir-plat">${detail}</div></div>
+  </div>`;
 }
 
 function loadData(data) {
@@ -1991,10 +2001,7 @@ function renderDirectory(search) {
       card.onclick = () => c.url && window.open(c.url, '_blank', 'noopener');
       const status = c.automatic === true ? `${c.platform || 'Automatic'} · direct careers page` : (c.platform || 'Careers page');
       card.innerHTML = `
-        <div>
-          <div class="dir-name">${escapeHtml(c.company)}</div>
-          <div class="dir-plat">${escapeHtml(status)}</div>
-        </div>
+        ${companyIdentity(c.company, escapeHtml(status))}
         <span class="apply-hint">Open →</span>
       `;
       grid.appendChild(card);
@@ -2060,10 +2067,7 @@ function renderLiveCompanies(search='') {
     const openUrl = c.careers_url || c.url || '';
     if (openUrl) card.onclick = () => window.open(openUrl, '_blank', 'noopener');
     card.innerHTML = `
-      <div>
-        <div class="dir-name">${escapeHtml(c.company)}</div>
-        <div class="dir-plat">${escapeHtml(c.platform || 'source unknown')} · ${c.count} live ${c.count === 1 ? 'job' : 'jobs'}</div>
-      </div>
+      ${companyIdentity(c.company, `${escapeHtml(c.platform || 'source unknown')} · ${c.count} live ${c.count === 1 ? 'job' : 'jobs'}`)}
       ${openUrl ? '<span class="apply-hint">Open →</span>' : ''}
     `;
     grid.appendChild(card);
@@ -2216,15 +2220,12 @@ function renderProvenWorkingCompanies(search='') {
       : 'unknown';
 
     card.innerHTML = `
-      <div>
-        <div class="dir-name">${escapeHtml(c.company)}</div>
-        <div class="dir-plat">
+      ${companyIdentity(c.company, `
           ${c.live_jobs} live now ·
           ${Number(hist.distinct_jobs_seen || 0)} distinct jobs seen ·
           first proven ${escapeHtml(firstSeen)} ·
           last positive ${escapeHtml(lastSeen)}
-        </div>
-      </div>
+      `)}
       ${c.url ? '<span class="apply-hint">Open →</span>' : '<span class="status-chip">no URL</span>'}
     `;
     grid.appendChild(card);
@@ -2259,10 +2260,7 @@ function renderCompanyDiagnosticList(gridId, companies, search, selectedCompany,
           : `${c.platform || 'automatic'} · returned 0 jobs · ${c.reason || (health && health.note) || 'source/connector needs verification'}`;
 
       card.innerHTML = `
-        <div>
-          <div class="dir-name">${escapeHtml(c.company)}</div>
-          <div class="dir-plat">${escapeHtml(detail)}</div>
-        </div>
+        ${companyIdentity(c.company, escapeHtml(detail))}
         ${c.url ? '<span class="apply-hint">Open →</span>' : '<span class="status-chip">no URL</span>'}
       `;
       grid.appendChild(card);
