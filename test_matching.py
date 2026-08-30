@@ -1,6 +1,6 @@
 import unittest
 
-from scrape import candidate_match, smartrecruiters_public_url
+from scrape import candidate_match, is_real_job_title, smartrecruiters_public_url
 
 
 PROFILE = {
@@ -39,6 +39,11 @@ class CandidateMatchTest(unittest.TestCase):
             "https://jobs.smartrecruiters.com/Version1/744000145976699-backend-developer",
             smartrecruiters_public_url("version1", "744000145976699", "Backend Developer"),
         )
+
+    def test_navigation_headings_are_not_jobs(self):
+        for title in ("Experience", "Skills & qualifications", "Degree", "Job types", "Organizations", "Sort by"):
+            self.assertFalse(is_real_job_title(title), title)
+        self.assertTrue(is_real_job_title("AI Governance Analyst, Service Delivery, Trust and Safety"))
 
 
 if __name__ == "__main__":

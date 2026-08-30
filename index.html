@@ -1129,9 +1129,20 @@ function publicJobUrl(job) {
   return `https://jobs.smartrecruiters.com/${company}/${match[2]}-${slug}`;
 }
 
+const GENERIC_JOB_TITLES = new Set([
+  'careers', 'categories', 'degree', 'experience', 'filter', 'filters',
+  'job search', 'job types', 'jobs', 'locations', 'organizations', 'roles',
+  'search jobs', 'skills qualifications', 'sort by', 'teams'
+]);
+
+function isRealJobTitle(title) {
+  return !GENERIC_JOB_TITLES.has(normalizeSearch(title).replace(/[^a-z0-9]+/g, ' ').trim());
+}
+
 function loadData(data) {
   const jobs = data.jobs || [];
-  ALL_JOBS = data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs);
+  ALL_JOBS = (data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs))
+    .filter(j => isRealJobTitle(j.title));
   ALL_MANUAL = data.manual_check_companies || [];
   ALL_REGISTRY = data.registry_companies || [];
   ALL_COVERAGE = data.coverage_diagnostics || [];

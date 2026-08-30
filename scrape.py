@@ -3970,14 +3970,14 @@ def _scrape_google_playwright():
                 if page_no == 1:
                     _dismiss_cookie_banner(page)
                 before = len(out)
-                hs = page.locator("h3")
+                hs = page.locator("h3.QJPWVe")
                 for i in range(hs.count()):
                     h = hs.nth(i)
                     title = _browser_text(h)
                     if not title or len(title) > 220:
                         continue
                     low = title.lower().strip()
-                    if low in {"jobs", "careers", "search jobs", "locations", "teams"} or low in seen:
+                    if not is_real_job_title(title) or low in seen:
                         continue
                     node, card = h, ""
                     for _ in range(4):
@@ -3990,10 +3990,16 @@ def _scrape_google_playwright():
                             card = candidate
                         if card and len(card) >= 30:
                             break
+                    job_link = node.locator("a[href*='jobs/results/']")
+                    if not job_link.count():
+                        continue
+                    href = urllib.parse.urljoin(page.url, job_link.first.get_attribute("href") or "")
+                    if not re.search(r"/jobs/results/\d+", href):
+                        continue
                     seen.add(low)
                     out.append({
                         "company": "Google", "ats": "direct", "title": title,
-                        "location": _browser_location(card, "Ireland"), "url": url,
+                        "location": _browser_location(card, "Ireland"), "url": href,
                         "updated_at": None, "description_text": card[:5000],
                     })
                 added = len(out) - before
@@ -17853,6 +17859,17 @@ def normalized_title(title):
     return re.sub(r"\s+", " ", text).strip()
 
 
+GENERIC_JOB_TITLES = {
+    "careers", "categories", "degree", "experience", "filter", "filters",
+    "job search", "job types", "jobs", "locations", "organizations",
+    "roles", "search jobs", "skills qualifications", "sort by", "teams",
+}
+
+
+def is_real_job_title(title):
+    return normalized_title(title) not in GENERIC_JOB_TITLES
+
+
 def classify_role_family(title, description, profile):
     title_n = normalized_title(title)
     best = ("Other", "None", 0, [])
@@ -18924,6 +18941,8 @@ def main():
     dropped_non_curated = 0
 
     for j in results:
+        if not is_real_job_title(j.get("title")):
+            continue
         display_company = company_display_name(j.get("company", ""))
         ck = _company_key(display_company)
 
