@@ -2922,11 +2922,6 @@
     "slug": "job-widget",
     "probe_version": 35
   },
-  "Primark / Penneys": {
-    "platform": "smartrecruiters",
-    "slug": "external-referrals",
-    "probe_version": 35
-  },
   "Pure Storage": {
     "platform": "greenhouse",
     "slug": "purestorage",
@@ -2995,6 +2990,11 @@
   "Canto": {
     "platform": "greenhouse",
     "slug": "canto",
+    "probe_version": 35
+  },
+  "Primark / Penneys": {
+    "platform": "smartrecruiters",
+    "slug": "external-referrals",
     "probe_version": 35
   },
   "__probe_version__": 35
