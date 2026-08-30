@@ -698,8 +698,10 @@ body{background:#f3f4f6!important}
 .job-card-head{display:flex;align-items:flex-start;gap:12px;min-width:0}
 .company-avatar{
   width:40px;height:40px;flex:0 0 40px;border-radius:50%;display:grid;place-items:center;
-  background:#18181b;color:#fff;font-size:12px;font-weight:800;letter-spacing:.02em
+  background:#fff;color:#18181b;font-size:12px;font-weight:800;letter-spacing:.02em;
+  border:1px solid var(--line);overflow:hidden
 }
+.company-avatar img{width:26px;height:26px;object-fit:contain;display:block}
 .job-card-head .company{margin:1px 0 4px;color:#52525b!important;font-family:var(--sans)!important;letter-spacing:0!important;text-transform:none!important}
 .job-card-head .title{font-size:16px!important;line-height:1.35!important;color:#18181b!important}
 .score-row{margin:0!important;gap:6px!important}
@@ -1090,6 +1092,23 @@ function companyInitials(name) {
   return String(name || '?').split(/\s+/).slice(0, 2).map(x => x[0] || '').join('').toUpperCase();
 }
 
+function companyCareersUrl(name) {
+  const row = ALL_REGISTRY.find(c => c.company === name);
+  return row?.careers_url || row?.url || '';
+}
+
+function companyLogo(name) {
+  const careersUrl = companyCareersUrl(name);
+  if (!careersUrl) return escapeHtml(companyInitials(name));
+  try {
+    const favicon = new URL('/favicon.ico', careersUrl).href;
+    const fallback = escapeHtml(companyInitials(name));
+    return `<img src="${escapeHtml(favicon)}" alt="" loading="lazy" data-fallback="${fallback}" onerror="this.parentNode.textContent=this.dataset.fallback">`;
+  } catch (_) {
+    return escapeHtml(companyInitials(name));
+  }
+}
+
 function loadData(data) {
   const jobs = data.jobs || [];
   ALL_JOBS = data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs);
@@ -1114,20 +1133,15 @@ function loadData(data) {
   const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
   document.getElementById('stManual').textContent = directoryCount;
 
-  // The main company filter is intentionally restricted to the
-  // 250 employers enabled in include_in_scrape_registry.
-  // Reserve/inactive companies from the 600-company master must never
-  // leak into the user-facing "All companies" dropdown.
-  const ACTIVE_FILTER_COMPANIES = ["A&L Goodbody","AECOM","AIB (Allied Irish Banks)","AIG","AMCS Group","ASL Aviation Holdings","ASML","AXA Ireland","AXA XL","AbbVie","Abbott","Accenture","ActionPoint","Adobe","Advanced Micro Devices (AMD)","Aer Lingus","Agilent Technologies","AirNav Ireland","Airbnb","Aiven","Akamai","Alexion Pharmaceuticals","Alkermes","Allianz Ireland","Alter Domus","Amazon","Amundi","An Post","Analog Devices","Anthropic","Aon","Apex Group","Apple","Applied Materials","Aptiv","Arcadis","Arista Networks","Arthur Cox","Arup","Asana","Astellas Pharma","AstraZeneca","AtkinsRéalis","Atlantic Technological University (ATU)","Autodesk","Auxilion","Avanade","Aviva Ireland","Avolon","BDO Ireland","BNP Paribas Ireland","BT Ireland","Bain & Company","Baker Tilly Ireland","Bank of America","Bank of Ireland","Barclays","Bausch + Lomb","Baxter International","Bayer","BearingPoint","Becton Dickinson (BD)","BioMarin","BlackRock","Bloomberg","Boehringer Ingelheim","Bord Gáis Energy","Bord na Móna","Boston Scientific","Bristol Myers Squibb","Broadcom","Brown Brothers Harriman","Bus Éireann","CACEIS","CBRE Ireland","CGI","CRH","Cadence Design Systems","Canto","Capgemini","CarTrawler","Carne Group","Catalent","Central Bank of Ireland","Charles River Laboratories","Check Point Software","Chubb","Circle K Ireland","Cisco","Citco","Citi","CitySwift","ClickUp","Cloudflare","CluneTech","Coca-Cola HBC Ireland","Codec","Cognizant","Coinbase","Concentrix (Ireland)","CrowdStrike","Crusoe","CyberArk","DCC plc","DHL Ireland","DPS Group (Arcadis)","DXC Technology","Danaher Corporation","Databricks","Datadog","Datalex","Davy","Dawn Meats","Decathlon Ireland","Dell Technologies","Deloitte Ireland","Dexcom","Diageo Ireland","Dillon Eustace","DocuSign","Dublin City University (DCU)","Dynatrace","ESB","ESW","EXL","EY Ireland","Eaton","Ekco","Elavon","Eli Lilly","Energia Group","Enterprise Ireland","Ergo","Ericsson","Eurofins Scientific","Fenergo","Fidelity International","Fiserv","Flipdish","Forvis Mazars Ireland","Fujitsu","GE HealthCare","Genesys","Gilead Sciences","Google","Grant Thornton Ireland","GridBeyond","HCLTech","Harvey Nash Ireland","Hitachi Energy","Honeywell","Huawei Ireland","HubSpot","IBM","Infosys","Integrity360","Intel","Intercom","Irish Life","Irish Rail (Iarnród Éireann)","JD Sports Ireland","JPMorgan Chase","Jacobs","Johnson & Johnson","Johnson Controls","KLA Corporation","KPMG Ireland","Kerry Group","Kitman Labs","Klaviyo","Kuehne+Nagel Ireland","Kyndryl","LearnUpon","LetsGetChecked","MSD (Merck Sharp & Dohme)","Marsh McLennan","Mastercard","Medtronic","Mercer","Merit Medical","Meta","Microsoft","MongoDB","Motorola Solutions","Munster Technological University (MTU)","Musgrave Group (SuperValu / Centra)","NTT DATA","NetApp","Northern Trust","Notion","Okta","OpenAI","OpenText","Oracle","PIMCO","PM Group","PayPal","PepsiCo","Pfizer","Pinterest","Public Jobs / Civil Service","Pure Storage","PwC Ireland","Qualtrics","Quest Software","RCSI University of Medicine and Health Sciences","Red Hat","Reddit","Revenue","Roche","Ryanair","S&P Global","SAP","SMBC Aviation Capital","Salesforce","Sanofi","Schneider Electric","ServiceNow","Snowflake","SolarWinds","Squarespace","State Street","Stripe","Susquehanna International Group (SIG)","Tata Consultancy Services (TCS)","Technological University Dublin (TU Dublin)","Technological University of the Shannon (TUS)","Tenable","Tesco Ireland","Thermo Fisher Scientific","TikTok","Tines","Toast","Tricentis","Trinity College Dublin","Twilio","Udemy","University College Cork (UCC)","University of Galway","Veeam","Version 1","Vodafone Ireland","Wayflyer","Wells Fargo","Wipro","Workday","Zimmer Biomet","Zscaler","daa (Dublin Airport Authority)","eBay"];
-  const ACTIVE_FILTER_COMPANY_SET = new Set(ACTIVE_FILTER_COMPANIES);
+  const liveCompanyCount = Number(data.companies_with_live_jobs) || getLiveCompanies().length;
+  const liveCompaniesTab = document.getElementById('tabLiveCompanies');
+  if (liveCompaniesTab) liveCompaniesTab.textContent = `Companies with live jobs (${liveCompanyCount})`;
 
-  // Keep all 250 active employers selectable even when a company has
+  // Keep every active employer selectable even when a company has
   // zero live jobs in the latest scrape. Its official careers-page
   // fallback can therefore still be reached from the company filter.
-  const companyUniverse = Array.from(new Set([
-    ...ACTIVE_FILTER_COMPANIES,
-    ...ALL_REGISTRY.map(c => c.company)
-  ])).sort((a, b) => a.localeCompare(b));
+  const companyUniverse = ALL_REGISTRY.map(c => c.company)
+    .sort((a, b) => a.localeCompare(b));
   fillSelect('fCompany', companyUniverse);
   fillSelect('fSector', ALL_JOBS.map(j => j.sector || 'Other'));
   fillSelect('fSource', ALL_JOBS.map(j => j.ats), v => v.charAt(0).toUpperCase() + v.slice(1));
@@ -1648,7 +1662,7 @@ if (search) {
     card.innerHTML = `
       ${j.new_since_last_check ? '<div class="new-ribbon">NEW</div>' : ''}
       <div class="job-card-head">
-        <div class="company-avatar" aria-hidden="true">${escapeHtml(companyInitials(j.company))}</div>
+        <div class="company-avatar" aria-hidden="true">${companyLogo(j.company)}</div>
         <div>
           <div class="company">${escapeHtml(j.company)}</div>
           <div class="title">${escapeHtml(j.title || 'Untitled role')}</div>
