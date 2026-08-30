@@ -549,6 +549,9 @@ DIRECT_COMPANY_CONNECTORS = {
     "Avolon": "avolon_official",
     "ASL Aviation Holdings": "asl_aviation_official",
     "Alexion Pharmaceuticals": "alexion_astrazeneca_official",
+    "Arcadis": "arcadis_eightfold_official",
+    "Baker Tilly Ireland": "baker_tilly_official",
+    "DocuSign": "docusign_official",
     "Auxilion": "auxilion_official",
     "BioMarin": "biomarin_official",
     "CGI": "njoyn_official",
@@ -4840,16 +4843,30 @@ def scrape_dxc():
         offset += limit
 
     print(f"  DXC Technology CWS API: {len(results)} Ireland jobs")
-    return list(results.values())
+    if results:
+        return list(results.values())
+    return _browser_board_collect(
+        company,
+        ["https://careers.dxc.com/job-search-results/?location=Ireland"],
+        ("careers.dxc.com/job/",),
+        default_location="Ireland",
+        max_scrolls=12,
+        require_ireland=True,
+        source_tag="official",
+    )
 
 
 def _static_official_jobs(company, url, href_pattern, default_location="Ireland"):
     """Parse server-rendered official career pages with requests/BeautifulSoup."""
     results = {}
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            html = r.read().decode("utf-8", errors="ignore")
+        from bs4 import BeautifulSoup
+        sess = _session()
+        if not sess:
+            return []
+        response = sess.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
+        response.raise_for_status()
+        html = response.text
         _mark_connector_health(company, True, "Official careers page loaded", url)
         soup = BeautifulSoup(html, "html.parser")
         for a in soup.find_all("a", href=True):
@@ -11522,7 +11539,17 @@ def scrape_axa():
         f"{len(best)} jobs"
     )
 
-    return list(best.values())
+    if best:
+        return list(best.values())
+    return _browser_board_collect(
+        company,
+        ["https://careers.axa.com/careers-home/jobs?country=Ireland"],
+        ("careers.axa.com/careers-home/jobs/",),
+        default_location="Ireland",
+        max_scrolls=12,
+        require_ireland=True,
+        source_tag="official",
+    )
 
 
 
@@ -14654,86 +14681,28 @@ def scrape_applied_materials():
 
 
 def scrape_arcadis_ireland():
-    company = "Arcadis"
-    source_url = (
-        "https://jobs.arcadis.com/careers"
-        "?domain=arcadis.com"
-        "&start=0"
-        "&location=Dublin%2C+Dublin%2C+Ireland"
-        "&pid=563671531437150"
-        "&sort_by=distance"
-        "&filter_distance=80"
-        "&filter_include_remote=1"
-        "&filter_include_relocation=0"
+    return _browser_board_collect(
+        "Arcadis",
+        [
+            "https://jobs.arcadis.com/careers"
+            "?domain=arcadis.com&location=Ireland&sort_by=relevance"
+        ],
+        ("jobs.arcadis.com/careers/job/",),
+        default_location="Ireland",
+        max_scrolls=12,
+        require_ireland=True,
+        source_tag="eightfold",
     )
 
-    if not HAS_PLAYWRIGHT:
-        return []
 
-    results = {}
-
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(locale="en-IE")
-            page.goto(source_url, wait_until="domcontentloaded", timeout=60000)
-            page.wait_for_timeout(5000)
-            _dismiss_cookie_banner(page)
-
-            for _ in range(6):
-                page.mouse.wheel(0, 4000)
-                page.wait_for_timeout(500)
-
-            anchors = page.locator("a[href]")
-
-            for i in range(anchors.count()):
-                a = anchors.nth(i)
-                href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
-
-                if "jobs.arcadis.com" not in href.lower():
-                    continue
-
-                # Only actual Arcadis job-detail pages.
-                if "/careers/job/" not in href.lower():
-                    continue
-
-                try:
-                    node = a.locator("xpath=ancestor::*[self::li or self::article or self::div][1]")
-                    card = re.sub(r"\s+", " ", _browser_text(node) or "").strip()
-                except Exception:
-                    card = ""
-
-                evidence = f"{card} {href}"
-
-                if re.search(r"\bNorthern Ireland\b|\bBelfast\b", evidence, re.I):
-                    continue
-                if not re.search(r"\bDublin\b|\bIreland\b", evidence, re.I):
-                    continue
-
-                title = re.sub(r"\s+", " ", _browser_text(a) or "").strip()
-                if not title or len(title) > 300:
-                    continue
-
-                results[href.split("#")[0]] = {
-                    "company": company,
-                    "ats": "eightfold",
-                    "title": title[:300],
-                    "location": "Dublin, Ireland" if re.search(r"\bDublin\b", evidence, re.I) else "Ireland",
-                    "url": href.split("#")[0],
-                    "updated_at": None,
-                    "description_text": card[:5000],
-                }
-
-            browser.close()
-
-    except Exception as exc:
-        print(f"  ! Arcadis scrape failed: {exc}")
-
-    print(f"  Arcadis official Ireland careers: {len(results)} jobs")
-    return list(results.values())
 def scrape_baker_tilly_ireland():
     company = "Baker Tilly Ireland"
     source_url = "https://www.bakertilly.ie/careers/vacancies"
+
+    static_jobs = _static_official_jobs(company, source_url, "/vacancies/")
+    if static_jobs:
+        print(f"  Baker Tilly Ireland official vacancies: {len(static_jobs)} jobs")
+        return static_jobs
 
     if not HAS_PLAYWRIGHT:
         return []
@@ -14798,6 +14767,21 @@ def scrape_baker_tilly_ireland():
 
     print(f"  Baker Tilly Ireland official vacancies: {len(results)} jobs")
     return list(results.values())
+
+
+def scrape_docusign():
+    return _browser_board_collect(
+        "DocuSign",
+        [
+            "https://careers.docusign.com/careers-home/jobs?country=Ireland",
+            "https://careers.docusign.com/careers-home/jobs?location=Dublin",
+        ],
+        ("careers.docusign.com/careers-home/jobs/",),
+        default_location="Dublin, Ireland",
+        max_scrolls=12,
+        require_ireland=True,
+        source_tag="official",
+    )
 def scrape_bausch_lomb_ireland():
     return _false_zero_browser_jobs(
         "Bausch + Lomb",
@@ -17665,6 +17649,7 @@ def scrape_direct_company(company: str):
     fn={
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
         "Arcadis": scrape_arcadis_ireland,
+        "DocuSign": scrape_docusign,
         "AXA XL": scrape_axa_xl,
         "AtkinsRéalis": scrape_atkinsrealis,
         "Advanced Micro Devices (AMD)": scrape_amd,
@@ -19671,6 +19656,18 @@ def main():
         })
     manual_check.sort(key=lambda x: x["company"].lower())
 
+    try:
+        with open("company_history.json", "r", encoding="utf-8") as f:
+            prior_history = json.load(f)
+        prior_companies = prior_history.get("companies", prior_history)
+        proven_company_keys = {
+            _company_key(name)
+            for name, record in prior_companies.items()
+            if isinstance(record, dict) and record.get("ever_working")
+        }
+    except (FileNotFoundError, json.JSONDecodeError, TypeError, AttributeError):
+        proven_company_keys = set()
+
     # Coverage diagnostics. "No live jobs" is not automatically the same as
     # "the company has no jobs"; distinguish missing connectors from configured
     # connectors that yielded no Ireland records.
@@ -19687,6 +19684,9 @@ def main():
         ):
             state = "live_zero"
             reason = "Official careers source independently verified live and currently has 0 qualifying Ireland jobs"
+        elif key in proven_company_keys:
+            state = "proven_zero"
+            reason = "Connector previously returned verified Ireland jobs and returned 0 in this run"
         elif item.get("automatic"):
             state = "configured_zero"
             reason = "Connector is configured but returned no qualifying Ireland jobs; mapping/filter may need verification"
@@ -19942,7 +19942,7 @@ def main():
         ],
         "coverage_state_counts": {
             state: sum(1 for x in coverage_diagnostics if x["state"] == state)
-            for state in ("working", "live_zero", "configured_zero", "no_validated_connector")
+            for state in ("working", "live_zero", "proven_zero", "configured_zero", "no_validated_connector")
         },
         "manual_check_companies": manual_check,
         "manual_check_count": len(manual_check),
@@ -20943,6 +20943,7 @@ def _working_batch_base_scrape_direct_company(company: str):
     fn={
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
         "Arcadis": scrape_arcadis_ireland,
+        "DocuSign": scrape_docusign,
         "AXA XL": scrape_axa_xl,
         "AtkinsRéalis": scrape_atkinsrealis,
         "Advanced Micro Devices (AMD)": scrape_amd,
