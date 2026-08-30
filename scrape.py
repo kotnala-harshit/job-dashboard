@@ -72,6 +72,13 @@ WORKDAY_COMPANIES = [('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce'
 # ---------------------------------------------------------------------------
 
 SMARTRECRUITERS_COMPANIES = ['smartrecruiters', 'aristanetworks', 'abbvie', 'eurofins', 'version1']
+SMARTRECRUITERS_PUBLIC_IDS = {
+    "aristanetworks": "AristaNetworks",
+    "abbvie": "AbbVie",
+    "eurofins": "Eurofins",
+    "smartrecruiters": "SmartRecruiters",
+    "version1": "Version1",
+}
 
 # ---------------------------------------------------------------------------
 # Three more genuinely free, unauthenticated ATS APIs. These skew toward
@@ -2112,6 +2119,12 @@ def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages
     return out
 
 
+def smartrecruiters_public_url(company_id: str, job_id: str, title: str):
+    public_id = SMARTRECRUITERS_PUBLIC_IDS.get(company_id.lower(), company_id)
+    title_slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-") or "job"
+    return f"https://jobs.smartrecruiters.com/{public_id}/{job_id}-{title_slug}"
+
+
 def scrape_smartrecruiters(company_id: str, max_pages: int = 15):
     """SmartRecruiters public postings API with robust pagination/location handling."""
     out = []
@@ -2151,20 +2164,14 @@ def scrape_smartrecruiters(company_id: str, max_pages: int = 15):
             if loc.get("remote"):
                 location = f"{location} (Remote)".strip(", ")
             if region_ok(location):
-                ref = j.get("ref") or {}
-                if isinstance(ref, dict):
-                    ref_url = ref.get("jobAd") or ref.get("applyUrl")
-                elif isinstance(ref, str):
-                    ref_url = ref
-                else:
-                    ref_url = None
+                job_id = str(j.get("id") or "")
 
                 out.append({
                     "company": company_id,
                     "ats": "smartrecruiters",
                     "title": title,
                     "location": location,
-                    "url": j.get("applyUrl") or ref_url or f"https://jobs.smartrecruiters.com/{company_id}/{j.get('id','')}",
+                    "url": smartrecruiters_public_url(company_id, job_id, title),
                     "updated_at": j.get("releasedDate"),
                 })
 

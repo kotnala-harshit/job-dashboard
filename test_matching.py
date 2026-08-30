@@ -1,6 +1,6 @@
 import unittest
 
-from scrape import candidate_match
+from scrape import candidate_match, smartrecruiters_public_url
 
 
 PROFILE = {
@@ -33,6 +33,12 @@ class CandidateMatchTest(unittest.TestCase):
         result = self.score("Data Analyst")
         self.assertEqual(result["role_family"], "Data & BI")
         self.assertGreaterEqual(result["candidate_match_score"], 55)
+
+    def test_version1_public_route_uses_correct_company_id(self):
+        self.assertEqual(
+            "https://jobs.smartrecruiters.com/Version1/744000145976699-backend-developer",
+            smartrecruiters_public_url("version1", "744000145976699", "Backend Developer"),
+        )
 
 
 if __name__ == "__main__":

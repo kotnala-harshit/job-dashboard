@@ -1119,6 +1119,16 @@ function companyIdentity(name, detail) {
   </div>`;
 }
 
+function publicJobUrl(job) {
+  const url = String(job?.url || '');
+  const match = url.match(/^https:\/\/api\.smartrecruiters\.com\/v1\/companies\/([^/]+)\/postings\/([^/?#]+)/i);
+  if (!match) return url;
+  const companies = {version1: 'Version1', aristanetworks: 'AristaNetworks', abbvie: 'AbbVie', eurofins: 'Eurofins', smartrecruiters: 'SmartRecruiters'};
+  const company = companies[match[1].toLowerCase()] || match[1];
+  const slug = String(job?.title || 'job').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return `https://jobs.smartrecruiters.com/${company}/${match[2]}-${slug}`;
+}
+
 function loadData(data) {
   const jobs = data.jobs || [];
   ALL_JOBS = data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs);
@@ -1720,7 +1730,8 @@ if (search) {
     const openButton = card.querySelector('[data-open-job]');
     if (openButton) openButton.addEventListener('click', e => {
       e.stopPropagation();
-      if (j.url) window.open(j.url, '_blank', 'noopener');
+      const url = publicJobUrl(j);
+      if (url) window.open(url, '_blank', 'noopener');
     });
     grid.appendChild(card);
   });
