@@ -1,6 +1,11 @@
 import unittest
 
-from scrape import candidate_match, is_real_job_title, smartrecruiters_public_url
+from scrape import (
+    VERIFIED_LIVE_ZERO_COMPANIES,
+    candidate_match,
+    is_real_job_title,
+    smartrecruiters_public_url,
+)
 
 
 PROFILE = {
@@ -44,6 +49,9 @@ class CandidateMatchTest(unittest.TestCase):
         for title in ("Experience", "Skills & qualifications", "Degree", "Job types", "Organizations", "Sort by"):
             self.assertFalse(is_real_job_title(title), title)
         self.assertTrue(is_real_job_title("AI Governance Analyst, Service Delivery, Trust and Safety"))
+
+    def test_verified_asl_zero_is_not_reported_as_broken(self):
+        self.assertIn("ASL Aviation Holdings", VERIFIED_LIVE_ZERO_COMPANIES)
 
 
 if __name__ == "__main__":

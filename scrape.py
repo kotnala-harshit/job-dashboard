@@ -431,6 +431,7 @@ CONNECTOR_HEALTH = {}
 # been manually/independently verified as healthy and genuinely empty.
 # Do NOT infer healthy-zero merely from an HTTP 200 response.
 VERIFIED_LIVE_ZERO_COMPANIES = {
+    "ASL Aviation Holdings",
     "Central Bank of Ireland",
 
     "Qualcomm",
@@ -547,6 +548,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "AMCS Group": "amcs_official",
     "Avolon": "avolon_official",
     "ASL Aviation Holdings": "asl_aviation_official",
+    "Alexion Pharmaceuticals": "alexion_astrazeneca_official",
     "Auxilion": "auxilion_official",
     "BioMarin": "biomarin_official",
     "CGI": "njoyn_official",
@@ -7866,6 +7868,20 @@ def scrape_astrazeneca():
 
     print(f"  AstraZeneca official Dublin careers: {len(results)} jobs")
     return list(results.values())
+
+
+def scrape_alexion():
+    jobs = []
+    for job in scrape_astrazeneca():
+        if "alexion" not in str(job.get("description_text") or "").lower():
+            continue
+        jobs.append({**job, "company": "Alexion Pharmaceuticals"})
+    _mark_connector_health(
+        "Alexion Pharmaceuticals", True,
+        f"Official AstraZeneca Ireland board returned {len(jobs)} Alexion roles",
+        "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2",
+    )
+    return jobs
 
 
 
@@ -17748,6 +17764,7 @@ def scrape_direct_company(company: str):
         "Huawei": scrape_huawei,
         "Becton Dickinson (BD)": scrape_becton_dickinson,
         "AstraZeneca": scrape_astrazeneca,
+        "Alexion Pharmaceuticals": scrape_alexion,
         "Aiven": scrape_aiven,
         "A&L Goodbody": scrape_algoodbody,
         "Agilent Technologies": scrape_agilent,
@@ -21025,6 +21042,7 @@ def _working_batch_base_scrape_direct_company(company: str):
         "Huawei": scrape_huawei,
         "Becton Dickinson (BD)": scrape_becton_dickinson,
         "AstraZeneca": scrape_astrazeneca,
+        "Alexion Pharmaceuticals": scrape_alexion,
         "Aiven": scrape_aiven,
         "A&L Goodbody": scrape_algoodbody,
         "Agilent Technologies": scrape_agilent,
