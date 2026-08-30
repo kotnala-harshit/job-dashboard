@@ -24,7 +24,9 @@
         "commercial analyst",
         "operations analyst",
         "strategy analyst",
-        "product analyst"
+        "product analyst",
+        "risk analyst",
+        "financial crime analyst"
       ]
     },
     "Data & BI": {
@@ -38,7 +40,10 @@
         "data visualization",
         "reporting developer",
         "analytics engineer",
-        "data consultant"
+        "data consultant",
+        "data governance",
+        "data quality",
+        "insights analyst"
       ]
     },
     "Data Engineering": {
@@ -63,7 +68,11 @@
         "transformation consultant",
         "erp consultant",
         "implementation consultant",
-        "solutions consultant"
+        "solutions consultant",
+        "functional consultant",
+        "business systems analyst",
+        "systems analyst",
+        "application support analyst"
       ]
     },
     "Product & Operations": {
@@ -76,7 +85,9 @@
         "operations analyst",
         "program analyst",
         "project analyst",
-        "process analyst"
+        "process analyst",
+        "supply chain analyst",
+        "planning analyst"
       ]
     },
     "Graduate & Entry": {
@@ -150,7 +161,9 @@
     "head of": 30,
     "principal": 22,
     "staff": 20,
-    "senior manager": 18
+    "senior manager": 18,
+    "manager": 18,
+    "lead": 15
   },
   "negative_title_terms": [
     "nurse",
@@ -163,6 +176,18 @@
     "warehouse operative",
     "retail assistant",
     "sales assistant",
-    "security guard"
+    "security guard",
+    "software engineer",
+    "engineering manager",
+    "account executive",
+    "sales manager",
+    "sales operations",
+    "sales development",
+    "marketing operations",
+    "customer success",
+    "renewals manager",
+    "legal counsel",
+    "product designer",
+    "software developer"
   ]
 }

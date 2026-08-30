@@ -608,6 +608,12 @@ def employment_type(title: str) -> str:
     t = (title or "").lower()
     if any(k in t for k in INTERNSHIP_KEYWORDS):
         return "internship"
+    if re.search(r"\b(graduate|graduate programme|graduate program|trainee)\b", t):
+        return "graduate"
+    if re.search(r"\b(contract|fixed[\s-]?term|ftc|agency contract|maternity cover)\b", t):
+        return "contract"
+    if re.search(r"\b(temporary|seasonal|temp)\b", t):
+        return "temporary"
     if any(k in t for k in PART_TIME_KEYWORDS):
         return "part_time"
     return "full_time"
@@ -17842,13 +17848,14 @@ def normalized_title(title):
 
 def classify_role_family(title, description, profile):
     title_n = normalized_title(title)
-    text = f"{title_n} {_norm_phrase(description)}"
     best = ("Other", "None", 0, [])
     for family, cfg in (profile.get("role_families") or {}).items():
         hits = []
         for phrase in cfg.get("titles", []):
             p = _norm_phrase(phrase)
-            if p and (p in title_n or (len(p.split()) >= 2 and p in text)):
+            # Role identity comes from the title. Descriptions routinely mention
+            # adjacent teams and were misclassifying sales/legal roles as data jobs.
+            if p and p in title_n:
                 hits.append(phrase)
         score = cfg.get("weight", 0) + min(8, len(hits) * 2) if hits else 0
         if score > best[2]:
@@ -17938,7 +17945,9 @@ def candidate_match(job, description, profile):
     exp_fit, exp_min, exp_max = experience_fit(title, description, years)
 
     score = role["role_score"]
-    score += min(34, len(matched) * 4)
+    # Skills refine a relevant role; they must not manufacture relevance for an
+    # unrelated title that happens to mention Python, AWS or analytics.
+    score += min(34, len(matched) * 4) if role["family"] != "Other" else min(8, len(matched) * 2)
     score += {"Strong": 16, "Possible": 9, "Stretch": 3, "Overqualified": -5, "Too Senior": -25, "Unknown": 0}.get(exp_fit, 0)
 
     loc_text = _norm_phrase(job.get("location"))
@@ -17954,10 +17963,15 @@ def candidate_match(job, description, profile):
             break
 
     # Noise penalty for clearly irrelevant job families, without deleting the job from the broad engine.
+    irrelevant_title = False
     for term in profile.get("negative_title_terms", []):
         if _norm_phrase(term) in title_n:
             score -= 18
+            irrelevant_title = True
             break
+
+    if irrelevant_title or role["family"] == "Other":
+        score = min(score, 40)
 
     score = max(0, min(100, int(round(score))))
     reasons = []

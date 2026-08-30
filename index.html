@@ -691,6 +691,39 @@ body{background:#f3f4f6!important}
 
 </style>
 
+<style>
+/* Profile-first job board: compact cards inspired by the supplied reference. */
+.grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important}
+.card{padding:18px!important;gap:12px!important;cursor:default!important;min-height:285px!important}
+.job-card-head{display:flex;align-items:flex-start;gap:12px;min-width:0}
+.company-avatar{
+  width:40px;height:40px;flex:0 0 40px;border-radius:50%;display:grid;place-items:center;
+  background:#18181b;color:#fff;font-size:12px;font-weight:800;letter-spacing:.02em
+}
+.job-card-head .company{margin:1px 0 4px;color:#52525b!important;font-family:var(--sans)!important;letter-spacing:0!important;text-transform:none!important}
+.job-card-head .title{font-size:16px!important;line-height:1.35!important;color:#18181b!important}
+.score-row{margin:0!important;gap:6px!important}
+.meta{gap:6px!important}
+.job-details{border-top:1px solid var(--line);padding-top:9px;margin-top:2px}
+.job-details summary{cursor:pointer;color:#52525b;font-size:11.5px;font-weight:650;list-style-position:inside}
+.job-details[open] summary{margin-bottom:8px;color:#18181b}
+.detail-line{font:10.5px var(--mono);color:var(--muted);margin:8px 0}
+.job-details .visa-stack{margin:8px 0 0!important;min-width:0!important;width:100%!important}
+.job-card-safe-actions{display:flex!important;align-items:center!important;gap:6px!important;width:100%!important;margin:0!important;padding:0!important}
+.state-btn,.open-job-btn,.ignore-btn{padding:7px 9px!important;font-size:11px!important;cursor:pointer!important;background:#fff!important;color:#52525b!important}
+.state-btn.active{background:#18181b!important;color:#fff!important;border-color:#18181b!important}
+.open-job-btn{margin-left:auto!important;background:#18181b!important;color:#fff!important;border-color:#18181b!important;font-weight:700!important}
+.filter-row select{min-width:132px}
+#fProfileMode{font-weight:700;border-color:#a1a1aa!important}
+@media(max-width:1120px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:680px){
+  .grid{grid-template-columns:1fr!important}
+  .board{position:static!important;padding:16px!important}
+  main{padding:16px 12px 50px!important}
+  .filter-row select{flex:1 1 150px;min-width:0}
+}
+</style>
+
 </head>
 <body>
 
@@ -779,12 +812,30 @@ body{background:#f3f4f6!important}
       <option value="not_mentioned">Current job does not mention visa</option>
       <option value="other">Other / unclear</option>
     </select>
+    <select id="fProfileMode" aria-label="CV profile">
+      <option value="balanced">Balanced CV</option>
+      <option value="business">Business / ERP CV</option>
+      <option value="technical">Technical / Data CV</option>
+      <option value="early">Graduate / FTC</option>
+    </select>
+    <select id="fSort" aria-label="Sort jobs">
+      <option value="fit">Best fit</option>
+      <option value="newest">Newest first</option>
+      <option value="closing">Closing soon</option>
+      <option value="company">Company A–Z</option>
+    </select>
+    <select id="fStatus" aria-label="Application status">
+      <option value="">All application states</option>
+      <option value="saved">Saved</option>
+      <option value="applied">Applied</option>
+    </select>
     <label class="profile-match-toggle"
-      title="Show jobs with at least 55% candidate match">
+      title="Require a role title aligned with the selected CV profile">
       <input id="fProfileMatch"
              type="checkbox"
+             checked
              onchange="applyFilters()" />
-      <span>Match my profile</span>
+      <span>Target roles only</span>
       <span id="profileMatchCount"
             class="profile-match-count"></span>
     </label>
@@ -803,7 +854,7 @@ body{background:#f3f4f6!important}
       <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs</div>
       <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
       <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
-      <div id="tabLiveZero" class="tab" onclick="showTab('livezero')">True zero jobs</div>
+      <div id="tabLiveZero" class="tab" onclick="showTab('livezero')">No live jobs</div>
       <div id="tabZero" class="tab" onclick="showTab('zero')">False zero / broken</div>
       <div id="tabLiveCompanies" class="tab" onclick="showTab('livecompanies')">Companies with live jobs</div>
       <div id="tabProvenCompanies" class="tab" onclick="showTab('provencompanies')">Proven working</div>
@@ -881,13 +932,24 @@ let CURRENT_TAB = 'live';
 
 
 const IGNORED_KEY = 'ireland_job_dashboard_ignored_v1';
+const JOB_STATE_KEY = 'ireland_job_dashboard_state_v1';
 let IGNORED_JOBS = [];
+let JOB_STATES = {};
 
 function loadRadarState() {
   try { IGNORED_JOBS = JSON.parse(localStorage.getItem(IGNORED_KEY) || '[]'); } catch(e) { IGNORED_JOBS = []; }
+  try { JOB_STATES = JSON.parse(localStorage.getItem(JOB_STATE_KEY) || '{}'); } catch(e) { JOB_STATES = {}; }
 }
 function jobId(j) { return String(j.url || `${j.company}|${j.title}|${j.location || ''}`); }
 function isIgnored(j) { return IGNORED_JOBS.includes(jobId(j)); }
+function jobState(j) { return JOB_STATES[jobId(j)] || ''; }
+function setJobState(j, state) {
+  const id = jobId(j);
+  if (JOB_STATES[id] === state) delete JOB_STATES[id];
+  else JOB_STATES[id] = state;
+  localStorage.setItem(JOB_STATE_KEY, JSON.stringify(JOB_STATES));
+  applyFilters();
+}
 function ignoreJob(j) {
   const id = jobId(j);
   if (!IGNORED_JOBS.includes(id)) IGNORED_JOBS.push(id);
@@ -998,6 +1060,36 @@ function effectiveMatchScore(job) {
   return Number(job.candidate_match_score || 0);
 }
 
+const PROFILE_RULES = {
+  technical: /\b(data analyst|analytics analyst|bi analyst|business intelligence|reporting analyst|insights? analyst|analytics engineer|junior data engineer|data governance|data quality|power bi|sql developer|risk analyst|fraud analyst)\b/i,
+  business: /\b(business analyst|business systems analyst|systems analyst|erp|implementation consultant|functional consultant|technology consultant|application support analyst|operations analyst|process analyst|project analyst|programme analyst|program analyst|commercial analyst|supply chain analyst|planning analyst|transformation consultant|solutions consultant)\b/i,
+  early: /\b(graduate|graduate programme|graduate program|entry[- ]level|junior|trainee|intern(ship)?|placement|apprentice|fixed[- ]term|\bftc\b|\d+[- ]month contract)\b/i
+};
+const PROFILE_NOISE = /\b(software engineer|software developer|engineering manager|account executive|sales manager|sales operations|sales development|marketing operations|customer success|renewals manager|legal counsel|nurse|doctor|pharmacist|mechanic|electrician|driver|chef|warehouse operative|retail assistant|sales assistant|security guard)\b/i;
+const PROFILE_TOO_SENIOR = /\b(director|vice president|\bvp\b|head of|principal|staff|senior manager|managing director|manager)\b/i;
+
+function selectedProfileMode() {
+  return document.getElementById('fProfileMode')?.value || 'balanced';
+}
+
+function isTargetRole(job, mode = selectedProfileMode()) {
+  const title = String(job.title || '');
+  if (PROFILE_NOISE.test(title) || PROFILE_TOO_SENIOR.test(title)) return false;
+  if (mode === 'technical') return PROFILE_RULES.technical.test(title);
+  if (mode === 'business') return PROFILE_RULES.business.test(title);
+  if (mode === 'early') {
+    return PROFILE_RULES.early.test(title) &&
+      (PROFILE_RULES.technical.test(title) || PROFILE_RULES.business.test(title) ||
+       /\b(technology|analytics|data|business|operations|supply chain|engineering graduate|risk|consulting)\b/i.test(title));
+  }
+  return PROFILE_RULES.technical.test(title) || PROFILE_RULES.business.test(title) ||
+    (PROFILE_RULES.early.test(title) && /\b(technology|analytics|data|business|operations|supply chain|risk|consulting)\b/i.test(title));
+}
+
+function companyInitials(name) {
+  return String(name || '?').split(/\s+/).slice(0, 2).map(x => x[0] || '').join('').toUpperCase();
+}
+
 function loadData(data) {
   const jobs = data.jobs || [];
   ALL_JOBS = data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs);
@@ -1032,7 +1124,10 @@ function loadData(data) {
   // Keep all 250 active employers selectable even when a company has
   // zero live jobs in the latest scrape. Its official careers-page
   // fallback can therefore still be reached from the company filter.
-  const companyUniverse = ACTIVE_FILTER_COMPANIES;
+  const companyUniverse = Array.from(new Set([
+    ...ACTIVE_FILTER_COMPANIES,
+    ...ALL_REGISTRY.map(c => c.company)
+  ])).sort((a, b) => a.localeCompare(b));
   fillSelect('fCompany', companyUniverse);
   fillSelect('fSector', ALL_JOBS.map(j => j.sector || 'Other'));
   fillSelect('fSource', ALL_JOBS.map(j => j.ats), v => v.charAt(0).toUpperCase() + v.slice(1));
@@ -1050,6 +1145,9 @@ function setupInstantFilters() {
     'fPosted',
     'fEmployment',
     'fEmploymentLevel',
+    'fProfileMode',
+    'fSort',
+    'fStatus',
     'fNew',
     'fVisa',
   ];
@@ -1386,6 +1484,18 @@ function employmentTypeLabel(value) {
   }[value] || 'Other';
 }
 
+function employmentTypeValues(job) {
+  const text = `${job?.employment_type || ''} ${job?.job_type || ''} ${job?.contract_type || ''} ${job?.title || ''}`.toLowerCase();
+  const values = [];
+  if (/\b(graduate|graduate programme|graduate program|trainee)\b/.test(text)) values.push('graduate');
+  if (/\b(contract|fixed[\s-]?term|ftc|agency contract|maternity cover)\b/.test(text)) values.push('contract');
+  if (/\b(intern(ship)?|placement|co-?op)\b/.test(text)) values.push('internship');
+  if (/\b(temporary|seasonal|\btemp\b)\b/.test(text)) values.push('temporary');
+  if (/\bpart[\s-]?time\b/.test(text)) values.push('part_time');
+  if (!values.length && /\b(full[\s-]?time|permanent|regular)\b/.test(text)) values.push('full_time');
+  return values.length ? values : ['other'];
+}
+
 
 function applyFilters() {
   const search = document.getElementById('fSearch').value.trim().toLowerCase();
@@ -1399,6 +1509,9 @@ function applyFilters() {
     (document.getElementById('fType')?.value || '');
   const profileMatchOnly =
     document.getElementById('fProfileMatch')?.checked === true;
+  const profileMode = selectedProfileMode();
+  const sortMode = document.getElementById('fSort')?.value || 'fit';
+  const statusFilter = document.getElementById('fStatus')?.value || '';
   const newOnly = document.getElementById('fNew').value;
   const visa = document.getElementById('fVisa').value;
 
@@ -1424,45 +1537,38 @@ if (search) {
     if (sector && (j.sector || 'Other') !== sector) return false;
     if (source && j.ats !== source) return false;
     if (isIgnored(j)) return false;
-    const m = effectiveMatchScore(j);
-
-    // Reuse the existing backend candidate-match score.
-    // This is the former "For You" threshold.
-    if (profileMatchOnly && m < 55) return false;
-        if (newOnly === 'new' && !j.new_since_last_check) return false;
+    if (profileMatchOnly && !isTargetRole(j, profileMode)) return false;
+    if (statusFilter && jobState(j) !== statusFilter) return false;
+    if (newOnly === 'new' && !j.new_since_last_check) return false;
     const v = j.visa_sponsorship || 'not_mentioned';
     const vh = j.employer_sponsorship_history || {};
     if (visa === 'historical_sponsor' && Number(vh.sponsors || 0) <= 0) return false;
     if (visa === 'official_permits' && Number(j.official_permits_total || vh.official_permits_total || 0) <= 0) return false;
     if (visa && !['historical_sponsor','official_permits'].includes(visa) && v !== visa) return false;
     if (posted && !postedWithin(getJobPostedDate(j), posted)) return false;
-    if (employmentFilter && classifyEmploymentType(j) !== employmentFilter) return false;
+    if (employmentFilter && !employmentTypeValues(j).includes(employmentFilter)) return false;
     if (employmentLevelFilter && classifyEmploymentLevel(j) !== employmentLevelFilter) return false;
     return true;
   });
 
   const secondaryCompare = (a, b) => {
-    if (profileMatchOnly) {
-      return (
-        effectiveMatchScore(b) - effectiveMatchScore(a) ||
-        Number(b.discovery_score || 0) - Number(a.discovery_score || 0) ||
-        new Date(b.updated_at || 0) - new Date(a.updated_at || 0)
-      );
+    if (sortMode === 'company') {
+      return String(a.company || '').localeCompare(String(b.company || '')) ||
+        String(a.title || '').localeCompare(String(b.title || ''));
     }
-
+    if (sortMode === 'closing') {
+      const ad = a.closing_date ? new Date(a.closing_date).getTime() : Infinity;
+      const bd = b.closing_date ? new Date(b.closing_date).getTime() : Infinity;
+      return ad - bd;
+    }
+    if (sortMode === 'newest') {
+      return (getJobPostedDate(b)?.getTime() || 0) - (getJobPostedDate(a)?.getTime() || 0);
+    }
     return (
-      new Date(
-        b.updated_at ||
-        b.posted_at_parsed ||
-        b.first_seen_at ||
-        0
-      ) -
-      new Date(
-        a.updated_at ||
-        a.posted_at_parsed ||
-        a.first_seen_at ||
-        0
-      )
+      Number(isTargetRole(b, profileMode)) - Number(isTargetRole(a, profileMode)) ||
+      effectiveMatchScore(b) - effectiveMatchScore(a) ||
+      Number(b.discovery_score || 0) - Number(a.discovery_score || 0) ||
+      (getJobPostedDate(b)?.getTime() || 0) - (getJobPostedDate(a)?.getTime() || 0)
     );
   };
 
@@ -1530,8 +1636,7 @@ if (search) {
     const visaHistory = j.employer_sponsorship_history || {};
     const permitTotal = Number(j.official_permits_total || visaHistory.official_permits_total || 0);
     const pm = personalJobMatch(j);
-    const type = j.employment_type || employmentType(j.title);
-    const typeLabel = { internship: 'Internship' }[type];
+    const applicationState = jobState(j);
     const employmentLevel = classifyEmploymentLevel(j);
     const employmentLevelText = employmentLevelLabel(employmentLevel);
     const bucketLabel = recencyLabel(postedDate);
@@ -1540,29 +1645,31 @@ if (search) {
     card.className =
       'card job-card-overlap-fixed ' +
       (fresh ? 'fresh' : '');
-    card.onclick = () => j.url && window.open(j.url, '_blank', 'noopener');
     card.innerHTML = `
       ${j.new_since_last_check ? '<div class="new-ribbon">NEW</div>' : ''}
-      <div class="company">${escapeHtml(j.company)}</div>
-      <div class="title">${escapeHtml(j.title || 'Untitled role')}</div>
+      <div class="job-card-head">
+        <div class="company-avatar" aria-hidden="true">${escapeHtml(companyInitials(j.company))}</div>
+        <div>
+          <div class="company">${escapeHtml(j.company)}</div>
+          <div class="title">${escapeHtml(j.title || 'Untitled role')}</div>
+        </div>
+      </div>
       <div class="score-row">
         ${j.candidate_match_score != null ? `<span class="score-badge match">${j.candidate_match_score}% Match</span>` : ''}
-        ${j.discovery_score != null ? `<span class="score-badge discovery">${j.discovery_score} Discovery</span>` : ''}
         ${j.role_family && j.role_family !== 'Other' ? `<span class="chip">${escapeHtml(j.role_family)}</span>` : ''}
         ${pm.experienceFit ? `<span class="chip">${escapeHtml(pm.experienceFit)}</span>` : ''}
+        ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
       </div>
-      ${(pm.reasons || []).length ? `<div class="reason-row"><span class="reason-good">Matched:</span> ${escapeHtml((pm.reasons || []).join(' · '))}</div>` : ''}
-      ${(pm.missing || []).length ? `<div class="reason-row"><span class="reason-missing">Potential gaps:</span> ${escapeHtml((pm.missing || []).join(' · '))}</div>` : ''}
       <div class="meta">
         <span class="chip">${escapeHtml(j.location || j.ireland_area || 'Ireland')}</span>
-        <span class="chip">${escapeHtml(j.sector || 'Other')}</span>
-        <span class="chip">${escapeHtml(j.ats || '')}</span>
-        ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
-        ${typeLabel ? `<span class="chip type">${typeLabel}</span>` : ''}
         ${employmentLevelText ? `<span class="chip level-chip">${escapeHtml(employmentLevelText)}</span>` : ''}
-        <span class="chip type">${escapeHtml(employmentTypeLabel(classifyEmploymentType(j)))}</span>
+        ${employmentTypeValues(j).map(value => `<span class="chip type">${escapeHtml(employmentTypeLabel(value))}</span>`).join('')}
       </div>
-      <div class="card-foot">
+      <details class="job-details">
+        <summary>Match details, source & visa</summary>
+        ${(pm.reasons || []).length ? `<div class="reason-row"><span class="reason-good">Matched:</span> ${escapeHtml((pm.reasons || []).join(' · '))}</div>` : ''}
+        ${(pm.missing || []).length ? `<div class="reason-row"><span class="reason-missing">Potential gaps:</span> ${escapeHtml((pm.missing || []).join(' · '))}</div>` : ''}
+        <div class="detail-line">Source: ${escapeHtml(j.ats || 'unknown')} · Sector: ${escapeHtml(j.sector || 'Other')}</div>
         <div class="visa-stack job-card-safe-meta">
           <span class="visa-badge ${badge.cls}" title="${escapeHtml(j.visa_snippet || '')}">${escapeHtml(badge.text)}</span>
           <div class="visa-history">
@@ -1570,14 +1677,27 @@ if (search) {
             ${permitTotal > 0 ? ` · <strong>${permitTotal}</strong> official permits` : ''}
           </div>
         </div>
-        <div class="job-card-safe-actions" style="display:flex;gap:6px;align-items:center;">
+      </details>
+      <div class="card-foot">
+        <div class="job-card-safe-actions">
+          <button type="button" class="state-btn ${applicationState === 'saved' ? 'active' : ''}" data-state="saved">Save</button>
+          <button type="button" class="state-btn ${applicationState === 'applied' ? 'active' : ''}" data-state="applied">Applied</button>
           <button type="button" class="ignore-btn" data-ignore-job="1">Ignore</button>
-          <span class="apply-hint">Open →</span>
+          <button type="button" class="open-job-btn" data-open-job="1">Open role →</button>
         </div>
       </div>
     `;
+    card.querySelectorAll('[data-state]').forEach(button => button.addEventListener('click', e => {
+      e.stopPropagation();
+      setJobState(j, button.dataset.state);
+    }));
     const ignoreButton = card.querySelector('[data-ignore-job]');
     if (ignoreButton) ignoreButton.addEventListener('click', e => { e.stopPropagation(); ignoreJob(j); });
+    const openButton = card.querySelector('[data-open-job]');
+    if (openButton) openButton.addEventListener('click', e => {
+      e.stopPropagation();
+      if (j.url) window.open(j.url, '_blank', 'noopener');
+    });
     grid.appendChild(card);
   });
 
@@ -1609,7 +1729,7 @@ if (search) {
 
   if (profileCountEl) {
     const profileEligibleCount = ALL_JOBS.filter(
-      j => !isIgnored(j) && effectiveMatchScore(j) >= 55
+      j => !isIgnored(j) && isTargetRole(j, profileMode)
     ).length;
 
     profileCountEl.textContent =
@@ -1626,7 +1746,7 @@ if (search) {
   const provenCompanies = getProvenWorkingCompanies();
 
   document.getElementById('tabManual').textContent = `Manual search needed (${manualCompanies.length})`;
-  document.getElementById('tabLiveZero').textContent = `True zero jobs (${trueZeroCompanies.length})`;
+  document.getElementById('tabLiveZero').textContent = `No live jobs (${trueZeroCompanies.length})`;
   document.getElementById('tabZero').textContent = `Needs verification (${zeroCompanies.length})`;
   document.getElementById('tabProvenCompanies').textContent = `Proven working (${provenCompanies.length})`;
 
@@ -1972,47 +2092,18 @@ function getCurrentLiveCompanyNames() {
 }
 
 function getTrueZeroCompanies() {
-  /*
-   * TRUE ZERO is authoritative backend state only.
-   *
-   * Historical ever_working belongs in Proven working and must
-   * never promote configured_zero into this bucket.
-   */
+  // This tab answers the simple current-state question: which configured
+  // employers have no live Ireland jobs in this dataset right now?
   const liveNames = getCurrentLiveCompanyNames();
-
-  const registryByName = new Map(
-    ALL_REGISTRY
-      .filter(c => c && c.company)
-      .map(c => [c.company, c])
-  );
-
-  return ALL_COVERAGE
-    .filter(c =>
-      c &&
-      c.company &&
-      c.state === 'live_zero' &&
-      !liveNames.has(c.company)
-    )
-    .map(c => {
-      const registry =
-        registryByName.get(c.company) || {};
-
-      return {
-        ...registry,
-        ...c,
-        state: 'live_zero',
-        url:
-          c.careers_url ||
-          c.url ||
-          registry.careers_url ||
-          registry.url ||
-          ''
-      };
-    })
-    .sort(
-      (a, b) =>
-        a.company.localeCompare(b.company)
-    );
+  const coverageByName = new Map(ALL_COVERAGE.map(c => [c.company, c]));
+  return ALL_REGISTRY
+    .filter(c => c && c.company && !liveNames.has(c.company))
+    .map(c => ({
+      ...c,
+      ...(coverageByName.get(c.company) || {}),
+      url: c.careers_url || c.url || ''
+    }))
+    .sort((a, b) => a.company.localeCompare(b.company));
 }
 
 function getZeroJobCompanies() {
@@ -2185,7 +2276,7 @@ function renderDiagnostics(search) {
     `${manualVisible} shown · ${manualCompanies.length} total companies require manual careers-page checking because no working automatic connector is currently available.`;
 
   document.getElementById('liveZeroSummary').textContent =
-    `${trueZeroVisible} shown · ${trueZeroCompanies.length} true-zero companies: source is verified/proven working but currently has 0 qualifying Ireland jobs.`;
+    `${trueZeroVisible} shown · ${trueZeroCompanies.length} configured companies currently have no live Ireland jobs in this dataset.`;
 
   document.getElementById('zeroSummary').textContent =
     `${zeroVisible} shown · ${zeroCompanies.length} companies returned 0 qualifying Ireland jobs, but that zero has not yet been independently verified.`;
