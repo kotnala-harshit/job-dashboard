@@ -574,6 +574,8 @@ DIRECT_COMPANY_CONNECTORS = {
     "CGI": "njoyn_official",
     "Dawn Meats": "icims_official",
     "Decathlon Ireland": "successfactors_official",
+    "Alter Domus": "alter_domus_official",
+    "Baxter International": "baxter_official",
 }
 
 # Official Irish university vacancy boards use a shared collector.
@@ -4947,20 +4949,20 @@ def _static_official_jobs(company, url, href_pattern, default_location="Ireland"
             href = urllib.parse.urljoin(url, a.get("href") or "")
             if href_pattern not in href:
                 continue
-            title = re.sub(r"\s+", " ", a.get_text(" ", strip=True)).strip()
+            heading = a.find(["h1", "h2", "h3", "h4"])
+            title = re.sub(
+                r"\s+", " ",
+                (heading or a).get_text(" ", strip=True),
+            ).strip()
             if not title or len(title) < 3:
                 continue
-            node = a
-            card = title
-            for _ in range(5):
-                node = node.parent if getattr(node, "parent", None) else None
-                if not node:
-                    break
-                txt = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
-                if txt and len(txt) <= 3000:
-                    card = txt
+            node = a.find_parent(["li", "article"]) or a
+            card = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
             evidence = f"{title} {card} {href}".lower()
-            if not re.search(r"\b(ireland|dublin|cork|galway|limerick|waterford|athlone)\b", evidence):
+            if not re.search(
+                r"\b(ireland|dublin|cork|galway|limerick|waterford|athlone|navan|sligo|kilkenny)\b",
+                evidence,
+            ):
                 continue
             location = "Dublin, Ireland" if "dublin" in evidence else default_location
             results[href] = {
@@ -4972,6 +4974,22 @@ def _static_official_jobs(company, url, href_pattern, default_location="Ireland"
         _mark_connector_health(company, False, str(exc), url)
         print(f"  ! {company} static scrape failed: {exc}")
     return list(results.values())
+
+
+def scrape_alter_domus_ireland():
+    return _static_official_jobs(
+        "Alter Domus",
+        "https://careers.alterdomus.com/en/search_jobs/Ireland/1298/1",
+        "/en/job/",
+    )
+
+
+def scrape_baxter_ireland():
+    return _static_official_jobs(
+        "Baxter International",
+        "https://jobs.baxter.com/en/location/ireland-jobs/152/2963597/2",
+        "/en/job/",
+    )
 
 
 def scrape_bank_of_america():
@@ -17813,6 +17831,8 @@ def scrape_direct_company(company: str):
     if company in UNIVERSITY_CAREER_PAGES:
         return scrape_university_official(company)
     fn={
+        "Alter Domus": scrape_alter_domus_ireland,
+        "Baxter International": scrape_baxter_ireland,
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
         "Arcadis": scrape_arcadis_ireland,
         "DocuSign": scrape_docusign,
@@ -21099,6 +21119,8 @@ def _working_batch_base_scrape_direct_company(company: str):
     # BEGIN SALE_READY_DIRECT_CONNECTORS
     # Canonical/alias names that must use their verified official collectors.
     _verified_direct_connectors = {
+        'Alter Domus': scrape_alter_domus_ireland,
+        'Baxter International': scrape_baxter_ireland,
         'Iarnród Éireann': scrape_irish_rail,
         'Irish Rail (Iarnród Éireann)': scrape_irish_rail,
         'Irish Life': scrape_irish_life,
