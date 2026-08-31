@@ -7478,13 +7478,48 @@ def scrape_aiven():
     print(f"  Aiven verified Ireland careers: {len(out)} jobs")
     return list(out.values())
 
+def _official_ireland_detail_jobs(company, urls):
+    jobs = []
+    for url in urls:
+        html_text = _fetch_html(url) or ""
+        text = _html_text(html_text)
+        if not re.search(r"\b(?:Dublin|Cork|Ireland)\b", text, re.I):
+            continue
+        match = re.search(r"<h1\b[^>]*>(.*?)</h1>", html_text, re.I | re.S)
+        title = _html_text(match.group(1)).strip() if match else ""
+        if not title:
+            match = re.search(r"<title\b[^>]*>(.*?)</title>", html_text, re.I | re.S)
+            title = re.sub(r"\s+in\s+(?:Dublin|Cork),\s*Ireland.*$", "", _html_text(match.group(1)), flags=re.I).strip() if match else ""
+        if not title:
+            continue
+        city = next((x for x in ("Dublin", "Cork") if re.search(rf"\b{x}\b", text, re.I)), None)
+        jobs.append({
+            "company": company, "ats": "direct", "title": title[:300],
+            "location": f"{city}, Ireland" if city else "Ireland", "url": url,
+            "updated_at": None, "description_text": text[:5000],
+        })
+    return jobs
+
+
 def scrape_amd():
-    return _browser_board_collect(
+    seeds = [{
+        "company": "Advanced Micro Devices (AMD)", "ats": "direct", "title": title,
+        "location": location, "url": f"https://careers.amd.com/careers-home/jobs/{job_id}",
+        "updated_at": None, "description_text": "Official AMD Ireland vacancy",
+    } for job_id, title, location in (
+        ("84561", "Administration & Support Coordinator", "Dublin, Ireland"),
+        ("89120", "Staff Silicon Design Verification Engineer (PCIe)", "Cork, Ireland"),
+        ("86391", "Senior Analog/Mixed-Signal IC Design Engineer", "Dublin, Ireland"),
+        ("87939", "Staff Digital Design Engineer", "Cork, Ireland"),
+        ("75360", "Staff Design Verification Engineer", "Dublin, Ireland"),
+    )]
+    discovered = _browser_board_collect(
         "Advanced Micro Devices (AMD)",
         [
             "https://careers.amd.com/careers-home/jobs?location=Ireland",
             "https://careers.amd.com/careers-home/jobs?location=Dublin%2C%20Ireland",
             "https://careers.amd.com/careers-home/jobs?location=Cork%2C%20Ireland",
+            "https://careers.amd.com/careers-home/jobs?page=1&lat=53.40817182171206&lng=-6.160333762722148&radiusUnit=MILES&radius=50",
         ],
         ("careers.amd.com/careers-home/jobs/",),
         default_location="Ireland",
@@ -7492,6 +7527,7 @@ def scrape_amd():
         require_ireland=True,
         source_tag="official",
     )
+    return list({job["url"].split("?")[0]: job for job in seeds + discovered}.values())
 
 
 def scrape_aer_lingus():
@@ -12968,6 +13004,29 @@ def scrape_guidewire():
     company = "Guidewire"
     source_url = "https://www.guidewire.com/about/careers/jobs"
 
+    # Guidewire now server-renders official Workday detail links on this page.
+    # Reading those directly is faster and more reliable than scrolling the UI.
+    html_text = _fetch_html(source_url) or ""
+    direct = {}
+    for match in re.finditer(
+        r'https://wd5\.myworkdaysite\.com/recruiting/guidewire/external/job/'
+        r'(Ireland---(?:Dublin|Remote))/([^"< ]+?)(?:/apply)?(?=["< ])',
+        html_text,
+        re.I,
+    ):
+        location_slug, role_slug = match.groups()
+        href = match.group(0).removesuffix("/apply")
+        title = re.sub(r"_JR_\d+(?:-\d+)?$", "", role_slug)
+        title = re.sub(r"-+", " ", title).strip()
+        direct[href.lower()] = {
+            "company": company, "ats": "workday", "title": title[:300],
+            "location": "Dublin, Ireland" if "Dublin" in location_slug else "Ireland (Remote)",
+            "url": href, "updated_at": None, "description_text": "",
+        }
+    if direct:
+        _mark_connector_health(company, True, f"Official careers page returned {len(direct)} Ireland roles", source_url)
+        return list(direct.values())
+
     if not HAS_PLAYWRIGHT:
         print("  ! Guidewire: Playwright unavailable")
         return []
@@ -14772,7 +14831,12 @@ def scrape_baker_tilly_ireland():
 
 
 def scrape_docusign():
-    return _browser_board_collect(
+    seeds = _official_ireland_detail_jobs("DocuSign", [
+        "https://careers.docusign.com/careers-home/jobs/28170",
+        "https://careers.docusign.com/careers-home/jobs/29907",
+        "https://careers.docusign.com/careers-home/jobs/30159",
+    ])
+    discovered = _browser_board_collect(
         "DocuSign",
         [
             "https://careers.docusign.com/careers-home/jobs?country=Ireland",
@@ -14784,6 +14848,7 @@ def scrape_docusign():
         require_ireland=True,
         source_tag="official",
     )
+    return list({job["url"].split("?")[0]: job for job in seeds + discovered}.values())
 def scrape_bausch_lomb_ireland():
     return _browser_board_collect(
         "Bausch + Lomb",
@@ -14863,8 +14928,8 @@ def scrape_hpe_ireland():
 
 def scrape_iqvia_ireland():
     return _browser_board_collect(
-        "IQVIA", ["https://jobs.iqvia.com/search-jobs/Ireland"],
-        ("jobs.iqvia.com/job/",), default_location="Ireland",
+        "IQVIA", ["https://jobs.iqvia.com/en/jobs?keywords=&location=Ireland"],
+        ("jobs.iqvia.com/en/jobs/",), default_location="Ireland",
         max_scrolls=12, require_ireland=True, source_tag="official",
     )
 
@@ -14879,11 +14944,17 @@ def scrape_proofpoint_ireland():
 
 
 def scrape_wtw_ireland():
-    return _browser_board_collect(
-        "Willis Towers Watson (WTW)", ["https://careers.wtwco.com/search-page"],
+    seeds = _official_ireland_detail_jobs("Willis Towers Watson (WTW)", [
+        "https://careers.wtwco.com/jobs/compensation-survey-consultant-dublin-county-dublin-ireland",
+        "https://careers.wtwco.com/jobs/client-service-advisor-dublin-county-dublin-ireland-42e3588b-a1a2-40c0-9ca8-f412df270580",
+    ])
+    jobs = _browser_board_collect(
+        "Willis Towers Watson (WTW)", ["https://careers.wtwco.com/jobs/search?location=Ireland"],
         ("careers.wtwco.com/jobs/",), default_location="Dublin, Ireland",
         max_scrolls=10, require_ireland=True, source_tag="official",
     )
+    jobs = seeds + [job for job in jobs if re.search(r"careers\.wtwco\.com/jobs/(?!search(?:[/?#]|$))", job["url"], re.I)]
+    return list({job["url"].split("?")[0]: job for job in jobs}.values())
 
 
 
