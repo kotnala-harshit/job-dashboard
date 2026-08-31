@@ -2346,7 +2346,7 @@ def _jsonld_location(job_location):
 # Dynamic ATS discovery + cached coverage expansion
 # ---------------------------------------------------------------------------
 
-ATS_PROBE_VERSION = 35
+ATS_PROBE_VERSION = 36
 ATS_PROBE_LIMIT = int(os.environ.get("ATS_PROBE_LIMIT", "60"))
 ATS_CACHE_PATH = "ats_platform_cache.json"
 

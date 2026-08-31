@@ -53,8 +53,8 @@
     "probe_version": 35
   },
   "NetApp": {
-    "platform": "none",
-    "slug": null,
+    "platform": "eightfold",
+    "slug": "netapp",
     "probe_version": 35
   },
   "TikTok": {
@@ -165,12 +165,12 @@
   "Astellas Pharma": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
-  "AtkinsR\u00e9alis": {
+  "AtkinsRéalis": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Atlas Copco Ireland": {
     "platform": "ashby",
@@ -190,12 +190,12 @@
   "Avanade": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Aviva Ireland": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Avolon": {
     "platform": "none",
@@ -210,7 +210,7 @@
   "AXA XL": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Bank of America": {
     "platform": "none",
@@ -230,11 +230,11 @@
   "Baxter International": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Bayer": {
-    "platform": "none",
-    "slug": null,
+    "platform": "eightfold",
+    "slug": "bayer",
     "probe_version": 35
   },
   "BDO Ireland": {
@@ -265,27 +265,27 @@
   "BNY": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Boehringer Ingelheim": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
-  "Bord G\u00e1is Energy": {
+  "Bord Gáis Energy": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
-  "Bord na M\u00f3na": {
+  "Bord na Móna": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Bristol Myers Squibb": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Brown Brothers Harriman": {
     "platform": "pinpoint",
@@ -297,10 +297,10 @@
     "slug": "bt",
     "probe_version": 35
   },
-  "Bus \u00c9ireann": {
+  "Bus Éireann": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "ByrneWallace": {
     "platform": "none",
@@ -330,12 +330,12 @@
   "Carne Group": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "CBRE Ireland": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "CDB Aviation": {
     "platform": "none",
@@ -360,17 +360,17 @@
   "Check Point Software": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Chubb": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Citco": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Citrix": {
     "platform": "none",
@@ -385,7 +385,7 @@
   "Clio": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Cloudflare": {
     "platform": "greenhouse",
@@ -395,7 +395,7 @@
   "CluneTech": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Coca-Cola HBC Ireland": {
     "platform": "none",
@@ -428,8 +428,8 @@
     "probe_version": 35
   },
   "Convatec": {
-    "platform": "none",
-    "slug": null,
+    "platform": "phenom",
+    "slug": "careers.convatec.com|CONVGLOBAL",
     "probe_version": 35
   },
   "Cook Medical": {
@@ -440,17 +440,17 @@
   "CRH": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Crusoe": {
     "platform": "ashby",
     "slug": "Crusoe",
     "probe_version": 35
   },
-  "Cubic\u00b3": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+  "Cubic³": {
+    "platform": "ashby",
+    "slug": "cubic3",
+    "probe_version": 36
   },
   "Cushman & Wakefield Ireland": {
     "platform": "none",
@@ -458,11 +458,6 @@
     "probe_version": 35
   },
   "CWSI": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
-  },
-  "daa (Dublin Airport Authority)": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -478,8 +473,8 @@
     "probe_version": 35
   },
   "Danaher Corporation": {
-    "platform": "none",
-    "slug": null,
+    "platform": "phenom",
+    "slug": "jobs.danaher.com|DANAGLOBAL",
     "probe_version": 35
   },
   "Daon": {
@@ -492,11 +487,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Datalex": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
-  },
   "DataStax": {
     "platform": "none",
     "slug": null,
@@ -505,12 +495,12 @@
   "Davy": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "DCC plc": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Dedalus": {
     "platform": "none",
@@ -527,14 +517,9 @@
     "slug": null,
     "probe_version": 35
   },
-  "Dexcom": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
-  },
   "DHL Ireland": {
-    "platform": "none",
-    "slug": null,
+    "platform": "phenom",
+    "slug": "careers.dhl.com|DPDHGLOBAL",
     "probe_version": 35
   },
   "Dillon Eustace": {
@@ -577,11 +562,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Dublin Port Company": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
-  },
   "DXC Technology": {
     "platform": "none",
     "slug": null,
@@ -590,17 +570,17 @@
   "Dynatrace": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Eaton": {
-    "platform": "none",
-    "slug": null,
+    "platform": "eightfold",
+    "slug": "eaton",
     "probe_version": 35
   },
   "eBay": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Edwards Lifesciences": {
     "platform": "none",
@@ -610,22 +590,22 @@
   "Eir": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "EirGrid": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Ekco": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Eli Lilly": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Emerald Airlines": {
     "platform": "none",
@@ -640,17 +620,12 @@
   "Energia Group": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Enterprise Ireland": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Ergo": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Ericsson": {
     "platform": "eightfold",
@@ -663,9 +638,9 @@
     "probe_version": 35
   },
   "ESW": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+    "platform": "greenhouse",
+    "slug": "esw",
+    "probe_version": 36
   },
   "Etsy": {
     "platform": "none",
@@ -690,7 +665,7 @@
   "Expleo": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Exyte": {
     "platform": "none",
@@ -730,7 +705,7 @@
   "Fidelity Investments": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "FINEOS": {
     "platform": "none",
@@ -780,9 +755,9 @@
   "Fujitsu": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
-  "F\u00e1ilte Ireland": {
+  "Fáilte Ireland": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -795,11 +770,11 @@
   "Gas Networks Ireland": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "GE HealthCare": {
-    "platform": "none",
-    "slug": null,
+    "platform": "phenom",
+    "slug": "careers.gehealthcare.com|GEVGHLGLOBAL",
     "probe_version": 35
   },
   "Gemini": {
@@ -812,10 +787,10 @@
     "slug": null,
     "probe_version": 35
   },
-  "Glanbia / Tirl\u00e1n": {
+  "Glanbia / Tirlán": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "GlaxoSmithKline (GSK)": {
     "platform": "none",
@@ -835,12 +810,7 @@
   "Goldman Sachs": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
-  },
-  "Gong": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Goodbody": {
     "platform": "none",
@@ -855,7 +825,7 @@
   "GridBeyond": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Guidewire": {
     "platform": "none",
@@ -875,7 +845,7 @@
   "HCLTech": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Heineken Ireland": {
     "platform": "none",
@@ -975,7 +945,7 @@
   "Integrity360": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Intel": {
     "platform": "none",
@@ -1027,7 +997,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Irish Rail (Iarnr\u00f3d \u00c9ireann)": {
+  "Irish Rail (Iarnród Éireann)": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1180,7 +1150,7 @@
   "McKinsey & Company": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Mediahuis Ireland": {
     "platform": "none",
@@ -1198,13 +1168,13 @@
     "probe_version": 35
   },
   "Medtronic": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+    "platform": "workday",
+    "slug": "medtronic|wd1|MedtronicCareers",
+    "probe_version": 36
   },
   "Merck Group": {
-    "platform": "none",
-    "slug": null,
+    "platform": "phenom",
+    "slug": "jobs.merck.com|MERCUS",
     "probe_version": 35
   },
   "Mercury Engineering": {
@@ -1282,7 +1252,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Nestl\u00e9 Ireland": {
+  "Nestlé Ireland": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1365,7 +1335,7 @@
   "OpenText": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Optum": {
     "platform": "none",
@@ -1380,7 +1350,7 @@
   "Ornua": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "PA Consulting": {
     "platform": "none",
@@ -1448,9 +1418,9 @@
     "probe_version": 35
   },
   "PTSB (Permanent TSB)": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+    "platform": "pinpoint",
+    "slug": "ptsb",
+    "probe_version": 36
   },
   "Public Jobs / Civil Service": {
     "platform": "none",
@@ -1490,7 +1460,7 @@
   "Quest Software": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Qumulo": {
     "platform": "none",
@@ -1557,7 +1527,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "RT\u00c9 (Raidi\u00f3 Teilif\u00eds \u00c9ireann)": {
+  "RTÉ (Raidió Teilifís Éireann)": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1665,7 +1635,7 @@
   "SMBC Aviation Capital": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Smurfit Westrock": {
     "platform": "none",
@@ -1683,9 +1653,9 @@
     "probe_version": 35
   },
   "SolarWinds": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+    "platform": "greenhouse",
+    "slug": "solarwinds",
+    "probe_version": 36
   },
   "Sophos": {
     "platform": "none",
@@ -1723,16 +1693,11 @@
     "probe_version": 35
   },
   "STMicroelectronics": {
-    "platform": "none",
-    "slug": null,
+    "platform": "eightfold",
+    "slug": "stmicroelectronics",
     "probe_version": 35
   },
   "Stripe": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
-  },
-  "Stryker": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1808,9 +1773,9 @@
     "probe_version": 35
   },
   "Teneo Ireland": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+    "platform": "greenhouse",
+    "slug": "teneo",
+    "probe_version": 36
   },
   "Terumo": {
     "platform": "none",
@@ -1820,7 +1785,7 @@
   "Tesco Ireland": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Tetra Tech": {
     "platform": "none",
@@ -1848,8 +1813,8 @@
     "probe_version": 35
   },
   "Thermo Fisher Scientific": {
-    "platform": "none",
-    "slug": null,
+    "platform": "phenom",
+    "slug": "jobs.thermofisher.com|TFSCGLOBAL",
     "probe_version": 35
   },
   "Three Ireland": {
@@ -1917,7 +1882,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Uisce \u00c9ireann (Irish Water)": {
+  "Uisce Éireann (Irish Water)": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1940,7 +1905,7 @@
   "VHI Healthcare": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Viatris": {
     "platform": "none",
@@ -2053,8 +2018,8 @@
     "probe_version": 35
   },
   "Zimmer Biomet": {
-    "platform": "none",
-    "slug": null,
+    "platform": "phenom",
+    "slug": "careers.zimmerbiomet.com|ZBUZBRUS",
     "probe_version": 35
   },
   "Zscaler": {
@@ -2065,7 +2030,7 @@
   "Zurich Insurance": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Accenture": {
     "platform": "workday",
@@ -2115,7 +2080,7 @@
   "ActionPoint": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "AECOM": {
     "platform": "none",
@@ -2130,22 +2095,22 @@
   "AirNav Ireland": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Akamai": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Alkermes": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Alter Domus": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Alvarez & Marsal": {
     "platform": "none",
@@ -2165,12 +2130,12 @@
   "Amundi": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "An Post": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "ARYZTA Ireland": {
     "platform": "none",
@@ -2218,8 +2183,8 @@
     "probe_version": 35
   },
   "Marsh McLennan": {
-    "platform": "none",
-    "slug": null,
+    "platform": "phenom",
+    "slug": "careers.marsh.com|MAMCGLOBAL",
     "probe_version": 35
   },
   "Marvell Technology": {
@@ -2253,13 +2218,8 @@
     "probe_version": 35
   },
   "State Street": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
-  },
-  "Tricentis": {
-    "platform": "none",
-    "slug": null,
+    "platform": "phenom",
+    "slug": "careers.statestreet.com|STSTGLOBAL",
     "probe_version": 35
   },
   "Zendesk": {
@@ -2357,11 +2317,6 @@
     "slug": "johnson",
     "probe_version": 35
   },
-  "Kyndryl": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
-  },
   "Motorola Solutions": {
     "platform": "none",
     "slug": null,
@@ -2420,12 +2375,12 @@
   "Bain & Company": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "Veeam": {
     "platform": "none",
     "slug": null,
-    "probe_version": 35
+    "probe_version": 36
   },
   "CyberArk": {
     "platform": "pinpoint",
@@ -2923,9 +2878,9 @@
     "probe_version": 35
   },
   "CrowdStrike": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+    "platform": "workday",
+    "slug": "crowdstrike|wd5|crowdstrikecareers",
+    "probe_version": 36
   },
   "Cadence Design Systems": {
     "platform": "none",
@@ -2933,9 +2888,9 @@
     "probe_version": 35
   },
   "KLA Corporation": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+    "platform": "workday",
+    "slug": "kla|wd1|Search",
+    "probe_version": 36
   },
   "Circle K Ireland": {
     "platform": "pinpoint",
@@ -3007,5 +2962,5 @@
     "slug": null,
     "probe_version": 35
   },
-  "__probe_version__": 35
+  "__probe_version__": 36
 }
