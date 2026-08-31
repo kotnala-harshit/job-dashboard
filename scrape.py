@@ -19024,40 +19024,38 @@ def main():
             except Exception as e:
                 errors.append(f"phenom/{company}: {e}")
 
-    # Proprietary/direct company search surfaces. DIRECT_COMPANY_CONNECTORS is
-    # the source of truth, so new validated connectors cannot be forgotten here.
-    for company in DIRECT_COMPANY_CONNECTORS:
-        if not _targeted(company):
-            continue
-        try:
-            found = scrape_direct_company(company)
-            results.extend(found)
-            print(f"direct/{company}: {len(found)} Ireland jobs")
-        except Exception as e:
-            errors.append(f"direct/{company}: {e}")
-        time.sleep(0.4)
+    # Browser-heavy proprietary boards belong to the nightly audit. A small
+    # worker pool keeps that audit bounded without overwhelming the runner.
+    if SCRAPE_MODE != "fast":
+        direct_tasks = [
+            ("direct", company, lambda company=company: scrape_direct_company(company))
+            for company in DIRECT_COMPANY_CONNECTORS
+            if _targeted(company)
+        ]
+        _parallel_collect(direct_tasks, results, errors, workers=3)
 
     # Suman-style dynamic ATS discovery for companies not already wired into a
     # known connector. Confirmed mappings persist in ats_platform_cache.json.
     initial_registry = build_company_registry(include_cache=False)
     if TARGET_COMPANIES:
         initial_registry = [x for x in initial_registry if _targeted(x.get("company", ""))]
-    try:
-        dynamic_found, _dynamic_mappings = discover_and_scrape_manual(initial_registry)
-        results.extend(dynamic_found)
-    except Exception as e:
-        errors.append(f"dynamic ATS discovery: {e}")
+    if SCRAPE_MODE != "fast":
+        try:
+            dynamic_found, _dynamic_mappings = discover_and_scrape_manual(initial_registry)
+            results.extend(dynamic_found)
+        except Exception as e:
+            errors.append(f"dynamic ATS discovery: {e}")
 
-    # Universal structured-data fallback over the CURRENT registry. Run concurrently.
-    # FULL still checks every curated careers page each run; FAST checks targets only.
-    jsonld_tasks = []
-    for company, url, _source_type, _category in _load_company_master():
-        if not url or not _targeted(company):
-            continue
-        jsonld_tasks.append(("jsonld", company, lambda company=company,url=url: scrape_jsonld(company, url)))
-    _parallel_collect(jsonld_tasks, results, errors, workers=min(SCRAPE_WORKERS, 20))
+    # The nightly full audit runs the universal structured-data fallback.
+    if SCRAPE_MODE != "fast":
+        jsonld_tasks = []
+        for company, url, _source_type, _category in _load_company_master():
+            if not url or not _targeted(company):
+                continue
+            jsonld_tasks.append(("jsonld", company, lambda company=company,url=url: scrape_jsonld(company, url)))
+        _parallel_collect(jsonld_tasks, results, errors, workers=min(SCRAPE_WORKERS, 20))
 
-    run_broad_aggregators = SCRAPE_MODE != "fast" or not TARGET_COMPANIES
+    run_broad_aggregators = SCRAPE_MODE != "fast"
     for country in (ADZUNA_COUNTRIES if run_broad_aggregators else []):
         for query in DIRECT_QUERIES:
             try:
@@ -19090,7 +19088,7 @@ def main():
             errors.append(f"jooble ({query}): {e}")
         time.sleep(0.3)
 
-    if _targeted("Amazon"):
+    if SCRAPE_MODE != "fast" and _targeted("Amazon"):
         try:
             found = scrape_amazon("")
             results.extend(found)
@@ -19099,7 +19097,7 @@ def main():
             errors.append(f"direct/Amazon: {e}")
         time.sleep(0.5)
 
-    if _targeted("Netflix"):
+    if SCRAPE_MODE != "fast" and _targeted("Netflix"):
         try:
             found = scrape_netflix("")
             results.extend(found)
@@ -19133,6 +19131,17 @@ def main():
     # Adzuna and Careerjet were allowed to introduce adjacent employers that
     # were not present in the master CSV, which caused removed/unwanted
     # companies to leak back into data.json and the HTML company filter.
+    # A fast run updates what it checked and carries the remaining jobs forward;
+    # the nightly full audit remains responsible for removals and closures.
+    if SCRAPE_MODE == "fast":
+        try:
+            with open("data.json", encoding="utf-8") as f:
+                previous_jobs = (json.load(f) or {}).get("jobs", [])
+            results.extend(previous_jobs)
+            print(f"Fast refresh: carried forward {len(previous_jobs)} prior jobs")
+        except (FileNotFoundError, json.JSONDecodeError, TypeError, AttributeError):
+            pass
+
     curated_keys = curated_company_key_set()
 
     filtered_results = []
