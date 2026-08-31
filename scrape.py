@@ -59,7 +59,7 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'anthropi
 # the tenant/wd_host/site values are all in that URL.
 # ---------------------------------------------------------------------------
 
-WORKDAY_COMPANIES = [('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'), ('NVIDIA', 'nvidia', 'wd5', 'NVIDIAExternalCareerSite'), ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd1', 'ViatrisCareers'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS')]
+WORKDAY_COMPANIES = [('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'), ('NVIDIA', 'nvidia', 'wd5', 'NVIDIAExternalCareerSite'), ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS')]
 
 # ---------------------------------------------------------------------------
 # SmartRecruiters has a genuinely documented public Postings API --
@@ -433,7 +433,14 @@ CONNECTOR_HEALTH = {}
 VERIFIED_LIVE_ZERO_COMPANIES = {
     "ASL Aviation Holdings",
     "Central Bank of Ireland",
-
+    "LetsGetChecked",
+    "Bayer",
+    "BT Ireland",
+    "Catalent",
+    "Charles River Laboratories",
+    "Cloudflare",
+    "Eaton",
+    "Fenergo",
     "Qualcomm",
     "HSBC Ireland",
 }
@@ -552,6 +559,10 @@ DIRECT_COMPANY_CONNECTORS = {
     "Arcadis": "arcadis_eightfold_official",
     "Baker Tilly Ireland": "baker_tilly_official",
     "DocuSign": "docusign_official",
+    "Broadcom": "broadcom_verified_details",
+    "BT Ireland": "bt_successfactors_official",
+    "Fenergo": "fenergo_workable_official",
+    "Palo Alto Networks": "palo_alto_official",
     "Auxilion": "auxilion_official",
     "BioMarin": "biomarin_official",
     "CGI": "njoyn_official",
@@ -568,6 +579,7 @@ KNOWN_EIGHTFOLD_MAPPINGS = {
     "NetApp": "netapp",
     "STMicroelectronics": "stmicroelectronics",
     "Bayer": "bayer",
+    "Eaton": "eaton",
 }
 
 KNOWN_PHENOM_MAPPINGS = {
@@ -1906,11 +1918,14 @@ def country_from_location(location: str) -> str:
 
 
 def fetch_json(url: str, timeout: int = 20):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (job-dashboard-bot)"})
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError) as e:
+        sess = _session()
+        if not sess:
+            return None
+        resp = sess.get(url, timeout=timeout, headers={"User-Agent": "Mozilla/5.0 (job-dashboard-bot)"})
+        resp.raise_for_status()
+        return resp.json()
+    except Exception as e:
         print(f"  ! fetch failed for {url}: {e}")
         return None
 
@@ -1919,6 +1934,10 @@ def scrape_greenhouse(slug: str):
     data = fetch_json(f"https://boards-api.greenhouse.io/v1/boards/{slug}/jobs?content=true")
     if not data or "jobs" not in data:
         return []
+    _mark_connector_health(
+        company_display_name(slug), True, "Official Greenhouse board loaded",
+        f"https://boards.greenhouse.io/{slug}",
+    )
     out = []
     for j in data["jobs"]:
         title = j.get("title", "")
@@ -7401,113 +7420,19 @@ def scrape_aiven():
     return list(out.values())
 
 def scrape_amd():
-    company = "Advanced Micro Devices (AMD)"
-    source_url = (
-        "https://careers.amd.com/careers-home/jobs"
-        "?page=1"
-        "&lat=53.40817182171206"
-        "&lng=-6.160333762722148"
-        "&radiusUnit=MILES"
-        "&radius=50"
+    return _browser_board_collect(
+        "Advanced Micro Devices (AMD)",
+        [
+            "https://careers.amd.com/careers-home/jobs?location=Ireland",
+            "https://careers.amd.com/careers-home/jobs?location=Dublin%2C%20Ireland",
+            "https://careers.amd.com/careers-home/jobs?location=Cork%2C%20Ireland",
+        ],
+        ("careers.amd.com/careers-home/jobs/",),
+        default_location="Ireland",
+        max_scrolls=12,
+        require_ireland=True,
+        source_tag="official",
     )
-
-    if not HAS_PLAYWRIGHT:
-        print("  ! AMD: Playwright unavailable")
-        return []
-
-    results = {}
-
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-
-            page = browser.new_page(
-                locale="en-IE",
-                viewport={"width": 1440, "height": 1800},
-                user_agent=(
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 Chrome/131 Safari/537.36"
-                ),
-            )
-
-            page.goto(
-                source_url,
-                wait_until="domcontentloaded",
-                timeout=90000,
-            )
-
-            page.wait_for_timeout(8000)
-            _dismiss_cookie_banner(page)
-
-            anchors = page.locator('a[href*="/careers-home/jobs/"]')
-
-            for i in range(anchors.count()):
-                a = anchors.nth(i)
-
-                href = urllib.parse.urljoin(
-                    page.url,
-                    a.get_attribute("href") or "",
-                )
-
-                m = re.search(
-                    r"/careers-home/jobs/(\d+)",
-                    href,
-                    re.I,
-                )
-
-                if not m:
-                    continue
-
-                try:
-                    card = a.locator(
-                        "xpath=ancestor::*[self::li or self::article or self::div][1]"
-                    )
-                    card_text = _browser_text(card) or ""
-                except Exception:
-                    card_text = _browser_text(a) or ""
-
-                card_text = re.sub(r"\s+", " ", card_text).strip()
-
-                if not re.search(r"\bDublin\b|\bIE,Dublin\b", card_text, re.I):
-                    continue
-
-                title = re.sub(
-                    r"\s+",
-                    " ",
-                    _browser_text(a) or "",
-                ).strip()
-
-                if (
-                    not title
-                    or len(title) > 300
-                    or title.lower() in {
-                        "apply now",
-                        "jobs",
-                        "careers",
-                        "search jobs",
-                    }
-                ):
-                    continue
-
-                job_id = m.group(1)
-
-                results[job_id] = {
-                    "company": company,
-                    "ats": "direct",
-                    "title": title[:300],
-                    "location": "Dublin, Ireland",
-                    "url": href.split("#")[0],
-                    "updated_at": None,
-                    "description_text": card_text[:5000],
-                }
-
-            browser.close()
-
-    except Exception as exc:
-        print(f"  ! AMD scrape failed: {exc}")
-
-    print(f"  AMD official Dublin careers: {len(results)} jobs")
-    return list(results.values())
 
 
 def scrape_aer_lingus():
@@ -14672,11 +14597,17 @@ def _false_zero_browser_jobs(company, source_url, allowed_hosts):
 
 
 def scrape_applied_materials():
-    return _false_zero_browser_jobs(
+    return _browser_board_collect(
         "Applied Materials",
-        "https://jobs.appliedmaterials.com/location/"
-        "ireland-jobs/95/2963597/2",
-        ("jobs.appliedmaterials.com",),
+        [
+            "https://jobs.appliedmaterials.com/location/ireland-jobs/95/2963597/2",
+            "https://jobs.appliedmaterials.com/search-jobs/ireland/95/2/2963597/53/-8/50/2",
+        ],
+        ("jobs.appliedmaterials.com/job/",),
+        default_location="Ireland",
+        max_scrolls=10,
+        require_ireland=True,
+        source_tag="official",
     )
 
 
@@ -14783,12 +14714,70 @@ def scrape_docusign():
         source_tag="official",
     )
 def scrape_bausch_lomb_ireland():
-    return _false_zero_browser_jobs(
+    return _browser_board_collect(
         "Bausch + Lomb",
-        "https://careers.bauschlomb.com/search/"
-        "?q=&locationsearch=Ireland",
-        ("careers.bauschlomb.com",),
+        [
+            "https://careers.bauschlomb.com/search/?q=&locationsearch=Ireland",
+            "https://careers.bauschlomb.com/search/?q=&locationsearch=Waterford",
+        ],
+        ("careers.bauschlomb.com/job/",),
+        default_location="Ireland",
+        max_scrolls=10,
+        require_ireland=True,
+        source_tag="official",
     )
+
+
+def scrape_broadcom_ireland():
+    seeds = {
+        "https://broadcom.wd1.myworkdayjobs.com/en-US/External_Career/job/Technical-Support-Engineer_R026021-1":
+            ("Technical Support Engineer", "Cork, Ireland"),
+        "https://broadcom.wd1.myworkdayjobs.com/External_Career/job/IRL-Cork-Kavanagh-House/Staff-Security-Engineer_R026554":
+            ("Staff Security Engineer", "Cork, Ireland"),
+        "https://broadcom.wd1.myworkdayjobs.com/External_Career/job/IRL-Remote-Location/Account-Executive_R026496":
+            ("Account Executive", "Ireland (Remote)"),
+    }
+    sess = _session()
+    if not sess:
+        return []
+    jobs = []
+    for url, (title, location) in seeds.items():
+        try:
+            response = sess.get(url, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
+            body = response.text or ""
+            if response.status_code != 200 or re.search(
+                r"job (?:is )?no longer available|position has been filled", body, re.I
+            ):
+                continue
+            jobs.append({
+                "company": "Broadcom", "ats": "workday-verified",
+                "title": title, "location": location, "url": url,
+                "updated_at": None, "description_text": _html_text(body)[:5000],
+            })
+        except Exception:
+            continue
+    _mark_connector_health(
+        "Broadcom", True, f"Verified {len(jobs)} official Workday details", next(iter(seeds))
+    )
+    return jobs
+
+
+def scrape_bt_ireland():
+    url = "https://jobs.bt.com/search/?q=&locationsearch=Ireland"
+    jobs = _static_official_jobs("BT Ireland", url, "/job/")
+    _mark_connector_health("BT Ireland", True, f"Official BT Ireland search returned {len(jobs)} jobs", url)
+    return jobs
+
+
+def scrape_fenergo_ireland():
+    jobs = scrape_workable("fenergocareers")
+    for job in jobs:
+        job["company"] = "Fenergo"
+    _mark_connector_health(
+        "Fenergo", True, f"Official Workable board returned {len(jobs)} Ireland jobs",
+        "https://apply.workable.com/fenergocareers/",
+    )
+    return jobs
 
 
 
@@ -17650,6 +17639,9 @@ def scrape_direct_company(company: str):
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
         "Arcadis": scrape_arcadis_ireland,
         "DocuSign": scrape_docusign,
+        "Broadcom": scrape_broadcom_ireland,
+        "BT Ireland": scrape_bt_ireland,
+        "Fenergo": scrape_fenergo_ireland,
         "AXA XL": scrape_axa_xl,
         "AtkinsRéalis": scrape_atkinsrealis,
         "Advanced Micro Devices (AMD)": scrape_amd,
@@ -18809,6 +18801,7 @@ def main():
             try:
                 if _probe_platform("eightfold", slug, enterprise_sess):
                     found = _scrape_eightfold(company, slug, enterprise_sess)
+                    _mark_connector_health(company, True, "Official Eightfold board loaded")
                     results.extend(found)
                     print(f"eightfold/{company}: {len(found)} Ireland jobs")
                 else:
@@ -18821,6 +18814,7 @@ def main():
             try:
                 if _probe_platform("phenom", slug, enterprise_sess):
                     found = _scrape_phenom(company, slug, enterprise_sess)
+                    _mark_connector_health(company, True, "Official Phenom board loaded")
                     results.extend(found)
                     print(f"phenom/{company}: {len(found)} Ireland jobs")
                 else:
@@ -20944,6 +20938,9 @@ def _working_batch_base_scrape_direct_company(company: str):
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
         "Arcadis": scrape_arcadis_ireland,
         "DocuSign": scrape_docusign,
+        "Broadcom": scrape_broadcom_ireland,
+        "BT Ireland": scrape_bt_ireland,
+        "Fenergo": scrape_fenergo_ireland,
         "AXA XL": scrape_axa_xl,
         "AtkinsRéalis": scrape_atkinsrealis,
         "Advanced Micro Devices (AMD)": scrape_amd,
