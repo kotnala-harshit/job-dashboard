@@ -52,11 +52,6 @@
     "slug": "meta",
     "probe_version": 35
   },
-  "NetApp": {
-    "platform": "eightfold",
-    "slug": "netapp",
-    "probe_version": 35
-  },
   "TikTok": {
     "platform": "none",
     "slug": null,
@@ -167,7 +162,7 @@
     "slug": null,
     "probe_version": 36
   },
-  "AtkinsRéalis": {
+  "AtkinsR\u00e9alis": {
     "platform": "none",
     "slug": null,
     "probe_version": 36
@@ -272,12 +267,12 @@
     "slug": null,
     "probe_version": 36
   },
-  "Bord Gáis Energy": {
+  "Bord G\u00e1is Energy": {
     "platform": "none",
     "slug": null,
     "probe_version": 36
   },
-  "Bord na Móna": {
+  "Bord na M\u00f3na": {
     "platform": "none",
     "slug": null,
     "probe_version": 36
@@ -297,7 +292,7 @@
     "slug": "bt",
     "probe_version": 35
   },
-  "Bus Éireann": {
+  "Bus \u00c9ireann": {
     "platform": "none",
     "slug": null,
     "probe_version": 36
@@ -447,7 +442,7 @@
     "slug": "Crusoe",
     "probe_version": 35
   },
-  "Cubic³": {
+  "Cubic\u00b3": {
     "platform": "ashby",
     "slug": "cubic3",
     "probe_version": 36
@@ -757,7 +752,7 @@
     "slug": null,
     "probe_version": 36
   },
-  "Fáilte Ireland": {
+  "F\u00e1ilte Ireland": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -787,7 +782,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Glanbia / Tirlán": {
+  "Glanbia / Tirl\u00e1n": {
     "platform": "none",
     "slug": null,
     "probe_version": 36
@@ -997,7 +992,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Irish Rail (Iarnród Éireann)": {
+  "Irish Rail (Iarnr\u00f3d \u00c9ireann)": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1252,7 +1247,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Nestlé Ireland": {
+  "Nestl\u00e9 Ireland": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1527,7 +1522,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "RTÉ (Raidió Teilifís Éireann)": {
+  "RT\u00c9 (Raidi\u00f3 Teilif\u00eds \u00c9ireann)": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -1882,7 +1877,7 @@
     "slug": null,
     "probe_version": 35
   },
-  "Uisce Éireann (Irish Water)": {
+  "Uisce \u00c9ireann (Irish Water)": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
@@ -2360,11 +2355,6 @@
   "C&C Group": {
     "platform": "greenhouse",
     "slug": "cc",
-    "probe_version": 35
-  },
-  "Databricks": {
-    "platform": "greenhouse",
-    "slug": "databricks",
     "probe_version": 35
   },
   "Bloomberg": {
@@ -2961,6 +2951,61 @@
     "platform": "none",
     "slug": null,
     "probe_version": 35
+  },
+  "Databricks": {
+    "platform": "greenhouse",
+    "slug": "databricks",
+    "probe_version": 36
+  },
+  "Kyndryl": {
+    "platform": "workday",
+    "slug": "kyndryl|wd5|KyndrylEarlyCareers",
+    "probe_version": 36
+  },
+  "Tricentis": {
+    "platform": "workday",
+    "slug": "tricentis|wd1|Tricentis_Careers",
+    "probe_version": 36
+  },
+  "daa (Dublin Airport Authority)": {
+    "platform": "personio",
+    "slug": "daa",
+    "probe_version": 36
+  },
+  "Datalex": {
+    "platform": "personio",
+    "slug": "datalex",
+    "probe_version": 36
+  },
+  "Dexcom": {
+    "platform": "eightfold",
+    "slug": "dexcom",
+    "probe_version": 36
+  },
+  "Dublin Port Company": {
+    "platform": "greenhouse",
+    "slug": "dublin",
+    "probe_version": 36
+  },
+  "Enterprise Ireland": {
+    "platform": "recruitee",
+    "slug": "enterprise",
+    "probe_version": 36
+  },
+  "NetApp": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 36
+  },
+  "Stryker": {
+    "platform": "eightfold",
+    "slug": "stryker",
+    "probe_version": 36
+  },
+  "Gong": {
+    "platform": "recruitee",
+    "slug": "gong",
+    "probe_version": 36
   },
   "__probe_version__": 36
 }
