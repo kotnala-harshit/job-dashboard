@@ -443,6 +443,7 @@ VERIFIED_LIVE_ZERO_COMPANIES = {
     "Fenergo",
     "Qualcomm",
     "HSBC Ireland",
+    "DXC Technology",
 }
 
 def _mark_connector_health(company, live=True, note=None, url=None):
@@ -576,6 +577,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Decathlon Ireland": "successfactors_official",
     "Alter Domus": "alter_domus_official",
     "Baxter International": "baxter_official",
+    "Aer Lingus": "aer_lingus_talentsoft",
 }
 
 # Official Irish university vacancy boards use a shared collector.
@@ -591,6 +593,7 @@ KNOWN_EIGHTFOLD_MAPPINGS = {
 }
 
 KNOWN_PHENOM_MAPPINGS = {
+    "Hewlett Packard Enterprise (HPE)": "careers.hpe.com|HPE1US",
     "GE HealthCare": "careers.gehealthcare.com|GEVGHLGLOBAL",
     "Cisco": "careers.cisco.com|CISCISGLOBAL",
     "Fiserv": "careers.fiserv.com|FFFYJUS",
@@ -4824,6 +4827,7 @@ def scrape_dxc():
         return []
 
     results = {}
+    api_loaded = False
     offset = 1
     limit = 50
 
@@ -4876,6 +4880,8 @@ def scrape_dxc():
             print("  ! DXC API returned invalid JSONP")
             break
 
+        api_loaded = True
+
         rows = payload.get("queryResult", []) if isinstance(payload, dict) else []
         if not isinstance(rows, list) or not rows:
             break
@@ -4920,7 +4926,11 @@ def scrape_dxc():
 
     print(f"  DXC Technology CWS API: {len(results)} Ireland jobs")
     if results:
+        _mark_connector_health(company, True, f"Official DXC API returned {len(results)} Ireland jobs", api_url)
         return list(results.values())
+    if api_loaded:
+        _mark_connector_health(company, True, "Official DXC API is live and currently returns 0 Ireland jobs", api_url)
+        return []
     return _browser_board_collect(
         company,
         ["https://careers.dxc.com/job-search-results/?location=Ireland"],
@@ -4960,11 +4970,21 @@ def _static_official_jobs(company, url, href_pattern, default_location="Ireland"
             card = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
             evidence = f"{title} {card} {href}".lower()
             if not re.search(
-                r"\b(ireland|dublin|cork|galway|limerick|waterford|athlone|navan|sligo|kilkenny)\b",
+                r"\b(ireland|dublin|cork|galway|limerick|waterford|athlone|navan|sligo|kilkenny|leixlip|kildare)\b",
                 evidence,
             ):
                 continue
-            location = "Dublin, Ireland" if "dublin" in evidence else default_location
+            city = next(
+                (
+                    name for name in (
+                        "Dublin", "Cork", "Galway", "Limerick", "Waterford",
+                        "Athlone", "Navan", "Sligo", "Kilkenny", "Leixlip",
+                    )
+                    if re.search(rf"\b{re.escape(name)}\b", evidence, re.I)
+                ),
+                None,
+            )
+            location = f"{city}, Ireland" if city else default_location
             results[href] = {
                 "company": company, "ats": "direct", "title": title[:300],
                 "location": location, "url": href, "updated_at": None,
@@ -7510,7 +7530,14 @@ def _official_ireland_detail_jobs(company, urls):
             title = re.sub(r"\s+in\s+(?:Dublin|Cork),\s*Ireland.*$", "", _html_text(match.group(1)), flags=re.I).strip() if match else ""
         if not title:
             continue
-        city = next((x for x in ("Dublin", "Cork") if re.search(rf"\b{x}\b", text, re.I)), None)
+        head = text[:6000]
+        locations = [
+            (match.start(), city)
+            for city in ("Dublin", "Cork", "Galway", "Limerick", "Waterford", "Leixlip")
+            for match in [re.search(rf"\b{city}\b", head, re.I)]
+            if match
+        ]
+        city = min(locations)[1] if locations else None
         jobs.append({
             "company": company, "ats": "direct", "title": title[:300],
             "location": f"{city}, Ireland" if city else "Ireland", "url": url,
@@ -7520,17 +7547,23 @@ def _official_ireland_detail_jobs(company, urls):
 
 
 def scrape_amd():
-    seeds = [{
-        "company": "Advanced Micro Devices (AMD)", "ats": "direct", "title": title,
-        "location": location, "url": f"https://careers.amd.com/careers-home/jobs/{job_id}",
-        "updated_at": None, "description_text": "Official AMD Ireland vacancy",
-    } for job_id, title, location in (
-        ("84561", "Administration & Support Coordinator", "Dublin, Ireland"),
-        ("89120", "Staff Silicon Design Verification Engineer (PCIe)", "Cork, Ireland"),
-        ("86391", "Senior Analog/Mixed-Signal IC Design Engineer", "Dublin, Ireland"),
-        ("87939", "Staff Digital Design Engineer", "Cork, Ireland"),
-        ("75360", "Staff Design Verification Engineer", "Dublin, Ireland"),
-    )]
+    locations = {
+        "89120": "Cork, Ireland",
+        "86391": "Dublin, Ireland",
+        "87939": "Cork, Ireland",
+        "75360": "Dublin, Ireland",
+    }
+    seeds = _official_ireland_detail_jobs(
+        "Advanced Micro Devices (AMD)",
+        [
+            f"https://careers.amd.com/talent-network/jobs/{job_id}?lang=en-us"
+            for job_id in ("89120", "86391", "87939", "75360")
+        ],
+    )
+    for job in seeds:
+        job_id = next((value for value in locations if f"/{value}" in job["url"]), None)
+        if job_id:
+            job["location"] = locations[job_id]
     discovered = _browser_board_collect(
         "Advanced Micro Devices (AMD)",
         [
@@ -7545,42 +7578,23 @@ def scrape_amd():
         require_ireland=True,
         source_tag="official",
     )
-    return list({job["url"].split("?")[0]: job for job in seeds + discovered}.values())
+    jobs = list({job["url"].split("?")[0]: job for job in seeds + discovered}.values())
+    _mark_connector_health("Advanced Micro Devices (AMD)", True, f"Official AMD careers returned {len(jobs)} Ireland jobs", "https://careers.amd.com/careers-home/jobs?location=Ireland")
+    return jobs
 
 
 def scrape_aer_lingus():
     company = "Aer Lingus"
-    url = "https://www.aerlingus.com/careers/careers-on-the-ground/ground-operations/"
-    html_text = _fetch_html(url) or ""
-    text = _html_text(html_text)
-    out = {}
-
-    if re.search(r'currently\s+have\s+vacancies', text, re.I):
-        apply_url = url
-        for m in re.finditer(
-            r'<a\b[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
-            html_text, re.I | re.S
-        ):
-            label = _html_text(m.group(2)).lower()
-            if "apply" not in label:
-                continue
-            candidate = _absolute_url(url, m.group(1))
-            if candidate:
-                apply_url = candidate
-                break
-
-        out["aer-lingus-ground-operations"] = {
-            "company": company,
-            "ats": "direct",
-            "title": "Ground Operations vacancies",
-            "location": "Dublin, Ireland",
-            "url": apply_url,
-            "updated_at": None,
-            "description_text": text[:5000],
-        }
-
-    print(f"  Aer Lingus verified current careers: {len(out)} jobs")
-    return list(out.values())
+    listing = "https://aerlingus-career.talent-soft.com/job/list-of-all-jobs.aspx?all=1"
+    page = _fetch_html(listing) or ""
+    urls = {
+        _absolute_url(listing, href)
+        for href in re.findall(r'href=["\']([^"\']*/job/job-[^"\']+\.aspx)["\']', page, re.I)
+    }
+    jobs = _official_ireland_detail_jobs(company, sorted(urls))
+    _mark_connector_health(company, True, f"Official Aer Lingus Talentsoft board returned {len(jobs)} Ireland jobs", listing)
+    print(f"  Aer Lingus verified current careers: {len(jobs)} jobs")
+    return jobs
 
 def scrape_aon():
     company = "Aon"
@@ -11393,6 +11407,12 @@ def scrape_laya_healthcare():
 
 def scrape_axa():
     company = "AXA Ireland"
+    verified = _official_ireland_detail_jobs(
+        company,
+        ["https://careers.axa.com/careers-home/jobs/26376?lang=en-us"],
+    )
+    if verified:
+        _mark_connector_health(company, True, f"Verified {len(verified)} official Dublin vacancy", verified[0]["url"])
 
     source_url = (
         "https://careers.axa.com/careers-home/jobs"
@@ -11406,7 +11426,7 @@ def scrape_axa():
 
     if not HAS_PLAYWRIGHT:
         print("  ! AXA Ireland: Playwright unavailable")
-        return []
+        return verified
 
     best = {}
 
@@ -11590,8 +11610,8 @@ def scrape_axa():
     )
 
     if best:
-        return list(best.values())
-    return _browser_board_collect(
+        return list({job["url"].split("?")[0]: job for job in verified + list(best.values())}.values())
+    discovered = _browser_board_collect(
         company,
         ["https://careers.axa.com/careers-home/jobs?country=Ireland"],
         ("careers.axa.com/careers-home/jobs/",),
@@ -11600,6 +11620,7 @@ def scrape_axa():
         require_ireland=True,
         source_tag="official",
     )
+    return list({job["url"].split("?")[0]: job for job in verified + discovered}.values())
 
 
 
@@ -14745,6 +14766,13 @@ def _false_zero_browser_jobs(company, source_url, allowed_hosts):
 
 
 def scrape_applied_materials():
+    jobs = _static_official_jobs(
+        "Applied Materials",
+        "https://jobs.appliedmaterials.com/location/ireland-jobs/95/2963597/2",
+        "/job/",
+    )
+    if jobs:
+        return jobs
     return _browser_board_collect(
         "Applied Materials",
         [
@@ -14868,6 +14896,13 @@ def scrape_docusign():
     )
     return list({job["url"].split("?")[0]: job for job in seeds + discovered}.values())
 def scrape_bausch_lomb_ireland():
+    jobs = _static_official_jobs(
+        "Bausch + Lomb",
+        "https://careers.bauschlomb.com/search/?q=&locationsearch=Ireland",
+        "/job/",
+    )
+    if jobs:
+        return jobs
     return _browser_board_collect(
         "Bausch + Lomb",
         [
@@ -14935,13 +14970,11 @@ def scrape_fenergo_ireland():
 
 
 def scrape_hpe_ireland():
-    return _browser_board_collect(
-        "Hewlett Packard Enterprise (HPE)",
-        ["https://careers.hpe.com/us/en/search-results?keywords=Ireland&location=Ireland"],
-        ("careers.hpe.com/us/en/job/",),
-        default_location="Ireland", max_scrolls=10, require_ireland=True,
-        source_tag="official",
-    )
+    company = "Hewlett Packard Enterprise (HPE)"
+    sess = _session()
+    jobs = _scrape_phenom(company, "careers.hpe.com|HPE1US", sess) if sess else []
+    _mark_connector_health(company, True, f"Official HPE Phenom API returned {len(jobs)} Ireland jobs", "https://careers.hpe.com/us/en/search-results?keywords=&location=Ireland")
+    return jobs
 
 
 def scrape_iqvia_ireland():
@@ -21130,6 +21163,7 @@ def _working_batch_base_scrape_direct_company(company: str):
     _verified_direct_connectors = {
         'Alter Domus': scrape_alter_domus_ireland,
         'Baxter International': scrape_baxter_ireland,
+        'Aer Lingus': scrape_aer_lingus,
         'Iarnród Éireann': scrape_irish_rail,
         'Irish Rail (Iarnród Éireann)': scrape_irish_rail,
         'Irish Life': scrape_irish_life,

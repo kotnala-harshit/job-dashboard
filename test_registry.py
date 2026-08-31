@@ -3,13 +3,27 @@ import unittest
 
 from unittest.mock import patch
 
-from scrape import _parse_yello_jobs, scrape_grant_thornton
+from scrape import (
+    DIRECT_COMPANY_CONNECTORS,
+    KNOWN_PHENOM_MAPPINGS,
+    VERIFIED_LIVE_ZERO_COMPANIES,
+    _parse_yello_jobs,
+    scrape_grant_thornton,
+)
 
 
 REGISTRY_PATH = "ireland_job_radar_HARSHIT_MASTER.csv"
 
 
 class RegistryTests(unittest.TestCase):
+    def test_repaired_official_company_mappings_are_registered(self):
+        self.assertEqual("aer_lingus_talentsoft", DIRECT_COMPANY_CONNECTORS["Aer Lingus"])
+        self.assertEqual(
+            "careers.hpe.com|HPE1US",
+            KNOWN_PHENOM_MAPPINGS["Hewlett Packard Enterprise (HPE)"],
+        )
+        self.assertIn("DXC Technology", VERIFIED_LIVE_ZERO_COMPANIES)
+
     @patch("scrape._scrape_grant_thornton_board")
     def test_grant_thornton_scans_experienced_and_graduate_boards(self, collect):
         collect.side_effect = lambda url: [{"url": url}]
