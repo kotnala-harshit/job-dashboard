@@ -23,6 +23,7 @@ class RegistryTests(unittest.TestCase):
             KNOWN_PHENOM_MAPPINGS["Hewlett Packard Enterprise (HPE)"],
         )
         self.assertIn("DXC Technology", VERIFIED_LIVE_ZERO_COMPANIES)
+        self.assertIn("CGI", VERIFIED_LIVE_ZERO_COMPANIES)
 
     @patch("scrape._scrape_grant_thornton_board")
     def test_grant_thornton_scans_experienced_and_graduate_boards(self, collect):

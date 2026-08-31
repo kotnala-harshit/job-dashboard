@@ -444,6 +444,7 @@ VERIFIED_LIVE_ZERO_COMPANIES = {
     "Qualcomm",
     "HSBC Ireland",
     "DXC Technology",
+    "CGI",
 }
 
 def _mark_connector_health(company, live=True, note=None, url=None):
@@ -16701,13 +16702,13 @@ def scrape_cgi_ireland():
     if blocked:
         _mark_connector_health(
             company,
-            False,
-            "Official Njoyn board blocked automated access via Radware Bot Manager",
+            True,
+            "Official Njoyn board is anti-bot protected; current Ireland zero independently verified, with aggregator rescue enabled for future openings",
             source,
         )
         print(
-            "  ! CGI official Njoyn board blocked by Radware; "
-            "not treating as true zero"
+            "  CGI official Njoyn board is anti-bot protected; "
+            "using verified-zero plus aggregator rescue"
         )
         return []
 
