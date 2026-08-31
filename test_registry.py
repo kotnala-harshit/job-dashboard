@@ -20,11 +20,17 @@ class RegistryTests(unittest.TestCase):
         expected = {
             "ActionPoint", "Teneo Ireland", "Aer Lingus", "Ornua",
             "Expleo", "Eir", "Dublin Port Company",
+            "Hewlett Packard Enterprise (HPE)", "IQVIA", "Proofpoint",
+            "Willis Towers Watson (WTW)", "BNY", "Goldman Sachs",
+            "Guidewire", "Figma",
         }
         excluded = {
             "ABP Food Group", "Circle K Ireland", "Dawn Meats",
             "Decathlon Ireland", "Harvey Nash Ireland", "JD Sports Ireland",
             "Primark / Penneys",
+            "LetsGetChecked", "Bayer", "Brown Brothers Harriman",
+            "BT Ireland", "CACEIS", "Catalent",
+            "Charles River Laboratories", "Eaton",
         }
         self.assertTrue(expected <= active)
         self.assertFalse(excluded & active)

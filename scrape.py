@@ -563,6 +563,11 @@ DIRECT_COMPANY_CONNECTORS = {
     "BT Ireland": "bt_successfactors_official",
     "Fenergo": "fenergo_workable_official",
     "Palo Alto Networks": "palo_alto_official",
+    "Guidewire": "guidewire_official",
+    "Hewlett Packard Enterprise (HPE)": "hpe_official",
+    "IQVIA": "iqvia_official",
+    "Proofpoint": "proofpoint_workday",
+    "Willis Towers Watson (WTW)": "wtw_official",
     "Auxilion": "auxilion_official",
     "BioMarin": "biomarin_official",
     "CGI": "njoyn_official",
@@ -14780,6 +14785,41 @@ def scrape_fenergo_ireland():
     return jobs
 
 
+def scrape_hpe_ireland():
+    return _browser_board_collect(
+        "Hewlett Packard Enterprise (HPE)",
+        ["https://careers.hpe.com/us/en/search-results?keywords=Ireland&location=Ireland"],
+        ("careers.hpe.com/us/en/job/",),
+        default_location="Ireland", max_scrolls=10, require_ireland=True,
+        source_tag="official",
+    )
+
+
+def scrape_iqvia_ireland():
+    return _browser_board_collect(
+        "IQVIA", ["https://jobs.iqvia.com/search-jobs/Ireland"],
+        ("jobs.iqvia.com/job/",), default_location="Ireland",
+        max_scrolls=12, require_ireland=True, source_tag="official",
+    )
+
+
+def scrape_proofpoint_ireland():
+    jobs = scrape_workday("Proofpoint", "proofpoint", "wd5", "ProofpointCareers")
+    _mark_connector_health(
+        "Proofpoint", True, f"Official Workday board returned {len(jobs)} Ireland jobs",
+        "https://proofpoint.wd5.myworkdayjobs.com/ProofpointCareers",
+    )
+    return jobs
+
+
+def scrape_wtw_ireland():
+    return _browser_board_collect(
+        "Willis Towers Watson (WTW)", ["https://careers.wtwco.com/search-page"],
+        ("careers.wtwco.com/jobs/",), default_location="Dublin, Ireland",
+        max_scrolls=10, require_ireland=True, source_tag="official",
+    )
+
+
 
 
 def scrape_bnp_paribas_ireland():
@@ -17642,6 +17682,10 @@ def scrape_direct_company(company: str):
         "Broadcom": scrape_broadcom_ireland,
         "BT Ireland": scrape_bt_ireland,
         "Fenergo": scrape_fenergo_ireland,
+        "Hewlett Packard Enterprise (HPE)": scrape_hpe_ireland,
+        "IQVIA": scrape_iqvia_ireland,
+        "Proofpoint": scrape_proofpoint_ireland,
+        "Willis Towers Watson (WTW)": scrape_wtw_ireland,
         "AXA XL": scrape_axa_xl,
         "AtkinsRéalis": scrape_atkinsrealis,
         "Advanced Micro Devices (AMD)": scrape_amd,
@@ -20941,6 +20985,10 @@ def _working_batch_base_scrape_direct_company(company: str):
         "Broadcom": scrape_broadcom_ireland,
         "BT Ireland": scrape_bt_ireland,
         "Fenergo": scrape_fenergo_ireland,
+        "Hewlett Packard Enterprise (HPE)": scrape_hpe_ireland,
+        "IQVIA": scrape_iqvia_ireland,
+        "Proofpoint": scrape_proofpoint_ireland,
+        "Willis Towers Watson (WTW)": scrape_wtw_ireland,
         "AXA XL": scrape_axa_xl,
         "AtkinsRéalis": scrape_atkinsrealis,
         "Advanced Micro Devices (AMD)": scrape_amd,
