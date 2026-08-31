@@ -622,6 +622,7 @@ TITLE_KEYWORDS = [
     # so genuinely part-time or intern postings get caught even when the
     # title doesn't literally say "retail" or "customer service".
     "intern", "internship", "working student", "student job", "placement",
+    "graduate", "graduate programme", "graduate program", "trainee",
     "part time", "part-time", "sales assistant", "stock assistant",
     "seasonal", "temporary staff", "christmas temp", "weekend staff",
 ]
@@ -4185,6 +4186,52 @@ def _scrape_ey_playwright():
     return list(results.values())
 
 
+def _parse_yello_jobs(company, fragment):
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(fragment, "html.parser")
+    jobs = {}
+    for anchor in soup.select('a[href*="/jobs/"]'):
+        title = re.sub(r"\s+", " ", anchor.get_text(" ", strip=True)).strip()
+        href = urllib.parse.urljoin("https://eyglobal.yello.co", anchor.get("href") or "")
+        if not title or not href:
+            continue
+        card = anchor.find_parent("li")
+        card_text = re.sub(r"\s+", " ", card.get_text(" ", strip=True)).strip() if card else title
+        jobs[href] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": "Ireland",
+            "url": href,
+            "updated_at": None,
+            "description_text": card_text[:5000],
+        }
+    return list(jobs.values())
+
+
+def _scrape_yello_ireland(company, board_id):
+    """Collect Republic-of-Ireland early-career roles from a public Yello board."""
+    sess = _session()
+    if not sess:
+        return []
+    base = f"https://eyglobal.yello.co/job_boards/{board_id}"
+    try:
+        response = sess.get(
+            f"{base}/search",
+            params={"query": "", "filters": "30012"},
+            headers={"User-Agent": "Mozilla/5.0", "X-Requested-With": "XMLHttpRequest"},
+            timeout=30,
+        )
+        response.raise_for_status()
+        jobs = _parse_yello_jobs(company, (response.json() or {}).get("html") or "")
+    except Exception as exc:
+        print(f"  ! {company} Yello Ireland search failed: {exc}")
+        return []
+    _mark_connector_health(company, True, f"Official Yello Ireland board returned {len(jobs)} early-career roles", base)
+    print(f"  {company} Yello Ireland early careers: {len(jobs)} jobs")
+    return jobs
+
+
 def _scrape_kpmg_playwright():
     """KPMG Ireland: Avature browser collector adapted from Suman's working pipeline."""
     if not HAS_PLAYWRIGHT:
@@ -4248,7 +4295,9 @@ def _scrape_kpmg_playwright():
 
 
 def scrape_ey():
-    return _scrape_ey_playwright()
+    jobs = _scrape_ey_playwright()
+    jobs.extend(_scrape_yello_ireland("EY Ireland", "c1riT--B2O-KySgYWsZO1Q"))
+    return jobs
 
 
 def scrape_kpmg():

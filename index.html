@@ -1085,10 +1085,10 @@ function isTargetRole(job, mode = selectedProfileMode()) {
   if (mode === 'early') {
     return PROFILE_RULES.early.test(title) &&
       (PROFILE_RULES.technical.test(title) || PROFILE_RULES.business.test(title) ||
-       /\b(technology|analytics|data|business|operations|supply chain|engineering graduate|risk|consulting)\b/i.test(title));
+       /\b(technology|analytics|data|business|operations|supply chain|engineering graduate|risk|consulting|assurance|audit|tax|actuarial|finance|accounting)\b/i.test(title));
   }
   return PROFILE_RULES.technical.test(title) || PROFILE_RULES.business.test(title) ||
-    (PROFILE_RULES.early.test(title) && /\b(technology|analytics|data|business|operations|supply chain|risk|consulting)\b/i.test(title));
+    (PROFILE_RULES.early.test(title) && /\b(technology|analytics|data|business|operations|supply chain|risk|consulting|assurance|audit|tax|actuarial|finance|accounting)\b/i.test(title));
 }
 
 function companyInitials(name) {

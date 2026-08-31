@@ -1,11 +1,23 @@
 import csv
 import unittest
 
+from scrape import _parse_yello_jobs
+
 
 REGISTRY_PATH = "ireland_job_radar_HARSHIT_MASTER.csv"
 
 
 class RegistryTests(unittest.TestCase):
+    def test_yello_graduate_parser_keeps_job_identity(self):
+        jobs = _parse_yello_jobs(
+            "EY Ireland",
+            '<li><a href="/jobs/abc?job_board_id=board">AI &amp; Data Graduate Programme 2027</a></li>',
+        )
+        self.assertEqual(1, len(jobs))
+        self.assertEqual("AI & Data Graduate Programme 2027", jobs[0]["title"])
+        self.assertEqual("Ireland", jobs[0]["location"])
+        self.assertIn("/jobs/abc", jobs[0]["url"])
+
     def test_active_registry_is_unique_and_profile_focused(self):
         with open(REGISTRY_PATH, newline="", encoding="utf-8-sig") as handle:
             rows = list(csv.DictReader(handle))
