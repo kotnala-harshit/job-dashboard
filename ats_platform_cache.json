@@ -2267,11 +2267,6 @@
     "slug": "zendesk",
     "probe_version": 35
   },
-  "CitySwift": {
-    "platform": "greenhouse",
-    "slug": "cityswift",
-    "probe_version": 35
-  },
   "Red Hat": {
     "platform": "none",
     "slug": null,
@@ -2995,6 +2990,16 @@
   "Primark / Penneys": {
     "platform": "smartrecruiters",
     "slug": "external-referrals",
+    "probe_version": 35
+  },
+  "CitySwift": {
+    "platform": "greenhouse",
+    "slug": "cityswift",
+    "probe_version": 35
+  },
+  "Figma": {
+    "platform": "greenhouse",
+    "slug": "figma",
     "probe_version": 35
   },
   "__probe_version__": 35
