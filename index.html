@@ -848,7 +848,8 @@ body{background:#f3f4f6!important}
     <div class="loadctrl">
       <span id="liveStatus" class="live-dot">● live</span>
       <button id="searchEnterBtn" type="button" onclick="applyFilters()">Search / Enter</button>
-      <button id="refreshNowBtn" type="button" onclick="autoFetchJobs()">Refresh now</button>
+      <button id="refreshNowBtn" type="button" onclick="autoFetchJobs()"
+              title="Reload the latest completed collection from GitHub Pages">Reload latest data</button>
     </div>
   </div>
 </div>
@@ -1173,9 +1174,23 @@ function loadData(data) {
   CONNECTOR_HEALTH = data.connector_health || {};
   RAW_TOTAL = jobs.length;
 
-  document.getElementById('genTime').textContent = data.generated_at
-    ? ('Last updated: ' + new Date(data.generated_at).toLocaleString())
-    : '';
+  const generatedAt = data.generated_at ? new Date(data.generated_at) : null;
+  const generatedTime = document.getElementById('genTime');
+  if (generatedAt && !Number.isNaN(generatedAt.getTime())) {
+    const ageMinutes = Math.max(0, Math.floor((Date.now() - generatedAt.getTime()) / 60000));
+    const ageLabel = ageMinutes < 60
+      ? `${ageMinutes}m ago`
+      : `${Math.floor(ageMinutes / 60)}h ${ageMinutes % 60}m ago`;
+    const dublinTime = new Intl.DateTimeFormat('en-IE', {
+      dateStyle: 'short',
+      timeStyle: 'medium',
+      timeZone: 'Europe/Dublin'
+    }).format(generatedAt);
+    generatedTime.textContent = `Job data refreshed: ${dublinTime} Dublin time · ${ageLabel}`;
+    generatedTime.title = 'This is when the latest job collection completed, not when the website code was deployed.';
+  } else {
+    generatedTime.textContent = '';
+  }
   document.getElementById('stLive').textContent = ALL_JOBS.length;
   document.getElementById('stCompanies').textContent = data.total_companies_checked ?? '—';
   const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
