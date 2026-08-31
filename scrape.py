@@ -491,6 +491,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Vodafone": "vodafone_successfactors",
     "Wipro": "wipro_successfactors",
     "Grant Thornton Ireland": "grant_thornton_oracle",
+    "RSM Ireland": "rsm_candidate_manager",
     "KPMG Ireland": "kpmg_avature",
     "Deutsche Bank": "deutsche_bank_workday",
     "DXC Technology": "dxc_cws_api",
@@ -6415,12 +6416,8 @@ def scrape_nvidia():
 
 
 
-def scrape_grant_thornton():
+def _scrape_grant_thornton_board(source_url):
     company = "Grant Thornton Ireland"
-    source_url = (
-        "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/"
-        "GrantThorntonIrelandExperiencedHires/jobs"
-    )
 
     if not HAS_PLAYWRIGHT:
         print("  ! Grant Thornton Ireland: Playwright unavailable")
@@ -6535,6 +6532,14 @@ def scrape_grant_thornton():
 
     print(f"  Grant Thornton Ireland Oracle /jobs: {len(results)} Ireland jobs")
     return list(results.values())
+
+
+def scrape_grant_thornton():
+    base = "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/"
+    jobs = []
+    for site in ("GrantThorntonIrelandExperiencedHires", "GrantThorntonIrelandGraduateProgramme"):
+        jobs.extend(_scrape_grant_thornton_board(f"{base}{site}/jobs"))
+    return list({job["url"]: job for job in jobs}.values())
 
 def scrape_microsoft():
     return _browser_board_collect(
@@ -8651,13 +8656,11 @@ def scrape_infosys():
     return list(results.values())
 
 
-def scrape_tcs():
-    company = "Tata Consultancy Services (TCS)"
-    source_url = "https://www.candidatemanager.net/cm/p/pJobs.aspx?mid=CXAZAZB&sid=YYAZD"
+def _scrape_candidate_manager(company, source_url):
 
     sess = _session()
     if not sess:
-        print("  ! TCS: HTTP session unavailable")
+        print(f"  ! {company}: HTTP session unavailable")
         return []
 
     try:
@@ -8670,11 +8673,11 @@ def scrape_tcs():
             },
         )
     except Exception as exc:
-        print(f"  ! TCS Candidate Manager request failed: {exc}")
+        print(f"  ! {company} Candidate Manager request failed: {exc}")
         return []
 
     if r.status_code != 200:
-        print(f"  ! TCS Candidate Manager HTTP {r.status_code}")
+        print(f"  ! {company} Candidate Manager HTTP {r.status_code}")
         return []
 
     html_text = r.text or ""
@@ -8725,8 +8728,22 @@ def scrape_tcs():
             "description_text": row_text[:5000],
         }
 
-    print(f"  TCS Candidate Manager: {len(results)} Ireland jobs")
+    print(f"  {company} Candidate Manager: {len(results)} Ireland jobs")
     return list(results.values())
+
+
+def scrape_tcs():
+    return _scrape_candidate_manager(
+        "Tata Consultancy Services (TCS)",
+        "https://www.candidatemanager.net/cm/p/pJobs.aspx?mid=CXAZAZB&sid=YYAZD",
+    )
+
+
+def scrape_rsm():
+    return _scrape_candidate_manager(
+        "RSM Ireland",
+        "https://www.candidatemanager.net/cm/p/pJobs.aspx?mid=YGTFD&sid=YBFD",
+    )
 
 
 def scrape_dell():
@@ -17822,6 +17839,7 @@ def scrape_direct_company(company: str):
         "EXL": scrape_exl,
         "Dell Technologies": scrape_dell,
         "Tata Consultancy Services (TCS)": scrape_tcs,
+        "RSM Ireland": scrape_rsm,
         "Infosys": scrape_infosys,
         "Wells Fargo": scrape_wells_fargo,
         "Vodafone": scrape_vodafone,
@@ -21125,6 +21143,7 @@ def _working_batch_base_scrape_direct_company(company: str):
         "EXL": scrape_exl,
         "Dell Technologies": scrape_dell,
         "Tata Consultancy Services (TCS)": scrape_tcs,
+        "RSM Ireland": scrape_rsm,
         "Infosys": scrape_infosys,
         "Wells Fargo": scrape_wells_fargo,
         "Vodafone": scrape_vodafone,
