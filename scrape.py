@@ -494,6 +494,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Vodafone": "vodafone_successfactors",
     "Wipro": "wipro_successfactors",
     "Grant Thornton Ireland": "grant_thornton_oracle",
+    "Three Ireland": "three_official",
     "RSM Ireland": "rsm_candidate_manager",
     "KPMG Ireland": "kpmg_avature",
     "Deutsche Bank": "deutsche_bank_workday",
@@ -19065,6 +19066,9 @@ GRADIRELAND_COMPANY_NAMES = {
     "Allianz": "Allianz Ireland",
     "BDO Ireland": "BDO Ireland",
     "Grant Thornton": "Grant Thornton Ireland",
+    "Kingspan": "Kingspan Group",
+    "Three Ireland": "Three Ireland",
+    "Uisce Éireann": "Uisce Éireann (Irish Water)",
     "publicjobs": "Public Jobs / Civil Service",
 }
 

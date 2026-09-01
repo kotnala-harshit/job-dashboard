@@ -96,7 +96,7 @@ class RegistryTests(unittest.TestCase):
             for row in rows
             if row["include_in_scrape_registry"].lower() == "true"
         }
-        self.assertEqual(263, len(active))
+        self.assertEqual(266, len(active))
 
         expected = {
             "ActionPoint", "Teneo Ireland", "Aer Lingus", "Ornua",
@@ -105,6 +105,7 @@ class RegistryTests(unittest.TestCase):
             "Willis Towers Watson (WTW)", "BNY", "Goldman Sachs",
             "Guidewire", "Figma",
             "RSM Ireland",
+            "Kingspan Group", "Three Ireland", "Uisce Éireann (Irish Water)",
         }
         excluded = {
             "ABP Food Group", "Circle K Ireland", "Dawn Meats",
