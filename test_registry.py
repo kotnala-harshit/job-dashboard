@@ -6,6 +6,8 @@ from unittest.mock import patch
 from scrape import (
     DIRECT_COMPANY_CONNECTORS,
     KNOWN_PHENOM_MAPPINGS,
+    KNOWN_EIGHTFOLD_MAPPINGS,
+    REJECTED_DYNAMIC_MAPPINGS,
     WORKDAY_COMPANIES,
     VERIFIED_LIVE_ZERO_COMPANIES,
     _parse_yello_jobs,
@@ -44,6 +46,15 @@ class RegistryTests(unittest.TestCase):
         self.assertIn(
             ("Bristol Myers Squibb", "bristolmyerssquibb", "wd5", "BMS"),
             WORKDAY_COMPANIES,
+        )
+        self.assertIn(("Stryker", "stryker", "wd1", "StrykerCareers"), WORKDAY_COMPANIES)
+        self.assertEqual(
+            "careers.dexcom.com|dexcom.com",
+            KNOWN_EIGHTFOLD_MAPPINGS["Dexcom"],
+        )
+        self.assertIn(
+            ("Enterprise Ireland", "recruitee", "enterprise"),
+            REJECTED_DYNAMIC_MAPPINGS,
         )
 
     @patch("scrape._scrape_grant_thornton_board")

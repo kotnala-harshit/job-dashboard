@@ -60,6 +60,7 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'anthropi
 # ---------------------------------------------------------------------------
 
 WORKDAY_COMPANIES = [('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'), ('NVIDIA', 'nvidia', 'wd5', 'NVIDIAExternalCareerSite'), ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS')]
+WORKDAY_COMPANIES.append(('Stryker', 'stryker', 'wd1', 'StrykerCareers'))
 
 # ---------------------------------------------------------------------------
 # SmartRecruiters has a genuinely documented public Postings API --
@@ -599,6 +600,7 @@ DIRECT_COMPANY_CONNECTORS.update({name: "university_official" for name in UNIVER
 # Exact enterprise-platform mappings learned from validated public career-site
 # hosts. Unlike guessed ATS slugs, these are revalidated at runtime before use.
 KNOWN_EIGHTFOLD_MAPPINGS = {
+    "Dexcom": "careers.dexcom.com|dexcom.com",
     "NetApp": "netapp",
     "STMicroelectronics": "stmicroelectronics",
     "Bayer": "bayer",
@@ -2374,6 +2376,14 @@ ATS_PROBE_VERSION = 36
 ATS_PROBE_LIMIT = int(os.environ.get("ATS_PROBE_LIMIT", "60"))
 ATS_CACHE_PATH = "ats_platform_cache.json"
 
+REJECTED_DYNAMIC_MAPPINGS = {
+    ("daa (Dublin Airport Authority)", "personio", "daa"),
+    ("Datalex", "personio", "datalex"),
+    ("Dublin Port Company", "greenhouse", "dublin"),
+    ("Enterprise Ireland", "recruitee", "enterprise"),
+    ("Gong", "recruitee", "gong"),
+}
+
 _CORP_WORDS = re.compile(r"\b(?:limited|ltd|plc|inc|incorporated|corporation|corp|company|group|holdings|ireland|international)\b", re.I)
 _EF_GROUP_ID_RE = re.compile(r'_EF_GROUP_ID[\'\"]?\]?\s*[=:]\s*[\'\"]([^\'\"]+)[\'\"]')
 _PHENOM_REFNUM_RE = re.compile(r'"refNum"\s*:\s*"([A-Za-z0-9_-]+)"')
@@ -2544,8 +2554,12 @@ def _probe_platform(platform: str, slug: str, sess, allow_empty: bool = False) -
             d=r.json()
             return isinstance(d, (list, dict))
         if platform == "eightfold":
-            r=sess.get(f"https://{slug}.eightfold.ai/careers", timeout=10)
+            host, domain = (slug.split("|", 1) if "|" in slug else (f"{slug}.eightfold.ai", None))
+            r=sess.get(f"https://{host}/careers", timeout=10)
             if r.status_code != 200: return False
+            if domain:
+                rr=sess.get(f"https://{host}/api/pcsx/search", params={"domain":domain,"query":"","location":"Ireland","start":0}, timeout=10)
+                return rr.status_code == 200 and isinstance(rr.json(), dict)
             m=_EF_GROUP_ID_RE.search(r.text)
             if not m: return False
             rr=sess.get(f"https://{slug}.eightfold.ai/api/pcsx/search", params={"domain":m.group(1),"query":"","location":"","start":0}, timeout=10)
@@ -2564,15 +2578,18 @@ def _probe_platform(platform: str, slug: str, sess, allow_empty: bool = False) -
 def _scrape_eightfold(company: str, slug: str, sess):
     out=[]
     try:
-        page=sess.get(f"https://{slug}.eightfold.ai/careers",timeout=10)
-        m=_EF_GROUP_ID_RE.search(page.text)
-        if not m: return out
+        host, domain = (slug.split("|", 1) if "|" in slug else (f"{slug}.eightfold.ai", None))
+        if not domain:
+            page=sess.get(f"https://{host}/careers",timeout=10)
+            m=_EF_GROUP_ID_RE.search(page.text)
+            if not m: return out
+            domain=m.group(1)
         start=0
         seen_ids=set()
         for _ in range(20):
-            r=sess.get(f"https://{slug}.eightfold.ai/api/pcsx/search",params={"domain":m.group(1),"query":"","location":"","start":start},timeout=15)
+            r=sess.get(f"https://{host}/api/pcsx/search",params={"domain":domain,"query":"","location":"Ireland","start":start},timeout=15)
             if r.status_code!=200: break
-            d=r.json(); jobs=d.get("positions") or d.get("results") or []
+            d=r.json(); payload=d.get("data") or d; jobs=payload.get("positions") or payload.get("results") or []
             if not jobs: break
             new=0
             for j in jobs:
@@ -2628,7 +2645,7 @@ def _scrape_cached_mapping(company: str, platform: str, slug: str, sess):
             if not slug or slug.count("|") != 2:
                 return []
             tenant, wd_host, site = slug.split("|", 2)
-            jobs = scrape_workday(company, tenant, wd_host, site)
+            jobs = scrape_workday(company, tenant, wd_host, site, search_text="Ireland")
         elif platform == "greenhouse": jobs=scrape_greenhouse(slug)
         elif platform == "lever": jobs=scrape_lever(slug)
         elif platform == "smartrecruiters": jobs=scrape_smartrecruiters(slug)
@@ -2676,9 +2693,9 @@ def discover_and_scrape_manual(company_registry):
 
     # Seed exact enterprise mappings, but still validate each endpoint before use.
     for company, slug in KNOWN_EIGHTFOLD_MAPPINGS.items():
-        cache.setdefault(company, {"platform": "eightfold", "slug": slug})
+        cache[company] = {"platform": "eightfold", "slug": slug}
     for company, slug in KNOWN_PHENOM_MAPPINGS.items():
-        cache.setdefault(company, {"platform": "phenom", "slug": slug})
+        cache[company] = {"platform": "phenom", "slug": slug}
 
     dynamic_jobs=[]; confirmed={}; fresh=0
     platforms=("workday","greenhouse","lever","smartrecruiters","ashby","workable","recruitee","personio","pinpoint","eightfold")
@@ -2688,6 +2705,10 @@ def discover_and_scrape_manual(company_registry):
         info=cache.get(company) if isinstance(cache.get(company),dict) else None
         platform=info.get("platform") if info else None
         slug=info.get("slug") if info else None
+
+        if (company, platform, slug) in REJECTED_DYNAMIC_MAPPINGS:
+            cache.pop(company, None)
+            platform = slug = None
 
         if platform and platform != "none":
             # Never trust a stale/guessed cache entry without validating its endpoint.
@@ -2705,7 +2726,11 @@ def discover_and_scrape_manual(company_registry):
             for plat, cand in _careers_page_ats_candidates(
                 company, entry.get("careers_url") or "", sess
             ):
-                if plat in platforms and _probe_platform(plat, cand, sess, allow_empty=True):
+                if (
+                    (company, plat, cand) not in REJECTED_DYNAMIC_MAPPINGS
+                    and plat in platforms
+                    and _probe_platform(plat, cand, sess, allow_empty=True)
+                ):
                     platform, slug = plat, cand
                     break
 
@@ -2718,7 +2743,10 @@ def discover_and_scrape_manual(company_registry):
                 )
                 for cand in candidate_slugs(company):
                     for plat in guess_platforms:
-                        if _probe_platform(plat,cand,sess):
+                        if (
+                            (company, plat, cand) not in REJECTED_DYNAMIC_MAPPINGS
+                            and _probe_platform(plat,cand,sess)
+                        ):
                             platform,slug=plat,cand
                             break
                     if platform:
@@ -12429,7 +12457,7 @@ def scrape_axa_xl():
 
 def scrape_atkinsrealis():
     company = "AtkinsRéalis"
-    source_url = "https://careers.atkinsrealis.com/en"
+    source_url = "https://careers.atkinsrealis.com/en/jobs?location=Ireland"
 
     if not HAS_PLAYWRIGHT:
         print("  ! AtkinsRéalis: Playwright unavailable")
