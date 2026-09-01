@@ -2883,11 +2883,6 @@
     "slug": "bearingpoint",
     "probe_version": 35
   },
-  "Kitman Labs": {
-    "platform": "lever",
-    "slug": "kitmanlabs",
-    "probe_version": 35
-  },
   "Concentrix (Ireland)": {
     "platform": "workday",
     "slug": "cnx|wd1|external_global",
@@ -2985,6 +2980,11 @@
   "Asana": {
     "platform": "greenhouse",
     "slug": "asana",
+    "probe_version": 36
+  },
+  "Kitman Labs": {
+    "platform": "lever",
+    "slug": "kitmanlabs",
     "probe_version": 36
   },
   "NetApp": {
