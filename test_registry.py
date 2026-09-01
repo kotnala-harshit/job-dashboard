@@ -9,12 +9,14 @@ from scrape import (
     KNOWN_PHENOM_MAPPINGS,
     KNOWN_EIGHTFOLD_MAPPINGS,
     REJECTED_DYNAMIC_MAPPINGS,
+    WORKABLE_COMPANIES,
     WORKDAY_COMPANIES,
     VERIFIED_LIVE_ZERO_COMPANIES,
     _parse_yello_jobs,
     _parse_gradireland_listing,
     _scrape_public_careers_page,
     scrape_grant_thornton,
+    scrape_workable,
 )
 
 
@@ -64,6 +66,18 @@ class RegistryTests(unittest.TestCase):
             ("Enterprise Ireland", "recruitee", "enterprise"),
             REJECTED_DYNAMIC_MAPPINGS,
         )
+        self.assertIn("davy", WORKABLE_COMPANIES)
+
+    @patch("scrape.fetch_json")
+    def test_davy_workable_jobs_default_to_ireland(self, fetch):
+        fetch.return_value = {
+            "jobs": [{
+                "title": "Investment Analyst",
+                "location": {},
+                "url": "https://apply.workable.com/davy/j/example/",
+            }]
+        }
+        self.assertEqual("Ireland", scrape_workable("davy")[0]["location"])
 
     @patch("scrape._scrape_grant_thornton_board")
     def test_grant_thornton_scans_experienced_and_graduate_boards(self, collect):

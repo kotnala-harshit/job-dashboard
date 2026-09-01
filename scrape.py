@@ -100,7 +100,7 @@ SMARTRECRUITERS_PUBLIC_IDS = {
 # ---------------------------------------------------------------------------
 
 WORKABLE_COMPANIES = [
-    # https://apply.workable.com/api/v1/widget/accounts/{slug} -- add slugs here
+    "davy",
 ]
 
 RECRUITEE_COMPANIES = [
@@ -2261,6 +2261,8 @@ def scrape_workable(slug: str):
         loc_str = ", ".join(filter(None, [
             location.get("city"), location.get("region"), location.get("country"),
         ]))
+        if not loc_str and slug == "davy":
+            loc_str = "Ireland"
         if location.get("telecommuting"):
             loc_str = f"{loc_str} (Remote)".strip(", ")
         if region_ok(loc_str):
