@@ -1,17 +1,4 @@
 {
-  "Stripe": {
-    "matched_employer_names": [
-      "ST Ireland Limited",
-      "Stripe Payments Europe Limited",
-      "Stripe Technology Company Limited",
-      "Stripe Technology Europe Limited"
-    ],
-    "permits_by_year": {
-      "2024": 35,
-      "2026": 10
-    },
-    "total_permits": 45
-  },
   "Accenture": {
     "matched_employer_names": [
       "Accenture Global Solutions Limited",
@@ -22,1622 +9,6 @@
       "2026": 20
     },
     "total_permits": 259
-  },
-  "Google": {
-    "matched_employer_names": [
-      "Google Cloud EMEA Limited",
-      "Google Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 426,
-      "2026": 38
-    },
-    "total_permits": 464
-  },
-  "Microsoft": {
-    "matched_employer_names": [
-      "Microsoft Ireland Operations Limited",
-      "Microsoft Ireland Research Unlimited Company",
-      "Microsoft RL Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 214,
-      "2026": 13
-    },
-    "total_permits": 227
-  },
-  "Apple": {
-    "matched_employer_names": [
-      "Apple Distribution International Limited",
-      "Apple Operations Europe",
-      "Apple Operations International Limited",
-      "Apple Operations Limited",
-      "Appleby Jewellers Ltd",
-      "Applefield Limited",
-      "Applewood Homecare Limited",
-      "Applewood Homecare Ltd",
-      "Chapple Catering Limited",
-      "Little Apples Academy"
-    ],
-    "permits_by_year": {
-      "2024": 131,
-      "2026": 15
-    },
-    "total_permits": 146
-  },
-  "Meta": {
-    "matched_employer_names": [
-      "Ardagh Metal Packaging Holdings Sarl",
-      "Flynn Metal Recycling Limited",
-      "Fort Wayne Metals (Ireland) Ltd",
-      "Heraeus Metal Processing Limited",
-      "KEM Sheetsteel + Metal Fabrication Limited",
-      "Meta Platforms Ireland Limited",
-      "Metaltech Engineering Ltd",
-      "Metalworks Fabrication Limited",
-      "United Metals Recycling Ireland Limited",
-      "Wilton Scrap Metals Limited"
-    ],
-    "permits_by_year": {
-      "2024": 113,
-      "2026": 15
-    },
-    "total_permits": 128
-  },
-  "Amazon": {
-    "matched_employer_names": [
-      "Amazon Data Services Ireland Limited",
-      "Amazon Data Services Ireland Ltd",
-      "Amazon Development Centre Ireland Limited",
-      "Amazon EU Sarl, Irish Branch",
-      "Amazon Ireland Support Services Limited",
-      "Amazon Ireland Support Services Ltd",
-      "Amazon Web Services EMEA SARL"
-    ],
-    "permits_by_year": {
-      "2024": 929,
-      "2026": 35
-    },
-    "total_permits": 964
-  },
-  "Salesforce": {
-    "matched_employer_names": [
-      "Dynamic Sales Force Limited"
-    ],
-    "permits_by_year": {
-      "2026": 1
-    },
-    "total_permits": 1
-  },
-  "HubSpot": {
-    "matched_employer_names": [
-      "HubSpot Ireland Limited",
-      "Hubspot Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 24,
-      "2026": 1
-    },
-    "total_permits": 25
-  },
-  "LinkedIn": {
-    "matched_employer_names": [
-      "LinkedIn Ireland Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 16,
-      "2026": 1
-    },
-    "total_permits": 17
-  },
-  "TikTok": {
-    "matched_employer_names": [
-      "TikTok Technology Limited"
-    ],
-    "permits_by_year": {
-      "2024": 144,
-      "2026": 5
-    },
-    "total_permits": 149
-  },
-  "Intel": {
-    "matched_employer_names": [
-      "Arka Intellect Limited",
-      "Cosmo Artificial Intelligence - AI Limited",
-      "Eaton Intelligent Power Limited",
-      "Intel Ireland Limited",
-      "Intel Ireland Ltd",
-      "Intel Research and Development Ireland Limited",
-      "IntelliNest Limited",
-      "Intelligent Informations Systems Ltd",
-      "Intelliware Solutions Limited",
-      "Intellync Technology Limited",
-      "KARE, Promoting Inclusion For People with Intellectual  Disabilities CLG",
-      "Skout Secure Intelligence EMEA Limited",
-      "Sonra Intelligence Limited",
-      "Studio Intelligence Limited"
-    ],
-    "permits_by_year": {
-      "2024": 351,
-      "2026": 24
-    },
-    "total_permits": 375
-  },
-  "Hewlett Packard Enterprise (HPE)": {
-    "matched_employer_names": [
-      "Hewlett Packard Enterprise Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "IBM": {
-    "matched_employer_names": [
-      "IBM (Ireland) Limited",
-      "IBM Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 6,
-      "2026": 1
-    },
-    "total_permits": 7
-  },
-  "Oracle": {
-    "matched_employer_names": [
-      "Oracle Cerner Ireland Limited",
-      "Oracle EMEA Limited",
-      "Oracle Emea Ltd",
-      "Oracle Financial Services Software B.V"
-    ],
-    "permits_by_year": {
-      "2024": 8,
-      "2026": 3
-    },
-    "total_permits": 11
-  },
-  "Cisco": {
-    "matched_employer_names": [
-      "Cisco Limited",
-      "Cisco Systems Internetworking (Ireland) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4,
-      "2026": 2
-    },
-    "total_permits": 6
-  },
-  "SAP": {
-    "matched_employer_names": [
-      "SAP Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2026": 3
-    },
-    "total_permits": 3
-  },
-  "Workday": {
-    "matched_employer_names": [
-      "Workday Limited"
-    ],
-    "permits_by_year": {
-      "2024": 113,
-      "2026": 5
-    },
-    "total_permits": 118
-  },
-  "VMware (Broadcom)": {
-    "matched_employer_names": [
-      "VMware International Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 9
-    },
-    "total_permits": 9
-  },
-  "Intercom": {
-    "matched_employer_names": [
-      "Carrier Intercompany Lending DAC",
-      "Intercom R&D Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 18,
-      "2026": 1
-    },
-    "total_permits": 19
-  },
-  "Toast": {
-    "matched_employer_names": [
-      "ST Ireland Limited",
-      "Toasttab Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4,
-      "2026": 3
-    },
-    "total_permits": 7
-  },
-  "Zendesk": {
-    "matched_employer_names": [
-      "Zendesk International Limited"
-    ],
-    "permits_by_year": {
-      "2026": 1
-    },
-    "total_permits": 1
-  },
-  "Genesys": {
-    "matched_employer_names": [
-      "Genesys Cloud Services Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 6
-    },
-    "total_permits": 6
-  },
-  "MongoDB": {
-    "matched_employer_names": [
-      "MongoDB Limited"
-    ],
-    "permits_by_year": {
-      "2024": 21,
-      "2026": 4
-    },
-    "total_permits": 25
-  },
-  "ServiceNow": {
-    "matched_employer_names": [
-      "ServiceNow Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 42,
-      "2026": 2
-    },
-    "total_permits": 44
-  },
-  "DocuSign": {
-    "matched_employer_names": [
-      "DOC (PLAN BUILD FINISH) LTD.",
-      "DocuSign International (EMEA) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 3
-    },
-    "total_permits": 6
-  },
-  "Twilio": {
-    "matched_employer_names": [
-      "Twilio Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 7,
-      "2026": 1
-    },
-    "total_permits": 8
-  },
-  "NetApp": {
-    "matched_employer_names": [
-      "NetApp Ireland Limited",
-      "NetApp Ireland Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 18,
-      "2026": 2
-    },
-    "total_permits": 20
-  },
-  "Fiserv": {
-    "matched_employer_names": [
-      "Fiserv Solutions (Europe) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 23,
-      "2026": 2
-    },
-    "total_permits": 25
-  },
-  "Mastercard": {
-    "matched_employer_names": [
-      "MasterCard Ireland Limited",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 126,
-      "2026": 9
-    },
-    "total_permits": 135
-  },
-  "Visa": {
-    "matched_employer_names": [
-      "Align Invisalign IE Limited",
-      "Blue Poppy Visage Limited",
-      "Visametric Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2026": 3
-    },
-    "total_permits": 3
-  },
-  "PayPal": {
-    "matched_employer_names": [
-      "PayPal Europe Services Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 4
-    },
-    "total_permits": 7
-  },
-  "Adobe": {
-    "matched_employer_names": [
-      "Adobe Systems Software Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2,
-      "2026": 1
-    },
-    "total_permits": 3
-  },
-  "Autodesk": {
-    "matched_employer_names": [
-      "Autodesk Ireland Operations Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 10
-    },
-    "total_permits": 10
-  },
-  "Arista Networks": {
-    "matched_employer_names": [
-      "Arista Networks Limited",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 9,
-      "2026": 1
-    },
-    "total_permits": 10
-  },
-  "Cadence Design Systems": {
-    "matched_employer_names": [
-      "Cadence Design Systems (Ireland) Limited",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 34,
-      "2026": 1
-    },
-    "total_permits": 35
-  },
-  "Synopsys": {
-    "matched_employer_names": [
-      "Synopsys International Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 17,
-      "2026": 1
-    },
-    "total_permits": 18
-  },
-  "Analog Devices": {
-    "matched_employer_names": [
-      "Analog Devices International Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 45,
-      "2026": 6
-    },
-    "total_permits": 51
-  },
-  "Microchip Technology": {
-    "matched_employer_names": [
-      "Microchip Technology Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 6,
-      "2026": 1
-    },
-    "total_permits": 7
-  },
-  "Logitech": {
-    "matched_employer_names": [
-      "Logitech Ireland Services Limited"
-    ],
-    "permits_by_year": {
-      "2024": 15,
-      "2026": 1
-    },
-    "total_permits": 16
-  },
-  "Ericsson": {
-    "matched_employer_names": [
-      "L.M. Ericsson Limited",
-      "LM Ericsson Limited"
-    ],
-    "permits_by_year": {
-      "2024": 48,
-      "2026": 3
-    },
-    "total_permits": 51
-  },
-  "Pinterest": {
-    "matched_employer_names": [
-      "Pinterest Europe Limited",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 11,
-      "2026": 1
-    },
-    "total_permits": 12
-  },
-  "Reddit": {
-    "matched_employer_names": [
-      "Reddit Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Etsy": {
-    "matched_employer_names": [
-      "All Net Systems Limited",
-      "Etsy Ireland Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 2
-    },
-    "total_permits": 5
-  },
-  "Asana": {
-    "matched_employer_names": [
-      "Asana Software Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Notion": {
-    "matched_employer_names": [
-      "Notion Labs, Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "Dropbox": {
-    "matched_employer_names": [
-      "Dropbox International Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Snowflake": {
-    "matched_employer_names": [
-      "Snowflake Computing Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Datadog": {
-    "matched_employer_names": [
-      "Datadog Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 5,
-      "2026": 1
-    },
-    "total_permits": 6
-  },
-  "CrowdStrike": {
-    "matched_employer_names": [
-      "CrowdStrike Ireland Limited",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4
-    },
-    "total_permits": 4
-  },
-  "Fastly": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Akamai": {
-    "matched_employer_names": [
-      "Amai Limited"
-    ],
-    "permits_by_year": {
-      "2026": 1
-    },
-    "total_permits": 1
-  },
-  "Okta": {
-    "matched_employer_names": [
-      "Okta Identity Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 7,
-      "2026": 1
-    },
-    "total_permits": 8
-  },
-  "Tenable": {
-    "matched_employer_names": [
-      "Enable Ireland",
-      "Tenable Network Security Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 8,
-      "2026": 1
-    },
-    "total_permits": 9
-  },
-  "Proofpoint": {
-    "matched_employer_names": [
-      "Proofpoint Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 1
-    },
-    "total_permits": 4
-  },
-  "Trend Micro": {
-    "matched_employer_names": [
-      "Trend Micro EMEA Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 4
-    },
-    "total_permits": 4
-  },
-  "Pure Storage": {
-    "matched_employer_names": [
-      "Pure Storage International Limited",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4
-    },
-    "total_permits": 4
-  },
-  "Rubrik": {
-    "matched_employer_names": [
-      "R & U Company Limited",
-      "Rubrik Cloud Data Management Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2,
-      "2026": 1
-    },
-    "total_permits": 3
-  },
-  "Cohesity": {
-    "matched_employer_names": [
-      "Cohesity International Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3
-    },
-    "total_permits": 3
-  },
-  "Western Digital": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Texas Instruments": {
-    "matched_employer_names": [
-      "R & U Company Limited",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 1
-    },
-    "total_permits": 4
-  },
-  "Broadcom": {
-    "matched_employer_names": [
-      "Broadcom (CA) Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "STMicroelectronics": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Infineon Technologies": {
-    "matched_employer_names": [
-      "Infineon Technologies Ireland Limited",
-      "Infineon Technologies Semiconductor Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 3
-    },
-    "total_permits": 6
-  },
-  "Applied Materials": {
-    "matched_employer_names": [
-      "Applied Materials Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 150,
-      "2026": 5
-    },
-    "total_permits": 155
-  },
-  "Lam Research": {
-    "matched_employer_names": [
-      "Lam Research (Ireland) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 21,
-      "2026": 1
-    },
-    "total_permits": 22
-  },
-  "ASML": {
-    "matched_employer_names": [
-      "ASML Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 14,
-      "2026": 1
-    },
-    "total_permits": 15
-  },
-  "Honeywell": {
-    "matched_employer_names": [
-      "Honeywell Advanced Limited",
-      "Honeywell Control Systems Limited",
-      "Honeywell Measurex (Ireland) Limited",
-      "Honeywell Productivity Solutions (Ireland) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 28,
-      "2026": 3
-    },
-    "total_permits": 31
-  },
-  "Emerson": {
-    "matched_employer_names": [
-      "Clifton Scannell Emerson Associates",
-      "Clifton Scannell Emerson Associates Ltd",
-      "Emerson Automation Solutions Ireland Limited",
-      "Emerson Ferreira"
-    ],
-    "permits_by_year": {
-      "2024": 37,
-      "2026": 5
-    },
-    "total_permits": 42
-  },
-  "Rockwell Automation": {
-    "matched_employer_names": [
-      "Rockwell Automation Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4
-    },
-    "total_permits": 4
-  },
-  "ABB": {
-    "matched_employer_names": [
-      "ABB Limited"
-    ],
-    "permits_by_year": {
-      "2024": 6,
-      "2026": 1
-    },
-    "total_permits": 7
-  },
-  "Schneider Electric": {
-    "matched_employer_names": [
-      "Schneider Electric IT Logistics Europe Limited",
-      "Schneider Electric Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 12,
-      "2026": 2
-    },
-    "total_permits": 14
-  },
-  "Eaton": {
-    "matched_employer_names": [
-      "BDO Eaton Square Limited",
-      "BDO Eaton Square Ltd",
-      "Eaton Capital",
-      "Eaton Industries (Ireland) Limited",
-      "Eaton Intelligent Power Limited"
-    ],
-    "permits_by_year": {
-      "2024": 21,
-      "2026": 2
-    },
-    "total_permits": 23
-  },
-  "Johnson Controls": {
-    "matched_employer_names": [
-      "Johnson Controls Ireland Limited",
-      "NTR PLC"
-    ],
-    "permits_by_year": {
-      "2024": 2,
-      "2026": 1
-    },
-    "total_permits": 3
-  },
-  "Trane Technologies": {
-    "matched_employer_names": [
-      "Trane Technologies International Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4
-    },
-    "total_permits": 4
-  },
-  "Carrier": {
-    "matched_employer_names": [
-      "Carrier Intercompany Lending DAC"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Vodafone Ireland": {
-    "matched_employer_names": [
-      "Vodafone Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 14,
-      "2026": 1
-    },
-    "total_permits": 15
-  },
-  "Three Ireland": {
-    "matched_employer_names": [
-      "Dr. Sumenthree Moodley",
-      "SEIRBH\u00cdS\u00cd TEICNEOLA\u00cdOCHTA MTHREE CONSULTING TEORANTA",
-      "Three Ireland (Hutchison) Limited",
-      "Three Tigers Food Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 11,
-      "2026": 2
-    },
-    "total_permits": 13
-  },
-  "Virgin Media Ireland": {
-    "matched_employer_names": [
-      "M.EDIA",
-      "Virgin Media Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 2
-    },
-    "total_permits": 3
-  },
-  "Pfizer": {
-    "matched_employer_names": [
-      "Pfizer Healthcare Ireland",
-      "Pfizer Ireland Pharmaceuticals",
-      "Pfizer Ireland Pharmaceuticals Unlimited Company",
-      "Pfizer Shared Services Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 12,
-      "2026": 1
-    },
-    "total_permits": 13
-  },
-  "Boston Scientific": {
-    "matched_employer_names": [
-      "Boston Scientific Cork",
-      "Boston Scientific Ireland Limited",
-      "Boston Scientific Limited",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 147,
-      "2026": 4
-    },
-    "total_permits": 151
-  },
-  "Medtronic": {
-    "matched_employer_names": [
-      "Medtronic Ireland Limited",
-      "Medtronic Vascular Galway Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 20,
-      "2026": 1
-    },
-    "total_permits": 21
-  },
-  "Abbott": {
-    "matched_employer_names": [
-      "ABB Limited",
-      "Abbott Diagnostics",
-      "Abbott Ireland",
-      "Abbott Ireland (Irish Branch)",
-      "Abbott Medical Ireland Limited",
-      "Abbott Rapid Dx International Limited",
-      "Woodtown Abbott Farm Limited"
-    ],
-    "permits_by_year": {
-      "2024": 51,
-      "2026": 7
-    },
-    "total_permits": 58
-  },
-  "Novartis": {
-    "matched_employer_names": [
-      "Novartis Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 18,
-      "2026": 1
-    },
-    "total_permits": 19
-  },
-  "Sanofi": {
-    "matched_employer_names": [
-      "Sanofi - Aventis Ireland Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Eli Lilly": {
-    "matched_employer_names": [
-      "Eli Lilly Cork Limited",
-      "Eli Lilly Kinsale Limited"
-    ],
-    "permits_by_year": {
-      "2024": 107,
-      "2026": 14
-    },
-    "total_permits": 121
-  },
-  "MSD (Merck Sharp & Dohme)": {
-    "matched_employer_names": [
-      "MSD IRELAND (DUNBOYNE BIOLOGICS)"
-    ],
-    "permits_by_year": {
-      "2024": 3
-    },
-    "total_permits": 3
-  },
-  "Roche": {
-    "matched_employer_names": [
-      "Caroline Roche",
-      "Clarochem Ireland Ltd",
-      "Mr Cathal Roche",
-      "Roche Injury Clinic_x000D_",
-      "Roche Moyle Ltd",
-      "Roche Products (Ireland) Limited",
-      "Rochefreight (Ireland) Limited",
-      "Roches Tankardstown"
-    ],
-    "permits_by_year": {
-      "2024": 6,
-      "2026": 7
-    },
-    "total_permits": 13
-  },
-  "Bristol Myers Squibb": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "ICON plc": {
-    "matched_employer_names": [
-      "Asahi Concepts Limited",
-      "Cypress Semiconductor Ireland Limited",
-      "FTI Consulting Management Solutions Limited",
-      "ICON Clinical Research Limited",
-      "Icon Accountancy & Taxation Services Ltd",
-      "Iconic Health Clubs Limited",
-      "Infineon Technologies Semiconductor Ireland Limited",
-      "Kokusai Semiconductor Europe GMBH",
-      "Mechanic On Duty Limited",
-      "Michael O'Neill Agri Consulting Limited",
-      "Monami Construction Ltd",
-      "Navitas Semiconductor Limited",
-      "On Semiconductor Ireland Research and Design Limited",
-      "Piconsult Limited",
-      "Rubicon Infrastructure Advisors Unlimited Company",
-      "Rubicon Technical Services Europe LLC",
-      "Santrini Construction Ltd",
-      "Silicon & Software Systems Ltd.",
-      "Sri Laxmi Consulting Limited",
-      "Tricon Automation Ireland Limited",
-      "Vishay Siliconix Ireland Limited",
-      "Vishay Siliconix Ireland Ltd",
-      "Waggi Connected Pets"
-    ],
-    "permits_by_year": {
-      "2024": 55,
-      "2026": 14
-    },
-    "total_permits": 69
-  },
-  "Bausch + Lomb": {
-    "matched_employer_names": [
-      "Bausch + Lomb Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 1
-    },
-    "total_permits": 4
-  },
-  "Horizon Therapeutics (Amgen)": {
-    "matched_employer_names": [
-      "Horizon Therapeutics Ireland Designated Activity Company"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Takeda": {
-    "matched_employer_names": [
-      "Takeda Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4
-    },
-    "total_permits": 4
-  },
-  "Stryker": {
-    "matched_employer_names": [
-      "ST Ireland Limited",
-      "Stryker European Operations Limited",
-      "Stryker Ireland Limited",
-      "Stryker NV Operations Limited"
-    ],
-    "permits_by_year": {
-      "2024": 23,
-      "2026": 2
-    },
-    "total_permits": 25
-  },
-  "Cook Medical": {
-    "matched_employer_names": [
-      "Cook Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 7
-    },
-    "total_permits": 7
-  },
-  "Amgen": {
-    "matched_employer_names": [
-      "Amgen Technology (Ireland) Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 1
-    },
-    "total_permits": 4
-  },
-  "AbbVie": {
-    "matched_employer_names": [
-      "ABB Limited",
-      "AbbVie Ireland NL B.V.",
-      "AbbVie Ireland NL BV",
-      "AbbVie Limited"
-    ],
-    "permits_by_year": {
-      "2024": 15,
-      "2026": 2
-    },
-    "total_permits": 17
-  },
-  "Regeneron": {
-    "matched_employer_names": [
-      "Regeneron Ireland DAC"
-    ],
-    "permits_by_year": {
-      "2024": 24,
-      "2026": 2
-    },
-    "total_permits": 26
-  },
-  "Gilead Sciences": {
-    "matched_employer_names": [
-      "Gilead Sciences Ireland UC"
-    ],
-    "permits_by_year": {
-      "2024": 6,
-      "2026": 1
-    },
-    "total_permits": 7
-  },
-  "AstraZeneca": {
-    "matched_employer_names": [
-      "AstraZeneca Pharmaceuticals (Ireland) Designated Activity Company",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4,
-      "2026": 1
-    },
-    "total_permits": 5
-  },
-  "Merck Group": {
-    "matched_employer_names": [
-      "Merck Millipore Limited",
-      "Merck Serono Ireland Limited",
-      "Merck Sharp & Dohme Ireland (Human Health) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 14,
-      "2026": 2
-    },
-    "total_permits": 16
-  },
-  "Alexion Pharmaceuticals": {
-    "matched_employer_names": [
-      "Arm Ireland Limited",
-      "Mace Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2,
-      "2026": 1
-    },
-    "total_permits": 3
-  },
-  "Edwards Lifesciences": {
-    "matched_employer_names": [
-      "Edwards Lifesciences Ireland Limited",
-      "IFES Ireland (ROI) Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 1
-    },
-    "total_permits": 4
-  },
-  "Teleflex": {
-    "matched_employer_names": [
-      "Teleflex Medical Europe Limited"
-    ],
-    "permits_by_year": {
-      "2024": 8,
-      "2026": 1
-    },
-    "total_permits": 9
-  },
-  "Zimmer Biomet": {
-    "matched_employer_names": [
-      "Zimmer Biomet Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Teva Pharmaceuticals": {
-    "matched_employer_names": [
-      "Arm Ireland Limited",
-      "Mace Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2,
-      "2026": 1
-    },
-    "total_permits": 3
-  },
-  "WuXi Biologics": {
-    "matched_employer_names": [
-      "WuXi Biologics Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 252,
-      "2026": 16
-    },
-    "total_permits": 268
-  },
-  "Jazz Pharmaceuticals": {
-    "matched_employer_names": [
-      "Arm Ireland Limited",
-      "Mace Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2,
-      "2026": 1
-    },
-    "total_permits": 3
-  },
-  "ResMed": {
-    "matched_employer_names": [
-      "ResMed Sensor Technologies Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "DePuy Synthes": {
-    "matched_employer_names": [
-      "DePuy Ireland Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 6,
-      "2026": 1
-    },
-    "total_permits": 7
-  },
-  "Baxter International": {
-    "matched_employer_names": [
-      "Baxter Healthcare S.A"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Becton Dickinson (BD)": {
-    "matched_employer_names": [
-      "Becton Dickinson Penel Limited",
-      "Becton Dickinson Research Centre Ireland Limited",
-      "Becton Dickinson and Company Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 1
-    },
-    "total_permits": 4
-  },
-  "Terumo": {
-    "matched_employer_names": [
-      "R & U Company Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "Coloplast": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Integra LifeSciences": {
-    "matched_employer_names": [
-      "IFES Ireland (ROI) Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Merit Medical": {
-    "matched_employer_names": [
-      "Merit Medical Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Hollister Incorporated": {
-    "matched_employer_names": [
-      "Hollister ULC",
-      "Hollister ULC Unlimited Company",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4,
-      "2026": 1
-    },
-    "total_permits": 5
-  },
-  "Dexcom": {
-    "matched_employer_names": [
-      "Dexcom International Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "IQVIA": {
-    "matched_employer_names": [
-      "IQVIA RDS Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4,
-      "2026": 1
-    },
-    "total_permits": 5
-  },
-  "Charles River Laboratories": {
-    "matched_employer_names": [
-      "Charles River Laboratories Ireland Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 16,
-      "2026": 1
-    },
-    "total_permits": 17
-  },
-  "Waters Corporation": {
-    "matched_employer_names": [
-      "Byrne Looby Partners Water Services Limited",
-      "O'Brien Water Services Limited",
-      "VorTech Water Solutions Ltd",
-      "Waters Chromatography Ireland Limited",
-      "Watershed Company Limited",
-      "Waterside Hospitality",
-      "Xylem Water Solutions Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 10,
-      "2026": 2
-    },
-    "total_permits": 12
-  },
-  "Agilent Technologies": {
-    "matched_employer_names": [
-      "Agilent Technologies Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2026": 1
-    },
-    "total_permits": 1
-  },
-  "Thermo Fisher Scientific": {
-    "matched_employer_names": [
-      "Thermo Fisher Scientific Cork Limited"
-    ],
-    "permits_by_year": {
-      "2024": 8
-    },
-    "total_permits": 8
-  },
-  "Bruker": {
-    "matched_employer_names": [
-      "R & U Company Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "Eurofins Scientific": {
-    "matched_employer_names": [
-      "Eurofins Scientific (Ireland) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3
-    },
-    "total_permits": 3
-  },
-  "GlaxoSmithKline (GSK)": {
-    "matched_employer_names": [
-      "GlaxoSmithKline (Ireland) Ltd",
-      "GlaxoSmithKline Dungarvan Limited"
-    ],
-    "permits_by_year": {
-      "2024": 6
-    },
-    "total_permits": 6
-  },
-  "Bank of Ireland": {
-    "matched_employer_names": [
-      "Bank of America Europe DAC",
-      "Bank of America Europe Designated Activity Company",
-      "Bank of China (Europe) S.A.",
-      "Bank of Ireland Group PLC",
-      "The Bank of New York Mellon SA/NV"
-    ],
-    "permits_by_year": {
-      "2024": 108,
-      "2026": 7
-    },
-    "total_permits": 115
-  },
-  "Citi": {
-    "matched_employer_names": [
-      "Citi Bus Limited",
-      "Citi Bus Ltd",
-      "Citibank Europe PLC",
-      "Citibank Europe Public Limited Company",
-      "Citibank N.A."
-    ],
-    "permits_by_year": {
-      "2024": 86,
-      "2026": 8
-    },
-    "total_permits": 94
-  },
-  "BNY Mellon": {
-    "matched_employer_names": [
-      "BNY Mellon Fund Services (Ireland) DAC",
-      "BNY Mellon Fund Services (Ireland) Designated Activity Company"
-    ],
-    "permits_by_year": {
-      "2024": 16,
-      "2026": 6
-    },
-    "total_permits": 22
-  },
-  "State Street": {
-    "matched_employer_names": [
-      "ST Ireland Limited",
-      "State Street International (Ireland) Limited",
-      "State Street Technology (Ireland) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 16,
-      "2026": 3
-    },
-    "total_permits": 19
-  },
-  "Fidelity Investments": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Susquehanna International Group (SIG)": {
-    "matched_employer_names": [
-      "Susquehanna Dublin Limited",
-      "Susquehanna International Group Limited"
-    ],
-    "permits_by_year": {
-      "2024": 7,
-      "2026": 2
-    },
-    "total_permits": 9
-  },
-  "Irish Life": {
-    "matched_employer_names": [
-      "Irish Life Financial Services Ltd",
-      "Irish Life Group Services Limited",
-      "Irish Life Investment Managers Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 14,
-      "2026": 1
-    },
-    "total_permits": 15
-  },
-  "Zurich Insurance": {
-    "matched_employer_names": [
-      "Zurich Insurance Company Ltd",
-      "Zurich Insurance Public Limited Company"
-    ],
-    "permits_by_year": {
-      "2024": 12,
-      "2026": 1
-    },
-    "total_permits": 13
-  },
-  "Aviva Ireland": {
-    "matched_employer_names": [
-      "Aviva Direct Ireland Limited",
-      "Aviva Group Services Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 8,
-      "2026": 1
-    },
-    "total_permits": 9
-  },
-  "Davy": {
-    "matched_employer_names": [
-      "J & E Davy Holdings"
-    ],
-    "permits_by_year": {
-      "2024": 7
-    },
-    "total_permits": 7
-  },
-  "Goodbody": {
-    "matched_employer_names": [
-      "A & L Goodbody",
-      "A & L Goodbody LLP",
-      "Goodbody Stockbrokers"
-    ],
-    "permits_by_year": {
-      "2024": 12,
-      "2026": 2
-    },
-    "total_permits": 14
-  },
-  "FBD Insurance": {
-    "matched_employer_names": [
-      "FBD Insurance PLC"
-    ],
-    "permits_by_year": {
-      "2024": 5
-    },
-    "total_permits": 5
-  },
-  "Elavon": {
-    "matched_employer_names": [
-      "Elavon Financial Services DAC"
-    ],
-    "permits_by_year": {
-      "2024": 6
-    },
-    "total_permits": 6
-  },
-  "Northern Trust": {
-    "matched_employer_names": [
-      "NTR PLC",
-      "Northern Trust Management Services (Ireland) Ltd",
-      "R & U Company Limited",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 21,
-      "2026": 2
-    },
-    "total_permits": 23
-  },
-  "Morgan Stanley": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Barclays": {
-    "matched_employer_names": [
-      "Barclays Bank Ireland PLC"
-    ],
-    "permits_by_year": {
-      "2024": 3
-    },
-    "total_permits": 3
-  },
-  "HSBC Ireland": {
-    "matched_employer_names": [
-      "HSBC Continental Europe",
-      "HSBC Securities Services (Ireland) DAC"
-    ],
-    "permits_by_year": {
-      "2024": 9,
-      "2026": 1
-    },
-    "total_permits": 10
-  },
-  "BNP Paribas Ireland": {
-    "matched_employer_names": [
-      "BNP Paribas",
-      "BNP Paribas Dublin Branch",
-      "BNP Paribas Fund Administration Services (Ireland) Limited",
-      "BNP Paribas, Dublin Branch"
-    ],
-    "permits_by_year": {
-      "2024": 9,
-      "2026": 1
-    },
-    "total_permits": 10
-  },
-  "SMBC Aviation Capital": {
-    "matched_employer_names": [
-      "SMBC Aviation Capital Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 8,
-      "2026": 1
-    },
-    "total_permits": 9
-  },
-  "Avolon": {
-    "matched_employer_names": [
-      "Avolon Aerospace Leasing Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 1
-    },
-    "total_permits": 4
-  },
-  "Macquarie Group": {
-    "matched_employer_names": [
-      "Macquarie Aircraft Leasing Services Ltd",
-      "Macquarie Bank Europe Designated Activity Company"
-    ],
-    "permits_by_year": {
-      "2024": 9
-    },
-    "total_permits": 9
-  },
-  "Morningstar": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "S&P Global": {
-    "matched_employer_names": [
-      "ESP Global Services Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "Bloomberg": {
-    "matched_employer_names": [
-      "Bloomberg Data Management Services Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2,
-      "2026": 3
-    },
-    "total_permits": 5
-  },
-  "Refinitiv (LSEG)": {
-    "matched_employer_names": [
-      "Refinitiv Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
   },
   "Deloitte Ireland": {
     "matched_employer_names": [
@@ -1650,6 +21,15 @@
     },
     "total_permits": 225
   },
+  "GridBeyond": {
+    "matched_employer_names": [
+      "GridBeyond Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4
+    },
+    "total_permits": 4
+  },
   "KPMG Ireland": {
     "matched_employer_names": [
       "KPMG"
@@ -1660,47 +40,57 @@
     },
     "total_permits": 116
   },
-  "Grant Thornton Ireland": {
+  "Oracle": {
     "matched_employer_names": [
-      "Grant Thornton",
-      "Grant Thornton Corporate Finance Limited",
-      "Grant Thornton Financial and Taxation Consultants Limited"
+      "Oracle Cerner Ireland Limited",
+      "Oracle EMEA Limited",
+      "Oracle Emea Ltd",
+      "Oracle Financial Services Software B.V",
+      "Oracle Sovereign Cloud Ireland Limited"
     ],
     "permits_by_year": {
-      "2024": 86,
+      "2024": 8,
       "2026": 4
     },
-    "total_permits": 90
+    "total_permits": 12
   },
-  "BDO Ireland": {
+  "SAP": {
     "matched_employer_names": [
-      "BDO"
+      "SAP Ireland Limited"
     ],
     "permits_by_year": {
-      "2026": 2
+      "2026": 3
     },
-    "total_permits": 2
+    "total_permits": 3
   },
-  "Forvis Mazars Ireland": {
+  "Auxilion": {
     "matched_employer_names": [
-      "Forvis Mazars",
-      "Mazars"
+      "Auxilion Ireland Limited"
     ],
     "permits_by_year": {
-      "2024": 95,
-      "2026": 5
+      "2024": 2,
+      "2026": 1
     },
-    "total_permits": 100
+    "total_permits": 3
   },
-  "Baker Tilly Ireland": {
+  "Avanade": {
     "matched_employer_names": [
-      "Baker Tilly",
-      "Baker Tilly Ireland LP"
+      "Avanade Ireland Limited"
     ],
     "permits_by_year": {
-      "2024": 4
+      "2024": 12
     },
-    "total_permits": 4
+    "total_permits": 12
+  },
+  "BearingPoint": {
+    "matched_employer_names": [
+      "BearingPoint Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 13,
+      "2026": 1
+    },
+    "total_permits": 14
   },
   "Capgemini": {
     "matched_employer_names": [
@@ -1711,6 +101,58 @@
       "2026": 3
     },
     "total_permits": 39
+  },
+  "Cisco": {
+    "matched_employer_names": [
+      "Cisco Limited",
+      "Cisco Systems Internetworking (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4,
+      "2026": 2
+    },
+    "total_permits": 6
+  },
+  "Cognizant": {
+    "matched_employer_names": [
+      "Cognizant Technology Solutions Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 153,
+      "2026": 5
+    },
+    "total_permits": 158
+  },
+  "Ekco": {
+    "matched_employer_names": [
+      "Ekco Security Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Ericsson": {
+    "matched_employer_names": [
+      "L.M. Ericsson Limited",
+      "LM Ericsson Limited"
+    ],
+    "permits_by_year": {
+      "2024": 48,
+      "2026": 3
+    },
+    "total_permits": 51
+  },
+  "IBM": {
+    "matched_employer_names": [
+      "IBM (Ireland) Limited",
+      "IBM Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 6,
+      "2026": 1
+    },
+    "total_permits": 7
   },
   "Infosys": {
     "matched_employer_names": [
@@ -1724,16 +166,55 @@
     },
     "total_permits": 94
   },
-  "Wipro": {
+  "Kyndryl": {
     "matched_employer_names": [
-      "Wipro Limited",
-      "Wipro Limited - Irish Branch"
+      "Kyndryl Ireland Limited"
     ],
     "permits_by_year": {
-      "2024": 59,
-      "2026": 8
+      "2024": 1
     },
-    "total_permits": 67
+    "total_permits": 1
+  },
+  "NTT DATA": {
+    "matched_employer_names": [
+      "NTT DATA Services Ireland Limited",
+      "NTT Data UK Limited"
+    ],
+    "permits_by_year": {
+      "2024": 19,
+      "2026": 2
+    },
+    "total_permits": 21
+  },
+  "Quest Software": {
+    "matched_employer_names": [
+      "Quest Software International Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "Red Hat": {
+    "matched_employer_names": [
+      "Red Hat Limited"
+    ],
+    "permits_by_year": {
+      "2024": 12,
+      "2026": 4
+    },
+    "total_permits": 16
+  },
+  "SolarWinds": {
+    "matched_employer_names": [
+      "SolarWinds Software Europe DAC"
+    ],
+    "permits_by_year": {
+      "2024": 5,
+      "2026": 1
+    },
+    "total_permits": 6
   },
   "Tata Consultancy Services (TCS)": {
     "matched_employer_names": [
@@ -1746,16 +227,6 @@
     },
     "total_permits": 228
   },
-  "Cognizant": {
-    "matched_employer_names": [
-      "Cognizant Technology Solutions Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 153,
-      "2026": 5
-    },
-    "total_permits": 158
-  },
   "Version 1": {
     "matched_employer_names": [
       "Version 1 Software Limited"
@@ -1766,311 +237,66 @@
     },
     "total_permits": 30
   },
-  "Slalom": {
+  "Wipro": {
     "matched_employer_names": [
-      "Slalom Technology and Management Solutions Limited"
+      "Wipro Limited",
+      "Wipro Limited - Irish Branch"
     ],
     "permits_by_year": {
-      "2024": 3,
-      "2026": 1
+      "2024": 59,
+      "2026": 8
     },
-    "total_permits": 4
+    "total_permits": 67
   },
-  "FTI Consulting": {
+  "Bloomberg": {
     "matched_employer_names": [
-      "FTI Consulting Management Solutions Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3
-    },
-    "total_permits": 3
-  },
-  "Aon": {
-    "matched_employer_names": [
-      "Aon Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Willis Towers Watson (WTW)": {
-    "matched_employer_names": [
-      "ST Ireland Limited",
-      "Willis Towers Watson (Ireland) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 5,
-      "2026": 1
-    },
-    "total_permits": 6
-  },
-  "Mercer": {
-    "matched_employer_names": [
-      "Mercer (Ireland) Limited",
-      "Mercer Global Investments Europe Limited",
-      "Mercer Ireland Limited",
-      "Mercer Ireland Ltd",
-      "Mercer Premier Services Limited"
-    ],
-    "permits_by_year": {
-      "2024": 5,
-      "2026": 1
-    },
-    "total_permits": 6
-  },
-  "Marsh McLennan": {
-    "matched_employer_names": [
-      "Marsh & McLennan Innovation Centre Limited"
-    ],
-    "permits_by_year": {
-      "2024": 6
-    },
-    "total_permits": 6
-  },
-  "McKinsey & Company": {
-    "matched_employer_names": [
-      "McKinsey & Company Inc. Ireland"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Boston Consulting Group (BCG)": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Bain & Company": {
-    "matched_employer_names": [
-      "Saint-Gobain Life Sciences Ireland Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "Matheson": {
-    "matched_employer_names": [
-      "Matheson LLP"
-    ],
-    "permits_by_year": {
-      "2026": 1
-    },
-    "total_permits": 1
-  },
-  "A&L Goodbody": {
-    "matched_employer_names": [
-      "A & L Goodbody",
-      "A & L Goodbody LLP"
-    ],
-    "permits_by_year": {
-      "2024": 8,
-      "2026": 1
-    },
-    "total_permits": 9
-  },
-  "Arthur Cox": {
-    "matched_employer_names": [
-      "Arthur Cox",
-      "Arthur Cox LLP"
-    ],
-    "permits_by_year": {
-      "2024": 11,
-      "2026": 1
-    },
-    "total_permits": 12
-  },
-  "McCann FitzGerald": {
-    "matched_employer_names": [
-      "McCann FitzGerald"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Mason Hayes & Curran": {
-    "matched_employer_names": [
-      "Mason Hayes & Curran LLP",
-      "Mason Hayes & Curran Professional Services Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "William Fry": {
-    "matched_employer_names": [
-      "William Fry LLP"
-    ],
-    "permits_by_year": {
-      "2026": 1
-    },
-    "total_permits": 1
-  },
-  "Eversheds Sutherland Ireland": {
-    "matched_employer_names": [
-      "Eversheds Sutherland (Ireland) LLP",
-      "Eversheds Sutherland Legal Support Services Unlimited Company"
+      "Bloomberg Data Management Services Limited"
     ],
     "permits_by_year": {
       "2024": 2,
-      "2026": 1
-    },
-    "total_permits": 3
-  },
-  "Maples Group Ireland": {
-    "matched_employer_names": [
-      "Maples Fund Management Ireland Limited",
-      "MaplesFS Service Company (Ireland) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3,
-      "2026": 2
+      "2026": 3
     },
     "total_permits": 5
   },
-  "Walkers Ireland": {
+  "Codec": {
     "matched_employer_names": [
-      "Walkers (Ireland) LLP",
-      "Walkers Corporate Services (Ireland) Ltd."
+      "Codec-DSS Limited"
+    ],
+    "permits_by_year": {
+      "2024": 14,
+      "2026": 1
+    },
+    "total_permits": 15
+  },
+  "Kitman Labs": {
+    "matched_employer_names": [
+      "Kitman Labs Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Teneo Ireland": {
+    "matched_employer_names": [
+      "Teneo Restructuring (Ireland) Limited",
+      "Teneo Strategy Ireland Limited"
     ],
     "permits_by_year": {
       "2024": 4
     },
     "total_permits": 4
   },
-  "Dillon Eustace": {
+  "Aer Lingus": {
     "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Sigmar Recruitment": {
-    "matched_employer_names": [
-      "R & U Company Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "Hays Ireland": {
-    "matched_employer_names": [
-      "Vishay Siliconix Ireland Limited",
-      "Vishay Siliconix Ireland Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "Adecco Ireland": {
-    "matched_employer_names": [
-      "Adecco Ireland Ltd"
-    ],
-    "permits_by_year": {
-      "2026": 5
-    },
-    "total_permits": 5
-  },
-  "Manpower Ireland": {
-    "matched_employer_names": [
-      "Manpowergroup (Ireland) Limited",
-      "Oriental Manpower Limited"
+      "Aer Lingus  Limited",
+      "Aer Lingus (Ireland) Limited"
     ],
     "permits_by_year": {
       "2024": 7,
       "2026": 1
     },
     "total_permits": 8
-  },
-  "Tesco Ireland": {
-    "matched_employer_names": [
-      "Brian Foley and Associates Consulting Ltd",
-      "Donnachadh O'Brien & Associates Consulting Engineers Limited",
-      "KP  Associates Consulting Engineers Limited",
-      "KP Associates Consulting Engineers Limited",
-      "Tesco Ireland Limited",
-      "Tesco Ireland Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 4,
-      "2026": 3
-    },
-    "total_permits": 7
-  },
-  "Lidl Ireland": {
-    "matched_employer_names": [
-      "Lidl Ireland GmbH"
-    ],
-    "permits_by_year": {
-      "2024": 1
-    },
-    "total_permits": 1
-  },
-  "Aldi Ireland": {
-    "matched_employer_names": [
-      "53rd Parallel Electrical Distribution Ltd",
-      "APEL Financial Distribution Services Limited",
-      "Alex Capaldi T/A Don Taco",
-      "Alliance Medical Diagnostic Imaging Limited",
-      "Alliance Medical Diagnostic Imaging Ltd",
-      "Douglas & Kaldi @ Dundrum Limited",
-      "Douglas and Kaldi @ Rathborne Limited",
-      "Geraldine Jones Limited",
-      "HX46 Cafe And Pan Asian Casual Dining Ltd",
-      "KARE, Promoting Inclusion For People with Intellectual  Disabilities CLG",
-      "L.E.D. Lighting and Electrical Distribution Group Unlimited Company",
-      "Mobile Medical Diagnostics Limited",
-      "Thomas And Geraldine O'Connor Limited"
-    ],
-    "permits_by_year": {
-      "2024": 36,
-      "2026": 7
-    },
-    "total_permits": 43
-  },
-  "Dunnes Stores": {
-    "matched_employer_names": [
-      "Dunnes Stores Unlimited Company",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4
-    },
-    "total_permits": 4
-  },
-  "Musgrave Group (SuperValu / Centra)": {
-    "matched_employer_names": [
-      "Musgrave Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2,
-      "2026": 1
-    },
-    "total_permits": 3
-  },
-  "Primark / Penneys": {
-    "matched_employer_names": [
-      "Primark Limited"
-    ],
-    "permits_by_year": {
-      "2026": 1
-    },
-    "total_permits": 1
   },
   "Kerry Group": {
     "matched_employer_names": [
@@ -2095,61 +321,15 @@
     },
     "total_permits": 256
   },
-  "Glanbia / Tirl\u00e1n": {
+  "Musgrave Group (SuperValu / Centra)": {
     "matched_employer_names": [
-      "Tirl\u00e1n Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "Smurfit Westrock": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Dairygold": {
-    "matched_employer_names": [
-      "Dairygold Co-operative Society Limited"
+      "Musgrave Limited"
     ],
     "permits_by_year": {
       "2024": 2,
       "2026": 1
     },
     "total_permits": 3
-  },
-  "Kepak Group": {
-    "matched_employer_names": [
-      "Agrakepak International",
-      "Kepak Athleague Unlimited Company",
-      "Kepak Ballybay Unlimited Company",
-      "Kepak Clonee Unlimited Company",
-      "Kepak Convenience Foods",
-      "Kepak Cork Unlimited Company",
-      "Kepak Kilbeggan Unlimited Company",
-      "Kepak Longford Unlimited Company"
-    ],
-    "permits_by_year": {
-      "2024": 190,
-      "2026": 8
-    },
-    "total_permits": 198
-  },
-  "Dawn Meats": {
-    "matched_employer_names": [
-      "Dawn Meats Ireland UC"
-    ],
-    "permits_by_year": {
-      "2024": 663,
-      "2026": 5
-    },
-    "total_permits": 668
   },
   "Ornua": {
     "matched_employer_names": [
@@ -2161,6 +341,566 @@
     },
     "total_permits": 9
   },
+  "Ryanair": {
+    "matched_employer_names": [
+      "Ryanair DAC",
+      "Ryanair Labs Limited",
+      "Ryanair Labs Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 11,
+      "2026": 2
+    },
+    "total_permits": 13
+  },
+  "Tesco Ireland": {
+    "matched_employer_names": [
+      "Tesco Ireland Limited",
+      "Tesco Ireland Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 2,
+      "2026": 1
+    },
+    "total_permits": 3
+  },
+  "CrowdStrike": {
+    "matched_employer_names": [
+      "CrowdStrike Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2
+    },
+    "total_permits": 2
+  },
+  "A&L Goodbody": {
+    "matched_employer_names": [
+      "A & L Goodbody",
+      "A & L Goodbody LLP"
+    ],
+    "permits_by_year": {
+      "2024": 8,
+      "2026": 1
+    },
+    "total_permits": 9
+  },
+  "ABB": {
+    "matched_employer_names": [
+      "ABB Limited"
+    ],
+    "permits_by_year": {
+      "2024": 6,
+      "2026": 1
+    },
+    "total_permits": 7
+  },
+  "AECOM": {
+    "matched_employer_names": [
+      "AECOM Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 17,
+      "2026": 2
+    },
+    "total_permits": 19
+  },
+  "Agilent Technologies": {
+    "matched_employer_names": [
+      "Agilent Technologies Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Allianz Ireland": {
+    "matched_employer_names": [
+      "Allianz Technology SE",
+      "Allianz plc"
+    ],
+    "permits_by_year": {
+      "2024": 9
+    },
+    "total_permits": 9
+  },
+  "Alter Domus": {
+    "matched_employer_names": [
+      "Alter Domus (Ireland) Ltd",
+      "Alter Domus Fund Services (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 14,
+      "2026": 1
+    },
+    "total_permits": 15
+  },
+  "Amundi": {
+    "matched_employer_names": [
+      "Amundi Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 11,
+      "2026": 1
+    },
+    "total_permits": 12
+  },
+  "An Post": {
+    "matched_employer_names": [
+      "An Post",
+      "An Post DAC",
+      "An Post GeoDirectory DAC"
+    ],
+    "permits_by_year": {
+      "2024": 7,
+      "2026": 1
+    },
+    "total_permits": 8
+  },
+  "Aon": {
+    "matched_employer_names": [
+      "Aon Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "Apex Group": {
+    "matched_employer_names": [
+      "Apex Capital Limited",
+      "Apex Fund Company Services Limited",
+      "Apex Fund Services (Ireland) Limited",
+      "Apex IFS Limited",
+      "Apex RC Frames",
+      "Apex RC Frames Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 6,
+      "2026": 3
+    },
+    "total_permits": 9
+  },
+  "Applied Materials": {
+    "matched_employer_names": [
+      "Applied Materials Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 150,
+      "2026": 5
+    },
+    "total_permits": 155
+  },
+  "Aptiv": {
+    "matched_employer_names": [
+      "Aptiv Global Operations Limited"
+    ],
+    "permits_by_year": {
+      "2024": 22,
+      "2026": 1
+    },
+    "total_permits": 23
+  },
+  "Arcadis": {
+    "matched_employer_names": [
+      "Arcadis Consulting Ireland Limited",
+      "Arcadis Ireland Ltd"
+    ],
+    "permits_by_year": {
+      "2026": 2
+    },
+    "total_permits": 2
+  },
+  "Arista Networks": {
+    "matched_employer_names": [
+      "Arista Networks Limited"
+    ],
+    "permits_by_year": {
+      "2024": 7,
+      "2026": 1
+    },
+    "total_permits": 8
+  },
+  "Arthur Cox": {
+    "matched_employer_names": [
+      "Arthur Cox",
+      "Arthur Cox LLP"
+    ],
+    "permits_by_year": {
+      "2024": 11,
+      "2026": 1
+    },
+    "total_permits": 12
+  },
+  "Arup": {
+    "matched_employer_names": [
+      "Ove Arup & Partners Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 62,
+      "2026": 2
+    },
+    "total_permits": 64
+  },
+  "Asana": {
+    "matched_employer_names": [
+      "Asana Software Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "ASML": {
+    "matched_employer_names": [
+      "ASML Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 14,
+      "2026": 1
+    },
+    "total_permits": 15
+  },
+  "AstraZeneca": {
+    "matched_employer_names": [
+      "AstraZeneca Pharmaceuticals (Ireland) Designated Activity Company"
+    ],
+    "permits_by_year": {
+      "2024": 2,
+      "2026": 1
+    },
+    "total_permits": 3
+  },
+  "AtkinsR\u00e9alis": {
+    "matched_employer_names": [
+      "AtkinsR\u00e9alis Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 4
+    },
+    "total_permits": 4
+  },
+  "Autodesk": {
+    "matched_employer_names": [
+      "Autodesk Ireland Operations Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 10
+    },
+    "total_permits": 10
+  },
+  "Aviva Ireland": {
+    "matched_employer_names": [
+      "Aviva Direct Ireland Limited",
+      "Aviva Group Services Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 8,
+      "2026": 1
+    },
+    "total_permits": 9
+  },
+  "Baker Tilly Ireland": {
+    "matched_employer_names": [
+      "Baker Tilly",
+      "Baker Tilly Ireland LP"
+    ],
+    "permits_by_year": {
+      "2024": 4
+    },
+    "total_permits": 4
+  },
+  "Bank of Ireland": {
+    "matched_employer_names": [
+      "Bank of America Europe DAC",
+      "Bank of America Europe Designated Activity Company",
+      "Bank of China (Europe) S.A.",
+      "Bank of Ireland Group PLC",
+      "The Bank of New York Mellon SA/NV"
+    ],
+    "permits_by_year": {
+      "2024": 108,
+      "2026": 7
+    },
+    "total_permits": 115
+  },
+  "Bausch + Lomb": {
+    "matched_employer_names": [
+      "Bausch + Lomb Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Baxter International": {
+    "matched_employer_names": [
+      "Baxter Healthcare S.A"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "BDO Ireland": {
+    "matched_employer_names": [
+      "BDO"
+    ],
+    "permits_by_year": {
+      "2026": 2
+    },
+    "total_permits": 2
+  },
+  "Becton Dickinson (BD)": {
+    "matched_employer_names": [
+      "Becton Dickinson Penel Limited",
+      "Becton Dickinson Research Centre Ireland Limited",
+      "Becton Dickinson and Company Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "BioMarin": {
+    "matched_employer_names": [
+      "BioMarin International Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4
+    },
+    "total_permits": 4
+  },
+  "Block": {
+    "matched_employer_names": [
+      "Block E Cap Dock Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "BNP Paribas Ireland": {
+    "matched_employer_names": [
+      "BNP Paribas",
+      "BNP Paribas Dublin Branch",
+      "BNP Paribas Fund Administration Services (Ireland) Limited",
+      "BNP Paribas, Dublin Branch"
+    ],
+    "permits_by_year": {
+      "2024": 9,
+      "2026": 1
+    },
+    "total_permits": 10
+  },
+  "Bord G\u00e1is Energy": {
+    "matched_employer_names": [
+      "Bord G\u00e1is Energy"
+    ],
+    "permits_by_year": {
+      "2024": 15,
+      "2026": 2
+    },
+    "total_permits": 17
+  },
+  "Broadcom": {
+    "matched_employer_names": [
+      "Broadcom (CA) Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Brown Brothers Harriman": {
+    "matched_employer_names": [
+      "Brown Brothers Harriman Trustee Services (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "Bus \u00c9ireann": {
+    "matched_employer_names": [
+      "Bus \u00c9ireann - Irish Bus"
+    ],
+    "permits_by_year": {
+      "2026": 3
+    },
+    "total_permits": 3
+  },
+  "CACEIS": {
+    "matched_employer_names": [
+      "Caceis Bank, Ireland Branch",
+      "Caceis Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4
+    },
+    "total_permits": 4
+  },
+  "Cadence Design Systems": {
+    "matched_employer_names": [
+      "Cadence Design Systems (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 32,
+      "2026": 1
+    },
+    "total_permits": 33
+  },
+  "Cairn Homes": {
+    "matched_employer_names": [
+      "Cairn Homes",
+      "Cairn Homes Construction Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 6,
+      "2026": 2
+    },
+    "total_permits": 8
+  },
+  "Canto": {
+    "matched_employer_names": [
+      "Canto DAM Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4,
+      "2026": 1
+    },
+    "total_permits": 5
+  },
+  "Carne Group": {
+    "matched_employer_names": [
+      "Carne Global Financial Services Ltd",
+      "Carne Global Fund Managers (Ireland) Limited",
+      "Carne Global Fund Services Limited"
+    ],
+    "permits_by_year": {
+      "2024": 14,
+      "2026": 1
+    },
+    "total_permits": 15
+  },
+  "CBRE Ireland": {
+    "matched_employer_names": [
+      "CBRE Advisory (IRL) Limited",
+      "CBRE GWS (Ireland) Ltd",
+      "CBRE GWS Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 10,
+      "2026": 1
+    },
+    "total_permits": 11
+  },
+  "CDB Aviation": {
+    "matched_employer_names": [
+      "CDB Aviation Lease Finance Designated Activity Company"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Charles River Laboratories": {
+    "matched_employer_names": [
+      "Charles River Laboratories Ireland Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 16,
+      "2026": 1
+    },
+    "total_permits": 17
+  },
+  "Citco": {
+    "matched_employer_names": [
+      "Citco Bank Nederland N.V.",
+      "Citco Bank Nederland NV Dublin Branch",
+      "Citco Corporate Services (Ireland) Ltd",
+      "Citco Custody Limited",
+      "Citco Fund Services (Ireland) Limited",
+      "Citco Technology Management Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 29,
+      "2026": 5
+    },
+    "total_permits": 34
+  },
+  "Cohesity": {
+    "matched_employer_names": [
+      "Cohesity International (Ireland) Tech Limited",
+      "Cohesity International Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Coillte": {
+    "matched_employer_names": [
+      "Coillte Teo"
+    ],
+    "permits_by_year": {
+      "2024": 6
+    },
+    "total_permits": 6
+  },
+  "Concentrix (Ireland)": {
+    "matched_employer_names": [
+      "Concentrix CVG Ireland Limited",
+      "Concentrix Srev Europe Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3
+    },
+    "total_permits": 3
+  },
+  "Cushman & Wakefield Ireland": {
+    "matched_employer_names": [
+      "Cushman & Wakefield Commercial Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Datalex": {
+    "matched_employer_names": [
+      "Datalex Ireland Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Davy": {
+    "matched_employer_names": [
+      "J & E Davy Holdings",
+      "J & E Davy Holdings Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 7,
+      "2026": 1
+    },
+    "total_permits": 8
+  },
+  "Dexcom": {
+    "matched_employer_names": [
+      "Dexcom International Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
   "Diageo Ireland": {
     "matched_employer_names": [
       "Diageo Ireland Holdings Unlimited Company"
@@ -2171,16 +911,389 @@
     },
     "total_permits": 7
   },
-  "Irish Distillers (Pernod Ricard)": {
+  "DocuSign": {
     "matched_employer_names": [
-      "Irish Distillers International Ltd",
-      "Irish Distillers Limited",
-      "ST Ireland Limited"
+      "DocuSign International (EMEA) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2,
+      "2026": 3
+    },
+    "total_permits": 5
+  },
+  "Dublin Bus": {
+    "matched_employer_names": [
+      "Bus Atha Cliath - Dublin Bus",
+      "Bus \u00c1tha Cliath - Dublin Bus"
+    ],
+    "permits_by_year": {
+      "2024": 49,
+      "2026": 1
+    },
+    "total_permits": 50
+  },
+  "Dublin Port Company": {
+    "matched_employer_names": [
+      "Dublin Port Company"
+    ],
+    "permits_by_year": {
+      "2024": 2,
+      "2026": 1
+    },
+    "total_permits": 3
+  },
+  "Eaton": {
+    "matched_employer_names": [
+      "BDO Eaton Square Limited",
+      "BDO Eaton Square Ltd",
+      "Eaton Capital",
+      "Eaton Industries (Ireland) Limited",
+      "Eaton Intelligent Power Limited"
+    ],
+    "permits_by_year": {
+      "2024": 21,
+      "2026": 2
+    },
+    "total_permits": 23
+  },
+  "eBay": {
+    "matched_employer_names": [
+      "eBay Europe Services Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 3
+    },
+    "total_permits": 4
+  },
+  "Edwards Lifesciences": {
+    "matched_employer_names": [
+      "Edwards Lifesciences Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2,
+      "2026": 1
+    },
+    "total_permits": 3
+  },
+  "EirGrid": {
+    "matched_employer_names": [
+      "EirGrid PLC",
+      "EirGrid Public Limited Company"
+    ],
+    "permits_by_year": {
+      "2024": 33,
+      "2026": 7
+    },
+    "total_permits": 40
+  },
+  "Elavon": {
+    "matched_employer_names": [
+      "Elavon Financial Services DAC"
+    ],
+    "permits_by_year": {
+      "2024": 6
+    },
+    "total_permits": 6
+  },
+  "Eli Lilly": {
+    "matched_employer_names": [
+      "Eli Lilly Cork Limited",
+      "Eli Lilly Kinsale Limited"
+    ],
+    "permits_by_year": {
+      "2024": 107,
+      "2026": 14
+    },
+    "total_permits": 121
+  },
+  "Emerald Airlines": {
+    "matched_employer_names": [
+      "Emerald Airlines Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 6,
+      "2026": 1
+    },
+    "total_permits": 7
+  },
+  "Emerson": {
+    "matched_employer_names": [
+      "Clifton Scannell Emerson Associates",
+      "Clifton Scannell Emerson Associates Ltd",
+      "Emerson Automation Solutions Ireland Limited",
+      "Emerson Ferreira"
+    ],
+    "permits_by_year": {
+      "2024": 37,
+      "2026": 5
+    },
+    "total_permits": 42
+  },
+  "Energia Group": {
+    "matched_employer_names": [
+      "Eiffage Energia Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Enterprise Ireland": {
+    "matched_employer_names": [
+      "Bismi Enterprise Limited",
+      "Clonmel Enterprise Limited",
+      "Doon Farm Enterprise Limited",
+      "Enterprise Registry Solutions Limited",
+      "Flogas Enterprise Solutions (Ireland) Limited",
+      "Hewlett Packard Enterprise Ireland Limited",
+      "Junior Achievement / Young Enterprise Ireland Clg",
+      "My Greenway Enterprise LTD",
+      "National Association of Community Enterprise Centres NACEC CLG",
+      "Tehreem Enterprise Limited"
+    ],
+    "permits_by_year": {
+      "2024": 7,
+      "2026": 6
+    },
+    "total_permits": 13
+  },
+  "Etsy": {
+    "matched_employer_names": [
+      "Etsy Ireland Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Eurofins Scientific": {
+    "matched_employer_names": [
+      "Eurofins Scientific (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3
+    },
+    "total_permits": 3
+  },
+  "Eversheds Sutherland Ireland": {
+    "matched_employer_names": [
+      "Eversheds Sutherland (Ireland) LLP",
+      "Eversheds Sutherland Legal Support Services Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 2,
+      "2026": 1
+    },
+    "total_permits": 3
+  },
+  "Expleo": {
+    "matched_employer_names": [
+      "Expleo Technology Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 8,
+      "2026": 1
+    },
+    "total_permits": 9
+  },
+  "Exyte": {
+    "matched_employer_names": [
+      "Exyte Northern Europe Limited"
+    ],
+    "permits_by_year": {
+      "2024": 8,
+      "2026": 1
+    },
+    "total_permits": 9
+  },
+  "FBD Insurance": {
+    "matched_employer_names": [
+      "FBD Insurance PLC"
     ],
     "permits_by_year": {
       "2024": 5
     },
     "total_permits": 5
+  },
+  "FedEx Express Ireland": {
+    "matched_employer_names": [
+      "Fedex Express (Irl) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2
+    },
+    "total_permits": 2
+  },
+  "Fenergo": {
+    "matched_employer_names": [
+      "Fenergo Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "FINEOS": {
+    "matched_employer_names": [
+      "Fineos Corporation Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4,
+      "2026": 1
+    },
+    "total_permits": 5
+  },
+  "Fiserv": {
+    "matched_employer_names": [
+      "Fiserv Solutions (Europe) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 23,
+      "2026": 2
+    },
+    "total_permits": 25
+  },
+  "Flipdish": {
+    "matched_employer_names": [
+      "Flipdish Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Forvis Mazars Ireland": {
+    "matched_employer_names": [
+      "Forvis Mazars"
+    ],
+    "permits_by_year": {
+      "2026": 5
+    },
+    "total_permits": 5
+  },
+  "Freudenberg Medical": {
+    "matched_employer_names": [
+      "Freudenberg Medical Ireland Ltd"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "FTI Consulting": {
+    "matched_employer_names": [
+      "FTI Consulting Management Solutions Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3
+    },
+    "total_permits": 3
+  },
+  "Gartner": {
+    "matched_employer_names": [
+      "Gartner Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3
+    },
+    "total_permits": 3
+  },
+  "Gas Networks Ireland": {
+    "matched_employer_names": [
+      "Gas Networks Ireland"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "GE HealthCare": {
+    "matched_employer_names": [
+      "GE Healthcare Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Genesys": {
+    "matched_employer_names": [
+      "Genesys Cloud Services Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 6,
+      "2026": 1
+    },
+    "total_permits": 7
+  },
+  "Gilead Sciences": {
+    "matched_employer_names": [
+      "Gilead Sciences Ireland UC"
+    ],
+    "permits_by_year": {
+      "2024": 6,
+      "2026": 1
+    },
+    "total_permits": 7
+  },
+  "Glanbia": {
+    "matched_employer_names": [
+      "Glanbia Management Services Limited",
+      "Glanbia Nutritionals Ltd",
+      "Glanbia Performance Nutrition Limited"
+    ],
+    "permits_by_year": {
+      "2024": 23,
+      "2026": 2
+    },
+    "total_permits": 25
+  },
+  "GlaxoSmithKline (GSK)": {
+    "matched_employer_names": [
+      "GlaxoSmithKline (Ireland) Ltd",
+      "GlaxoSmithKline Dungarvan Limited"
+    ],
+    "permits_by_year": {
+      "2024": 6
+    },
+    "total_permits": 6
+  },
+  "Goodbody": {
+    "matched_employer_names": [
+      "A & L Goodbody",
+      "A & L Goodbody LLP",
+      "Goodbody Stockbrokers"
+    ],
+    "permits_by_year": {
+      "2024": 12,
+      "2026": 2
+    },
+    "total_permits": 14
+  },
+  "Grant Thornton Ireland": {
+    "matched_employer_names": [
+      "Grant Thornton",
+      "Grant Thornton Corporate Finance Limited",
+      "Grant Thornton Financial and Taxation Consultants Limited"
+    ],
+    "permits_by_year": {
+      "2024": 86,
+      "2026": 4
+    },
+    "total_permits": 90
+  },
+  "Guidewire": {
+    "matched_employer_names": [
+      "Guidewire Software (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 12,
+      "2026": 1
+    },
+    "total_permits": 13
   },
   "Heineken Ireland": {
     "matched_employer_names": [
@@ -2192,117 +1305,143 @@
     },
     "total_permits": 4
   },
-  "Brown Thomas Arnotts": {
+  "Hewlett Packard Enterprise (HPE)": {
     "matched_employer_names": [
-      "Brown Thomas Arnotts Limited"
+      "Hewlett Packard Enterprise Ireland Limited"
     ],
     "permits_by_year": {
-      "2024": 6,
+      "2024": 1,
       "2026": 1
     },
-    "total_permits": 7
+    "total_permits": 2
   },
-  "Eason": {
+  "Hollister Incorporated": {
     "matched_employer_names": [
-      "Corked Season 2 Designated Activity Company",
-      "Cybereason Ireland Limited",
-      "Eason Limited",
-      "Season Master Double Glazing Ltd",
-      "Seasons Catering Limited"
+      "Hollister ULC",
+      "Hollister ULC Unlimited Company"
     ],
     "permits_by_year": {
-      "2024": 9,
-      "2026": 3
-    },
-    "total_permits": 12
-  },
-  "Currys Ireland": {
-    "matched_employer_names": [
-      "Currys Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3,
+      "2024": 2,
       "2026": 1
-    },
-    "total_permits": 4
-  },
-  "Smyths Toys Superstores": {
-    "matched_employer_names": [
-      "ST Ireland Limited",
-      "Smyths Toys Limited"
-    ],
-    "permits_by_year": {
-      "2024": 4
-    },
-    "total_permits": 4
-  },
-  "Boots Ireland": {
-    "matched_employer_names": [
-      "Boots Hearingcare Ltd",
-      "Boots Retail (Ireland) Limited"
-    ],
-    "permits_by_year": {
-      "2024": 3
     },
     "total_permits": 3
   },
-  "LloydsPharmacy Ireland": {
+  "Honeywell": {
     "matched_employer_names": [
-      "Arm Ireland Limited"
+      "Honeywell Advanced Limited",
+      "Honeywell Control Systems Limited",
+      "Honeywell Measurex (Ireland) Limited",
+      "Honeywell Productivity Solutions (Ireland) Limited"
     ],
     "permits_by_year": {
-      "2024": 1,
-      "2026": 1
+      "2024": 28,
+      "2026": 4
     },
-    "total_permits": 2
+    "total_permits": 32
   },
-  "Uniphar Group": {
+  "Hostelworld": {
     "matched_employer_names": [
-      "UNIPHAR PUBLIC LIMITED COMPANY",
-      "Uniphar Group",
-      "Uniphar Medtech",
-      "Uniphar Medtech Limited",
-      "Uniphar PLC",
-      "Uniphar Wholesale Limited"
-    ],
-    "permits_by_year": {
-      "2024": 12,
-      "2026": 2
-    },
-    "total_permits": 14
-  },
-  "Superdrug Ireland": {
-    "matched_employer_names": [
-      "R & U Company Limited"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "Waterstones Ireland": {
-    "matched_employer_names": [
-      "ST Ireland Limited"
+      "Hostelworld.com Limited"
     ],
     "permits_by_year": {
       "2024": 2
     },
     "total_permits": 2
   },
-  "Next Ireland": {
+  "HSBC Ireland": {
     "matched_employer_names": [
-      "Appnext Technologies Limited",
-      "Greenvolt Next Ireland Limited"
+      "HSBC Continental Europe",
+      "HSBC Securities Services (Ireland) DAC"
     ],
     "permits_by_year": {
+      "2024": 9,
       "2026": 2
+    },
+    "total_permits": 11
+  },
+  "Huawei Ireland": {
+    "matched_employer_names": [
+      "Huawei Technologies (Ireland) Co Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 40,
+      "2026": 1
+    },
+    "total_permits": 41
+  },
+  "ICON plc": {
+    "matched_employer_names": [
+      "ICON Clinical Research Limited",
+      "Icon Accountancy & Taxation Services Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 18,
+      "2026": 1
+    },
+    "total_permits": 19
+  },
+  "IDA Ireland": {
+    "matched_employer_names": [
+      "IDA Ireland"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Indeed": {
+    "matched_employer_names": [
+      "Indeed Ireland Operations Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Infineon Technologies": {
+    "matched_employer_names": [
+      "Infineon Technologies Ireland Limited",
+      "Infineon Technologies Semiconductor Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 3
+    },
+    "total_permits": 6
+  },
+  "Intercom": {
+    "matched_employer_names": [
+      "Intercom R&D Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 17,
+      "2026": 1
+    },
+    "total_permits": 18
+  },
+  "Invesco": {
+    "matched_employer_names": [
+      "Invesco Investment Management Limited",
+      "Invesco Ltd."
+    ],
+    "permits_by_year": {
+      "2024": 2
     },
     "total_permits": 2
   },
-  "Decathlon Ireland": {
+  "IQ-EQ": {
     "matched_employer_names": [
-      "Decathlon Sports Ireland Limited"
+      "IQ EQ Fund Management (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "IQVIA": {
+    "matched_employer_names": [
+      "IQVIA RDS Ireland Limited"
     ],
     "permits_by_year": {
       "2024": 4,
@@ -2310,13 +1449,91 @@
     },
     "total_permits": 5
   },
-  "Life Style Sports": {
+  "Irish Distillers (Pernod Ricard)": {
     "matched_employer_names": [
-      "IFES Ireland (ROI) Ltd",
-      "ST Ireland Limited"
+      "Irish Distillers International Ltd",
+      "Irish Distillers Limited"
     ],
     "permits_by_year": {
       "2024": 3
+    },
+    "total_permits": 3
+  },
+  "Irish Ferries": {
+    "matched_employer_names": [
+      "Irish Ferries Services Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "Irish Life": {
+    "matched_employer_names": [
+      "Irish Life Financial Services Ltd",
+      "Irish Life Group Services Limited",
+      "Irish Life Investment Managers Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 14,
+      "2026": 1
+    },
+    "total_permits": 15
+  },
+  "Irish Rail (Iarnr\u00f3d \u00c9ireann)": {
+    "matched_employer_names": [
+      "Iarnr\u00f3d \u00c9ireann - Irish Rail"
+    ],
+    "permits_by_year": {
+      "2024": 33,
+      "2026": 7
+    },
+    "total_permits": 40
+  },
+  "Jacobs": {
+    "matched_employer_names": [
+      "Jacobs Anderson Ltd",
+      "Jacobs Engineering Ireland Limited",
+      "Jacobs Engineering Ireland Ltd",
+      "Jacobs on the Mall Limited"
+    ],
+    "permits_by_year": {
+      "2024": 20,
+      "2026": 2
+    },
+    "total_permits": 22
+  },
+  "John Sisk & Son (Sisk Group)": {
+    "matched_employer_names": [
+      "John Sisk & Son (Holdings) Limited",
+      "John Sisk & Son (Holdings) Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 11,
+      "2026": 1
+    },
+    "total_permits": 12
+  },
+  "Johnson Controls": {
+    "matched_employer_names": [
+      "Johnson Controls Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "Keelings": {
+    "matched_employer_names": [
+      "Keelings Retail Unlimited Company",
+      "Keelings Solutions Limited",
+      "Keelings Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 2,
+      "2026": 1
     },
     "total_permits": 3
   },
@@ -2334,38 +1551,6 @@
     },
     "total_permits": 11
   },
-  "Cairn Homes": {
-    "matched_employer_names": [
-      "Cairn Homes",
-      "Cairn Homes Construction Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 6,
-      "2026": 1
-    },
-    "total_permits": 7
-  },
-  "John Sisk & Son (Sisk Group)": {
-    "matched_employer_names": [
-      "John Sisk & Son (Holdings) Limited",
-      "John Sisk & Son (Holdings) Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 11,
-      "2026": 1
-    },
-    "total_permits": 12
-  },
-  "Mercury Engineering": {
-    "matched_employer_names": [
-      "Mercury Engineering Limited"
-    ],
-    "permits_by_year": {
-      "2024": 19,
-      "2026": 1
-    },
-    "total_permits": 20
-  },
   "Kirby Group Engineering": {
     "matched_employer_names": [
       "Kirby Group Engineering ULC",
@@ -2377,41 +1562,184 @@
     },
     "total_permits": 70
   },
-  "Arup": {
+  "Kuehne+Nagel Ireland": {
     "matched_employer_names": [
-      "Ove Arup & Partners Ireland Limited",
-      "R & U Company Limited",
-      "Sarup Catering Limited"
+      "Kuehne & Nagel (Ireland) Limited"
     ],
     "permits_by_year": {
-      "2024": 64,
-      "2026": 4
+      "2024": 3,
+      "2026": 1
     },
-    "total_permits": 68
+    "total_permits": 4
   },
-  "Jacobs": {
+  "Lam Research": {
     "matched_employer_names": [
-      "Jacobs Anderson Ltd",
-      "Jacobs Engineering Ireland Limited",
-      "Jacobs Engineering Ireland Ltd",
-      "Jacobs on the Mall Limited"
+      "Lam Research (Ireland) Limited"
     ],
     "permits_by_year": {
-      "2024": 20,
-      "2026": 2
+      "2024": 21,
+      "2026": 1
     },
     "total_permits": 22
   },
-  "AECOM": {
+  "LearnUpon": {
     "matched_employer_names": [
-      "AECOM Ireland Limited",
-      "Benova E-Commerce Limited"
+      "LearnUpon Limited"
     ],
     "permits_by_year": {
-      "2024": 18,
-      "2026": 3
+      "2026": 1
     },
-    "total_permits": 21
+    "total_permits": 1
+  },
+  "Logitech": {
+    "matched_employer_names": [
+      "Logitech Ireland Services Limited"
+    ],
+    "permits_by_year": {
+      "2024": 15,
+      "2026": 1
+    },
+    "total_permits": 16
+  },
+  "Macquarie Group": {
+    "matched_employer_names": [
+      "Macquarie Aircraft Leasing Services Ltd",
+      "Macquarie Bank Europe Designated Activity Company"
+    ],
+    "permits_by_year": {
+      "2024": 9
+    },
+    "total_permits": 9
+  },
+  "Maples Group Ireland": {
+    "matched_employer_names": [
+      "Maples Fund Management Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Mars Ireland": {
+    "matched_employer_names": [
+      "Mars Capital Management Ireland DAC"
+    ],
+    "permits_by_year": {
+      "2024": 3
+    },
+    "total_permits": 3
+  },
+  "Marsh McLennan": {
+    "matched_employer_names": [
+      "Marsh & McLennan Innovation Centre Limited"
+    ],
+    "permits_by_year": {
+      "2024": 6
+    },
+    "total_permits": 6
+  },
+  "Mason Hayes & Curran": {
+    "matched_employer_names": [
+      "Mason Hayes & Curran LLP",
+      "Mason Hayes & Curran Professional Services Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 2
+    },
+    "total_permits": 2
+  },
+  "Matheson": {
+    "matched_employer_names": [
+      "Matheson LLP"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "McCann FitzGerald": {
+    "matched_employer_names": [
+      "McCann FitzGerald"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Mediahuis Ireland": {
+    "matched_employer_names": [
+      "Mediahuis Ireland Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 8,
+      "2026": 1
+    },
+    "total_permits": 9
+  },
+  "Mediolanum International Funds": {
+    "matched_employer_names": [
+      "Mediolanum International Funds Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Mercer": {
+    "matched_employer_names": [
+      "Mercer (Ireland) Limited",
+      "Mercer Global Investments Europe Limited",
+      "Mercer Ireland Limited",
+      "Mercer Ireland Ltd",
+      "Mercer Premier Services Limited"
+    ],
+    "permits_by_year": {
+      "2024": 5,
+      "2026": 1
+    },
+    "total_permits": 6
+  },
+  "Merck Group": {
+    "matched_employer_names": [
+      "Merck Millipore Limited",
+      "Merck Serono Ireland Limited",
+      "Merck Sharp & Dohme Ireland (Human Health) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 14,
+      "2026": 2
+    },
+    "total_permits": 16
+  },
+  "Mercury Engineering": {
+    "matched_employer_names": [
+      "Mercury Engineering Limited"
+    ],
+    "permits_by_year": {
+      "2024": 19,
+      "2026": 1
+    },
+    "total_permits": 20
+  },
+  "Merit Medical": {
+    "matched_employer_names": [
+      "Merit Medical Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Microchip Technology": {
+    "matched_employer_names": [
+      "Microchip Technology Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 6,
+      "2026": 1
+    },
+    "total_permits": 7
   },
   "Mott MacDonald": {
     "matched_employer_names": [
@@ -2423,80 +1751,48 @@
     },
     "total_permits": 11
   },
-  "Tetra Tech": {
+  "MSD": {
     "matched_employer_names": [
-      "Tetra Tech Ireland Limited",
-      "Trate Limited"
+      "MSD IRELAND (DUNBOYNE BIOLOGICS)"
     ],
     "permits_by_year": {
-      "2024": 2,
-      "2026": 3
+      "2024": 3
     },
-    "total_permits": 5
+    "total_permits": 3
   },
-  "Stantec": {
+  "MSD (Merck Sharp & Dohme)": {
     "matched_employer_names": [
-      "ST Ireland Limited",
-      "Stantec Ireland Limited",
-      "Stantec UK Limited"
+      "MSD IRELAND (DUNBOYNE BIOLOGICS)"
     ],
     "permits_by_year": {
-      "2024": 3,
-      "2026": 1
+      "2024": 3
     },
-    "total_permits": 4
+    "total_permits": 3
   },
-  "Arcadis": {
+  "NetApp": {
     "matched_employer_names": [
-      "Arcadis Ireland Ltd"
+      "NetApp Ireland Limited",
+      "NetApp Ireland Unlimited Company"
     ],
     "permits_by_year": {
-      "2026": 1
-    },
-    "total_permits": 1
-  },
-  "AtkinsR\u00e9alis": {
-    "matched_employer_names": [
-      "AtkinsR\u00e9alis Limited"
-    ],
-    "permits_by_year": {
-      "2026": 4
-    },
-    "total_permits": 4
-  },
-  "Bord G\u00e1is Energy": {
-    "matched_employer_names": [
-      "Bord G\u00e1is Energy"
-    ],
-    "permits_by_year": {
-      "2024": 15,
+      "2024": 18,
       "2026": 2
     },
-    "total_permits": 17
+    "total_permits": 20
   },
-  "Energia Group": {
+  "Northern Trust": {
     "matched_employer_names": [
-      "Eiffage Energia Ireland Limited"
+      "Northern Trust Management Services (Ireland) Ltd"
     ],
     "permits_by_year": {
+      "2024": 17,
       "2026": 1
     },
-    "total_permits": 1
+    "total_permits": 18
   },
-  "EirGrid Group": {
+  "Notion": {
     "matched_employer_names": [
-      "EirGrid PLC",
-      "EirGrid Public Limited Company"
-    ],
-    "permits_by_year": {
-      "2024": 33,
-      "2026": 7
-    },
-    "total_permits": 40
-  },
-  "Gas Networks Ireland": {
-    "matched_employer_names": [
-      "Gas Networks Ireland"
+      "Notion Labs, Ireland Limited"
     ],
     "permits_by_year": {
       "2024": 1,
@@ -2504,41 +1800,19 @@
     },
     "total_permits": 2
   },
-  "Coillte": {
+  "Novartis": {
     "matched_employer_names": [
-      "Coillte Teo"
+      "Novartis Ireland Limited"
     ],
     "permits_by_year": {
-      "2024": 6
+      "2024": 18,
+      "2026": 1
     },
-    "total_permits": 6
+    "total_permits": 19
   },
-  "Uisce \u00c9ireann (Irish Water)": {
+  "Okta": {
     "matched_employer_names": [
-      "Uisce \u00c9ireann"
-    ],
-    "permits_by_year": {
-      "2024": 27,
-      "2026": 2
-    },
-    "total_permits": 29
-  },
-  "Ryanair": {
-    "matched_employer_names": [
-      "Ryanair DAC",
-      "Ryanair Labs Limited",
-      "Ryanair Labs Ltd"
-    ],
-    "permits_by_year": {
-      "2024": 11,
-      "2026": 2
-    },
-    "total_permits": 13
-  },
-  "Aer Lingus": {
-    "matched_employer_names": [
-      "Aer Lingus  Limited",
-      "Aer Lingus (Ireland) Limited"
+      "Okta Identity Ireland Limited"
     ],
     "permits_by_year": {
       "2024": 7,
@@ -2546,79 +1820,127 @@
     },
     "total_permits": 8
   },
-  "Irish Rail (Iarnr\u00f3d \u00c9ireann)": {
+  "Optum": {
     "matched_employer_names": [
-      "Iarnr\u00f3d \u00c9ireann - Irish Rail"
+      "Optum Health Solutions (Ireland) Limited",
+      "Optum Services (Ireland) Limited"
     ],
     "permits_by_year": {
-      "2024": 33,
-      "2026": 7
+      "2024": 66,
+      "2026": 6
     },
-    "total_permits": 40
+    "total_permits": 72
   },
-  "Bus \u00c9ireann": {
+  "PayPal": {
     "matched_employer_names": [
-      "Bus \u00c9ireann - Irish Bus"
+      "PayPal Europe Services Limited"
     ],
     "permits_by_year": {
-      "2026": 3
+      "2024": 3,
+      "2026": 4
     },
-    "total_permits": 3
+    "total_permits": 7
   },
-  "Dublin Bus": {
+  "Perrigo": {
     "matched_employer_names": [
-      "Bus Atha Cliath - Dublin Bus",
-      "Bus \u00c1tha Cliath - Dublin Bus"
+      "Perrigo Pharma International D.A.C."
     ],
     "permits_by_year": {
-      "2024": 49,
-      "2026": 1
+      "2024": 4
     },
-    "total_permits": 50
+    "total_permits": 4
   },
-  "An Post": {
+  "Personio": {
     "matched_employer_names": [
-      "An Post",
-      "An Post DAC",
-      "An Post GeoDirectory DAC",
-      "ST Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 9,
-      "2026": 1
-    },
-    "total_permits": 10
-  },
-  "FedEx Express Ireland": {
-    "matched_employer_names": [
-      "Fedex Express (Irl) Limited"
+      "Personio GmbH and Co. KG"
     ],
     "permits_by_year": {
       "2024": 2
     },
     "total_permits": 2
   },
-  "Kuehne+Nagel Ireland": {
+  "Proofpoint": {
     "matched_employer_names": [
-      "Kuehne & Nagel (Ireland) Limited"
+      "Proofpoint Ireland Limited"
     ],
     "permits_by_year": {
-      "2024": 3
+      "2024": 3,
+      "2026": 1
     },
-    "total_permits": 3
+    "total_permits": 4
   },
-  "Fastway Couriers Ireland": {
+  "Pure Storage": {
     "matched_employer_names": [
-      "ST Ireland Limited"
+      "Pure Storage International Limited"
     ],
     "permits_by_year": {
       "2024": 2
     },
     "total_permits": 2
   },
-  "Irish Ferries": {
+  "Reddit": {
     "matched_employer_names": [
-      "Irish Ferries Services Limited"
+      "Reddit Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2
+    },
+    "total_permits": 2
+  },
+  "Refinitiv (LSEG)": {
+    "matched_employer_names": [
+      "Refinitiv Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Regeneron": {
+    "matched_employer_names": [
+      "Regeneron Ireland DAC"
+    ],
+    "permits_by_year": {
+      "2024": 24,
+      "2026": 2
+    },
+    "total_permits": 26
+  },
+  "Research Ireland": {
+    "matched_employer_names": [
+      "AUGUSTA LIFE SCIENCES RESEARCH CENTER LIMITED",
+      "Adhesives Research Ireland LImited",
+      "Becton Dickinson Research Centre Ireland Limited",
+      "Breakthrough Cancer Research",
+      "Circana Market Research Company",
+      "Environmental Systems Research Institute Ireland limited",
+      "Foundry Innovation  Research 1 Limited",
+      "GH Research Ireland Limited",
+      "Health Research Board",
+      "Health and Happiness (HH) Research Limited",
+      "Henkel Ireland Operations and Research Limited",
+      "Henkel Ireland Operations and Research Ltd",
+      "ICON Clinical Research Limited",
+      "Intel Research and Development Ireland Limited",
+      "Lam Research (Ireland) Limited",
+      "Microsoft Ireland Research Unlimited Company",
+      "On Semiconductor Ireland Research and Design Limited",
+      "Oriflame Research  Development Ltd",
+      "Oriflame Research & Development Ltd",
+      "Seabrook Research Limited",
+      "Shimmer Research Limited",
+      "The NPD Group Market Research Ltd",
+      "Western Automation Research & Development Limited"
+    ],
+    "permits_by_year": {
+      "2024": 292,
+      "2026": 17
+    },
+    "total_permits": 309
+  },
+  "ResMed": {
+    "matched_employer_names": [
+      "ResMed Sensor Technologies Limited"
     ],
     "permits_by_year": {
       "2024": 1,
@@ -2626,34 +1948,265 @@
     },
     "total_permits": 2
   },
-  "Stena Line Ireland": {
+  "Riot Games": {
     "matched_employer_names": [
-      "ST Ireland Limited"
+      "Riot Games Ireland Broadcasting Limited",
+      "Riot Games Limited"
     ],
     "permits_by_year": {
-      "2024": 2
+      "2024": 7
     },
-    "total_permits": 2
+    "total_permits": 7
   },
-  "Maldron Hotels": {
+  "Rippling": {
     "matched_employer_names": [
-      "Ogwell Ltd t/a Maldron Hotel Shandon"
+      "Rippling Ireland Limited",
+      "Rippling Payments Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 7,
+      "2026": 1
+    },
+    "total_permits": 8
+  },
+  "Roche": {
+    "matched_employer_names": [
+      "Caroline Roche",
+      "Mr Cathal Roche",
+      "Roche Injury Clinic_x000D_",
+      "Roche Manufacturing Limited",
+      "Roche Moyle Ltd",
+      "Roche Products (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 6
+    },
+    "total_permits": 9
+  },
+  "Rockwell Automation": {
+    "matched_employer_names": [
+      "Rockwell Automation Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4
+    },
+    "total_permits": 4
+  },
+  "RSA Insurance Ireland": {
+    "matched_employer_names": [
+      "RSA Insurance Ireland Designated Activity Company"
+    ],
+    "permits_by_year": {
+      "2024": 11
+    },
+    "total_permits": 11
+  },
+  "Rubrik": {
+    "matched_employer_names": [
+      "Rubrik Cloud Data Management Limited"
     ],
     "permits_by_year": {
       "2024": 1
     },
     "total_permits": 1
   },
-  "Mediahuis Ireland": {
+  "Sage": {
     "matched_employer_names": [
-      "M.EDIA",
-      "Mediahuis Ireland Ltd"
+      "Sage Hibernia Limited",
+      "Sterling Sage Advisors Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3
+    },
+    "total_permits": 3
+  },
+  "Sanofi": {
+    "matched_employer_names": [
+      "Sanofi - Aventis Ireland Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Savills Ireland": {
+    "matched_employer_names": [
+      "Savills Commercial (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Schneider Electric": {
+    "matched_employer_names": [
+      "Schneider Electric IT Logistics Europe Limited",
+      "Schneider Electric Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 12,
+      "2026": 2
+    },
+    "total_permits": 14
+  },
+  "Slalom": {
+    "matched_employer_names": [
+      "Slalom Technology and Management Solutions Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Smartling": {
+    "matched_employer_names": [
+      "Smartling Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Squarespace": {
+    "matched_employer_names": [
+      "Squarespace Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 6,
+      "2026": 1
+    },
+    "total_permits": 7
+  },
+  "Stantec": {
+    "matched_employer_names": [
+      "Stantec Ireland Limited",
+      "Stantec UK Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "Stryker": {
+    "matched_employer_names": [
+      "Stryker European Operations Limited",
+      "Stryker Ireland Limited",
+      "Stryker NV Operations Limited"
+    ],
+    "permits_by_year": {
+      "2024": 21,
+      "2026": 2
+    },
+    "total_permits": 23
+  },
+  "SumUp": {
+    "matched_employer_names": [
+      "SumUp Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Sun Life Ireland": {
+    "matched_employer_names": [
+      "Sun Life Information Services Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 7,
+      "2026": 1
+    },
+    "total_permits": 8
+  },
+  "Susquehanna International Group (SIG)": {
+    "matched_employer_names": [
+      "Susquehanna Dublin Limited",
+      "Susquehanna International Group Limited"
+    ],
+    "permits_by_year": {
+      "2024": 7,
+      "2026": 2
+    },
+    "total_permits": 9
+  },
+  "Synopsys": {
+    "matched_employer_names": [
+      "Synopsys International Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 17,
+      "2026": 1
+    },
+    "total_permits": 18
+  },
+  "Takeda": {
+    "matched_employer_names": [
+      "Takeda Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4
+    },
+    "total_permits": 4
+  },
+  "Teagasc": {
+    "matched_employer_names": [
+      "Teagasc (Agriculture & Food Development Authority)"
+    ],
+    "permits_by_year": {
+      "2024": 2
+    },
+    "total_permits": 2
+  },
+  "Tech Mahindra": {
+    "matched_employer_names": [
+      "Tech Mahindra Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 3
+    },
+    "total_permits": 6
+  },
+  "Teleflex": {
+    "matched_employer_names": [
+      "Teleflex Medical Europe Limited"
     ],
     "permits_by_year": {
       "2024": 8,
       "2026": 1
     },
     "total_permits": 9
+  },
+  "Teleperformance (Ireland)": {
+    "matched_employer_names": [
+      "Teleperformance Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Tenable": {
+    "matched_employer_names": [
+      "Tenable Network Security Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Tetra Tech": {
+    "matched_employer_names": [
+      "Tetra Tech Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 3
+    },
+    "total_permits": 3
   },
   "The Irish Times": {
     "matched_employer_names": [
@@ -2666,6 +2219,26 @@
     },
     "total_permits": 4
   },
+  "Thermo Fisher Scientific": {
+    "matched_employer_names": [
+      "Thermo Fisher Scientific Cork Limited"
+    ],
+    "permits_by_year": {
+      "2024": 8
+    },
+    "total_permits": 8
+  },
+  "Three Ireland": {
+    "matched_employer_names": [
+      "Three Ireland (Hutchison) Limited",
+      "Three Tigers Food Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 9,
+      "2026": 2
+    },
+    "total_permits": 11
+  },
   "Tourism Ireland": {
     "matched_employer_names": [
       "Maritime Tourism Limited"
@@ -2675,179 +2248,28 @@
     },
     "total_permits": 1
   },
-  "Enterprise Ireland": {
+  "Trane Technologies": {
     "matched_employer_names": [
-      "Amarildo Kociu Enterprises Limited",
-      "Atview Enterprises Limited",
-      "Ballyfaskin Enterprises Limited",
-      "Beniska Enterprises Ltd",
-      "Bismi Enterprise Limited",
-      "Bothma Enterprises Ltd",
-      "Carrickdale Enterprises Limited",
-      "Carrickdale Enterprises Ltd t/a Carrickdale Hotel",
-      "Clonmel Enterprise Limited",
-      "Colin Tobin Enterprises Limited",
-      "Corkery Alu-Cast Enterprises Ltd",
-      "DMD United Enterprises Limited",
-      "DW Express Catering Enterprises Limited",
-      "Dead Space Enterprises",
-      "Doon Farm Enterprise Limited",
-      "Elcon Commercial Enterprises Limited",
-      "Enterprise Registry Solutions Limited",
-      "Eochiall Enterprises Limited",
-      "Euprepia Enterprises Limited",
-      "Euprepia Enterprises Unlimited Company",
-      "Festina Lente Enterprises LTD.",
-      "Flogas Enterprise Solutions (Ireland) Limited",
-      "G&J O'Neill Enterprises Ltd",
-      "Guardwell Enterprises Ltd",
-      "Halstead Enterprises Ltd",
-      "Hewlett Packard Enterprise Ireland Limited",
-      "JJV Dairy Enterprises Ltd",
-      "Junior Achievement / Young Enterprise Ireland Clg",
-      "K S K Enterprises Limited",
-      "KPK Food Enterprises Limited",
-      "KSK Enterprises Limited",
-      "Kenry House Enterprises Limited",
-      "Killruddery Estate Enterprises Limited",
-      "Knockfadda Enterprises Limited",
-      "Larkin Engineering Enterprises Limited",
-      "Leighlin Bridge Enterprises Limited",
-      "Leighlinbridge Enterprises Ltd",
-      "Leijen Enterprises Ltd",
-      "Luke Bogue Enterprises Unlimited Company",
-      "Lyrias Dairy Enterprises",
-      "M&T Enterprises Limited",
-      "MKS Food Enterprises Limited",
-      "Michael Cronin Farm Enterprises Ltd",
-      "Mull Enterprises Limited",
-      "Mull Enterprises Limited T/A Yeomanstown Stud",
-      "Mulligan Wren Enterprises Limited",
-      "My Greenway Enterprise LTD",
-      "National Association of Community Enterprise Centres NACEC CLG",
-      "Naver Enterprises Limited",
-      "Origin Enterprises Public Limited Company",
-      "Paul & Susie Egan Enterprises Limited",
-      "Phoenix Rock Enterprises Limited",
-      "Ryan Agri Enterprises Lauragh Ltd",
-      "Sandra Duffy/Vinnie Duffy Enterprises Limited",
-      "Sayana Food Enterprises Limited",
-      "Sezer Enterprises Ltd",
-      "Shamrock Farm Enterprises Limited",
-      "Skellville Enterprises Limited",
-      "Smith Comey Enterprises Limited",
-      "Sujjon Enterprises Limited",
-      "Swavi Enterprises Limited",
-      "TIGL Ireland Enterprises LTD",
-      "TIGL Ireland Enterprises Limited",
-      "Tehreem Enterprise Limited",
-      "Vena Enterprises Limited",
-      "Vinnie Duffy Enterprises Ltd.",
-      "Walkinstown Green Social Enterprises Ltd,"
+      "Trane Technologies International Limited"
     ],
     "permits_by_year": {
-      "2024": 72,
-      "2026": 39
+      "2024": 4
     },
-    "total_permits": 111
+    "total_permits": 4
   },
-  "IDA Ireland": {
+  "Trend Micro": {
     "matched_employer_names": [
-      "IDA Ireland"
+      "Trend Micro EMEA Ltd"
     ],
     "permits_by_year": {
-      "2024": 1
+      "2024": 4
     },
-    "total_permits": 1
+    "total_permits": 4
   },
-  "Teagasc": {
+  "Udemy": {
     "matched_employer_names": [
-      "Teagasc (Agriculture & Food Development Authority)"
-    ],
-    "permits_by_year": {
-      "2024": 2
-    },
-    "total_permits": 2
-  },
-  "Trinity College Dublin (TCD)": {
-    "matched_employer_names": [
-      "Trinity College Dublin Academy of Dramatic Arts - The Lir Academy",
-      "Trinity College Dublin, the University of Dublin",
-      "Tyco Ireland Limited"
-    ],
-    "permits_by_year": {
-      "2024": 5,
-      "2026": 4
-    },
-    "total_permits": 9
-  },
-  "University College Dublin (UCD)": {
-    "matched_employer_names": [
-      "Tyco Ireland Limited",
-      "University College Dublin",
-      "University College Dublin Foundation CLG"
-    ],
-    "permits_by_year": {
-      "2024": 27,
-      "2026": 5
-    },
-    "total_permits": 32
-  },
-  "Dublin City University (DCU)": {
-    "matched_employer_names": [
-      "Dublin City University"
-    ],
-    "permits_by_year": {
-      "2024": 1,
-      "2026": 1
-    },
-    "total_permits": 2
-  },
-  "University College Cork (UCC)": {
-    "matched_employer_names": [
-      "Tyco Ireland Limited",
-      "University College Cork"
-    ],
-    "permits_by_year": {
-      "2024": 17,
-      "2026": 2
-    },
-    "total_permits": 19
-  },
-  "University of Galway": {
-    "matched_employer_names": [
-      "Gal\u00fa Limited"
-    ],
-    "permits_by_year": {
-      "2026": 1
-    },
-    "total_permits": 1
-  },
-  "University of Limerick (UL)": {
-    "matched_employer_names": [
-      "University of Limerick"
-    ],
-    "permits_by_year": {
-      "2024": 7,
-      "2026": 3
-    },
-    "total_permits": 10
-  },
-  "South East Technological University (SETU)": {
-    "matched_employer_names": [
-      "ST Ireland Limited",
-      "South East Technological University",
-      "South East Technological University (SETU)"
-    ],
-    "permits_by_year": {
-      "2024": 9,
-      "2026": 1
-    },
-    "total_permits": 10
-  },
-  "Technological University Dublin (TU Dublin)": {
-    "matched_employer_names": [
-      "Technological University Dublin"
+      "Udemy Ireland Limited",
+      "Udemy Ireland Ltd"
     ],
     "permits_by_year": {
       "2024": 4,
@@ -2855,19 +2277,75 @@
     },
     "total_permits": 5
   },
-  "Munster Technological University (MTU)": {
+  "Uisce \u00c9ireann (Irish Water)": {
     "matched_employer_names": [
-      "Munster Technological University (MTU)",
-      "ST Ireland Limited"
+      "Uisce \u00c9ireann"
     ],
     "permits_by_year": {
-      "2024": 8
+      "2024": 27,
+      "2026": 2
     },
-    "total_permits": 8
+    "total_permits": 29
   },
-  "Indeed (Ireland)": {
+  "Uniphar Group": {
     "matched_employer_names": [
-      "Indeed Ireland Operations Limited"
+      "UNIPHAR PUBLIC LIMITED COMPANY",
+      "Uniphar Group",
+      "Uniphar Medtech",
+      "Uniphar Medtech Limited",
+      "Uniphar PLC",
+      "Uniphar Wholesale Limited"
+    ],
+    "permits_by_year": {
+      "2024": 12,
+      "2026": 2
+    },
+    "total_permits": 14
+  },
+  "Veolia Ireland": {
+    "matched_employer_names": [
+      "Veolia Energy Services Ireland Ltd",
+      "Veolia Water Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 15,
+      "2026": 2
+    },
+    "total_permits": 17
+  },
+  "Virgin Media Ireland": {
+    "matched_employer_names": [
+      "Virgin Media Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "Vodafone Ireland": {
+    "matched_employer_names": [
+      "Vodafone Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 14,
+      "2026": 1
+    },
+    "total_permits": 15
+  },
+  "Walkers Ireland": {
+    "matched_employer_names": [
+      "Walkers (Ireland) LLP",
+      "Walkers Corporate Services (Ireland) Ltd."
+    ],
+    "permits_by_year": {
+      "2024": 4
+    },
+    "total_permits": 4
+  },
+  "Waters Corporation": {
+    "matched_employer_names": [
+      "Waters Chromatography Ireland Limited"
     ],
     "permits_by_year": {
       "2024": 1
@@ -2884,18 +2362,162 @@
     },
     "total_permits": 7
   },
-  "Fenergo": {
+  "Waystone": {
     "matched_employer_names": [
-      "Fenergo Limited"
+      "Waystone Centralised Services (IE) Limited",
+      "Waystone Centralised Services (IE) Ltd."
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Wells Fargo": {
+    "matched_employer_names": [
+      "Wells Fargo Bank International"
+    ],
+    "permits_by_year": {
+      "2024": 2
+    },
+    "total_permits": 2
+  },
+  "William Fry": {
+    "matched_employer_names": [
+      "William Fry LLP"
     ],
     "permits_by_year": {
       "2026": 1
     },
     "total_permits": 1
   },
-  "SuperValu / Musgrave": {
+  "Willis Towers Watson (WTW)": {
     "matched_employer_names": [
-      "Musgrave Limited"
+      "Willis Towers Watson (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Winthrop Technologies": {
+    "matched_employer_names": [
+      "Winthrop Technologies Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "WorkFusion": {
+    "matched_employer_names": [
+      "WorkFusion Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2
+    },
+    "total_permits": 2
+  },
+  "Workvivo": {
+    "matched_employer_names": [
+      "Workvivo Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "WuXi Biologics": {
+    "matched_employer_names": [
+      "WuXi Biologics Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 252,
+      "2026": 16
+    },
+    "total_permits": 268
+  },
+  "Zendesk": {
+    "matched_employer_names": [
+      "Zendesk International Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Zimmer Biomet": {
+    "matched_employer_names": [
+      "Zimmer Biomet Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Zurich Insurance": {
+    "matched_employer_names": [
+      "Zurich Insurance Company Ltd",
+      "Zurich Insurance Public Limited Company"
+    ],
+    "permits_by_year": {
+      "2024": 12,
+      "2026": 1
+    },
+    "total_permits": 13
+  },
+  "Anthropic": {
+    "matched_employer_names": [
+      "Anthropic Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Atlas Copco Ireland": {
+    "matched_employer_names": [
+      "Atlas Copco (Ireland) Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "Chargebee": {
+    "matched_employer_names": [
+      "Chargebee Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Cubic\u00b3": {
+    "matched_employer_names": [
+      "Cubic Telecom Limited"
+    ],
+    "permits_by_year": {
+      "2024": 25,
+      "2026": 1
+    },
+    "total_permits": 26
+  },
+  "Daon": {
+    "matched_employer_names": [
+      "Daon Technology"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Forcepoint": {
+    "matched_employer_names": [
+      "Forcepoint International Technology Ltd"
     ],
     "permits_by_year": {
       "2024": 2,
@@ -2903,24 +2525,905 @@
     },
     "total_permits": 3
   },
-  "Concentrix (Ireland)": {
+  "Harvey": {
     "matched_employer_names": [
-      "Concentrix CVG Ireland Limited",
-      "Concentrix Srev Europe Limited",
-      "NTR PLC"
+      "Harvey Norman Trading (Ireland) Limited"
     ],
     "permits_by_year": {
-      "2024": 4
+      "2024": 8
+    },
+    "total_permits": 8
+  },
+  "Hitachi Energy": {
+    "matched_employer_names": [
+      "Hitachi Energy Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
     },
     "total_permits": 4
   },
-  "Teleperformance (Ireland)": {
+  "Motorola Solutions": {
     "matched_employer_names": [
-      "Teleperformance Ireland Limited"
+      "Motorola Solutions Ireland Ltd",
+      "Motorola Solutions Ireland Ltd."
+    ],
+    "permits_by_year": {
+      "2024": 26,
+      "2026": 1
+    },
+    "total_permits": 27
+  },
+  "RoviSys": {
+    "matched_employer_names": [
+      "RoviSys Ireland Private Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "SHEIN": {
+    "matched_employer_names": [
+      "SHEIN TECHNOLOGY CO., LIMITED",
+      "Shein Technology Co. Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "Taoglas": {
+    "matched_employer_names": [
+      "Taoglas Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2
+    },
+    "total_permits": 2
+  },
+  "Workato": {
+    "matched_employer_names": [
+      "Workato Hibernia Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "Trinity College Dublin": {
+    "matched_employer_names": [
+      "Trinity College Dublin Academy of Dramatic Arts - The Lir Academy",
+      "Trinity College Dublin, the University of Dublin"
+    ],
+    "permits_by_year": {
+      "2026": 3
+    },
+    "total_permits": 3
+  },
+  "University College Cork (UCC)": {
+    "matched_employer_names": [
+      "University College Cork"
+    ],
+    "permits_by_year": {
+      "2024": 12,
+      "2026": 1
+    },
+    "total_permits": 13
+  },
+  "University College Dublin (UCD)": {
+    "matched_employer_names": [
+      "University College Dublin",
+      "University College Dublin Foundation CLG"
+    ],
+    "permits_by_year": {
+      "2024": 22,
+      "2026": 4
+    },
+    "total_permits": 26
+  },
+  "Dublin City University (DCU)": {
+    "matched_employer_names": [
+      "Dublin City University"
+    ],
+    "permits_by_year": {
+      "2024": 1,
+      "2026": 1
+    },
+    "total_permits": 2
+  },
+  "University of Limerick (UL)": {
+    "matched_employer_names": [
+      "University of Limerick"
+    ],
+    "permits_by_year": {
+      "2024": 7,
+      "2026": 3
+    },
+    "total_permits": 10
+  },
+  "Carrier": {
+    "matched_employer_names": [
+      "Carrier Intercompany Lending DAC"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Maynooth University": {
+    "matched_employer_names": [
+      "Maynooth University"
     ],
     "permits_by_year": {
       "2026": 1
     },
     "total_permits": 1
+  },
+  "Munster Technological University (MTU)": {
+    "matched_employer_names": [
+      "Munster Technological University (MTU)"
+    ],
+    "permits_by_year": {
+      "2024": 6
+    },
+    "total_permits": 6
+  },
+  "Technological University Dublin (TU Dublin)": {
+    "matched_employer_names": [
+      "Technological University Dublin"
+    ],
+    "permits_by_year": {
+      "2024": 4,
+      "2026": 1
+    },
+    "total_permits": 5
+  },
+  "South East Technological University (SETU)": {
+    "matched_employer_names": [
+      "South East Technological University",
+      "South East Technological University (SETU)"
+    ],
+    "permits_by_year": {
+      "2024": 7,
+      "2026": 1
+    },
+    "total_permits": 8
+  },
+  "Technological University of the Shannon (TUS)": {
+    "matched_employer_names": [
+      "Technological University of the Shannon: Midlands Midwest"
+    ],
+    "permits_by_year": {
+      "2024": 5,
+      "2026": 1
+    },
+    "total_permits": 6
+  },
+  "Abbott": {
+    "matched_employer_names": [
+      "Abbott Diagnostics",
+      "Abbott Ireland",
+      "Abbott Ireland (Irish Branch)",
+      "Abbott Medical Ireland Limited",
+      "Abbott Rapid Dx International Limited",
+      "Woodtown Abbott Farm Limited"
+    ],
+    "permits_by_year": {
+      "2024": 45,
+      "2026": 6
+    },
+    "total_permits": 51
+  },
+  "AbbVie": {
+    "matched_employer_names": [
+      "AbbVie Ireland NL B.V.",
+      "AbbVie Ireland NL BV",
+      "AbbVie Limited"
+    ],
+    "permits_by_year": {
+      "2024": 9,
+      "2026": 1
+    },
+    "total_permits": 10
+  },
+  "Amgen": {
+    "matched_employer_names": [
+      "Amgen Technology (Ireland) Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Analog Devices": {
+    "matched_employer_names": [
+      "Analog Devices International Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 45,
+      "2026": 6
+    },
+    "total_permits": 51
+  },
+  "Avolon": {
+    "matched_employer_names": [
+      "Avolon Aerospace Leasing Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Bank of America": {
+    "matched_employer_names": [
+      "Bank of America Europe DAC",
+      "Bank of America Europe Designated Activity Company"
+    ],
+    "permits_by_year": {
+      "2024": 49,
+      "2026": 4
+    },
+    "total_permits": 53
+  },
+  "Barclays": {
+    "matched_employer_names": [
+      "Barclays Bank Ireland PLC"
+    ],
+    "permits_by_year": {
+      "2024": 3
+    },
+    "total_permits": 3
+  },
+  "BlackRock": {
+    "matched_employer_names": [
+      "Blackrock Clinic Unlimited Company",
+      "Blackrock Healthcare Group Unlimited",
+      "Blackrock Resourcing Limited"
+    ],
+    "permits_by_year": {
+      "2024": 45,
+      "2026": 4
+    },
+    "total_permits": 49
+  },
+  "Boston Scientific": {
+    "matched_employer_names": [
+      "Boston Scientific Cork",
+      "Boston Scientific Ireland Limited",
+      "Boston Scientific Limited"
+    ],
+    "permits_by_year": {
+      "2024": 145,
+      "2026": 4
+    },
+    "total_permits": 149
+  },
+  "Citi": {
+    "matched_employer_names": [
+      "Citi Bus Limited",
+      "Citi Bus Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 55,
+      "2026": 3
+    },
+    "total_permits": 58
+  },
+  "Intel": {
+    "matched_employer_names": [
+      "Intel Ireland Limited",
+      "Intel Ireland Ltd",
+      "Intel Research and Development Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 331,
+      "2026": 18
+    },
+    "total_permits": 349
+  },
+  "Mastercard": {
+    "matched_employer_names": [
+      "MasterCard Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 124,
+      "2026": 9
+    },
+    "total_permits": 133
+  },
+  "Medtronic": {
+    "matched_employer_names": [
+      "Medtronic Ireland Limited",
+      "Medtronic Vascular Galway Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 20,
+      "2026": 1
+    },
+    "total_permits": 21
+  },
+  "Pfizer": {
+    "matched_employer_names": [
+      "Pfizer Healthcare Ireland",
+      "Pfizer Ireland Pharmaceuticals",
+      "Pfizer Ireland Pharmaceuticals Unlimited Company",
+      "Pfizer Shared Services Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 12,
+      "2026": 1
+    },
+    "total_permits": 13
+  },
+  "Siemens": {
+    "matched_employer_names": [
+      "Siemens Energy Limited",
+      "Siemens Healthcare Diagnostics Manufacturing Limited",
+      "Siemens Healthcare Medical Solutions Limited",
+      "Siemens Limited",
+      "Siemens lndustry Software Limited"
+    ],
+    "permits_by_year": {
+      "2024": 21,
+      "2026": 4
+    },
+    "total_permits": 25
+  },
+  "SMBC Aviation Capital": {
+    "matched_employer_names": [
+      "SMBC Aviation Capital Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 8,
+      "2026": 1
+    },
+    "total_permits": 9
+  },
+  "State Street": {
+    "matched_employer_names": [
+      "State Street International (Ireland) Limited",
+      "State Street Technology (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 14,
+      "2026": 3
+    },
+    "total_permits": 17
+  },
+  "Microsoft": {
+    "matched_employer_names": [
+      "Microsoft Ireland Operations Limited",
+      "Microsoft Ireland Research Unlimited Company",
+      "Microsoft RL Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 214,
+      "2026": 13
+    },
+    "total_permits": 227
+  },
+  "Adobe": {
+    "matched_employer_names": [
+      "Adobe Systems Software Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2,
+      "2026": 1
+    },
+    "total_permits": 3
+  },
+  "Airbnb": {
+    "matched_employer_names": [
+      "Airbnb Ireland Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Amazon": {
+    "matched_employer_names": [
+      "Amazon Data Services Ireland Limited",
+      "Amazon Data Services Ireland Ltd",
+      "Amazon Development Centre Ireland Limited",
+      "Amazon EU Sarl, Irish Branch",
+      "Amazon Ireland Support Services Limited",
+      "Amazon Ireland Support Services Ltd",
+      "Amazon Web Services EMEA SARL"
+    ],
+    "permits_by_year": {
+      "2024": 929,
+      "2026": 35
+    },
+    "total_permits": 964
+  },
+  "Apple": {
+    "matched_employer_names": [
+      "Apple Distribution International Limited",
+      "Apple Operations Europe",
+      "Apple Operations International Limited",
+      "Apple Operations Limited"
+    ],
+    "permits_by_year": {
+      "2024": 123,
+      "2026": 8
+    },
+    "total_permits": 131
+  },
+  "Coinbase": {
+    "matched_employer_names": [
+      "Coinbase Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Datadog": {
+    "matched_employer_names": [
+      "Datadog Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 5,
+      "2026": 1
+    },
+    "total_permits": 6
+  },
+  "Dropbox": {
+    "matched_employer_names": [
+      "Dropbox International Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Google": {
+    "matched_employer_names": [
+      "Google Cloud EMEA Limited",
+      "Google Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 426,
+      "2026": 38
+    },
+    "total_permits": 464
+  },
+  "HubSpot": {
+    "matched_employer_names": [
+      "HubSpot Ireland Limited",
+      "Hubspot Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 24,
+      "2026": 1
+    },
+    "total_permits": 25
+  },
+  "LinkedIn": {
+    "matched_employer_names": [
+      "LinkedIn Ireland Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 16,
+      "2026": 1
+    },
+    "total_permits": 17
+  },
+  "Meta": {
+    "matched_employer_names": [
+      "Meta Platforms Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 104,
+      "2026": 12
+    },
+    "total_permits": 116
+  },
+  "MongoDB": {
+    "matched_employer_names": [
+      "MongoDB Limited"
+    ],
+    "permits_by_year": {
+      "2024": 21,
+      "2026": 4
+    },
+    "total_permits": 25
+  },
+  "Pinterest": {
+    "matched_employer_names": [
+      "Pinterest Europe Limited"
+    ],
+    "permits_by_year": {
+      "2024": 9,
+      "2026": 1
+    },
+    "total_permits": 10
+  },
+  "ServiceNow": {
+    "matched_employer_names": [
+      "ServiceNow Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 42,
+      "2026": 2
+    },
+    "total_permits": 44
+  },
+  "Snowflake": {
+    "matched_employer_names": [
+      "Snowflake Computing Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2
+    },
+    "total_permits": 2
+  },
+  "Stripe": {
+    "matched_employer_names": [
+      "Stripe Payments Europe Limited",
+      "Stripe Technology Company Limited",
+      "Stripe Technology Europe Limited"
+    ],
+    "permits_by_year": {
+      "2024": 33,
+      "2026": 10
+    },
+    "total_permits": 43
+  },
+  "TikTok": {
+    "matched_employer_names": [
+      "TikTok Technology Limited"
+    ],
+    "permits_by_year": {
+      "2024": 144,
+      "2026": 5
+    },
+    "total_permits": 149
+  },
+  "Twilio": {
+    "matched_employer_names": [
+      "Twilio Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 7,
+      "2026": 1
+    },
+    "total_permits": 8
+  },
+  "Workday": {
+    "matched_employer_names": [
+      "Workday Limited"
+    ],
+    "permits_by_year": {
+      "2024": 113,
+      "2026": 5
+    },
+    "total_permits": 118
+  },
+  "Klaviyo": {
+    "matched_employer_names": [
+      "Klaviyo Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "OpenAI": {
+    "matched_employer_names": [
+      "OpenAI Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "McKinsey & Company": {
+    "matched_employer_names": [
+      "McKinsey & Company Inc. Ireland"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Adecco Ireland": {
+    "matched_employer_names": [
+      "Adecco Ireland Ltd"
+    ],
+    "permits_by_year": {
+      "2026": 5
+    },
+    "total_permits": 5
+  },
+  "Aramark Ireland": {
+    "matched_employer_names": [
+      "Aramark Property Services Ltd"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Bidvest Noonan": {
+    "matched_employer_names": [
+      "Bidvest Noonan (ROI) Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 3
+    },
+    "total_permits": 3
+  },
+  "Boots Ireland": {
+    "matched_employer_names": [
+      "Boots Hearingcare Ltd",
+      "Boots Retail (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Brown Thomas Arnotts": {
+    "matched_employer_names": [
+      "Brown Thomas Arnotts Limited"
+    ],
+    "permits_by_year": {
+      "2024": 6,
+      "2026": 1
+    },
+    "total_permits": 7
+  },
+  "Circle K Ireland": {
+    "matched_employer_names": [
+      "Circle K Procurement and Brands Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4,
+      "2026": 1
+    },
+    "total_permits": 5
+  },
+  "Compass Group Ireland": {
+    "matched_employer_names": [
+      "Compass Catering Services Ireland Limited",
+      "Compass Catering Services Ireland Ltd.",
+      "Compass Children's Residential Services DAC",
+      "Compass Informatics Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4,
+      "2026": 3
+    },
+    "total_permits": 7
+  },
+  "Currys Ireland": {
+    "matched_employer_names": [
+      "Currys Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 3,
+      "2026": 1
+    },
+    "total_permits": 4
+  },
+  "Dairygold": {
+    "matched_employer_names": [
+      "Dairygold Co-operative Society Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2,
+      "2026": 1
+    },
+    "total_permits": 3
+  },
+  "Dawn Meats": {
+    "matched_employer_names": [
+      "Dawn Meats Ireland UC"
+    ],
+    "permits_by_year": {
+      "2024": 663,
+      "2026": 5
+    },
+    "total_permits": 668
+  },
+  "Decathlon Ireland": {
+    "matched_employer_names": [
+      "Decathlon Sports Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2024": 4,
+      "2026": 1
+    },
+    "total_permits": 5
+  },
+  "Designer Group": {
+    "matched_employer_names": [
+      "Designer Group Engineering Contractors Limited",
+      "Designer Group Engineering Contractors Ltd",
+      "Designer Landscapes Limited"
+    ],
+    "permits_by_year": {
+      "2024": 8,
+      "2026": 1
+    },
+    "total_permits": 9
+  },
+  "Dornan": {
+    "matched_employer_names": [
+      "Dornan Engineering Limited"
+    ],
+    "permits_by_year": {
+      "2024": 30,
+      "2026": 1
+    },
+    "total_permits": 31
+  },
+  "Dunnes Stores": {
+    "matched_employer_names": [
+      "Dunnes Stores Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 2
+    },
+    "total_permits": 2
+  },
+  "Eason": {
+    "matched_employer_names": [
+      "Eason Limited"
+    ],
+    "permits_by_year": {
+      "2024": 2,
+      "2026": 1
+    },
+    "total_permits": 3
+  },
+  "Flynn": {
+    "matched_employer_names": [
+      "Flynn Accounting & Tax Services Limited",
+      "Flynn Bros Rent A Car Ballygar Limited",
+      "Flynn Management Contractors Limited",
+      "Flynn Metal Recycling Limited",
+      "Flynn O'Driscoll LLP",
+      "Flynn Transport Ltd",
+      "O'Flynn Building & Project Management Ltd",
+      "O'Flynn Construction Co. Unlimited Company",
+      "O'Flynn Meats Gracedieu Unlimited"
+    ],
+    "permits_by_year": {
+      "2024": 9,
+      "2026": 7
+    },
+    "total_permits": 16
+  },
+  "Harvey Norman Ireland": {
+    "matched_employer_names": [
+      "Harvey Norman Trading (Ireland) Limited"
+    ],
+    "permits_by_year": {
+      "2024": 8
+    },
+    "total_permits": 8
+  },
+  "John Paul Construction": {
+    "matched_employer_names": [
+      "John Paul Construction Limited"
+    ],
+    "permits_by_year": {
+      "2024": 36,
+      "2026": 1
+    },
+    "total_permits": 37
+  },
+  "JYSK Ireland": {
+    "matched_employer_names": [
+      "JYSK Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Kepak Group": {
+    "matched_employer_names": [
+      "Kepak Athleague Unlimited Company",
+      "Kepak Ballybay Unlimited Company",
+      "Kepak Clonee Unlimited Company",
+      "Kepak Convenience Foods",
+      "Kepak Cork Unlimited Company",
+      "Kepak Kilbeggan Unlimited Company",
+      "Kepak Longford Unlimited Company"
+    ],
+    "permits_by_year": {
+      "2024": 189,
+      "2026": 9
+    },
+    "total_permits": 198
+  },
+  "Lidl Ireland": {
+    "matched_employer_names": [
+      "Lidl Ireland GmbH"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Manpower Ireland": {
+    "matched_employer_names": [
+      "Oriental Manpower Limited"
+    ],
+    "permits_by_year": {
+      "2024": 5,
+      "2026": 1
+    },
+    "total_permits": 6
+  },
+  "McCabes Pharmacy": {
+    "matched_employer_names": [
+      "McCabes Pharmacy Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Mitie Ireland": {
+    "matched_employer_names": [
+      "Mitie Facilities Management Limited"
+    ],
+    "permits_by_year": {
+      "2024": 1
+    },
+    "total_permits": 1
+  },
+  "Next Ireland": {
+    "matched_employer_names": [
+      "Greenvolt Next Ireland Limited"
+    ],
+    "permits_by_year": {
+      "2026": 1
+    },
+    "total_permits": 1
+  },
+  "Securitas Ireland": {
+    "matched_employer_names": [
+      "Securitas Security Services (Ireland) Limited",
+      "Securitas Security Services Ireland Ltd",
+      "Securitas Treasury Ireland DAC"
+    ],
+    "permits_by_year": {
+      "2024": 4,
+      "2026": 1
+    },
+    "total_permits": 5
+  },
+  "Suir Engineering": {
+    "matched_employer_names": [
+      "Suir Engineering Ltd"
+    ],
+    "permits_by_year": {
+      "2024": 10,
+      "2026": 1
+    },
+    "total_permits": 11
+  },
+  "Trinity College Dublin (TCD)": {
+    "matched_employer_names": [
+      "Trinity College Dublin Academy of Dramatic Arts - The Lir Academy",
+      "Trinity College Dublin, the University of Dublin"
+    ],
+    "permits_by_year": {
+      "2026": 3
+    },
+    "total_permits": 3
   }
 }
