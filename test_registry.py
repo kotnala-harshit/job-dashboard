@@ -6,6 +6,7 @@ from unittest.mock import patch
 from scrape import (
     DIRECT_COMPANY_CONNECTORS,
     KNOWN_PHENOM_MAPPINGS,
+    WORKDAY_COMPANIES,
     VERIFIED_LIVE_ZERO_COMPANIES,
     _parse_yello_jobs,
     scrape_grant_thornton,
@@ -36,8 +37,14 @@ class RegistryTests(unittest.TestCase):
             "OpenText",
             "SMBC Aviation Capital",
             "Veeam",
+            "Chubb",
         ):
             self.assertIn(company, DIRECT_COMPANY_CONNECTORS)
+        self.assertEqual("jobs.ebayinc.com|EBAEBAUS", KNOWN_PHENOM_MAPPINGS["eBay"])
+        self.assertIn(
+            ("Bristol Myers Squibb", "bristolmyerssquibb", "wd5", "BMS"),
+            WORKDAY_COMPANIES,
+        )
 
     @patch("scrape._scrape_grant_thornton_board")
     def test_grant_thornton_scans_experienced_and_graduate_boards(self, collect):
