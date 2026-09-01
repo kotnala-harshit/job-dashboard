@@ -579,6 +579,17 @@ DIRECT_COMPANY_CONNECTORS = {
     "Alter Domus": "alter_domus_official",
     "Baxter International": "baxter_official",
     "Aer Lingus": "aer_lingus_talentsoft",
+    "Advanced Micro Devices (AMD)": "amd_official",
+    "Applied Materials": "applied_materials_official",
+    "Bausch + Lomb": "bausch_lomb_official",
+    "AXA XL": "axa_xl_official",
+    "AtkinsRéalis": "atkinsrealis_official",
+    "Citco": "citco_oracle",
+    "HCLTech": "hcltech_official",
+    "McKinsey & Company": "mckinsey_official",
+    "OpenText": "opentext_official",
+    "SMBC Aviation Capital": "smbc_aviation_official",
+    "Veeam": "greenhouse_official",
 }
 
 # Official Irish university vacancy boards use a shared collector.
@@ -1967,6 +1978,11 @@ def scrape_greenhouse(slug: str):
                 "description_text": _strip_html(content_html),
             })
     return out
+
+
+def scrape_veeam():
+    jobs = scrape_greenhouse("veeamsoftware")
+    return [{**job, "company": "Veeam"} for job in jobs]
 
 
 def scrape_lever(slug: str):
@@ -7884,7 +7900,7 @@ def scrape_hitachi_energy():
     return list(results.values())
 
 
-def scrape_astrazeneca():
+def scrape_astrazeneca(include_alexion=False):
     """AstraZeneca Dublin roles from the official server-rendered Dublin location page."""
     company = "AstraZeneca"
     listing = "https://careers.astrazeneca.com/location/dublin-jobs/7684/2963597-7521314-2964574/4"
@@ -7914,8 +7930,11 @@ def scrape_astrazeneca():
         if not title:
             continue
 
-        # Keep AstraZeneca and Alexion roles both under the AstraZeneca employer page;
-        # this mirrors the official Dublin search, which mixes both companies.
+        # Alexion has its own dashboard employer entry and collector.
+        if "alexion" in text.lower() and not include_alexion:
+            continue
+
+        # The official Dublin search mixes AstraZeneca and Alexion roles.
         key = href.rstrip("/").lower()
         results[key] = {
             "company": company,
@@ -7942,7 +7961,7 @@ def scrape_astrazeneca():
 
 def scrape_alexion():
     jobs = []
-    for job in scrape_astrazeneca():
+    for job in scrape_astrazeneca(include_alexion=True):
         if "alexion" not in str(job.get("description_text") or "").lower():
             continue
         jobs.append({**job, "company": "Alexion Pharmaceuticals"})
@@ -17988,6 +18007,7 @@ def scrape_direct_company(company: str):
         "Deutsche Bank": scrape_deutsche_bank,
         "SMBC Group": scrape_smbc_group,
         "SMBC Aviation Capital": scrape_smbc_aviation_capital,
+        "Veeam": scrape_veeam,
         "Harvey Nash": scrape_harvey_nash,
         "ING": scrape_ing,
         "Bank of America": scrape_bank_of_america,
@@ -21304,6 +21324,7 @@ def _working_batch_base_scrape_direct_company(company: str):
         "Deutsche Bank": scrape_deutsche_bank,
         "SMBC Group": scrape_smbc_group,
         "SMBC Aviation Capital": scrape_smbc_aviation_capital,
+        "Veeam": scrape_veeam,
         "Harvey Nash": scrape_harvey_nash,
         "ING": scrape_ing,
         "Bank of America": scrape_bank_of_america,

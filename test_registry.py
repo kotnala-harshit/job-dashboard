@@ -24,6 +24,20 @@ class RegistryTests(unittest.TestCase):
         )
         self.assertIn("DXC Technology", VERIFIED_LIVE_ZERO_COMPANIES)
         self.assertIn("CGI", VERIFIED_LIVE_ZERO_COMPANIES)
+        for company in (
+            "Advanced Micro Devices (AMD)",
+            "Applied Materials",
+            "Bausch + Lomb",
+            "AXA XL",
+            "AtkinsRéalis",
+            "Citco",
+            "HCLTech",
+            "McKinsey & Company",
+            "OpenText",
+            "SMBC Aviation Capital",
+            "Veeam",
+        ):
+            self.assertIn(company, DIRECT_COMPANY_CONNECTORS)
 
     @patch("scrape._scrape_grant_thornton_board")
     def test_grant_thornton_scans_experienced_and_graduate_boards(self, collect):
