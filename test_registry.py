@@ -52,6 +52,7 @@ class RegistryTests(unittest.TestCase):
             WORKDAY_COMPANIES,
         )
         self.assertIn(("Stryker", "stryker", "wd1", "StrykerCareers"), WORKDAY_COMPANIES)
+        self.assertIn(("Clio", "clio", "wd3", "cliocareersite"), WORKDAY_COMPANIES)
         self.assertEqual(
             "careers.dexcom.com|dexcom.com",
             KNOWN_EIGHTFOLD_MAPPINGS["Dexcom"],
