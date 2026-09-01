@@ -77,11 +77,6 @@
     "slug": "advanced",
     "probe_version": 35
   },
-  "Aer Lingus": {
-    "platform": "greenhouse",
-    "slug": "aerlingus",
-    "probe_version": 35
-  },
   "AIB (Allied Irish Banks)": {
     "platform": "none",
     "slug": null,
@@ -229,8 +224,7 @@
   },
   "Bayer": {
     "platform": "eightfold",
-    "slug": "bayer",
-    "probe_version": 35
+    "slug": "bayer"
   },
   "BDO Ireland": {
     "platform": "pinpoint",
@@ -424,8 +418,7 @@
   },
   "Convatec": {
     "platform": "phenom",
-    "slug": "careers.convatec.com|CONVGLOBAL",
-    "probe_version": 35
+    "slug": "careers.convatec.com|CONVGLOBAL"
   },
   "Cook Medical": {
     "platform": "none",
@@ -469,8 +462,7 @@
   },
   "Danaher Corporation": {
     "platform": "phenom",
-    "slug": "jobs.danaher.com|DANAGLOBAL",
-    "probe_version": 35
+    "slug": "jobs.danaher.com|DANAGLOBAL"
   },
   "Daon": {
     "platform": "none",
@@ -514,8 +506,7 @@
   },
   "DHL Ireland": {
     "platform": "phenom",
-    "slug": "careers.dhl.com|DPDHGLOBAL",
-    "probe_version": 35
+    "slug": "careers.dhl.com|DPDHGLOBAL"
   },
   "Dillon Eustace": {
     "platform": "none",
@@ -569,13 +560,11 @@
   },
   "Eaton": {
     "platform": "eightfold",
-    "slug": "eaton",
-    "probe_version": 35
+    "slug": "eaton"
   },
   "eBay": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 36
+    "platform": "phenom",
+    "slug": "jobs.ebayinc.com|EBAEBAUS"
   },
   "Edwards Lifesciences": {
     "platform": "none",
@@ -769,8 +758,7 @@
   },
   "GE HealthCare": {
     "platform": "phenom",
-    "slug": "careers.gehealthcare.com|GEVGHLGLOBAL",
-    "probe_version": 35
+    "slug": "careers.gehealthcare.com|GEVGHLGLOBAL"
   },
   "Gemini": {
     "platform": "none",
@@ -848,9 +836,8 @@
     "probe_version": 35
   },
   "Hewlett Packard Enterprise (HPE)": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
+    "platform": "phenom",
+    "slug": "careers.hpe.com|HPE1US"
   },
   "HIQA": {
     "platform": "none",
@@ -1169,8 +1156,7 @@
   },
   "Merck Group": {
     "platform": "phenom",
-    "slug": "jobs.merck.com|MERCUS",
-    "probe_version": 35
+    "slug": "jobs.merck.com|MERCUS"
   },
   "Mercury Engineering": {
     "platform": "none",
@@ -1689,8 +1675,7 @@
   },
   "STMicroelectronics": {
     "platform": "eightfold",
-    "slug": "stmicroelectronics",
-    "probe_version": 35
+    "slug": "stmicroelectronics"
   },
   "Stripe": {
     "platform": "none",
@@ -1809,8 +1794,7 @@
   },
   "Thermo Fisher Scientific": {
     "platform": "phenom",
-    "slug": "jobs.thermofisher.com|TFSCGLOBAL",
-    "probe_version": 35
+    "slug": "jobs.thermofisher.com|TFSCGLOBAL"
   },
   "Three Ireland": {
     "platform": "none",
@@ -2014,8 +1998,7 @@
   },
   "Zimmer Biomet": {
     "platform": "phenom",
-    "slug": "careers.zimmerbiomet.com|ZBUZBRUS",
-    "probe_version": 35
+    "slug": "careers.zimmerbiomet.com|ZBUZBRUS"
   },
   "Zscaler": {
     "platform": "none",
@@ -2179,8 +2162,7 @@
   },
   "Marsh McLennan": {
     "platform": "phenom",
-    "slug": "careers.marsh.com|MAMCGLOBAL",
-    "probe_version": 35
+    "slug": "careers.marsh.com|MAMCGLOBAL"
   },
   "Marvell Technology": {
     "platform": "none",
@@ -2214,8 +2196,7 @@
   },
   "State Street": {
     "platform": "phenom",
-    "slug": "careers.statestreet.com|STSTGLOBAL",
-    "probe_version": 35
+    "slug": "careers.statestreet.com|STSTGLOBAL"
   },
   "Zendesk": {
     "platform": "pinpoint",
@@ -2967,29 +2948,38 @@
     "slug": "tricentis|wd1|Tricentis_Careers",
     "probe_version": 36
   },
+  "Dexcom": {
+    "platform": "eightfold",
+    "slug": "careers.dexcom.com|dexcom.com"
+  },
+  "Stryker": {
+    "platform": "eightfold",
+    "slug": "stryker",
+    "probe_version": 36
+  },
+  "Aer Lingus": {
+    "platform": "greenhouse",
+    "slug": "aerlingus",
+    "probe_version": 36
+  },
   "daa (Dublin Airport Authority)": {
-    "platform": "personio",
-    "slug": "daa",
+    "platform": "none",
+    "slug": null,
     "probe_version": 36
   },
   "Datalex": {
-    "platform": "personio",
-    "slug": "datalex",
-    "probe_version": 36
-  },
-  "Dexcom": {
-    "platform": "eightfold",
-    "slug": "dexcom",
+    "platform": "none",
+    "slug": null,
     "probe_version": 36
   },
   "Dublin Port Company": {
-    "platform": "greenhouse",
-    "slug": "dublin",
+    "platform": "none",
+    "slug": null,
     "probe_version": 36
   },
   "Enterprise Ireland": {
-    "platform": "recruitee",
-    "slug": "enterprise",
+    "platform": "none",
+    "slug": null,
     "probe_version": 36
   },
   "NetApp": {
@@ -2997,14 +2987,9 @@
     "slug": null,
     "probe_version": 36
   },
-  "Stryker": {
-    "platform": "eightfold",
-    "slug": "stryker",
-    "probe_version": 36
-  },
   "Gong": {
-    "platform": "recruitee",
-    "slug": "gong",
+    "platform": "none",
+    "slug": null,
     "probe_version": 36
   },
   "__probe_version__": 36
