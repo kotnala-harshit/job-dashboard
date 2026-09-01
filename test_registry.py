@@ -23,6 +23,8 @@ REGISTRY_PATH = "ireland_job_radar_HARSHIT_MASTER.csv"
 class RegistryTests(unittest.TestCase):
     def test_repaired_official_company_mappings_are_registered(self):
         self.assertEqual("aer_lingus_talentsoft", DIRECT_COMPANY_CONNECTORS["Aer Lingus"])
+        for company in ("daa (Dublin Airport Authority)", "Vodafone Ireland", "VHI Healthcare"):
+            self.assertIn(company, DIRECT_COMPANY_CONNECTORS)
         self.assertEqual(
             "careers.hpe.com|HPE1US",
             KNOWN_PHENOM_MAPPINGS["Hewlett Packard Enterprise (HPE)"],

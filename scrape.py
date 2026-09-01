@@ -237,6 +237,7 @@ def build_company_registry(include_cache: bool = False):
         "TikTok": "direct",
         "NetApp": "eightfold",
         "EY Ireland": "direct",
+        "HubSpot": "greenhouse",
     }
     status_by_key.update({_company_key(k): v for k, v in explicit_status_aliases.items()})
     for mapping in connector_maps:
@@ -492,9 +493,12 @@ DIRECT_COMPANY_CONNECTORS = {
     "Infosys": "infosys_ireland",
     "Wells Fargo": "wells_fargo_detail_crawl",
     "Vodafone": "vodafone_successfactors",
+    "Vodafone Ireland": "vodafone_successfactors",
     "Wipro": "wipro_successfactors",
     "Grant Thornton Ireland": "grant_thornton_oracle",
     "Three Ireland": "three_official",
+    "daa (Dublin Airport Authority)": "daa_oracle",
+    "VHI Healthcare": "vhi_official",
     "RSM Ireland": "rsm_candidate_manager",
     "KPMG Ireland": "kpmg_avature",
     "Deutsche Bank": "deutsche_bank_workday",
@@ -3523,6 +3527,15 @@ def scrape_chubb():
         base_url="https://fa-ewgu-saasfaprod1.fa.ocs.oraclecloud.com",
         site_number="CX_2001",
         location_id="100000053100433",
+    )
+
+
+def scrape_daa():
+    return scrape_oracle_candidate_experience(
+        "daa (Dublin Airport Authority)",
+        "https://fa-etol-saasfaprod1.fa.ocs.oraclecloud.com",
+        "CX_1",
+        "IE",
     )
 
 
@@ -22311,9 +22324,12 @@ def scrape_direct_company(company, *args, **kwargs):
         "Vhi": scrape_vhi,
         "VHI": scrape_vhi,
         "Vhi Healthcare": scrape_vhi,
+        "VHI Healthcare": scrape_vhi,
         "Walkers Ireland": scrape_walkers,
         "Walkers": scrape_walkers,
         "Three Ireland": scrape_three_ireland,
+        "daa (Dublin Airport Authority)": scrape_daa,
+        "Vodafone Ireland": scrape_vodafone,
     }
 
     fn = overrides.get(company)
