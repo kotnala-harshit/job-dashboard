@@ -19060,6 +19060,86 @@ def scrape_tjx_ireland():
 
     return list(results.values())
 
+
+GRADIRELAND_COMPANY_NAMES = {
+    "Allianz": "Allianz Ireland",
+    "BDO Ireland": "BDO Ireland",
+    "Grant Thornton": "Grant Thornton Ireland",
+    "publicjobs": "Public Jobs / Civil Service",
+}
+
+
+def _parse_gradireland_listing(html_text, url, today=None):
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(html_text or "", "html.parser")
+    text = re.sub(r"\s+", " ", soup.get_text(" ", strip=True))
+    title = soup.title.get_text(" ", strip=True) if soup.title else ""
+    deadline = re.search(r"Apply by:\s*(\d{2}/\d{2}/\d{4})", text, re.I)
+    if not deadline or not re.search(r"\b(graduate|trainee|intern|placement|apprentice)\b", title, re.I):
+        return None
+    try:
+        closes = datetime.strptime(deadline.group(1), "%d/%m/%Y").date()
+    except ValueError:
+        return None
+    if closes < (today or datetime.now(timezone.utc).date()):
+        return None
+
+    employer = ""
+    for anchor in soup.select('a[href^="/organisations/"]'):
+        candidate = re.sub(r"\s+Verified Employer\s*$", "", anchor.get_text(" ", strip=True)).strip()
+        if candidate:
+            employer = GRADIRELAND_COMPANY_NAMES.get(candidate, "")
+            break
+    if not employer or re.search(r"\b(Belfast|Northern Ireland)\b", text, re.I):
+        return None
+
+    cities = [city for city in ("Dublin", "Cork", "Galway", "Limerick") if re.search(rf"\b{city}\b", title, re.I)]
+    if not cities:
+        cities = [city for city in ("Dublin", "Cork", "Galway", "Limerick") if re.search(rf"\b{city}\b", text, re.I)]
+    location = f"{cities[0]}, Ireland" if cities else "Ireland"
+    return {
+        "company": employer,
+        "ats": "gradireland",
+        "title": title[:300],
+        "location": location,
+        "url": url,
+        "updated_at": None,
+        "description_text": text[:5000],
+    }
+
+
+def scrape_gradireland_programmes():
+    sess = _session()
+    if not sess:
+        return []
+    try:
+        sitemap = sess.get("https://gradireland.com/sitemap-0.xml", timeout=30)
+        sitemap.raise_for_status()
+    except Exception as exc:
+        print(f"  ! GradIreland sitemap failed: {exc}")
+        return []
+
+    candidates = []
+    for url in re.findall(r"<loc>(https://gradireland\.com/jobs/[^<]+)</loc>", sitemap.text, re.I):
+        match = re.search(r"-(\d+)$", url)
+        if match and re.search(r"graduate|trainee|intern|placement|apprentice", url, re.I):
+            candidates.append((int(match.group(1)), url))
+
+    jobs = []
+    for _, url in sorted(candidates, reverse=True)[:60]:
+        try:
+            response = sess.get(url, timeout=15)
+            if response.status_code == 200:
+                response.encoding = "utf-8"
+                job = _parse_gradireland_listing(response.text, url)
+                if job:
+                    jobs.append(job)
+        except Exception:
+            continue
+    print(f"gradireland/current programmes: {len(jobs)} jobs")
+    return jobs
+
 def main():
     profile = load_candidate_profile()
     results = []
@@ -19121,6 +19201,7 @@ def main():
     # Browser-heavy proprietary boards belong to the nightly audit. A small
     # worker pool keeps that audit bounded without overwhelming the runner.
     if SCRAPE_MODE != "fast":
+        results.extend(scrape_gradireland_programmes())
         direct_tasks = [
             ("direct", company, lambda company=company: scrape_direct_company(company))
             for company in DIRECT_COMPANY_CONNECTORS

@@ -1,5 +1,6 @@
 import csv
 import unittest
+from datetime import date
 
 from unittest.mock import patch
 
@@ -11,6 +12,7 @@ from scrape import (
     WORKDAY_COMPANIES,
     VERIFIED_LIVE_ZERO_COMPANIES,
     _parse_yello_jobs,
+    _parse_gradireland_listing,
     scrape_grant_thornton,
 )
 
@@ -73,6 +75,17 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual("AI & Data Graduate Programme 2027", jobs[0]["title"])
         self.assertEqual("Ireland", jobs[0]["location"])
         self.assertIn("/jobs/abc", jobs[0]["url"])
+
+    def test_gradireland_parser_keeps_only_open_roi_programmes(self):
+        job = _parse_gradireland_listing(
+            "<html><head><title>2027 Data Graduate Programme - Cork</title></head>"
+            '<body><a href="/organisations/grant-thornton">Grant Thornton Verified Employer</a>'
+            "Apply by: 22/10/2026</body></html>",
+            "https://gradireland.com/jobs/example-1",
+            today=date(2026, 9, 1),
+        )
+        self.assertEqual("Grant Thornton Ireland", job["company"])
+        self.assertEqual("Cork, Ireland", job["location"])
 
     def test_active_registry_is_unique_and_profile_focused(self):
         with open(REGISTRY_PATH, newline="", encoding="utf-8-sig") as handle:
