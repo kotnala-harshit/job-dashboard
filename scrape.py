@@ -514,6 +514,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Becton Dickinson (BD)": "bd_workday_ireland",
     "Becton Dickinson (BD)": "bd_official",
     "AstraZeneca": "astrazeneca_official",
+    "Astellas Pharma": "astellas_successfactors",
     "Bank of America": "bank_of_america_official",
     "Aiven": "aiven_official",
     "A&L Goodbody": "alg_official",
@@ -542,11 +543,13 @@ DIRECT_COMPANY_CONNECTORS = {
     "Honeywell": "honeywell_oracle",
     "Revenue": "revenue_direct",
     "Public Jobs / Civil Service": "publicjobs_oleeo",
+    "Eir": "eir_official",
     "NTT DATA": "nttdata_successfactors",
     "Ryanair": "ryanair_direct",
     "Coca-Cola HBC Ireland": "cocacola_hbc",
     "PepsiCo": "pepsico_direct",
     "Musgrave Group (SuperValu / Centra)": "musgrave_direct",
+    "Ornua": "ornua_successfactors",
     "SAP": "sap_successfactors",
     "Allianz Ireland": "allianz_direct",
     "Susquehanna International Group (SIG)": "sig_direct",
@@ -3241,7 +3244,7 @@ def _fetch_html(url: str, timeout: int = 25):
 
 
 def _html_text(fragment: str) -> str:
-    return re.sub(r"\\s+", " ", html.unescape(_strip_html(fragment or ""))).strip()
+    return re.sub(r"\s+", " ", html.unescape(_strip_html(fragment or ""))).strip()
 
 
 def _absolute_url(base: str, href: str) -> str:
@@ -3695,7 +3698,7 @@ def _scrape_public_careers_page(company: str, url: str, href_hints, default_loca
     out=[]; seen=set()
     # Work with bounded chunks around anchors so one Ireland mention elsewhere on
     # the page cannot incorrectly tag a non-Ireland role.
-    for m in re.finditer(r'<a\\b[^>]*href=["\\\']([^"\\\']+)["\\\'][^>]*>(.*?)</a>', page, flags=re.I|re.S):
+    for m in re.finditer(r'<a\b[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>', page, flags=re.I|re.S):
         href=m.group(1); label=_html_text(m.group(2))
         if not label or len(label)<3 or len(label)>220:
             continue
@@ -3714,9 +3717,25 @@ def _scrape_public_careers_page(company: str, url: str, href_hints, default_loca
         if key in seen:
             continue
         seen.add(key)
-        dm=re.search(r'\\b(20\\d{2}-\\d{2}-\\d{2}|\\d{1,2}\\s+[A-Za-z]{3,9}\\s+20\\d{2}|[A-Za-z]{3,9}\\s+\\d{1,2},?\\s+20\\d{2})\\b', chunk)
+        dm=re.search(r'\b(20\d{2}-\d{2}-\d{2}|\d{1,2}\s+[A-Za-z]{3,9}\s+20\d{2}|[A-Za-z]{3,9}\s+\d{1,2},?\s+20\d{2})\b', chunk)
         out.append({"company":company,"ats":"direct","title":label,"location":location,"url":full,"updated_at":dm.group(1) if dm else None,"description_text":chunk[:5000]})
     return out
+
+
+def scrape_astellas():
+    return _scrape_public_careers_page(
+        "Astellas Pharma", "https://careers.astellas.com/search/?q=&locationsearch=Ireland", ("/job/",)
+    )
+
+
+def scrape_eir():
+    return _scrape_public_careers_page("Eir", "https://jobs.eir.care/jobs", ("/jobs/",))
+
+
+def scrape_ornua():
+    return _scrape_public_careers_page(
+        "Ornua", "https://careers.ornua.com/search/?q=&locationsearch=Ireland", ("/job/",)
+    )
 
 
 
@@ -22331,6 +22350,9 @@ def scrape_direct_company(company, *args, **kwargs):
         "Three Ireland": scrape_three_ireland,
         "daa (Dublin Airport Authority)": scrape_daa,
         "Vodafone Ireland": scrape_vodafone,
+        "Astellas Pharma": scrape_astellas,
+        "Eir": scrape_eir,
+        "Ornua": scrape_ornua,
     }
 
     fn = overrides.get(company)

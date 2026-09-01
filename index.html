@@ -2169,7 +2169,7 @@ function getTrueZeroCompanies() {
   const liveNames = getCurrentLiveCompanyNames();
   const coverageByName = new Map(ALL_COVERAGE.map(c => [c.company, c]));
   return ALL_REGISTRY
-    .filter(c => c && c.company && !liveNames.has(c.company))
+    .filter(c => c && c.company && c.automatic === true && !liveNames.has(c.company))
     .map(c => ({
       ...c,
       ...(coverageByName.get(c.company) || {}),

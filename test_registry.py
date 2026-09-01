@@ -13,6 +13,7 @@ from scrape import (
     VERIFIED_LIVE_ZERO_COMPANIES,
     _parse_yello_jobs,
     _parse_gradireland_listing,
+    _scrape_public_careers_page,
     scrape_grant_thornton,
 )
 
@@ -24,6 +25,8 @@ class RegistryTests(unittest.TestCase):
     def test_repaired_official_company_mappings_are_registered(self):
         self.assertEqual("aer_lingus_talentsoft", DIRECT_COMPANY_CONNECTORS["Aer Lingus"])
         for company in ("daa (Dublin Airport Authority)", "Vodafone Ireland", "VHI Healthcare"):
+            self.assertIn(company, DIRECT_COMPANY_CONNECTORS)
+        for company in ("Astellas Pharma", "Eir", "Ornua"):
             self.assertIn(company, DIRECT_COMPANY_CONNECTORS)
         self.assertEqual(
             "careers.hpe.com|HPE1US",
@@ -120,6 +123,15 @@ class RegistryTests(unittest.TestCase):
         }
         self.assertTrue(expected <= active)
         self.assertFalse(excluded & active)
+
+    @patch("scrape._fetch_html")
+    def test_server_rendered_job_parser(self, fetch):
+        fetch.return_value = (
+            '<section>Ireland <a href="/job/Dublin-Data-Analyst/123/">Data Analyst</a> '
+            'Dublin, Ireland 2026-09-02</section>'
+        )
+        jobs = _scrape_public_careers_page("Example", "https://example.ie/jobs", ("/job/",))
+        self.assertEqual("Data Analyst", jobs[0]["title"])
 
 
 if __name__ == "__main__":
