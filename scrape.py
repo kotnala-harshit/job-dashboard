@@ -8719,48 +8719,113 @@ def scrape_infosys():
         print("  ! Infosys: Playwright unavailable")
         return []
 
+    # Do not allow one browser-based employer to hold the entire refresh.
+    # Individual Playwright operations are capped as well as total scraper time.
+    import time as _time
+
+    max_runtime_seconds = 150
+    started_at = _time.monotonic()
+    deadline = started_at + max_runtime_seconds
+
+    def timed_out():
+        return _time.monotonic() >= deadline
+
     results = {}
+    browser = None
 
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
-            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1300},
+                locale="en-IE",
+            )
+
+            # Prevent locator/text/browser operations from waiting indefinitely.
+            page.set_default_timeout(10000)
+            page.set_default_navigation_timeout(45000)
+
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=45000,
+            )
+
             page.wait_for_timeout(2500)
 
             stagnant = 0
             prev = 0
+            hit_deadline = False
 
             for _ in range(80):
-                anchors = page.locator('a[href*="/apply-"], a[href*="/company-job/"], a[href*="reqid"]')
+                if timed_out():
+                    hit_deadline = True
+                    break
 
-                for i in range(anchors.count()):
+                anchors = page.locator(
+                    'a[href*="/apply-"], '
+                    'a[href*="/company-job/"], '
+                    'a[href*="reqid"]'
+                )
+
+                try:
+                    anchor_count = anchors.count()
+                except Exception as exc:
+                    print(f"  ! Infosys anchor lookup failed: {exc}")
+                    break
+
+                for i in range(anchor_count):
+                    if timed_out():
+                        hit_deadline = True
+                        break
+
                     a = anchors.nth(i)
+
                     try:
                         raw = a.get_attribute("href") or ""
                         href = urllib.parse.urljoin(page.url, raw).split("#")[0]
                     except Exception:
                         continue
 
-                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    try:
+                        title = re.sub(
+                            r"\s+",
+                            " ",
+                            _browser_text(a),
+                        ).strip()
+                    except Exception:
+                        title = ""
+
                     node = a
                     card = ""
 
                     for _up in range(6):
+                        if timed_out():
+                            hit_deadline = True
+                            break
+
                         try:
                             candidate = _browser_text(node)
                         except Exception:
                             candidate = ""
+
                         if candidate and len(candidate) <= 2600:
                             card = candidate
+
                         if re.search(r"\bIreland\b|\bDublin\b", card, re.I):
                             break
+
                         try:
                             node = node.locator("..")
                         except Exception:
                             break
 
+                    if hit_deadline:
+                        break
+
                     blob = f"{title}\n{card}\n{href}"
+
                     if not re.search(r"\bIreland\b", blob, re.I):
                         continue
 
@@ -8775,7 +8840,11 @@ def scrape_infosys():
                     if not title:
                         continue
 
-                    location = "Dublin, Ireland" if re.search(r"\bDublin\b", blob, re.I) else "Ireland"
+                    location = (
+                        "Dublin, Ireland"
+                        if re.search(r"\bDublin\b", blob, re.I)
+                        else "Ireland"
+                    )
 
                     # Infosys result-card text often appends location + requisition ID.
                     title = re.sub(
@@ -8784,6 +8853,7 @@ def scrape_infosys():
                         title,
                         flags=re.I,
                     ).strip()
+
                     title = re.sub(
                         r"\s+\d+BR\s*$",
                         "",
@@ -8801,21 +8871,47 @@ def scrape_infosys():
                         "description_text": card[:5000],
                     }
 
-                page.mouse.wheel(0, 3000)
-                page.wait_for_timeout(300)
+                if hit_deadline:
+                    break
+
+                try:
+                    page.mouse.wheel(0, 3000)
+                    page.wait_for_timeout(300)
+                except Exception as exc:
+                    print(f"  ! Infosys scroll failed: {exc}")
+                    break
 
                 cur = len(results)
                 stagnant = stagnant + 1 if cur == prev else 0
                 prev = cur
+
                 if stagnant >= 7:
                     break
 
-            browser.close()
+            if hit_deadline:
+                elapsed = _time.monotonic() - started_at
+                print(
+                    f"  ! Infosys scraper reached {max_runtime_seconds}s "
+                    f"runtime limit after {elapsed:.1f}s; "
+                    f"keeping {len(results)} jobs collected so far"
+                )
 
     except Exception as exc:
         print(f"  ! Infosys Ireland scrape failed: {exc}")
 
-    print(f"  Infosys official Ireland careers: {len(results)} jobs")
+    finally:
+        if browser is not None:
+            try:
+                browser.close()
+            except Exception:
+                pass
+
+    elapsed = _time.monotonic() - started_at
+    print(
+        f"  Infosys official Ireland careers: "
+        f"{len(results)} jobs ({elapsed:.1f}s)"
+    )
+
     return list(results.values())
 
 
