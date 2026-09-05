@@ -2115,11 +2115,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Reddit": {
-    "platform": "greenhouse",
-    "slug": "reddit",
-    "probe_version": 35
-  },
   "Analog Devices": {
     "platform": "none",
     "slug": null,
@@ -2977,11 +2972,6 @@
     "slug": "ireland",
     "probe_version": 36
   },
-  "NetApp": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 36
-  },
   "KLA Corporation": {
     "platform": "none",
     "slug": null,
@@ -2990,6 +2980,16 @@
   "Medtronic": {
     "platform": "none",
     "slug": null,
+    "probe_version": 36
+  },
+  "NetApp": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 36
+  },
+  "Reddit": {
+    "platform": "greenhouse",
+    "slug": "reddit",
     "probe_version": 36
   },
   "__probe_version__": 36
