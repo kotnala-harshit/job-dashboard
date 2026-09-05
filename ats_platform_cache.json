@@ -1149,11 +1149,6 @@
     "slug": null,
     "probe_version": 35
   },
-  "Medtronic": {
-    "platform": "workday",
-    "slug": "medtronic|wd1|MedtronicCareers",
-    "probe_version": 36
-  },
   "Merck Group": {
     "platform": "phenom",
     "slug": "jobs.merck.com|MERCUS"
@@ -2848,29 +2843,14 @@
     "slug": "purestorage",
     "probe_version": 35
   },
-  "CrowdStrike": {
-    "platform": "workday",
-    "slug": "crowdstrike|wd5|crowdstrikecareers",
-    "probe_version": 36
-  },
   "Cadence Design Systems": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
   },
-  "KLA Corporation": {
-    "platform": "workday",
-    "slug": "kla|wd1|Search",
-    "probe_version": 36
-  },
   "Circle K Ireland": {
     "platform": "pinpoint",
     "slug": "circlek",
-    "probe_version": 35
-  },
-  "Apex Group": {
-    "platform": "workday",
-    "slug": "theapexgroup|wd3|apexgroupcareers",
     "probe_version": 35
   },
   "Airbnb": {
@@ -2881,11 +2861,6 @@
   "BearingPoint": {
     "platform": "greenhouse",
     "slug": "bearingpoint",
-    "probe_version": 35
-  },
-  "Concentrix (Ireland)": {
-    "platform": "workday",
-    "slug": "cnx|wd1|external_global",
     "probe_version": 35
   },
   "CarTrawler": {
@@ -2933,16 +2908,6 @@
     "slug": "databricks",
     "probe_version": 36
   },
-  "Kyndryl": {
-    "platform": "workday",
-    "slug": "kyndryl|wd5|KyndrylEarlyCareers",
-    "probe_version": 36
-  },
-  "Tricentis": {
-    "platform": "workday",
-    "slug": "tricentis|wd1|Tricentis_Careers",
-    "probe_version": 36
-  },
   "Dexcom": {
     "platform": "eightfold",
     "slug": "careers.dexcom.com|dexcom.com"
@@ -2987,7 +2952,42 @@
     "slug": "kitmanlabs",
     "probe_version": 36
   },
+  "Kyndryl": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 36
+  },
+  "Tricentis": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 36
+  },
+  "CrowdStrike": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 36
+  },
+  "Apex Group": {
+    "platform": "greenhouse",
+    "slug": "apex",
+    "probe_version": 36
+  },
+  "Concentrix (Ireland)": {
+    "platform": "greenhouse",
+    "slug": "ireland",
+    "probe_version": 36
+  },
   "NetApp": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 36
+  },
+  "KLA Corporation": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 36
+  },
+  "Medtronic": {
     "platform": "none",
     "slug": null,
     "probe_version": 36
