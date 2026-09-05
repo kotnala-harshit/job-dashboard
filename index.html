@@ -2308,8 +2308,8 @@ function renderCompanyDiagnosticList(gridId, companies, search, selectedCompany,
         : mode === 'livezero'
           ? (
               history.ever_working
-                ? `${c.platform || 'official source'} · proven working previously · 0 Ireland jobs right now · ${Number(history.distinct_jobs_seen || 0)} jobs seen historically`
-                : `${c.platform || 'official source'} · source verified live · 0 Ireland jobs right now`
+                ? `${c.platform || 'official source'} · worked previously · no Ireland jobs returned this refresh · ${Number(history.distinct_jobs_seen || 0)} jobs seen historically`
+                : `${c.platform || 'official source'} · source verified · no Ireland jobs returned this refresh · vacancy status unconfirmed`
             )
           : `${c.platform || 'automatic'} · returned 0 jobs · ${c.reason || (health && health.note) || 'source/connector needs verification'}`;
 
