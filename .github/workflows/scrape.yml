@@ -2,9 +2,7 @@ name: Refresh Ireland Job Radar
 
 on:
   schedule:
-    # Lightweight ATS/API refreshes during the day; one complete audit nightly.
-    - cron: '17 0-1,3-23 * * *'
-    - cron: '17 2 * * *'
+    - cron: '17 * * * *'
   workflow_dispatch: {}
 
 permissions:
@@ -37,7 +35,7 @@ jobs:
 
       - name: Run Ireland job collector
         env:
-          SCRAPE_MODE: ${{ github.event_name == 'schedule' && github.event.schedule != '17 2 * * *' && 'fast' || 'full' }}
+          SCRAPE_MODE: ${{ github.event_name == 'schedule' && 'fast' || 'full' }}
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}

@@ -3471,7 +3471,15 @@ def scrape_oracle_candidate_experience(
         )
 
         if not location:
-            location = "Ireland"
+            continue
+
+        if not re.search(
+            r"\\b(?:ireland|dublin|cork|galway|limerick|waterford|"
+            r"kilkenny|athlone|sligo|letterkenny)\\b",
+            location,
+            re.I,
+        ):
+            continue
 
         job_url = (
             f"{base_url}/hcmUI/"
@@ -7978,7 +7986,7 @@ def scrape_hitachi_energy():
 def scrape_astrazeneca(include_alexion=False):
     """AstraZeneca Dublin roles from the official server-rendered Dublin location page."""
     company = "AstraZeneca"
-    listing = "https://careers.astrazeneca.com/location/dublin-jobs/7684/2963597-7521314-2964574/4"
+    listing = "https://careers.astrazeneca.com/location/ireland-jobs/7684/2963597/2"
     page = _fetch_html(listing) or ""
     urls = []
 
@@ -8005,8 +8013,15 @@ def scrape_astrazeneca(include_alexion=False):
         if not title:
             continue
 
-        # Alexion has its own dashboard employer entry and collector.
-        if "alexion" in text.lower() and not include_alexion:
+        # Alexion has its own dashboard employer entry. Do not search the
+        # whole page text because AstraZeneca pages can mention Alexion in
+        # shared navigation/footer content.
+        is_alexion = bool(re.search(
+            r'"hiringOrganization"\s*:\s*\{.*?"name"\s*:\s*"[^"]*Alexion',
+            detail,
+            re.I | re.S,
+        ))
+        if is_alexion and not include_alexion:
             continue
 
         # The official Dublin search mixes AstraZeneca and Alexion roles.
