@@ -18169,6 +18169,438 @@ def scrape_dps_group():
     return list(results.values())
 
 
+
+
+
+
+
+def scrape_eirgrid():
+    company = "EirGrid Group"
+    source = "https://www.candidatemanager.net/cm/p/pJobs.aspx?mid=YGTAZW&sid=BEVDEV"
+    sess = _session()
+    results = {}
+
+    try:
+        r = sess.get(source, timeout=25, headers={"User-Agent": "Mozilla/5.0"})
+        r.raise_for_status()
+    except Exception as exc:
+        print(f"  ! EirGrid: {exc}")
+        return []
+
+    for m in re.finditer(
+        r'<a[^>]+href=["\']([^"\']*pJobDetails\.aspx[^"\']*)["\'][^>]*>(.*?)</a>',
+        r.text,
+        re.I | re.S,
+    ):
+        href = urllib.parse.urljoin(source, m.group(1))
+        title = re.sub(r"\s+", " ", _html_text(m.group(2))).strip()
+
+        if not title:
+            continue
+
+        context = _html_text(
+            r.text[max(0, m.start()-1200):min(len(r.text), m.end()+1600)]
+        )
+
+        if not re.search(
+            r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford|Athlone)\b",
+            context,
+            re.I,
+        ):
+            continue
+
+        location = "Ireland"
+        for city in (
+            "Dublin", "Cork", "Galway", "Limerick",
+            "Waterford", "Athlone",
+        ):
+            if re.search(rf"\b{city}\b", context, re.I):
+                location = f"{city}, Ireland"
+                break
+
+        results[href.lower()] = {
+            "company": company,
+            "ats": "candidatemanager",
+            "title": title[:300],
+            "location": location,
+            "url": href,
+            "updated_at": None,
+            "description_text": context[:5000],
+        }
+
+    print(f"  EirGrid CandidateManager: {len(results)} Ireland jobs")
+    return list(results.values())
+
+
+def scrape_gas_networks_ireland():
+    company = "Gas Networks Ireland"
+    source = "https://www.gasnetworks.ie/about/careers/vacancies"
+    sess = _session()
+    results = {}
+
+    try:
+        r = sess.get(source, timeout=25, headers={"User-Agent": "Mozilla/5.0"})
+        r.raise_for_status()
+    except Exception as exc:
+        print(f"  ! Gas Networks Ireland: {exc}")
+        return []
+
+    body = _html_text(r.text)
+
+    if re.search(r"\bno current vacancies\b", body, re.I):
+        print("  Gas Networks Ireland official careers: 0 jobs")
+        return []
+
+    for m in re.finditer(
+        r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+        r.text,
+        re.I | re.S,
+    ):
+        context_html = r.text[max(0, m.start()-1800):m.end()+500]
+        context = _html_text(context_html)
+
+        if not re.search(r"\bGNI\d+\b", context, re.I):
+            continue
+
+        if not re.search(
+            r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Leinster)\b",
+            context,
+            re.I,
+        ):
+            continue
+
+        title = ""
+
+        headings = re.findall(
+            r"<h[2-5][^>]*>(.*?)</h[2-5]>",
+            context_html,
+            re.I | re.S,
+        )
+
+        for h in reversed(headings):
+            candidate = re.sub(r"\s+", " ", _html_text(h)).strip()
+            if candidate:
+                title = candidate
+                break
+
+        if not title:
+            title = re.sub(r"\s+", " ", _html_text(m.group(2))).strip()
+
+        if not title or title.lower() in {"apply now", "learn more"}:
+            continue
+
+        href = urllib.parse.urljoin(source, m.group(1))
+
+        location = "Ireland"
+        for city in ("Dublin", "Cork", "Galway", "Limerick"):
+            if re.search(rf"\b{city}\b", context, re.I):
+                location = f"{city}, Ireland"
+                break
+
+        results[href.lower()] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": location,
+            "url": href,
+            "updated_at": None,
+            "description_text": context[:5000],
+        }
+
+    print(f"  Gas Networks Ireland official careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_uisce_eireann():
+    company = "Uisce Éireann (Irish Water)"
+    base = "https://elyx.fa.em2.oraclecloud.com"
+    site = "careers"
+    api = f"{base}/hcmRestApi/resources/latest/recruitingCEJobRequisitions"
+
+    sess = _session()
+    results = {}
+    offset = 0
+
+    try:
+        while offset <= 1000:
+            finder = (
+                f"findReqs;siteNumber={site},"
+                "facetsList=LOCATIONS;WORK_FROM_HOME;WORKPLACE_TYPES,"
+                f"limit=200,offset={offset},sortBy=POSTING_DATES_DESC"
+            )
+
+            r = sess.get(
+                api,
+                params={
+                    "onlyData": "true",
+                    "expand": "requisitionList.secondaryLocations",
+                    "finder": finder,
+                },
+                timeout=30,
+                headers={"User-Agent": "Mozilla/5.0"},
+            )
+            r.raise_for_status()
+
+            payload = r.json()
+            items = payload.get("items") or []
+
+            if not items:
+                break
+
+            bucket = items[0]
+            reqs = bucket.get("requisitionList") or []
+
+            if not reqs:
+                break
+
+            for req in reqs:
+                title = str(
+                    req.get("Title")
+                    or req.get("ExternalTitle")
+                    or req.get("JobTitle")
+                    or ""
+                ).strip()
+
+                primary = str(
+                    req.get("PrimaryLocation")
+                    or req.get("Location")
+                    or ""
+                ).strip()
+
+                locations = [primary] if primary else []
+
+                for x in req.get("secondaryLocations") or []:
+                    if not isinstance(x, dict):
+                        continue
+
+                    loc = str(
+                        x.get("Name")
+                        or x.get("Location")
+                        or x.get("PrimaryLocation")
+                        or ""
+                    ).strip()
+
+                    if loc:
+                        locations.append(loc)
+
+                ireland_locations = [
+                    loc for loc in locations
+                    if re.search(r"\bIreland\b", loc, re.I)
+                ]
+
+                if not title or not ireland_locations:
+                    continue
+
+                rid = (
+                    req.get("Id")
+                    or req.get("RequisitionId")
+                    or req.get("RequisitionNumber")
+                )
+
+                if not rid:
+                    continue
+
+                href = (
+                    f"{base}/hcmUI/CandidateExperience/en/sites/"
+                    f"{site}/job/{rid}"
+                )
+
+                results[str(rid)] = {
+                    "company": company,
+                    "ats": "oracle",
+                    "title": title[:300],
+                    "location": ireland_locations[0][:120],
+                    "url": href,
+                    "updated_at": (
+                        req.get("PostedDate")
+                        or req.get("PostingDate")
+                        or req.get("ExternalPostedStartDate")
+                    ),
+                    "description_text": "",
+                }
+
+            total = int(bucket.get("TotalJobsCount") or 0)
+            offset += 200
+
+            if len(reqs) < 200 or (total and offset >= total):
+                break
+
+    except Exception as exc:
+        print(f"  ! Uisce Éireann Oracle feed failed: {exc}")
+        return []
+
+    print(
+        f"  Uisce Éireann official Oracle Ireland: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
+def scrape_bord_gais_energy():
+    jobs = scrape_workday(
+        "Bord Gáis Energy",
+        "centrica",
+        "wd3",
+        "Centrica",
+        search_text="Ireland",
+    )
+
+    for job in jobs:
+        loc = str(job.get("location") or "").strip()
+
+        if loc and "ireland" not in loc.lower():
+            if re.search(
+                r"\b(?:Dublin|Cork|Galway|Limerick|Waterford|"
+                r"Kildare|Meath|Wicklow|Louth)\b",
+                loc,
+                re.I,
+            ):
+                job["location"] = f"{loc}, Ireland"
+
+    return jobs
+
+
+def scrape_roche_current():
+    return scrape_workday(
+        "Roche",
+        "roche",
+        "wd3",
+        "roche-ext",
+        search_text="Ireland",
+    )
+
+
+def scrape_tesco_ireland_current():
+    company = "Tesco Ireland"
+    sess = _session()
+
+    search_urls = [
+        "https://apply.tesco-careers.com/v2/job/search?location_country=106&page=1",
+        "https://apply.tesco-careers.com/v2/job/search?location=Dublin&location_country=106&page=1",
+    ]
+
+    detail_urls = set()
+
+    for search_url in search_urls:
+        try:
+            r = sess.get(
+                search_url,
+                timeout=25,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+        except Exception:
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        for href in re.findall(
+            r'href=["\']([^"\']+)["\']',
+            r.text,
+            re.I,
+        ):
+            full = urllib.parse.urljoin(search_url, href).split("#")[0]
+            low = full.lower()
+
+            if "apply.tesco-careers.com" not in low:
+                continue
+
+            if (
+                "/v2/job/" in low
+                and "/search" not in low
+            ) or "job/detail.php" in low:
+                detail_urls.add(full)
+
+    results = {}
+
+    for href in sorted(detail_urls)[:40]:
+        try:
+            r = sess.get(
+                href,
+                timeout=20,
+                headers={"User-Agent": "Mozilla/5.0"},
+            )
+        except Exception:
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        text = _html_text(r.text)
+
+        if not re.search(
+            r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|"
+            r"Wexford|Waterford|Kildare|Meath|Louth|Wicklow|"
+            r"Kilkenny|Sligo|Mayo|Donegal|Clare|Tipperary)\b",
+            text,
+            re.I,
+        ):
+            continue
+
+        m = re.search(r"<h1[^>]*>(.*?)</h1>", r.text, re.I | re.S)
+
+        if not m:
+            m = re.search(
+                r"<title[^>]*>(.*?)</title>",
+                r.text,
+                re.I | re.S,
+            )
+
+        if not m:
+            continue
+
+        title = re.sub(
+            r"\s+",
+            " ",
+            _html_text(m.group(1)),
+        ).strip()
+
+        title = re.sub(
+            r"\s*[-|]\s*Tesco.*$",
+            "",
+            title,
+            flags=re.I,
+        ).strip()
+
+        if not title:
+            continue
+
+        location = "Ireland"
+
+        for city in (
+            "Dublin", "Cork", "Galway", "Limerick",
+            "Wexford", "Waterford", "Kildare", "Meath",
+            "Louth", "Wicklow", "Kilkenny", "Sligo",
+            "Mayo", "Donegal", "Clare", "Tipperary",
+        ):
+            if re.search(rf"\b{city}\b", text, re.I):
+                location = f"{city}, Ireland"
+                break
+
+        canonical = href.split("?")[0]
+
+        results[canonical.lower()] = {
+            "company": company,
+            "ats": "tribepad",
+            "title": title[:300],
+            "location": location,
+            "url": canonical,
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
+
+    print(
+        f"  Tesco Ireland official HTTP: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     # BEGIN SALE_READY_DIRECT_CONNECTORS
     # Canonical/alias names that must use their verified official collectors.
@@ -21770,6 +22202,18 @@ def _working_batch_base_scrape_direct_company(company: str):
 }.get(company)
     return fn() if fn else []
 
+
+DIRECT_COMPANY_CONNECTORS.update({
+    "EirGrid": "eirgrid_official",
+    "EirGrid Group": "eirgrid_official",
+    "Gas Networks Ireland": "gas_networks_official",
+    "Uisce Éireann (Irish Water)": "uisce_oracle_official",
+    "Bord Gáis Energy": "bord_gais_workday",
+    "Roche": "roche_workday",
+    "Tesco Ireland": "tesco_official",
+})
+
+
 def scrape_direct_company(company, *args, **kwargs):
     _working_batch = {
         'Irish Aviation Authority': scrape_irish_aviation_authority,
@@ -23090,9 +23534,15 @@ def scrape_direct_company(company, *args, **kwargs):
     overrides = {
         "Viatel": scrape_viatel,
         "Viatel Technology Group": scrape_viatel,
-
         "Applegreen": scrape_applegreen,
         "Applegreen Ireland": scrape_applegreen,
+        "EirGrid": scrape_eirgrid,
+        "EirGrid Group": scrape_eirgrid,
+        "Gas Networks Ireland": scrape_gas_networks_ireland,
+        "Uisce Éireann (Irish Water)": scrape_uisce_eireann,
+        "Bord Gáis Energy": scrape_bord_gais_energy,
+        "Roche": scrape_roche_current,
+        "Tesco Ireland": scrape_tesco_ireland_current,
     }
 
     fn = overrides.get(company)
