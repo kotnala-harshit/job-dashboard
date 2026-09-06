@@ -3606,12 +3606,133 @@ def scrape_citco():
 
 
 def scrape_jpmorgan():
-    return scrape_oracle_candidate_experience(
-        "JPMorgan Chase",
-        "https://jpmc.fa.oraclecloud.com",
-        "CX_1001",
-        "300000000289351",
+    company = "JPMorgan Chase"
+    base = "https://jpmc.fa.oraclecloud.com"
+    site = "CX_1001"
+    api = f"{base}/hcmRestApi/resources/latest/recruitingCEJobRequisitions"
+    session = _session()
+    jobs = []
+    offset = 0
+
+    ireland_re = re.compile(
+        r"\b(?:ireland|dublin|cork|galway|limerick|waterford|"
+        r"kilkenny|athlone|sligo|letterkenny)\b",
+        re.I,
     )
+
+    try:
+        while offset <= 1000:
+            finder = (
+                f"findReqs;siteNumber={site},"
+                "facetsList=LOCATIONS;WORK_FROM_HOME;WORKPLACE_TYPES,"
+                f"limit=200,offset={offset},sortBy=POSTING_DATES_DESC"
+            )
+            params = {
+                "onlyData": "true",
+                "expand": "requisitionList.secondaryLocations",
+                "finder": finder,
+            }
+
+            r = session.get(api, params=params, timeout=30)
+            r.raise_for_status()
+            data = r.json()
+
+            items = data.get("items") or []
+            if not items:
+                break
+
+            bucket = items[0]
+            reqs = bucket.get("requisitionList") or []
+            if not reqs:
+                break
+
+            for req in reqs:
+                title = str(
+                    req.get("Title")
+                    or req.get("ExternalTitle")
+                    or req.get("JobTitle")
+                    or ""
+                ).strip()
+
+                primary = str(
+                    req.get("PrimaryLocation")
+                    or req.get("Location")
+                    or ""
+                ).strip()
+
+                secondary = req.get("secondaryLocations") or []
+                locations = [primary] if primary else []
+
+                for x in secondary:
+                    if not isinstance(x, dict):
+                        continue
+                    loc = str(
+                        x.get("Name")
+                        or x.get("Location")
+                        or x.get("PrimaryLocation")
+                        or ""
+                    ).strip()
+                    if loc:
+                        locations.append(loc)
+
+                ireland_locations = [
+                    loc for loc in locations
+                    if re.search(r"\bIreland\b", loc, re.I)
+                ]
+
+                if not title or not ireland_locations:
+                    continue
+
+                ireland_location = ireland_locations[0]
+
+                rid = (
+                    req.get("Id")
+                    or req.get("RequisitionId")
+                    or req.get("RequisitionNumber")
+                )
+                if not rid:
+                    continue
+
+                url = (
+                    f"{base}/hcmUI/CandidateExperience/en/sites/"
+                    f"{site}/job/{rid}"
+                )
+
+                jobs.append({
+                    "company": company,
+                    "title": title,
+                    "location": ireland_location,
+                    "country": "Ireland",
+                    "url": url,
+                    "source": "official",
+                    "date_posted": (
+                        req.get("PostedDate")
+                        or req.get("PostingDate")
+                        or req.get("ExternalPostedStartDate")
+                        or ""
+                    ),
+                })
+
+            total = int(bucket.get("TotalJobsCount") or 0)
+            offset += 200
+
+            if len(reqs) < 200 or (total and offset >= total):
+                break
+
+    except Exception as e:
+        print(f"  ! {company}: Oracle feed failed: {e}")
+        return []
+
+    seen = set()
+    clean = []
+    for job in jobs:
+        key = job["url"]
+        if key not in seen:
+            seen.add(key)
+            clean.append(job)
+
+    print(f"  {company} official Oracle Ireland feed: {len(clean)} jobs")
+    return clean
 
 
 def scrape_apple():
