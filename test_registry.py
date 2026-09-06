@@ -34,7 +34,8 @@ class RegistryTests(unittest.TestCase):
             "careers.hpe.com|HPE1US",
             KNOWN_PHENOM_MAPPINGS["Hewlett Packard Enterprise (HPE)"],
         )
-        self.assertIn("DXC Technology", VERIFIED_LIVE_ZERO_COMPANIES)
+        self.assertNotIn("DXC Technology", VERIFIED_LIVE_ZERO_COMPANIES)
+        self.assertIn("DXC Technology", DIRECT_COMPANY_CONNECTORS)
         self.assertIn("CGI", VERIFIED_LIVE_ZERO_COMPANIES)
         for company in (
             "Advanced Micro Devices (AMD)",

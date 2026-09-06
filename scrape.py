@@ -446,7 +446,6 @@ VERIFIED_LIVE_ZERO_COMPANIES = {
     "Fenergo",
     "Qualcomm",
     "HSBC Ireland",
-    "DXC Technology",
     "CGI",
 }
 
@@ -5150,8 +5149,11 @@ def scrape_dxc():
         _mark_connector_health(company, True, f"Official DXC API returned {len(results)} Ireland jobs", api_url)
         return list(results.values())
     if api_loaded:
-        _mark_connector_health(company, True, "Official DXC API is live and currently returns 0 Ireland jobs", api_url)
-        return []
+        print(
+            "  ! DXC API returned 0 Ireland jobs; "
+            "checking official careers board before accepting zero"
+        )
+
     return _browser_board_collect(
         company,
         ["https://careers.dxc.com/job-search-results/?location=Ireland"],
