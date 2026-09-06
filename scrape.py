@@ -8624,78 +8624,53 @@ def scrape_kpmg_ireland():
 
 def scrape_wipro():
     company = "Wipro"
+    base = "https://careers.wipro.com"
 
-    seeds = [
-        "https://careers.wipro.com/job/ADMINISTRATOR-L3/192502-en_US/",
-        "https://careers.wipro.com/job/DEVELOPER-L3%28CONTRACT%29/185276-en_US/",
+    urls = [
+        f"{base}/search/?q=&locationsearch=Ireland",
+        f"{base}/search/?q=&locationsearch=Dublin",
+        f"{base}/search/?q=&locationsearch=Cork",
+        f"{base}/search/?q=&locationsearch=Galway",
+        f"{base}/search/?q=&locationsearch=Limerick",
+        f"{base}/go/United-Kingdom-and-Ireland/9470655/",
     ]
 
-    sess = _session()
-    if not sess:
-        print("  ! Wipro: HTTP session unavailable")
+    if not HAS_PLAYWRIGHT:
+        print(
+            "  ! Wipro: SuccessFactors requires browser discovery; "
+            "Playwright unavailable"
+        )
         return []
 
-    results = {}
-    queue = list(seeds)
-    seen = set()
+    try:
+        jobs = _browser_board_collect(
+            company,
+            urls,
+            (
+                "careers.wipro.com/job/",
+                "/job/",
+            ),
+            default_location="Ireland",
+            max_scrolls=15,
+            require_ireland=True,
+            source_tag="successfactors",
+        )
 
-    while queue and len(seen) < 80:
-        href = queue.pop(0).split("#")[0]
-        if href in seen:
-            continue
-        seen.add(href)
-
-        try:
-            r = sess.get(
-                href,
-                timeout=30,
-                headers={
-                    "User-Agent": "Mozilla/5.0",
-                    "Accept-Language": "en-IE,en;q=0.9",
-                },
+        if jobs:
+            print(
+                f"  Wipro SuccessFactors Ireland: "
+                f"{len(jobs)} verified jobs"
             )
-        except Exception:
-            continue
+            return jobs
 
-        if r.status_code != 200:
-            continue
+    except Exception as exc:
+        print(f"  ! Wipro browser discovery failed: {exc}")
 
-        html_text = r.text or ""
-        text = _html_text(html_text)
-
-        # Crawl other official Wipro detail links from the page.
-        for mm in re.finditer(
-            r'https?://careers\.wipro\.com/job/[^"\'<> ]+',
-            html_text,
-            re.I,
-        ):
-            nxt = mm.group(0).split("#")[0]
-            if nxt not in seen and nxt not in queue:
-                queue.append(nxt)
-
-        # Keep verified Dublin, Ireland roles only.
-        city = re.search(r'Job Title:\s*([^\n]+).*?City:\s*([^\n]+).*?State/Province:\s*([^\n]+)', text, re.I | re.S)
-        title = city.group(1).strip() if city else ""
-        city_name = city.group(2).strip() if city else ""
-        state_name = city.group(3).strip() if city else ""
-
-        if city_name.lower() != "dublin" or state_name.lower() != "dublin":
-            continue
-        if not title:
-            continue
-
-        results[href.rstrip("/").lower()] = {
-            "company": company,
-            "ats": "successfactors",
-            "title": re.sub(r"\s+", " ", title).strip()[:300],
-            "location": "Dublin, Ireland",
-            "url": href,
-            "updated_at": None,
-            "description_text": text[:5000],
-        }
-
-    print(f"  Wipro verified Ireland detail crawl: {len(results)} jobs")
-    return list(results.values())
+    print(
+        "  ! Wipro returned no verified Ireland jobs; "
+        "vacancy status unconfirmed"
+    )
+    return []
 
 def scrape_vodafone():
     company = "Vodafone Ireland"
