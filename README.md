@@ -51,23 +51,4 @@ The scraper:
 
 ## Automation schedule
 
-The main GitHub Actions scraper runs a quick refresh **every two hours** and a deeper full audit nightly at **03:17 UTC**. Each trigger performs one bounded run, so slow work cannot build an ever-growing queue.
-
-The effective UTC schedule is:
-
-```text
-00:17
-02:17
-04:17
-06:17
-08:17
-10:17
-12:17
-14:17
-16:17
-18:17
-20:17
-22:17
-```
-
-The nightly full audit runs separately at `03:17` UTC. Manual runs can select either `fast` or `full`.
+The scraper runs once per hour at minute `17`: fast for most hours, with full audits at `00:17` and `12:17` UTC. Full runs replace those hours' fast runs, so work never overlaps or duplicates. Manual runs can select either mode.
