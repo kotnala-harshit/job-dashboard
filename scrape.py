@@ -352,6 +352,8 @@ def company_display_name(raw: str) -> str:
         "openai": "OpenAI",
         "anthropic": "Anthropic",
         "hubspotjobs": "HubSpot",
+        "gongio": "Gong",
+        "eirgridgroup": "EirGrid",
         "qualtrics": "Qualtrics",
         "huawei": "Huawei Ireland",
         "revenueie": "Revenue",
@@ -455,9 +457,11 @@ VERIFIED_LIVE_ZERO_COMPANIES = {
     "Catalent",
     "Charles River Laboratories",
     "Cloudflare",
+    "DXC Technology",
     "Eaton",
     "Fenergo",
     "Qualcomm",
+    "Red Hat",
     "HSBC Ireland",
     "CGI",
 }
@@ -2274,12 +2278,16 @@ def scrape_workable(slug: str):
     for j in data["jobs"]:
         title = j.get("title", "")
         location = j.get("location", {}) or {}
+        if not location and j.get("locations"):
+            location = j["locations"][0] or {}
         loc_str = ", ".join(filter(None, [
-            location.get("city"), location.get("region"), location.get("country"),
+            location.get("city") or j.get("city"),
+            location.get("region") or j.get("state"),
+            location.get("country") or j.get("country"),
         ]))
         if not loc_str and slug == "davy":
             loc_str = "Ireland"
-        if location.get("telecommuting"):
+        if location.get("telecommuting") or j.get("telecommuting"):
             loc_str = f"{loc_str} (Remote)".strip(", ")
         if region_ok(loc_str):
             out.append({
@@ -3285,10 +3293,6 @@ def scrape_oracle_candidate_experience(
     endpoint discovered from the Candidate Experience careers page.
     Collection is restricted to the Republic of Ireland location facet.
     """
-    import json
-    import urllib.parse
-    import urllib.request
-
     endpoint = (
         f"{base_url}/hcmRestApi/resources/latest/"
         "recruitingCEJobRequisitions"
@@ -3327,9 +3331,10 @@ def scrape_oracle_candidate_experience(
         )
     )
 
-    req = urllib.request.Request(
-        url,
-        headers={
+    try:
+        response = _session().get(
+            url,
+            headers={
             "User-Agent": (
                 "Mozilla/5.0 "
                 "(Macintosh; Intel Mac OS X 10_15_7) "
@@ -3340,19 +3345,10 @@ def scrape_oracle_candidate_experience(
             "Accept": "application/json",
             "Accept-Language": "en-IE,en;q=0.9",
         },
-    )
-
-    try:
-        with urllib.request.urlopen(
-            req,
             timeout=45,
-        ) as response:
-            payload = json.loads(
-                response.read().decode(
-                    "utf-8",
-                    errors="replace",
-                )
-            )
+        )
+        response.raise_for_status()
+        payload = response.json()
 
     except Exception as exc:
         print(
@@ -3490,8 +3486,8 @@ def scrape_oracle_candidate_experience(
             continue
 
         if not re.search(
-            r"\\b(?:ireland|dublin|cork|galway|limerick|waterford|"
-            r"kilkenny|athlone|sligo|letterkenny)\\b",
+            r"\b(?:ireland|dublin|cork|galway|limerick|waterford|"
+            r"kilkenny|athlone|sligo|letterkenny)\b",
             location,
             re.I,
         ):
@@ -4261,6 +4257,7 @@ def _scrape_google_playwright():
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
             page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+            page.set_default_timeout(2000)
             empty_pages = 0
             for page_no in range(1, 31):
                 url = base + "?" + urllib.parse.urlencode({"location": "Ireland", "page": page_no})
@@ -5192,6 +5189,7 @@ def scrape_dxc():
         _mark_connector_health(company, True, f"Official DXC API returned {len(results)} Ireland jobs", api_url)
         return list(results.values())
     if api_loaded:
+        _mark_connector_health(company, True, "Official DXC API returned 0 Ireland jobs", api_url)
         print(
             "  ! DXC API returned 0 Ireland jobs; "
             "checking official careers board before accepting zero"
@@ -20021,7 +20019,9 @@ def main():
     if SCRAPE_MODE == "fast":
         try:
             with open("data.json", encoding="utf-8") as f:
-                previous_jobs = (json.load(f) or {}).get("jobs", [])
+                previous_data = json.load(f) or {}
+            previous_jobs = previous_data.get("jobs", [])
+            CONNECTOR_HEALTH.update(previous_data.get("connector_health") or {})
             results.extend(previous_jobs)
             print(f"Fast refresh: carried forward {len(previous_jobs)} prior jobs")
         except (FileNotFoundError, json.JSONDecodeError, TypeError, AttributeError):

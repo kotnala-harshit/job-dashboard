@@ -16,6 +16,7 @@ from scrape import (
     _parse_yello_jobs,
     _parse_gradireland_listing,
     _scrape_public_careers_page,
+    company_display_name,
     scrape_grant_thornton,
     scrape_workable,
 )
@@ -25,6 +26,10 @@ REGISTRY_PATH = "ireland_job_radar_HARSHIT_MASTER.csv"
 
 
 class RegistryTests(unittest.TestCase):
+    def test_gong_greenhouse_slug_maps_to_curated_company(self):
+        self.assertEqual("Gong", company_display_name("gongio"))
+        self.assertEqual("EirGrid", company_display_name("EirGrid Group"))
+
     def test_refresh_workflow_is_bounded(self):
         workflow = Path(".github/workflows/scrape.yml").read_text(encoding="utf-8")
         self.assertIn("cancel-in-progress: true", workflow)
@@ -43,9 +48,10 @@ class RegistryTests(unittest.TestCase):
             "careers.hpe.com|HPE1US",
             KNOWN_PHENOM_MAPPINGS["Hewlett Packard Enterprise (HPE)"],
         )
-        self.assertNotIn("DXC Technology", VERIFIED_LIVE_ZERO_COMPANIES)
+        self.assertIn("DXC Technology", VERIFIED_LIVE_ZERO_COMPANIES)
         self.assertIn("DXC Technology", DIRECT_COMPANY_CONNECTORS)
         self.assertIn("CGI", VERIFIED_LIVE_ZERO_COMPANIES)
+        self.assertIn("Red Hat", VERIFIED_LIVE_ZERO_COMPANIES)
         for company in (
             "Advanced Micro Devices (AMD)",
             "Applied Materials",
@@ -96,6 +102,16 @@ class RegistryTests(unittest.TestCase):
             }]
         }
         self.assertEqual("Ireland", scrape_workable("davy")[0]["location"])
+
+    @patch("scrape.fetch_json")
+    def test_workable_reads_current_location_shape(self, fetch):
+        fetch.return_value = {"jobs": [{
+            "title": "Analyst",
+            "url": "https://example.test/job",
+            "country": "Ireland",
+            "city": "Dublin",
+        }]}
+        self.assertEqual("Dublin, Ireland", scrape_workable("example")[0]["location"])
 
     @patch("scrape._scrape_grant_thornton_board")
     def test_grant_thornton_scans_experienced_and_graduate_boards(self, collect):
