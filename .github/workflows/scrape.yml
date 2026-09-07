@@ -15,7 +15,7 @@ permissions:
 
 concurrency:
   group: ireland-job-radar-refresh
-  cancel-in-progress: \${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '5 * * * *' }}
+  cancel-in-progress: false
 
 jobs:
   refresh:
