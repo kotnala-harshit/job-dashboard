@@ -2,8 +2,17 @@ name: Refresh Ireland Job Radar
 
 on:
   schedule:
-    - cron: '7 * * * *'
-  workflow_dispatch: {}
+    - cron: '17 */2 * * *'
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Refresh depth
+        type: choice
+        options:
+          - fast
+          - full
+        default: fast
 
 permissions:
   contents: write
@@ -11,8 +20,7 @@ permissions:
 
 concurrency:
   group: ireland-job-radar-refresh
-  cancel-in-progress: false
-  queue: max
+  cancel-in-progress: true
 
 jobs:
   refresh:
@@ -35,7 +43,7 @@ jobs:
           pip install requests beautifulsoup4 curl_cffi playwright
           python -m playwright install --with-deps chromium
 
-      - name: Run FULL FAST FAST refresh cycle
+      - name: Run one bounded refresh
         shell: bash
         env:
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
@@ -45,10 +53,7 @@ jobs:
           ATS_PROBE_LIMIT: "100"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -uo pipefail
-
-          START_EPOCH="$(date +%s)"
-          MAX_CYCLE_SECONDS=3000
+          set -euo pipefail
 
           GENERATED_FILES=(
             data.json
@@ -114,86 +119,23 @@ jobs:
             return 1
           }
 
-          run_full() {
-            echo
-            echo "========================================"
-            echo "FULL START $(date -u)"
-            echo "========================================"
+          mode=fast
+          if [ "${{ github.event.schedule }}" = "17 3 * * *" ]; then
+            mode=full
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            mode="${{ inputs.mode }}"
+          fi
 
-            local started
-            started="$(date +%s)"
+          started="$(date +%s)"
+          limit=12m
+          [ "$mode" = full ] && limit=45m
 
-            if timeout --signal=TERM --kill-after=30s 35m env SCRAPE_MODE=full python scrape.py; then
-              python -c 'import json,datetime; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
-              commit_state "FULL"
-              echo "FULL SUCCESS in $(( $(date +%s) - started ))s"
-              return 0
-            fi
-
-            rc=$?
-            echo "FULL FAILED/TIMED OUT rc=$rc after $(( $(date +%s) - started ))s"
-            return "$rc"
-          }
-
-          run_fast() {
-            echo
-            echo "========================================"
-            echo "FAST START $(date -u)"
-            echo "========================================"
-
-            local started
-            started="$(date +%s)"
-
-            if timeout --signal=TERM --kill-after=20s 10m env SCRAPE_MODE=fast python scrape.py; then
-              commit_state "FAST"
-              echo "FAST SUCCESS in $(( $(date +%s) - started ))s"
-              return 0
-            fi
-
-            rc=$?
-            echo "FAST FAILED/TIMED OUT rc=$rc after $(( $(date +%s) - started ))s"
-            return "$rc"
-          }
-
-          cycle=1
-
-          while true; do
-            elapsed=$(( $(date +%s) - START_EPOCH ))
-
-            if [ "$elapsed" -ge "$MAX_CYCLE_SECONDS" ]; then
-              echo "Hourly refresh window complete"
-              break
-            fi
-
-            echo
-            echo "######## CYCLE $cycle ########"
-
-            if ! run_full; then
-              echo "FULL failed; skipping FAST runs and ending this hourly workflow"
-              break
-            fi
-
-            elapsed=$(( $(date +%s) - START_EPOCH ))
-            [ "$elapsed" -ge "$MAX_CYCLE_SECONDS" ] && break
-
-            run_fast || echo "FAST #1 failed; continuing"
-
-            elapsed=$(( $(date +%s) - START_EPOCH ))
-            [ "$elapsed" -ge "$MAX_CYCLE_SECONDS" ] && break
-
-            run_fast || echo "FAST #2 failed; continuing"
-
-            cycle=$((cycle + 1))
-
-            elapsed=$(( $(date +%s) - START_EPOCH ))
-
-            if [ "$elapsed" -ge "$MAX_CYCLE_SECONDS" ]; then
-              break
-            fi
-          done
-
-          echo
-          echo "Refresh workflow finished after $(( $(date +%s) - START_EPOCH )) seconds"
+          timeout --signal=TERM --kill-after=30s "$limit" env SCRAPE_MODE="$mode" python scrape.py
+          if [ "$mode" = full ]; then
+            python -c 'import json,datetime; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
+          fi
+          commit_state "${mode^^}"
+          echo "${mode^^} SUCCESS in $(( $(date +%s) - started ))s"
 
       - name: Final repository status
         if: always()

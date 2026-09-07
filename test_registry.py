@@ -1,6 +1,7 @@
 import csv
 import unittest
 from datetime import date
+from pathlib import Path
 
 from unittest.mock import patch
 
@@ -24,6 +25,12 @@ REGISTRY_PATH = "ireland_job_radar_HARSHIT_MASTER.csv"
 
 
 class RegistryTests(unittest.TestCase):
+    def test_refresh_workflow_is_bounded(self):
+        workflow = Path(".github/workflows/scrape.yml").read_text(encoding="utf-8")
+        self.assertIn("cancel-in-progress: true", workflow)
+        self.assertNotIn("while true", workflow)
+        self.assertNotIn("queue: max", workflow)
+
     def test_repaired_official_company_mappings_are_registered(self):
         self.assertEqual("aer_lingus_talentsoft", DIRECT_COMPANY_CONNECTORS["Aer Lingus"])
         for company in ("daa (Dublin Airport Authority)", "Vodafone Ireland", "VHI Healthcare"):
