@@ -2,11 +2,7 @@ name: Refresh Ireland Job Radar
 
 on:
   schedule:
-    - cron: '5 * * * *'
-    - cron: '20 * * * *'
-    - cron: '35 * * * *'
-    - cron: '50 * * * *'
-    - cron: '55 * * * *'
+    - cron: '7 * * * *'
   workflow_dispatch: {}
 
 permissions:
@@ -16,123 +12,44 @@ permissions:
 concurrency:
   group: ireland-job-radar-refresh
   cancel-in-progress: false
+  queue: max
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 58
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
-      - name: Choose refresh mode
-        id: freshness
-        shell: bash
+      - name: Install dependencies
         run: |
           set -euo pipefail
-
-          EVENT="${{ github.event_name }}"
-          SCHEDULE="${{ github.event.schedule }}"
-
-          if [ "$EVENT" != "schedule" ]; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-            echo "mode=full" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          if [ "$SCHEDULE" = "5 * * * *" ]; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-            echo "mode=full" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          if [ "$SCHEDULE" = "55 * * * *" ]; then
-            python - <<'PY2'
-          import json
-          import os
-          from datetime import datetime, timezone
-
-          now = datetime.now(timezone.utc)
-          run = True
-
-          try:
-              with open("last_full_refresh.json", encoding="utf-8") as f:
-                  value = json.load(f)["completed_at"]
-              completed = datetime.fromisoformat(str(value).replace("Z", "+00:00")).astimezone(timezone.utc)
-              run = not (
-                  completed.year == now.year
-                  and completed.month == now.month
-                  and completed.day == now.day
-                  and completed.hour == now.hour
-              )
-          except Exception as exc:
-              print(f"Full-refresh marker unavailable: {exc}")
-
-          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-              f.write(f"run={'true' if run else 'false'}\n")
-              f.write("mode=full\n")
-
-          print("Backup FULL required" if run else "Primary FULL already completed this hour")
-          PY2
-            exit 0
-          fi
-
-          echo "run=true" >> "$GITHUB_OUTPUT"
-          echo "mode=fast" >> "$GITHUB_OUTPUT"
-
-      - name: Install dependencies
-        if: steps.freshness.outputs.run == 'true'
-        run: |
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4 curl_cffi playwright
           python -m playwright install --with-deps chromium
 
-      - name: Run FAST Ireland job collector
-        if: steps.freshness.outputs.run == 'true' && steps.freshness.outputs.mode == 'fast'
-        timeout-minutes: 55
-        env:
-          SCRAPE_MODE: fast
-          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
-          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
-          JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
-          CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
-          ATS_PROBE_LIMIT: "100"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python scrape.py
-
-      - name: Run FULL Ireland job collector
-        if: steps.freshness.outputs.run == 'true' && steps.freshness.outputs.mode == 'full'
-        timeout-minutes: 170
-        env:
-          SCRAPE_MODE: full
-          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
-          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
-          JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
-          CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
-          ATS_PROBE_LIMIT: "100"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python scrape.py
-
-      - name: Record successful FULL refresh
-        if: steps.freshness.outputs.run == 'true' && steps.freshness.outputs.mode == 'full'
-        run: python -c 'import json,datetime; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
-
-      - name: Commit generated state safely
-        if: steps.freshness.outputs.run == 'true'
+      - name: Run FULL FAST FAST refresh cycle
         shell: bash
+        env:
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
+          CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
+          ATS_PROBE_LIMIT: "100"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
+          set -uo pipefail
 
-          git config user.name "job-radar-bot"
-          git config user.email "actions@users.noreply.github.com"
+          START_EPOCH="$(date +%s)"
+          MAX_CYCLE_SECONDS=3000
 
-          tmpdir="$(mktemp -d)"
           GENERATED_FILES=(
             data.json
             seen_jobs.json
@@ -143,43 +60,143 @@ jobs:
             jsonld_cache.json
             sponsorship_history.json
             official_permit_stats.json
+            graduate_programme_history.json
             last_full_refresh.json
           )
 
-          for f in "${GENERATED_FILES[@]}"; do
-            [ -f "$f" ] && cp "$f" "$tmpdir/$f"
-          done
+          git config user.name "job-radar-bot"
+          git config user.email "actions@users.noreply.github.com"
 
-          for attempt in 1 2 3 4 5; do
-            git fetch origin main
-            git reset --hard origin/main
-
-            for f in "${GENERATED_FILES[@]}"; do
-              if [ -f "$tmpdir/$f" ]; then
-                cp "$tmpdir/$f" "$f"
-                git add "$f"
-              fi
-            done
-
-            if git diff --staged --quiet; then
-              echo "No generated-file changes"
-              exit 0
-            fi
-
-            git commit -m "Refresh Ireland Job Radar $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
-              exit 0
-            fi
+          commit_state() {
+            local mode="$1"
+            local tmpdir
+            tmpdir="$(mktemp -d)"
 
             for f in "${GENERATED_FILES[@]}"; do
               [ -f "$f" ] && cp "$f" "$tmpdir/$f"
             done
 
-            echo "Remote changed; retrying..."
-            sleep 5
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              git reset --hard origin/main
+
+              for f in "${GENERATED_FILES[@]}"; do
+                if [ -f "$tmpdir/$f" ]; then
+                  cp "$tmpdir/$f" "$f"
+                  git add "$f"
+                fi
+              done
+
+              if git diff --staged --quiet; then
+                echo "No generated changes after $mode"
+                rm -rf "$tmpdir"
+                return 0
+              fi
+
+              git commit -m "Refresh Ireland Job Radar [$mode] $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+              if git push origin HEAD:main; then
+                echo "Push succeeded after $mode"
+                rm -rf "$tmpdir"
+                return 0
+              fi
+
+              for f in "${GENERATED_FILES[@]}"; do
+                [ -f "$f" ] && cp "$f" "$tmpdir/$f"
+              done
+
+              echo "Remote changed; retrying push..."
+              sleep 4
+            done
+
+            echo "Push failed after $mode"
+            rm -rf "$tmpdir"
+            return 1
+          }
+
+          run_full() {
+            echo
+            echo "========================================"
+            echo "FULL START $(date -u)"
+            echo "========================================"
+
+            local started
+            started="$(date +%s)"
+
+            if timeout --signal=TERM --kill-after=30s 35m env SCRAPE_MODE=full python scrape.py; then
+              python -c 'import json,datetime; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
+              commit_state "FULL"
+              echo "FULL SUCCESS in $(( $(date +%s) - started ))s"
+              return 0
+            fi
+
+            rc=$?
+            echo "FULL FAILED/TIMED OUT rc=$rc after $(( $(date +%s) - started ))s"
+            return "$rc"
+          }
+
+          run_fast() {
+            echo
+            echo "========================================"
+            echo "FAST START $(date -u)"
+            echo "========================================"
+
+            local started
+            started="$(date +%s)"
+
+            if timeout --signal=TERM --kill-after=20s 10m env SCRAPE_MODE=fast python scrape.py; then
+              commit_state "FAST"
+              echo "FAST SUCCESS in $(( $(date +%s) - started ))s"
+              return 0
+            fi
+
+            rc=$?
+            echo "FAST FAILED/TIMED OUT rc=$rc after $(( $(date +%s) - started ))s"
+            return "$rc"
+          }
+
+          cycle=1
+
+          while true; do
+            elapsed=$(( $(date +%s) - START_EPOCH ))
+
+            if [ "$elapsed" -ge "$MAX_CYCLE_SECONDS" ]; then
+              echo "Hourly refresh window complete"
+              break
+            fi
+
+            echo
+            echo "######## CYCLE $cycle ########"
+
+            if ! run_full; then
+              echo "FULL failed; skipping FAST runs and ending this hourly workflow"
+              break
+            fi
+
+            elapsed=$(( $(date +%s) - START_EPOCH ))
+            [ "$elapsed" -ge "$MAX_CYCLE_SECONDS" ] && break
+
+            run_fast || echo "FAST #1 failed; continuing"
+
+            elapsed=$(( $(date +%s) - START_EPOCH ))
+            [ "$elapsed" -ge "$MAX_CYCLE_SECONDS" ] && break
+
+            run_fast || echo "FAST #2 failed; continuing"
+
+            cycle=$((cycle + 1))
+
+            elapsed=$(( $(date +%s) - START_EPOCH ))
+
+            if [ "$elapsed" -ge "$MAX_CYCLE_SECONDS" ]; then
+              break
+            fi
           done
 
-          echo "All push attempts failed"
-          exit 1
+          echo
+          echo "Refresh workflow finished after $(( $(date +%s) - START_EPOCH )) seconds"
+
+      - name: Final repository status
+        if: always()
+        run: |
+          git status --short
+          cat last_full_refresh.json 2>/dev/null || true
