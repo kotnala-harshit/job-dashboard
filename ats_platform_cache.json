@@ -2982,14 +2982,14 @@
     "slug": null,
     "probe_version": 36
   },
-  "Reddit": {
-    "platform": "greenhouse",
-    "slug": "reddit",
-    "probe_version": 36
-  },
   "NetApp": {
     "platform": "none",
     "slug": null,
+    "probe_version": 36
+  },
+  "Reddit": {
+    "platform": "greenhouse",
+    "slug": "reddit",
     "probe_version": 36
   },
   "__probe_version__": 36
