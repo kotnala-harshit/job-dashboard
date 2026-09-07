@@ -19761,6 +19761,30 @@ def scrape_gradireland_programmes():
     print(f"gradireland/current programmes: {len(jobs)} jobs")
     return jobs
 
+
+# --- VERIFIED_MANUAL_DIRECT_BATCH_V1 ---
+
+def scrape_medtronic_verified():
+    return scrape_workday(
+        "Medtronic",
+        "medtronic",
+        "wd1",
+        "MedtronicCareers",
+        max_pages=25,
+        search_text="Ireland",
+    )
+
+
+_scrape_direct_company_before_verified_manual_batch_v1 = scrape_direct_company
+
+
+def scrape_direct_company(company: str):
+    if company == "Medtronic":
+        return scrape_medtronic_verified()
+
+    return _scrape_direct_company_before_verified_manual_batch_v1(company)
+
+
 def main():
     profile = load_candidate_profile()
     results = []
