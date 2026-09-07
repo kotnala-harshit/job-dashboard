@@ -68,6 +68,14 @@ class RegistryTests(unittest.TestCase):
         )
         self.assertIn(("Stryker", "stryker", "wd1", "StrykerCareers"), WORKDAY_COMPANIES)
         self.assertIn(("Clio", "clio", "wd3", "cliocareersite"), WORKDAY_COMPANIES)
+        for mapping in (
+            ("KLA Corporation", "kla", "wd1", "Search"),
+            ("Medtronic", "medtronic", "wd1", "MedtronicCareers"),
+            ("Tricentis", "tricentis", "wd1", "Tricentis_Careers"),
+        ):
+            self.assertIn(mapping, WORKDAY_COMPANIES)
+        for company in ("CRH", "DCC plc", "Dublin Port Company", "Glanbia / Tirlán"):
+            self.assertIn(company, DIRECT_COMPANY_CONNECTORS)
         self.assertEqual(
             "careers.dexcom.com|dexcom.com",
             KNOWN_EIGHTFOLD_MAPPINGS["Dexcom"],

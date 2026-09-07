@@ -70,6 +70,11 @@ WORKDAY_COMPANIES = [
 ('Proofpoint', 'proofpoint', 'wd5', 'ProofpointCareers'), ('AIG', 'aig', 'wd1', 'aig'), ('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'), ('NVIDIA', 'nvidia', 'wd5', 'NVIDIAExternalCareerSite'), ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS')]
 WORKDAY_COMPANIES.append(('Stryker', 'stryker', 'wd1', 'StrykerCareers'))
 WORKDAY_COMPANIES.append(('Clio', 'clio', 'wd3', 'cliocareersite'))
+WORKDAY_COMPANIES.extend([
+    ('KLA Corporation', 'kla', 'wd1', 'Search'),
+    ('Medtronic', 'medtronic', 'wd1', 'MedtronicCareers'),
+    ('Tricentis', 'tricentis', 'wd1', 'Tricentis_Careers'),
+])
 
 # ---------------------------------------------------------------------------
 # SmartRecruiters has a genuinely documented public Postings API --
@@ -593,6 +598,10 @@ DIRECT_COMPANY_CONNECTORS = {
     "CGI": "njoyn_official",
     "Dawn Meats": "icims_official",
     "Decathlon Ireland": "successfactors_official",
+    "CRH": "successfactors_official",
+    "DCC plc": "successfactors_official",
+    "Dublin Port Company": "occupop_official",
+    "Glanbia / Tirlán": "successfactors_official",
     "Alter Domus": "alter_domus_official",
     "Baxter International": "baxter_official",
     "Aer Lingus": "aer_lingus_talentsoft",
@@ -3873,6 +3882,32 @@ def scrape_eir():
 def scrape_ornua():
     return _scrape_public_careers_page(
         "Ornua", "https://careers.ornua.com/search/?q=&locationsearch=Ireland", ("/job/",)
+    )
+
+
+def scrape_crh():
+    return _scrape_public_careers_page(
+        "CRH", "https://jobs.crh.com/search/?q=&locationsearch=Ireland", ("/job/",)
+    )
+
+
+def scrape_dcc():
+    return _scrape_public_careers_page(
+        "DCC plc", "https://careers.dcc.ie/search/?q=&locationsearch=Ireland", ("/job/",)
+    )
+
+
+def scrape_dublin_port():
+    return _scrape_public_careers_page(
+        "Dublin Port Company",
+        "https://api.occupop.com/api/jobs-frame/kCZBHKwvaNN8Shr8R4rQNMemvDajZIZqkn3srIHoW4kvQrDfGM?visibility=external",
+        ("/shared/job/",),
+    )
+
+
+def scrape_tirlan():
+    return _scrape_public_careers_page(
+        "Glanbia / Tirlán", "https://careers.tirlan.com/search/?q=&locationsearch=Ireland", ("/job/",)
     )
 
 
@@ -23450,6 +23485,10 @@ def scrape_direct_company(company, *args, **kwargs):
         "Bord Gáis Energy": scrape_bord_gais_energy,
         "Roche": scrape_roche_current,
         "Tesco Ireland": scrape_tesco_ireland_current,
+        "CRH": scrape_crh,
+        "DCC plc": scrape_dcc,
+        "Dublin Port Company": scrape_dublin_port,
+        "Glanbia / Tirlán": scrape_tirlan,
     }
 
     fn = overrides.get(company)
