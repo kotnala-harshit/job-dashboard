@@ -3,10 +3,10 @@ name: Refresh Ireland Job Radar
 on:
   schedule:
     - cron: '5 * * * *'
-    - cron: '10 * * * *'
     - cron: '20 * * * *'
     - cron: '35 * * * *'
     - cron: '50 * * * *'
+    - cron: '55 * * * *'
   workflow_dispatch: {}
 
 permissions:
@@ -31,43 +31,60 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Check refresh freshness
+      - name: Choose refresh mode
         id: freshness
         shell: bash
         run: |
-          if [ "${{ github.event_name }}" != "schedule" ] || [ "${{ github.event.schedule }}" = "10 * * * *" ]; then
+          set -euo pipefail
+
+          EVENT="${{ github.event_name }}"
+          SCHEDULE="${{ github.event.schedule }}"
+
+          if [ "$EVENT" != "schedule" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "mode=full" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          python - <<'PY2'
+          if [ "$SCHEDULE" = "5 * * * *" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$SCHEDULE" = "55 * * * *" ]; then
+            python - <<'PY2'
           import json
           import os
           from datetime import datetime, timezone
 
+          now = datetime.now(timezone.utc)
           run = True
 
           try:
-              with open("data.json", encoding="utf-8") as f:
-                  value = json.load(f).get("generated_at")
-
-              generated = datetime.fromisoformat(
-                  str(value).replace("Z", "+00:00")
+              with open("last_full_refresh.json", encoding="utf-8") as f:
+                  value = json.load(f)["completed_at"]
+              completed = datetime.fromisoformat(str(value).replace("Z", "+00:00")).astimezone(timezone.utc)
+              run = not (
+                  completed.year == now.year
+                  and completed.month == now.month
+                  and completed.day == now.day
+                  and completed.hour == now.hour
               )
-
-              age = (
-                  datetime.now(timezone.utc)
-                  - generated.astimezone(timezone.utc)
-              ).total_seconds() / 60
-
-              run = age >= 30
-              print(f"Existing data age: {age:.1f} minutes")
           except Exception as exc:
-              print(f"Freshness check unavailable: {exc}")
+              print(f"Full-refresh marker unavailable: {exc}")
 
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write(f"run={'true' if run else 'false'}\n")
+              f.write("mode=full\n")
+
+          print("Backup FULL required" if run else "Primary FULL already completed this hour")
           PY2
+            exit 0
+          fi
+
+          echo "run=true" >> "$GITHUB_OUTPUT"
+          echo "mode=fast" >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
         if: steps.freshness.outputs.run == 'true'
@@ -76,10 +93,11 @@ jobs:
           pip install requests beautifulsoup4 curl_cffi playwright
           python -m playwright install --with-deps chromium
 
-      - name: Run Ireland job collector
-        if: steps.freshness.outputs.run == 'true'
+      - name: Run FAST Ireland job collector
+        if: steps.freshness.outputs.run == 'true' && steps.freshness.outputs.mode == 'fast'
+        timeout-minutes: 55
         env:
-          SCRAPE_MODE: ${{ github.event_name == 'schedule' && github.event.schedule != '10 * * * *' && 'fast' || 'full' }}
+          SCRAPE_MODE: fast
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
@@ -87,6 +105,23 @@ jobs:
           ATS_PROBE_LIMIT: "100"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scrape.py
+
+      - name: Run FULL Ireland job collector
+        if: steps.freshness.outputs.run == 'true' && steps.freshness.outputs.mode == 'full'
+        timeout-minutes: 170
+        env:
+          SCRAPE_MODE: full
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
+          CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
+          ATS_PROBE_LIMIT: "100"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scrape.py
+
+      - name: Record successful FULL refresh
+        if: steps.freshness.outputs.run == 'true' && steps.freshness.outputs.mode == 'full'
+        run: python -c 'import json,datetime; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
 
       - name: Commit generated state safely
         if: steps.freshness.outputs.run == 'true'
@@ -108,6 +143,7 @@ jobs:
             jsonld_cache.json
             sponsorship_history.json
             official_permit_stats.json
+            last_full_refresh.json
           )
 
           for f in "${GENERATED_FILES[@]}"; do
