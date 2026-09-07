@@ -2596,5 +2596,487 @@ setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
  */
 </script>
 
+
+<style>
+/* GRADUATE_DASHBOARD_UI_V1 */
+#graduatePane{display:none}
+.grad-toolbar{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  margin:0 0 16px;padding:12px;background:#fff;
+  border:1px solid var(--line);border-radius:10px
+}
+.grad-toolbar select,.grad-toolbar input{min-height:38px}
+.grad-toolbar input{flex:1 1 240px;min-width:200px}
+.grad-summary{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;margin-bottom:16px
+}
+.grad-stat{
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  padding:14px
+}
+.grad-stat b{
+  display:block;font-size:22px;line-height:1.1;color:#18181b
+}
+.grad-stat span{font-size:11px;color:#71717a}
+.grad-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px
+}
+.grad-card{
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  padding:17px;display:flex;flex-direction:column;gap:10px;
+  min-width:0
+}
+.grad-card:hover{border-color:#a1a1aa;box-shadow:0 4px 18px rgba(0,0,0,.05)}
+.grad-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.grad-company{font-size:12px;font-weight:700;color:#52525b}
+.grad-title{font-size:16px;font-weight:750;line-height:1.35;color:#18181b}
+.grad-badges{display:flex;flex-wrap:wrap;gap:6px}
+.grad-badge{
+  display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;
+  border:1px solid #e4e4e7;background:#fafafa;
+  font-size:10.5px;font-weight:700;color:#3f3f46
+}
+.grad-badge.aplus{background:#ecfdf5;border-color:#a7f3d0;color:#047857}
+.grad-badge.a{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
+.grad-badge.live{background:#ecfdf5;border-color:#a7f3d0;color:#047857}
+.grad-badge.soon{background:#fffbeb;border-color:#fde68a;color:#92400e}
+.grad-badge.upcoming{background:#f5f3ff;border-color:#ddd6fe;color:#6d28d9}
+.grad-meta{font-size:11.5px;color:#71717a;line-height:1.5}
+.grad-actions{
+  display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;
+  padding-top:10px;border-top:1px solid #f4f4f5
+}
+.grad-actions button{
+  padding:7px 9px;font-size:11px;background:#fff;color:#52525b;cursor:pointer
+}
+.grad-actions .grad-open{
+  margin-left:auto;background:#18181b!important;color:#fff!important;
+  border-color:#18181b!important;font-weight:700
+}
+.grad-empty{
+  grid-column:1/-1;padding:40px;text-align:center;color:#71717a;
+  background:#fff;border:1px dashed #d4d4d8;border-radius:10px
+}
+.grad-programme-note{
+  font-size:11px;color:#71717a;background:#fafafa;border-radius:7px;padding:8px
+}
+#tabGraduates{font-weight:750}
+@media(max-width:1100px){
+  .grad-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  .grad-grid{grid-template-columns:1fr}
+  .grad-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+
+<script>
+(() => {
+  let RADAR_DATA = null;
+  let GRAD_STATUS = 'live';
+  let GRAD_ROWS = [];
+
+  const esc = v => String(v ?? '')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#039;");
+
+  function statusLabel(v){
+    const x = String(v || '').toLowerCase();
+    if (x === 'live') return 'Live Now';
+    if (x === 'opening_soon' || x === 'expected_soon') return 'Opening Soon';
+    if (x === 'upcoming') return 'Upcoming';
+    if (x === 'rolling') return 'Rolling';
+    if (x === 'closed' || x === 'next_cycle') return 'Closed / Next Cycle';
+    return 'Monitoring';
+  }
+
+  function statusClass(v){
+    const x = String(v || '').toLowerCase();
+    if (x === 'live') return 'live';
+    if (x === 'opening_soon' || x === 'expected_soon') return 'soon';
+    if (x === 'upcoming') return 'upcoming';
+    return '';
+  }
+
+  function normalizeProgrammeRows(data){
+    const g = data?.graduate_early_careers || {};
+    const jobs = Array.isArray(g.jobs) ? g.jobs : [];
+    const rows = jobs.map(j => ({
+      kind:'job',
+      status:'live',
+      company:j.company || '',
+      title:j.title || j.graduate_programme || 'Graduate opportunity',
+      location:j.location || '',
+      intake:j.graduate_intake ?? '',
+      priority:j.graduate_priority || 'B',
+      deadline:j.closing_date || j.deadline || j.graduate_deadline || '',
+      url:j.application_url || j.url || '',
+      posted:j.posted_date || j.date_posted || '',
+      source:j.source || '',
+      raw:j
+    }));
+
+    const seenCompanies = new Set(rows.map(x => x.company));
+
+    (data?.registry_companies || []).forEach(c => {
+      const status = String(c.graduate_status || 'monitoring').toLowerCase();
+
+      if (!c.graduate_monitoring) return;
+      if (status === 'monitoring') return;
+
+      if (
+        status === 'live' &&
+        seenCompanies.has(c.company)
+      ) return;
+
+      const programmes = Array.isArray(c.graduate_programmes)
+        ? c.graduate_programmes
+        : (c.graduate_programme ? [c.graduate_programme] : []);
+
+      const programmeNames = programmes.length
+        ? programmes
+        : ['Graduate / Early Careers Programme'];
+
+      programmeNames.forEach(name => {
+        rows.push({
+          kind:'programme',
+          status,
+          company:c.company || '',
+          title:name || 'Graduate / Early Careers Programme',
+          location:'Ireland',
+          intake:c.graduate_intake || data?.graduate_early_careers?.target_intake_year || '',
+          priority:c.graduate_priority || 'B',
+          deadline:c.graduate_deadline || '',
+          expected:c.graduate_expected_open || '',
+          url:c.graduate_application_url ||
+              c.graduate_programme_url ||
+              c.official_programme_url ||
+              c.careers_url ||
+              c.url || '',
+          raw:c
+        });
+      });
+    });
+
+    const unique = new Map();
+
+    rows.forEach(r => {
+      const key = [
+        r.company,
+        r.title,
+        r.location,
+        r.intake,
+        r.url
+      ].map(x => String(x || '').trim().toLowerCase()).join('|');
+
+      if (!unique.has(key)) unique.set(key, r);
+    });
+
+    return [...unique.values()];
+  }
+
+  function priorityRank(v){
+    return v === 'A+' ? 0 : v === 'A' ? 1 : 2;
+  }
+
+  function intakeRank(v){
+    const n = Number(v);
+    if (n === 2027) return 0;
+    if (n === 2026) return 1;
+    if (!v) return 2;
+    return 3;
+  }
+
+  function getDeadlineText(r){
+    if (!r.deadline) return '';
+    const d = new Date(r.deadline);
+    if (Number.isNaN(d.getTime())) return `Deadline: ${r.deadline}`;
+
+    const days = Math.ceil((d.getTime() - Date.now()) / 86400000);
+    const date = d.toLocaleDateString('en-IE',{
+      day:'numeric',month:'short',year:'numeric'
+    });
+
+    if (days < 0) return `Closed ${date}`;
+    if (days === 0) return `Closes today · ${date}`;
+    if (days <= 14) return `Closes in ${days} days · ${date}`;
+    return `Deadline ${date}`;
+  }
+
+  function setGraduateStatus(status){
+    GRAD_STATUS = status;
+    const sel = document.getElementById('gradStatus');
+    if (sel) sel.value = status;
+    renderGraduates();
+  }
+
+  function renderGraduates(){
+    const pane = document.getElementById('graduatePane');
+    if (!pane || !RADAR_DATA) return;
+
+    const g = RADAR_DATA.graduate_early_careers || {};
+    GRAD_ROWS = normalizeProgrammeRows(RADAR_DATA);
+
+    const q = String(document.getElementById('gradSearch')?.value || '').toLowerCase().trim();
+    const intake = document.getElementById('gradIntake')?.value || '';
+    const priority = document.getElementById('gradPriority')?.value || '';
+    const status = document.getElementById('gradStatus')?.value || 'live';
+
+    let rows = GRAD_ROWS.filter(r => {
+      const rs = String(r.status || '').toLowerCase();
+
+      if (status === 'live' && rs !== 'live') return false;
+      if (status === 'soon' && !['opening_soon','expected_soon'].includes(rs)) return false;
+      if (status === 'upcoming' && rs !== 'upcoming') return false;
+      if (status === 'rolling' && rs !== 'rolling') return false;
+      if (status === 'closed' && !['closed','next_cycle'].includes(rs)) return false;
+      if (status === 'all' && rs === 'monitoring') return false;
+
+      if (intake === '2027' && String(r.intake) !== '2027') return false;
+      if (intake === '2026' && String(r.intake) !== '2026') return false;
+      if (intake === 'rolling' && r.intake !== '' && r.intake != null) return false;
+
+      if (priority && r.priority !== priority) return false;
+
+      if (q) {
+        const hay = [
+          r.company,r.title,r.location,r.priority,r.intake,r.status
+        ].join(' ').toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+
+      return true;
+    });
+
+    rows.sort((a,b) =>
+      priorityRank(a.priority) - priorityRank(b.priority) ||
+      intakeRank(a.intake) - intakeRank(b.intake) ||
+      String(a.company).localeCompare(String(b.company)) ||
+      String(a.title).localeCompare(String(b.title))
+    );
+
+    const live = GRAD_ROWS.filter(x => x.status === 'live').length;
+    const liveCompanies = new Set(
+      GRAD_ROWS.filter(x => x.status === 'live').map(x => x.company)
+    ).size;
+
+    document.getElementById('gradSummary').innerHTML = `
+      <div class="grad-stat"><b>${Number(g.companies_monitored || RADAR_DATA.total_companies_checked || 0)}</b><span>companies monitored</span></div>
+      <div class="grad-stat"><b>${live}</b><span>live graduate roles</span></div>
+      <div class="grad-stat"><b>${liveCompanies}</b><span>companies hiring graduates</span></div>
+      <div class="grad-stat"><b>${Number(g.companies_with_known_programmes || 0)}</b><span>known programme signals</span></div>
+    `;
+
+    const grid = document.getElementById('graduateGrid');
+    grid.innerHTML = '';
+
+    if (!rows.length) {
+      grid.innerHTML = `<div class="grad-empty">No graduate programmes match these filters.</div>`;
+    } else {
+      rows.forEach(r => {
+        const card = document.createElement('article');
+        card.className = 'grad-card';
+
+        const priorityClass =
+          r.priority === 'A+' ? 'aplus' :
+          r.priority === 'A' ? 'a' : '';
+
+        const deadline = getDeadlineText(r);
+
+        card.innerHTML = `
+          <div class="grad-top">
+            <div>
+              <div class="grad-company">${esc(r.company)}</div>
+              <div class="grad-title">${esc(r.title)}</div>
+            </div>
+            <span class="grad-badge ${priorityClass}">${esc(r.priority || 'B')}</span>
+          </div>
+
+          <div class="grad-badges">
+            <span class="grad-badge ${statusClass(r.status)}">${esc(statusLabel(r.status))}</span>
+            ${r.intake ? `<span class="grad-badge">${esc(r.intake)} intake</span>` : `<span class="grad-badge">Rolling / year not stated</span>`}
+            ${r.location ? `<span class="grad-badge">${esc(r.location)}</span>` : ''}
+          </div>
+
+          <div class="grad-meta">
+            ${deadline ? `<div><strong>${esc(deadline)}</strong></div>` : ''}
+            ${r.expected ? `<div>Expected opening: ${esc(r.expected)}</div>` : ''}
+            ${r.posted ? `<div>Posted: ${esc(r.posted)}</div>` : ''}
+          </div>
+
+          ${r.kind === 'programme'
+            ? `<div class="grad-programme-note">Programme intelligence / monitoring record. This is not presented as a live vacancy unless an exact live job is detected.</div>`
+            : ''}
+
+          <div class="grad-actions"></div>
+        `;
+
+        const actions = card.querySelector('.grad-actions');
+
+        if (r.kind === 'job' && typeof window.jobState === 'function' && typeof window.setJobState === 'function') {
+          const saved = document.createElement('button');
+          saved.type = 'button';
+          saved.textContent = window.jobState(r.raw) === 'saved' ? '★ Saved' : '☆ Save';
+          saved.onclick = () => {
+            const next = window.jobState(r.raw) === 'saved' ? '' : 'saved';
+            window.setJobState(r.raw, next);
+            renderGraduates();
+          };
+          actions.appendChild(saved);
+
+          const applied = document.createElement('button');
+          applied.type = 'button';
+          applied.textContent = window.jobState(r.raw) === 'applied' ? '✓ Applied' : 'Mark applied';
+          applied.onclick = () => {
+            const next = window.jobState(r.raw) === 'applied' ? '' : 'applied';
+            window.setJobState(r.raw, next);
+            renderGraduates();
+          };
+          actions.appendChild(applied);
+        }
+
+        if (r.url) {
+          const open = document.createElement('button');
+          open.type = 'button';
+          open.className = 'grad-open';
+          open.textContent = r.kind === 'job' ? 'View exact vacancy →' : 'Open programme →';
+          open.onclick = () => window.open(r.url,'_blank','noopener');
+          actions.appendChild(open);
+        }
+
+        grid.appendChild(card);
+      });
+    }
+
+    const count = document.getElementById('resultCount');
+    if (count && window.CURRENT_TAB === 'graduates') {
+      count.textContent = `${rows.length} graduate results`;
+    }
+
+    const tab = document.getElementById('tabGraduates');
+    if (tab) tab.textContent = `🎓 Graduates (${live})`;
+  }
+
+  function buildGraduateUI(){
+    if (document.getElementById('tabGraduates')) return;
+
+    const liveTab = document.getElementById('tabLive');
+    if (!liveTab) return;
+
+    const tab = document.createElement('div');
+    tab.id = 'tabGraduates';
+    tab.className = 'tab';
+    tab.textContent = '🎓 Graduates';
+    tab.onclick = () => window.showTab('graduates');
+    liveTab.insertAdjacentElement('afterend', tab);
+
+    const main = document.querySelector('main');
+    if (!main) return;
+
+    const pane = document.createElement('div');
+    pane.id = 'graduatePane';
+    pane.innerHTML = `
+      <div class="grad-summary" id="gradSummary"></div>
+
+      <div class="grad-toolbar">
+        <input id="gradSearch" type="text"
+               placeholder="Search graduate programmes, companies or skills..." />
+
+        <select id="gradStatus">
+          <option value="live">Live Now</option>
+          <option value="soon">Opening Soon</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="rolling">Rolling</option>
+          <option value="closed">Closed / Next Cycle</option>
+          <option value="all">All programme signals</option>
+        </select>
+
+        <select id="gradIntake">
+          <option value="">All intakes</option>
+          <option value="2027">2027 intake</option>
+          <option value="2026">2026 intake</option>
+          <option value="rolling">Year not stated / rolling</option>
+        </select>
+
+        <select id="gradPriority">
+          <option value="">All relevance</option>
+          <option value="A+">A+ · Data / AI / Analytics / Tech</option>
+          <option value="A">A · Consulting / Analyst / Transformation</option>
+          <option value="B">B · Broader graduate roles</option>
+        </select>
+      </div>
+
+      <div id="graduateGrid" class="grad-grid"></div>
+    `;
+
+    const livePane = document.getElementById('livePane');
+    if (livePane) livePane.insertAdjacentElement('afterend', pane);
+    else main.appendChild(pane);
+
+    ['gradSearch','gradStatus','gradIntake','gradPriority'].forEach(id => {
+      document.getElementById(id)?.addEventListener(
+        id === 'gradSearch' ? 'input' : 'change',
+        renderGraduates
+      );
+    });
+  }
+
+  const oldShowTab = window.showTab;
+
+  window.showTab = function(tab){
+    if (tab !== 'graduates') {
+      document.getElementById('graduatePane')?.style.setProperty('display','none');
+      document.getElementById('tabGraduates')?.classList.remove('active');
+      if (typeof oldShowTab === 'function') return oldShowTab(tab);
+      return;
+    }
+
+    window.CURRENT_TAB = 'graduates';
+
+    [
+      'livePane','directoryPane','manualPane','liveZeroPane','zeroPane',
+      'liveCompaniesPane','provenCompaniesPane'
+    ].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+
+    document.querySelectorAll('.tabs .tab').forEach(x => x.classList.remove('active'));
+    document.getElementById('tabGraduates')?.classList.add('active');
+    document.getElementById('graduatePane')?.style.setProperty('display','block');
+
+    renderGraduates();
+  };
+
+  const oldLoadData = window.loadData;
+
+  if (typeof oldLoadData === 'function') {
+    window.loadData = function(data){
+      RADAR_DATA = data;
+      const result = oldLoadData(data);
+      renderGraduates();
+      return result;
+    };
+  }
+
+  buildGraduateUI();
+
+  fetch((window.DATA_URL || './data.json') + '?grad=' + Date.now(), {cache:'no-store'})
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(data => {
+      RADAR_DATA = data;
+      renderGraduates();
+    })
+    .catch(err => console.warn('Graduate dashboard data load failed:', err));
+})();
+</script>
+
 </body>
 </html>
