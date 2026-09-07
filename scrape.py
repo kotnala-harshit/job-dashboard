@@ -8203,138 +8203,46 @@ def scrape_becton_dickinson():
 def scrape_ibm():
     company = "IBM"
 
-    # Canonical official Ireland detail URLs. IBM's generic ?jobId= form can
-    # render the branded IBM H1 instead of the vacancy title.
-    seeds = [
-        (
-            "118888",
-            "https://careers.ibm.com/en_US/careers/JobDetail/"
-            "Research-Scientist-Quantum-Algorithms-for-Differential-Equations/118888",
-        ),
-        (
-            "118218",
-            "https://careers.ibm.com/en_US/careers/JobDetail/"
-            "OpenShift-Engineer/118218",
-        ),
-        (
-            "123063",
-            "https://careers.ibm.com/en_US/careers/JobDetail/"
-            "Project-Manager-Infrastructure-Technology-AI-Transformation/123063",
-        ),
-        (
-            "120398",
-            "https://careers.ibm.com/en_US/careers/JobDetail?"
-            "jobId=120398",
-        ),
+    urls = [
+        "https://www.ibm.com/uk-en/careers/search?field_keyword_05%5B0%5D=Ireland",
+        "https://www.ibm.com/careers/search?field_keyword_05%5B0%5D=Ireland",
     ]
 
     if not HAS_PLAYWRIGHT:
-        print("  ! IBM: Playwright unavailable")
+        print(
+            "  ! IBM: dynamic careers search requires Playwright; "
+            "vacancy status unconfirmed"
+        )
         return []
 
-    results = {}
-
     try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(
-                headless=True,
-                args=["--disable-blink-features=AutomationControlled"],
-            )
-            page = browser.new_page(
-                viewport={"width": 1440, "height": 1200},
-                locale="en-IE",
-            )
+        jobs = _browser_board_collect(
+            company,
+            urls,
+            (
+                "careers.ibm.com/job/",
+                "careers.ibm.com/en_US/careers/JobDetail",
+                "/careers/job/",
+                "/job/",
+            ),
+            default_location="Ireland",
+            max_scrolls=15,
+            require_ireland=True,
+            source_tag="official",
+        )
 
-            for jid, href in seeds:
-                try:
-                    page.goto(
-                        href,
-                        wait_until="domcontentloaded",
-                        timeout=60000,
-                    )
-                    page.wait_for_timeout(900)
-                    body = _browser_text(page.locator("body"))
-                except Exception:
-                    continue
-
-                if not re.search(r"\bIreland\b", body, re.I):
-                    continue
-
-                # Prefer the vacancy title encoded in the canonical URL slug.
-                title = ""
-                mm = re.search(
-                    r"/JobDetail/([^/?#]+)/\d+$",
-                    page.url,
-                    re.I,
-                )
-                if mm:
-                    title = urllib.parse.unquote(mm.group(1)).replace("-", " ").strip()
-
-                # For generic ?jobId= URLs, derive the title from the page text
-                # before the location/experience metadata.
-                if not title:
-                    lines = [
-                        re.sub(r"\s+", " ", x).strip()
-                        for x in body.splitlines()
-                        if 4 <= len(x.strip()) <= 260
-                    ]
-                    for line in lines:
-                        low = line.lower()
-                        if low in {"ibm", "email", "x", "linkedin", "apply now"}:
-                            continue
-                        if "javascript is disabled" in low:
-                            continue
-                        if "verify that you're not a robot" in low:
-                            continue
-                        if re.search(
-                            r"\b(?:Dublin|Waterford|Mulhuddart|Ireland)\b",
-                            line,
-                            re.I,
-                        ):
-                            continue
-                        title = line
-                        break
-
-                if not title:
-                    continue
-
-                # Normalize known canonical titles where punctuation matters.
-                known_titles = {
-                    "118888": "Research Scientist – Quantum Algorithms for Differential Equations",
-                    "118218": "OpenShift Engineer",
-                    "123063": "Project Manager – Infrastructure, Technology & AI Transformation",
-                    "120398": "Principal Software Engineer - GPU & Velox Architecture",
-                }
-                title = known_titles.get(jid, title)
-
-                if re.search(r"\bWaterford\b", body, re.I):
-                    location = "Waterford, Ireland"
-                elif re.search(r"\bMulhuddart\b", body, re.I):
-                    location = "Mulhuddart, Dublin, Ireland"
-                elif re.search(r"\bDublin\b", body, re.I):
-                    location = "Dublin, Ireland"
-                else:
-                    location = "Ireland"
-
-                canonical = page.url.split("#")[0]
-
-                results[jid] = {
-                    "company": company,
-                    "ats": "direct",
-                    "title": title[:300],
-                    "location": location,
-                    "url": canonical,
-                    "updated_at": None,
-                    "description_text": body[:5000],
-                }
-
-            browser.close()
+        if jobs:
+            print(f"  IBM dynamic Ireland search: {len(jobs)} verified jobs")
+            return jobs
 
     except Exception as exc:
-        print(f"  ! IBM canonical detail scrape failed: {exc}")
+        print(f"  ! IBM browser discovery failed: {exc}")
 
-    print(f"  IBM canonical Ireland details: {len(results)} jobs")
-    return list(results.values())
+    print(
+        "  ! IBM returned no verified Ireland jobs; "
+        "vacancy status unconfirmed"
+    )
+    return []
 
 
 def scrape_huawei():
