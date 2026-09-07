@@ -25,7 +25,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 58
+    timeout-minutes: 85
 
     steps:
       - uses: actions/checkout@v6
@@ -128,7 +128,7 @@ jobs:
 
           started="$(date +%s)"
           limit=12m
-          [ "$mode" = full ] && limit=45m
+          [ "$mode" = full ] && limit=75m
 
           timeout --signal=TERM --kill-after=30s "$limit" env SCRAPE_MODE="$mode" python scrape.py
           if [ "$mode" = full ]; then
