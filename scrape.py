@@ -15190,11 +15190,44 @@ def scrape_hpe_ireland():
 
 
 def scrape_iqvia_ireland():
-    return _browser_board_collect(
-        "IQVIA", ["https://jobs.iqvia.com/en/jobs?keywords=&location=Ireland"],
-        ("jobs.iqvia.com/en/jobs/",), default_location="Ireland",
-        max_scrolls=12, require_ireland=True, source_tag="official",
-    )
+    company = "IQVIA"
+
+    jobs = scrape_workday(
+        company,
+        "iqvia",
+        "wd1",
+        "IQVIA",
+        max_pages=25,
+        search_text="Ireland",
+    ) or []
+
+    roi = []
+    seen = set()
+
+    for job in jobs:
+        text = " ".join(
+            str(job.get(k, ""))
+            for k in ("title", "location", "description")
+        )
+
+        if not re.search(
+            r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford|Kilkenny|Athlone|Letterkenny)\b",
+            text,
+            re.I,
+        ):
+            continue
+
+        url = str(job.get("url") or "").strip()
+
+        if not url or url in seen:
+            continue
+
+        seen.add(url)
+        job["company"] = company
+        roi.append(job)
+
+    print(f"  IQVIA Workday Ireland: {len(roi)} verified jobs")
+    return roi
 
 
 def scrape_proofpoint_ireland():
@@ -22725,172 +22758,99 @@ def scrape_three_ireland():
 
 
 def scrape_vhi():
-    company = "Vhi"
+    from bs4 import BeautifulSoup
 
-    source = "https://www1.vhi.ie/about/careers"
+    company = "VHI Healthcare"
+    source = "https://www.candidatemanager.net/cm/p/pJobs.aspx?mid=YGTGTU&sid=YYBF"
 
-    try:
-        from playwright.sync_api import sync_playwright
-    except Exception as exc:
-        print(f"  ! Vhi: Playwright unavailable: {exc}")
+    sess = _session()
+    if not sess:
+        print("  ! VHI: HTTP session unavailable")
         return []
 
+    try:
+        r = sess.get(
+            source,
+            timeout=30,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+        r.raise_for_status()
+    except Exception as exc:
+        print(f"  ! VHI CandidateManager request failed: {exc}")
+        return []
+
+    soup = BeautifulSoup(r.text or "", "html.parser")
     results = {}
 
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
+    for a in soup.find_all("a", href=True):
+        raw = str(a.get("href") or "").strip()
 
-            context = browser.new_context(
-                user_agent=(
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/139.0 Safari/537.36"
-                ),
-                locale="en-IE",
+        if "pJobDetails.aspx" not in raw:
+            continue
+
+        href = urllib.parse.urljoin(r.url, raw).split("#")[0]
+
+        if (
+            "candidatemanager.net" not in href.lower()
+            or not re.search(r"[?&]jid=[^&]+", href, re.I)
+        ):
+            continue
+
+        title = re.sub(
+            r"\s+",
+            " ",
+            " ".join(a.stripped_strings),
+        ).strip()
+
+        if not title:
+            continue
+
+        location = "Ireland"
+
+        try:
+            rr = sess.get(
+                href,
+                timeout=20,
+                headers={"User-Agent": "Mozilla/5.0"},
             )
 
-            page = context.new_page()
+            if rr.status_code == 200:
+                detail = BeautifulSoup(
+                    rr.text or "",
+                    "html.parser",
+                )
 
-            page.goto(
-                source,
-                wait_until="domcontentloaded",
-                timeout=45000,
-            )
+                text = re.sub(
+                    r"\s+",
+                    " ",
+                    detail.get_text(" ", strip=True),
+                )
 
-            page.wait_for_timeout(3000)
+                m = re.search(
+                    r"\b(?:Dublin|Cork|Galway|Limerick|Waterford|Kilkenny|Athlone|Letterkenny|Ireland)\b",
+                    text,
+                    re.I,
+                )
 
-            try:
-                _dismiss_cookie_banner(page)
-            except Exception:
-                pass
+                if m:
+                    location = m.group(0)
 
-            frames = []
+        except Exception:
+            pass
 
-            for frame in page.frames:
-                if frame not in frames:
-                    frames.append(frame)
-
-            for frame in frames:
-                try:
-                    anchors = frame.locator("a[href]")
-                    count = anchors.count()
-                except Exception:
-                    continue
-
-                for i in range(count):
-                    a = anchors.nth(i)
-
-                    try:
-                        raw = a.get_attribute("href") or ""
-                    except Exception:
-                        continue
-
-                    if not raw:
-                        continue
-
-                    href = urllib.parse.urljoin(
-                        frame.url or source,
-                        raw,
-                    ).split("#")[0]
-
-                    if (
-                        "candidatemanager.net"
-                        not in href.lower()
-                    ):
-                        continue
-
-                    try:
-                        title = _uvwt_clean(
-                            a.inner_text(timeout=1000)
-                        )
-                    except Exception:
-                        title = ""
-
-                    if not title:
-                        continue
-
-                    canonical = _uvwt_canonical(href)
-
-                    try:
-                        card = a.evaluate(
-                            """el => {
-                                let n = el;
-
-                                for (
-                                    let i = 0;
-                                    i < 7 && n;
-                                    i++, n = n.parentElement
-                                ) {
-                                    const t = (n.innerText || '')
-                                        .replace(/\\s+/g, ' ')
-                                        .trim();
-
-                                    if (
-                                        t.length > 20 &&
-                                        t.length < 4000
-                                    ) {
-                                        return t;
-                                    }
-                                }
-
-                                return '';
-                            }"""
-                        )
-                    except Exception:
-                        card = title
-
-                    text = _uvwt_clean(card)
-
-                    # Ignore generic CandidateManager account/nav links.
-                    if not (
-                        re.search(
-                            r"(vacanc|job|role|position|recruit)",
-                            canonical,
-                            re.I,
-                        )
-                        or re.search(
-                            r"(advisor|manager|analyst|engineer|"
-                            r"specialist|executive|nurse|doctor|"
-                            r"developer|consultant|officer|"
-                            r"administrator|associate)",
-                            text,
-                            re.I,
-                        )
-                    ):
-                        continue
-
-                    results[canonical] = {
-                        "company": company,
-                        "ats": "candidatemanager",
-                        "title": title[:300],
-                        "location": _uvwt_location(text),
-                        "url": canonical,
-                        "updated_at": None,
-                        "description_text": text[:5000],
-                    }
-
-            context.close()
-            browser.close()
-
-    except Exception as exc:
-        print(f"  ! Vhi scrape failed: {exc}")
+        results[href] = {
+            "company": company,
+            "title": title,
+            "location": location,
+            "url": href,
+            "source": "candidate_manager",
+        }
 
     jobs = list(results.values())
 
-    try:
-        _mark_connector_health(
-            company,
-            True,
-            f"Official Vhi careers returned {len(jobs)} jobs",
-            source,
-        )
-    except Exception:
-        pass
-
     print(
-        f"  Vhi official careers: "
-        f"{len(jobs)} jobs"
+        f"  VHI CandidateManager: "
+        f"{len(jobs)} verified Ireland jobs"
     )
 
     return jobs
