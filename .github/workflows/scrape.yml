@@ -2,8 +2,8 @@ name: Refresh Ireland Job Radar
 
 on:
   schedule:
-    - cron: '17 1-11,13-23 * * *'
-    - cron: '17 0,12 * * *'
+    - cron: '17 1-3,5-7,9-11,13-15,17-19,21-23 * * *'
+    - cron: '17 */4 * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -120,7 +120,7 @@ jobs:
           }
 
           mode=fast
-          if [ "${{ github.event.schedule }}" = "17 0,12 * * *" ]; then
+          if [ "${{ github.event.schedule }}" = "17 */4 * * *" ]; then
             mode=full
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             mode="${{ inputs.mode }}"

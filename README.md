@@ -51,4 +51,4 @@ The scraper:
 
 ## Automation schedule
 
-The scraper runs once per hour at minute `17`: fast for most hours, with full audits at `00:17` and `12:17` UTC. Full runs replace those hours' fast runs, so work never overlaps or duplicates. Manual runs can select either mode.
+The scraper runs once per hour at minute `17`: fast for most hours, with a full audit every four hours. Full runs replace those hours' fast runs, so work never overlaps or duplicates. Manual runs can select either mode.
