@@ -20894,8 +20894,16 @@ def main():
         job["official_permits_total"] = int(hist.get("official_permits_total", 0) or 0)
         job["official_permits_by_year"] = hist.get("official_permits_by_year") or {}
 
+    graduate_dashboard = build_graduate_dashboard_state(results, company_registry)
+    print(
+        f"Graduate / early-career opportunities: "
+        f"{graduate_dashboard['live_job_count']} across "
+        f"{graduate_dashboard['live_company_count']} companies"
+    )
+
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "graduate_early_careers": graduate_dashboard,
         "scrape_mode": SCRAPE_MODE,
         "target_companies": sorted(TARGET_COMPANIES),
         "focus": "ireland" if IRELAND_ONLY else "multi_region",
@@ -23627,6 +23635,591 @@ def scrape_viatel():
 
 
 # === VIATEL_FINAL_END ===
+
+
+# --- GRADUATE_PROGRAMME_INTELLIGENCE_V1 ---
+
+GRADUATE_PROGRAMME_PROFILES = {
+    "Bank of Ireland": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [9],
+        "deadline": "2026-09-30",
+        "programmes": [
+            "Data, Technology and Change Graduate Programme 2027",
+            "Corporate and Commercial Banking Graduate Programme 2027",
+            "Retail Ireland Graduate Programme 2027",
+            "New Ireland Assurance Graduate Programme 2027",
+        ],
+        "priority": "A+",
+    },
+    "EY Ireland": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "deadline": "2026-10-21",
+        "programmes": [
+            "AI & Data Graduate Programme 2027",
+            "Technology Consulting Graduate Programme 2027",
+            "Business Consulting Graduate Programme 2027",
+            "Risk Consulting Graduate Programme 2027",
+            "Technology Risk Graduate Programme 2027",
+        ],
+        "priority": "A+",
+    },
+    "KPMG Ireland": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [8, 9, 10],
+        "programmes": ["KPMG Graduate Programme 2027"],
+        "priority": "A",
+    },
+    "Deloitte Ireland": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": [
+            "Deloitte Graduate Programme 2027",
+            "Actuarial, Rewards & Analytics Graduate Programme 2027",
+        ],
+        "priority": "A+",
+    },
+    "PwC Ireland": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": ["PwC Graduate Programme 2027"],
+        "priority": "A",
+    },
+    "Grant Thornton Ireland": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": ["Grant Thornton Graduate Programme 2027"],
+        "priority": "A",
+    },
+    "Forvis Mazars": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [8, 9, 10],
+        "deadline": "2026-10-14",
+        "programmes": ["Forvis Mazars Graduate Programme 2027"],
+        "priority": "A",
+    },
+    "RSM Ireland": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": ["RSM Graduate Programme 2027"],
+        "priority": "A",
+    },
+    "BDO Ireland": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": ["BDO Graduate Programme 2027"],
+        "priority": "A",
+    },
+    "Willis Towers Watson (WTW)": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [8, 9],
+        "deadline": "2026-09-30",
+        "programmes": ["Retirement Graduate Programme 2027"],
+        "priority": "B",
+    },
+    "Tirlán": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [8, 9, 10],
+        "programmes": [
+            "IT Associate Programme 2027",
+            "Business Excellence Associate Programme 2027",
+        ],
+        "priority": "A+",
+    },
+    "JPMorgan Chase": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [8, 9, 10],
+        "programmes": ["Global Payments Analyst Programme 2027"],
+        "priority": "A",
+    },
+    "Accenture": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [8, 9, 10],
+        "programmes": ["Graduate Programme 2027/2028"],
+        "priority": "A+",
+    },
+    "Zurich Insurance": {
+        "status": "live",
+        "intake": 2027,
+        "open_months": [8, 9, 10],
+        "programmes": ["Graduate Technology / Test Engineering Opportunities"],
+        "priority": "A",
+    },
+    "Central Bank of Ireland": {
+        "status": "opening_soon",
+        "intake": 2027,
+        "open_months": [9],
+        "programmes": ["Central Bank Graduate Programme 2027"],
+        "priority": "A+",
+    },
+    "EirGrid": {
+        "status": "upcoming",
+        "intake": 2027,
+        "expected_open": "2026-09-18",
+        "open_months": [9, 10],
+        "programmes": ["EirGrid Graduate Programme 2027"],
+        "priority": "A",
+    },
+    "Aon": {
+        "status": "expected_soon",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": ["Aon Graduate Programme"],
+        "priority": "A",
+    },
+    "PTSB": {
+        "status": "expected_soon",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": ["Data Analytics & Modelling Graduate Programme"],
+        "priority": "A+",
+    },
+    "Allianz Ireland": {
+        "status": "expected_soon",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": ["Data Analytics Graduate Programme"],
+        "priority": "A+",
+    },
+    "CBRE": {
+        "status": "expected_soon",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": ["CBRE Graduate Programme"],
+        "priority": "B",
+    },
+    "Lidl Ireland": {
+        "status": "expected_soon",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": [
+            "Controlling & Analytics Graduate Programme",
+            "Graduate Programme",
+        ],
+        "priority": "A+",
+    },
+    "Savills Ireland": {
+        "status": "expected_soon",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": ["Savills Graduate Programme 2027"],
+        "priority": "B",
+    },
+    "Crowe Ireland": {
+        "status": "expected_soon",
+        "intake": 2027,
+        "open_months": [9, 10],
+        "programmes": ["Crowe Graduate Programme 2027"],
+        "priority": "A",
+    },
+}
+
+GRADUATE_DISCOVERY_TERMS = [
+    "graduate",
+    "graduate programme",
+    "graduate program",
+    "early careers",
+    "early career",
+    "future talent",
+    "emerging talent",
+    "campus",
+    "new grad",
+    "entry level",
+    "entry-level",
+    "analyst programme",
+    "analyst program",
+    "associate programme",
+    "associate program",
+    "rotational programme",
+    "rotational program",
+    "technology graduate",
+    "data graduate",
+    "analytics graduate",
+    "ai graduate",
+    "digital graduate",
+    "consulting graduate",
+    "business graduate",
+    "trainee",
+    "apprentice",
+]
+
+_original_build_company_registry = build_company_registry
+
+def build_company_registry(include_cache=False):
+    registry = _original_build_company_registry(include_cache=include_cache)
+
+    aliases = {
+        "EY": "EY Ireland",
+        "KPMG": "KPMG Ireland",
+        "PwC": "PwC Ireland",
+        "Grant Thornton": "Grant Thornton Ireland",
+        "RSM": "RSM Ireland",
+        "BDO": "BDO Ireland",
+        "Zurich": "Zurich Insurance",
+        "Lidl": "Lidl Ireland",
+        "Savills": "Savills Ireland",
+        "Crowe": "Crowe Ireland",
+        "Permanent TSB": "PTSB",
+        "Willis Towers Watson": "Willis Towers Watson (WTW)",
+        "J.P. Morgan": "JPMorgan Chase",
+        "JP Morgan": "JPMorgan Chase",
+    }
+
+    for item in registry:
+        company = item.get("company") or item.get("name") or ""
+        profile_key = aliases.get(company, company)
+        profile = GRADUATE_PROGRAMME_PROFILES.get(profile_key)
+
+        item["graduate_monitoring"] = True
+        item["graduate_intake"] = 2027
+        item["graduate_search_terms"] = GRADUATE_DISCOVERY_TERMS
+
+        if profile:
+            item["graduate_programme"] = True
+            item["graduate_status"] = profile["status"]
+            item["graduate_priority"] = profile.get("priority")
+            item["graduate_programmes"] = profile.get("programmes", [])
+            item["graduate_open_months"] = profile.get("open_months", [])
+            item["graduate_deadline"] = profile.get("deadline")
+            item["graduate_expected_open"] = profile.get("expected_open")
+        else:
+            item["graduate_programme"] = False
+            item["graduate_status"] = "monitoring"
+            item["graduate_priority"] = None
+            item["graduate_programmes"] = []
+            item["graduate_open_months"] = []
+            item["graduate_deadline"] = None
+            item["graduate_expected_open"] = None
+
+    return registry
+
+# --- END_GRADUATE_PROGRAMME_INTELLIGENCE_V1 ---
+
+
+# --- GRADUATE_AUTO_DISCOVERY_V1 ---
+
+def _graduate_text(value):
+    return re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
+
+def _graduate_intake_year(job):
+    text = " ".join(
+        str(job.get(k, "") or "")
+        for k in ("title", "description", "url")
+    )
+    years = [
+        int(x)
+        for x in re.findall(r"\b20(?:26|27|28|29|30)\b", text)
+    ]
+    return min(years) if years else None
+
+
+def _is_graduate_opportunity(job):
+    title = _graduate_text(job.get("title"))
+    description = _graduate_text(job.get("description"))
+    url = _graduate_text(job.get("url"))
+    location = _graduate_text(
+        " ".join(
+            str(job.get(k, "") or "")
+            for k in ("location", "locations", "city", "region")
+        )
+    )
+
+    text = f"{title} {description} {url}"
+
+    reject_terms = (
+        "postgraduate",
+        "post graduate",
+        "graduate research school",
+        "research masters",
+        "research master",
+        "student lifecycle",
+        "structured modules",
+        "research admissions",
+        "phd",
+        "phds",
+    )
+
+    if any(x in text for x in reject_terms):
+        return False
+
+    if any(x in title for x in (
+        "senior manager",
+        "program manager",
+        "programme manager",
+        "early career manager",
+        "graduate recruitment manager",
+        "graduate program manager",
+        "graduate programme manager",
+        "director",
+        "vice president",
+        "vp ",
+        "head of ",
+        "principal ",
+    )):
+        return False
+
+    if "belfast" in text or "northern ireland" in text:
+        return False
+
+    strong_terms = (
+        "graduate",
+        "new grad",
+        "new graduate",
+        "graduate programme",
+        "graduate program",
+        "graduate scheme",
+        "early career",
+        "early careers",
+        "emerging talent",
+        "future talent",
+        "analyst programme",
+        "analyst program",
+        "associate programme",
+        "associate program",
+        "rotational programme",
+        "rotational program",
+        "graduate rotation",
+        "trainee programme",
+        "trainee program",
+    )
+
+    if not any(term in text for term in strong_terms):
+        return False
+
+    return True
+
+
+def _graduate_relevance(job):
+    text = _graduate_text(
+        str(job.get("title", "")) + " " +
+        str(job.get("description", ""))
+    )
+    if any(x in text for x in (
+        "data", "analytics", "artificial intelligence", " ai ",
+        "machine learning", "business intelligence", "technology",
+        "digital", "business analyst"
+    )):
+        return "A+"
+    if any(x in text for x in (
+        "consulting", "transformation", "risk", "strategy",
+        "analyst", "commercial", "finance"
+    )):
+        return "A"
+    return "B"
+
+def enrich_graduate_opportunities(results, company_registry):
+    graduate_jobs = []
+
+    for job in results:
+        if not _is_graduate_opportunity(job):
+            continue
+
+        job["graduate_opportunity"] = True
+        job["graduate_intake"] = _graduate_intake_year(job)
+        job["graduate_priority"] = _graduate_relevance(job)
+        graduate_jobs.append(job)
+
+    live_companies = {
+        _graduate_text(job.get("company"))
+        for job in graduate_jobs
+        if job.get("company")
+    }
+
+    for item in company_registry:
+        company = item.get("company") or item.get("name") or ""
+        key = _graduate_text(company)
+
+        if key in live_companies:
+            item["graduate_programme"] = True
+            item["graduate_status"] = "live"
+
+        months = item.get("graduate_open_months") or []
+        if (
+            item.get("graduate_status") == "monitoring"
+            and datetime.now(timezone.utc).month in months
+        ):
+            item["graduate_status"] = "expected_soon"
+
+    return graduate_jobs
+
+
+def build_graduate_dashboard_state(results, company_registry):
+    history_path = "graduate_programme_history.json"
+
+    try:
+        with open(history_path, encoding="utf-8") as f:
+            history = json.load(f)
+        if not isinstance(history, dict):
+            history = {}
+    except Exception:
+        history = {}
+
+    now = datetime.now(timezone.utc)
+    graduate_jobs = enrich_graduate_opportunities(results, company_registry)
+
+    by_company = {}
+    for job in graduate_jobs:
+        company = company_display_name(job.get("company", ""))
+        if not company:
+            continue
+
+        job["company"] = company
+        by_company.setdefault(company, []).append(job)
+
+        entry = history.setdefault(company, {
+            "first_seen": now.isoformat(),
+            "last_seen": now.isoformat(),
+            "observed_open_months": [],
+            "observed_intake_years": [],
+        })
+
+        entry["last_seen"] = now.isoformat()
+
+        month = now.month
+        months = {int(x) for x in entry.get("observed_open_months", []) if str(x).isdigit()}
+        months.add(month)
+        entry["observed_open_months"] = sorted(months)
+
+        years = {
+            int(x)
+            for x in entry.get("observed_intake_years", [])
+            if str(x).isdigit()
+        }
+        for observed_job in by_company.get(company, []):
+            intake = observed_job.get("graduate_intake")
+            if intake:
+                years.add(int(intake))
+        entry["observed_intake_years"] = sorted(years)
+
+    registry_lookup = {
+        _company_key(x.get("company") or x.get("name")): x
+        for x in company_registry
+    }
+
+    for company, hist in history.items():
+        item = registry_lookup.get(_company_key(company))
+        if not item:
+            continue
+
+        observed = hist.get("observed_open_months") or []
+        configured = item.get("graduate_open_months") or []
+        item["graduate_historical_open_months"] = sorted({
+            *[int(x) for x in configured if str(x).isdigit()],
+            *[int(x) for x in observed if str(x).isdigit()],
+        })
+        item["graduate_first_seen"] = hist.get("first_seen")
+        item["graduate_last_seen"] = hist.get("last_seen")
+
+    for item in company_registry:
+        item.setdefault(
+            "graduate_historical_open_months",
+            sorted({
+                int(x)
+                for x in (item.get("graduate_open_months") or [])
+                if str(x).isdigit()
+            }),
+        )
+        item.setdefault("graduate_first_seen", None)
+        item.setdefault("graduate_last_seen", None)
+
+        months = item.get("graduate_historical_open_months") or []
+        status = item.get("graduate_status")
+
+        if (
+            status == "monitoring"
+            and now.month in months
+        ):
+            item["graduate_status"] = "expected_soon"
+
+    try:
+        with open(history_path, "w", encoding="utf-8") as f:
+            json.dump(history, f, indent=2, ensure_ascii=False)
+    except Exception as exc:
+        print(f"  ! Could not write {history_path}: {exc}")
+
+    status_counts = {}
+    for item in company_registry:
+        status = item.get("graduate_status", "monitoring")
+        status_counts[status] = status_counts.get(status, 0) + 1
+
+    deduped = {}
+    for job in graduate_jobs:
+        company = _company_key(job.get("company", ""))
+        title = _graduate_text(job.get("title"))
+        year = job.get("graduate_intake")
+
+        key = (
+            company,
+            re.sub(r"[^a-z0-9]+", " ", title).strip(),
+            year,
+        )
+
+        current = deduped.get(key)
+        if current is None:
+            deduped[key] = job
+            continue
+
+        current_url = str(current.get("url", ""))
+        candidate_url = str(job.get("url", ""))
+
+        preferred = (
+            "workdayjobs.com",
+            "smartrecruiters.com",
+            "pinpointhq.com",
+            "candidatemanager.net",
+            "oraclecloud.com",
+            "yello.co",
+            "careers.",
+        )
+
+        if (
+            any(x in candidate_url for x in preferred)
+            and not any(x in current_url for x in preferred)
+        ):
+            deduped[key] = job
+
+    live_jobs = sorted(
+        deduped.values(),
+        key=lambda j: (
+            9999 if j.get("graduate_intake") is None else int(j["graduate_intake"]),
+            {"A+": 0, "A": 1, "B": 2}.get(j.get("graduate_priority"), 9),
+            str(j.get("company", "")),
+            str(j.get("title", "")),
+        ),
+    )
+
+    return {
+        "intake_year": "multiple",
+        "target_intake_year": 2027,
+        "companies_monitored": len(company_registry),
+        "companies_with_known_programmes": sum(
+            bool(x.get("graduate_programme")) for x in company_registry
+        ),
+        "status_counts": status_counts,
+        "live_job_count": len(live_jobs),
+        "live_company_count": len(by_company),
+        "live_companies": sorted(by_company),
+        "jobs": live_jobs,
+    }
+
+
+# --- END_GRADUATE_AUTO_DISCOVERY_V1 ---
+
+
 
 if __name__ == "__main__":
     main()
