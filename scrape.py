@@ -492,6 +492,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Citi": "citi",
     "Apple": "apple",
     "Google": "google",
+    "Goldman Sachs": "goldman_higher",
     "Microsoft": "microsoft",
     "Meta": "meta",
     "TikTok": "tiktok",
@@ -23469,11 +23470,93 @@ def scrape_applegreen():
     return jobs
 
 
+def scrape_goldman_sachs():
+    """Read public Ireland vacancies from Goldman Sachs' official HIGHER API."""
+    company = "Goldman Sachs"
+    source = "https://higher.gs.com/results"
+    query = """query GetRoles($searchQueryInput: RoleSearchQueryInput!) {
+      roleSearch(searchQueryInput: $searchQueryInput) {
+        totalCount
+        items {
+          roleId corporateTitle jobTitle jobFunction division skills status
+          locations { primary state country city }
+          jobType { code description }
+        }
+      }
+    }"""
+    session = _session()
+    if not session:
+        return []
+
+    jobs = []
+    page = 0
+    total = 1
+    try:
+        while page * 250 < total:
+            payload = {
+                "operationName": "GetRoles",
+                "variables": {"searchQueryInput": {
+                    "page": {"pageSize": 250, "pageNumber": page},
+                    "sort": {"sortStrategy": "RELEVANCE", "sortOrder": "DESC"},
+                    "filters": [],
+                    "experiences": ["EARLY_CAREER", "PROFESSIONAL"],
+                    "searchTerm": "",
+                }},
+                "query": query,
+            }
+            response = session.post(
+                "https://api-higher.gs.com/gateway/api/v1/graphql",
+                json=payload,
+                headers={"Origin": "https://higher.gs.com", "Referer": source},
+                timeout=30,
+            )
+            response.raise_for_status()
+            result = (response.json().get("data") or {}).get("roleSearch") or {}
+            items = result.get("items") or []
+            total = int(result.get("totalCount") or 0)
+            if not items:
+                break
+            for role in items:
+                location_parts = role.get("locations") or []
+                location = ", ".join(
+                    part for part in (
+                        next((x.get("city") for x in location_parts if x.get("primary")), None),
+                        next((x.get("state") for x in location_parts if x.get("primary")), None),
+                        next((x.get("country") for x in location_parts if x.get("primary")), None),
+                    ) if part
+                )
+                if not region_ok(location):
+                    continue
+                role_id = str(role.get("roleId") or "").split("_", 1)[0]
+                title = str(role.get("jobTitle") or "").strip()
+                if not role_id or not title:
+                    continue
+                jobs.append({
+                    "company": company,
+                    "ats": "goldman_higher",
+                    "title": title,
+                    "location": location,
+                    "url": f"https://higher.gs.com/roles/{role_id}",
+                    "updated_at": None,
+                    "description_text": " ".join(str(role.get(key) or "") for key in ("corporateTitle", "jobFunction", "division", "skills")),
+                })
+            page += 1
+    except Exception as exc:
+        print(f"  ! Goldman Sachs official careers failed: {exc}")
+        _mark_connector_health(company, False, "Official HIGHER API failed", source)
+        return []
+
+    _mark_connector_health(company, True, f"Official HIGHER API returned {len(jobs)} Ireland jobs", source)
+    print(f"  Goldman Sachs official HIGHER: {len(jobs)} Ireland jobs")
+    return jobs
+
+
 _va_previous_direct = scrape_direct_company
 
 
 def scrape_direct_company(company, *args, **kwargs):
     overrides = {
+        "Goldman Sachs": scrape_goldman_sachs,
         "Viatel": scrape_viatel,
         "Viatel Technology Group": scrape_viatel,
         "Applegreen": scrape_applegreen,

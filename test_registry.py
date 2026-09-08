@@ -18,6 +18,7 @@ from scrape import (
     _scrape_public_careers_page,
     company_display_name,
     scrape_grant_thornton,
+    scrape_goldman_sachs,
     scrape_workable,
 )
 
@@ -83,6 +84,7 @@ class RegistryTests(unittest.TestCase):
             self.assertIn(mapping, WORKDAY_COMPANIES)
         for company in ("CRH", "DCC plc", "Dublin Port Company", "Glanbia / Tirlán"):
             self.assertIn(company, DIRECT_COMPANY_CONNECTORS)
+        self.assertEqual("goldman_higher", DIRECT_COMPANY_CONNECTORS["Goldman Sachs"])
         self.assertEqual(
             "careers.dexcom.com|dexcom.com",
             KNOWN_EIGHTFOLD_MAPPINGS["Dexcom"],
@@ -130,6 +132,24 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual("AI & Data Graduate Programme 2027", jobs[0]["title"])
         self.assertEqual("Ireland", jobs[0]["location"])
         self.assertIn("/jobs/abc", jobs[0]["url"])
+
+    @patch("scrape._session")
+    def test_goldman_sachs_keeps_official_ireland_role_urls(self, session_factory):
+        class Response:
+            def raise_for_status(self):
+                pass
+
+            def json(self):
+                return {"data": {"roleSearch": {"totalCount": 1, "items": [{
+                    "roleId": "179955_GS_MID_CAREER",
+                    "jobTitle": "Customer Operations Manager, Associate, Dublin",
+                    "locations": [{"primary": True, "city": "Dublin", "state": "Co. Dublin", "country": "Ireland"}],
+                }]}}}
+
+        session_factory.return_value.post.return_value = Response()
+        jobs = scrape_goldman_sachs()
+        self.assertEqual("Dublin, Co. Dublin, Ireland", jobs[0]["location"])
+        self.assertEqual("https://higher.gs.com/roles/179955", jobs[0]["url"])
 
     def test_gradireland_parser_keeps_only_open_roi_programmes(self):
         job = _parse_gradireland_listing(
