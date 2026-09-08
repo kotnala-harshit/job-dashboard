@@ -493,6 +493,7 @@ DIRECT_COMPANY_CONNECTORS = {
     "Apple": "apple",
     "Google": "google",
     "Goldman Sachs": "goldman_higher",
+    "BNY": "bny_oracle",
     "Microsoft": "microsoft",
     "Meta": "meta",
     "TikTok": "tiktok",
@@ -3286,6 +3287,7 @@ def scrape_oracle_candidate_experience(
     ),
     site_number="CX_45001",
     location_id="300000000106938",
+    max_pages=1,
 ):
     """
     Oracle Candidate Experience Ireland connector.
@@ -3323,33 +3325,25 @@ def scrape_oracle_candidate_experience(
         "finder": finder,
     }
 
-    url = (
-        endpoint
-        + "?"
-        + urllib.parse.urlencode(
-            params,
-            safe=";,",
-        )
-    )
-
     try:
-        response = _session().get(
-            url,
-            headers={
-            "User-Agent": (
-                "Mozilla/5.0 "
-                "(Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 "
-                "(KHTML, like Gecko) "
-                "Chrome/131.0.0.0 Safari/537.36"
-            ),
-            "Accept": "application/json",
-            "Accept-Language": "en-IE,en;q=0.9",
-        },
-            timeout=45,
-        )
-        response.raise_for_status()
-        payload = response.json()
+        requisitions = []
+        total = 0
+        for page in range(max_pages):
+            page_params = dict(params)
+            if page:
+                page_params["finder"] = f"{finder},offset={page * 100}"
+            response = _session().get(
+                endpoint, params=page_params,
+                headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json", "Accept-Language": "en-IE,en;q=0.9"},
+                timeout=45,
+            )
+            response.raise_for_status()
+            container = (response.json().get("items") or [{}])[0] or {}
+            batch = container.get("requisitionList") or container.get("RequisitionList") or []
+            total = int(container.get("TotalJobsCount") or container.get("totalJobsCount") or len(batch))
+            requisitions.extend(batch)
+            if len(batch) < 100 or len(requisitions) >= total:
+                break
 
     except Exception as exc:
         print(
@@ -3358,27 +3352,9 @@ def scrape_oracle_candidate_experience(
         )
         return []
 
-    items = payload.get("items") or []
-
-    if not items:
-        print(
-            "  ! Oracle Candidate Experience returned no search container"
-        )
+    if not requisitions:
+        print("  ! Oracle Candidate Experience returned no requisitions")
         return []
-
-    container = items[0] or {}
-
-    requisitions = (
-        container.get("requisitionList")
-        or container.get("RequisitionList")
-        or []
-    )
-
-    total = (
-        container.get("TotalJobsCount")
-        or container.get("totalJobsCount")
-        or len(requisitions)
-    )
 
     jobs = []
 
@@ -3554,6 +3530,18 @@ def scrape_chubb():
         base_url="https://fa-ewgu-saasfaprod1.fa.ocs.oraclecloud.com",
         site_number="CX_2001",
         location_id="100000053100433",
+    )
+
+
+def scrape_bny():
+    # BNY's public Oracle board does not honour its country facet server-side.
+    # Read all pages and retain only the established Republic-of-Ireland filter.
+    return scrape_oracle_candidate_experience(
+        company="BNY",
+        base_url="https://eofe.fa.us2.oraclecloud.com",
+        site_number="BNY-Careers",
+        location_id="",
+        max_pages=14,
     )
 
 
@@ -23556,6 +23544,7 @@ _va_previous_direct = scrape_direct_company
 
 def scrape_direct_company(company, *args, **kwargs):
     overrides = {
+        "BNY": scrape_bny,
         "Goldman Sachs": scrape_goldman_sachs,
         "Viatel": scrape_viatel,
         "Viatel Technology Group": scrape_viatel,

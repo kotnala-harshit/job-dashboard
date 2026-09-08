@@ -19,6 +19,7 @@ from scrape import (
     company_display_name,
     scrape_grant_thornton,
     scrape_goldman_sachs,
+    scrape_bny,
     scrape_workable,
 )
 
@@ -85,6 +86,7 @@ class RegistryTests(unittest.TestCase):
         for company in ("CRH", "DCC plc", "Dublin Port Company", "Glanbia / Tirlán"):
             self.assertIn(company, DIRECT_COMPANY_CONNECTORS)
         self.assertEqual("goldman_higher", DIRECT_COMPANY_CONNECTORS["Goldman Sachs"])
+        self.assertEqual("bny_oracle", DIRECT_COMPANY_CONNECTORS["BNY"])
         self.assertEqual(
             "careers.dexcom.com|dexcom.com",
             KNOWN_EIGHTFOLD_MAPPINGS["Dexcom"],
@@ -150,6 +152,12 @@ class RegistryTests(unittest.TestCase):
         jobs = scrape_goldman_sachs()
         self.assertEqual("Dublin, Co. Dublin, Ireland", jobs[0]["location"])
         self.assertEqual("https://higher.gs.com/roles/179955", jobs[0]["url"])
+
+    @patch("scrape.scrape_oracle_candidate_experience")
+    def test_bny_uses_the_paginated_official_oracle_board(self, collect):
+        scrape_bny()
+        self.assertEqual("BNY", collect.call_args.kwargs["company"])
+        self.assertEqual(14, collect.call_args.kwargs["max_pages"])
 
     def test_gradireland_parser_keeps_only_open_roi_programmes(self):
         job = _parse_gradireland_listing(
