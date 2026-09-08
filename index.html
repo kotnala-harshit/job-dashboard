@@ -280,6 +280,21 @@
   }
   .resume-button:hover { border-color:var(--amber); }
   #resumeInput { display:none; }
+  .pagination-bar {
+    display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap;
+  }
+  .page-btn {
+    background:transparent; color:var(--ink); border:1px solid var(--line); padding:7px 11px;
+    border-radius:6px; cursor:pointer; font-size:12px; font-weight:700; min-width:34px;
+  }
+  .page-btn:hover { border-color:var(--amber); }
+  .page-btn.active { background:#18181b; color:#fff; border-color:#18181b; }
+  .page-btn:disabled { opacity:0.4; cursor:not-allowed; }
+  .page-ellipsis { padding:7px 4px; font-size:12px; color:var(--muted); }
+  .myapps-summary-row {
+    display:flex; gap:14px; flex-wrap:wrap; margin-bottom:14px; font-size:12px; color:var(--muted);
+  }
+  .myapps-summary-row strong { color:var(--ink); }
   .match-badge {
     font-family:var(--mono); font-size:10.5px; padding:3px 8px; border-radius:20px;
     border:1px solid #3fcf9a44; background:var(--teal-dim); color:var(--teal);
@@ -847,7 +862,7 @@ body{background:#f3f4f6!important}
 
     <div class="loadctrl">
       <span id="liveStatus" class="live-dot">● live</span>
-      <button id="searchEnterBtn" type="button" onclick="applyFilters()">Search / Enter</button>
+      <button id="searchEnterBtn" type="button" onclick="CURRENT_JOB_PAGE=1;applyFilters()">Search / Enter</button>
       <button id="refreshNowBtn" type="button" onclick="autoFetchJobs()"
               title="Reload the latest completed collection from GitHub Pages">Reload latest data</button>
     </div>
@@ -858,6 +873,7 @@ body{background:#f3f4f6!important}
   <div class="subhead">
     <div class="tabs">
       <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs</div>
+      <div id="tabMyApps" class="tab" onclick="showTab('myapps')">My Applications</div>
       <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
       <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
       <div id="tabLiveZero" class="tab" onclick="showTab('livezero')">No live jobs</div>
@@ -872,16 +888,13 @@ body{background:#f3f4f6!important}
     <div id="cardGrid" class="grid"></div>
     <div id="emptyState" class="empty">No jobs loaded yet — waiting for data.json.</div>
 
-    <div style="display:flex;justify-content:center;padding:22px 0;">
-      <button
-        id="loadMoreJobs"
-        class="resume-button"
-        type="button"
-        style="display:none;"
-      >
-        Load more jobs
-      </button>
-    </div>
+    <div id="jobPagination" class="pagination-bar" style="padding:22px 0;"></div>
+  </div>
+
+  <div id="myAppsPane" style="display:none">
+    <div id="myAppsSummary" class="myapps-summary-row"></div>
+    <div id="myAppsGrid" class="grid"></div>
+    <div id="myAppsEmpty" class="empty" style="display:none;">No saved or applied jobs yet — use the Save or Applied buttons on a job card.</div>
   </div>
 
   <div id="directoryPane">
@@ -931,9 +944,8 @@ let CONNECTOR_HEALTH = {};
 let RAW_TOTAL = 0;
 
 /* DASHBOARD_ZERO_PERF_FIX_V1 */
-const INITIAL_JOB_RENDER_LIMIT = 200;
-const JOB_RENDER_STEP = 200;
-let CURRENT_RENDER_LIMIT = INITIAL_JOB_RENDER_LIMIT;
+const JOB_PAGE_SIZE = 200;
+let CURRENT_JOB_PAGE = 1;
 let CURRENT_TAB = 'live';
 
 
@@ -1243,6 +1255,7 @@ function setupInstantFilters() {
         : 'change';
 
     el.addEventListener(eventName, () => {
+      CURRENT_JOB_PAGE = 1;
       applyFilters();
     });
   });
@@ -1256,6 +1269,7 @@ function setupInstantFilters() {
     search.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         e.preventDefault();
+        CURRENT_JOB_PAGE = 1;
         applyFilters();
       }
     });
@@ -1574,6 +1588,147 @@ function employmentTypeValues(job) {
 }
 
 
+function buildJobCard(j) {
+  const postedDate = getJobPostedDate(j);
+  const fresh = ageHours(postedDate) <= 24;
+  const badge = visaLabel(j.visa_sponsorship || 'not_mentioned');
+  const visaHistory = j.employer_sponsorship_history || {};
+  const permitTotal = Number(j.official_permits_total || visaHistory.official_permits_total || 0);
+  const pm = personalJobMatch(j);
+  const applicationState = jobState(j);
+  const employmentLevel = classifyEmploymentLevel(j);
+  const employmentLevelText = employmentLevelLabel(employmentLevel);
+  const bucketLabel = recencyLabel(postedDate);
+
+  const card = document.createElement('div');
+  card.className =
+    'card job-card-overlap-fixed ' +
+    (fresh ? 'fresh' : '');
+  card.innerHTML = `
+    ${j.new_since_last_check ? '<div class="new-ribbon">NEW</div>' : ''}
+    <div class="job-card-head">
+      <div class="company-avatar" aria-hidden="true">${companyLogo(j.company)}</div>
+      <div>
+        <div class="company">${escapeHtml(j.company)}</div>
+        <div class="title">${escapeHtml(j.title || 'Untitled role')}</div>
+      </div>
+    </div>
+    <div class="score-row">
+      ${j.candidate_match_score != null ? `<span class="score-badge match">${j.candidate_match_score}% Match</span>` : ''}
+      ${j.role_family && j.role_family !== 'Other' ? `<span class="chip">${escapeHtml(j.role_family)}</span>` : ''}
+      ${pm.experienceFit ? `<span class="chip">${escapeHtml(pm.experienceFit)}</span>` : ''}
+      ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
+    </div>
+    <div class="meta">
+      <span class="chip">${escapeHtml(j.location || j.ireland_area || 'Ireland')}</span>
+      ${employmentLevelText ? `<span class="chip level-chip">${escapeHtml(employmentLevelText)}</span>` : ''}
+      ${employmentTypeValues(j).map(value => `<span class="chip type">${escapeHtml(employmentTypeLabel(value))}</span>`).join('')}
+    </div>
+    <details class="job-details">
+      <summary>Match details, source & visa</summary>
+      ${(pm.reasons || []).length ? `<div class="reason-row"><span class="reason-good">Matched:</span> ${escapeHtml((pm.reasons || []).join(' · '))}</div>` : ''}
+      ${(pm.missing || []).length ? `<div class="reason-row"><span class="reason-missing">Potential gaps:</span> ${escapeHtml((pm.missing || []).join(' · '))}</div>` : ''}
+      <div class="detail-line">Source: ${escapeHtml(j.ats || 'unknown')} · Sector: ${escapeHtml(j.sector || 'Other')}</div>
+      <div class="visa-stack job-card-safe-meta">
+        <span class="visa-badge ${badge.cls}" title="${escapeHtml(j.visa_snippet || '')}">${escapeHtml(badge.text)}</span>
+        <div class="visa-history">
+          <strong>Employer history:</strong> ${escapeHtml(visaHistory.label || 'No sponsorship history yet')}
+          ${permitTotal > 0 ? ` · <strong>${permitTotal}</strong> official permits` : ''}
+        </div>
+      </div>
+    </details>
+    <div class="card-foot">
+      <div class="job-card-safe-actions">
+        <button type="button" class="state-btn ${applicationState === 'saved' ? 'active' : ''}" data-state="saved">Save</button>
+        <button type="button" class="state-btn ${applicationState === 'applied' ? 'active' : ''}" data-state="applied">Applied</button>
+        <button type="button" class="ignore-btn" data-ignore-job="1">Ignore</button>
+        <button type="button" class="open-job-btn" data-open-job="1">Open role →</button>
+      </div>
+    </div>
+  `;
+  card.querySelectorAll('[data-state]').forEach(button => button.addEventListener('click', e => {
+    e.stopPropagation();
+    setJobState(j, button.dataset.state);
+  }));
+  const ignoreButton = card.querySelector('[data-ignore-job]');
+  if (ignoreButton) ignoreButton.addEventListener('click', e => { e.stopPropagation(); ignoreJob(j); });
+  const openButton = card.querySelector('[data-open-job]');
+  if (openButton) openButton.addEventListener('click', e => {
+    e.stopPropagation();
+    const url = publicJobUrl(j);
+    if (url) window.open(url, '_blank', 'noopener');
+  });
+  return card;
+}
+
+function renderJobPagination(totalPages) {
+  const bar = document.getElementById('jobPagination');
+  if (!bar) return;
+  bar.innerHTML = '';
+  if (totalPages <= 1) return;
+
+  const goToPage = (p) => {
+    CURRENT_JOB_PAGE = p;
+    applyFilters();
+    bar.scrollIntoView({ block: 'nearest' });
+  };
+
+  const makeBtn = (label, page, opts = {}) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'page-btn' + (opts.active ? ' active' : '');
+    btn.textContent = label;
+    if (opts.disabled) btn.disabled = true;
+    else btn.addEventListener('click', () => goToPage(page));
+    return btn;
+  };
+
+  bar.appendChild(makeBtn('‹ Prev', CURRENT_JOB_PAGE - 1, { disabled: CURRENT_JOB_PAGE <= 1 }));
+
+  // Show first page, last page, current page, and a couple of
+  // neighbours either side; collapse the rest into an ellipsis so the
+  // bar stays usable even with hundreds of pages.
+  const pagesToShow = new Set([1, totalPages, CURRENT_JOB_PAGE, CURRENT_JOB_PAGE - 1, CURRENT_JOB_PAGE + 1]);
+  let lastShown = 0;
+  for (let p = 1; p <= totalPages; p++) {
+    if (!pagesToShow.has(p)) continue;
+    if (p - lastShown > 1) {
+      const ell = document.createElement('span');
+      ell.className = 'page-ellipsis';
+      ell.textContent = '…';
+      bar.appendChild(ell);
+    }
+    bar.appendChild(makeBtn(String(p), p, { active: p === CURRENT_JOB_PAGE }));
+    lastShown = p;
+  }
+
+  bar.appendChild(makeBtn('Next ›', CURRENT_JOB_PAGE + 1, { disabled: CURRENT_JOB_PAGE >= totalPages }));
+}
+
+function renderMyApplications() {
+  const grid = document.getElementById('myAppsGrid');
+  const empty = document.getElementById('myAppsEmpty');
+  const summary = document.getElementById('myAppsSummary');
+  if (!grid) return;
+
+  const savedJobs = ALL_JOBS.filter(j => jobState(j) === 'saved');
+  const appliedJobs = ALL_JOBS.filter(j => jobState(j) === 'applied');
+  const items = [...appliedJobs, ...savedJobs];
+
+  if (summary) {
+    summary.innerHTML = items.length
+      ? `<span><strong>${appliedJobs.length}</strong> applied</span><span><strong>${savedJobs.length}</strong> saved</span>`
+      : '';
+  }
+
+  grid.innerHTML = '';
+  if (empty) empty.style.display = items.length ? 'none' : 'block';
+
+  items.forEach(j => {
+    grid.appendChild(buildJobCard(j));
+  });
+}
+
 function applyFilters() {
   const search = document.getElementById('fSearch').value.trim().toLowerCase();
   const company = document.getElementById('fCompany').value;
@@ -1659,35 +1814,22 @@ if (search) {
     filtered.sort(secondaryCompare);
   }
 
-  document.getElementById('resultCount').textContent =
-    `${Math.min(filtered.length, CURRENT_RENDER_LIMIT)} shown · ` +
-    `${filtered.length} of ${ALL_JOBS.length} matches`;
+  /*
+   * Do not create ~3,000 rich job-card DOM trees at once.
+   * The complete filtered result is preserved; only rendering is paged.
+   * Pages are navigable (not just appended) via #jobPagination below.
+   */
+  const totalJobPages = Math.max(1, Math.ceil(filtered.length / JOB_PAGE_SIZE));
+  if (CURRENT_JOB_PAGE > totalJobPages) CURRENT_JOB_PAGE = totalJobPages;
+  if (CURRENT_JOB_PAGE < 1) CURRENT_JOB_PAGE = 1;
+  const pageStart = (CURRENT_JOB_PAGE - 1) * JOB_PAGE_SIZE;
+  const pageEnd = Math.min(filtered.length, pageStart + JOB_PAGE_SIZE);
 
-  const loadMoreButton =
-    document.getElementById('loadMoreJobs');
+  document.getElementById('resultCount').textContent = filtered.length
+    ? `Showing ${pageStart + 1}–${pageEnd} of ${filtered.length} matches (page ${CURRENT_JOB_PAGE} of ${totalJobPages}) · ${ALL_JOBS.length} total jobs`
+    : `0 of ${ALL_JOBS.length} matches`;
 
-  if (loadMoreButton) {
-
-    const remaining =
-      Math.max(
-        0,
-        filtered.length -
-        CURRENT_RENDER_LIMIT
-      );
-
-    loadMoreButton.style.display =
-      remaining > 0
-        ? 'inline-block'
-        : 'none';
-
-    loadMoreButton.textContent =
-      remaining > 0
-        ? `Load more (${Math.min(
-            JOB_RENDER_STEP,
-            remaining
-          )})`
-        : 'Load more jobs';
-  }
+  renderJobPagination(totalJobPages);
 
   const grid = document.getElementById('cardGrid');
   grid.innerHTML = '';
@@ -1695,94 +1837,20 @@ if (search) {
   document.getElementById('emptyState').style.display =
     filtered.length ? 'none' : 'block';
 
-  /*
-   * Do not create ~3,000 rich job-card DOM trees at once.
-   * The complete filtered result is preserved; only rendering is paged.
-   */
-  const jobsToRender =
-    filtered.slice(
-      0,
-      CURRENT_RENDER_LIMIT
-    );
+  const jobsToRender = filtered.slice(pageStart, pageEnd);
 
   jobsToRender.forEach(j => {
-    const postedDate = getJobPostedDate(j);
-    const bucket = recencyBucket(postedDate);
-    const fresh = ageHours(postedDate) <= 24;
-    const badge = visaLabel(j.visa_sponsorship || 'not_mentioned');
-    const visaHistory = j.employer_sponsorship_history || {};
-    const permitTotal = Number(j.official_permits_total || visaHistory.official_permits_total || 0);
-    const pm = personalJobMatch(j);
-    const applicationState = jobState(j);
-    const employmentLevel = classifyEmploymentLevel(j);
-    const employmentLevelText = employmentLevelLabel(employmentLevel);
-    const bucketLabel = recencyLabel(postedDate);
-
-    const card = document.createElement('div');
-    card.className =
-      'card job-card-overlap-fixed ' +
-      (fresh ? 'fresh' : '');
-    card.innerHTML = `
-      ${j.new_since_last_check ? '<div class="new-ribbon">NEW</div>' : ''}
-      <div class="job-card-head">
-        <div class="company-avatar" aria-hidden="true">${companyLogo(j.company)}</div>
-        <div>
-          <div class="company">${escapeHtml(j.company)}</div>
-          <div class="title">${escapeHtml(j.title || 'Untitled role')}</div>
-        </div>
-      </div>
-      <div class="score-row">
-        ${j.candidate_match_score != null ? `<span class="score-badge match">${j.candidate_match_score}% Match</span>` : ''}
-        ${j.role_family && j.role_family !== 'Other' ? `<span class="chip">${escapeHtml(j.role_family)}</span>` : ''}
-        ${pm.experienceFit ? `<span class="chip">${escapeHtml(pm.experienceFit)}</span>` : ''}
-        ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
-      </div>
-      <div class="meta">
-        <span class="chip">${escapeHtml(j.location || j.ireland_area || 'Ireland')}</span>
-        ${employmentLevelText ? `<span class="chip level-chip">${escapeHtml(employmentLevelText)}</span>` : ''}
-        ${employmentTypeValues(j).map(value => `<span class="chip type">${escapeHtml(employmentTypeLabel(value))}</span>`).join('')}
-      </div>
-      <details class="job-details">
-        <summary>Match details, source & visa</summary>
-        ${(pm.reasons || []).length ? `<div class="reason-row"><span class="reason-good">Matched:</span> ${escapeHtml((pm.reasons || []).join(' · '))}</div>` : ''}
-        ${(pm.missing || []).length ? `<div class="reason-row"><span class="reason-missing">Potential gaps:</span> ${escapeHtml((pm.missing || []).join(' · '))}</div>` : ''}
-        <div class="detail-line">Source: ${escapeHtml(j.ats || 'unknown')} · Sector: ${escapeHtml(j.sector || 'Other')}</div>
-        <div class="visa-stack job-card-safe-meta">
-          <span class="visa-badge ${badge.cls}" title="${escapeHtml(j.visa_snippet || '')}">${escapeHtml(badge.text)}</span>
-          <div class="visa-history">
-            <strong>Employer history:</strong> ${escapeHtml(visaHistory.label || 'No sponsorship history yet')}
-            ${permitTotal > 0 ? ` · <strong>${permitTotal}</strong> official permits` : ''}
-          </div>
-        </div>
-      </details>
-      <div class="card-foot">
-        <div class="job-card-safe-actions">
-          <button type="button" class="state-btn ${applicationState === 'saved' ? 'active' : ''}" data-state="saved">Save</button>
-          <button type="button" class="state-btn ${applicationState === 'applied' ? 'active' : ''}" data-state="applied">Applied</button>
-          <button type="button" class="ignore-btn" data-ignore-job="1">Ignore</button>
-          <button type="button" class="open-job-btn" data-open-job="1">Open role →</button>
-        </div>
-      </div>
-    `;
-    card.querySelectorAll('[data-state]').forEach(button => button.addEventListener('click', e => {
-      e.stopPropagation();
-      setJobState(j, button.dataset.state);
-    }));
-    const ignoreButton = card.querySelector('[data-ignore-job]');
-    if (ignoreButton) ignoreButton.addEventListener('click', e => { e.stopPropagation(); ignoreJob(j); });
-    const openButton = card.querySelector('[data-open-job]');
-    if (openButton) openButton.addEventListener('click', e => {
-      e.stopPropagation();
-      const url = publicJobUrl(j);
-      if (url) window.open(url, '_blank', 'noopener');
-    });
-    grid.appendChild(card);
+    grid.appendChild(buildJobCard(j));
   });
 
   /*
    * Secondary tabs are rendered only when visible.
    * This avoids repeatedly rebuilding hundreds of hidden cards.
    */
+  if (CURRENT_TAB === 'myapps') {
+    renderMyApplications();
+  }
+
   if (CURRENT_TAB === 'dir') {
     renderDirectory(search);
   }
@@ -2355,6 +2423,7 @@ function renderDiagnostics(search) {
 function showTab(which) {
   CURRENT_TAB = which;
   document.getElementById('livePane').style.display = which === 'live' ? 'block' : 'none';
+  document.getElementById('myAppsPane').style.display = which === 'myapps' ? 'block' : 'none';
   document.getElementById('directoryPane').style.display = which === 'dir' ? 'block' : 'none';
   document.getElementById('manualPane').style.display = which === 'manual' ? 'block' : 'none';
   document.getElementById('liveZeroPane').style.display = which === 'livezero' ? 'block' : 'none';
@@ -2363,6 +2432,7 @@ function showTab(which) {
   document.getElementById('provenCompaniesPane').style.display = which === 'provencompanies' ? 'block' : 'none';
 
   document.getElementById('tabLive').classList.toggle('active', which === 'live');
+  document.getElementById('tabMyApps').classList.toggle('active', which === 'myapps');
   document.getElementById('tabDir').classList.toggle('active', which === 'dir');
   document.getElementById('tabManual').classList.toggle('active', which === 'manual');
   document.getElementById('tabLiveZero').classList.toggle('active', which === 'livezero');
@@ -2371,6 +2441,10 @@ function showTab(which) {
   document.getElementById('tabProvenCompanies').classList.toggle('active', which === 'provencompanies');
   const currentSearch =
     document.getElementById('fSearch')?.value || '';
+
+  if (which === 'myapps') {
+    renderMyApplications();
+  }
 
   if (which === 'dir') {
     renderDirectory(currentSearch);
@@ -2395,23 +2469,6 @@ function showTab(which) {
 
 function escapeHtml(str) {
   return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
-}
-
-const loadMoreJobsButton =
-  document.getElementById('loadMoreJobs');
-
-if (loadMoreJobsButton) {
-
-  loadMoreJobsButton.addEventListener(
-    'click',
-    () => {
-
-      CURRENT_RENDER_LIMIT +=
-        JOB_RENDER_STEP;
-
-      applyFilters();
-    }
-  );
 }
 
 loadRadarState();
