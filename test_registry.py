@@ -34,9 +34,9 @@ class RegistryTests(unittest.TestCase):
 
     def test_refresh_workflow_is_bounded(self):
         workflow = Path(".github/workflows/scrape.yml").read_text(encoding="utf-8")
-        self.assertIn("cancel-in-progress: true", workflow)
-        self.assertIn("17 1-3,5-7,9-11,13-15,17-19,21-23 * * *", workflow)
-        self.assertIn("17 */4 * * *", workflow)
+        self.assertIn("cancel-in-progress: false", workflow)
+        self.assertIn("17 * * * *", workflow)
+        self.assertNotIn("17 */4 * * *", workflow)
         self.assertIn("limit=75m", workflow)
         self.assertNotIn("while true", workflow)
         self.assertNotIn("queue: max", workflow)
