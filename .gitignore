@@ -9,3 +9,6 @@ __pycache__/
 
 # Local refresh backups
 ireland_job_radar_HARSHIT_MASTER.backup_*.csv
+
+# Local/generated artifacts
+metrics/history.local.jsonl
