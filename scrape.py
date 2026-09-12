@@ -63,6 +63,8 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'anthropi
 # ---------------------------------------------------------------------------
 
 WORKDAY_COMPANIES = [
+    ('Deutsche Bank', 'db', 'wd3', 'DBWebsite'),
+
     # --- VERIFIED_WORKDAY_MANUAL_BATCH_V2 ---
     ("Eli Lilly", "lilly", "wd115", "LLY"),
     ("CrowdStrike", "crowdstrike", "wd5", "crowdstrikecareers"),
@@ -2409,7 +2411,7 @@ def _jsonld_location(job_location):
 # Dynamic ATS discovery + cached coverage expansion
 # ---------------------------------------------------------------------------
 
-ATS_PROBE_VERSION = 36
+ATS_PROBE_VERSION = 35
 ATS_PROBE_LIMIT = int(os.environ.get("ATS_PROBE_LIMIT", "60"))
 ATS_CACHE_PATH = "ats_platform_cache.json"
 
