@@ -4295,6 +4295,21 @@ def _scrape_google_playwright():
                         continue
 
                     parsed = urllib.parse.urlsplit(href)
+                    # Google sometimes exposes hrefs with a duplicated /jobs/ segment.
+                    parsed = urllib.parse.urlsplit(href)
+                    clean_path = parsed.path.replace(
+                        "/about/careers/applications/jobs/jobs/results/",
+                        "/about/careers/applications/jobs/results/",
+                    )
+                    href = urllib.parse.urlunsplit((
+                        parsed.scheme,
+                        parsed.netloc,
+                        clean_path,
+                        "",
+                        "",
+                    ))
+
+                    parsed = urllib.parse.urlsplit(href)
                     detail_url = urllib.parse.urlunsplit((
                         parsed.scheme,
                         parsed.netloc,
