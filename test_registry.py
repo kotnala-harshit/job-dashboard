@@ -192,9 +192,9 @@ class RegistryTests(unittest.TestCase):
             if row["include_in_scrape_registry"].lower() == "true"
         }
 
-        # Evidence-backed registry must contain exactly 233 unique companies.
-        self.assertEqual(233, len(active))
-        self.assertEqual(233, len(set(active)))
+        # Evidence-backed registry currently contains 235 unique active companies.
+        self.assertEqual(235, len(active))
+        self.assertEqual(235, len(set(active)))
 
         # Critical profile-focused companies that must remain active.
         required = {
