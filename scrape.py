@@ -20600,12 +20600,22 @@ def main():
                         url_key = base_url
 
                 elif company_key == _company_key("Google"):
-                    # Google collector currently uses a result-page URL for
-                    # each visible job. Multiple vacancies therefore share
-                    # the same URL. Include title in the dedupe identity so
-                    # valid Google jobs are not collapsed.
-                    title_part = normalized_title(j.get("title"))
-                    url_key = f"{base_url}#title={title_part}"
+                    # Google job cards contain individual vacancy URLs.
+                    # Pagination/filter parameters such as location and page
+                    # are not part of the vacancy identity. Use the canonical
+                    # individual job URL instead of result-page URL + title.
+                    parsed_google = urllib.parse.urlsplit(raw_url)
+                    path = parsed_google.path.rstrip("/")
+                    if re.search(r"/jobs/results/\d+", path, re.I):
+                        url_key = urllib.parse.urlunsplit((
+                            parsed_google.scheme.lower(),
+                            parsed_google.netloc.lower(),
+                            path,
+                            "",
+                            "",
+                        ))
+                    else:
+                        url_key = base_url
 
                 else:
                     url_key = base_url
