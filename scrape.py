@@ -4244,23 +4244,22 @@ def _scrape_google_playwright():
         return []
 
     base = "https://www.google.com/about/careers/applications/jobs/results"
-    results = {}
+    out, seen = [], set()
 
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
             page = browser.new_page(
                 viewport={"width": 1440, "height": 1100},
-                locale="en-IE"
+                locale="en-IE",
             )
-            page.set_default_timeout(3000)
 
             empty_pages = 0
 
             for page_no in range(1, 31):
                 url = base + "?" + urllib.parse.urlencode({
                     "location": "Ireland",
-                    "page": page_no
+                    "page": page_no,
                 })
 
                 page.goto(url, wait_until="domcontentloaded", timeout=60000)
@@ -4269,83 +4268,101 @@ def _scrape_google_playwright():
                 if page_no == 1:
                     _dismiss_cookie_banner(page)
 
-                before = len(results)
+                before = len(out)
 
-                anchors = page.locator("a[href*='jobs/results/']")
+                links = page.locator(
+                    "a[href*='/about/careers/applications/jobs/results/']"
+                )
 
-                for i in range(anchors.count()):
-                    anchor = anchors.nth(i)
+                for i in range(links.count()):
+                    a = links.nth(i)
 
                     try:
-                        href = urllib.parse.urljoin(
-                            page.url,
-                            anchor.get_attribute("href") or ""
-                        )
+                        href = a.get_attribute("href") or ""
                     except Exception:
                         continue
 
-                    if not re.search(r"/jobs/results/\d+", href):
+                    if not href:
                         continue
 
-                    if href in results:
+                    href = urllib.parse.urljoin(page.url, href)
+
+                    if not re.search(
+                        r"/about/careers/applications/jobs/results/[0-9]+",
+                        href,
+                        re.I,
+                    ):
                         continue
 
-                    title = _browser_text(anchor)
+                    parsed = urllib.parse.urlsplit(href)
+                    detail_url = urllib.parse.urlunsplit((
+                        parsed.scheme,
+                        parsed.netloc,
+                        parsed.path.rstrip("/"),
+                        "",
+                        "",
+                    ))
 
-                    if not title or len(title) > 300:
+                    try:
+                        title = _browser_text(a)
+                    except Exception:
+                        title = ""
+
+                    if not title:
                         try:
-                            headings = anchor.locator("h3,h2,h1")
-                            if headings.count():
-                                title = _browser_text(headings.first)
+                            h3 = a.locator("h3")
+                            title = _browser_text(h3.first) if h3.count() else ""
                         except Exception:
-                            pass
+                            title = ""
 
-                    node = anchor
+                    if not title or len(title) > 220:
+                        continue
+
+                    if title.lower().strip() in {
+                        "jobs",
+                        "careers",
+                        "search jobs",
+                        "locations",
+                        "teams",
+                    }:
+                        continue
+
+                    if detail_url in seen:
+                        continue
+
+                    node = a
                     card = ""
 
-                    for _ in range(6):
+                    for _ in range(5):
                         try:
                             node = node.locator("..")
                             candidate = _browser_text(node)
                         except Exception:
                             break
 
-                        if candidate and len(candidate) <= 1800:
+                        if candidate and len(candidate) <= 1600:
                             card = candidate
 
                         if card and len(card) >= 30:
                             break
 
-                    if not title:
-                        lines = [
-                            x.strip()
-                            for x in card.splitlines()
-                            if 3 < len(x.strip()) <= 300
-                        ]
-                        title = lines[0] if lines else ""
+                    seen.add(detail_url)
 
-                    if not title:
-                        continue
-
-                    title = re.sub(r"\s+", " ", title).strip()
-
-                    if not is_real_job_title(title):
-                        continue
-
-                    results[href] = {
+                    out.append({
                         "company": "Google",
                         "ats": "direct",
-                        "title": title[:300],
+                        "title": title,
                         "location": _browser_location(card, "Ireland"),
-                        "url": href,
+                        "url": detail_url,
                         "updated_at": None,
                         "description_text": card[:5000],
-                    }
+                    })
 
-                added = len(results) - before
+                added = len(out) - before
+
                 print(
                     f"  Google browser page {page_no}: "
-                    f"+{added} ({len(results)} total)"
+                    f"+{added} ({len(out)} total)"
                 )
 
                 empty_pages = empty_pages + 1 if added == 0 else 0
@@ -4358,7 +4375,7 @@ def _scrape_google_playwright():
     except Exception as exc:
         print(f"  ! Google browser scrape failed: {exc}")
 
-    return list(results.values())
+    return out
 
 def _scrape_meta_playwright():
     if not HAS_PLAYWRIGHT:
