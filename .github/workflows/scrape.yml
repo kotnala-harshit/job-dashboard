@@ -6,9 +6,9 @@ concurrency:
 
 on:
   schedule:
-    - cron: '17 * * * *'
-    - cron: '37 * * * *'
-    - cron: '57 * * * *'
+    - cron: '03 * * * *'
+    - cron: '23 * * * *'
+    - cron: '43 * * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -121,12 +121,11 @@ jobs:
 
           mode=fast
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            minute="$(date -u +%M)"
-            if [ "$minute" = "17" ]; then
-              mode=full
-            else
-              mode=fast
-            fi
+            case "${{ github.event.schedule }}" in
+              '23 * * * *') mode=full ;;
+              '03 * * * *'|'43 * * * *') mode=fast ;;
+              *) echo "Unknown schedule: ${{ github.event.schedule }}"; exit 1 ;;
+            esac
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             mode="${{ inputs.mode }}"
           fi
