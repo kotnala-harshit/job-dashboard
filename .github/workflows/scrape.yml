@@ -119,9 +119,18 @@ jobs:
           }
 
           mode=fast
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            hour="$(date -u +%H)"
+            if [ $((10#$hour % 4)) -eq 0 ]; then
+              mode=full
+            else
+              mode=fast
+            fi
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             mode="${{ inputs.mode }}"
           fi
+
+          echo "Selected refresh mode: $mode"
 
           started="$(date +%s)"
           limit=12m

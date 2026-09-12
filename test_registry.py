@@ -37,6 +37,7 @@ class RegistryTests(unittest.TestCase):
         self.assertIn("cancel-in-progress: false", workflow)
         self.assertIn("17 * * * *", workflow)
         self.assertNotIn("17 */4 * * *", workflow)
+        self.assertIn("hour % 4", workflow)
         self.assertIn("limit=75m", workflow)
         self.assertNotIn("while true", workflow)
         self.assertNotIn("queue: max", workflow)

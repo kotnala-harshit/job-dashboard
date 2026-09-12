@@ -21987,7 +21987,8 @@ def _ireland_browser_collect_pages(
                 ):
                     break
 
-            context.close()
+            # Browser close also closes its only context. Closing the context
+            # first can wait indefinitely on OpenText's page workers.
             browser.close()
 
     except Exception as exc:
