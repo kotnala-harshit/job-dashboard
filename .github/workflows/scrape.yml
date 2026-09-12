@@ -23,10 +23,6 @@ permissions:
   contents: write
   issues: write
 
-concurrency:
-  group: ireland-job-radar-refresh
-  cancel-in-progress: false
-
 jobs:
   refresh:
     runs-on: ubuntu-latest
@@ -125,8 +121,8 @@ jobs:
 
           mode=fast
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            hour="$(date -u +%H)"
-            if [ $((10#$hour % 4)) -eq 0 ]; then
+            minute="$(date -u +%M)"
+            if [ "$minute" = "17" ]; then
               mode=full
             else
               mode=fast

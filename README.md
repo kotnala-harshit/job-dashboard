@@ -51,4 +51,10 @@ The scraper:
 
 ## Automation schedule
 
-The scraper runs once per hour at minute `17`: fast for most hours, with a full audit every four hours. Full runs replace those hours' fast runs, so work never overlaps or duplicates. Manual runs can select either mode.
+The scraper runs three times per hour:
+
+- `:17` — Full audit
+- `:37` — Fast incremental refresh
+- `:57` — Fast incremental refresh
+
+This provides up to 72 scheduled refreshes per day: 24 full audits and 48 fast refreshes. Full runs perform the deeper connector and fallback checks, while Fast runs use the lighter incremental paths and carry forward previously discovered jobs. Concurrency protection prevents refresh runs from being cancelled while another refresh is active. Manual runs can select either mode.

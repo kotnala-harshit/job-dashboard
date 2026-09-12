@@ -6,3 +6,6 @@ __pycache__/
 *before-*
 *.backup-*
 .DS_Store
+
+# Local refresh backups
+ireland_job_radar_HARSHIT_MASTER.backup_*.csv

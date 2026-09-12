@@ -19106,8 +19106,8 @@ def job_state_identity(job):
 
 # ---------------------------------------------------------------------------
 # Runtime modes
-# FULL (default): all configured connectors + unresolved-company deep fallback.
-# FAST: targeted development pass; set TARGET_COMPANIES comma-separated.
+# FULL: complete audit using configured connectors and deep fallbacks.
+# FAST: lightweight incremental refresh using cheaper paths and priority rescue.
 # ---------------------------------------------------------------------------
 SCRAPE_MODE = os.environ.get("SCRAPE_MODE", "full").strip().lower()
 SCRAPE_WORKERS = max(2, min(32, int(os.environ.get("SCRAPE_WORKERS", "16"))))
@@ -19955,7 +19955,7 @@ def main():
             except Exception as e:
                 errors.append(f"phenom/{company}: {e}")
 
-    # Browser-heavy proprietary boards belong to the nightly audit. A small
+    # Browser-heavy proprietary boards belong to the full audit. A small
     # worker pool keeps that audit bounded without overwhelming the runner.
     if SCRAPE_MODE != "fast":
         results.extend(scrape_gradireland_programmes())
@@ -19978,7 +19978,7 @@ def main():
         except Exception as e:
             errors.append(f"dynamic ATS discovery: {e}")
 
-    # The nightly full audit runs the universal structured-data fallback.
+    # The full audit runs the universal structured-data fallback.
     if SCRAPE_MODE != "fast":
         jsonld_tasks = []
         for company, url, _source_type, _category in _load_company_master():
@@ -20064,7 +20064,7 @@ def main():
     # were not present in the master CSV, which caused removed/unwanted
     # companies to leak back into data.json and the HTML company filter.
     # A fast run updates what it checked and carries the remaining jobs forward;
-    # the nightly full audit remains responsible for removals and closures.
+    # the full audit remains responsible for removals and closures.
     if SCRAPE_MODE == "fast":
         try:
             with open("data.json", encoding="utf-8") as f:
