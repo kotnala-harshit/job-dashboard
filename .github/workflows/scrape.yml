@@ -1,8 +1,14 @@
 name: Refresh Ireland Job Radar
 
+concurrency:
+  group: ireland-job-radar-scrape
+  cancel-in-progress: false
+
 on:
   schedule:
     - cron: '17 * * * *'
+    - cron: '37 * * * *'
+    - cron: '57 * * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -63,7 +69,6 @@ jobs:
             browser_scrape_cache.json
             jsonld_cache.json
             sponsorship_history.json
-            official_permit_stats.json
             graduate_programme_history.json
             last_full_refresh.json
           )

@@ -23,7 +23,6 @@ on:
       - "company_history.json"
       - "seen_jobs.json"
       - "sponsorship_history.json"
-      - "official_permit_stats.json"
       - ".github/workflows/deploy-secure-pages.yml"
 
   workflow_dispatch:
@@ -92,7 +91,6 @@ jobs:
             company_history.json \
             seen_jobs.json \
             sponsorship_history.json \
-            official_permit_stats.json \
             ireland_job_radar_HARSHIT_MASTER.csv
           do
             if [ -e "secure_site/$file" ]; then
