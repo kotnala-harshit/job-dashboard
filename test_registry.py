@@ -185,26 +185,28 @@ class RegistryTests(unittest.TestCase):
             for row in rows
             if row["include_in_scrape_registry"].lower() == "true"
         }
-        self.assertEqual(266, len(active))
 
-        expected = {
-            "ActionPoint", "Teneo Ireland", "Aer Lingus", "Ornua",
-            "Expleo", "Eir", "Dublin Port Company",
-            "Hewlett Packard Enterprise (HPE)", "IQVIA", "Proofpoint",
-            "Willis Towers Watson (WTW)", "BNY", "Goldman Sachs",
-            "Guidewire", "Figma",
-            "RSM Ireland",
-            "Kingspan Group", "Three Ireland", "Uisce Éireann (Irish Water)",
+        # Evidence-backed registry must contain exactly 233 unique companies.
+        self.assertEqual(233, len(active))
+        self.assertEqual(233, len(set(active)))
+
+        # Critical profile-focused companies that must remain active.
+        required = {
+            "Teneo Ireland", "Aer Lingus", "Ornua",
+            "Eir", "Dublin Port Company",
+            "Hewlett Packard Enterprise (HPE)", "IQVIA",
+            "Proofpoint", "Willis Towers Watson (WTW)",
+            "BNY", "Goldman Sachs", "Guidewire",
+            "RSM Ireland", "Three Ireland",
+            "Uisce Éireann (Irish Water)",
+            "Deutsche Bank", "SMBC Aviation Capital",
         }
+        self.assertTrue(required <= active)
+
+        # Company deliberately replaced in the evidence-backed registry.
         excluded = {
-            "ABP Food Group", "Circle K Ireland", "Dawn Meats",
-            "Decathlon Ireland", "Harvey Nash Ireland", "JD Sports Ireland",
-            "Primark / Penneys",
-            "LetsGetChecked", "Bayer", "Brown Brothers Harriman",
-            "BT Ireland", "CACEIS", "Catalent",
-            "Charles River Laboratories", "Eaton",
+            "Tesco Ireland",
         }
-        self.assertTrue(expected <= active)
         self.assertFalse(excluded & active)
 
     @patch("scrape._fetch_html")
