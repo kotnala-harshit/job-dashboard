@@ -12476,6 +12476,16 @@ def scrape_publicjobs():
             if not title:
                 continue
 
+            parsed_href = urllib.parse.urlsplit(href)
+            public_path = parsed_href.path.rstrip("/").lower()
+
+            # The Oleeo board itself contains /vacancy/3/adv/, but it is
+            # a search/navigation page rather than an individual vacancy.
+            # Real Public Jobs vacancies have a numeric vacancy ID after
+            # /vacancy/ and continue beyond that ID.
+            if re.search(r"/vacancy/3/adv/?$", public_path, re.I):
+                continue
+
             if re.search(
                 r"\bNorthern Ireland\b|\bAntrim\b|\bFermanagh\b|\bTyrone\b",
                 card_text,
@@ -18264,7 +18274,10 @@ def scrape_gas_networks_ireland():
         r.text,
         re.I | re.S,
     ):
-        context_html = r.text[max(0, m.start()-1800):m.end()+500]
+        # Keep the vacancy context tightly bound to the anchor.
+        # The old ±1800-character window could cross into the previous or
+        # next vacancy card and attach the wrong title to this URL.
+        context_html = r.text[max(0, m.start()-350):m.end()+700]
         context = _html_text(context_html)
 
         if not re.search(r"\bGNI\d+\b", context, re.I):
@@ -18277,22 +18290,24 @@ def scrape_gas_networks_ireland():
         ):
             continue
 
-        title = ""
+        title = re.sub(r"\s+", " ", _html_text(m.group(2))).strip()
 
-        headings = re.findall(
-            r"<h[2-5][^>]*>(.*?)</h[2-5]>",
-            context_html,
-            re.I | re.S,
-        )
-
-        for h in reversed(headings):
-            candidate = re.sub(r"\s+", " ", _html_text(h)).strip()
-            if candidate:
-                title = candidate
-                break
-
-        if not title:
-            title = re.sub(r"\s+", " ", _html_text(m.group(2))).strip()
+        if not title or title.lower() in {"apply now", "learn more"}:
+            # Fall back only to headings inside the tightly bounded
+            # local card, never to the neighbouring page content.
+            headings = re.findall(
+                r"<h[2-5][^>]*>(.*?)</h[2-5]>",
+                context_html,
+                re.I | re.S,
+            )
+            for h in headings:
+                candidate = re.sub(r"\s+", " ", _html_text(h)).strip()
+                if candidate and candidate.lower() not in {
+                    "apply now",
+                    "learn more",
+                }:
+                    title = candidate
+                    break
 
         if not title or title.lower() in {"apply now", "learn more"}:
             continue
@@ -20616,6 +20631,23 @@ def main():
                         ))
                     else:
                         url_key = base_url
+
+                elif company_key == _company_key("State Street"):
+                    # State Street exposes the same Workday requisition both
+                    # as /<requisition> and /<requisition>/apply.
+                    # The /apply suffix is an application route, not a
+                    # separate vacancy.
+                    state_path = parsed.path.rstrip("/")
+                    if state_path.lower().endswith("/apply"):
+                        state_path = state_path[:-len("/apply")].rstrip("/")
+
+                    url_key = urllib.parse.urlunsplit((
+                        parsed.scheme.lower(),
+                        parsed.netloc.lower(),
+                        state_path,
+                        "",
+                        "",
+                    ))
 
                 else:
                     url_key = base_url
