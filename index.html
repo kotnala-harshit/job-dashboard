@@ -821,7 +821,7 @@ body{background:#f3f4f6!important}
 
     <select id="fNew">
       <option value="">All postings</option>
-      <option value="new">New since last check</option>
+      <option value="new">Discovered in past 24h</option>
     </select>
     <select id="fVisa">
       <option value="">Any visa status</option>
@@ -862,6 +862,7 @@ body{background:#f3f4f6!important}
 
     <div class="loadctrl">
       <span id="liveStatus" class="live-dot">● live</span>
+      <button id="clearFiltersBtn" type="button" onclick="clearFilters()">Clear filters</button>
       <button id="searchEnterBtn" type="button" onclick="CURRENT_JOB_PAGE=1;applyFilters()">Search / Enter</button>
       <button id="refreshNowBtn" type="button" onclick="autoFetchJobs()"
               title="Reload the latest completed collection from GitHub Pages">Reload latest data</button>
@@ -1004,6 +1005,11 @@ function parsePostedDate(value) {
 function ageHours(date) {
   if (!date) return Infinity;
   return Math.max(0, (Date.now() - date.getTime()) / 3600000);
+}
+
+function firstSeenWithin(job, hours = 24) {
+  const firstSeen = job?.first_seen_at ? new Date(job.first_seen_at) : null;
+  return firstSeen && !Number.isNaN(firstSeen.getTime()) && ageHours(firstSeen) <= hours;
 }
 
 function recencyBucket(date) {
@@ -1185,6 +1191,9 @@ function loadData(data) {
   HISTORICAL_DISTINCT_JOBS = Number(data.historical_distinct_jobs_seen || 0);
   CONNECTOR_HEALTH = data.connector_health || {};
   RAW_TOTAL = jobs.length;
+  const recentlyDiscovered = ALL_JOBS.filter(j => firstSeenWithin(j)).length;
+  const newOption = document.querySelector('#fNew option[value="new"]');
+  if (newOption) newOption.textContent = `Discovered in past 24h (${recentlyDiscovered})`;
 
   const generatedAt = data.generated_at ? new Date(data.generated_at) : null;
   const generatedTime = document.getElementById('genTime');
@@ -1221,6 +1230,17 @@ function loadData(data) {
   fillSelect('fSector', ALL_JOBS.map(j => j.sector || 'Other'));
   fillSelect('fSource', ALL_JOBS.map(j => j.ats), v => v.charAt(0).toUpperCase() + v.slice(1));
 
+  applyFilters();
+}
+
+function clearFilters() {
+  for (const id of ['fSearch', 'fCompany', 'fLocation', 'fSector', 'fSource', 'fPosted', 'fEmployment', 'fEmploymentLevel', 'fNew', 'fVisa', 'fStatus']) {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  }
+  const targetOnly = document.getElementById('fProfileMatch');
+  if (targetOnly) targetOnly.checked = false;
+  CURRENT_JOB_PAGE = 1;
   applyFilters();
 }
 
@@ -1771,7 +1791,7 @@ if (search) {
     if (isIgnored(j)) return false;
     if (profileMatchOnly && !isTargetRole(j, profileMode)) return false;
     if (statusFilter && jobState(j) !== statusFilter) return false;
-    if (newOnly === 'new' && !j.new_since_last_check) return false;
+    if (newOnly === 'new' && !firstSeenWithin(j)) return false;
     const v = j.visa_sponsorship || 'not_mentioned';
     const vh = j.employer_sponsorship_history || {};
     if (visa === 'historical_sponsor' && Number(vh.sponsors || 0) <= 0) return false;

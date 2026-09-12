@@ -42,6 +42,11 @@ class RegistryTests(unittest.TestCase):
         self.assertNotIn("while true", workflow)
         self.assertNotIn("queue: max", workflow)
 
+    def test_dashboard_keeps_recently_discovered_roles_visible(self):
+        dashboard = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn("Discovered in past 24h", dashboard)
+        self.assertIn("firstSeenWithin", dashboard)
+
     def test_repaired_official_company_mappings_are_registered(self):
         self.assertEqual("aer_lingus_talentsoft", DIRECT_COMPANY_CONNECTORS["Aer Lingus"])
         for company in ("daa (Dublin Airport Authority)", "Vodafone Ireland", "VHI Healthcare"):
