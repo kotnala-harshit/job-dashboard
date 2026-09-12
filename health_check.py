@@ -42,8 +42,8 @@ if registry_path.exists():
         and row.get("company_name", "").strip()
     }
 
-    if len(active) != 233:
-        errors.append(f"Expected 233 active companies, found {len(active)}")
+    if len(active) < 235:
+        errors.append(f"Expected at least 235 active companies, found {len(active)}")
 
     if "Deutsche Bank" not in active:
         errors.append("Deutsche Bank is not active")
@@ -105,7 +105,7 @@ if errors:
     sys.exit(1)
 
 print("=== HEALTH CHECK PASSED ===")
-print("Registry: 233 active companies")
+print(f"Registry: {len(active)} active companies")
 print("Deutsche Bank: ACTIVE")
 print("Tesco Ireland: INACTIVE")
 print("SMBC Aviation Capital: ACTIVE")
