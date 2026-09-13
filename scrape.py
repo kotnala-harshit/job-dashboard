@@ -3948,7 +3948,7 @@ def _scrape_accenture_playwright():
 
                     try:
                         raw_href = a.get_attribute("href") or ""
-                        href = urllib.parse.urljoin(page.url, raw_href)
+                        href = urllib.parse.urljoin("https://www.google.com/about/careers/applications/", raw_href)
                     except Exception:
                         continue
 
@@ -4245,8 +4245,8 @@ def _scrape_google_playwright():
         print("  ! Google: Playwright unavailable")
         return []
 
-    base = "https://www.google.com/about/careers/applications/jobs/results"
-    out, seen = [], set()
+    base = "https://www.google.com/about/careers/applications/jobs/results/"
+    results = {}
 
     try:
         with sync_playwright() as pw:
@@ -4256,38 +4256,29 @@ def _scrape_google_playwright():
                 locale="en-IE",
             )
 
-            empty_pages = 0
-
-            for page_no in range(1, 31):
+            for page_no in range(1, 15):
                 url = base + "?" + urllib.parse.urlencode({
                     "location": "Ireland",
                     "page": page_no,
                 })
 
                 page.goto(url, wait_until="domcontentloaded", timeout=60000)
-                page.wait_for_timeout(1500)
+                page.wait_for_timeout(1800)
 
                 if page_no == 1:
                     _dismiss_cookie_banner(page)
 
-                before = len(out)
+                before = len(results)
+                anchors = page.locator("a[href*='jobs/results/']")
 
-                links = page.locator(
-                    "a[href*='/about/careers/applications/jobs/results/']"
-                )
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
 
-                for i in range(links.count()):
-                    a = links.nth(i)
-
-                    try:
-                        href = a.get_attribute("href") or ""
-                    except Exception:
-                        continue
-
-                    if not href:
-                        continue
-
-                    href = urllib.parse.urljoin(page.url, href)
+                    raw_href = a.get_attribute("href") or ""
+                    href = urllib.parse.urljoin(
+                        "https://www.google.com/about/careers/applications/",
+                        raw_href,
+                    )
 
                     if not re.search(
                         r"/about/careers/applications/jobs/results/[0-9]+",
@@ -4297,94 +4288,54 @@ def _scrape_google_playwright():
                         continue
 
                     parsed = urllib.parse.urlsplit(href)
-                    # Google sometimes exposes hrefs with a duplicated /jobs/ segment.
-                    parsed = urllib.parse.urlsplit(href)
-                    clean_path = parsed.path.replace(
-                        "/about/careers/applications/jobs/jobs/results/",
-                        "/about/careers/applications/jobs/results/",
-                    )
-                    href = urllib.parse.urlunsplit((
+                    canonical = urllib.parse.urlunsplit((
                         parsed.scheme,
                         parsed.netloc,
-                        clean_path,
+                        parsed.path,
                         "",
                         "",
                     ))
 
-                    parsed = urllib.parse.urlsplit(href)
-                    detail_url = urllib.parse.urlunsplit((
-                        parsed.scheme,
-                        parsed.netloc,
-                        parsed.path.rstrip("/"),
-                        "",
-                        "",
-                    ))
+                    if canonical in results:
+                        continue
 
-                    try:
-                        title = _browser_text(a)
-                    except Exception:
-                        title = ""
+                    aria = a.get_attribute("aria-label") or ""
+                    prefix = "Learn more about "
+
+                    if aria.startswith(prefix):
+                        title = aria[len(prefix):].strip()
+                    else:
+                        title = aria.strip()
 
                     if not title:
-                        try:
-                            h3 = a.locator("h3")
-                            title = _browser_text(h3.first) if h3.count() else ""
-                        except Exception:
-                            title = ""
-
-                    if not title or len(title) > 220:
                         continue
 
-                    if title.lower().strip() in {
-                        "jobs",
-                        "careers",
-                        "search jobs",
-                        "locations",
-                        "teams",
-                    }:
+                    # The actual Google job card is three parents above
+                    # the invisible "Learn more" anchor.
+                    card_node = a.locator("../..").locator("..")
+                    card = (card_node.inner_text() or "").strip()
+
+                    if not card:
                         continue
 
-                    if detail_url in seen:
-                        continue
-
-                    node = a
-                    card = ""
-
-                    for _ in range(5):
-                        try:
-                            node = node.locator("..")
-                            candidate = _browser_text(node)
-                        except Exception:
-                            break
-
-                        if candidate and len(candidate) <= 1600:
-                            card = candidate
-
-                        if card and len(card) >= 30:
-                            break
-
-                    seen.add(detail_url)
-
-                    out.append({
+                    results[canonical] = {
                         "company": "Google",
                         "ats": "direct",
-                        "title": title,
+                        "title": title[:300],
                         "location": _browser_location(card, "Ireland"),
-                        "url": detail_url,
+                        "url": canonical,
                         "updated_at": None,
                         "description_text": card[:5000],
-                    })
+                    }
 
-                added = len(out) - before
+                added = len(results) - before
 
                 print(
                     f"  Google browser page {page_no}: "
-                    f"+{added} ({len(out)} total)"
+                    f"+{added} ({len(results)} total)"
                 )
 
-                empty_pages = empty_pages + 1 if added == 0 else 0
-
-                if empty_pages >= 2:
+                if added == 0:
                     break
 
             browser.close()
@@ -4392,267 +4343,7 @@ def _scrape_google_playwright():
     except Exception as exc:
         print(f"  ! Google browser scrape failed: {exc}")
 
-    return out
-
-def _scrape_meta_playwright():
-    if not HAS_PLAYWRIGHT:
-        print("  ! Meta: Playwright unavailable")
-        return []
-    pages = [
-        ("Dublin, Ireland", "https://www.metacareers.com/locations/dublin/?offices%5B0%5D=Dublin%2C+Ireland&p%5Boffices%5D%5B0%5D=Dublin%2C+Ireland"),
-        ("Clonee, Ireland", "https://www.metacareers.com/locations/clonee/?offices%5B0%5D=Clonee%2C+Ireland&p%5Boffices%5D%5B0%5D=Clonee%2C+Ireland"),
-    ]
-    results = {}
-    rx = re.compile(r"metacareers\.com/profile/job_details/\d+/?", re.I)
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
-            for default_location, url in pages:
-                page.goto(url, wait_until="domcontentloaded", timeout=60000)
-                page.wait_for_timeout(1800)
-                _dismiss_cookie_banner(page)
-                stagnant, previous = 0, len(results)
-                for _ in range(100):
-                    anchors = page.locator("a[href]")
-                    for i in range(anchors.count()):
-                        a = anchors.nth(i)
-                        try:
-                            href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
-                        except Exception:
-                            continue
-                        if not rx.search(href) or href in results:
-                            continue
-                        title = _browser_text(a)
-                        node, card = a, ""
-                        for _ in range(5):
-                            try:
-                                node = node.locator("..")
-                                candidate = _browser_text(node)
-                            except Exception:
-                                break
-                            if candidate and len(candidate) <= 1600:
-                                card = candidate
-                            if card and len(card) >= 30:
-                                break
-                        if not title or len(title) > 260:
-                            try:
-                                heads = node.locator("h1,h2,h3,h4")
-                                if heads.count():
-                                    title = _browser_text(heads.first)
-                            except Exception:
-                                pass
-                        if not title:
-                            lines = [x.strip() for x in card.splitlines() if 3 < len(x.strip()) <= 220]
-                            title = lines[0] if lines else ""
-                        if not title:
-                            continue
-                        results[href] = {
-                            "company": "Meta", "ats": "direct", "title": title[:300],
-                            "location": _browser_location(card, default_location), "url": href,
-                            "updated_at": None, "description_text": card[:5000],
-                        }
-                    for label in ("Show more", "Load more", "See more", "More jobs", "View more"):
-                        try:
-                            btn = page.get_by_role("button", name=label, exact=False)
-                            if btn.count() and btn.first.is_visible():
-                                btn.first.click(timeout=1000)
-                                page.wait_for_timeout(400)
-                        except Exception:
-                            pass
-                    page.mouse.wheel(0, 3200)
-                    page.wait_for_timeout(500)
-                    current = len(results)
-                    stagnant = stagnant + 1 if current == previous else 0
-                    previous = current
-                    if stagnant >= 12:
-                        break
-                print(f"  Meta {default_location}: {len(results)} unique jobs accumulated")
-            browser.close()
-    except Exception as exc:
-        print(f"  ! Meta browser scrape failed: {exc}")
     return list(results.values())
-
-
-
-def _scrape_ey_playwright():
-    """EY Ireland: SAP SuccessFactors browser collector adapted from Suman's working pipeline."""
-    if not HAS_PLAYWRIGHT:
-        print("  ! EY Ireland: Playwright unavailable")
-        return []
-    base = "https://careers.ey.com/ey/search/"
-    results = {}
-    href_rx = re.compile(r"careers\.ey\.com/ey/job/", re.I)
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
-            stagnant = 0
-            for startrow in range(0, 2500, 25):
-                url = base + "?" + urllib.parse.urlencode({"q": "", "locationsearch": "Ireland", "startrow": startrow})
-                page.goto(url, wait_until="domcontentloaded", timeout=60000)
-                page.wait_for_timeout(1000)
-                if startrow == 0:
-                    _dismiss_cookie_banner(page)
-                before = len(results)
-                anchors = page.locator("a[href]")
-                for i in range(anchors.count()):
-                    a = anchors.nth(i)
-                    try:
-                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
-                    except Exception:
-                        continue
-                    if not href_rx.search(href) or href in results:
-                        continue
-                    title = _browser_text(a)
-                    node, card = a, ""
-                    for _ in range(5):
-                        try:
-                            node = node.locator("..")
-                            candidate = _browser_text(node)
-                        except Exception:
-                            break
-                        if candidate and len(candidate) <= 1800:
-                            card = candidate
-                        if card and len(card) >= 25:
-                            break
-                    if not title or len(title) > 300:
-                        lines = [x.strip() for x in card.splitlines() if 3 < len(x.strip()) <= 250]
-                        title = lines[0] if lines else ""
-                    if not title:
-                        continue
-                    results[href] = {
-                        "company": "EY Ireland", "ats": "direct", "title": title[:300],
-                        "location": _browser_location(card, "Ireland"), "url": href,
-                        "updated_at": None, "description_text": card[:5000],
-                    }
-                added = len(results) - before
-                print(f"  EY browser startrow={startrow}: +{added} ({len(results)} total)")
-                stagnant = stagnant + 1 if added == 0 else 0
-                if stagnant >= 2:
-                    break
-            browser.close()
-    except Exception as exc:
-        print(f"  ! EY Ireland browser scrape failed: {exc}")
-    return list(results.values())
-
-
-def _parse_yello_jobs(company, fragment):
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(fragment, "html.parser")
-    jobs = {}
-    for anchor in soup.select('a[href*="/jobs/"]'):
-        title = re.sub(r"\s+", " ", anchor.get_text(" ", strip=True)).strip()
-        href = urllib.parse.urljoin("https://eyglobal.yello.co", anchor.get("href") or "")
-        if not title or not href:
-            continue
-        card = anchor.find_parent("li")
-        card_text = re.sub(r"\s+", " ", card.get_text(" ", strip=True)).strip() if card else title
-        jobs[href] = {
-            "company": company,
-            "ats": "direct",
-            "title": title[:300],
-            "location": "Ireland",
-            "url": href,
-            "updated_at": None,
-            "description_text": card_text[:5000],
-        }
-    return list(jobs.values())
-
-
-def _scrape_yello_ireland(company, board_id):
-    """Collect Republic-of-Ireland early-career roles from a public Yello board."""
-    sess = _session()
-    if not sess:
-        return []
-    base = f"https://eyglobal.yello.co/job_boards/{board_id}"
-    try:
-        response = sess.get(
-            f"{base}/search",
-            params={"query": "", "filters": "30012"},
-            headers={"User-Agent": "Mozilla/5.0", "X-Requested-With": "XMLHttpRequest"},
-            timeout=30,
-        )
-        response.raise_for_status()
-        jobs = _parse_yello_jobs(company, (response.json() or {}).get("html") or "")
-    except Exception as exc:
-        print(f"  ! {company} Yello Ireland search failed: {exc}")
-        return []
-    _mark_connector_health(company, True, f"Official Yello Ireland board returned {len(jobs)} early-career roles", base)
-    print(f"  {company} Yello Ireland early careers: {len(jobs)} jobs")
-    return jobs
-
-
-def _scrape_kpmg_playwright():
-    """KPMG Ireland: Avature browser collector adapted from Suman's working pipeline."""
-    if not HAS_PLAYWRIGHT:
-        print("  ! KPMG Ireland: Playwright unavailable")
-        return []
-    base = "https://kpmgireland.avature.net/careers/SearchJobs/"
-    results = {}
-    href_rx = re.compile(r"kpmgireland\.avature\.net/careers/(?:JobDetail|jobdetail|FolderDetail|folderdetail)", re.I)
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
-            stagnant = 0
-            for offset in range(0, 1000, 10):
-                url = base + "?" + urllib.parse.urlencode({"folderOffset": offset})
-                page.goto(url, wait_until="domcontentloaded", timeout=60000)
-                page.wait_for_timeout(900)
-                if offset == 0:
-                    _dismiss_cookie_banner(page)
-                before = len(results)
-                anchors = page.locator("a[href]")
-                for i in range(anchors.count()):
-                    a = anchors.nth(i)
-                    try:
-                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
-                    except Exception:
-                        continue
-                    if not href_rx.search(href) or href in results:
-                        continue
-                    title = _browser_text(a)
-                    node, card = a, ""
-                    for _ in range(5):
-                        try:
-                            node = node.locator("..")
-                            candidate = _browser_text(node)
-                        except Exception:
-                            break
-                        if candidate and len(candidate) <= 1800:
-                            card = candidate
-                        if card and len(card) >= 25:
-                            break
-                    if not title or len(title) > 300:
-                        lines = [x.strip() for x in card.splitlines() if 3 < len(x.strip()) <= 250]
-                        title = lines[0] if lines else ""
-                    if not title:
-                        continue
-                    results[href] = {
-                        "company": "KPMG Ireland", "ats": "direct", "title": title[:300],
-                        "location": _browser_location(card, "Ireland"), "url": href,
-                        "updated_at": None, "description_text": card[:5000],
-                    }
-                added = len(results) - before
-                print(f"  KPMG browser folderOffset={offset}: +{added} ({len(results)} total)")
-                stagnant = stagnant + 1 if added == 0 else 0
-                if stagnant >= 2:
-                    break
-            browser.close()
-    except Exception as exc:
-        print(f"  ! KPMG Ireland browser scrape failed: {exc}")
-    return list(results.values())
-
-
-def scrape_ey():
-    jobs = _scrape_ey_playwright()
-    jobs.extend(_scrape_yello_ireland("EY Ireland", "c1riT--B2O-KySgYWsZO1Q"))
-    return jobs
-
-
-def scrape_kpmg():
-    return _scrape_kpmg_playwright()
 
 def scrape_google():
     jobs = _scrape_google_playwright()
