@@ -7026,106 +7026,137 @@ def scrape_servicenow():
 
 def scrape_harvey_nash():
     company = "Harvey Nash"
-    urls = [
-        "https://www.harveynash.ie/",
-        "https://www.harveynash.co.uk/jobs",
-    ]
-    results = {}
 
     if not HAS_PLAYWRIGHT:
         print("  ! Harvey Nash: Playwright unavailable")
         return []
 
+    results = {}
+
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1200},
+                locale="en-IE",
+            )
+
+            urls = [
+                "https://www.harveynash.ie/",
+                "https://www.harveynash.co.uk/jobs",
+            ]
+
             for url in urls:
                 try:
-                    page.goto(url, wait_until="domcontentloaded", timeout=60000)
-                    page.wait_for_timeout(1400)
+                    page.goto(
+                        url,
+                        wait_until="domcontentloaded",
+                        timeout=60000,
+                    )
+                    page.wait_for_timeout(1800)
                     _dismiss_cookie_banner(page)
                 except Exception:
                     continue
 
-                # Search Ireland/Dublin when the job search inputs are present.
-                try:
-                    inputs = page.locator("input")
-                    for i in range(inputs.count()):
-                        inp = inputs.nth(i)
-                        ph = (inp.get_attribute("placeholder") or "").lower()
-                        if "town" in ph or "city" in ph or "county" in ph or "location" in ph:
-                            inp.fill("Ireland")
-                            try:
-                                inp.press("Enter")
-                            except Exception:
-                                pass
-                            page.wait_for_timeout(900)
-                            break
-                except Exception:
-                    pass
-
                 anchors = page.locator("a[href]")
+                before = len(results)
+
                 for i in range(anchors.count()):
                     a = anchors.nth(i)
+
                     try:
-                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
+                        raw_href = a.get_attribute("href") or ""
+                        href = urllib.parse.urljoin(page.url, raw_href)
+                        title = _browser_text(a).strip()
                     except Exception:
                         continue
-                    hlow = href.lower()
-                    if "/job" not in hlow and "/jobs/" not in hlow:
-                        continue
-                    title = _browser_text(a).strip()
-                    node, card = a, ""
-                    for _up in range(5):
-                        try:
-                            node = node.locator("..")
-                            candidate = _browser_text(node)
-                        except Exception:
-                            break
-                        if candidate and len(candidate) <= 2200:
-                            card = candidate
-                        if card and region_ok(card):
-                            break
-                    if not region_ok(f"{title} {card} {href}"):
-                        continue
-                    if not title or len(title) > 300:
-                        lines = [x.strip() for x in card.splitlines() if 4 <= len(x.strip()) <= 220]
-                        title = lines[0] if lines else ""
-                    if not title:
-                        continue
-                    bad_titles = {
-                        "find tech jobs",
-                        "search tech jobs",
-                        "jobs",
-                        "dublin",
-                        "ireland",
-                    }
 
-                    if (
-                        title.lower() in bad_titles
-                        or "bulk_consent" in title.lower()
-                        or "cross-domain consent" in title.lower()
+                    # Harvey Nash actual job URLs look like:
+                    # /jobs/299014-Python-Developer
+                    parsed = urllib.parse.urlsplit(href)
+
+                    if not re.match(
+                        r"^/jobs/\d+-[^/]+/?$",
+                        parsed.path,
+                        re.I,
                     ):
                         continue
-                    key = href.split("?")[0].rstrip("/").lower()
-                    results[key] = {
+
+                    # Find the nearest useful rendered job card.
+                    node = a
+                    card = ""
+
+                    for _ in range(6):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node).strip()
+                        except Exception:
+                            break
+
+                        if candidate and len(candidate) <= 2500:
+                            card = candidate
+
+                        if card and region_ok(card):
+                            break
+
+                    combined = f"{title} {card} {href}"
+
+                    if not region_ok(combined):
+                        continue
+
+                    if not title or len(title) > 300:
+                        # Derive title from URL slug when anchor text is empty.
+                        slug = parsed.path.rsplit("/", 1)[-1]
+                        slug = re.sub(r"^\d+-", "", slug)
+                        title = re.sub(r"[-_]+", " ", slug).strip()
+
+                    if not title:
+                        continue
+
+                    bad_titles = {
+                        "jobs",
+                        "find jobs",
+                        "find tech jobs",
+                        "search jobs",
+                        "search tech jobs",
+                    }
+
+                    if title.lower() in bad_titles:
+                        continue
+
+                    canonical = urllib.parse.urlunsplit((
+                        parsed.scheme,
+                        parsed.netloc,
+                        parsed.path.rstrip("/"),
+                        "",
+                        "",
+                    ))
+
+                    results[canonical] = {
                         "company": company,
                         "ats": "direct",
                         "title": title[:300],
                         "location": _browser_location(card, "Ireland"),
-                        "url": href,
+                        "url": canonical,
                         "updated_at": None,
                         "description_text": card[:5000],
                     }
+
+                added = len(results) - before
+
+                print(
+                    f"  Harvey Nash {url}: "
+                    f"+{added} ({len(results)} total)"
+                )
+
             browser.close()
+
     except Exception as exc:
         print(f"  ! Harvey Nash browser scrape failed: {exc}")
 
     print(f"  Harvey Nash official Ireland careers: {len(results)} jobs")
     return list(results.values())
-
-
 
 def scrape_smbc_group():
     company = "SMBC Group"
