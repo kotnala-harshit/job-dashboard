@@ -65,6 +65,7 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'vercel',
 # ---------------------------------------------------------------------------
 
 WORKDAY_COMPANIES = [
+    ("Cohesity", "cohesity", "wd5", "Cohesity_Careers"),
     ('Deutsche Bank', 'db', 'wd3', 'DBWebsite'),
 
     # --- VERIFIED_WORKDAY_MANUAL_BATCH_V2 ---
@@ -126,6 +127,7 @@ RECRUITEE_COMPANIES = [
 ]
 
 PERSONIO_COMPANIES = [
+    "keelvar",
     "dilloneustace",
 ]
 
@@ -258,6 +260,8 @@ def build_company_registry(include_cache: bool = False):
         "EY Ireland": "direct",
         "HubSpot": "greenhouse",
         "Nucleo": "workable",
+        "Keelvar": "personio",
+        "Cohesity": "workday",
     }
     status_by_key.update({_company_key(k): v for k, v in explicit_status_aliases.items()})
     for mapping in connector_maps:
@@ -2329,6 +2333,7 @@ def scrape_recruitee(slug: str):
                 "updated_at": j.get("created_at"),
             })
     return out
+
 
 
 def scrape_personio(slug: str):
