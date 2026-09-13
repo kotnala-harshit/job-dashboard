@@ -657,11 +657,6 @@
     "slug": "msd|wd5|SearchJobs",
     "probe_version": 35
   },
-  "NetApp": {
-    "platform": "none",
-    "slug": null,
-    "probe_version": 35
-  },
   "Northern Trust": {
     "platform": "pinpoint",
     "slug": "northern",
@@ -1183,6 +1178,11 @@
     "probe_version": 35
   },
   "Diageo": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "NetApp": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
