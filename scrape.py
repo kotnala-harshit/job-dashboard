@@ -22010,9 +22010,15 @@ def scrape_opentext():
         "&s=1"
     )
 
+    # OpenText's Phenom search can hang indefinitely on later pagination
+    # pages in headless Chromium. In the last full refresh, pages 1-3
+    # returned all 17 Ireland jobs observed, while page 4 stalled until
+    # the workflow's global 75-minute timeout killed the entire scraper.
+    # Keep this connector bounded rather than allowing one bad page to
+    # block every other company.
     urls = [base]
 
-    for offset in range(10, 100, 10):
+    for offset in range(10, 30, 10):
         urls.append(
             base + f"&from={offset}"
         )
