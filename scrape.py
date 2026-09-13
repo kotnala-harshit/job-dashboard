@@ -4910,194 +4910,131 @@ def scrape_citi():
 
 
 def scrape_hsbc():
-    """HSBC Ireland via its official SAP SuccessFactors careers site."""
-
+    """HSBC Ireland via the official HSBC Eightfold careers API."""
     if not HAS_PLAYWRIGHT:
         print("  ! HSBC Ireland: Playwright unavailable")
         return []
 
-    search_urls = [
-        "https://apply.careers.hsbc.com/search/?q=&locationsearch=Dublin",
-        "https://apply.careers.hsbc.com/search/?q=&locationsearch=Ireland",
-        "https://apply.careers.hsbc.com/search/?createNewAlert=false&q=&locationsearch=Dublin",
-    ]
+    api_url = (
+        "https://hsbc.eightfold.ai/api/apply/v2/jobs"
+        "?domain=hsbc.com"
+        "&profile="
+        "&query=Dublin"
+        "&sort_by=relevance"
+    )
 
-    results = {}
+    out = []
 
     try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
 
-            page = browser.new_page(
-                viewport={"width": 1440, "height": 1100},
-                locale="en-IE",
+            # Establish the official HSBC Eightfold session/context.
+            page.goto(
+                "https://hsbc.eightfold.ai/careers",
+                wait_until="domcontentloaded",
+                timeout=60000,
             )
 
-            for search_url in search_urls:
-                try:
-                    page.goto(
-                        search_url,
-                        wait_until="domcontentloaded",
-                        timeout=90000,
-                    )
-                    page.wait_for_timeout(2500)
-                    _dismiss_cookie_banner(page)
-                    official_board_loaded = True
-                except Exception as exc:
-                    print(f"  ! HSBC page load failed: {exc}")
+            response = page.request.get(
+                api_url,
+                headers={
+                    "Accept": "application/json, text/plain, */*",
+                    "Referer": "https://hsbc.eightfold.ai/careers",
+                },
+                timeout=60000,
+            )
+
+            if response.status != 200:
+                print(
+                    f"  ! HSBC Ireland Eightfold API returned HTTP "
+                    f"{response.status}"
+                )
+                browser.close()
+                return []
+
+            data = response.json()
+
+            for job in data.get("positions", []):
+                title = (
+                    job.get("posting_name")
+                    or job.get("name")
+                    or job.get("title")
+                    or ""
+                ).strip()
+
+                job_id = job.get("id")
+
+                locations = job.get("locations") or []
+                location = job.get("location") or ""
+
+                location_parts = []
+                if location:
+                    location_parts.append(str(location))
+                location_parts.extend(str(x) for x in locations)
+
+                location_text = " | ".join(
+                    dict.fromkeys(location_parts)
+                )
+
+                if not title or not job_id:
                     continue
 
-                # SuccessFactors job-detail URLs normally contain /job/
-                # and frequently a numeric requisition suffix.
-                anchors = page.locator("a[href*='/job/']")
+                # Only retain genuine Ireland vacancies.
+                if not any(
+                    token in location_text.lower()
+                    for token in (
+                        "ireland",
+                        "dublin",
+                        "cork",
+                        "galway",
+                        "limerick",
+                    )
+                ):
+                    continue
 
-                for i in range(anchors.count()):
-                    a = anchors.nth(i)
+                url = (
+                    job.get("canonicalPositionUrl")
+                    or f"https://hsbc.eightfold.ai/careers/job/{job_id}"
+                )
 
-                    try:
-                        href = urllib.parse.urljoin(
-                            page.url,
-                            a.get_attribute("href") or "",
-                        )
-                    except Exception:
-                        continue
+                description = (
+                    job.get("job_description")
+                    or job.get("description")
+                    or ""
+                )
 
-                    if not href or href in results:
-                        continue
-
-                    title = _browser_text(a)
-
-                    node = a
-                    card = ""
-
-                    for _ in range(6):
-                        try:
-                            node = node.locator("..")
-                            candidate = _browser_text(node)
-                        except Exception:
-                            break
-
-                        if candidate and len(candidate) <= 3000:
-                            card = candidate
-
-                        if (
-                            "dublin" in card.lower()
-                            or "ireland" in card.lower()
-                            or ", ie" in card.lower()
-                        ):
-                            break
-
-                    evidence = f"{title} {card} {href}"
-
-                    if not title:
-                        continue
-
-                    if not region_ok(evidence):
-                        continue
-
-                    results[href] = {
-                        "company": "HSBC Ireland",
-                        "ats": "direct",
-                        "title": title[:300],
-                        "location": _browser_location(
-                            card,
-                            "Dublin, Ireland",
-                        ),
-                        "url": href,
-                        "updated_at": None,
-                        "description_text": card[:5000],
-                    }
-
-                # Support more than first page where available.
-                for _ in range(10):
-                    try:
-                        next_btn = page.get_by_role(
-                            "link",
-                            name=re.compile(r"next", re.I),
-                        )
-
-                        if not next_btn.count() or not next_btn.first.is_visible():
-                            break
-
-                        before = len(results)
-
-                        next_btn.first.click(timeout=2500)
-                        page.wait_for_timeout(1800)
-
-                        anchors = page.locator("a[href*='/job/']")
-
-                        for i in range(anchors.count()):
-                            a = anchors.nth(i)
-
-                            href = urllib.parse.urljoin(
-                                page.url,
-                                a.get_attribute("href") or "",
-                            )
-
-                            if not href or href in results:
-                                continue
-
-                            title = _browser_text(a)
-
-                            node = a
-                            card = ""
-
-                            for _up in range(6):
-                                try:
-                                    node = node.locator("..")
-                                    candidate = _browser_text(node)
-                                except Exception:
-                                    break
-
-                                if candidate and len(candidate) <= 3000:
-                                    card = candidate
-
-                            evidence = f"{title} {card} {href}"
-
-                            if title and region_ok(evidence):
-                                results[href] = {
-                                    "company": "HSBC Ireland",
-                                    "ats": "direct",
-                                    "title": title[:300],
-                                    "location": _browser_location(
-                                        card,
-                                        "Dublin, Ireland",
-                                    ),
-                                    "url": href,
-                                    "updated_at": None,
-                                    "description_text": card[:5000],
-                                }
-
-                        if len(results) == before:
-                            break
-
-                    except Exception:
-                        break
+                out.append({
+                    "company": "HSBC Ireland",
+                    "ats": "eightfold",
+                    "title": title,
+                    "location": location_text,
+                    "url": url,
+                    "updated_at": job.get("updated_at") or "",
+                    "description_text": _strip_html(description),
+                })
 
             browser.close()
 
     except Exception as exc:
-        print(f"  ! HSBC Ireland browser scrape failed: {exc}")
+        print(f"  ! HSBC Ireland Eightfold scrape failed: {exc}")
+        return []
 
-    _mark_connector_health(
-        "HSBC Ireland",
-        official_board_loaded,
-        (
-            f"Official HSBC Ireland careers board loaded and returned "
-            f"{len(results)} qualifying Ireland jobs"
-            if official_board_loaded
-            else "Official HSBC Ireland careers board could not be verified"
-        ),
-        "https://apply.careers.hsbc.com/search/?q=&locationsearch=Ireland",
-    )
+    # Canonical URL deduplication.
+    seen = set()
+    unique = []
 
-    print(
-        f"  HSBC Ireland official careers: "
-        f"{len(results)} unique Ireland jobs"
-    )
+    for job in out:
+        key = job.get("url", "").split("?")[0].rstrip("/").lower()
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        unique.append(job)
 
-    return list(results.values())
+    print(f"  HSBC Ireland Eightfold: {len(unique)} Ireland jobs")
 
+    return unique
 
 def scrape_boston_scientific():
     return _browser_board_collect(
