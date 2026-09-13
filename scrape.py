@@ -40,13 +40,15 @@ except ImportError:
 # ---------------------------------------------------------------------------
 
 GREENHOUSE_COMPANIES = [
+    "anthropic",
+    "cityswift",
     # --- VERIFIED_MANUAL_BATCH_V3 ---
     "gongio",
 'stripe', 'airbnb', 'doordash', 'pinterest', 'squarespace', 'twilio', 'docusign', 'robinhood', 'reddit', 'coinbase', 'gitlab', 'github', 'hubspotjobs', 'indeed', 'zendesk', 'trustpilot', 'workhuman', 'wayflyer', 'intercom', 'wise', 'asana', 'cloudflare', 'datadog', 'snowflake', 'instacart', 'lyft', 'fenergo', 'affirm', 'airtable', 'algolia', 'amplitude', 'betterup', 'buffer', 'calendly', 'carta', 'chime', 'classpass', 'coursera', 'discord', 'doximity', 'elastic', 'envoy', 'faire', 'flexport', 'gusto', 'handshake', 'hashicorp', 'honeycomb', 'justworks', 'klaviyo', 'lattice', 'mixpanel', 'mongodb', 'qualtrics', 'mural', 'okta', 'opendoor', 'patreon', 'peloton', 'pilot', 'postman', 'procore', 'quora', 'rippling', 'samsara', 'segment', 'sendgrid', 'sourcegraph', 'sprinklr', 'strava', 'tanium', 'thumbtack', 'toast', 'turo', 'udemy', 'verkada', 'webflow', 'wework', 'yelp', 'zapier', 'zoominfo', 'getyourguide', 'trivago', 'deliveryhero', 'babbel', 'contentful', 'celonis', 'flixbus', 'tiermobility', 'gorillas', 'typeform', 'glovo', 'cabify', 'blablacar', 'backmarket', 'doctolib', 'qonto', 'alan', 'payfit', 'gocardless', 'truelayer', 'thoughtmachine', 'cazoo', 'octopusenergy', 'farfetch', 'starlingbank', 'revolut', 'darktrace', 'graphcore', 'onfido', 'fundingcircle', 'tines', 'flipdish', 'letsgetchecked', 'genesys', 'grab', 'sea', 'carousell', 'razer', 'lazada', 'careem', 'noon', 'talabat', 'propertyfinder', 'razorpay', 'swiggy', 'freshworks', 'browserstack', 'meesho', 'cred', 'groww', 'urbancompany', 'chargebee', 'clevertap', 'cultureamp', 'safetyculture', 'employmenthero', 'airwallex', 'deputy', 'linktree', 'go1', 'halter', 'judobank', 'figma', 'zscaler']
 
 LEVER_COMPANIES = ['spotify', 'plaid', 'brex', 'checkout', 'deliveroo', 'monzo', 'wolt', 'bolt', 'pipedrive', 'zopa', 'gojek', 'traveloka']
 
-ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'anthropic', 'vercel', 'scale', 'deel', 'partly', 'clickup', 'snowflake', 'wayflyer']
+ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'vercel', 'scale', 'deel', 'partly', 'clickup', 'snowflake', 'wayflyer']
 
 # ---------------------------------------------------------------------------
 # Workday-hosted career sites (*.myworkdayjobs.com). Workday has no official
