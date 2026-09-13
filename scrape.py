@@ -118,6 +118,7 @@ SMARTRECRUITERS_PUBLIC_IDS = {
 
 WORKABLE_COMPANIES = [
     "davy",
+    "nucleo-consulting",
 ]
 
 RECRUITEE_COMPANIES = [
@@ -256,6 +257,7 @@ def build_company_registry(include_cache: bool = False):
         "NetApp": "eightfold",
         "EY Ireland": "direct",
         "HubSpot": "greenhouse",
+        "Nucleo": "workable",
     }
     status_by_key.update({_company_key(k): v for k, v in explicit_status_aliases.items()})
     for mapping in connector_maps:

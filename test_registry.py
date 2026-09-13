@@ -198,8 +198,8 @@ class RegistryTests(unittest.TestCase):
         }
 
         # Evidence-backed registry currently contains 235 unique active companies.
-        self.assertEqual(235, len(active))
-        self.assertEqual(235, len(set(active)))
+        self.assertEqual(236, len(active))
+        self.assertEqual(236, len(set(active)))
 
         # Critical profile-focused companies that must remain active.
         required = {
