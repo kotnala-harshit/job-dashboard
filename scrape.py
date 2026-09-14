@@ -3171,8 +3171,6 @@ def rescue_priority_ireland_employers(results):
     }
     rescued = []
     for company in PRIORITY_IRELAND_EMPLOYERS:
-        if SCRAPE_MODE == "audit" and not _targeted(company):
-            continue
         if SCRAPE_MODE == "fast" and TARGET_COMPANIES and not _targeted(company):
             continue
         key = _company_key(company)
@@ -19291,7 +19289,6 @@ def job_state_identity(job):
 # ---------------------------------------------------------------------------
 # Runtime modes
 # FULL: complete audit using configured connectors and deep fallbacks.
-# AUDIT: one stable slice of the full audit; carries prior results forward.
 # FAST: lightweight incremental refresh using cheaper paths and priority rescue.
 # ---------------------------------------------------------------------------
 SCRAPE_MODE = os.environ.get("SCRAPE_MODE", "full").strip().lower()
@@ -19299,8 +19296,6 @@ SCRAPE_WORKERS = max(2, min(32, int(os.environ.get("SCRAPE_WORKERS", "16"))))
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
 }
-AUDIT_SHARD_COUNT = max(1, int(os.environ.get("AUDIT_SHARD_COUNT", "1")))
-AUDIT_SHARD_INDEX = int(os.environ.get("AUDIT_SHARD_INDEX", "0")) % AUDIT_SHARD_COUNT
 
 def _targeted(company):
     key = _company_key(company)
@@ -19309,10 +19304,7 @@ def _targeted(company):
             return True
         # Allow ATS slugs/short brands such as "kpmg" to match "KPMG Ireland".
         return any(len(key) >= 4 and (key in target or target in key) for target in TARGET_COMPANIES)
-    if SCRAPE_MODE != "audit":
-        return True
-    # Stable across Python processes; every scheduled audit reaches one quarter.
-    return int(hashlib.sha1(key.encode()).hexdigest(), 16) % AUDIT_SHARD_COUNT == AUDIT_SHARD_INDEX
+    return True
 
 
 def _run_direct_company_isolated(company):
@@ -20457,8 +20449,7 @@ def main():
 
     print(
         f"SCRAPE_MODE={SCRAPE_MODE} workers={SCRAPE_WORKERS} "
-        f"targets={len(TARGET_COMPANIES) or 'all'} "
-        f"shard={AUDIT_SHARD_INDEX + 1}/{AUDIT_SHARD_COUNT}"
+        f"targets={len(TARGET_COMPANIES) or 'all'}"
     )
     tasks = []
     for slug in GREENHOUSE_COMPANIES:
@@ -20541,11 +20532,8 @@ def main():
 
     # Browser-heavy proprietary boards belong to the full audit. A small
     # worker pool keeps that audit bounded without overwhelming the runner.
-    if SCRAPE_MODE in {"full", "audit"}:
-        # GradIreland is one national board, not an employer-specific source;
-        # scanning it once per four-slice cycle is enough.
-        if SCRAPE_MODE == "full" or AUDIT_SHARD_INDEX == 0:
-            results.extend(scrape_gradireland_programmes())
+    if SCRAPE_MODE == "full":
+        results.extend(scrape_gradireland_programmes())
         direct_tasks = [
             ("direct", company, lambda company=company: scrape_direct_company(company))
             for company in DIRECT_COMPANY_CONNECTORS
@@ -20558,16 +20546,16 @@ def main():
             direct_tasks,
             results,
             errors,
-            workers=8 if SCRAPE_MODE == "audit" else 6,
-            timeout_seconds=70 if SCRAPE_MODE == "audit" else 90,
+            workers=6,
+            timeout_seconds=90,
         )
 
     # Suman-style dynamic ATS discovery for companies not already wired into a
     # known connector. Confirmed mappings persist in ats_platform_cache.json.
     initial_registry = build_company_registry(include_cache=False)
-    if TARGET_COMPANIES or SCRAPE_MODE == "audit":
+    if TARGET_COMPANIES:
         initial_registry = [x for x in initial_registry if _targeted(x.get("company", ""))]
-    if SCRAPE_MODE in {"full", "audit"}:
+    if SCRAPE_MODE == "full":
         try:
             dynamic_found, _dynamic_mappings = discover_and_scrape_manual(initial_registry)
             results.extend(dynamic_found)
@@ -20575,7 +20563,7 @@ def main():
             errors.append(f"dynamic ATS discovery: {e}")
 
     # The full audit runs the universal structured-data fallback.
-    if SCRAPE_MODE in {"full", "audit"}:
+    if SCRAPE_MODE == "full":
         jsonld_tasks = []
         for company, url, _source_type, _category in _load_company_master():
             if not url or not _targeted(company):
@@ -20588,7 +20576,7 @@ def main():
             results,
             errors,
             workers=min(SCRAPE_WORKERS, 16),
-            timeout_seconds=40 if SCRAPE_MODE == "audit" else 60,
+            timeout_seconds=60,
         )
 
     run_broad_aggregators = SCRAPE_MODE == "full"
@@ -20624,7 +20612,7 @@ def main():
             errors.append(f"jooble ({query}): {e}")
         time.sleep(0.3)
 
-    if SCRAPE_MODE in {"full", "audit"} and _targeted("Amazon"):
+    if SCRAPE_MODE == "full" and _targeted("Amazon"):
         try:
             found = scrape_amazon("")
             results.extend(found)
@@ -20633,7 +20621,7 @@ def main():
             errors.append(f"direct/Amazon: {e}")
         time.sleep(0.5)
 
-    if SCRAPE_MODE in {"full", "audit"} and _targeted("Netflix"):
+    if SCRAPE_MODE == "full" and _targeted("Netflix"):
         try:
             found = scrape_netflix("")
             results.extend(found)
@@ -20642,9 +20630,9 @@ def main():
             errors.append(f"direct/Netflix: {e}")
         time.sleep(0.5)
 
-    # Incremental slices retain the last complete dataset before attempting
+    # Fast refreshes retain the last complete dataset before attempting
     # fallback sources, so a healthy prior result prevents needless API rescue.
-    if SCRAPE_MODE in {"fast", "audit"}:
+    if SCRAPE_MODE == "fast":
         try:
             with open("data.json", encoding="utf-8") as f:
                 previous_data = json.load(f) or {}
@@ -21484,8 +21472,8 @@ def main():
         }
 
     # Missing jobs are not immediately declared closed: transient ATS failures happen.
-    # Only a complete full audit can advance missing counters. Audit slices and
-    # fast refreshes intentionally inspect a subset of employers.
+    # Only a complete full audit can advance missing counters; fast refreshes
+    # intentionally inspect a subset of employers.
     if SCRAPE_MODE == "full":
         for identity, prior in list(current_seen.items()):
             if identity in current_ids or not isinstance(prior, dict):

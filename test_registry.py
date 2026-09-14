@@ -5,8 +5,6 @@ from pathlib import Path
 
 from unittest.mock import patch
 
-import scrape
-
 from scrape import (
     DIRECT_COMPANY_CONNECTORS,
     KNOWN_PHENOM_MAPPINGS,
@@ -32,27 +30,6 @@ REGISTRY_PATH = "ireland_job_radar_HARSHIT_MASTER.csv"
 
 
 class RegistryTests(unittest.TestCase):
-    def test_audit_shards_cover_each_target_once(self):
-        old_mode = scrape.SCRAPE_MODE
-        old_targets = scrape.TARGET_COMPANIES
-        old_count = scrape.AUDIT_SHARD_COUNT
-        old_index = scrape.AUDIT_SHARD_INDEX
-        companies = ["Alpha Ireland", "Beta Ireland", "Gamma Ireland", "Delta Ireland"]
-        try:
-            scrape.SCRAPE_MODE = "audit"
-            scrape.TARGET_COMPANIES = set()
-            scrape.AUDIT_SHARD_COUNT = 4
-            covered = []
-            for shard in range(4):
-                scrape.AUDIT_SHARD_INDEX = shard
-                covered.extend(company for company in companies if scrape._targeted(company))
-            self.assertCountEqual(companies, covered)
-        finally:
-            scrape.SCRAPE_MODE = old_mode
-            scrape.TARGET_COMPANIES = old_targets
-            scrape.AUDIT_SHARD_COUNT = old_count
-            scrape.AUDIT_SHARD_INDEX = old_index
-
     def test_rejects_northern_ireland_abbreviation(self):
         self.assertFalse(region_ok("No City, England, Wales, N Ireland"))
 
@@ -68,10 +45,11 @@ class RegistryTests(unittest.TestCase):
     def test_refresh_workflow_is_bounded(self):
         workflow = Path(".github/workflows/scrape.yml").read_text(encoding="utf-8")
         self.assertIn("cancel-in-progress: false", workflow)
-        for cron in ("03 * * * *", "18 * * * *", "33 * * * *", "48 * * * *"):
-            self.assertIn(cron, workflow)
+        self.assertIn("03 * * * *", workflow)
         self.assertNotIn("23 */4 * * *", workflow)
-        self.assertNotIn("08 * * * *", workflow)
+        self.assertNotIn("18 * * * *", workflow)
+        self.assertNotIn("33 * * * *", workflow)
+        self.assertNotIn("48 * * * *", workflow)
         self.assertNotIn("23 * * * *", workflow)
         self.assertNotIn("43 * * * *", workflow)
         self.assertNotIn("17 * * * *", workflow)
@@ -82,12 +60,9 @@ class RegistryTests(unittest.TestCase):
         self.assertIn("github.event.schedule", workflow)
         self.assertNotIn('minute="$(date -u +%M)"', workflow)
         self.assertNotIn('if [ "$minute" = "17" ]; then', workflow)
-        self.assertIn("'03 * * * *') mode=audit; audit_shard=0", workflow)
-        self.assertIn("'48 * * * *') mode=audit; audit_shard=3", workflow)
-        self.assertIn("AUDIT_SHARD_COUNT", workflow)
+        self.assertIn("'03 * * * *') mode=full", workflow)
         self.assertIn("timeout-minutes: 60", workflow)
         self.assertIn("limit=10m", workflow)
-        self.assertIn("[ \"$mode\" = audit ] && limit=13m", workflow)
         self.assertIn("limit=50m", workflow)
         self.assertEqual(1, workflow.count("concurrency:"))
         self.assertNotIn("while true", workflow)
@@ -95,13 +70,12 @@ class RegistryTests(unittest.TestCase):
 
         scraper = Path("scrape.py").read_text(encoding="utf-8")
         self.assertEqual(1, scraper.count("def _parallel_collect_isolated("))
-        self.assertIn('workers=8 if SCRAPE_MODE == "audit" else 6', scraper)
-        self.assertIn('timeout_seconds=70 if SCRAPE_MODE == "audit" else 90', scraper)
+        self.assertIn("workers=6", scraper)
+        self.assertIn("timeout_seconds=90", scraper)
         self.assertIn('"Optum",', scraper)
         self.assertIn('"Siemens",', scraper)
-        self.assertIn('SCRAPE_MODE != "audit"', scraper)
-        self.assertIn('SCRAPE_MODE in {"fast", "audit"}', scraper)
-        self.assertIn('SCRAPE_MODE == "full" or AUDIT_SHARD_INDEX == 0', scraper)
+        self.assertNotIn('SCRAPE_MODE == "audit"', scraper)
+        self.assertNotIn("AUDIT_SHARD", scraper)
         self.assertIn('if SCRAPE_MODE == "full":\n            rescue_registry', scraper)
 
     def test_dashboard_keeps_recently_discovered_roles_visible(self):

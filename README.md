@@ -51,8 +51,6 @@ The scraper:
 
 ## Automation schedule
 
-The scheduler runs four deterministic audit slices per hour at `:03`, `:18`,
-`:33`, and `:48`. Each slice checks roughly one quarter of the employer
-registry and carries forward the remaining verified jobs, so all employers are
-covered within an hour without a long, overlapping run. A manual full audit is
-available for broad aggregator reconciliation and job-closure checks.
+The scheduler runs one complete refresh at `:03` every hour. It has a
+50-minute collection limit, leaving time for its data commit and GitHub Pages
+deployment before the next hourly run.
