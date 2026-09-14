@@ -95,13 +95,14 @@ class RegistryTests(unittest.TestCase):
 
         scraper = Path("scrape.py").read_text(encoding="utf-8")
         self.assertEqual(1, scraper.count("def _parallel_collect_isolated("))
-        self.assertIn("workers=5", scraper)
-        self.assertIn("timeout_seconds=120", scraper)
+        self.assertIn('workers=8 if SCRAPE_MODE == "audit" else 6', scraper)
+        self.assertIn('timeout_seconds=70 if SCRAPE_MODE == "audit" else 90', scraper)
         self.assertIn('"Optum",', scraper)
         self.assertIn('"Siemens",', scraper)
         self.assertIn('SCRAPE_MODE != "audit"', scraper)
         self.assertIn('SCRAPE_MODE in {"fast", "audit"}', scraper)
         self.assertIn('SCRAPE_MODE == "full" or AUDIT_SHARD_INDEX == 0', scraper)
+        self.assertIn('if SCRAPE_MODE == "full":\n            rescue_registry', scraper)
 
     def test_dashboard_keeps_recently_discovered_roles_visible(self):
         dashboard = Path("index.html").read_text(encoding="utf-8")
@@ -248,8 +249,8 @@ class RegistryTests(unittest.TestCase):
         }
 
         # Evidence-backed registry currently contains 235 unique active companies.
-        self.assertEqual(300, len(active))
-        self.assertEqual(300, len(set(active)))
+        self.assertEqual(295, len(active))
+        self.assertEqual(295, len(set(active)))
 
         # Critical profile-focused companies that must remain active.
         required = {
@@ -269,6 +270,10 @@ class RegistryTests(unittest.TestCase):
             "Tesco Ireland",
         }
         self.assertFalse(excluded & active)
+        self.assertFalse({
+            "Circle K Ireland", "Dawn Meats", "Decathlon Ireland",
+            "Harvey Nash Ireland", "JD Sports Ireland",
+        } & active)
 
     @patch("scrape._fetch_html")
     def test_server_rendered_job_parser(self, fetch):

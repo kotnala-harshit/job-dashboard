@@ -51,10 +51,8 @@ The scraper:
 
 ## Automation schedule
 
-The scraper runs three times per hour:
-
-- `:17` — Full audit
-- `:37` — Fast incremental refresh
-- `:57` — Fast incremental refresh
-
-This provides up to 72 scheduled refreshes per day: 24 full audits and 48 fast refreshes. Full runs perform the deeper connector and fallback checks, while Fast runs use the lighter incremental paths and carry forward previously discovered jobs. Concurrency protection prevents refresh runs from being cancelled while another refresh is active. Manual runs can select either mode.
+The scheduler runs four deterministic audit slices per hour at `:03`, `:18`,
+`:33`, and `:48`. Each slice checks roughly one quarter of the employer
+registry and carries forward the remaining verified jobs, so all employers are
+covered within an hour without a long, overlapping run. A manual full audit is
+available for broad aggregator reconciliation and job-closure checks.

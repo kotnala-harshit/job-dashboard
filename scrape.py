@@ -248,7 +248,7 @@ def _registry_url_map():
     return out
 
 
-def build_company_registry(include_cache: bool = False):
+def _build_company_registry_base(include_cache: bool = False):
     url_map = _registry_url_map()
     master_metadata = _load_company_master_metadata()
     connector_maps = [
@@ -18853,7 +18853,7 @@ def scrape_direct_company(company: str):
         "Irish Revenue": scrape_revenue_ie,
         "Revenue": scrape_revenue_ie,
         "Revenue.ie": scrape_revenue_ie,
-        "Medtronic": scrape_medtronic,
+        "Medtronic": scrape_medtronic_verified,
         "UPS Ireland": scrape_ups,
         "Three Ireland": scrape_three_ireland,
         "TK Maxx Ireland": scrape_tjx_ireland,
@@ -20450,38 +20450,6 @@ def scrape_medtronic_verified():
     )
 
 
-_scrape_direct_company_before_verified_manual_batch_v1 = scrape_direct_company
-
-
-def scrape_direct_company(company: str):
-    if company == "Medtronic":
-        return scrape_medtronic_verified()
-
-    return _scrape_direct_company_before_verified_manual_batch_v1(company)
-
-
-
-
-
-# --- GONG_REGISTRY_V1 ---
-
-_build_company_registry_before_gong_v1 = build_company_registry
-
-def build_company_registry(include_cache: bool = False):
-    registry = _build_company_registry_before_gong_v1(
-        include_cache=include_cache
-    )
-
-    for item in registry:
-        if item.get("company") == "Gong":
-            item["platform"] = "greenhouse"
-            item["automatic"] = True
-            item["ats_slug"] = "gongio"
-            break
-
-    return registry
-
-
 def main():
     profile = load_candidate_profile()
     results = []
@@ -20590,8 +20558,8 @@ def main():
             direct_tasks,
             results,
             errors,
-            workers=5,
-            timeout_seconds=120,
+            workers=8 if SCRAPE_MODE == "audit" else 6,
+            timeout_seconds=70 if SCRAPE_MODE == "audit" else 90,
         )
 
     # Suman-style dynamic ATS discovery for companies not already wired into a
@@ -20619,8 +20587,8 @@ def main():
             jsonld_tasks,
             results,
             errors,
-            workers=min(SCRAPE_WORKERS, 12),
-            timeout_seconds=60 if SCRAPE_MODE == "audit" else 300,
+            workers=min(SCRAPE_WORKERS, 16),
+            timeout_seconds=40 if SCRAPE_MODE == "audit" else 60,
         )
 
     run_broad_aggregators = SCRAPE_MODE == "full"
@@ -20674,6 +20642,19 @@ def main():
             errors.append(f"direct/Netflix: {e}")
         time.sleep(0.5)
 
+    # Incremental slices retain the last complete dataset before attempting
+    # fallback sources, so a healthy prior result prevents needless API rescue.
+    if SCRAPE_MODE in {"fast", "audit"}:
+        try:
+            with open("data.json", encoding="utf-8") as f:
+                previous_data = json.load(f) or {}
+            previous_jobs = previous_data.get("jobs", [])
+            CONNECTOR_HEALTH.update(previous_data.get("connector_health") or {})
+            results.extend(previous_jobs)
+            print(f"{SCRAPE_MODE.title()} refresh: carried forward {len(previous_jobs)} prior jobs")
+        except (FileNotFoundError, json.JSONDecodeError, TypeError, AttributeError):
+            pass
+
     # Targeted second pass for configured companies that still returned zero.
     # This uses the already-configured free aggregator API, but searches by
     # employer name instead of relying on a single broad first page.
@@ -20683,11 +20664,10 @@ def main():
         priority_rescued = rescue_priority_ireland_employers(results)
         results.extend(priority_rescued)
 
-        # The broader curated-company rescue is limited to the active audit slice.
-        if SCRAPE_MODE in {"full", "audit"}:
+        # Broad aggregator rescue is an explicit full-audit fallback, not an
+        # hourly source: the official slice has already checked each employer.
+        if SCRAPE_MODE == "full":
             rescue_registry = build_company_registry(include_cache=True)
-            if SCRAPE_MODE == "audit":
-                rescue_registry = [x for x in rescue_registry if _targeted(x.get("company", ""))]
             rescued = rescue_zero_companies_with_aggregators(results, rescue_registry)
             results.extend(rescued)
     except Exception as e:
@@ -20701,19 +20681,6 @@ def main():
     # Adzuna and Careerjet were allowed to introduce adjacent employers that
     # were not present in the master CSV, which caused removed/unwanted
     # companies to leak back into data.json and the HTML company filter.
-    # Incremental runs update what they checked and carry the rest forward;
-    # only a complete full audit is allowed to remove or close prior jobs.
-    if SCRAPE_MODE in {"fast", "audit"}:
-        try:
-            with open("data.json", encoding="utf-8") as f:
-                previous_data = json.load(f) or {}
-            previous_jobs = previous_data.get("jobs", [])
-            CONNECTOR_HEALTH.update(previous_data.get("connector_health") or {})
-            results.extend(previous_jobs)
-            print(f"{SCRAPE_MODE.title()} refresh: carried forward {len(previous_jobs)} prior jobs")
-        except (FileNotFoundError, json.JSONDecodeError, TypeError, AttributeError):
-            pass
-
     curated_keys = curated_company_key_set()
 
     filtered_results = []
@@ -24894,10 +24861,8 @@ GRADUATE_DISCOVERY_TERMS = [
     "apprentice",
 ]
 
-_original_build_company_registry = build_company_registry
-
 def build_company_registry(include_cache=False):
-    registry = _original_build_company_registry(include_cache=include_cache)
+    registry = _build_company_registry_base(include_cache=include_cache)
 
     aliases = {
         "EY": "EY Ireland",
@@ -24918,6 +24883,8 @@ def build_company_registry(include_cache=False):
 
     for item in registry:
         company = item.get("company") or item.get("name") or ""
+        if company == "Gong":
+            item.update(platform="greenhouse", automatic=True, ats_slug="gongio")
         profile_key = aliases.get(company, company)
         profile = GRADUATE_PROGRAMME_PROFILES.get(profile_key)
 
