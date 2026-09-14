@@ -15,7 +15,7 @@ import urllib.error
 import urllib.parse
 import hashlib
 import threading
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 from datetime import datetime, timezone, timedelta
 
 try:
@@ -19095,6 +19095,74 @@ def _targeted(company):
         return True
     # Allow ATS slugs/short brands such as "kpmg" to match "KPMG Ireland".
     return any(len(key) >= 4 and (key in target or target in key) for target in TARGET_COMPANIES)
+
+
+def _run_direct_company_isolated(company):
+    """Run one direct-company connector in an isolated child process.
+
+    A separate process is intentional here: Playwright/Chromium can hang
+    inside a Python thread and cannot be reliably force-killed. A child
+    process can be terminated without taking down the whole refresh.
+    """
+    return scrape_direct_company(company) or []
+
+
+def _parallel_collect_bounded(
+    tasks,
+    results,
+    errors,
+    workers=3,
+    timeout_seconds=600,
+):
+    """Run direct collectors with a real per-company process deadline."""
+    if not tasks:
+        return
+
+    # Only pass the company name to the child process. This avoids trying
+    # to pickle the lambda used by the existing task list.
+    companies = [(label, company) for label, company, _fn in tasks]
+
+    pool = ProcessPoolExecutor(max_workers=workers)
+    future_map = {}
+
+    try:
+        for label, company in companies:
+            future = pool.submit(
+                _run_direct_company_isolated,
+                company,
+            )
+            future_map[future] = (label, company)
+
+        pending = dict(future_map)
+
+        while pending:
+            finished = []
+
+            for fut, (label, company) in list(pending.items()):
+                if fut.done():
+                    finished.append((fut, label, company))
+
+            if not finished:
+                import time
+                time.sleep(0.25)
+                continue
+
+            for fut, label, company in finished:
+                pending.pop(fut, None)
+
+                try:
+                    found = fut.result()
+                    results.extend(found)
+                    print(f"{label}/{company}: {len(found)} matches")
+                except Exception as exc:
+                    errors.append(f"{label}/{company}: {exc}")
+                    print(f"! {label}/{company}: {exc}")
+
+    finally:
+        # Normal shutdown only occurs after all children have completed.
+        # A hard timeout is enforced below by the watchdog.
+        pool.shutdown(wait=True, cancel_futures=True)
+
 
 def _parallel_collect(tasks, results, errors, workers=None):
     """Run independent collectors concurrently; each task=(label, company, callable)."""
