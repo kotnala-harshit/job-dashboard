@@ -64,20 +64,39 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'vercel',
 # the tenant/wd_host/site values are all in that URL.
 # ---------------------------------------------------------------------------
 
+# Official career sources verified live but currently returning
+# no qualifying Republic-of-Ireland vacancies. Keep these companies in
+# the registry/health model, but do not spend a Workday scrape on every run.
+KNOWN_HEALTHY_ZERO_COMPANIES = {
+    "Deutsche Bank": {
+        "url": "https://db.wd3.myworkdayjobs.com/DBWebsite",
+        "note": "Official Deutsche Bank Workday source verified live; currently 0 qualifying Ireland jobs",
+    },
+    "Unilever": {
+        "url": "https://unilever.wd3.myworkdayjobs.com/Unilever_Experienced_Professionals",
+        "note": "Official Unilever Workday source verified live; currently 0 qualifying Ireland jobs",
+    },
+    "Visa": {
+        "url": "https://visa.wd5.myworkdayjobs.com/Visa",
+        "note": "Official Visa Workday source verified live; currently 0 qualifying Ireland jobs",
+    },
+    "NVIDIA": {
+        "url": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite",
+        "note": "Official NVIDIA Workday source verified live; currently 0 qualifying Ireland jobs",
+    },
+}
+
 WORKDAY_COMPANIES = [
     ('Coca-Cola', 'coke', 'wd1', 'coca-cola-careers'),
     ("Cohesity", "cohesity", "wd5", "Cohesity_Careers"),
-    ('Deutsche Bank', 'db', 'wd3', 'DBWebsite'),
-    ('Unilever', 'unilever', 'wd3', 'Unilever_Experienced_Professionals'),
     ('Virgin Media Ireland', 'libertyglobal', 'wd3', 'VMIE_Careers'),
     ('Verizon', 'verizon', 'wd12', 'verizon-careers'),
-    ('Visa', 'visa', 'wd5', 'Visa'),
 
     # --- VERIFIED_WORKDAY_MANUAL_BATCH_V2 ---
     ("Eli Lilly", "lilly", "wd115", "LLY"),
     ("CrowdStrike", "crowdstrike", "wd5", "crowdstrikecareers"),
     ("Kyndryl", "kyndryl", "wd5", "KyndrylProfessionalCareers"),
-('Proofpoint', 'proofpoint', 'wd5', 'ProofpointCareers'), ('AIG', 'aig', 'wd1', 'aig'), ('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'), ('NVIDIA', 'nvidia', 'wd5', 'NVIDIAExternalCareerSite'), ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS')]
+('Proofpoint', 'proofpoint', 'wd5', 'ProofpointCareers'), ('AIG', 'aig', 'wd1', 'aig'), ('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'),  ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS')]
 WORKDAY_COMPANIES.append(('Stryker', 'stryker', 'wd1', 'StrykerCareers'))
 WORKDAY_COMPANIES.append(('Clio', 'clio', 'wd3', 'cliocareersite'))
 WORKDAY_COMPANIES.extend([
@@ -250,6 +269,12 @@ def build_company_registry(include_cache: bool = False):
     # prevent display-name differences such as "Meta" vs "Meta (Ireland)" from
     # incorrectly placing an employer in Manual Search Needed.
     explicit_status_aliases = {
+        # Verified healthy-zero Workday companies are retained in the
+        # registry even though they are excluded from the active scrape batch.
+        "Deutsche Bank": "workday",
+        "Unilever": "workday",
+        "Visa": "workday",
+        "NVIDIA": "workday",
         "Accenture": "direct",
         "Citi": "direct",
         "Citigroup": "direct",
@@ -21021,6 +21046,16 @@ def main():
         for j in results
         if j.get("company")
     }
+
+    # Preserve verified healthy-zero status for connectors intentionally
+    # excluded from the active scrape batch.
+    for _company, _info in KNOWN_HEALTHY_ZERO_COMPANIES.items():
+        CONNECTOR_HEALTH[_company] = {
+            "live": True,
+            "note": _info["note"],
+            "url": _info["url"],
+            "checked_at": datetime.now(timezone.utc).isoformat(),
+        }
 
     manual_check = []
     for item in company_registry:
