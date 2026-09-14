@@ -20561,8 +20561,8 @@ def main():
             direct_tasks,
             results,
             errors,
-            workers=6,
-            timeout_seconds=90,
+            workers=1,
+            timeout_seconds=30,
         )
 
     # Suman-style dynamic ATS discovery for companies not already wired into a
