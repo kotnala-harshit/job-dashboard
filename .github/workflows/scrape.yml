@@ -7,8 +7,7 @@ concurrency:
 on:
   schedule:
     - cron: '03 * * * *'
-    - cron: '23 * * * *'
-    - cron: '43 * * * *'
+    - cron: '23 */4 * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -61,6 +60,7 @@ jobs:
             seen_jobs.json
             job_state.json
             connector_cache.json
+            workday_detail_cache.json
             ats_platform_cache.json
             browser_scrape_cache.json
             jsonld_cache.json
@@ -122,8 +122,8 @@ jobs:
           mode=fast
           if [ "${{ github.event_name }}" = "schedule" ]; then
             case "${{ github.event.schedule }}" in
-              '23 * * * *') mode=full ;;
-              '03 * * * *'|'43 * * * *') mode=fast ;;
+              '23 */4 * * *') mode=full ;;
+              '03 * * * *') mode=fast ;;
               *) echo "Unknown schedule: ${{ github.event.schedule }}"; exit 1 ;;
             esac
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -134,9 +134,20 @@ jobs:
 
           started="$(date +%s)"
           limit=12m
-          [ "$mode" = full ] && limit=75m
+          [ "$mode" = full ] && limit=80m
 
-          timeout --signal=TERM --kill-after=30s "$limit" env SCRAPE_MODE="$mode" python scrape.py
+          timeout \
+            --signal=TERM \
+            --kill-after=30s \
+            "$limit" \
+            env \
+              SCRAPE_MODE="$mode" \
+              SCRAPE_WORKERS="20" \
+              ATS_PROBE_LIMIT="40" \
+              JSONLD_CACHE_TTL_SECONDS="7200" \
+              JSONLD_NEGATIVE_CACHE_TTL_SECONDS="21600" \
+              BROWSER_SCRAPE_CACHE_TTL_SECONDS="21600" \
+              python -u scrape.py
           if [ "$mode" = full ]; then
             python -c 'import json,datetime; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
           fi

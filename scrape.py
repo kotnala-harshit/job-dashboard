@@ -6,6 +6,7 @@ Run by GitHub Actions hourly. Writes data.json for index.html.
 """
 
 import json
+import sys
 import re
 import time
 import os
@@ -19309,16 +19310,213 @@ def _run_direct_company_isolated(company):
     return scrape_direct_company(company) or []
 
 
-def _isolated_task_worker(fn, result_queue):
-    """Execute one existing collector callable inside a killable child."""
+
+def _isolated_subprocess_worker(task_spec, result_path, timeout_seconds):
+    """Run one risky collector in a completely fresh Python process."""
+    import json
+    import os
+    import signal
+    import subprocess
+
+    cmd = [
+        sys.executable,
+        "-u",
+        str(Path(__file__).resolve()),
+        "--isolated-task",
+        json.dumps(task_spec),
+        "--isolated-result",
+        str(result_path),
+    ]
+
+    proc = subprocess.Popen(
+        cmd,
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        start_new_session=True,
+    )
+
     try:
-        found = fn() or []
-        result_queue.put(("ok", found))
-    except BaseException as exc:
-        result_queue.put(("error", repr(exc)))
+        stdout, stderr = proc.communicate(timeout=timeout_seconds)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(proc.pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+
+        try:
+            stdout, stderr = proc.communicate(timeout=5)
+        except subprocess.TimeoutExpired:
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            stdout, stderr = proc.communicate()
+
+        return {
+            "status": "timeout",
+            "returncode": proc.returncode,
+            "stdout": stdout,
+            "stderr": stderr,
+        }
+
+    return {
+        "status": "ok" if proc.returncode == 0 else "error",
+        "returncode": proc.returncode,
+        "stdout": stdout,
+        "stderr": stderr,
+    }
+
+
+def _run_isolated_task_child(task_spec, result_path):
+    """Child-process entrypoint for a single risky collector."""
+    import json
+
+    task_type = task_spec.get("type")
+    company = task_spec.get("company")
+
+    if task_type == "direct":
+        found = scrape_direct_company(company) or []
+    elif task_type == "jsonld":
+        found = scrape_jsonld(
+            task_spec["company"],
+            task_spec["url"],
+        ) or []
+    else:
+        raise ValueError(f"Unknown isolated task type: {task_type!r}")
+
+    Path(result_path).write_text(
+        json.dumps(found, ensure_ascii=False),
+        encoding="utf-8",
+    )
 
 
 def _parallel_collect_isolated(
+    tasks,
+    results,
+    errors,
+    workers=3,
+    timeout_seconds=900,
+):
+    """
+    Run risky collectors in independent OS subprocesses.
+
+    Unlike multiprocessing/fork, every child starts a completely fresh
+    Python interpreter, so Playwright/browser state is never inherited
+    from the parent process. Each child is also placed in its own process
+    group so a timeout can kill the Python process and its descendants.
+    """
+    from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
+    import json
+    import tempfile
+    import time
+
+    if not tasks:
+        return
+
+    def make_spec(task):
+        label, company, *rest = task
+        if label == "jsonld":
+            return {
+                "type": "jsonld",
+                "company": company,
+                "url": rest[0],
+            }
+        if label != "direct":
+            raise ValueError(f"Unknown isolated task label: {label!r}")
+        return {
+            "type": "direct",
+            "company": company,
+        }
+
+    def launch(spec, result_path):
+        return _isolated_subprocess_worker(
+            spec,
+            result_path,
+            timeout_seconds,
+        )
+
+    # Keep bounded concurrency without sharing Python/Playwright state.
+    with tempfile.TemporaryDirectory(prefix="job-radar-isolated-") as tmp:
+        pending = {}
+        queue = iter(tasks)
+        completed = set()
+
+        with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+          while pending or (task := next(queue, None)) is not None:
+            if task is not None:
+                spec = make_spec(task)
+                company = spec["company"]
+                result_path = str(
+                    Path(tmp) / f"{len(completed) + len(pending)}.json"
+                )
+                pending[pool.submit(launch, spec, result_path)] = (company, spec, result_path)
+                continue
+
+            done, _ = wait(pending, return_when=FIRST_COMPLETED)
+
+            for future in done:
+                company, spec, result_path = pending.pop(future)
+                completed.add(company)
+
+                try:
+                    outcome = future.result()
+                except Exception as exc:
+                    errors.append(
+                        f"isolated/{spec['type']}/{company}: {exc!r}"
+                    )
+                    continue
+
+                if outcome["status"] == "timeout":
+                    errors.append(
+                        f"isolated/{spec['type']}/{company}: "
+                        f"timed out after {timeout_seconds}s"
+                    )
+                    continue
+
+                if outcome["status"] != "ok":
+                    detail = outcome["stderr"].strip().splitlines()
+                    detail = detail[-1] if detail else (
+                        f"exit code {outcome['returncode']}"
+                    )
+                    errors.append(
+                        f"isolated/{spec['type']}/{company}: {detail}"
+                    )
+                    continue
+
+                try:
+                    payload = Path(result_path).read_text(
+                        encoding="utf-8"
+                    )
+                    found = json.loads(payload)
+                    if found:
+                        results.extend(found)
+                except Exception as exc:
+                    errors.append(
+                        f"isolated/{spec['type']}/{company}: "
+                        f"invalid result: {exc!r}"
+                    )
+
+
+def _parallel_collect_bounded(
+    tasks,
+    results,
+    errors,
+    workers=3,
+    timeout_seconds=900,
+):
+    """Backward-compatible wrapper for callers using the old name."""
+    return _parallel_collect_isolated(
+        tasks,
+        results,
+        errors,
+        workers=workers,
+        timeout_seconds=timeout_seconds,
+    )
+
+
+def _parallel_collect_legacy_fork(
     tasks,
     results,
     errors,
@@ -19478,15 +19676,16 @@ def _parallel_collect_isolated(
                 pass
 
 
-# Backward-compatible name retained for any future callers.
-def _parallel_collect_bounded(
+# Kept private until removed with the next scraper cleanup; callers use the
+# subprocess version above because it does not inherit browser state.
+def _parallel_collect_bounded_legacy(
     tasks,
     results,
     errors,
     workers=3,
     timeout_seconds=900,
 ):
-    return _parallel_collect_isolated(
+    return _parallel_collect_legacy_fork(
         tasks,
         results,
         errors,
@@ -20367,8 +20566,8 @@ def main():
             direct_tasks,
             results,
             errors,
-            workers=3,
-            timeout_seconds=900,
+            workers=5,
+            timeout_seconds=120,
         )
 
     # Suman-style dynamic ATS discovery for companies not already wired into a
@@ -20389,7 +20588,7 @@ def main():
         for company, url, _source_type, _category in _load_company_master():
             if not url or not _targeted(company):
                 continue
-            jsonld_tasks.append(("jsonld", company, lambda company=company,url=url: scrape_jsonld(company, url)))
+            jsonld_tasks.append(("jsonld", company, url))
         # JSON-LD career pages can also hang independently of the normal ATS
         # APIs. Give each company a hard child-process boundary.
         _parallel_collect_isolated(
@@ -25017,6 +25216,22 @@ def build_graduate_dashboard_state(results, company_registry):
 
 
 if __name__ == "__main__":
+
+    # Internal mode used by _parallel_collect_isolated().
+    # It is intentionally handled before normal main() execution.
+    if "--isolated-task" in sys.argv:
+        import json
+
+        task_idx = sys.argv.index("--isolated-task")
+        result_idx = sys.argv.index("--isolated-result")
+
+        task_spec = json.loads(sys.argv[task_idx + 1])
+        result_path = sys.argv[result_idx + 1]
+
+        _run_isolated_task_child(task_spec, result_path)
+        raise SystemExit(0)
+
+
     main()
 
 # =====================================================================
