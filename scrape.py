@@ -20344,6 +20344,119 @@ def main():
 
     results = filtered_results
 
+    # ------------------------------------------------------------------
+    # Company-specific data-quality cleanup.
+    #
+    # Aon:
+    #   Aon occasionally exposes a Singapore vacancy through its Ireland
+    #   Workday feed. Do not allow an authoritative Singapore title/location
+    #   to be relabelled as an Ireland job.
+    #
+    # Citi:
+    #   Citi's direct careers board and its Eightfold mirror can expose the
+    #   same vacancy. When the direct Citi URL has the same normalized
+    #   title/location as an Eightfold record, retain the direct record.
+    #
+    # This is intentionally scoped to Aon/Citi only. No global location or
+    # deduplication behaviour is changed.
+    # ------------------------------------------------------------------
+
+    def _company_cleanup_key(value):
+        return re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
+
+    # Aon: reject records whose own title/location text clearly identifies
+    # Singapore. This prevents an upstream/malformed Ireland label from
+    # overriding the actual vacancy location.
+    _aon_before = len(results)
+    _aon_filtered = []
+
+    for _job in results:
+        _company = _company_cleanup_key(_job.get("company"))
+        if _company == "aon":
+            _title = _company_cleanup_key(_job.get("title"))
+            _location = _company_cleanup_key(_job.get("location"))
+            _country = _company_cleanup_key(_job.get("country"))
+            _area = _company_cleanup_key(_job.get("ireland_area"))
+
+            _aon_location_text = " ".join(
+                x for x in (_title, _location, _country, _area) if x
+            )
+
+            if "singapore" in _aon_location_text:
+                print(
+                    "Aon location cleanup: dropped non-Ireland vacancy "
+                    f"{_job.get('title')} | {_job.get('location')}"
+                )
+                continue
+
+        _aon_filtered.append(_job)
+
+    results = _aon_filtered
+
+    # Citi: direct careers records take precedence over Eightfold mirrors
+    # when normalized title + location identify the same vacancy.
+    _citi_direct = set()
+
+    for _job in results:
+        if _company_cleanup_key(_job.get("company")) != "citi":
+            continue
+
+        _url = str(_job.get("url") or "").lower()
+        _ats = _company_cleanup_key(_job.get("ats"))
+
+        if "jobs.citi.com/" in _url or _ats == "direct":
+            _citi_direct.add(
+                (
+                    _company_cleanup_key(_job.get("title")),
+                    _company_cleanup_key(_job.get("location")),
+                )
+            )
+
+    _citi_before = len(results)
+    _citi_filtered = []
+
+    for _job in results:
+        if _company_cleanup_key(_job.get("company")) != "citi":
+            _citi_filtered.append(_job)
+            continue
+
+        _url = str(_job.get("url") or "").lower()
+        _ats = _company_cleanup_key(_job.get("ats"))
+
+        _sig = (
+            _company_cleanup_key(_job.get("title")),
+            _company_cleanup_key(_job.get("location")),
+        )
+
+        _is_eightfold = (
+            "citi.eightfold.ai/" in _url
+            or _ats == "eightfold"
+        )
+
+        if _is_eightfold and _sig in _citi_direct:
+            print(
+                "Citi mirror cleanup: dropped Eightfold duplicate of direct "
+                f"record {_job.get('title')} | {_job.get('location')}"
+            )
+            continue
+
+        _citi_filtered.append(_job)
+
+    results = _citi_filtered
+
+    if _aon_before != len(results):
+        print(
+            f"Aon/Citi cleanup: total result count changed "
+            f"{_aon_before} -> {len(results)} after Aon filtering"
+        )
+
+    if _citi_before != len(results):
+        print(
+            f"Citi cleanup: result count changed "
+            f"{_citi_before} -> {len(results)} after Citi mirror filtering"
+        )
+
+
     # ============================================================
     # GLOBAL REPUBLIC OF IRELAND EMPLOYMENT-LOCATION GATE
     #
