@@ -76,7 +76,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 4
       matrix:
         include:
           - id: 1
@@ -87,6 +87,14 @@ jobs:
             shard: 2
           - id: 4
             shard: 3
+          - id: 5
+            shard: 4
+          - id: 6
+            shard: 5
+          - id: 7
+            shard: 6
+          - id: 8
+            shard: 7
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
@@ -94,7 +102,7 @@ jobs:
       - name: Install dependencies
         run: pip install requests beautifulsoup4 curl_cffi
       - name: Collect structured-data fallback slice
-        run: timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=jsonld SCRAPE_WORKERS=16 SCRAPE_SHARD_INDEX=${{ matrix.shard }} SCRAPE_SHARD_COUNT=4 python -u scrape.py
+        run: timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=jsonld SCRAPE_WORKERS=16 SCRAPE_SHARD_INDEX=${{ matrix.shard }} SCRAPE_SHARD_COUNT=8 python -u scrape.py
       - name: Name slice
         run: mv data.json jsonld-${{ matrix.id }}.json
       - uses: actions/upload-artifact@v4
