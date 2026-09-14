@@ -68,6 +68,10 @@ WORKDAY_COMPANIES = [
     ('Coca-Cola', 'coke', 'wd1', 'coca-cola-careers'),
     ("Cohesity", "cohesity", "wd5", "Cohesity_Careers"),
     ('Deutsche Bank', 'db', 'wd3', 'DBWebsite'),
+    ('Unilever', 'unilever', 'wd3', 'Unilever_Experienced_Professionals'),
+    ('Virgin Media Ireland', 'libertyglobal', 'wd3', 'VMIE_Careers'),
+    ('Verizon', 'verizon', 'wd12', 'verizon-careers'),
+    ('Visa', 'visa', 'wd5', 'Visa'),
 
     # --- VERIFIED_WORKDAY_MANUAL_BATCH_V2 ---
     ("Eli Lilly", "lilly", "wd115", "LLY"),
@@ -132,7 +136,7 @@ PERSONIO_COMPANIES = [
     "dilloneustace",
 ]
 
-PINPOINT_COMPANIES = ['ericsson', 'kpmg', 'greencore', 'arcadis', 'zendesk', 'synopsys', 'nutanix', 'virgin', 'terumo', 'smith']
+PINPOINT_COMPANIES = ['ericsson', 'kpmg', 'greencore', 'arcadis', 'zendesk', 'synopsys', 'nutanix', 'terumo', 'smith']
 
 # ---------------------------------------------------------------------------
 # JSON-LD structured-data scraper -- universal fallback for the ~500-company
