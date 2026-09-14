@@ -3,10 +3,6 @@
     "platform": "eightfold",
     "slug": "careers.dexcom.com|dexcom.com"
   },
-  "STMicroelectronics": {
-    "platform": "eightfold",
-    "slug": "stmicroelectronics"
-  },
   "Bayer": {
     "platform": "eightfold",
     "slug": "bayer"
@@ -1182,7 +1178,327 @@
     "slug": null,
     "probe_version": 35
   },
+  "GridBeyond": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Cohesity": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "CRH": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "FactSet": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "FBD Insurance": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Fitch Ratings": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Heineken Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "HSBC Ireland": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Illumina": {
+    "platform": "workday",
+    "slug": "illumina|wd1|illumina-careers",
+    "probe_version": 35
+  },
+  "Indeed": {
+    "platform": "greenhouse",
+    "slug": "indeed",
+    "probe_version": 35
+  },
+  "Jabil": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Keysight Technologies": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Lam Research": {
+    "platform": "eightfold",
+    "slug": "lamresearch",
+    "probe_version": 35
+  },
+  "Macquarie Group": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Marvell Technology": {
+    "platform": "workday",
+    "slug": "marvell|wd1|MarvellCareers",
+    "probe_version": 35
+  },
+  "Microchip Technology": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Monzo": {
+    "platform": "greenhouse",
+    "slug": "monzo",
+    "probe_version": 35
+  },
+  "Morningstar": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "MSCI": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
   "NetApp": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Nokia": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Novartis": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Nutanix": {
+    "platform": "pinpoint",
+    "slug": "nutanix",
+    "probe_version": 35
+  },
+  "NVIDIA": {
+    "platform": "workday",
+    "slug": "nvidia|wd5|NVIDIAExternalCareerSite",
+    "probe_version": 35
+  },
+  "NXP Semiconductors": {
+    "platform": "workday",
+    "slug": "nxp|wd3|careers",
+    "probe_version": 35
+  },
+  "Optum": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Perrigo": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Qualcomm": {
+    "platform": "eightfold",
+    "slug": "qualcomm",
+    "probe_version": 35
+  },
+  "Quantexa": {
+    "platform": "ashby",
+    "slug": "quantexa",
+    "probe_version": 35
+  },
+  "Riot Games": {
+    "platform": "greenhouse",
+    "slug": "riotgames",
+    "probe_version": 35
+  },
+  "Rockwell Automation": {
+    "platform": "workday",
+    "slug": "rockwellautomation|wd1|External_Rockwell_Automation",
+    "probe_version": 35
+  },
+  "Seagate": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Smartling": {
+    "platform": "greenhouse",
+    "slug": "smartling",
+    "probe_version": 35
+  },
+  "STMicroelectronics": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "SumUp": {
+    "platform": "greenhouse",
+    "slug": "sumup",
+    "probe_version": 35
+  },
+  "Synopsys": {
+    "platform": "pinpoint",
+    "slug": "synopsys",
+    "probe_version": 35
+  },
+  "Takeda": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Teva Pharmaceuticals": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Texas Instruments": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Trading 212": {
+    "platform": "ashby",
+    "slug": "trading212",
+    "probe_version": 35
+  },
+  "TransferMate": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Trend Micro": {
+    "platform": "workday",
+    "slug": "trendmicro|wd3|External",
+    "probe_version": 35
+  },
+  "UBS": {
+    "platform": "pinpoint",
+    "slug": "ubs",
+    "probe_version": 35
+  },
+  "Virgin Media Ireland": {
+    "platform": "pinpoint",
+    "slug": "virgin",
+    "probe_version": 35
+  },
+  "Waystone": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Workhuman": {
+    "platform": "ashby",
+    "slug": "Workhuman",
+    "probe_version": 35
+  },
+  "WuXi Biologics": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Zurich Insurance": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Daon": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Amgen": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Fidelity Investments": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Morgan Stanley": {
+    "platform": "eightfold",
+    "slug": "morganstanley",
+    "probe_version": 35
+  },
+  "Siemens": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Siemens Healthineers": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Unilever Ireland": {
+    "platform": "workday",
+    "slug": "unilever|wd3|Unilever_Experienced_Professionals",
+    "probe_version": 35
+  },
+  "Visa": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "LinkedIn": {
+    "platform": "greenhouse",
+    "slug": "linkedin",
+    "probe_version": 35
+  },
+  "Nucleo": {
+    "platform": "personio",
+    "slug": "nucleo",
+    "probe_version": 35
+  },
+  "Verizon": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "First Derivative": {
+    "platform": "pinpoint",
+    "slug": "firstderivative",
+    "probe_version": 35
+  },
+  "Keelvar": {
+    "platform": "personio",
+    "slug": "keelvar",
+    "probe_version": 35
+  },
+  "Compliance & Risks": {
+    "platform": "none",
+    "slug": null,
+    "probe_version": 35
+  },
+  "Fexco": {
+    "platform": "pinpoint",
+    "slug": "fexco",
+    "probe_version": 35
+  },
+  "Murex": {
+    "platform": "workday",
+    "slug": "murex|wd3|MurexCareerPage1",
+    "probe_version": 35
+  },
+  "NeoDyne": {
     "platform": "none",
     "slug": null,
     "probe_version": 35
