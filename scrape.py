@@ -19307,6 +19307,10 @@ def _targeted(company):
     return True
 
 
+def is_active_registry_company(company):
+    return _company_key(company_display_name(company)) in curated_company_key_set()
+
+
 def _run_direct_company_isolated(company):
     """Run one direct-company connector in an isolated child process.
 
@@ -20453,23 +20457,23 @@ def main():
     )
     tasks = []
     for slug in GREENHOUSE_COMPANIES:
-        if _targeted(slug): tasks.append(("greenhouse", slug, lambda slug=slug: scrape_greenhouse(slug)))
+        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("greenhouse", slug, lambda slug=slug: scrape_greenhouse(slug)))
     for slug in LEVER_COMPANIES:
-        if _targeted(slug): tasks.append(("lever", slug, lambda slug=slug: scrape_lever(slug)))
+        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("lever", slug, lambda slug=slug: scrape_lever(slug)))
     for slug in ASHBY_COMPANIES:
-        if _targeted(slug): tasks.append(("ashby", slug, lambda slug=slug: scrape_ashby(slug)))
+        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("ashby", slug, lambda slug=slug: scrape_ashby(slug)))
     for company, tenant, wd_host, site in WORKDAY_COMPANIES:
-        if _targeted(company): tasks.append(("workday", company, lambda company=company,tenant=tenant,wd_host=wd_host,site=site: scrape_workday(company,tenant,wd_host,site)))
+        if _targeted(company) and is_active_registry_company(company): tasks.append(("workday", company, lambda company=company,tenant=tenant,wd_host=wd_host,site=site: scrape_workday(company,tenant,wd_host=wd_host,site=site)))
     for company_id in SMARTRECRUITERS_COMPANIES:
-        if _targeted(company_id): tasks.append(("smartrecruiters", company_id, lambda company_id=company_id: scrape_smartrecruiters(company_id)))
+        if _targeted(company_id) and is_active_registry_company(company_id): tasks.append(("smartrecruiters", company_id, lambda company_id=company_id: scrape_smartrecruiters(company_id)))
     for slug in WORKABLE_COMPANIES:
-        if _targeted(slug): tasks.append(("workable", slug, lambda slug=slug: scrape_workable(slug)))
+        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("workable", slug, lambda slug=slug: scrape_workable(slug)))
     for slug in RECRUITEE_COMPANIES:
-        if _targeted(slug): tasks.append(("recruitee", slug, lambda slug=slug: scrape_recruitee(slug)))
+        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("recruitee", slug, lambda slug=slug: scrape_recruitee(slug)))
     for slug in PERSONIO_COMPANIES:
-        if _targeted(slug): tasks.append(("personio", slug, lambda slug=slug: scrape_personio(slug)))
+        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("personio", slug, lambda slug=slug: scrape_personio(slug)))
     for slug in PINPOINT_COMPANIES:
-        if _targeted(slug): tasks.append(("pinpoint", slug, lambda slug=slug: scrape_pinpoint(slug)))
+        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("pinpoint", slug, lambda slug=slug: scrape_pinpoint(slug)))
     _parallel_collect(tasks, results, errors)
 
     # Exact enterprise-platform mappings (Phenom / Eightfold). Validate before
@@ -20477,7 +20481,7 @@ def main():
     enterprise_sess = _session()
     if enterprise_sess:
         for company, slug in KNOWN_EIGHTFOLD_MAPPINGS.items():
-            if not _targeted(company):
+            if not _targeted(company) or not is_active_registry_company(company):
                 continue
             try:
                 if _probe_platform("eightfold", slug, enterprise_sess):
@@ -20490,7 +20494,7 @@ def main():
             except Exception as e:
                 errors.append(f"eightfold/{company}: {e}")
         for company, slug in KNOWN_PHENOM_MAPPINGS.items():
-            if not _targeted(company):
+            if not _targeted(company) or not is_active_registry_company(company):
                 continue
             try:
                 if _probe_platform("phenom", slug, enterprise_sess):
@@ -20520,7 +20524,7 @@ def main():
                 lambda company=company: scrape_direct_company(company),
             )
             for company in fast_direct_companies
-            if company in DIRECT_COMPANY_CONNECTORS and _targeted(company)
+            if company in DIRECT_COMPANY_CONNECTORS and _targeted(company) and is_active_registry_company(company)
         ]
         _parallel_collect_isolated(
             fast_direct_tasks,
@@ -20537,7 +20541,7 @@ def main():
         direct_tasks = [
             ("direct", company, lambda company=company: scrape_direct_company(company))
             for company in DIRECT_COMPANY_CONNECTORS
-            if _targeted(company)
+            if _targeted(company) and is_active_registry_company(company)
         ]
         # Direct/browser career sites are the highest-risk collectors:
         # isolate each company so one hung Playwright process cannot hold the

@@ -1,9 +1,5 @@
 name: Refresh Ireland Job Radar
 
-concurrency:
-  group: ireland-job-radar-scrape
-  cancel-in-progress: false
-
 on:
   schedule:
     - cron: '03 * * * *'

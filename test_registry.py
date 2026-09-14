@@ -18,6 +18,7 @@ from scrape import (
     _scrape_public_careers_page,
     company_display_name,
     build_company_registry,
+    is_active_registry_company,
     region_ok,
     scrape_grant_thornton,
     scrape_goldman_sachs,
@@ -41,10 +42,12 @@ class RegistryTests(unittest.TestCase):
     def test_gong_greenhouse_slug_maps_to_curated_company(self):
         self.assertEqual("Gong", company_display_name("gongio"))
         self.assertEqual("EirGrid", company_display_name("EirGrid Group"))
+        self.assertTrue(is_active_registry_company("gongio"))
+        self.assertFalse(is_active_registry_company("farfetch"))
 
     def test_refresh_workflow_is_bounded(self):
         workflow = Path(".github/workflows/scrape.yml").read_text(encoding="utf-8")
-        self.assertIn("cancel-in-progress: false", workflow)
+        self.assertNotIn("concurrency:", workflow)
         self.assertIn("03 * * * *", workflow)
         self.assertNotIn("23 */4 * * *", workflow)
         self.assertNotIn("18 * * * *", workflow)
@@ -64,7 +67,6 @@ class RegistryTests(unittest.TestCase):
         self.assertIn("timeout-minutes: 60", workflow)
         self.assertIn("limit=10m", workflow)
         self.assertIn("limit=50m", workflow)
-        self.assertEqual(1, workflow.count("concurrency:"))
         self.assertNotIn("while true", workflow)
         self.assertNotIn("queue: max", workflow)
 
@@ -77,6 +79,7 @@ class RegistryTests(unittest.TestCase):
         self.assertNotIn('SCRAPE_MODE == "audit"', scraper)
         self.assertNotIn("AUDIT_SHARD", scraper)
         self.assertIn('if SCRAPE_MODE == "full":\n            rescue_registry', scraper)
+        self.assertIn("is_active_registry_company(slug)", scraper)
 
     def test_dashboard_keeps_recently_discovered_roles_visible(self):
         dashboard = Path("index.html").read_text(encoding="utf-8")
