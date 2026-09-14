@@ -1128,6 +1128,8 @@ def region_ok(location: str) -> bool:
             return False
 
         # Republic-of-Ireland only.
+        if re.search(r"\b(?:n\.?|northern)\s+ireland\b", loc):
+            return False
         foreign_markers = (
             "northern ireland",
             "united states",
@@ -20897,6 +20899,14 @@ def main():
         if not loc:
             return False, "missing structured location"
 
+        if re.search(r"\b(?:belfast|northern ireland)\b", title) and not any(
+            place in title for place in _ROI_PLACES
+        ):
+            return False, "Northern Ireland title"
+
+        if re.search(r"\bdublin\s*,?\s*england\b", loc):
+            return False, "invalid Dublin, England location"
+
         # Any explicit Republic of Ireland city/county is enough,
         # even where foreign alternatives also exist.
         #
@@ -20911,7 +20921,7 @@ def main():
             return True, "Republic of Ireland location"
 
         # Northern Ireland is outside the Republic.
-        if "northern ireland" in loc or "belfast" in loc:
+        if re.search(r"\b(?:n\.?|northern)\s+ireland\b|\bbelfast\b", loc):
             return False, "Northern Ireland / UK"
 
         # ATS country value "Ireland" means Republic of Ireland
@@ -21086,10 +21096,7 @@ def main():
             return True
 
         # Northern Ireland / Belfast alone is outside ROI.
-        if (
-            "northern ireland" in loc
-            or "belfast" in loc
-        ):
+        if re.search(r"\b(?:n\.?|northern)\s+ireland\b|\bbelfast\b", loc):
             return False
 
         # Most ATS systems use the country value "Ireland" for ROI.
@@ -21342,6 +21349,15 @@ def main():
                         ))
                     else:
                         url_key = base_url
+
+                elif "myworkdayjobs.com" in parsed.netloc.lower():
+                    # Some Workday boards expose one requisition through
+                    # multiple tenant paths (for example /job and /JJ/job).
+                    requisition = re.search(r"_(r-\d[\w-]*)$", parsed.path, re.I)
+                    url_key = (
+                        f"workday:{company_key}:{requisition.group(1).lower()}"
+                        if requisition else base_url
+                    )
 
                 elif company_key == _company_key("State Street"):
                     # State Street exposes the same Workday requisition both

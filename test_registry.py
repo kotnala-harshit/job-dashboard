@@ -17,6 +17,7 @@ from scrape import (
     _parse_gradireland_listing,
     _scrape_public_careers_page,
     company_display_name,
+    region_ok,
     scrape_grant_thornton,
     scrape_goldman_sachs,
     scrape_bny,
@@ -28,6 +29,9 @@ REGISTRY_PATH = "ireland_job_radar_HARSHIT_MASTER.csv"
 
 
 class RegistryTests(unittest.TestCase):
+    def test_rejects_northern_ireland_abbreviation(self):
+        self.assertFalse(region_ok("No City, England, Wales, N Ireland"))
+
     def test_gong_greenhouse_slug_maps_to_curated_company(self):
         self.assertEqual("Gong", company_display_name("gongio"))
         self.assertEqual("EirGrid", company_display_name("EirGrid Group"))
