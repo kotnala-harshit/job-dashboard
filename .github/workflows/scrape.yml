@@ -4,152 +4,124 @@ on:
   schedule:
     - cron: '03 * * * *'
   workflow_dispatch:
-    inputs:
-      mode:
-        description: Refresh depth
-        type: choice
-        options:
-          - fast
-          - full
-        default: fast
 
 permissions:
   contents: write
-  issues: write
 
 jobs:
-  refresh:
+  core:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
-
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
       - uses: actions/setup-python@v6
-        with:
-          python-version: "3.11"
-
+        with: {python-version: '3.11'}
       - name: Install dependencies
         run: |
-          set -euo pipefail
-          python -m pip install --upgrade pip
           pip install requests beautifulsoup4 curl_cffi playwright
           python -m playwright install --with-deps chromium
-
-      - name: Run one bounded refresh
-        shell: bash
+      - name: Collect API-backed boards
         env:
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
           CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=core SCRAPE_WORKERS=20 python -u scrape.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: core
+          path: data.json
+
+  direct:
+    needs: core
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        include:
+          - id: 1
+            targets: 'A&L Goodbody,AECOM,AIB (Allied Irish Banks),AIG,AMCS Group,ASL Aviation Holdings,AXA Ireland,AXA XL,Accenture,Advanced Micro Devices (AMD),Aer Lingus,Agilent Technologies,Aiven,Alexion Pharmaceuticals,Allianz Ireland,Alter Domus,Amazon,Aon,Apple,Applied Materials,Arcadis,Arup,Astellas Pharma,AstraZeneca,AtkinsRéalis,Atlantic Technological University (ATU),Auxilion,Avolon'
+          - id: 2
+            targets: 'BNP Paribas Ireland,BNY,Baker Tilly Ireland,Bank of America,Bank of Ireland,Barclays,Bausch + Lomb,Baxter International,Becton Dickinson (BD),BioMarin,BlackRock,Bloomberg,Bord Gáis Energy,Boston Scientific,Broadcom,CRH,Capgemini,Central Bank of Ireland,Chubb,Citco,Citi,Coca-Cola HBC Ireland,Cognizant,DCC plc,DPS Group (Arcadis),Dell Technologies,Deutsche Bank,Dublin City University (DCU)'
+          - id: 3
+            targets: 'Dublin Port Company,ESB,EXL,EY Ireland,Eir,EirGrid,EirGrid Group,Fenergo,Fidelity International,Forvis Mazars Ireland,GE HealthCare,Gas Networks Ireland,Glanbia / Tirlán,Goldman Sachs,Google,Grant Thornton Ireland,Guidewire,HCLTech,HSBC Ireland,Heineken Ireland,Hewlett Packard Enterprise (HPE),Hitachi Energy,Honeywell,Huawei,Huawei Ireland,IBM,IQVIA,Infosys'
+          - id: 4
+            targets: 'Irish Life,Irish Rail (Iarnród Éireann),JPMorgan Chase,Jacobs,Johnson & Johnson,Johnson Controls,KPMG Ireland,McKinsey & Company,Meta,Microsoft,Motorola Solutions,Munster Technological University (MTU),Musgrave Group (SuperValu / Centra),NTT DATA,NetApp,OpenText,Optum,Oracle,Ornua,PM Group,Palo Alto Networks,PepsiCo,Proofpoint,Public Jobs / Civil Service,RCSI University of Medicine and Health Sciences,RSM Ireland,Revenue,Roche'
+          - id: 5
+            targets: 'Ryanair,S&P Global,SAP,SMBC Aviation Capital,SMBC Group,Schneider Electric,ServiceNow,Siemens,Susquehanna International Group (SIG),Tata Consultancy Services (TCS),Technological University Dublin (TU Dublin),Technological University of the Shannon (TUS),Three Ireland,TikTok,Trinity College Dublin,Uisce Éireann (Irish Water),University College Cork (UCC),University of Galway,VHI Healthcare,Veeam,Version 1,Vodafone Ireland,Wells Fargo,Willis Towers Watson (WTW),Wipro,Zscaler,daa (Dublin Airport Authority)'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.11'}
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 curl_cffi playwright
+          python -m playwright install --with-deps chromium
+      - name: Collect direct careers slice
+        env:
+          TARGET_COMPANIES: ${{ matrix.targets }}
+        run: timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=direct SCRAPE_WORKERS=16 TARGET_COMPANIES="$TARGET_COMPANIES" python -u scrape.py
+      - name: Name slice
+        run: mv data.json slice-${{ matrix.id }}.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: direct-${{ matrix.id }}
+          path: slice-${{ matrix.id }}.json
+
+  jsonld:
+    needs: core
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - id: 1
+            targets: 'A&L Goodbody,AECOM,AIB (Allied Irish Banks),AIG,AMCS Group,AMD,ASL Aviation Holdings,AXA Ireland,AXA XL,AbbVie,Abbott,Accenture,Adobe,Advanced Micro Devices (AMD),Aer Lingus,Agilent Technologies,Airbnb,Aiven,Alexion Pharmaceuticals,Allianz Ireland,Alter Domus,Amazon,Amgen,Analog Devices,Anthropic,Aon,Apex Group,Apple,Applied Materials,Aptiv,Arcadis,Arista Networks,Arthur Cox,Arup,Asana,Astellas Pharma,AstraZeneca,AtkinsRéalis,Atlantic Technological University (ATU),Autodesk,Auxilion,Avolon,BDO Ireland,BNP Paribas Ireland,BNY,Baker Tilly Ireland,Bank of America,Bank of Ireland,Barclays,Bausch + Lomb,Baxter International,BearingPoint,Becton Dickinson (BD),BioMarin,BlackRock,Bloomberg,Bord Gáis Energy,Boston Scientific,Bristol Myers Squibb,Broadcom,CRH,Cadence Design Systems,Canto,Capgemini,CarTrawler,Central Bank of Ireland,Chubb,Cisco,Citco,Citi,CitySwift,ClickUp,Clio,Coca-Cola HBC Ireland,Codec,Cognizant,Cohesity,Coinbase,Compliance & Risks,Concentrix (Ireland),CrowdStrike,Crusoe,Cubic³,DCC plc,DHL Ireland,DPS Group (Arcadis),Danaher Corporation,Daon,Databricks,Datadog,Davy,Dell Technologies,Deloitte Ireland,Deutsche Bank,Dexcom,Diageo,Diageo Ireland,Dillon Eustace,Dublin City University (DCU),Dublin Port Company,ESB,ESW,EXL,EY Ireland,Eaton,Eir,EirGrid,Elavon,Eli Lilly,Ericsson,Eurofins Scientific,FBD Insurance,FactSet,Fenergo,Fexco,Fidelity International,Fidelity Investments,First Derivative,Fiserv,Fitch Ratings,Flipdish,Forvis Mazars Ireland,GE HealthCare,Gas Networks Ireland,Genesys,Gilead Sciences,Glanbia / Tirlán,Goldman Sachs,Gong,Google,Grant Thornton Ireland,GridBeyond,Guidewire,HCLTech,HSBC Ireland,Heineken Ireland,Hewlett Packard Enterprise (HPE),Hitachi Energy,Honeywell,Huawei Ireland,HubSpot,IBM,IQVIA,Illumina,Indeed,Infosys,Intel,Intercom,Irish Life,Irish Rail (Iarnród Éireann)'
+          - id: 2
+            targets: 'JPMorgan Chase,Jabil,Jacobs,Johnson & Johnson,Johnson Controls,KLA Corporation,KPMG Ireland,Keelvar,Kerry Group,Keysight Technologies,Kitman Labs,Klaviyo,Kuehne+Nagel Ireland,Kyndryl,Lam Research,LearnUpon,LinkedIn,MSCI,MSD (Merck Sharp & Dohme),Macquarie Group,Marsh McLennan,Marvell Technology,Mastercard,McKinsey & Company,Medtronic,Mercer,Merit Medical,Meta,Microchip Technology,Microsoft,MongoDB,Monzo,Morgan Stanley,Morningstar,Motorola Solutions,Munster Technological University (MTU),Murex,Musgrave Group (SuperValu / Centra),NTT DATA,NVIDIA,NXP Semiconductors,NeoDyne,NetApp,Nokia,Northern Trust,Notion,Novartis,Nucleo,Nutanix,Okta,OpenAI,OpenText,Optum,Oracle,Ornua,PIMCO,PM Group,PTSB (Permanent TSB),Palo Alto Networks,PayPal,PepsiCo,Perrigo,Pfizer,Pinterest,Proofpoint,Public Jobs / Civil Service,Pure Storage,PwC Ireland,Qualcomm,Qualtrics,Quantexa,RCSI University of Medicine and Health Sciences,RSM Ireland,Reddit,Revenue,Riot Games,Roche,Rockwell Automation,Ryanair,S&P Global,SAP,SMBC Aviation Capital,STMicroelectronics,Salesforce,Sanofi,Schneider Electric,Seagate,ServiceNow,Siemens,Siemens Healthineers,Smartling,Snowflake,SolarWinds,Squarespace,State Street,Stripe,Stryker,SumUp,Susquehanna International Group (SIG),Synopsys,Takeda,Tata Consultancy Services (TCS),Technological University Dublin (TU Dublin),Technological University of the Shannon (TUS),Tenable,Teneo Ireland,Teva Pharmaceuticals,Texas Instruments,Thermo Fisher Scientific,Three Ireland,TikTok,Tines,Toast,Trading 212,TransferMate,Trend Micro,Trinity College Dublin,Twilio,UBS,Udemy,Uisce Éireann (Irish Water),Unilever Ireland,University College Cork (UCC),University of Galway,VHI Healthcare,Veeam,Verizon,Version 1,Viatris,Virgin Media Ireland,Visa,Vodafone Ireland,Wayflyer,Waystone,Wells Fargo,Willis Towers Watson (WTW),Wipro,Workday,Workhuman,WuXi Biologics,Zimmer Biomet,Zscaler,Zurich Insurance,daa (Dublin Airport Authority),eBay'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.11'}
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 curl_cffi
+      - name: Collect structured-data fallback slice
+        env:
+          TARGET_COMPANIES: ${{ matrix.targets }}
+        run: timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=jsonld SCRAPE_WORKERS=16 TARGET_COMPANIES="$TARGET_COMPANIES" python -u scrape.py
+      - name: Name slice
+        run: mv data.json jsonld-${{ matrix.id }}.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jsonld-${{ matrix.id }}
+          path: jsonld-${{ matrix.id }}.json
+
+  publish:
+    needs: [direct, jsonld]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with: {fetch-depth: 0}
+      - uses: actions/download-artifact@v4
+        with: {name: core, path: merge/core}
+      - uses: actions/download-artifact@v4
+        with: {pattern: direct-*, path: merge/direct, merge-multiple: true}
+      - uses: actions/download-artifact@v4
+        with: {pattern: jsonld-*, path: merge/jsonld, merge-multiple: true}
+      - name: Merge and publish
         run: |
           set -euo pipefail
-
-          GENERATED_FILES=(
-            data.json
-            seen_jobs.json
-            job_state.json
-            connector_cache.json
-            workday_detail_cache.json
-            ats_platform_cache.json
-            browser_scrape_cache.json
-            jsonld_cache.json
-            sponsorship_history.json
-            graduate_programme_history.json
-            last_full_refresh.json
-          )
-
-          git config user.name "job-radar-bot"
-          git config user.email "actions@users.noreply.github.com"
-
-          commit_state() {
-            local mode="$1"
-            local tmpdir
-            tmpdir="$(mktemp -d)"
-
-            for f in "${GENERATED_FILES[@]}"; do
-              [ -f "$f" ] && cp "$f" "$tmpdir/$f"
-            done
-
-            for attempt in 1 2 3 4 5; do
-              git fetch origin main
-              git reset --hard origin/main
-
-              for f in "${GENERATED_FILES[@]}"; do
-                if [ -f "$tmpdir/$f" ]; then
-                  cp "$tmpdir/$f" "$f"
-                  git add "$f"
-                fi
-              done
-
-              if git diff --staged --quiet; then
-                echo "No generated changes after $mode"
-                rm -rf "$tmpdir"
-                return 0
-              fi
-
-              git commit -m "Refresh Ireland Job Radar [$mode] $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-
-              if git push origin HEAD:main; then
-                echo "Push succeeded after $mode"
-                rm -rf "$tmpdir"
-                return 0
-              fi
-
-              for f in "${GENERATED_FILES[@]}"; do
-                [ -f "$f" ] && cp "$f" "$tmpdir/$f"
-              done
-
-              echo "Remote changed; retrying push..."
-              sleep 4
-            done
-
-            echo "Push failed after $mode"
-            rm -rf "$tmpdir"
-            return 1
-          }
-
-          mode=fast
-          if [ "${{ github.event_name }}" = "schedule" ]; then
-            case "${{ github.event.schedule }}" in
-              '03 * * * *') mode=full ;;
-              *) echo "Unknown schedule: ${{ github.event.schedule }}"; exit 1 ;;
-            esac
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            mode="${{ inputs.mode }}"
-          fi
-
-          echo "Selected refresh mode: $mode"
-
-          started="$(date +%s)"
-          # Keep collection plus the follow-on Pages deployment inside one hour.
-          limit=10m
-          [ "$mode" = full ] && limit=50m
-
-          timeout \
-            --signal=TERM \
-            --kill-after=30s \
-            "$limit" \
-            env \
-              SCRAPE_MODE="$mode" \
-              SCRAPE_WORKERS="20" \
-              ATS_PROBE_LIMIT="40" \
-              JSONLD_CACHE_TTL_SECONDS="7200" \
-              JSONLD_NEGATIVE_CACHE_TTL_SECONDS="21600" \
-              BROWSER_SCRAPE_CACHE_TTL_SECONDS="21600" \
-              python -u scrape.py
-          if [ "$mode" = full ]; then
-            python -c 'import json,datetime; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
-          fi
-          commit_state "${mode^^}"
-          echo "${mode^^} SUCCESS in $(( $(date +%s) - started ))s"
-
-      - name: Final repository status
-        if: always()
-        run: |
-          git status --short
-          cat last_full_refresh.json 2>/dev/null || true
+          python merge_job_data.py merge/core/data.json merge/direct/*.json merge/jsonld/*.json --seen seen_jobs.json
+          python -c 'import json,datetime; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
+          git config user.name job-radar-bot
+          git config user.email actions@users.noreply.github.com
+          git add data.json seen_jobs.json last_full_refresh.json
+          git diff --staged --quiet && exit 0
+          git commit -m "Refresh Ireland Job Radar [FULL] $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git pull --rebase -X ours origin main
+          git push origin HEAD:main

@@ -19292,6 +19292,7 @@ def job_state_identity(job):
 # FAST: lightweight incremental refresh using cheaper paths and priority rescue.
 # ---------------------------------------------------------------------------
 SCRAPE_MODE = os.environ.get("SCRAPE_MODE", "full").strip().lower()
+SCRAPE_PHASE = os.environ.get("SCRAPE_PHASE", "all").strip().lower()
 SCRAPE_WORKERS = max(2, min(32, int(os.environ.get("SCRAPE_WORKERS", "16"))))
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
@@ -19309,6 +19310,11 @@ def _targeted(company):
 
 def is_active_registry_company(company):
     return _company_key(company_display_name(company)) in curated_company_key_set()
+
+
+def _runs_phase(name):
+    """Whether this invocation includes a collection phase."""
+    return SCRAPE_PHASE in {"all", name}
 
 
 def _run_direct_company_isolated(company):
@@ -20452,33 +20458,34 @@ def main():
     errors = []
 
     print(
-        f"SCRAPE_MODE={SCRAPE_MODE} workers={SCRAPE_WORKERS} "
+        f"SCRAPE_MODE={SCRAPE_MODE} phase={SCRAPE_PHASE} workers={SCRAPE_WORKERS} "
         f"targets={len(TARGET_COMPANIES) or 'all'}"
     )
     tasks = []
-    for slug in GREENHOUSE_COMPANIES:
-        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("greenhouse", slug, lambda slug=slug: scrape_greenhouse(slug)))
-    for slug in LEVER_COMPANIES:
-        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("lever", slug, lambda slug=slug: scrape_lever(slug)))
-    for slug in ASHBY_COMPANIES:
-        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("ashby", slug, lambda slug=slug: scrape_ashby(slug)))
-    for company, tenant, wd_host, site in WORKDAY_COMPANIES:
-        if _targeted(company) and is_active_registry_company(company): tasks.append(("workday", company, lambda company=company,tenant=tenant,wd_host=wd_host,site=site: scrape_workday(company,tenant,wd_host=wd_host,site=site)))
-    for company_id in SMARTRECRUITERS_COMPANIES:
-        if _targeted(company_id) and is_active_registry_company(company_id): tasks.append(("smartrecruiters", company_id, lambda company_id=company_id: scrape_smartrecruiters(company_id)))
-    for slug in WORKABLE_COMPANIES:
-        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("workable", slug, lambda slug=slug: scrape_workable(slug)))
-    for slug in RECRUITEE_COMPANIES:
-        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("recruitee", slug, lambda slug=slug: scrape_recruitee(slug)))
-    for slug in PERSONIO_COMPANIES:
-        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("personio", slug, lambda slug=slug: scrape_personio(slug)))
-    for slug in PINPOINT_COMPANIES:
-        if _targeted(slug) and is_active_registry_company(slug): tasks.append(("pinpoint", slug, lambda slug=slug: scrape_pinpoint(slug)))
-    _parallel_collect(tasks, results, errors)
+    if _runs_phase("core"):
+        for slug in GREENHOUSE_COMPANIES:
+            if _targeted(slug) and is_active_registry_company(slug): tasks.append(("greenhouse", slug, lambda slug=slug: scrape_greenhouse(slug)))
+        for slug in LEVER_COMPANIES:
+            if _targeted(slug) and is_active_registry_company(slug): tasks.append(("lever", slug, lambda slug=slug: scrape_lever(slug)))
+        for slug in ASHBY_COMPANIES:
+            if _targeted(slug) and is_active_registry_company(slug): tasks.append(("ashby", slug, lambda slug=slug: scrape_ashby(slug)))
+        for company, tenant, wd_host, site in WORKDAY_COMPANIES:
+            if _targeted(company) and is_active_registry_company(company): tasks.append(("workday", company, lambda company=company,tenant=tenant,wd_host=wd_host,site=site: scrape_workday(company,tenant,wd_host=wd_host,site=site)))
+        for company_id in SMARTRECRUITERS_COMPANIES:
+            if _targeted(company_id) and is_active_registry_company(company_id): tasks.append(("smartrecruiters", company_id, lambda company_id=company_id: scrape_smartrecruiters(company_id)))
+        for slug in WORKABLE_COMPANIES:
+            if _targeted(slug) and is_active_registry_company(slug): tasks.append(("workable", slug, lambda slug=slug: scrape_workable(slug)))
+        for slug in RECRUITEE_COMPANIES:
+            if _targeted(slug) and is_active_registry_company(slug): tasks.append(("recruitee", slug, lambda slug=slug: scrape_recruitee(slug)))
+        for slug in PERSONIO_COMPANIES:
+            if _targeted(slug) and is_active_registry_company(slug): tasks.append(("personio", slug, lambda slug=slug: scrape_personio(slug)))
+        for slug in PINPOINT_COMPANIES:
+            if _targeted(slug) and is_active_registry_company(slug): tasks.append(("pinpoint", slug, lambda slug=slug: scrape_pinpoint(slug)))
+        _parallel_collect(tasks, results, errors)
 
     # Exact enterprise-platform mappings (Phenom / Eightfold). Validate before
     # scraping so a stale mapping cannot silently pollute the dataset.
-    enterprise_sess = _session()
+    enterprise_sess = _session() if _runs_phase("core") else None
     if enterprise_sess:
         for company, slug in KNOWN_EIGHTFOLD_MAPPINGS.items():
             if not _targeted(company) or not is_active_registry_company(company):
@@ -20510,7 +20517,7 @@ def main():
     # AMD and Citi are explicitly promoted into FAST because their official
     # direct boards are important to the dashboard. Keep every other direct
     # connector FULL-only so FAST remains bounded.
-    if SCRAPE_MODE == "fast":
+    if SCRAPE_MODE == "fast" and _runs_phase("direct"):
         fast_direct_companies = {
             "Advanced Micro Devices (AMD)",
             "Citi",
@@ -20536,8 +20543,9 @@ def main():
 
     # Browser-heavy proprietary boards belong to the full audit. A small
     # worker pool keeps that audit bounded without overwhelming the runner.
-    if SCRAPE_MODE == "full":
+    if SCRAPE_MODE == "full" and _runs_phase("core"):
         results.extend(scrape_gradireland_programmes())
+    if SCRAPE_MODE == "full" and _runs_phase("direct"):
         direct_tasks = [
             ("direct", company, lambda company=company: scrape_direct_company(company))
             for company in DIRECT_COMPANY_CONNECTORS
@@ -20559,7 +20567,7 @@ def main():
     initial_registry = build_company_registry(include_cache=False)
     if TARGET_COMPANIES:
         initial_registry = [x for x in initial_registry if _targeted(x.get("company", ""))]
-    if SCRAPE_MODE == "full":
+    if SCRAPE_MODE == "full" and _runs_phase("fallback"):
         try:
             dynamic_found, _dynamic_mappings = discover_and_scrape_manual(initial_registry)
             results.extend(dynamic_found)
@@ -20567,7 +20575,7 @@ def main():
             errors.append(f"dynamic ATS discovery: {e}")
 
     # The full audit runs the universal structured-data fallback.
-    if SCRAPE_MODE == "full":
+    if SCRAPE_MODE == "full" and SCRAPE_PHASE in {"all", "fallback", "jsonld"}:
         jsonld_tasks = []
         for company, url, _source_type, _category in _load_company_master():
             if not url or not _targeted(company):
@@ -20583,7 +20591,7 @@ def main():
             timeout_seconds=60,
         )
 
-    run_broad_aggregators = SCRAPE_MODE == "full"
+    run_broad_aggregators = SCRAPE_MODE == "full" and SCRAPE_PHASE == "all"
     for country in (ADZUNA_COUNTRIES if run_broad_aggregators else []):
         for query in DIRECT_QUERIES:
             try:
@@ -20616,7 +20624,7 @@ def main():
             errors.append(f"jooble ({query}): {e}")
         time.sleep(0.3)
 
-    if SCRAPE_MODE == "full" and _targeted("Amazon"):
+    if SCRAPE_MODE == "full" and _runs_phase("direct") and _targeted("Amazon"):
         try:
             found = scrape_amazon("")
             results.extend(found)
@@ -20625,7 +20633,7 @@ def main():
             errors.append(f"direct/Amazon: {e}")
         time.sleep(0.5)
 
-    if SCRAPE_MODE == "full" and _targeted("Netflix"):
+    if SCRAPE_MODE == "full" and _runs_phase("direct") and _targeted("Netflix"):
         try:
             found = scrape_netflix("")
             results.extend(found)
@@ -20650,20 +20658,21 @@ def main():
     # Targeted second pass for configured companies that still returned zero.
     # This uses the already-configured free aggregator API, but searches by
     # employer name instead of relying on a single broad first page.
-    try:
-        # Priority rescue is cheap and important in FAST mode. The helper itself
-        # respects TARGET_COMPANIES, so only the selected priority employer runs.
-        priority_rescued = rescue_priority_ireland_employers(results)
-        results.extend(priority_rescued)
+    if SCRAPE_PHASE in {"all", "core"}:
+        try:
+            # Priority rescue is cheap and important in FAST mode. The helper itself
+            # respects TARGET_COMPANIES, so only the selected priority employer runs.
+            priority_rescued = rescue_priority_ireland_employers(results)
+            results.extend(priority_rescued)
 
-        # Broad aggregator rescue is an explicit full-audit fallback, not an
-        # hourly source: the official slice has already checked each employer.
-        if SCRAPE_MODE == "full":
-            rescue_registry = build_company_registry(include_cache=True)
-            rescued = rescue_zero_companies_with_aggregators(results, rescue_registry)
-            results.extend(rescued)
-    except Exception as e:
-        errors.append(f"zero-company targeted rescue: {e}")
+            # Broad aggregator rescue is an explicit full-audit fallback, not an
+            # hourly source: the official slice has already checked each employer.
+            if SCRAPE_MODE == "full" and SCRAPE_PHASE == "all":
+                rescue_registry = build_company_registry(include_cache=True)
+                rescued = rescue_zero_companies_with_aggregators(results, rescue_registry)
+                results.extend(rescued)
+        except Exception as e:
+            errors.append(f"zero-company targeted rescue: {e}")
 
 
     # The committed Harshit master CSV is the SINGLE source of truth for the
@@ -21805,6 +21814,7 @@ def main():
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "graduate_early_careers": graduate_dashboard,
         "scrape_mode": SCRAPE_MODE,
+        "scrape_phase": SCRAPE_PHASE,
         "target_companies": sorted(TARGET_COMPANIES),
         "focus": "ireland" if IRELAND_ONLY else "multi_region",
         "integrations": {
@@ -21869,7 +21879,8 @@ def main():
     with open("data.json", "w") as f:
         json.dump(output, f, indent=2)
 
-    notify_github_issue(results)
+    if SCRAPE_PHASE == "all":
+        notify_github_issue(results)
 
     print(f"\nDone. {len(results)} matching jobs written to data.json ({len(errors)} companies errored).")
 
