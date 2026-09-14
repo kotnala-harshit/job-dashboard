@@ -19309,61 +19309,190 @@ def _run_direct_company_isolated(company):
     return scrape_direct_company(company) or []
 
 
+def _isolated_task_worker(fn, result_queue):
+    """Execute one existing collector callable inside a killable child."""
+    try:
+        found = fn() or []
+        result_queue.put(("ok", found))
+    except BaseException as exc:
+        result_queue.put(("error", repr(exc)))
+
+
+def _parallel_collect_isolated(
+    tasks,
+    results,
+    errors,
+    workers=3,
+    timeout_seconds=900,
+):
+    """Run risky collectors with a real per-task hard process deadline.
+
+    The ordinary ThreadPoolExecutor cannot kill a stuck Playwright/browser
+    collector.  This layer gives each collector its own child process, so a
+    pathological company can be terminated without blocking the rest of the
+    refresh.
+
+    On Linux/macOS we prefer fork because the existing task list contains
+    lambdas/closures which are not pickleable under spawn.
+    """
+    if not tasks:
+        return
+
+    import multiprocessing as mp
+    import os
+
+    try:
+        ctx = mp.get_context("fork")
+    except ValueError:
+        # The production runner is Linux and macOS also supports fork.
+        # Keep a clear failure instead of silently reverting to unsafe threads.
+        raise RuntimeError(
+            "Per-task process isolation requires the fork multiprocessing context"
+        )
+
+    max_workers = max(1, int(workers or 1))
+    deadline = max(30, int(timeout_seconds))
+
+    pending = []
+    next_index = 0
+
+    def start_one(task):
+        label, company, fn = task
+        queue = ctx.Queue(maxsize=1)
+        proc = ctx.Process(
+            target=_isolated_task_worker,
+            args=(fn, queue),
+            daemon=True,
+        )
+        proc.start()
+        return {
+            "label": label,
+            "company": company,
+            "process": proc,
+            "queue": queue,
+            "started": time.monotonic(),
+        }
+
+    try:
+        while next_index < len(tasks) or pending:
+            while next_index < len(tasks) and len(pending) < max_workers:
+                pending.append(start_one(tasks[next_index]))
+                next_index += 1
+
+            completed = []
+
+            for item in pending:
+                proc = item["process"]
+                label = item["label"]
+                company = item["company"]
+                elapsed = time.monotonic() - item["started"]
+
+                if proc.is_alive() and elapsed < deadline:
+                    continue
+
+                if proc.is_alive():
+                    print(
+                        f"! {label}/{company}: HARD TIMEOUT after "
+                        f"{elapsed:.1f}s; terminating isolated collector"
+                    )
+                    errors.append(
+                        f"{label}/{company}: hard timeout after {elapsed:.1f}s"
+                    )
+                    proc.terminate()
+                    proc.join(timeout=5)
+
+                    if proc.is_alive():
+                        print(
+                            f"! {label}/{company}: terminate did not finish; "
+                            f"forcing kill"
+                        )
+                        try:
+                            proc.kill()
+                        except AttributeError:
+                            pass
+                        proc.join(timeout=2)
+
+                    completed.append(item)
+                    continue
+
+                status = None
+                payload = None
+
+                try:
+                    if not item["queue"].empty():
+                        status, payload = item["queue"].get_nowait()
+                except Exception:
+                    status = None
+
+                proc.join(timeout=1)
+
+                if status == "ok":
+                    found = payload or []
+                    results.extend(found)
+                    print(
+                        f"{label}/{company}: {len(found)} matches "
+                        f"({time.monotonic() - item['started']:.1f}s)"
+                    )
+                elif status == "error":
+                    errors.append(f"{label}/{company}: {payload}")
+                    print(f"! {label}/{company}: {payload}")
+                else:
+                    exit_code = proc.exitcode
+                    errors.append(
+                        f"{label}/{company}: isolated process exited "
+                        f"without result (code {exit_code})"
+                    )
+                    print(
+                        f"! {label}/{company}: isolated process exited "
+                        f"without result (code {exit_code})"
+                    )
+
+                completed.append(item)
+
+            for item in completed:
+                try:
+                    item["queue"].close()
+                except Exception:
+                    pass
+                if item in pending:
+                    pending.remove(item)
+
+            if pending and not completed:
+                time.sleep(0.20)
+
+    finally:
+        for item in pending:
+            proc = item["process"]
+            if proc.is_alive():
+                proc.terminate()
+                proc.join(timeout=3)
+                if proc.is_alive():
+                    try:
+                        proc.kill()
+                    except AttributeError:
+                        pass
+                    proc.join(timeout=2)
+            try:
+                item["queue"].close()
+            except Exception:
+                pass
+
+
+# Backward-compatible name retained for any future callers.
 def _parallel_collect_bounded(
     tasks,
     results,
     errors,
     workers=3,
-    timeout_seconds=600,
+    timeout_seconds=900,
 ):
-    """Run direct collectors with a real per-company process deadline."""
-    if not tasks:
-        return
-
-    # Only pass the company name to the child process. This avoids trying
-    # to pickle the lambda used by the existing task list.
-    companies = [(label, company) for label, company, _fn in tasks]
-
-    pool = ProcessPoolExecutor(max_workers=workers)
-    future_map = {}
-
-    try:
-        for label, company in companies:
-            future = pool.submit(
-                _run_direct_company_isolated,
-                company,
-            )
-            future_map[future] = (label, company)
-
-        pending = dict(future_map)
-
-        while pending:
-            finished = []
-
-            for fut, (label, company) in list(pending.items()):
-                if fut.done():
-                    finished.append((fut, label, company))
-
-            if not finished:
-                import time
-                time.sleep(0.25)
-                continue
-
-            for fut, label, company in finished:
-                pending.pop(fut, None)
-
-                try:
-                    found = fut.result()
-                    results.extend(found)
-                    print(f"{label}/{company}: {len(found)} matches")
-                except Exception as exc:
-                    errors.append(f"{label}/{company}: {exc}")
-                    print(f"! {label}/{company}: {exc}")
-
-    finally:
-        # Normal shutdown only occurs after all children have completed.
-        # A hard timeout is enforced below by the watchdog.
-        pool.shutdown(wait=True, cancel_futures=True)
+    return _parallel_collect_isolated(
+        tasks,
+        results,
+        errors,
+        workers=workers,
+        timeout_seconds=timeout_seconds,
+    )
 
 
 def _parallel_collect(tasks, results, errors, workers=None):
@@ -20197,6 +20326,31 @@ def main():
             except Exception as e:
                 errors.append(f"phenom/{company}: {e}")
 
+    # AMD and Citi are explicitly promoted into FAST because their official
+    # direct boards are important to the dashboard. Keep every other direct
+    # connector FULL-only so FAST remains bounded.
+    if SCRAPE_MODE == "fast":
+        fast_direct_companies = {
+            "Advanced Micro Devices (AMD)",
+            "Citi",
+        }
+        fast_direct_tasks = [
+            (
+                "direct",
+                company,
+                lambda company=company: scrape_direct_company(company),
+            )
+            for company in fast_direct_companies
+            if company in DIRECT_COMPANY_CONNECTORS and _targeted(company)
+        ]
+        _parallel_collect_isolated(
+            fast_direct_tasks,
+            results,
+            errors,
+            workers=2,
+            timeout_seconds=120,
+        )
+
     # Browser-heavy proprietary boards belong to the full audit. A small
     # worker pool keeps that audit bounded without overwhelming the runner.
     if SCRAPE_MODE != "fast":
@@ -20206,7 +20360,16 @@ def main():
             for company in DIRECT_COMPANY_CONNECTORS
             if _targeted(company)
         ]
-        _parallel_collect(direct_tasks, results, errors, workers=3)
+        # Direct/browser career sites are the highest-risk collectors:
+        # isolate each company so one hung Playwright process cannot hold the
+        # entire FULL refresh until the global 75-minute timeout.
+        _parallel_collect_isolated(
+            direct_tasks,
+            results,
+            errors,
+            workers=3,
+            timeout_seconds=900,
+        )
 
     # Suman-style dynamic ATS discovery for companies not already wired into a
     # known connector. Confirmed mappings persist in ats_platform_cache.json.
@@ -20227,7 +20390,15 @@ def main():
             if not url or not _targeted(company):
                 continue
             jsonld_tasks.append(("jsonld", company, lambda company=company,url=url: scrape_jsonld(company, url)))
-        _parallel_collect(jsonld_tasks, results, errors, workers=min(SCRAPE_WORKERS, 20))
+        # JSON-LD career pages can also hang independently of the normal ATS
+        # APIs. Give each company a hard child-process boundary.
+        _parallel_collect_isolated(
+            jsonld_tasks,
+            results,
+            errors,
+            workers=min(SCRAPE_WORKERS, 8),
+            timeout_seconds=300,
+        )
 
     run_broad_aggregators = SCRAPE_MODE != "fast"
     for country in (ADZUNA_COUNTRIES if run_broad_aggregators else []):
