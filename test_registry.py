@@ -17,6 +17,7 @@ from scrape import (
     _parse_gradireland_listing,
     _scrape_public_careers_page,
     company_display_name,
+    build_company_registry,
     region_ok,
     scrape_grant_thornton,
     scrape_goldman_sachs,
@@ -31,6 +32,11 @@ REGISTRY_PATH = "ireland_job_radar_HARSHIT_MASTER.csv"
 class RegistryTests(unittest.TestCase):
     def test_rejects_northern_ireland_abbreviation(self):
         self.assertFalse(region_ok("No City, England, Wales, N Ireland"))
+
+    def test_manual_aliases_use_existing_ireland_collectors(self):
+        registry = {entry["company"]: entry for entry in build_company_registry()}
+        for company in ("AMD", "Diageo", "Optum", "Siemens"):
+            self.assertTrue(registry[company]["automatic"])
 
     def test_gong_greenhouse_slug_maps_to_curated_company(self):
         self.assertEqual("Gong", company_display_name("gongio"))
@@ -64,6 +70,8 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(1, scraper.count("def _parallel_collect_isolated("))
         self.assertIn("workers=5", scraper)
         self.assertIn("timeout_seconds=120", scraper)
+        self.assertIn('"Optum",', scraper)
+        self.assertIn('"Siemens",', scraper)
 
     def test_dashboard_keeps_recently_discovered_roles_visible(self):
         dashboard = Path("index.html").read_text(encoding="utf-8")

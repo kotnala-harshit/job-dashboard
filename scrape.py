@@ -293,6 +293,10 @@ def build_company_registry(include_cache: bool = False):
         "HubSpot": "greenhouse",
         "Nucleo": "workable",
         "Advanced Micro Devices (AMD)": "direct",
+        "AMD": "direct",
+        "Diageo": "workday",
+        "Optum": "direct",
+        "Siemens": "direct",
         "Keelvar": "personio",
         "Cohesity": "workday",
         "Coca-Cola": "workday",
@@ -20535,6 +20539,8 @@ def main():
         fast_direct_companies = {
             "Advanced Micro Devices (AMD)",
             "Citi",
+            "Optum",
+            "Siemens",
         }
         fast_direct_tasks = [
             (
@@ -23054,6 +23060,8 @@ def _working_batch_base_scrape_direct_company(company: str):
 
 
 DIRECT_COMPANY_CONNECTORS.update({
+    "Optum": "optum_official",
+    "Siemens": "siemens_official",
     "EirGrid": "eirgrid_official",
     "EirGrid Group": "eirgrid_official",
     "Gas Networks Ireland": "gas_networks_official",
