@@ -7,7 +7,9 @@ concurrency:
 on:
   schedule:
     - cron: '03 * * * *'
-    - cron: '23 */4 * * *'
+    - cron: '18 * * * *'
+    - cron: '33 * * * *'
+    - cron: '48 * * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -15,6 +17,7 @@ on:
         type: choice
         options:
           - fast
+          - audit
           - full
         default: fast
 
@@ -120,10 +123,13 @@ jobs:
           }
 
           mode=fast
+          audit_shard=""
           if [ "${{ github.event_name }}" = "schedule" ]; then
             case "${{ github.event.schedule }}" in
-              '23 */4 * * *') mode=full ;;
-              '03 * * * *') mode=fast ;;
+              '03 * * * *') mode=audit; audit_shard=0 ;;
+              '18 * * * *') mode=audit; audit_shard=1 ;;
+              '33 * * * *') mode=audit; audit_shard=2 ;;
+              '48 * * * *') mode=audit; audit_shard=3 ;;
               *) echo "Unknown schedule: ${{ github.event.schedule }}"; exit 1 ;;
             esac
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -135,6 +141,7 @@ jobs:
           started="$(date +%s)"
           # Keep collection plus the follow-on Pages deployment inside one hour.
           limit=10m
+          [ "$mode" = audit ] && limit=13m
           [ "$mode" = full ] && limit=50m
 
           timeout \
@@ -143,6 +150,8 @@ jobs:
             "$limit" \
             env \
               SCRAPE_MODE="$mode" \
+              AUDIT_SHARD_COUNT="${AUDIT_SHARD_COUNT:-4}" \
+              AUDIT_SHARD_INDEX="${audit_shard:-0}" \
               SCRAPE_WORKERS="20" \
               ATS_PROBE_LIMIT="40" \
               JSONLD_CACHE_TTL_SECONDS="7200" \

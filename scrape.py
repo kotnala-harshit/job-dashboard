@@ -3171,6 +3171,8 @@ def rescue_priority_ireland_employers(results):
     }
     rescued = []
     for company in PRIORITY_IRELAND_EMPLOYERS:
+        if SCRAPE_MODE == "audit" and not _targeted(company):
+            continue
         if SCRAPE_MODE == "fast" and TARGET_COMPANIES and not _targeted(company):
             continue
         key = _company_key(company)
@@ -19289,6 +19291,7 @@ def job_state_identity(job):
 # ---------------------------------------------------------------------------
 # Runtime modes
 # FULL: complete audit using configured connectors and deep fallbacks.
+# AUDIT: one stable slice of the full audit; carries prior results forward.
 # FAST: lightweight incremental refresh using cheaper paths and priority rescue.
 # ---------------------------------------------------------------------------
 SCRAPE_MODE = os.environ.get("SCRAPE_MODE", "full").strip().lower()
@@ -19296,15 +19299,20 @@ SCRAPE_WORKERS = max(2, min(32, int(os.environ.get("SCRAPE_WORKERS", "16"))))
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
 }
+AUDIT_SHARD_COUNT = max(1, int(os.environ.get("AUDIT_SHARD_COUNT", "1")))
+AUDIT_SHARD_INDEX = int(os.environ.get("AUDIT_SHARD_INDEX", "0")) % AUDIT_SHARD_COUNT
 
 def _targeted(company):
-    if not TARGET_COMPANIES:
-        return True
     key = _company_key(company)
-    if key in TARGET_COMPANIES:
+    if TARGET_COMPANIES:
+        if key in TARGET_COMPANIES:
+            return True
+        # Allow ATS slugs/short brands such as "kpmg" to match "KPMG Ireland".
+        return any(len(key) >= 4 and (key in target or target in key) for target in TARGET_COMPANIES)
+    if SCRAPE_MODE != "audit":
         return True
-    # Allow ATS slugs/short brands such as "kpmg" to match "KPMG Ireland".
-    return any(len(key) >= 4 and (key in target or target in key) for target in TARGET_COMPANIES)
+    # Stable across Python processes; every scheduled audit reaches one quarter.
+    return int(hashlib.sha1(key.encode()).hexdigest(), 16) % AUDIT_SHARD_COUNT == AUDIT_SHARD_INDEX
 
 
 def _run_direct_company_isolated(company):
@@ -20479,7 +20487,11 @@ def main():
     results = []
     errors = []
 
-    print(f"SCRAPE_MODE={SCRAPE_MODE} workers={SCRAPE_WORKERS} targets={len(TARGET_COMPANIES) or 'all'}")
+    print(
+        f"SCRAPE_MODE={SCRAPE_MODE} workers={SCRAPE_WORKERS} "
+        f"targets={len(TARGET_COMPANIES) or 'all'} "
+        f"shard={AUDIT_SHARD_INDEX + 1}/{AUDIT_SHARD_COUNT}"
+    )
     tasks = []
     for slug in GREENHOUSE_COMPANIES:
         if _targeted(slug): tasks.append(("greenhouse", slug, lambda slug=slug: scrape_greenhouse(slug)))
@@ -20561,8 +20573,11 @@ def main():
 
     # Browser-heavy proprietary boards belong to the full audit. A small
     # worker pool keeps that audit bounded without overwhelming the runner.
-    if SCRAPE_MODE != "fast":
-        results.extend(scrape_gradireland_programmes())
+    if SCRAPE_MODE in {"full", "audit"}:
+        # GradIreland is one national board, not an employer-specific source;
+        # scanning it once per four-slice cycle is enough.
+        if SCRAPE_MODE == "full" or AUDIT_SHARD_INDEX == 0:
+            results.extend(scrape_gradireland_programmes())
         direct_tasks = [
             ("direct", company, lambda company=company: scrape_direct_company(company))
             for company in DIRECT_COMPANY_CONNECTORS
@@ -20582,9 +20597,9 @@ def main():
     # Suman-style dynamic ATS discovery for companies not already wired into a
     # known connector. Confirmed mappings persist in ats_platform_cache.json.
     initial_registry = build_company_registry(include_cache=False)
-    if TARGET_COMPANIES:
+    if TARGET_COMPANIES or SCRAPE_MODE == "audit":
         initial_registry = [x for x in initial_registry if _targeted(x.get("company", ""))]
-    if SCRAPE_MODE != "fast":
+    if SCRAPE_MODE in {"full", "audit"}:
         try:
             dynamic_found, _dynamic_mappings = discover_and_scrape_manual(initial_registry)
             results.extend(dynamic_found)
@@ -20592,7 +20607,7 @@ def main():
             errors.append(f"dynamic ATS discovery: {e}")
 
     # The full audit runs the universal structured-data fallback.
-    if SCRAPE_MODE != "fast":
+    if SCRAPE_MODE in {"full", "audit"}:
         jsonld_tasks = []
         for company, url, _source_type, _category in _load_company_master():
             if not url or not _targeted(company):
@@ -20604,11 +20619,11 @@ def main():
             jsonld_tasks,
             results,
             errors,
-            workers=min(SCRAPE_WORKERS, 8),
-            timeout_seconds=300,
+            workers=min(SCRAPE_WORKERS, 12),
+            timeout_seconds=60 if SCRAPE_MODE == "audit" else 300,
         )
 
-    run_broad_aggregators = SCRAPE_MODE != "fast"
+    run_broad_aggregators = SCRAPE_MODE == "full"
     for country in (ADZUNA_COUNTRIES if run_broad_aggregators else []):
         for query in DIRECT_QUERIES:
             try:
@@ -20641,7 +20656,7 @@ def main():
             errors.append(f"jooble ({query}): {e}")
         time.sleep(0.3)
 
-    if SCRAPE_MODE != "fast" and _targeted("Amazon"):
+    if SCRAPE_MODE in {"full", "audit"} and _targeted("Amazon"):
         try:
             found = scrape_amazon("")
             results.extend(found)
@@ -20650,7 +20665,7 @@ def main():
             errors.append(f"direct/Amazon: {e}")
         time.sleep(0.5)
 
-    if SCRAPE_MODE != "fast" and _targeted("Netflix"):
+    if SCRAPE_MODE in {"full", "audit"} and _targeted("Netflix"):
         try:
             found = scrape_netflix("")
             results.extend(found)
@@ -20668,9 +20683,11 @@ def main():
         priority_rescued = rescue_priority_ireland_employers(results)
         results.extend(priority_rescued)
 
-        # The broader curated-company rescue remains FULL-only.
-        if SCRAPE_MODE != "fast":
+        # The broader curated-company rescue is limited to the active audit slice.
+        if SCRAPE_MODE in {"full", "audit"}:
             rescue_registry = build_company_registry(include_cache=True)
+            if SCRAPE_MODE == "audit":
+                rescue_registry = [x for x in rescue_registry if _targeted(x.get("company", ""))]
             rescued = rescue_zero_companies_with_aggregators(results, rescue_registry)
             results.extend(rescued)
     except Exception as e:
@@ -20684,16 +20701,16 @@ def main():
     # Adzuna and Careerjet were allowed to introduce adjacent employers that
     # were not present in the master CSV, which caused removed/unwanted
     # companies to leak back into data.json and the HTML company filter.
-    # A fast run updates what it checked and carries the remaining jobs forward;
-    # the full audit remains responsible for removals and closures.
-    if SCRAPE_MODE == "fast":
+    # Incremental runs update what they checked and carry the rest forward;
+    # only a complete full audit is allowed to remove or close prior jobs.
+    if SCRAPE_MODE in {"fast", "audit"}:
         try:
             with open("data.json", encoding="utf-8") as f:
                 previous_data = json.load(f) or {}
             previous_jobs = previous_data.get("jobs", [])
             CONNECTOR_HEALTH.update(previous_data.get("connector_health") or {})
             results.extend(previous_jobs)
-            print(f"Fast refresh: carried forward {len(previous_jobs)} prior jobs")
+            print(f"{SCRAPE_MODE.title()} refresh: carried forward {len(previous_jobs)} prior jobs")
         except (FileNotFoundError, json.JSONDecodeError, TypeError, AttributeError):
             pass
 
@@ -21500,8 +21517,9 @@ def main():
         }
 
     # Missing jobs are not immediately declared closed: transient ATS failures happen.
-    # Only advance missing counters on FULL runs; targeted FAST tests never close jobs.
-    if SCRAPE_MODE != "fast":
+    # Only a complete full audit can advance missing counters. Audit slices and
+    # fast refreshes intentionally inspect a subset of employers.
+    if SCRAPE_MODE == "full":
         for identity, prior in list(current_seen.items()):
             if identity in current_ids or not isinstance(prior, dict):
                 continue
