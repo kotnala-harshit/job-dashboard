@@ -20658,7 +20658,7 @@ def main():
     # Targeted second pass for configured companies that still returned zero.
     # This uses the already-configured free aggregator API, but searches by
     # employer name instead of relying on a single broad first page.
-    if SCRAPE_PHASE in {"all", "core"}:
+    if SCRAPE_PHASE == "all":
         try:
             # Priority rescue is cheap and important in FAST mode. The helper itself
             # respects TARGET_COMPANIES, so only the selected priority employer runs.

@@ -80,7 +80,7 @@ class RegistryTests(unittest.TestCase):
         self.assertNotIn('SCRAPE_MODE == "audit"', scraper)
         self.assertNotIn("AUDIT_SHARD", scraper)
         self.assertIn('SCRAPE_PHASE = os.environ.get("SCRAPE_PHASE", "all")', scraper)
-        self.assertIn('SCRAPE_PHASE in {"all", "core"}', scraper)
+        self.assertIn('SCRAPE_PHASE == "all"', scraper)
         self.assertIn("is_active_registry_company(slug)", scraper)
 
     def test_dashboard_keeps_recently_discovered_roles_visible(self):
