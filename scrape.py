@@ -290,6 +290,7 @@ def build_company_registry(include_cache: bool = False):
         "EY Ireland": "direct",
         "HubSpot": "greenhouse",
         "Nucleo": "workable",
+        "Advanced Micro Devices (AMD)": "direct",
         "Keelvar": "personio",
         "Cohesity": "workday",
         "Coca-Cola": "workday",
