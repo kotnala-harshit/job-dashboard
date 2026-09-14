@@ -2138,73 +2138,192 @@ def _workday_post(session, url, headers, facets, limit, offset, search_text=""):
 
 
 def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages: int = 25, search_text: str = ""):
-    """Workday collector with the browser-like session/facet strategy used by Suman.
+    """Workday collector with bounded Ireland discovery.
 
-    The important Accenture fix is the standard Workday Ireland country facet.
-    We still run region_ok() on every result so an ignored facet can never leak
-    global jobs into the Ireland dashboard.
+    Workday tenants expose different location facets. Some expose a usable
+    Ireland facet, while others expose only broad location groups or no
+    country facet at all. Prefer a tenant-provided Ireland/location facet;
+    otherwise use bounded location searches and always enforce region_ok().
     """
     origin = f"https://{tenant}.{wd_host}.myworkdayjobs.com"
     api = f"{origin}/wday/cxs/{tenant}/{site}/jobs"
     headers = _workday_headers(tenant, wd_host, site)
     session = _workday_session()
+
     if session is None:
         return []
 
-    # Warm the tenant like a real browser before its CXS endpoint is called.
     try:
-        session.get(f"{origin}/en-US/{site}", headers=headers, timeout=20)
+        session.get(
+            f"{origin}/en-US/{site}",
+            headers=headers,
+            timeout=20,
+        )
         time.sleep(0.4)
     except Exception:
         pass
 
-    # Workday's standard Ireland country reference ID. This is the key fix for
-    # large global tenants such as Accenture where sampling an unfiltered board
-    # can completely miss Ireland. Keep searchText as a second narrowing signal.
-    ireland_facets = {"locationCountry": ["04a05835925f45b3a59406a2a6b72c8a"]}
-    facets = {}
-    probe = _workday_post(session, api, headers, ireland_facets, 20, 0, search_text or "")
-    if probe is not None:
-        try:
-            total = int((probe.json() or {}).get("total") or 0)
-        except Exception:
-            total = 0
-        if 0 < total <= 150:
-            facets = ireland_facets
-
-    out, seen = [], set()
-    offset = 0
     page_size = 20
-    effective_search = search_text or ("Ireland" if not facets else "")
-    page_cap = max_pages if facets else min(max_pages, 12)
 
-    for _ in range(page_cap):
-        resp = _workday_post(session, api, headers, facets, page_size, offset, effective_search)
-        if resp is None:
-            break
-        try:
-            data = resp.json() or {}
-        except Exception:
-            break
-        postings = data.get("jobPostings") or []
-        if not postings:
-            break
+    def fetch(applied_facets=None, query=""):
+        """Fetch a bounded set of Workday postings."""
+        applied_facets = applied_facets or {}
+        results = []
 
-        for j in postings:
-            title = (j.get("title") or "").strip()
-            location = (j.get("locationsText") or "").strip()
-            if not location:
-                bullets = j.get("bulletFields") or []
-                location = str(bullets[0]).strip() if bullets else ""
-            # Safety net: always verify Ireland client-side.
+        for page in range(max_pages):
+            offset = page * page_size
+
+            resp = _workday_post(
+                session,
+                api,
+                headers,
+                applied_facets,
+                page_size,
+                offset,
+                query,
+            )
+
+            if resp is None:
+                break
+
+            try:
+                data = resp.json() or {}
+            except Exception:
+                break
+
+            postings = data.get("jobPostings") or []
+
+            if not postings:
+                break
+
+            results.extend(postings)
+
+            if len(postings) < page_size:
+                break
+
+            # Keep fallback searches tightly bounded. We do not want a
+            # global 1000+ job board to consume the full scraper runtime.
+            if page >= min(max_pages, 12) - 1:
+                break
+
+        return results
+
+    def ireland_posting(job):
+        title = (job.get("title") or "").strip()
+        location = (job.get("locationsText") or "").strip()
+
+        if not location:
+            bullets = job.get("bulletFields") or []
+            location = str(bullets[0]).strip() if bullets else ""
+
+        return title, location
+
+    # Initial unfiltered response gives us tenant-specific facets.
+    probe = _workday_post(
+        session,
+        api,
+        headers,
+        {},
+        page_size,
+        0,
+        search_text or "",
+    )
+
+    if probe is None:
+        return []
+
+    try:
+        probe_data = probe.json() or {}
+    except Exception:
+        return []
+
+    facets = probe_data.get("facets") or []
+    ireland_facets = {}
+
+    def inspect_facet(facet, inherited_parameter=None):
+        if not isinstance(facet, dict):
+            return
+
+        parameter = facet.get("facetParameter") or inherited_parameter
+
+        for value in facet.get("values") or []:
+            if not isinstance(value, dict):
+                continue
+
+            descriptor = str(value.get("descriptor") or "").strip()
+            value_id = value.get("id")
+
+            if (
+                parameter
+                and value_id
+                and any(
+                    term in descriptor.lower()
+                    for term in (
+                        "ireland",
+                        "dublin",
+                        "cork",
+                        "galway",
+                        "limerick",
+                        "waterford",
+                        "kildare",
+                        "ballymount",
+                    )
+                )
+            ):
+                ireland_facets.setdefault(parameter, []).append(
+                    str(value_id)
+                )
+
+            nested = value.get("values") or []
+            if nested:
+                inspect_facet(
+                    {
+                        "facetParameter": (
+                            value.get("facetParameter") or parameter
+                        ),
+                        "values": nested,
+                    },
+                    parameter,
+                )
+
+        for nested in facet.get("facets") or []:
+            inspect_facet(nested, parameter)
+
+    for facet in facets:
+        inspect_facet(facet)
+
+    # Deduplicate facet IDs.
+    for parameter, values in list(ireland_facets.items()):
+        ireland_facets[parameter] = list(dict.fromkeys(values))
+
+    out = []
+    seen = set()
+
+    def add_jobs(postings):
+        for job in postings:
+            title, location = ireland_posting(job)
+
             if not title or not region_ok(location):
                 continue
-            path = j.get("externalPath") or ""
-            url = f"{origin}/{site}{path}" if path else f"{origin}/{site}"
-            key = (title.lower(), location.lower(), url.split("?")[0])
+
+            path = job.get("externalPath") or ""
+            url = (
+                f"{origin}/{site}{path}"
+                if path
+                else f"{origin}/{site}"
+            )
+
+            key = (
+                title.lower(),
+                location.lower(),
+                url.split("?")[0],
+            )
+
             if key in seen:
                 continue
+
             seen.add(key)
+
             out.append({
                 "company": company,
                 "ats": "workday",
@@ -2212,13 +2331,66 @@ def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages
                 "raw_location": location,
                 "location": location,
                 "url": url,
-                "updated_at": j.get("postedOn"),
+                "updated_at": job.get("postedOn"),
             })
 
-        if len(postings) < page_size:
-            break
-        offset += page_size
-        time.sleep(0.25)
+    # 1. Use a real tenant-specific Ireland/location facet when available.
+    if ireland_facets:
+        add_jobs(
+            fetch(
+                ireland_facets,
+                search_text or "",
+            )
+        )
+
+    # 2. If no useful facet exists, use bounded location searches.
+    #
+    # Search terms are deliberately short. Workday's searchText searches
+    # indexed job content, so "Ireland" can miss jobs whose location is only
+    # represented as a structured field. Dublin/Cork/etc. provide additional
+    # coverage without crawling the entire global board.
+    if not ireland_facets or not out:
+        queries = []
+
+        if search_text:
+            queries.append(search_text)
+
+        queries.extend([
+            "Ireland",
+            "Dublin",
+            "Cork",
+            "Galway",
+            "Limerick",
+            "Waterford",
+        ])
+
+        seen_queries = set()
+
+        for query in queries:
+            query = query.strip()
+
+            if not query or query.lower() in seen_queries:
+                continue
+
+            seen_queries.add(query)
+
+            postings = fetch({}, query)
+            add_jobs(postings)
+
+            # Once we have a useful Ireland set, don't keep hammering a large
+            # Workday tenant unnecessarily.
+            if len(out) >= 50:
+                break
+
+    # 3. Legacy country facet as a final bounded fallback.
+    if not out:
+        legacy = {
+            "locationCountry": [
+                "04a05835925f45b3a59406a2a6b72c8a"
+            ]
+        }
+
+        add_jobs(fetch(legacy, search_text or ""))
 
     return out
 
