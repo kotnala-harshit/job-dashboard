@@ -19294,6 +19294,8 @@ def job_state_identity(job):
 SCRAPE_MODE = os.environ.get("SCRAPE_MODE", "full").strip().lower()
 SCRAPE_PHASE = os.environ.get("SCRAPE_PHASE", "all").strip().lower()
 SCRAPE_WORKERS = max(2, min(32, int(os.environ.get("SCRAPE_WORKERS", "16"))))
+SCRAPE_SHARD_INDEX = max(0, int(os.environ.get("SCRAPE_SHARD_INDEX", "0")))
+SCRAPE_SHARD_COUNT = max(1, int(os.environ.get("SCRAPE_SHARD_COUNT", "1")))
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
 }
@@ -20577,7 +20579,9 @@ def main():
     # The full audit runs the universal structured-data fallback.
     if SCRAPE_MODE == "full" and SCRAPE_PHASE in {"all", "fallback", "jsonld"}:
         jsonld_tasks = []
-        for company, url, _source_type, _category in _load_company_master():
+        for index, (company, url, _source_type, _category) in enumerate(_load_company_master()):
+            if index % SCRAPE_SHARD_COUNT != SCRAPE_SHARD_INDEX:
+                continue
             if not url or not _targeted(company):
                 continue
             jsonld_tasks.append(("jsonld", company, url))
