@@ -62,6 +62,8 @@ class RegistryTests(unittest.TestCase):
         self.assertNotIn("hour % 4", workflow)
         self.assertIn("needs: core", workflow)
         self.assertIn("needs: [direct, jsonld]", workflow)
+        self.assertIn("continue-on-error: true", workflow)
+        self.assertIn("if: always()", workflow)
         self.assertIn("max-parallel: 2", workflow)
         self.assertIn("max-parallel: 4", workflow)
         self.assertIn("SCRAPE_PHASE=core", workflow)
