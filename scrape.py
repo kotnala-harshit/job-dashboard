@@ -20550,8 +20550,9 @@ def main():
     if SCRAPE_MODE == "full" and _runs_phase("direct"):
         direct_tasks = [
             ("direct", company, lambda company=company: scrape_direct_company(company))
-            for company in DIRECT_COMPANY_CONNECTORS
-            if _targeted(company) and is_active_registry_company(company)
+            for index, company in enumerate(DIRECT_COMPANY_CONNECTORS)
+            if index % SCRAPE_SHARD_COUNT == SCRAPE_SHARD_INDEX
+            and _targeted(company) and is_active_registry_company(company)
         ]
         # Direct/browser career sites are the highest-risk collectors:
         # isolate each company so one hung Playwright process cannot hold the
@@ -20592,7 +20593,7 @@ def main():
             results,
             errors,
             workers=min(SCRAPE_WORKERS, 16),
-            timeout_seconds=60,
+            timeout_seconds=20,
         )
 
     run_broad_aggregators = SCRAPE_MODE == "full" and SCRAPE_PHASE == "all"

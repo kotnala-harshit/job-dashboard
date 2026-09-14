@@ -42,15 +42,25 @@ jobs:
       matrix:
         include:
           - id: 1
-            targets: 'A&L Goodbody,AECOM,AIB (Allied Irish Banks),AIG,AMCS Group,ASL Aviation Holdings,AXA Ireland,AXA XL,Accenture,Advanced Micro Devices (AMD),Aer Lingus,Agilent Technologies,Aiven,Alexion Pharmaceuticals,Allianz Ireland,Alter Domus,Amazon,Aon,Apple,Applied Materials,Arcadis,Arup,Astellas Pharma,AstraZeneca,AtkinsRéalis,Atlantic Technological University (ATU),Auxilion,Avolon'
+            shard: 0
           - id: 2
-            targets: 'BNP Paribas Ireland,BNY,Baker Tilly Ireland,Bank of America,Bank of Ireland,Barclays,Bausch + Lomb,Baxter International,Becton Dickinson (BD),BioMarin,BlackRock,Bloomberg,Bord Gáis Energy,Boston Scientific,Broadcom,CRH,Capgemini,Central Bank of Ireland,Chubb,Citco,Citi,Coca-Cola HBC Ireland,Cognizant,DCC plc,DPS Group (Arcadis),Dell Technologies,Deutsche Bank,Dublin City University (DCU)'
+            shard: 1
           - id: 3
-            targets: 'Dublin Port Company,ESB,EXL,EY Ireland,Eir,EirGrid,EirGrid Group,Fenergo,Fidelity International,Forvis Mazars Ireland,GE HealthCare,Gas Networks Ireland,Glanbia / Tirlán,Goldman Sachs,Google,Grant Thornton Ireland,Guidewire,HCLTech,HSBC Ireland,Heineken Ireland,Hewlett Packard Enterprise (HPE),Hitachi Energy,Honeywell,Huawei,Huawei Ireland,IBM,IQVIA,Infosys'
+            shard: 2
           - id: 4
-            targets: 'Irish Life,Irish Rail (Iarnród Éireann),JPMorgan Chase,Jacobs,Johnson & Johnson,Johnson Controls,KPMG Ireland,McKinsey & Company,Meta,Microsoft,Motorola Solutions,Munster Technological University (MTU),Musgrave Group (SuperValu / Centra),NTT DATA,NetApp,OpenText,Optum,Oracle,Ornua,PM Group,Palo Alto Networks,PepsiCo,Proofpoint,Public Jobs / Civil Service,RCSI University of Medicine and Health Sciences,RSM Ireland,Revenue,Roche'
+            shard: 3
           - id: 5
-            targets: 'Ryanair,S&P Global,SAP,SMBC Aviation Capital,SMBC Group,Schneider Electric,ServiceNow,Siemens,Susquehanna International Group (SIG),Tata Consultancy Services (TCS),Technological University Dublin (TU Dublin),Technological University of the Shannon (TUS),Three Ireland,TikTok,Trinity College Dublin,Uisce Éireann (Irish Water),University College Cork (UCC),University of Galway,VHI Healthcare,Veeam,Version 1,Vodafone Ireland,Wells Fargo,Willis Towers Watson (WTW),Wipro,Zscaler,daa (Dublin Airport Authority)'
+            shard: 4
+          - id: 6
+            shard: 5
+          - id: 7
+            shard: 6
+          - id: 8
+            shard: 7
+          - id: 9
+            shard: 8
+          - id: 10
+            shard: 9
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
@@ -60,9 +70,7 @@ jobs:
           pip install requests beautifulsoup4 curl_cffi playwright
           python -m playwright install --with-deps chromium
       - name: Collect direct careers slice
-        env:
-          TARGET_COMPANIES: ${{ matrix.targets }}
-        run: timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=direct SCRAPE_WORKERS=16 TARGET_COMPANIES="$TARGET_COMPANIES" python -u scrape.py
+        run: timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=direct SCRAPE_WORKERS=16 SCRAPE_SHARD_INDEX=${{ matrix.shard }} SCRAPE_SHARD_COUNT=10 python -u scrape.py
       - name: Name slice
         run: mv data.json slice-${{ matrix.id }}.json
       - uses: actions/upload-artifact@v4

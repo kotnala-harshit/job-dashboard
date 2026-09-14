@@ -67,6 +67,7 @@ class RegistryTests(unittest.TestCase):
         self.assertIn("SCRAPE_PHASE=core", workflow)
         self.assertIn("SCRAPE_PHASE=direct", workflow)
         self.assertIn("SCRAPE_PHASE=jsonld", workflow)
+        self.assertIn("SCRAPE_SHARD_COUNT=10", workflow)
         self.assertIn("SCRAPE_SHARD_COUNT=8", workflow)
         self.assertIn("merge_job_data.py", workflow)
         self.assertNotIn("while true", workflow)
@@ -82,6 +83,7 @@ class RegistryTests(unittest.TestCase):
         self.assertNotIn("AUDIT_SHARD", scraper)
         self.assertIn('SCRAPE_PHASE = os.environ.get("SCRAPE_PHASE", "all")', scraper)
         self.assertIn('SCRAPE_SHARD_COUNT = max(1', scraper)
+        self.assertIn('index % SCRAPE_SHARD_COUNT == SCRAPE_SHARD_INDEX', scraper)
         self.assertIn('SCRAPE_PHASE == "all"', scraper)
         self.assertIn("is_active_registry_company(slug)", scraper)
 
