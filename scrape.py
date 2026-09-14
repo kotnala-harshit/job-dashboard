@@ -10,6 +10,7 @@ import sys
 import re
 import time
 import os
+from pathlib import Path
 import html
 import urllib.request
 import urllib.error
