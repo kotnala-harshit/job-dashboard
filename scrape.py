@@ -8115,20 +8115,17 @@ def scrape_aon():
             if new_id not in seen and new_id not in queue:
                 queue.append(new_id)
 
-        # Keep only verified Ireland roles.
-        if not re.search(r'\bIreland\b', text, re.I):
-            continue
-
-        # Stronger location requirement near the top/metadata.
-        head = "\n".join(text.splitlines()[:120])
-        if not re.search(
-            r'\b(?:Dublin|Malahide|Blackrock|Ireland)\b'
-            r'[\s\S]{0,200}\bIreland\b|'
-            r'\bIreland\b',
-            head,
+        # Navigation mentions Ireland even on foreign vacancies. The official
+        # document title identifies the vacancy's own location.
+        page_title = re.search(r"<title\b[^>]*>(.*?)</title>", html_text, re.I | re.S)
+        location_match = re.search(
+            r"\bin\s+([^|]+,\s*Ireland)\s*\|\s*Aon Corporation\s*$",
+            _html_text(page_title.group(1)) if page_title else "",
             re.I,
-        ):
+        )
+        if not location_match or re.search(r"Belfast|Northern Ireland", location_match.group(1), re.I):
             continue
+        head = location_match.group(1)
 
         title = ""
         hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', html_text, re.I | re.S)

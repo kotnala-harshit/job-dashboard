@@ -6,7 +6,7 @@ import time
 from contextlib import redirect_stdout
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import scrape
 
@@ -26,6 +26,14 @@ def main():
     with patch.object(scrape, "_scrape_accenture_with_retry", return_value=[{"title": "Analyst"}]), patch.object(scrape, "scrape_workday") as workday:
         assert scrape.scrape_accenture() == [{"title": "Analyst"}]
         workday.assert_not_called()
+    session = Mock()
+    for location, expected in (("Singapore, Singapore", False), ("Belfast, Northern Ireland", False), ("Dublin, Ireland", True)):
+        session.get.return_value = Mock(status_code=200, text=(
+            f"<title>Analyst in {location} | Aon Corporation</title>"
+            "<h1>Analyst</h1><nav>Jobs in Ireland</nav>"
+        ))
+        with redirect_stdout(io.StringIO()), patch.object(scrape, "_session", return_value=session):
+            assert bool(scrape.scrape_aon()) is expected
 
     submitted, paths = set(), set()
     lock = threading.Lock()
