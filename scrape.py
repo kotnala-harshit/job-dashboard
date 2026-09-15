@@ -46,7 +46,7 @@ GREENHOUSE_COMPANIES = [
     "cityswift",
     # --- VERIFIED_MANUAL_BATCH_V3 ---
     "gongio",
-'stripe', 'airbnb', 'doordash', 'pinterest', 'squarespace', 'twilio', 'docusign', 'robinhood', 'reddit', 'coinbase', 'gitlab', 'github', 'hubspotjobs', 'indeed', 'zendesk', 'trustpilot', 'workhuman', 'wayflyer', 'intercom', 'wise', 'asana', 'cloudflare', 'datadog', 'snowflake', 'instacart', 'lyft', 'fenergo', 'affirm', 'airtable', 'algolia', 'amplitude', 'betterup', 'buffer', 'calendly', 'carta', 'chime', 'classpass', 'coursera', 'discord', 'doximity', 'elastic', 'envoy', 'faire', 'flexport', 'gusto', 'handshake', 'hashicorp', 'honeycomb', 'justworks', 'klaviyo', 'lattice', 'mixpanel', 'mongodb', 'qualtrics', 'mural', 'okta', 'opendoor', 'patreon', 'peloton', 'pilot', 'postman', 'procore', 'quora', 'rippling', 'samsara', 'segment', 'sendgrid', 'sourcegraph', 'sprinklr', 'strava', 'tanium', 'thumbtack', 'toast', 'turo', 'udemy', 'verkada', 'webflow', 'wework', 'yelp', 'zapier', 'zoominfo', 'getyourguide', 'trivago', 'deliveryhero', 'babbel', 'contentful', 'celonis', 'flixbus', 'tiermobility', 'gorillas', 'typeform', 'glovo', 'cabify', 'blablacar', 'backmarket', 'doctolib', 'qonto', 'alan', 'payfit', 'gocardless', 'truelayer', 'thoughtmachine', 'cazoo', 'octopusenergy', 'farfetch', 'starlingbank', 'revolut', 'darktrace', 'graphcore', 'onfido', 'fundingcircle', 'tines', 'flipdish', 'letsgetchecked', 'genesys', 'grab', 'sea', 'carousell', 'razer', 'lazada', 'careem', 'noon', 'talabat', 'propertyfinder', 'razorpay', 'swiggy', 'freshworks', 'browserstack', 'meesho', 'cred', 'groww', 'urbancompany', 'chargebee', 'clevertap', 'cultureamp', 'safetyculture', 'employmenthero', 'airwallex', 'deputy', 'linktree', 'go1', 'halter', 'judobank', 'figma', 'zscaler', 'monzo']
+'stripe', 'airbnb', 'doordash', 'pinterest', 'squarespace', 'twilio', 'docusign', 'robinhood', 'reddit', 'coinbase', 'gitlab', 'github', 'hubspotjobs', 'indeed', 'zendesk', 'trustpilot', 'wayflyer', 'intercom', 'wise', 'asana', 'cloudflare', 'datadog', 'snowflake', 'instacart', 'lyft', 'fenergo', 'affirm', 'airtable', 'algolia', 'amplitude', 'betterup', 'buffer', 'calendly', 'carta', 'chime', 'classpass', 'coursera', 'discord', 'doximity', 'elastic', 'envoy', 'faire', 'flexport', 'gusto', 'handshake', 'hashicorp', 'honeycomb', 'justworks', 'klaviyo', 'lattice', 'mixpanel', 'mongodb', 'qualtrics', 'mural', 'okta', 'opendoor', 'patreon', 'peloton', 'pilot', 'postman', 'procore', 'quora', 'rippling', 'samsara', 'segment', 'sendgrid', 'sourcegraph', 'sprinklr', 'strava', 'tanium', 'thumbtack', 'toast', 'turo', 'udemy', 'verkada', 'webflow', 'wework', 'yelp', 'zapier', 'zoominfo', 'getyourguide', 'trivago', 'deliveryhero', 'babbel', 'contentful', 'celonis', 'flixbus', 'tiermobility', 'gorillas', 'typeform', 'glovo', 'cabify', 'blablacar', 'backmarket', 'doctolib', 'qonto', 'alan', 'payfit', 'gocardless', 'truelayer', 'thoughtmachine', 'cazoo', 'octopusenergy', 'farfetch', 'starlingbank', 'revolut', 'darktrace', 'graphcore', 'onfido', 'fundingcircle', 'tines', 'flipdish', 'letsgetchecked', 'genesys', 'grab', 'sea', 'carousell', 'razer', 'lazada', 'careem', 'noon', 'talabat', 'propertyfinder', 'razorpay', 'swiggy', 'freshworks', 'browserstack', 'meesho', 'cred', 'groww', 'urbancompany', 'chargebee', 'clevertap', 'cultureamp', 'safetyculture', 'employmenthero', 'airwallex', 'deputy', 'linktree', 'go1', 'halter', 'judobank', 'figma', 'zscaler', 'monzo']
 
 LEVER_COMPANIES = ['spotify', 'plaid', 'brex', 'checkout', 'deliveroo', 'wolt', 'bolt', 'pipedrive', 'zopa', 'gojek', 'traveloka']
 
@@ -102,7 +102,7 @@ WORKDAY_COMPANIES = [
     ("Eli Lilly", "lilly", "wd115", "LLY"),
     ("CrowdStrike", "crowdstrike", "wd5", "crowdstrikecareers"),
     ("Kyndryl", "kyndryl", "wd5", "KyndrylProfessionalCareers"),
-('Proofpoint', 'proofpoint', 'wd5', 'ProofpointCareers'), ('AIG', 'aig', 'wd1', 'aig'), ('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'),  ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS')]
+('Proofpoint', 'proofpoint', 'wd5', 'ProofpointCareers'), ('AIG', 'aig', 'wd1', 'aig'), ('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'),  ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS')]
 WORKDAY_COMPANIES.append(('Stryker', 'stryker', 'wd1', 'StrykerCareers'))
 WORKDAY_COMPANIES.append(('Clio', 'clio', 'wd3', 'cliocareersite'))
 WORKDAY_COMPANIES.extend([
@@ -18815,6 +18815,458 @@ def scrape_tesco_ireland_current():
     return list(results.values())
 
 
+
+def scrape_workhuman_official():
+    company = "Workhuman"
+    source = "https://www.workhuman.com/company/careers/list/"
+    sess = _session()
+
+    if not sess:
+        return []
+
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept-Language": "en-IE,en;q=0.9",
+    }
+
+    try:
+        r = sess.get(
+            source,
+            timeout=30,
+            headers=headers,
+        )
+        r.raise_for_status()
+        listing = r.text or ""
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), source)
+        print(f"  ! Workhuman official careers failed: {exc}")
+        return []
+
+    urls = set()
+
+    for href in re.findall(
+        r'href=["\']([^"\']*/company/careers/list/[^"\']+/?)["\']',
+        listing,
+        re.I,
+    ):
+        url = urllib.parse.urljoin(
+            source,
+            html.unescape(href),
+        )
+
+        if url.rstrip("/") == source.rstrip("/"):
+            continue
+
+        if "/company/careers/list/page/" in url.lower():
+            continue
+
+        urls.add(url)
+
+    results = {}
+
+    def iter_jobpostings(value):
+        if isinstance(value, dict):
+            kind = value.get("@type")
+
+            if (
+                kind == "JobPosting"
+                or (
+                    isinstance(kind, list)
+                    and "JobPosting" in kind
+                )
+            ):
+                yield value
+
+            for child in value.values():
+                yield from iter_jobpostings(child)
+
+        elif isinstance(value, list):
+            for child in value:
+                yield from iter_jobpostings(child)
+
+    for url in sorted(urls):
+        try:
+            rr = sess.get(
+                url,
+                timeout=25,
+                headers=headers,
+            )
+
+            if rr.status_code != 200:
+                continue
+
+            page = rr.text or ""
+
+        except Exception as exc:
+            print(
+                f"  ! Workhuman detail failed "
+                f"{url}: {exc}"
+            )
+            continue
+
+        postings = []
+
+        for raw in re.findall(
+            r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>'
+            r'(.*?)</script>',
+            page,
+            re.I | re.S,
+        ):
+            try:
+                payload = json.loads(
+                    html.unescape(raw).strip()
+                )
+            except Exception:
+                continue
+
+            postings.extend(
+                iter_jobpostings(payload)
+            )
+
+        for posting in postings:
+            title = str(
+                posting.get("title")
+                or posting.get("name")
+                or ""
+            ).strip()
+
+            job_url = str(
+                posting.get("url")
+                or url
+            ).strip()
+
+            description = _html_text(
+                str(posting.get("description") or "")
+            )
+
+            locations = []
+
+            raw_location = posting.get("jobLocation")
+
+            if isinstance(raw_location, dict):
+                raw_location = [raw_location]
+
+            if isinstance(raw_location, list):
+                for loc in raw_location:
+                    if not isinstance(loc, dict):
+                        continue
+
+                    address = loc.get("address") or {}
+
+                    if not isinstance(address, dict):
+                        continue
+
+                    country = address.get("addressCountry")
+
+                    if isinstance(country, dict):
+                        country = (
+                            country.get("name")
+                            or country.get("@id")
+                            or ""
+                        )
+
+                    parts = [
+                        address.get("addressLocality"),
+                        address.get("addressRegion"),
+                        country,
+                    ]
+
+                    location = ", ".join(
+                        str(x).strip()
+                        for x in parts
+                        if x
+                    )
+
+                    if location:
+                        locations.append(location)
+
+            remote = posting.get(
+                "applicantLocationRequirements"
+            )
+
+            if isinstance(remote, dict):
+                remote = [remote]
+
+            if isinstance(remote, list):
+                for loc in remote:
+                    if not isinstance(loc, dict):
+                        continue
+
+                    name = str(
+                        loc.get("name") or ""
+                    ).strip()
+
+                    if name:
+                        locations.append(name)
+
+            if not locations:
+                page_text = _html_text(page)
+
+                loc_match = re.search(
+                    r"\b(Dublin|Cork|Galway|Limerick|"
+                    r"Waterford|Ireland)\b",
+                    page_text,
+                    re.I,
+                )
+
+                if loc_match:
+                    city = loc_match.group(1)
+
+                    if city.lower() == "ireland":
+                        locations.append("Ireland")
+                    else:
+                        locations.append(
+                            f"{city.title()}, Ireland"
+                        )
+
+            valid_locations = [
+                loc
+                for loc in locations
+                if region_ok(loc)
+            ]
+
+            if not title or not valid_locations:
+                continue
+
+            key = job_url.lower()
+
+            results[key] = {
+                "company": company,
+                "ats": "workhuman_official",
+                "title": title[:300],
+                "location": valid_locations[0],
+                "url": job_url,
+                "updated_at": posting.get(
+                    "datePosted"
+                ),
+                "closing_date": posting.get(
+                    "validThrough"
+                ),
+                "description_text": description[:7000],
+            }
+
+    _mark_connector_health(
+        company,
+        True,
+        (
+            "Official Workhuman careers source loaded; "
+            f"{len(results)} Ireland jobs"
+        ),
+        source,
+    )
+
+    print(
+        f"  Workhuman official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+def scrape_takeda_official():
+    company = "Takeda"
+    source = (
+        "https://jobs.takeda.com/location/"
+        "ireland-jobs/1113/2963597/2/takedajobs.com"
+    )
+
+    sess = _session()
+
+    if not sess:
+        return []
+
+    try:
+        r = sess.get(
+            source,
+            timeout=30,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+        r.raise_for_status()
+        body = html.unescape(r.text or "")
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), source)
+        print(f"  ! Takeda official careers failed: {exc}")
+        return []
+
+    urls = set()
+
+    for href in re.findall(
+        r'href=["\']([^"\']*/job/[^"\']+)["\']',
+        body,
+        re.I,
+    ):
+        url = urllib.parse.urljoin(source, html.unescape(href))
+
+        if not re.search(
+            r"/job/[^/]+/[^/]+/\d+/\d+(?:[/?#]|$)",
+            url,
+            re.I,
+        ):
+            continue
+
+        urls.add(url)
+
+    results = {}
+
+    for url in sorted(urls):
+        try:
+            jobs = scrape_jsonld(company, url) or []
+        except Exception:
+            jobs = []
+
+        for job in jobs:
+            location = str(job.get("location") or "")
+
+            if not region_ok(location):
+                continue
+
+            job["company"] = company
+            job["ats"] = "takeda_official"
+
+            key = str(job.get("url") or url).lower()
+            results[key] = job
+
+        if jobs:
+            continue
+
+        m = re.search(
+            r"/job/([^/]+)/([^/]+)/\d+/\d+",
+            url,
+            re.I,
+        )
+
+        if not m:
+            continue
+
+        city = m.group(1).replace("-", " ").title()
+
+        if city.lower() not in {
+            "dublin",
+            "wicklow",
+            "bray",
+        }:
+            continue
+
+        title = m.group(2).replace("-", " ").strip().title()
+
+        results[url.lower()] = {
+            "company": company,
+            "ats": "takeda_official",
+            "title": title,
+            "location": f"{city}, Ireland",
+            "url": url,
+            "updated_at": None,
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Takeda Ireland careers source loaded; {len(results)} jobs",
+        source,
+    )
+
+    print(
+        f"  Takeda official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
+def scrape_teva_official():
+    company = "Teva Pharmaceuticals"
+    source = "https://www.careers.teva/"
+    sess = _session()
+
+    if not sess:
+        return []
+
+    try:
+        r = sess.get(
+            source,
+            timeout=35,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+        r.raise_for_status()
+        body = html.unescape(r.text or "")
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), source)
+        print(f"  ! Teva official careers failed: {exc}")
+        return []
+
+    decoder = json.JSONDecoder()
+    results = {}
+
+    starts = re.finditer(
+        r'\{"id"\s*:\s*\d+\s*,\s*"name"\s*:',
+        body,
+    )
+
+    for match in starts:
+        try:
+            obj, _ = decoder.raw_decode(body[match.start():])
+        except Exception:
+            continue
+
+        if not isinstance(obj, dict):
+            continue
+
+        title = str(
+            obj.get("name")
+            or obj.get("posting_name")
+            or ""
+        ).strip()
+
+        location = str(
+            obj.get("location")
+            or ""
+        ).strip()
+
+        url = str(
+            obj.get("canonicalPositionUrl")
+            or ""
+        ).strip()
+
+        if not title or not url or not region_ok(location):
+            continue
+
+        results[url.lower()] = {
+            "company": company,
+            "ats": "eightfold",
+            "title": title[:300],
+            "location": location,
+            "url": url,
+            "updated_at": obj.get("t_update"),
+            "description_text": str(
+                obj.get("job_description") or ""
+            )[:7000],
+            "requisition_id": str(
+                obj.get("display_job_id")
+                or obj.get("ats_job_id")
+                or ""
+            ) or None,
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Teva Eightfold source loaded; {len(results)} Ireland jobs",
+        source,
+    )
+
+    print(
+        f"  Teva official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     # BEGIN SALE_READY_DIRECT_CONNECTORS
     # Canonical/alias names that must use their verified official collectors.
@@ -19010,6 +19462,9 @@ def scrape_direct_company(company: str):
         "Dawn Meats": scrape_dawn_meats,
         "DHL Ireland": scrape_dhl_ireland_official,
         "Decathlon Ireland": scrape_decathlon_ireland,
+        "Workhuman": scrape_workhuman_official,
+        "Takeda": scrape_takeda_official,
+        "Teva Pharmaceuticals": scrape_teva_official,
             "Marsh McLennan": scrape_marsh_mclennan_official,
 }.get(company)
     return fn() if fn else []
@@ -19322,7 +19777,6 @@ SCRAPE_SHARD_INDEX = max(0, int(os.environ.get("SCRAPE_SHARD_INDEX", "0")))
 SCRAPE_SHARD_COUNT = max(1, int(os.environ.get("SCRAPE_SHARD_COUNT", "1")))
 
 STALE_GENERIC_ATS_PROBES = {
-    ("greenhouse", "workhuman"),
     ("greenhouse", "snowflake"),
     ("greenhouse", "wayflyer"),
     ("greenhouse", "fenergo"),
@@ -20575,6 +21029,25 @@ def main():
                 results, errors, workers=4, timeout_seconds=180,
             )
 
+        supplemental_direct_companies = (
+            "Workhuman",
+            "Takeda",
+            "Teva Pharmaceuticals",
+        )
+
+        _parallel_collect_isolated(
+            [
+                ("direct", company)
+                for company in supplemental_direct_companies
+                if _targeted(company)
+                and is_active_registry_company(company)
+            ],
+            results,
+            errors,
+            workers=3,
+            timeout_seconds=120,
+        )
+
     # AMD and Citi are explicitly promoted into FAST because their official
     # direct boards are important to the dashboard. Keep every other direct
     # connector FULL-only so FAST remains bounded.
@@ -20613,6 +21086,23 @@ def main():
             if index % SCRAPE_SHARD_COUNT == SCRAPE_SHARD_INDEX
             and _targeted(company) and is_active_registry_company(company)
         ]
+
+        existing_direct = {
+            company
+            for _label, company, *_rest in direct_tasks
+        }
+
+        for company in (
+            "Workhuman",
+            "Takeda",
+            "Teva Pharmaceuticals",
+        ):
+            if (
+                company not in existing_direct
+                and _targeted(company)
+                and is_active_registry_company(company)
+            ):
+                direct_tasks.append(("direct", company))
         # Direct/browser career sites are the highest-risk collectors:
         # isolate each company so one hung Playwright process cannot hold the
         # entire FULL refresh until the global 75-minute timeout.
@@ -23106,7 +23596,10 @@ def _working_batch_base_scrape_direct_company(company: str):
         "Dawn Meats": scrape_dawn_meats,
         "DHL Ireland": scrape_dhl_ireland_official,
         "Decathlon Ireland": scrape_decathlon_ireland,
-            "Marsh McLennan": scrape_marsh_mclennan_official,
+        "Workhuman": scrape_workhuman_official,
+        "Takeda": scrape_takeda_official,
+        "Teva Pharmaceuticals": scrape_teva_official,
+        "Marsh McLennan": scrape_marsh_mclennan_official,
 }.get(company)
     return fn() if fn else []
 
