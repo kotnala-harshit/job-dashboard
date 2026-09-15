@@ -17,9 +17,33 @@ def main():
     all_names = [name for group in scrape.PROVEN_REFRESH_BATCHES for name in group]
     assert len(all_names) == len(set(all_names))
     for number, group in enumerate(scrape.PROVEN_REFRESH_BATCHES, 1):
-        assert len(group) == 10
+        assert 1 <= len(group) <= 10
+        if number < len(scrape.PROVEN_REFRESH_BATCHES):
+            assert len(group) == 10
         assert all(name in scrape.DIRECT_COMPANY_CONNECTORS for name in group)
         assert all(registry[name]["refresh_batch"] == number for name in group)
+
+    active_direct_keys = {
+        scrape._company_key(row["company"])
+        for row in scrape.build_company_registry()
+        if scrape.is_active_registry_company(row["company"])
+        and scrape._company_key(row["company"]) in {
+            scrape._company_key(scrape.company_display_name(name))
+            for name in scrape.DIRECT_COMPANY_CONNECTORS
+        }
+    }
+
+    batched_keys = {
+        scrape._company_key(scrape.company_display_name(name))
+        for group in scrape.PROVEN_REFRESH_BATCHES
+        for name in group
+    }
+
+    assert active_direct_keys == batched_keys, (
+        "Direct batch coverage mismatch: "
+        f"missing={sorted(active_direct_keys - batched_keys)}, "
+        f"extra={sorted(batched_keys - active_direct_keys)}"
+    )
     with patch.object(scrape, "scrape_oracle_candidate_experience", return_value=[{"title": "Analyst"}]) as oracle:
         assert scrape.scrape_oracle() == [{"title": "Analyst"}]
         oracle.assert_called_once_with(max_pages=5)

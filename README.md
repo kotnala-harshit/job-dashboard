@@ -66,6 +66,11 @@ AstraZeneca, Bank of Ireland, BioMarin, and BNP Paribas Ireland.
 Batch 4 adds DPS Group (Arcadis), ESB, Grant Thornton Ireland, Honeywell,
 Huawei Ireland, Irish Life, Irish Rail, Jacobs, Johnson Controls, and NetApp.
 
+Batches 5-14 complete the active direct-company connector set. The current
+295-company board contains 136 direct connectors; they run in groups of up to
+10 while the remaining companies continue through their existing ATS/core
+collectors.
+
 Each direct collector runs once in an isolated process, with four collectors
 at a time and a three-minute limit per company. Their jobs pass through the same Ireland validation,
 deduplication, ranking, history, and graduate processing as the core boards.
