@@ -17,7 +17,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v6
         with: {fetch-depth: 0}
@@ -37,7 +37,7 @@ jobs:
           set -euo pipefail
           python test_refresh_publish.py
           python test_proven_batch.py
-          timeout --signal=TERM --kill-after=30s 21m env SCRAPE_MODE=full SCRAPE_PHASE=core SCRAPE_WORKERS=20 python -u scrape.py
+          timeout --signal=TERM --kill-after=30s 45m env SCRAPE_MODE=full SCRAPE_PHASE=core SCRAPE_WORKERS=20 python -u scrape.py
           python -c 'import datetime,json; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
           python health_check.py
           git config user.name job-radar-bot

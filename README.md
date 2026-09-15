@@ -52,12 +52,22 @@ The scraper:
 ## Automation schedule
 
 The scheduler runs the core boards plus integrated proven-company batches at
-`:03` every hour. Collection has a 21-minute limit within a 25-minute workflow.
+`:03` every hour. Collection has a 45-minute limit within a 50-minute workflow.
 
 Batch 1 adds Accenture, EY Ireland, KPMG Ireland, Oracle, SAP, Auxilion,
-Capgemini, Cognizant, Dell Technologies, and IBM. Each direct collector runs
-once in an isolated process, with three collectors at a time and a three-minute
-limit per company. Their jobs pass through the same Ireland validation,
+Capgemini, Cognizant, Dell Technologies, and IBM.
+
+Batch 2 adds Infosys, NTT DATA, Tata Consultancy Services (TCS), Wipro,
+Bloomberg, Musgrave Group, Ryanair, A&L Goodbody, AECOM, and Agilent Technologies.
+
+Batch 3 adds AIB, Allianz Ireland, AMCS Group, Aon, Arup, ASL Aviation Holdings,
+AstraZeneca, Bank of Ireland, BioMarin, and BNP Paribas Ireland.
+
+Batch 4 adds DPS Group (Arcadis), ESB, Grant Thornton Ireland, Honeywell,
+Huawei Ireland, Irish Life, Irish Rail, Jacobs, Johnson Controls, and NetApp.
+
+Each direct collector runs once in an isolated process, with four collectors
+at a time and a three-minute limit per company. Their jobs pass through the same Ireland validation,
 deduplication, ranking, history, and graduate processing as the core boards.
 The Proven working tab shows batch membership and unsuccessful checks.
 

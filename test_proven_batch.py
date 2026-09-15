@@ -1,7 +1,9 @@
 """Offline regression check: python test_proven_batch.py."""
 import json
+import io
 import threading
 import time
+from contextlib import redirect_stdout
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from unittest.mock import patch
@@ -11,13 +13,19 @@ import scrape
 
 def main():
     batch = scrape.PROVEN_REFRESH_BATCHES[0]
-    assert len(batch) == len(set(batch)) == 10
-    assert all(name in scrape.DIRECT_COMPANY_CONNECTORS for name in batch)
     registry = {row["company"]: row for row in scrape.build_company_registry()}
-    assert all(registry[name]["refresh_batch"] == 1 for name in batch)
+    all_names = [name for group in scrape.PROVEN_REFRESH_BATCHES for name in group]
+    assert len(all_names) == len(set(all_names))
+    for number, group in enumerate(scrape.PROVEN_REFRESH_BATCHES, 1):
+        assert len(group) == 10
+        assert all(name in scrape.DIRECT_COMPANY_CONNECTORS for name in group)
+        assert all(registry[name]["refresh_batch"] == number for name in group)
     with patch.object(scrape, "scrape_oracle_candidate_experience", return_value=[{"title": "Analyst"}]) as oracle:
         assert scrape.scrape_oracle() == [{"title": "Analyst"}]
         oracle.assert_called_once_with(max_pages=5)
+    with patch.object(scrape, "_scrape_accenture_with_retry", return_value=[{"title": "Analyst"}]), patch.object(scrape, "scrape_workday") as workday:
+        assert scrape.scrape_accenture() == [{"title": "Analyst"}]
+        workday.assert_not_called()
 
     submitted, paths = set(), set()
     lock = threading.Lock()
@@ -52,7 +60,7 @@ def main():
 
     scrape.CONNECTOR_HEALTH.clear()
     results, errors = [], []
-    with patch.object(scrape, "ThreadPoolExecutor", CheckedPool), patch.object(
+    with redirect_stdout(io.StringIO()), patch.object(scrape, "ThreadPoolExecutor", CheckedPool), patch.object(
         scrape, "_isolated_subprocess_worker", worker
     ):
         scrape._parallel_collect_isolated(

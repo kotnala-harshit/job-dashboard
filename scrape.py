@@ -497,6 +497,7 @@ CONNECTOR_HEALTH = {}
 # been manually/independently verified as healthy and genuinely empty.
 # Do NOT infer healthy-zero merely from an HTTP 200 response.
 VERIFIED_LIVE_ZERO_COMPANIES = {
+    "Infosys",
     "ASL Aviation Holdings",
     "Central Bank of Ireland",
     "LetsGetChecked",
@@ -4345,45 +4346,21 @@ def _scrape_accenture_with_retry():
 
 
 def scrape_accenture():
-    """Accenture Ireland.
-
-    Accenture's branded search is partly client-rendered, while current official
-    job-detail pages still hand applications to the wd103 Workday tenant.
-    Try both rather than assuming either surface is complete.
-    """
-    combined = []
-    seen = set()
-
-    # Official branded search surface is client-rendered: use Chromium first.
-    branded_jobs = _scrape_accenture_with_retry()
-    if not branded_jobs:
-        branded_jobs = _scrape_public_careers_page(
+    """Use the official Ireland board, with Workday only as a fallback."""
+    jobs = _scrape_accenture_with_retry()
+    if not jobs:
+        jobs = _scrape_public_careers_page(
             "Accenture",
             "https://www.accenture.com/ie-en/careers/jobsearch",
             ("/ie-en/careers/jobdetails", "/careers/jobdetails", "jobdetails?id="),
             default_location="Ireland",
         )
-    for j in branded_jobs:
-        key = ((j.get("title") or "").lower(), (j.get("url") or "").split("?")[0])
-        if key not in seen:
-            seen.add(key)
-            combined.append(j)
-
-    # Current Accenture job pages still use this Workday tenant for applications.
-    # Search "Ireland" so we do not have to paginate thousands of global jobs.
-    try:
-        for j in scrape_workday(
-            "Accenture", "accenture", "wd103", "AccentureCareers",
-            max_pages=25, search_text="Ireland",
-        ):
-            key = ((j.get("title") or "").lower(), (j.get("url") or "").split("?")[0])
-            if key not in seen:
-                seen.add(key)
-                combined.append(j)
-    except Exception as e:
-        print(f"  ! direct/Accenture workday fallback: {e}")
-
-    return combined
+    if jobs:
+        return jobs
+    return scrape_workday(
+        "Accenture", "accenture", "wd103", "AccentureCareers",
+        max_pages=25, search_text="Ireland",
+    )
 
 
 def scrape_citi():
@@ -9167,6 +9144,13 @@ def scrape_infosys():
                     f"  ! Infosys scraper reached {max_runtime_seconds}s "
                     f"runtime limit after {elapsed:.1f}s; "
                     f"keeping {len(results)} jobs collected so far"
+                )
+
+            if not results and page.get_by_text(
+                "The are no results. Try using other terms.", exact=True
+            ).is_visible():
+                _mark_connector_health(
+                    company, True, "Official Ireland search explicitly reports zero matching jobs", source_url
                 )
 
     except Exception as exc:
@@ -19295,6 +19279,12 @@ SCRAPE_SHARD_COUNT = max(1, int(os.environ.get("SCRAPE_SHARD_COUNT", "1")))
 PROVEN_REFRESH_BATCHES = (
     ("Accenture", "EY Ireland", "KPMG Ireland", "Oracle", "SAP",
      "Auxilion", "Capgemini", "Cognizant", "Dell Technologies", "IBM"),
+    ("Infosys", "NTT DATA", "Tata Consultancy Services (TCS)", "Wipro", "Bloomberg",
+     "Musgrave Group (SuperValu / Centra)", "Ryanair", "A&L Goodbody", "AECOM", "Agilent Technologies"),
+    ("AIB (Allied Irish Banks)", "Allianz Ireland", "AMCS Group", "Aon", "Arup",
+     "ASL Aviation Holdings", "AstraZeneca", "Bank of Ireland", "BioMarin", "BNP Paribas Ireland"),
+    ("DPS Group (Arcadis)", "ESB", "Grant Thornton Ireland", "Honeywell", "Huawei Ireland",
+     "Irish Life", "Irish Rail (Iarnród Éireann)", "Jacobs", "Johnson Controls", "NetApp"),
 )
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
@@ -20493,7 +20483,7 @@ def main():
             _parallel_collect_isolated(
                 [("direct", company) for company in batch
                  if _targeted(company) and is_active_registry_company(company)],
-                results, errors, workers=3, timeout_seconds=180,
+                results, errors, workers=4, timeout_seconds=180,
             )
 
     # AMD and Citi are explicitly promoted into FAST because their official
