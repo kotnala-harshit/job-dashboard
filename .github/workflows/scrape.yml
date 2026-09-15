@@ -8,143 +8,39 @@ on:
 permissions:
   contents: write
 
+# One refresh at a time. Scheduled runs wait rather than cancelling a scrape
+# that is already publishing the dashboard.
+concurrency:
+  group: ireland-job-radar-refresh
+  cancel-in-progress: false
+
 jobs:
-  core:
+  refresh:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
+        with: {fetch-depth: 0}
       - uses: actions/setup-python@v6
         with: {python-version: '3.11'}
       - name: Install dependencies
         run: |
           pip install requests beautifulsoup4 curl_cffi playwright
           python -m playwright install --with-deps chromium
-      - name: Collect API-backed boards
+      - name: Collect and publish core boards
         env:
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
           CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
-        run: timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=core SCRAPE_WORKERS=20 python -u scrape.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: core
-          path: data.json
-
-  direct:
-    needs: core
-    continue-on-error: true
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      max-parallel: 2
-      matrix:
-        include:
-          - id: 1
-            shard: 0
-          - id: 2
-            shard: 1
-          - id: 3
-            shard: 2
-          - id: 4
-            shard: 3
-          - id: 5
-            shard: 4
-          - id: 6
-            shard: 5
-          - id: 7
-            shard: 6
-          - id: 8
-            shard: 7
-          - id: 9
-            shard: 8
-          - id: 10
-            shard: 9
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with: {python-version: '3.11'}
-      - name: Install dependencies
-        run: |
-          pip install requests beautifulsoup4 curl_cffi playwright
-          python -m playwright install --with-deps chromium
-      - name: Collect direct careers slice
-        run: timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=direct SCRAPE_WORKERS=16 SCRAPE_SHARD_INDEX=${{ matrix.shard }} SCRAPE_SHARD_COUNT=10 python -u scrape.py
-      - name: Name slice
-        run: mv data.json slice-${{ matrix.id }}.json
-      - uses: actions/upload-artifact@v4
-        with:
-          name: direct-${{ matrix.id }}
-          path: slice-${{ matrix.id }}.json
-
-  jsonld:
-    needs: core
-    continue-on-error: true
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      max-parallel: 4
-      matrix:
-        include:
-          - id: 1
-            shard: 0
-          - id: 2
-            shard: 1
-          - id: 3
-            shard: 2
-          - id: 4
-            shard: 3
-          - id: 5
-            shard: 4
-          - id: 6
-            shard: 5
-          - id: 7
-            shard: 6
-          - id: 8
-            shard: 7
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with: {python-version: '3.11'}
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4 curl_cffi
-      - name: Collect structured-data fallback slice
-        run: timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=jsonld SCRAPE_WORKERS=16 SCRAPE_SHARD_INDEX=${{ matrix.shard }} SCRAPE_SHARD_COUNT=8 python -u scrape.py
-      - name: Name slice
-        run: mv data.json jsonld-${{ matrix.id }}.json
-      - uses: actions/upload-artifact@v4
-        with:
-          name: jsonld-${{ matrix.id }}
-          path: jsonld-${{ matrix.id }}.json
-
-  publish:
-    needs: [direct, jsonld]
-    if: always()
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v6
-        with: {fetch-depth: 0}
-      - uses: actions/download-artifact@v4
-        with: {name: core, path: merge/core}
-      - uses: actions/download-artifact@v4
-        with: {pattern: direct-*, path: merge/direct, merge-multiple: true}
-      - uses: actions/download-artifact@v4
-        with: {pattern: jsonld-*, path: merge/jsonld, merge-multiple: true}
-      - name: Merge and publish
         run: |
           set -euo pipefail
-          shopt -s nullglob
-          inputs=(merge/core/data.json merge/core/data.json merge/direct/*.json merge/jsonld/*.json)
-          python merge_job_data.py "${inputs[@]}" --seen seen_jobs.json
-          python -c 'import json,datetime; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
+          timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=core SCRAPE_WORKERS=20 python -u scrape.py
+          python -c 'import datetime,json; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
           git config user.name job-radar-bot
           git config user.email actions@users.noreply.github.com
-          git add data.json seen_jobs.json last_full_refresh.json
+          git add data.json seen_jobs.json company_history.json sponsorship_history.json last_full_refresh.json
           git diff --staged --quiet && exit 0
-          git commit -m "Refresh Ireland Job Radar [FULL] $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          git pull --rebase -X ours origin main
+          git commit -m "Refresh Ireland Job Radar $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git pull --rebase origin main
           git push origin HEAD:main
