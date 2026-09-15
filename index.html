@@ -2344,6 +2344,7 @@ function renderProvenWorkingCompanies(search='') {
 
   summary.textContent =
     `${visible.length} shown · ${all.length} companies proven working since ${HISTORY_TRACKING_STARTED} · ` +
+    `${all.filter(c => c.refresh_batch).length} integrated into hourly batches · ` +
     `${HISTORICAL_DISTINCT_JOBS} distinct jobs observed cumulatively.`;
 
   grid.innerHTML = '';
@@ -2363,11 +2364,14 @@ function renderProvenWorkingCompanies(search='') {
 
     card.innerHTML = `
       ${companyIdentity(c.company, `
+          ${c.refresh_batch ? `Hourly refresh · batch ${Number(c.refresh_batch)} · ` : ''}
           ${c.live_jobs} live now ·
           ${Number(hist.distinct_jobs_seen || 0)} distinct jobs seen ·
           first proven ${escapeHtml(firstSeen)} ·
           last positive ${escapeHtml(lastSeen)}
       `)}
+      ${c.refresh_batch && CONNECTOR_HEALTH[c.company]?.live === false
+        ? '<span class="status-chip">Latest check needs attention</span>' : ''}
       ${c.url ? '<span class="apply-hint">Open →</span>' : '<span class="status-chip">no URL</span>'}
     `;
     grid.appendChild(card);

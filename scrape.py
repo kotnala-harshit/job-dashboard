@@ -4167,7 +4167,7 @@ def _scrape_accenture_playwright():
 
                     try:
                         raw_href = a.get_attribute("href") or ""
-                        href = urllib.parse.urljoin("https://www.google.com/about/careers/applications/", raw_href)
+                        href = urllib.parse.urljoin(search_url, raw_href)
                     except Exception:
                         continue
 
@@ -7043,12 +7043,7 @@ def scrape_oracle():
     where available, with the rendered Candidate Experience page as fallback.
     """
     try:
-        jobs = scrape_oracle_candidate_experience(
-            "Oracle",
-            "https://eeho.fa.us2.oraclecloud.com",
-            "CX_1",
-            "IE",
-        )
+        jobs = scrape_oracle_candidate_experience(max_pages=5)
         if jobs:
             return jobs
     except Exception as e:
@@ -19296,6 +19291,11 @@ SCRAPE_PHASE = os.environ.get("SCRAPE_PHASE", "all").strip().lower()
 SCRAPE_WORKERS = max(2, min(32, int(os.environ.get("SCRAPE_WORKERS", "16"))))
 SCRAPE_SHARD_INDEX = max(0, int(os.environ.get("SCRAPE_SHARD_INDEX", "0")))
 SCRAPE_SHARD_COUNT = max(1, int(os.environ.get("SCRAPE_SHARD_COUNT", "1")))
+# Promote verified direct connectors into the hourly core run in batches of 10.
+PROVEN_REFRESH_BATCHES = (
+    ("Accenture", "EY Ireland", "KPMG Ireland", "Oracle", "SAP",
+     "Auxilion", "Capgemini", "Cognizant", "Dell Technologies", "IBM"),
+)
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
 }
@@ -19406,7 +19406,7 @@ def _run_isolated_task_child(task_spec, result_path):
         raise ValueError(f"Unknown isolated task type: {task_type!r}")
 
     Path(result_path).write_text(
-        json.dumps(found, ensure_ascii=False),
+        json.dumps({"jobs": found, "connector_health": CONNECTOR_HEALTH}, ensure_ascii=False),
         encoding="utf-8",
     )
 
@@ -19426,10 +19426,7 @@ def _parallel_collect_isolated(
     from the parent process. Each child is also placed in its own process
     group so a timeout can kill the Python process and its descendants.
     """
-    from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
-    import json
     import tempfile
-    import time
 
     if not tasks:
         return
@@ -19456,66 +19453,41 @@ def _parallel_collect_isolated(
             timeout_seconds,
         )
 
-    # Keep bounded concurrency without sharing Python/Playwright state.
+    # The executor bounds running processes; each queued task is submitted once.
     with tempfile.TemporaryDirectory(prefix="job-radar-isolated-") as tmp:
-        pending = {}
-        queue = iter(tasks)
-        completed = set()
-
         with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
-          while pending or (task := next(queue, None)) is not None:
-            if task is not None:
+            pending = {}
+            for index, task in enumerate(tasks):
                 spec = make_spec(task)
+                result_path = str(Path(tmp) / f"{index}.json")
+                pending[pool.submit(launch, spec, result_path)] = (spec, result_path)
+
+            for future in as_completed(pending):
+                spec, result_path = pending[future]
                 company = spec["company"]
-                result_path = str(
-                    Path(tmp) / f"{len(completed) + len(pending)}.json"
-                )
-                pending[pool.submit(launch, spec, result_path)] = (company, spec, result_path)
-                continue
-
-            done, _ = wait(pending, return_when=FIRST_COMPLETED)
-
-            for future in done:
-                company, spec, result_path = pending.pop(future)
-                completed.add(company)
-
                 try:
                     outcome = future.result()
+                    if outcome["status"] == "timeout":
+                        raise RuntimeError(f"timed out after {timeout_seconds}s")
+                    if outcome["status"] != "ok":
+                        detail = outcome["stderr"].strip().splitlines()
+                        raise RuntimeError(detail[-1] if detail else f"exit code {outcome['returncode']}")
+                    payload = json.loads(Path(result_path).read_text(encoding="utf-8"))
+                    found = payload["jobs"]
+                    if not isinstance(found, list) or not all(isinstance(job, dict) for job in found):
+                        raise ValueError("invalid job list")
+                    results.extend(found)
+                    CONNECTOR_HEALTH.update(payload["connector_health"])
+                    if company not in payload["connector_health"]:
+                        _mark_connector_health(company, bool(found),
+                            f"Official connector returned {len(found)} jobs" if found
+                            else "No verified jobs returned; vacancy status unconfirmed")
+                    print(f"isolated/{spec['type']}/{company}: {len(found)} jobs", flush=True)
                 except Exception as exc:
-                    errors.append(
-                        f"isolated/{spec['type']}/{company}: {exc!r}"
-                    )
-                    continue
-
-                if outcome["status"] == "timeout":
-                    errors.append(
-                        f"isolated/{spec['type']}/{company}: "
-                        f"timed out after {timeout_seconds}s"
-                    )
-                    continue
-
-                if outcome["status"] != "ok":
-                    detail = outcome["stderr"].strip().splitlines()
-                    detail = detail[-1] if detail else (
-                        f"exit code {outcome['returncode']}"
-                    )
-                    errors.append(
-                        f"isolated/{spec['type']}/{company}: {detail}"
-                    )
-                    continue
-
-                try:
-                    payload = Path(result_path).read_text(
-                        encoding="utf-8"
-                    )
-                    found = json.loads(payload)
-                    if found:
-                        results.extend(found)
-                except Exception as exc:
-                    errors.append(
-                        f"isolated/{spec['type']}/{company}: "
-                        f"invalid result: {exc!r}"
-                    )
+                    message = f"isolated/{spec['type']}/{company}: {exc}"
+                    errors.append(message)
+                    _mark_connector_health(company, False, str(exc))
+                    print(message, flush=True)
 
 
 def _parallel_collect_bounded(
@@ -20515,6 +20487,14 @@ def main():
                     errors.append(f"phenom/{company}: endpoint validation failed")
             except Exception as e:
                 errors.append(f"phenom/{company}: {e}")
+
+    if SCRAPE_MODE == "full" and SCRAPE_PHASE == "core":
+        for batch in PROVEN_REFRESH_BATCHES:
+            _parallel_collect_isolated(
+                [("direct", company) for company in batch
+                 if _targeted(company) and is_active_registry_company(company)],
+                results, errors, workers=3, timeout_seconds=180,
+            )
 
     # AMD and Citi are explicitly promoted into FAST because their official
     # direct boards are important to the dashboard. Keep every other direct
@@ -24891,6 +24871,10 @@ def build_company_registry(include_cache=False):
 
     for item in registry:
         company = item.get("company") or item.get("name") or ""
+        item["refresh_batch"] = next(
+            (number for number, batch in enumerate(PROVEN_REFRESH_BATCHES, 1) if company in batch),
+            None,
+        )
         if company == "Gong":
             item.update(platform="greenhouse", automatic=True, ats_slug="gongio")
         profile_key = aliases.get(company, company)

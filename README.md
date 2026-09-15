@@ -51,6 +51,15 @@ The scraper:
 
 ## Automation schedule
 
-The scheduler runs one complete refresh at `:03` every hour. It has a
-50-minute collection limit, leaving time for its data commit and GitHub Pages
-deployment before the next hourly run.
+The scheduler runs the core boards plus integrated proven-company batches at
+`:03` every hour. Collection has a 21-minute limit within a 25-minute workflow.
+
+Batch 1 adds Accenture, EY Ireland, KPMG Ireland, Oracle, SAP, Auxilion,
+Capgemini, Cognizant, Dell Technologies, and IBM. Each direct collector runs
+once in an isolated process, with three collectors at a time and a three-minute
+limit per company. Their jobs pass through the same Ireland validation,
+deduplication, ranking, history, and graduate processing as the core boards.
+The Proven working tab shows batch membership and unsuccessful checks.
+
+Run `python test_proven_batch.py` and `python test_refresh_publish.py` from the
+repository directory to check batch execution and publication without network access.

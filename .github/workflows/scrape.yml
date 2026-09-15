@@ -17,7 +17,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v6
         with: {fetch-depth: 0}
@@ -27,7 +27,7 @@ jobs:
         run: |
           pip install requests beautifulsoup4 curl_cffi playwright
           python -m playwright install --with-deps chromium
-      - name: Collect and publish core boards
+      - name: Collect and publish core boards and proven batches
         env:
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
@@ -35,7 +35,9 @@ jobs:
           CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
         run: |
           set -euo pipefail
-          timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=core SCRAPE_WORKERS=20 python -u scrape.py
+          python test_refresh_publish.py
+          python test_proven_batch.py
+          timeout --signal=TERM --kill-after=30s 21m env SCRAPE_MODE=full SCRAPE_PHASE=core SCRAPE_WORKERS=20 python -u scrape.py
           python -c 'import datetime,json; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
           python health_check.py
           git config user.name job-radar-bot
