@@ -37,9 +37,10 @@ jobs:
           set -euo pipefail
           timeout --signal=TERM --kill-after=30s 11m env SCRAPE_MODE=full SCRAPE_PHASE=core SCRAPE_WORKERS=20 python -u scrape.py
           python -c 'import datetime,json; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
+          python health_check.py
           git config user.name job-radar-bot
           git config user.email actions@users.noreply.github.com
-          git add data.json seen_jobs.json company_history.json sponsorship_history.json last_full_refresh.json
+          git add data.json seen_jobs.json company_history.json sponsorship_history.json last_full_refresh.json graduate_programme_history.json ats_platform_cache.json jsonld_cache.json browser_scrape_cache.json
           git diff --staged --quiet && exit 0
           git commit -m "Refresh Ireland Job Radar $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git pull --rebase origin main
