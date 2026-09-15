@@ -149,7 +149,6 @@ SMARTRECRUITERS_PUBLIC_IDS = {
 
 WORKABLE_COMPANIES = [
     "davy",
-    "nucleo-consulting",
 ]
 
 RECRUITEE_COMPANIES = [
@@ -161,7 +160,7 @@ PERSONIO_COMPANIES = [
     "dilloneustace",
 ]
 
-PINPOINT_COMPANIES = ['ericsson', 'kpmg', 'greencore', 'arcadis', 'zendesk', 'synopsys', 'nutanix', 'terumo', 'smith']
+PINPOINT_COMPANIES = ['ericsson', 'kpmg', 'greencore', 'arcadis', 'zendesk', 'nutanix', 'terumo', 'smith']
 
 # ---------------------------------------------------------------------------
 # JSON-LD structured-data scraper -- universal fallback for the ~500-company
@@ -18816,6 +18815,448 @@ def scrape_tesco_ireland_current():
 
 
 
+
+
+def _fz_text(value):
+    value = html.unescape(str(value or ""))
+    value = re.sub(r"<[^>]+>", " ", value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def scrape_synopsys_official():
+    company = "Synopsys"
+    source = "https://careers.synopsys.com/location/ireland-jobs/44408/2963597/2"
+
+    try:
+        r = _session().get(
+            source,
+            timeout=30,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+        r.raise_for_status()
+    except Exception as exc:
+        print(f"  ! Synopsys fetch failed: {exc}")
+        return []
+
+    jobs = {}
+
+    pattern = (
+        r'<a[^>]+href=["\']'
+        r'(/job/dublin/[^"\']+)'
+        r'["\'][^>]*>(.*?)</a>'
+    )
+
+    for match in re.finditer(pattern, r.text, re.I | re.S):
+        path = html.unescape(match.group(1))
+        title = _fz_text(match.group(2))
+
+        title = re.sub(
+            r"\s+Dublin,\s*Ireland\s+Category:.*$",
+            "",
+            title,
+            flags=re.I,
+        ).strip()
+
+        if not title:
+            continue
+
+        url = urllib.parse.urljoin(source, path)
+
+        jobs[url] = {
+            "company": company,
+            "ats": "official",
+            "title": title,
+            "location": "Dublin, Ireland",
+            "url": url,
+            "updated_at": None,
+            "description_text": "",
+        }
+
+    _mark_connector_health(
+        company,
+        bool(jobs),
+        f"Official Synopsys Ireland page returned {len(jobs)} jobs",
+        source,
+    )
+
+    print(f"  Synopsys official Ireland careers: {len(jobs)} jobs")
+    return list(jobs.values())
+
+
+def scrape_riot_games_official():
+    company = "Riot Games"
+    source = "https://www.riotgames.com/en/work-with-us/offices/dublin"
+    sess = _session()
+
+    try:
+        response = sess.get(
+            source,
+            timeout=30,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+        response.raise_for_status()
+        body = response.text
+    except Exception as exc:
+        print(f"  ! Riot Games fetch failed: {exc}")
+        return []
+
+    ids = []
+
+    for pattern in (
+        r"/en/j/(\d+)",
+        r"/en/work-with-us/job/(\d+)/",
+        r"\\?/en/j/(\d+)",
+        r"\\?/en/work-with-us/job/(\d+)/",
+    ):
+        ids.extend(re.findall(pattern, body, re.I))
+
+    jobs = {}
+
+    for job_id in dict.fromkeys(ids):
+        url = f"https://www.riotgames.com/en/j/{job_id}"
+
+        try:
+            detail = sess.get(
+                url,
+                timeout=25,
+                headers={"User-Agent": "Mozilla/5.0"},
+                allow_redirects=True,
+            )
+            detail.raise_for_status()
+        except Exception:
+            continue
+
+        plain = _fz_text(detail.text)
+
+        if "dublin" not in plain.lower():
+            continue
+
+        title = ""
+
+        h1 = re.search(
+            r"<h1[^>]*>(.*?)</h1>",
+            detail.text,
+            re.I | re.S,
+        )
+
+        if h1:
+            title = _fz_text(h1.group(1))
+
+        if not title:
+            tm = re.search(
+                r"<title>(.*?)</title>",
+                detail.text,
+                re.I | re.S,
+            )
+            if tm:
+                title = _fz_text(tm.group(1))
+                title = re.sub(
+                    r"\s*\|\s*Riot Games.*$",
+                    "",
+                    title,
+                    flags=re.I,
+                ).strip()
+
+        if not title or "global offices" in title.lower():
+            continue
+
+        final_url = detail.url or url
+
+        jobs[final_url] = {
+            "company": company,
+            "ats": "official",
+            "title": title,
+            "location": "Dublin, Ireland",
+            "url": final_url,
+            "updated_at": None,
+            "description_text": plain[:10000],
+        }
+
+    _mark_connector_health(
+        company,
+        bool(jobs),
+        f"Official Riot Dublin source returned {len(jobs)} jobs",
+        source,
+    )
+
+    print(f"  Riot Games official Dublin careers: {len(jobs)} jobs")
+    return list(jobs.values())
+
+
+def scrape_nucleo_official():
+    company = "Nucleo"
+    source = "https://nucleogroup.com/careers/"
+
+    try:
+        r = _session().get(
+            source,
+            timeout=30,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+        r.raise_for_status()
+    except Exception as exc:
+        print(f"  ! Nucleo fetch failed: {exc}")
+        return []
+
+    text = _fz_text(r.text)
+
+    section_match = re.search(
+        r"Open Vacancies\s+(.*?)\s+No roles match your search",
+        text,
+        re.I | re.S,
+    )
+
+    section = section_match.group(1) if section_match else text
+
+    pattern = (
+        r"(.{3,120}?)\s+"
+        r"Posted\s+(?:today|\d+\s+(?:day|days|week|weeks|month|months)\s+ago)"
+        r"\s+Dublin,\s*Ireland"
+    )
+
+    jobs = {}
+
+    for match in re.finditer(pattern, section, re.I):
+        title = _fz_text(match.group(1))
+
+        title = re.sub(
+            r"^.*?Open Vacancies\s+",
+            "",
+            title,
+            flags=re.I,
+        ).strip()
+
+        if not title:
+            continue
+
+        slug = re.sub(
+            r"[^a-z0-9]+",
+            "-",
+            title.lower(),
+        ).strip("-")
+
+        url = source + "#job-" + slug
+
+        jobs[url] = {
+            "company": company,
+            "ats": "official",
+            "title": title,
+            "location": "Dublin, Ireland",
+            "url": url,
+            "updated_at": None,
+            "description_text": "",
+        }
+
+    _mark_connector_health(
+        company,
+        bool(jobs),
+        f"Official Nucleo careers page returned {len(jobs)} Dublin jobs",
+        source,
+    )
+
+    print(f"  Nucleo official careers: {len(jobs)} jobs")
+    return list(jobs.values())
+
+
+def scrape_learnupon_official():
+    company = "LearnUpon"
+    source = "https://careers.learnupon.com/"
+    sess = _session()
+
+    try:
+        r = sess.get(
+            source,
+            timeout=30,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+        r.raise_for_status()
+    except Exception as exc:
+        print(f"  ! LearnUpon fetch failed: {exc}")
+        return []
+
+    links = re.findall(
+        r"https://job-boards\.greenhouse\.io/learnupon/jobs/\d+",
+        r.text,
+        re.I,
+    )
+
+    jobs = {}
+
+    for url in dict.fromkeys(links):
+        try:
+            detail = sess.get(
+                url,
+                timeout=25,
+                headers={"User-Agent": "Mozilla/5.0"},
+            )
+            detail.raise_for_status()
+        except Exception:
+            continue
+
+        plain = _fz_text(detail.text)
+
+        if "dublin" not in plain.lower() and "ireland" not in plain.lower():
+            continue
+
+        title = ""
+
+        m = re.search(
+            r"<title>(.*?)</title>",
+            detail.text,
+            re.I | re.S,
+        )
+
+        if m:
+            title = _fz_text(m.group(1))
+
+        if not title:
+            h1 = re.search(
+                r"<h1[^>]*>(.*?)</h1>",
+                detail.text,
+                re.I | re.S,
+            )
+            if h1:
+                title = _fz_text(h1.group(1))
+
+        title = re.sub(
+            r"^Job Application for\s+",
+            "",
+            title,
+            flags=re.I,
+        )
+        title = re.sub(
+            r"\s+at\s+LearnUpon$",
+            "",
+            title,
+            flags=re.I,
+        ).strip()
+
+        if not title:
+            continue
+
+        jobs[url] = {
+            "company": company,
+            "ats": "greenhouse",
+            "title": title,
+            "location": "Dublin, Ireland",
+            "url": url,
+            "updated_at": None,
+            "description_text": plain[:10000],
+        }
+
+    _mark_connector_health(
+        company,
+        bool(jobs),
+        f"Official LearnUpon Greenhouse returned {len(jobs)} Dublin jobs",
+        source,
+    )
+
+    print(f"  LearnUpon official careers: {len(jobs)} jobs")
+    return list(jobs.values())
+
+
+def scrape_concentrix_official():
+    company = "Concentrix (Ireland)"
+    source = "https://jobs.concentrix.com/job-search/?country=Ireland"
+
+    body = ""
+
+    if cffi_requests is not None:
+        try:
+            r = cffi_requests.get(
+                source,
+                timeout=30,
+                impersonate="chrome",
+                headers={"Accept-Language": "en-IE,en;q=0.9"},
+            )
+            if r.status_code == 200:
+                body = r.text
+        except Exception as exc:
+            print(f"  ! Concentrix curl_cffi listing failed: {exc}")
+
+    if not body:
+        return []
+
+    ids = re.findall(
+        r"(?:\?|&amp;|&)id=(R\d+)",
+        body,
+        re.I,
+    )
+
+    ids += re.findall(
+        r'["\'](?:id|jobId|requisitionId)["\']\s*:\s*["\'](R\d+)["\']',
+        body,
+        re.I,
+    )
+
+    jobs = {}
+
+    for job_id in dict.fromkeys(ids):
+        url = f"https://jobs.concentrix.com/job/?id={job_id}"
+
+        try:
+            detail = cffi_requests.get(
+                url,
+                timeout=25,
+                impersonate="chrome",
+            )
+        except Exception:
+            continue
+
+        if detail.status_code != 200:
+            continue
+
+        plain = _fz_text(detail.text)
+
+        if not any(
+            term in plain.lower()
+            for term in ("ireland", "dublin", "santry")
+        ):
+            continue
+
+        h1 = re.search(
+            r"<h1[^>]*>(.*?)</h1>",
+            detail.text,
+            re.I | re.S,
+        )
+
+        if not h1:
+            continue
+
+        title = _fz_text(h1.group(1))
+        location = "Ireland"
+
+        lm = re.search(
+            r"Location\s+(.{2,100}?Ireland)",
+            plain,
+            re.I,
+        )
+
+        if lm:
+            location = _fz_text(lm.group(1))
+
+        jobs[url] = {
+            "company": company,
+            "ats": "official",
+            "title": title,
+            "location": location,
+            "url": url,
+            "updated_at": None,
+            "description_text": plain[:10000],
+        }
+
+    _mark_connector_health(
+        company,
+        bool(jobs),
+        f"Official Concentrix Ireland source returned {len(jobs)} jobs",
+        source,
+    )
+
+    print(f"  Concentrix official Ireland careers: {len(jobs)} jobs")
+    return list(jobs.values())
+
+
+
 def scrape_workhuman_official():
     company = "Workhuman"
     source = "https://www.workhuman.com/company/careers/list/"
@@ -19462,6 +19903,11 @@ def scrape_direct_company(company: str):
         "Dawn Meats": scrape_dawn_meats,
         "DHL Ireland": scrape_dhl_ireland_official,
         "Decathlon Ireland": scrape_decathlon_ireland,
+        "Synopsys": scrape_synopsys_official,
+        "Riot Games": scrape_riot_games_official,
+        "Nucleo": scrape_nucleo_official,
+        "Concentrix (Ireland)": scrape_concentrix_official,
+        "LearnUpon": scrape_learnupon_official,
         "Workhuman": scrape_workhuman_official,
         "Takeda": scrape_takeda_official,
         "Teva Pharmaceuticals": scrape_teva_official,
@@ -21033,6 +21479,11 @@ def main():
             "Workhuman",
             "Takeda",
             "Teva Pharmaceuticals",
+            "Synopsys",
+            "Riot Games",
+            "Nucleo",
+            "Concentrix (Ireland)",
+            "LearnUpon",
         )
 
         _parallel_collect_isolated(
@@ -21096,6 +21547,11 @@ def main():
             "Workhuman",
             "Takeda",
             "Teva Pharmaceuticals",
+            "Synopsys",
+            "Riot Games",
+            "Nucleo",
+            "Concentrix (Ireland)",
+            "LearnUpon",
         ):
             if (
                 company not in existing_direct
@@ -23596,6 +24052,11 @@ def _working_batch_base_scrape_direct_company(company: str):
         "Dawn Meats": scrape_dawn_meats,
         "DHL Ireland": scrape_dhl_ireland_official,
         "Decathlon Ireland": scrape_decathlon_ireland,
+        "Synopsys": scrape_synopsys_official,
+        "Riot Games": scrape_riot_games_official,
+        "Nucleo": scrape_nucleo_official,
+        "Concentrix (Ireland)": scrape_concentrix_official,
+        "LearnUpon": scrape_learnupon_official,
         "Workhuman": scrape_workhuman_official,
         "Takeda": scrape_takeda_official,
         "Teva Pharmaceuticals": scrape_teva_official,
