@@ -46,9 +46,9 @@ GREENHOUSE_COMPANIES = [
     "cityswift",
     # --- VERIFIED_MANUAL_BATCH_V3 ---
     "gongio",
-'stripe', 'airbnb', 'doordash', 'pinterest', 'squarespace', 'twilio', 'docusign', 'robinhood', 'reddit', 'coinbase', 'gitlab', 'github', 'hubspotjobs', 'indeed', 'zendesk', 'trustpilot', 'workhuman', 'wayflyer', 'intercom', 'wise', 'asana', 'cloudflare', 'datadog', 'snowflake', 'instacart', 'lyft', 'fenergo', 'affirm', 'airtable', 'algolia', 'amplitude', 'betterup', 'buffer', 'calendly', 'carta', 'chime', 'classpass', 'coursera', 'discord', 'doximity', 'elastic', 'envoy', 'faire', 'flexport', 'gusto', 'handshake', 'hashicorp', 'honeycomb', 'justworks', 'klaviyo', 'lattice', 'mixpanel', 'mongodb', 'qualtrics', 'mural', 'okta', 'opendoor', 'patreon', 'peloton', 'pilot', 'postman', 'procore', 'quora', 'rippling', 'samsara', 'segment', 'sendgrid', 'sourcegraph', 'sprinklr', 'strava', 'tanium', 'thumbtack', 'toast', 'turo', 'udemy', 'verkada', 'webflow', 'wework', 'yelp', 'zapier', 'zoominfo', 'getyourguide', 'trivago', 'deliveryhero', 'babbel', 'contentful', 'celonis', 'flixbus', 'tiermobility', 'gorillas', 'typeform', 'glovo', 'cabify', 'blablacar', 'backmarket', 'doctolib', 'qonto', 'alan', 'payfit', 'gocardless', 'truelayer', 'thoughtmachine', 'cazoo', 'octopusenergy', 'farfetch', 'starlingbank', 'revolut', 'darktrace', 'graphcore', 'onfido', 'fundingcircle', 'tines', 'flipdish', 'letsgetchecked', 'genesys', 'grab', 'sea', 'carousell', 'razer', 'lazada', 'careem', 'noon', 'talabat', 'propertyfinder', 'razorpay', 'swiggy', 'freshworks', 'browserstack', 'meesho', 'cred', 'groww', 'urbancompany', 'chargebee', 'clevertap', 'cultureamp', 'safetyculture', 'employmenthero', 'airwallex', 'deputy', 'linktree', 'go1', 'halter', 'judobank', 'figma', 'zscaler']
+'stripe', 'airbnb', 'doordash', 'pinterest', 'squarespace', 'twilio', 'docusign', 'robinhood', 'reddit', 'coinbase', 'gitlab', 'github', 'hubspotjobs', 'indeed', 'zendesk', 'trustpilot', 'workhuman', 'wayflyer', 'intercom', 'wise', 'asana', 'cloudflare', 'datadog', 'snowflake', 'instacart', 'lyft', 'fenergo', 'affirm', 'airtable', 'algolia', 'amplitude', 'betterup', 'buffer', 'calendly', 'carta', 'chime', 'classpass', 'coursera', 'discord', 'doximity', 'elastic', 'envoy', 'faire', 'flexport', 'gusto', 'handshake', 'hashicorp', 'honeycomb', 'justworks', 'klaviyo', 'lattice', 'mixpanel', 'mongodb', 'qualtrics', 'mural', 'okta', 'opendoor', 'patreon', 'peloton', 'pilot', 'postman', 'procore', 'quora', 'rippling', 'samsara', 'segment', 'sendgrid', 'sourcegraph', 'sprinklr', 'strava', 'tanium', 'thumbtack', 'toast', 'turo', 'udemy', 'verkada', 'webflow', 'wework', 'yelp', 'zapier', 'zoominfo', 'getyourguide', 'trivago', 'deliveryhero', 'babbel', 'contentful', 'celonis', 'flixbus', 'tiermobility', 'gorillas', 'typeform', 'glovo', 'cabify', 'blablacar', 'backmarket', 'doctolib', 'qonto', 'alan', 'payfit', 'gocardless', 'truelayer', 'thoughtmachine', 'cazoo', 'octopusenergy', 'farfetch', 'starlingbank', 'revolut', 'darktrace', 'graphcore', 'onfido', 'fundingcircle', 'tines', 'flipdish', 'letsgetchecked', 'genesys', 'grab', 'sea', 'carousell', 'razer', 'lazada', 'careem', 'noon', 'talabat', 'propertyfinder', 'razorpay', 'swiggy', 'freshworks', 'browserstack', 'meesho', 'cred', 'groww', 'urbancompany', 'chargebee', 'clevertap', 'cultureamp', 'safetyculture', 'employmenthero', 'airwallex', 'deputy', 'linktree', 'go1', 'halter', 'judobank', 'figma', 'zscaler', 'monzo']
 
-LEVER_COMPANIES = ['spotify', 'plaid', 'brex', 'checkout', 'deliveroo', 'monzo', 'wolt', 'bolt', 'pipedrive', 'zopa', 'gojek', 'traveloka']
+LEVER_COMPANIES = ['spotify', 'plaid', 'brex', 'checkout', 'deliveroo', 'wolt', 'bolt', 'pipedrive', 'zopa', 'gojek', 'traveloka']
 
 ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'vercel', 'scale', 'deel', 'partly', 'clickup', 'snowflake', 'wayflyer']
 
@@ -70,6 +70,10 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'vercel',
 # no qualifying Republic-of-Ireland vacancies. Keep these companies in
 # the registry/health model, but do not spend a Workday scrape on every run.
 KNOWN_HEALTHY_ZERO_COMPANIES = {
+    "Keelvar": {
+        "url": "https://keelvar.jobs.personio.com/",
+        "note": "Official Keelvar Personio source verified live; currently 0 qualifying Ireland jobs",
+    },
     "Deutsche Bank": {
         "url": "https://db.wd3.myworkdayjobs.com/DBWebsite",
         "note": "Official Deutsche Bank Workday source verified live; currently 0 qualifying Ireland jobs",
@@ -502,6 +506,7 @@ CONNECTOR_HEALTH = {}
 # been manually/independently verified as healthy and genuinely empty.
 # Do NOT infer healthy-zero merely from an HTTP 200 response.
 VERIFIED_LIVE_ZERO_COMPANIES = {
+    "Keelvar",
     "Deutsche Bank",
     "Infosys",
     "ASL Aviation Holdings",
@@ -2556,13 +2561,38 @@ def scrape_recruitee(slug: str):
 
 
 def scrape_personio(slug: str):
-    url = f"https://{slug}.jobs.personio.de/xml?language=en"
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (job-dashboard-bot)"})
-    try:
-        with urllib.request.urlopen(req, timeout=20) as resp:
-            xml_text = resp.read().decode("utf-8")
-    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
-        print(f"  ! fetch failed for {url}: {e}")
+    url = f"https://{slug}.jobs.personio.com/xml?language=en"
+    headers = {"User-Agent": "Mozilla/5.0 (job-dashboard-bot)"}
+    xml_text = None
+    last_error = None
+
+    if requests is not None:
+        try:
+            resp = requests.get(url, headers=headers, timeout=20)
+            resp.raise_for_status()
+            xml_text = resp.text
+        except Exception as e:
+            last_error = e
+
+    if xml_text is None and cffi_requests is not None:
+        try:
+            resp = cffi_requests.get(url, headers=headers, timeout=20)
+            if resp.status_code >= 400:
+                raise RuntimeError(f"HTTP {resp.status_code}")
+            xml_text = resp.text
+        except Exception as e:
+            last_error = e
+
+    if xml_text is None:
+        try:
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=20) as resp:
+                xml_text = resp.read().decode("utf-8")
+        except Exception as e:
+            last_error = e
+
+    if xml_text is None:
+        print(f"  ! fetch failed for {url}: {last_error}")
         return []
 
     out = []
@@ -2570,12 +2600,25 @@ def scrape_personio(slug: str):
         block = m.group(1)
 
         def field(name):
-            fm = re.search(rf"<{name}><!\[CDATA\[(.*?)\]\]></{name}>", block, re.DOTALL) \
-                 or re.search(rf"<{name}>(.*?)</{name}>", block, re.DOTALL)
+            fm = (
+                re.search(
+                    rf"<{name}><!\[CDATA\[(.*?)\]\]></{name}>",
+                    block,
+                    re.DOTALL,
+                )
+                or re.search(
+                    rf"<{name}>(.*?)</{name}>",
+                    block,
+                    re.DOTALL,
+                )
+            )
             return fm.group(1).strip() if fm else ""
 
         title = field("name")
-        location = ", ".join(filter(None, [field("office"), field("city")]))
+        location = ", ".join(
+            filter(None, [field("office"), field("city")])
+        )
+
         if region_ok(location):
             out.append({
                 "company": slug,
@@ -2585,9 +2628,8 @@ def scrape_personio(slug: str):
                 "url": field("careerSiteUrl") or None,
                 "updated_at": field("createdAt"),
             })
+
     return out
-
-
 
 def scrape_pinpoint(slug: str):
     data = fetch_json(f"https://{slug}.pinpointhq.com/postings.json")
@@ -2813,7 +2855,7 @@ def _probe_platform(platform: str, slug: str, sess, allow_empty: bool = False) -
             d=r.json() if r.status_code == 200 else {}
             return r.status_code == 200 and isinstance(d, dict) and "offers" in d
         if platform == "personio":
-            r=sess.get(f"https://{slug}.jobs.personio.de/xml?language=en", timeout=10)
+            r=sess.get(f"https://{slug}.jobs.personio.com/xml?language=en", timeout=10)
             return r.status_code == 200 and ("<position" in r.text or "<workzag-jobs" in r.text)
         if platform == "pinpoint":
             r=sess.get(f"https://{slug}.pinpointhq.com/postings.json", timeout=10)
@@ -19285,11 +19327,9 @@ STALE_GENERIC_ATS_PROBES = {
     ("greenhouse", "wayflyer"),
     ("greenhouse", "fenergo"),
     ("greenhouse", "genesys"),
-    ("lever", "monzo"),
 }
 
 STALE_PERSONIO_XML_PROBES = {
-    "keelvar",
     "dilloneustace",
 }
 
