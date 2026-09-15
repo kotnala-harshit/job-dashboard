@@ -138,7 +138,7 @@ jobs:
         run: |
           set -euo pipefail
           shopt -s nullglob
-          inputs=(merge/core/data.json merge/direct/*.json merge/jsonld/*.json)
+          inputs=(merge/core/data.json merge/core/data.json merge/direct/*.json merge/jsonld/*.json)
           python merge_job_data.py "${inputs[@]}" --seen seen_jobs.json
           python -c 'import json,datetime; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
           git config user.name job-radar-bot

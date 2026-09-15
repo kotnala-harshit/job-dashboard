@@ -64,6 +64,7 @@ class RegistryTests(unittest.TestCase):
         self.assertIn("needs: [direct, jsonld]", workflow)
         self.assertIn("continue-on-error: true", workflow)
         self.assertIn("if: always()", workflow)
+        self.assertIn("inputs=(merge/core/data.json merge/core/data.json", workflow)
         self.assertIn("max-parallel: 2", workflow)
         self.assertIn("max-parallel: 4", workflow)
         self.assertIn("SCRAPE_PHASE=core", workflow)
