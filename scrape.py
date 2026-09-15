@@ -207,7 +207,12 @@ CAREERS_URL_OVERRIDES = {
 
 def _company_key(value: str) -> str:
     value = (value or "").lower().replace("&", "and")
-    return re.sub(r"[^a-z0-9]+", "", value)
+    key = re.sub(r"[^a-z0-9]+", "", value)
+    aliases = {
+        "advancedmicrodevicesamd": "amd",
+        "diageoireland": "diageo",
+    }
+    return aliases.get(key, key)
 
 def _load_company_master_rows():
     """Single source of truth for the Ireland employer universe."""
@@ -497,6 +502,7 @@ CONNECTOR_HEALTH = {}
 # been manually/independently verified as healthy and genuinely empty.
 # Do NOT infer healthy-zero merely from an HTTP 200 response.
 VERIFIED_LIVE_ZERO_COMPANIES = {
+    "Deutsche Bank",
     "Infosys",
     "ASL Aviation Holdings",
     "Central Bank of Ireland",
