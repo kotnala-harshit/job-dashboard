@@ -20,7 +20,9 @@ jobs:
     timeout-minutes: 50
     steps:
       - uses: actions/checkout@v6
-        with: {fetch-depth: 0}
+        with:
+          fetch-depth: 0
+          ref: main
       - uses: actions/setup-python@v6
         with: {python-version: '3.11'}
       - name: Install dependencies
@@ -35,6 +37,8 @@ jobs:
           CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
         run: |
           set -euo pipefail
+          git fetch origin main
+          git reset --hard origin/main
           python test_refresh_publish.py
           python test_proven_batch.py
           timeout --signal=TERM --kill-after=30s 45m env SCRAPE_MODE=full SCRAPE_PHASE=core SCRAPE_WORKERS=20 python -u scrape.py
