@@ -19272,6 +19272,32 @@ SCRAPE_PHASE = os.environ.get("SCRAPE_PHASE", "all").strip().lower()
 SCRAPE_WORKERS = max(2, min(32, int(os.environ.get("SCRAPE_WORKERS", "16"))))
 SCRAPE_SHARD_INDEX = max(0, int(os.environ.get("SCRAPE_SHARD_INDEX", "0")))
 SCRAPE_SHARD_COUNT = max(1, int(os.environ.get("SCRAPE_SHARD_COUNT", "1")))
+
+STALE_GENERIC_ATS_PROBES = {
+    ("greenhouse", "workhuman"),
+    ("greenhouse", "snowflake"),
+    ("greenhouse", "wayflyer"),
+    ("greenhouse", "fenergo"),
+    ("greenhouse", "genesys"),
+    ("lever", "monzo"),
+}
+
+STALE_PERSONIO_XML_PROBES = {
+    "keelvar",
+    "dilloneustace",
+}
+
+def _skip_known_stale_generic_probe(platform, slug):
+    """Suppress only generic ATS endpoints already verified stale.
+
+    Direct-company connectors and other fallback mechanisms remain untouched.
+    """
+    platform = str(platform or "").strip().lower()
+    slug = str(slug or "").strip().lower()
+    return (
+        (platform, slug) in STALE_GENERIC_ATS_PROBES
+        or (platform == "personio" and slug in STALE_PERSONIO_XML_PROBES)
+    )
 # Promote verified direct connectors into the hourly core run in batches of 10.
 PROVEN_REFRESH_BATCHES = (
     ("Accenture", "EY Ireland", "KPMG Ireland", "Oracle", "SAP",
