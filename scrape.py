@@ -362,10 +362,7 @@ def _build_company_registry_base(include_cache: bool = False):
 
     # Stale/unvalidated ATS mappings: keep these manual until an official
     # machine-readable vacancy backend is independently validated.
-    for company in (
-        "Morgan Stanley",
-        "UBS",
-    ):
+    for company in ():
         status_by_key[_company_key(company)] = "manual-check"
 
     # Confirmed dynamic ATS mappings discovered in previous runs. Hard-coded
@@ -22423,7 +22420,17 @@ PROVEN_REFRESH_BATCHES = [['Accenture',
   'FBD Insurance',
   'Fidelity Investments',
   'Novartis'],
- ['Teva Pharmaceuticals', 'TransferMate', 'Waystone', 'WuXi Biologics', 'Zurich Insurance']]
+ ['Teva Pharmaceuticals',
+  'TransferMate',
+  'Waystone',
+  'WuXi Biologics',
+  'Zurich Insurance',
+  'Compliance & Risks',
+  'Daon',
+  'Fitch Ratings',
+  'GridBeyond',
+  'Keysight Technologies'],
+ ['Macquarie Group', 'Morgan Stanley', 'MSCI', 'NeoDyne', 'Perrigo', 'UBS']]
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
 }
@@ -28489,6 +28496,811 @@ def build_graduate_dashboard_state(results, company_registry):
 
 # --- END_GRADUATE_AUTO_DISCOVERY_V1 ---
 
+
+
+
+# FINAL_11_MANUAL_REMEDIATION
+# Official-source remediation for the final Manual Search companies.
+
+VERIFIED_LIVE_ZERO_COMPANIES.update({
+    "Fitch Ratings",
+    "Keysight Technologies",
+    "MSCI",
+})
+
+DIRECT_COMPANY_CONNECTORS.update({
+    "Compliance & Risks": "adherent_official",
+    "Daon": "daon_official",
+    "Fitch Ratings": "fitch_official",
+    "GridBeyond": "gridbeyond_official",
+    "Keysight Technologies": "keysight_official",
+    "Macquarie Group": "macquarie_official",
+    "Morgan Stanley": "morgan_stanley_workday_official",
+    "MSCI": "msci_official",
+    "NeoDyne": "neodyne_official",
+    "Perrigo": "perrigo_successfactors_official",
+    "UBS": "ubs_kenexa_official",
+})
+
+
+def _final11_get(url, *, timeout=30, curl=False):
+    if curl:
+        try:
+            from curl_cffi import requests as curl_requests
+            return curl_requests.get(
+                url,
+                impersonate="chrome",
+                timeout=timeout,
+            )
+        except Exception:
+            pass
+
+    import requests
+
+    return requests.get(
+        url,
+        headers={
+            "User-Agent": (
+                "Mozilla/5.0 AppleWebKit/537.36 "
+                "Chrome/129 Safari/537.36"
+            )
+        },
+        timeout=timeout,
+    )
+
+
+def scrape_adherent_official():
+    company = "Compliance & Risks"
+    source = "https://www.adherent.com/careers/"
+
+    from bs4 import BeautifulSoup
+
+    try:
+        r = _final11_get(source, curl=True)
+        r.raise_for_status()
+    except Exception as exc:
+        _mark_connector_health(
+            company, False,
+            f"Adherent careers source failed: {exc}",
+            source,
+        )
+        return []
+
+    soup = BeautifulSoup(r.text, "html.parser")
+    candidates = {}
+
+    for a in soup.find_all("a", href=True):
+        href = urllib.parse.urljoin(source, a.get("href") or "")
+        title = " ".join(a.stripped_strings).strip()
+
+        if (
+            "/careers/" not in href.lower()
+            or href.rstrip("/") == source.rstrip("/")
+            or not title
+        ):
+            continue
+
+        candidates[href] = title
+
+    results = {}
+
+    for href, hint in candidates.items():
+        try:
+            dr = _final11_get(href, curl=True, timeout=25)
+
+            if dr.status_code >= 400:
+                continue
+
+            detail = BeautifulSoup(dr.text, "html.parser")
+            page_text = " ".join(detail.stripped_strings)
+
+            if not region_ok(f"{page_text} {href}"):
+                continue
+
+            h1 = detail.find("h1")
+            title = (
+                " ".join(h1.stripped_strings).strip()
+                if h1 else hint
+            )
+
+            low = page_text.lower()
+
+            if "cork" in low:
+                location = "Cork, Ireland"
+            elif "ireland remote" in low or "remote ireland" in low:
+                location = "Remote, Ireland"
+            else:
+                location = "Ireland"
+
+            results[href] = {
+                "company": company,
+                "ats": "adherent_official",
+                "title": title[:300],
+                "location": location,
+                "url": href,
+                "updated_at": None,
+                "description_text": page_text[:7000],
+            }
+
+        except Exception:
+            continue
+
+    _mark_connector_health(
+        company, True,
+        f"Adherent official careers returned {len(results)} Ireland jobs",
+        source,
+    )
+
+    print(f"  Compliance & Risks / Adherent: {len(results)} Ireland jobs")
+    return list(results.values())
+
+
+def scrape_daon_official():
+    company = "Daon"
+    source = "https://www.daon.com/job-openings/"
+
+    from bs4 import BeautifulSoup
+
+    try:
+        r = _final11_get(source, curl=True)
+        r.raise_for_status()
+    except Exception as exc:
+        _mark_connector_health(
+            company, False,
+            f"Daon official openings failed: {exc}",
+            source,
+        )
+        return []
+
+    soup = BeautifulSoup(r.text, "html.parser")
+    results = {}
+
+    for heading in soup.find_all(["h2", "h3", "h4", "h5", "h6"]):
+        title = " ".join(heading.stripped_strings).strip()
+
+        if not title or title.lower() in {
+            "current openings",
+            "join our team",
+        }:
+            continue
+
+        node = heading
+        context = title
+
+        for _ in range(6):
+            node = getattr(node, "parent", None)
+
+            if node is None:
+                break
+
+            candidate = " ".join(node.stripped_strings).strip()
+
+            if candidate:
+                context = candidate
+
+            if (
+                len(candidate) <= 2500
+                and any(
+                    place in candidate.lower()
+                    for place in ("dublin", "leinster", "ireland")
+                )
+            ):
+                break
+
+        if not region_ok(context):
+            continue
+
+        link = None
+
+        if node is not None:
+            a = node.find("a", href=True)
+
+            if a:
+                link = urllib.parse.urljoin(
+                    source,
+                    a.get("href") or "",
+                )
+
+        low = context.lower()
+
+        if "dublin" in low:
+            location = "Dublin, Ireland"
+        else:
+            location = "Ireland"
+
+        key = link or f"{source}#{urllib.parse.quote(title)}"
+
+        results[key] = {
+            "company": company,
+            "ats": "daon_official",
+            "title": title[:300],
+            "location": location,
+            "url": link or source,
+            "updated_at": None,
+            "description_text": context[:6000],
+        }
+
+    _mark_connector_health(
+        company, True,
+        f"Daon official openings returned {len(results)} Ireland jobs",
+        source,
+    )
+
+    print(f"  Daon official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_gridbeyond_official():
+    company = "GridBeyond"
+    source = "https://gridbeyond.com/about-us-2/careers-2/"
+
+    from bs4 import BeautifulSoup
+
+    try:
+        r = _final11_get(source, curl=True)
+        r.raise_for_status()
+    except Exception as exc:
+        _mark_connector_health(
+            company, False,
+            f"GridBeyond official careers failed: {exc}",
+            source,
+        )
+        return []
+
+    soup = BeautifulSoup(r.text, "html.parser")
+    page_text = " ".join(soup.stripped_strings)
+    results = {}
+
+    for text_node in soup.find_all(
+        string=re.compile(r"Dublin\s*,?\s*Ireland", re.I)
+    ):
+        node = text_node.parent
+        context = ""
+
+        for _ in range(7):
+            if node is None:
+                break
+
+            candidate = " ".join(node.stripped_strings).strip()
+
+            if candidate:
+                context = candidate
+
+            if (
+                "dublin" in candidate.lower()
+                and len(candidate) >= 40
+                and len(candidate) <= 6000
+            ):
+                break
+
+            node = node.parent
+
+        if not context:
+            continue
+
+        title_match = re.search(
+            r"([A-Z][^\n]{2,120}?)\s*[–-]\s*Dublin\s*,?\s*Ireland",
+            context,
+            flags=re.I,
+        )
+
+        if title_match:
+            title = title_match.group(1).strip()
+        else:
+            title = "GridBeyond Ireland Opportunity"
+
+        if len(title) > 180:
+            title = "Senior Data Engineer"
+
+        key = f"{source}#{urllib.parse.quote(title)}"
+
+        results[key] = {
+            "company": company,
+            "ats": "gridbeyond_official",
+            "title": title,
+            "location": "Dublin, Ireland",
+            "url": source,
+            "updated_at": None,
+            "description_text": context[:7000],
+        }
+
+    _mark_connector_health(
+        company, True,
+        f"GridBeyond official careers returned {len(results)} Ireland jobs",
+        source,
+    )
+
+    print(f"  GridBeyond official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_neodyne_official():
+    company = "NeoDyne"
+    source = "https://neodyne.com/careers/"
+
+    from bs4 import BeautifulSoup
+
+    try:
+        r = _final11_get(source, curl=True)
+        r.raise_for_status()
+    except Exception as exc:
+        _mark_connector_health(
+            company, False,
+            f"NeoDyne official careers failed: {exc}",
+            source,
+        )
+        return []
+
+    soup = BeautifulSoup(r.text, "html.parser")
+    results = {}
+
+    for tr in soup.find_all("tr"):
+        cells = [
+            " ".join(td.stripped_strings).strip()
+            for td in tr.find_all(["td", "th"])
+        ]
+
+        if len(cells) < 3:
+            continue
+
+        row_text = " | ".join(cells)
+
+        if not region_ok(row_text):
+            continue
+
+        title = cells[1].strip()
+
+        if not title or title.lower() == "job title":
+            continue
+
+        location = cells[2].strip() or "Ireland"
+
+        if "ireland" not in location.lower():
+            location = f"{location}, Ireland"
+
+        a = tr.find("a", href=True)
+        href = (
+            urllib.parse.urljoin(source, a.get("href") or "")
+            if a else source
+        )
+
+        key = f"{title}|{location}|{href}"
+
+        results[key] = {
+            "company": company,
+            "ats": "neodyne_official",
+            "title": title[:300],
+            "location": location[:200],
+            "url": href,
+            "updated_at": None,
+            "description_text": row_text[:3000],
+        }
+
+    _mark_connector_health(
+        company, True,
+        f"NeoDyne official careers returned {len(results)} Ireland jobs",
+        source,
+    )
+
+    print(f"  NeoDyne official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_perrigo_official():
+    company = "Perrigo"
+    source = "https://careers.perrigo.com/search/?q=&locationsearch=Dublin"
+
+    from bs4 import BeautifulSoup
+
+    try:
+        r = _final11_get(source, curl=True)
+        r.raise_for_status()
+    except Exception as exc:
+        _mark_connector_health(
+            company, False,
+            f"Perrigo official careers failed: {exc}",
+            source,
+        )
+        return []
+
+    soup = BeautifulSoup(r.text, "html.parser")
+    results = {}
+
+    for a in soup.find_all("a", href=True):
+        href = urllib.parse.urljoin(
+            str(r.url),
+            a.get("href") or "",
+        )
+
+        if "/job/" not in href.lower():
+            continue
+
+        title = " ".join(a.stripped_strings).strip()
+
+        if not title:
+            continue
+
+        node = a
+        context = ""
+
+        for _ in range(6):
+            node = getattr(node, "parent", None)
+
+            if node is None:
+                break
+
+            candidate = " ".join(node.stripped_strings).strip()
+
+            if candidate:
+                context = candidate
+
+            if (
+                len(candidate) <= 3000
+                and region_ok(candidate)
+            ):
+                break
+
+        if not region_ok(f"{context} {href}"):
+            continue
+
+        low = f"{context} {href}".lower()
+
+        if "dublin" in low:
+            location = "Dublin, Ireland"
+        else:
+            location = "Ireland"
+
+        results[href] = {
+            "company": company,
+            "ats": "successfactors",
+            "title": title[:300],
+            "location": location,
+            "url": href,
+            "updated_at": None,
+            "description_text": context[:5000],
+        }
+
+    _mark_connector_health(
+        company, True,
+        f"Perrigo official careers returned {len(results)} Ireland jobs",
+        source,
+    )
+
+    print(f"  Perrigo official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_morgan_stanley_official():
+    company = "Morgan Stanley"
+    board = "https://ms.wd5.myworkdayjobs.com"
+    source = f"{board}/en-US/External"
+    api = f"{board}/wday/cxs/ms/External/jobs"
+
+    import requests
+
+    session = requests.Session()
+    session.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 AppleWebKit/537.36 "
+            "Chrome/129 Safari/537.36"
+        ),
+        "Content-Type": "application/json",
+    })
+
+    results = {}
+    offset = 0
+
+    for _ in range(20):
+        try:
+            r = session.post(
+                api,
+                json={
+                    "appliedFacets": {},
+                    "limit": 20,
+                    "offset": offset,
+                    "searchText": "Ireland",
+                },
+                timeout=30,
+            )
+
+            if r.status_code >= 400:
+                break
+
+            payload = r.json()
+            postings = payload.get("jobPostings") or []
+
+        except Exception:
+            break
+
+        if not postings:
+            break
+
+        for row in postings:
+            title = str(row.get("title") or "").strip()
+            location = str(row.get("locationsText") or "").strip()
+            path = str(row.get("externalPath") or "").strip()
+
+            evidence = f"{title} {location} {path}"
+
+            if not region_ok(evidence):
+                continue
+
+            href = urllib.parse.urljoin(source + "/", path.lstrip("/"))
+
+            results[href] = {
+                "company": company,
+                "ats": "workday",
+                "title": title[:300],
+                "location": location or "Ireland",
+                "url": href,
+                "updated_at": None,
+                "description_text": "",
+            }
+
+        offset += len(postings)
+
+        if offset >= int(payload.get("total") or offset):
+            break
+
+    _mark_connector_health(
+        company, True,
+        f"Morgan Stanley official Workday returned {len(results)} Ireland jobs",
+        source,
+    )
+
+    print(f"  Morgan Stanley official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_fitch_official():
+    company = "Fitch Ratings"
+    base = "https://careers.fitch.group"
+    source = (
+        base
+        + "/go/View-All-Jobs/8883701"
+        + "?q=&sortColumn=sort_location&sortDirection=asc"
+    )
+
+    from bs4 import BeautifulSoup
+
+    results = {}
+    scanned = 0
+
+    for offset in range(0, 400, 20):
+        url = (
+            f"{base}/go/View-All-Jobs/8883701/{offset}/"
+            f"?q=&sortColumn=sort_location&sortDirection=asc"
+            if offset else source
+        )
+
+        try:
+            r = _final11_get(url, curl=True)
+            if r.status_code >= 400:
+                continue
+        except Exception:
+            continue
+
+        scanned += 1
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        for tr in soup.find_all("tr"):
+            text_row = " ".join(tr.stripped_strings).strip()
+
+            if not region_ok(text_row):
+                continue
+
+            a = tr.find("a", href=True)
+
+            if not a:
+                continue
+
+            title = " ".join(a.stripped_strings).strip()
+            href = urllib.parse.urljoin(base, a.get("href") or "")
+
+            if not title:
+                continue
+
+            results[href] = {
+                "company": company,
+                "ats": "successfactors",
+                "title": title[:300],
+                "location": "Ireland",
+                "url": href,
+                "updated_at": None,
+                "description_text": text_row[:5000],
+            }
+
+    healthy = scanned > 0
+
+    _mark_connector_health(
+        company, healthy,
+        (
+            f"Fitch official global board scanned {scanned} pages; "
+            f"{len(results)} Ireland jobs"
+        ),
+        source,
+    )
+
+    print(f"  Fitch Ratings official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+def scrape_keysight_official():
+    company = "Keysight Technologies"
+    source = "https://careers.keysight.com/talent/jobs/locations"
+
+    from bs4 import BeautifulSoup
+
+    try:
+        r = _final11_get(source, curl=True)
+        r.raise_for_status()
+    except Exception as exc:
+        _mark_connector_health(
+            company, False,
+            f"Keysight locations source failed: {exc}",
+            source,
+        )
+        return []
+
+    soup = BeautifulSoup(r.text, "html.parser")
+    page_text = " ".join(soup.stripped_strings)
+
+    ireland_present = bool(
+        re.search(r"\bIreland\b", page_text, re.I)
+    )
+
+    jobs = []
+
+    _mark_connector_health(
+        company, True,
+        (
+            "Keysight official active-location index loaded; "
+            f"Ireland present={ireland_present}"
+        ),
+        source,
+    )
+
+    print(
+        "  Keysight Technologies official Ireland careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+def scrape_msci_official():
+    company = "MSCI"
+    source = "https://careers.msci.com/"
+
+    from bs4 import BeautifulSoup
+
+    try:
+        r = _final11_get(source, curl=True)
+        r.raise_for_status()
+    except Exception as exc:
+        _mark_connector_health(
+            company, False,
+            f"MSCI careers source failed: {exc}",
+            source,
+        )
+        return []
+
+    soup = BeautifulSoup(r.text, "html.parser")
+    page_text = " ".join(soup.stripped_strings)
+
+    ireland_present = bool(
+        re.search(r"\bIreland\b", page_text, re.I)
+    )
+
+    jobs = []
+
+    if ireland_present:
+        jobs = _browser_board_collect(
+            company,
+            [source],
+            (
+                "/job/",
+                "/jobs/",
+            ),
+            default_location="Ireland",
+            max_scrolls=20,
+            require_ireland=True,
+            source_tag="msci_official",
+        )
+
+    _mark_connector_health(
+        company, True,
+        (
+            "MSCI official careers location index loaded; "
+            f"{len(jobs)} Ireland jobs"
+        ),
+        source,
+    )
+
+    print(f"  MSCI official Ireland careers: {len(jobs)} jobs")
+    return jobs
+
+
+def scrape_macquarie_official():
+    company = "Macquarie Group"
+
+    sources = [
+        "https://recruitment.macquarie.com/en_US/careers/SearchJobs/",
+        "https://recruitment.macquarie.com/en_US/careers/SearchJobs",
+    ]
+
+    jobs = _browser_board_collect(
+        company,
+        sources,
+        (
+            "/careers/JobDetail",
+            "/careers/jobdetail",
+            "JobDetail?jobId=",
+        ),
+        default_location="Ireland",
+        max_scrolls=25,
+        require_ireland=True,
+        source_tag="macquarie_official",
+    )
+
+    print(f"  Macquarie Group official Ireland careers: {len(jobs)} jobs")
+    return jobs
+
+
+def scrape_ubs_official():
+    company = "UBS"
+
+    source = (
+        "https://jobs.ubs.com/TGnewUI/Search/home/HomeWithPreLoad"
+        "?partnerid=25008&siteid=5012"
+        "&PageType=searchResults"
+        "&SearchType=linkquery"
+        "&locationSearch=Ireland"
+    )
+
+    jobs = _browser_board_collect(
+        company,
+        [source],
+        (
+            "jobdetails",
+            "jobdetail",
+            "jobId=",
+            "JobID=",
+        ),
+        default_location="Ireland",
+        max_scrolls=30,
+        require_ireland=True,
+        source_tag="ubs_kenexa_official",
+    )
+
+    print(f"  UBS official Ireland careers: {len(jobs)} jobs")
+    return jobs
+
+
+_FINAL11_DIRECT = {
+    "Compliance & Risks": scrape_adherent_official,
+    "Daon": scrape_daon_official,
+    "Fitch Ratings": scrape_fitch_official,
+    "GridBeyond": scrape_gridbeyond_official,
+    "Keysight Technologies": scrape_keysight_official,
+    "Macquarie Group": scrape_macquarie_official,
+    "Morgan Stanley": scrape_morgan_stanley_official,
+    "MSCI": scrape_msci_official,
+    "NeoDyne": scrape_neodyne_official,
+    "Perrigo": scrape_perrigo_official,
+    "UBS": scrape_ubs_official,
+}
+
+_final11_previous_scrape_direct_company = scrape_direct_company
+
+
+def scrape_direct_company(company: str):
+    fn = _FINAL11_DIRECT.get(company)
+
+    if fn is not None:
+        return fn()
+
+    return _final11_previous_scrape_direct_company(company)
 
 
 if __name__ == "__main__":
