@@ -228,9 +228,11 @@ class RegistryTests(unittest.TestCase):
             if row["include_in_scrape_registry"].lower() == "true"
         }
 
-        # Evidence-backed registry currently contains 235 unique active companies.
-        self.assertEqual(295, len(active))
-        self.assertEqual(295, len(set(active)))
+        # Canonical master registry is deduplicated.
+        # AMD is represented by Advanced Micro Devices (AMD) in the CSV,
+        # while AMD remains available as a runtime alias.
+        self.assertEqual(294, len(active))
+        self.assertEqual(294, len(set(active)))
 
         # Critical profile-focused companies that must remain active.
         required = {
