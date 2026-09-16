@@ -78,7 +78,7 @@ KNOWN_HEALTHY_ZERO_COMPANIES = {
         "url": "https://db.wd3.myworkdayjobs.com/DBWebsite",
         "note": "Official Deutsche Bank Workday source verified live; currently 0 qualifying Ireland jobs",
     },
-    "Unilever": {
+    "Unilever Ireland": {
         "url": "https://unilever.wd3.myworkdayjobs.com/Unilever_Experienced_Professionals",
         "note": "Official Unilever Workday source verified live; currently 0 qualifying Ireland jobs",
     },
@@ -89,6 +89,18 @@ KNOWN_HEALTHY_ZERO_COMPANIES = {
     "NVIDIA": {
         "url": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite",
         "note": "Official NVIDIA Workday source verified live; currently 0 qualifying Ireland jobs",
+    },
+    "Texas Instruments": {
+        "url": "https://careers.ti.com/en/sites/CX",
+        "note": "Official Texas Instruments Oracle Candidate Experience source verified live; global location facets currently contain no Republic of Ireland vacancies",
+    },
+    "Nokia": {
+        "url": "https://jobs.nokia.com/en/sites/CX_1",
+        "note": "Official Nokia Oracle Candidate Experience source verified live; global location facets currently contain no Republic of Ireland vacancies",
+    },
+    "Seagate": {
+        "url": "https://seagatecareers.com/search/",
+        "note": "Official Seagate SuccessFactors careers search verified live; Ireland search currently returns no matching vacancies",
     },
 }
 
@@ -205,6 +217,10 @@ CAREERS_URL_OVERRIDES = {
     "EY Ireland": "https://careers.ey.com/ey",
     "Accenture": "https://www.accenture.com/ie-en/careers/jobsearch",
     "Citi": "https://jobs.citi.com/location/dublin-jobs/287/2963597/2",
+    "Morgan Stanley": "https://www.morganstanley.com/careers/career-opportunities-search",
+    "UBS": "https://www.ubs.com/global/en/careers/search-jobs.html",
+    "Morningstar": "https://www.morningstar.com/en-us/company/careers",
+    "Seagate": "https://seagatecareers.com/search/",
 }
 
 def _company_key(value: str) -> str:
@@ -281,7 +297,7 @@ def _build_company_registry_base(include_cache: bool = False):
         # Verified healthy-zero Workday companies are retained in the
         # registry even though they are excluded from the active scrape batch.
         "Deutsche Bank": "workday",
-        "Unilever": "workday",
+        "Unilever Ireland": "workday",
         "Visa": "workday",
         "NVIDIA": "workday",
         "Accenture": "direct",
@@ -311,6 +327,16 @@ def _build_company_registry_base(include_cache: bool = False):
     status_by_key.update({_company_key(k): v for k, v in explicit_status_aliases.items()})
     for mapping in connector_maps:
         status_by_key.update(mapping)
+
+
+    # Stale/unvalidated ATS mappings: keep these manual until an official
+    # machine-readable vacancy backend is independently validated.
+    for company in (
+        "Morgan Stanley",
+        "UBS",
+        "Morningstar",
+    ):
+        status_by_key[_company_key(company)] = "manual-check"
 
     # Confirmed dynamic ATS mappings discovered in previous runs. Hard-coded
     # mappings remain authoritative; cache only fills companies that otherwise
@@ -522,6 +548,12 @@ VERIFIED_LIVE_ZERO_COMPANIES = {
     "Red Hat",
     "HSBC Ireland",
     "CGI",
+    "Unilever Ireland",
+    "NVIDIA",
+    "Visa",
+    "Texas Instruments",
+    "Nokia",
+    "Seagate",
 }
 
 def _mark_connector_health(company, live=True, note=None, url=None):
@@ -20160,6 +20192,111 @@ def scrape_teneo_ireland_official():
     return list(out.values())
 
 
+
+def scrape_virgin_media_ireland():
+    company = "Virgin Media Ireland"
+    tenant = "libertyglobal"
+    host = "wd3"
+    site = "VMIE_Careers"
+    source = "https://libertyglobal.wd3.myworkdayjobs.com/VMIE_Careers"
+
+    origin = f"https://{tenant}.{host}.myworkdayjobs.com"
+    api = f"{origin}/wday/cxs/{tenant}/{site}/jobs"
+
+    sess = _workday_session()
+    headers = _workday_headers(tenant, host, site)
+
+    if sess is None:
+        return []
+
+    resp = _workday_post(
+        sess,
+        api,
+        headers,
+        {},
+        20,
+        0,
+        "",
+    )
+
+    if resp is None:
+        _mark_connector_health(
+            company,
+            False,
+            "Virgin Media Ireland Workday API did not respond",
+            source,
+        )
+        return []
+
+    try:
+        data = resp.json() or {}
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), source)
+        return []
+
+    results = {}
+
+    for row in data.get("jobPostings") or []:
+        title = str(row.get("title") or "").strip()
+        raw_location = str(
+            row.get("locationsText")
+            or (
+                (row.get("bulletFields") or [""])[0]
+                if row.get("bulletFields")
+                else ""
+            )
+        ).strip()
+
+        if not title:
+            continue
+
+        if re.search(r"\bBallymount\b", raw_location, re.I):
+            location = "Ballymount, Dublin, Ireland"
+        elif region_ok(raw_location):
+            location = raw_location
+        else:
+            continue
+
+        external_path = str(row.get("externalPath") or "").strip()
+
+        if external_path:
+            url = urllib.parse.urljoin(
+                f"{origin}/en-US/{site}/",
+                external_path,
+            )
+        else:
+            url = source
+
+        key = url.rstrip("/").lower() + "|" + title.lower()
+
+        results[key] = {
+            "company": company,
+            "ats": "workday",
+            "title": title,
+            "location": location,
+            "url": url,
+            "updated_at": None,
+            "description_text": "",
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        (
+            "Official Virgin Media Ireland Workday returned "
+            f"{len(results)} Ireland jobs"
+        ),
+        source,
+    )
+
+    print(
+        f"  Virgin Media Ireland official Workday: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
 def scrape_workhuman_official():
     company = "Workhuman"
     source = "https://www.workhuman.com/company/careers/list/"
@@ -20685,6 +20822,7 @@ def scrape_direct_company(company: str):
         "Qualcomm": scrape_qualcomm,
         "Fexco": scrape_fexco_official,
         "Teneo Ireland": scrape_teneo_ireland_official,
+        "Virgin Media Ireland": scrape_virgin_media_ireland,
         "NTT DATA Services": scrape_ntt_data,
         "NTT Data": scrape_ntt_data,
         "NTT DATA": scrape_ntt_data,
@@ -22399,6 +22537,7 @@ def main():
             "PTSB (Permanent TSB)",
             "Fexco",
             "Teneo Ireland",
+            "Virgin Media Ireland",
         )
 
         _parallel_collect_isolated(
@@ -24846,6 +24985,7 @@ def _working_batch_base_scrape_direct_company(company: str):
         "Qualcomm": scrape_qualcomm,
         "Fexco": scrape_fexco_official,
         "Teneo Ireland": scrape_teneo_ireland_official,
+        "Virgin Media Ireland": scrape_virgin_media_ireland,
         "NTT DATA Services": scrape_ntt_data,
         "NTT Data": scrape_ntt_data,
         "NTT DATA": scrape_ntt_data,
