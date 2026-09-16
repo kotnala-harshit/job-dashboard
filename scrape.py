@@ -157,7 +157,6 @@ RECRUITEE_COMPANIES = [
 
 PERSONIO_COMPANIES = [
     "keelvar",
-    "dilloneustace",
 ]
 
 PINPOINT_COMPANIES = ['ericsson', 'kpmg', 'greencore', 'arcadis', 'zendesk', 'nutanix', 'terumo', 'smith']
@@ -19257,6 +19256,697 @@ def scrape_concentrix_official():
 
 
 
+
+def _fz2_text(value):
+    value = html.unescape(str(value or ""))
+    value = re.sub(r"<[^>]+>", " ", value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def scrape_solarwinds_official():
+    from bs4 import BeautifulSoup
+
+    company = "SolarWinds"
+    base = "https://jobs.solarwinds.com/jobs/"
+    sess = _session()
+    jobs = {}
+
+    for page_num in range(1, 10):
+        url = (
+            base
+            if page_num == 1
+            else f"{base}?sw-page={page_num}"
+        )
+
+        try:
+            r = sess.get(
+                url,
+                timeout=30,
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+            r.raise_for_status()
+        except Exception as exc:
+            print(
+                f"  ! SolarWinds page {page_num} failed: {exc}"
+            )
+            break
+
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        anchors = soup.find_all(
+            "a",
+            href=re.compile(
+                r"job-detail/\?gh_jid=\d+",
+                re.I,
+            ),
+        )
+
+        page_ids = set()
+
+        for a in anchors:
+            href = urllib.parse.urljoin(
+                r.url,
+                html.unescape(
+                    str(a.get("href") or "")
+                ),
+            )
+
+            m = re.search(
+                r"[?&]gh_jid=(\d+)",
+                href,
+                re.I,
+            )
+
+            if not m:
+                continue
+
+            jid = m.group(1)
+
+            if jid in page_ids:
+                continue
+
+            page_ids.add(jid)
+
+            card = None
+            node = a
+
+            for _ in range(10):
+                node = getattr(node, "parent", None)
+
+                if node is None:
+                    break
+
+                card_links = {
+                    re.search(
+                        r"[?&]gh_jid=(\d+)",
+                        urllib.parse.urljoin(
+                            r.url,
+                            html.unescape(
+                                str(x.get("href") or "")
+                            ),
+                        ),
+                        re.I,
+                    ).group(1)
+                    for x in node.find_all(
+                        "a",
+                        href=re.compile(
+                            r"job-detail/\?gh_jid=\d+",
+                            re.I,
+                        ),
+                    )
+                    if re.search(
+                        r"[?&]gh_jid=(\d+)",
+                        urllib.parse.urljoin(
+                            r.url,
+                            html.unescape(
+                                str(x.get("href") or "")
+                            ),
+                        ),
+                        re.I,
+                    )
+                }
+
+                text = _fz2_text(
+                    node.get_text(
+                        " ",
+                        strip=True,
+                    )
+                )
+
+                if (
+                    card_links == {jid}
+                    and re.search(
+                        r"\bLocation\b",
+                        text,
+                        re.I,
+                    )
+                ):
+                    card = node
+                    break
+
+            if card is None:
+                continue
+
+            card_text = _fz2_text(
+                card.get_text(
+                    " ",
+                    strip=True,
+                )
+            )
+
+            location_match = re.search(
+                r"\bLocation\s+(.+?)\s+Departments\b",
+                card_text,
+                re.I,
+            )
+
+            if not location_match:
+                continue
+
+            location = _fz2_text(
+                location_match.group(1)
+            )
+
+            if not re.search(
+                r"\bCork,\s*Ireland\b",
+                location,
+                re.I,
+            ):
+                continue
+
+            title = ""
+
+            for candidate in card.find_all(
+                "a",
+                href=re.compile(
+                    rf"job-detail/\?gh_jid={re.escape(jid)}",
+                    re.I,
+                ),
+            ):
+                candidate_text = _fz2_text(
+                    candidate.get_text(
+                        " ",
+                        strip=True,
+                    )
+                )
+
+                if not candidate_text:
+                    continue
+
+                if candidate_text.lower().startswith(
+                    (
+                        "location ",
+                        "departments ",
+                    )
+                ):
+                    continue
+
+                title = candidate_text
+                break
+
+            if not title:
+                continue
+
+            canonical = (
+                "https://jobs.solarwinds.com/"
+                f"job-detail/?gh_jid={jid}"
+            )
+
+            jobs[canonical] = {
+                "company": company,
+                "ats": "official",
+                "title": title,
+                "location": "Cork, Ireland",
+                "url": canonical,
+                "updated_at": None,
+                "description_text": card_text[:5000],
+            }
+
+        next_link = soup.find(
+            "a",
+            string=re.compile(
+                r"^\s*Next\s*$",
+                re.I,
+            ),
+        )
+
+        if not next_link:
+            break
+
+    _mark_connector_health(
+        company,
+        True,
+        (
+            "Official SolarWinds careers loaded; "
+            f"{len(jobs)} Cork jobs"
+        ),
+        base,
+    )
+
+    print(
+        f"  SolarWinds official careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return list(jobs.values())
+
+def scrape_bdo_ireland_official():
+    company = "BDO Ireland"
+    source = "https://bdoireland.pinpointhq.com/"
+    jobs = {}
+
+    try:
+        from playwright.sync_api import sync_playwright
+
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                locale="en-IE",
+                user_agent=(
+                    "Mozilla/5.0 "
+                    "(Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) "
+                    "Chrome/139.0 Safari/537.36"
+                ),
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+
+            page.wait_for_timeout(2500)
+
+            anchors = page.locator("a[href]")
+
+            for i in range(anchors.count()):
+                a = anchors.nth(i)
+
+                try:
+                    href = a.get_attribute("href") or ""
+                    label = _fz2_text(a.inner_text(timeout=1000))
+                except Exception:
+                    continue
+
+                full = urllib.parse.urljoin(page.url, href)
+
+                if "pinpointhq.com" not in full.lower():
+                    continue
+
+                if not re.search(
+                    r"/(?:postings|jobs|job)/",
+                    full,
+                    re.I,
+                ):
+                    continue
+
+                if not label or len(label) < 3:
+                    continue
+
+                try:
+                    container_text = a.evaluate(
+                        """el => {
+                            let n = el;
+                            for (let i = 0; i < 7 && n; i++, n = n.parentElement) {
+                                const t = (n.innerText || '').replace(/\\s+/g, ' ').trim();
+                                if (t.length > 10 && t.length < 3000) return t;
+                            }
+                            return '';
+                        }"""
+                    )
+                except Exception:
+                    container_text = label
+
+                context_text = _fz2_text(container_text)
+
+                if not re.search(
+                    r"\b(?:Dublin|Ireland)\b",
+                    context_text,
+                    re.I,
+                ):
+                    continue
+
+                jobs[full] = {
+                    "company": company,
+                    "ats": "pinpoint",
+                    "title": label[:300],
+                    "location": (
+                        "Dublin, Ireland"
+                        if "dublin" in context_text.lower()
+                        else "Ireland"
+                    ),
+                    "url": full,
+                    "updated_at": None,
+                    "description_text": context_text[:5000],
+                }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! BDO Ireland Pinpoint scrape failed: {exc}")
+
+    _mark_connector_health(
+        company,
+        bool(jobs),
+        f"Official BDO Ireland Pinpoint returned {len(jobs)} jobs",
+        source,
+    )
+
+    print(f"  BDO Ireland official careers: {len(jobs)} jobs")
+    return list(jobs.values())
+
+
+def scrape_bearingpoint_official():
+    company = "BearingPoint"
+    source = "https://www.bearingpoint.com/en-ie/careers/open-roles/?country=IE"
+    sess = _session()
+
+    try:
+        r = sess.get(
+            source,
+            timeout=30,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+        r.raise_for_status()
+    except Exception as exc:
+        print(f"  ! BearingPoint fetch failed: {exc}")
+        return []
+
+    jobs = {}
+
+    pattern = (
+        r'<a[^>]+href=["\']'
+        r'([^"\']*job-offer-successfactors/\?id=[^"\']+)'
+        r'["\'][^>]*>(.*?)</a>'
+    )
+
+    for match in re.finditer(pattern, r.text, re.I | re.S):
+        url = urllib.parse.urljoin(
+            source,
+            html.unescape(match.group(1)),
+        )
+
+        title = _fz2_text(match.group(2))
+
+        if not title:
+            continue
+
+        title = re.sub(
+            r"\s+(?:Advisory|Enterprise Microsoft Transformation|Software\s*-\s*Dev|Systems Design)$",
+            "",
+            title,
+            flags=re.I,
+        ).strip()
+
+        jobs[url] = {
+            "company": company,
+            "ats": "successfactors",
+            "title": title,
+            "location": "Dublin, Ireland",
+            "url": url,
+            "updated_at": None,
+            "description_text": "",
+        }
+
+    _mark_connector_health(
+        company,
+        bool(jobs),
+        f"Official BearingPoint Ireland page returned {len(jobs)} jobs",
+        source,
+    )
+
+    print(f"  BearingPoint official Ireland careers: {len(jobs)} jobs")
+    return list(jobs.values())
+
+
+def scrape_cartrawler_official():
+    company = "CarTrawler"
+    source = "https://corporate.cartrawler.com/en-gb/careers/opportunities/"
+    jobs = {}
+
+    body = ""
+
+    if cffi_requests is not None:
+        try:
+            r = cffi_requests.get(
+                source,
+                timeout=30,
+                impersonate="chrome",
+                headers={"Accept-Language": "en-IE,en;q=0.9"},
+            )
+
+            if r.status_code == 200:
+                body = r.text
+
+        except Exception:
+            pass
+
+    if not body:
+        try:
+            from playwright.sync_api import sync_playwright
+
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+
+                context = browser.new_context(locale="en-IE")
+                page = context.new_page()
+
+                page.goto(
+                    source,
+                    wait_until="domcontentloaded",
+                    timeout=60000,
+                )
+
+                page.wait_for_timeout(2500)
+                body = page.content()
+
+                context.close()
+                browser.close()
+
+        except Exception as exc:
+            print(f"  ! CarTrawler browser scrape failed: {exc}")
+
+    if body:
+        pattern = (
+            r'<a[^>]+href=["\']'
+            r'([^"\']*/careers/opportunities/[0-9a-f-]+/?)'
+            r'["\'][^>]*>(.*?)</a>'
+        )
+
+        candidate_urls = []
+
+        for match in re.finditer(pattern, body, re.I | re.S):
+            candidate_urls.append(
+                urllib.parse.urljoin(
+                    source,
+                    html.unescape(match.group(1)),
+                )
+            )
+
+        candidate_urls = list(dict.fromkeys(candidate_urls))
+
+        for url in candidate_urls:
+            detail_body = ""
+
+            if cffi_requests is not None:
+                try:
+                    dr = cffi_requests.get(
+                        url,
+                        timeout=25,
+                        impersonate="chrome",
+                    )
+                    if dr.status_code == 200:
+                        detail_body = dr.text
+                except Exception:
+                    pass
+
+            if not detail_body:
+                continue
+
+            plain = _fz2_text(detail_body)
+
+            if not re.search(
+                r"Location:\s*Dublin|\bDublin\b",
+                plain,
+                re.I,
+            ):
+                continue
+
+            h1 = re.search(
+                r"<h1[^>]*>(.*?)</h1>",
+                detail_body,
+                re.I | re.S,
+            )
+
+            if not h1:
+                continue
+
+            title = _fz2_text(h1.group(1))
+
+            if not title:
+                continue
+
+            jobs[url] = {
+                "company": company,
+                "ats": "official",
+                "title": title,
+                "location": "Dublin, Ireland",
+                "url": url,
+                "updated_at": None,
+                "description_text": plain[:10000],
+            }
+
+    _mark_connector_health(
+        company,
+        bool(jobs),
+        f"Official CarTrawler careers returned {len(jobs)} Dublin jobs",
+        source,
+    )
+
+    print(f"  CarTrawler official careers: {len(jobs)} jobs")
+    return list(jobs.values())
+
+
+def scrape_dillon_eustace_official():
+    company = "Dillon Eustace"
+    source = (
+        "https://www.dilloneustace.com/"
+        "careers/business-services/"
+    )
+
+    jobs = {}
+
+    try:
+        from playwright.sync_api import sync_playwright
+
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            context = browser.new_context(
+                locale="en-IE",
+                user_agent=(
+                    "Mozilla/5.0 "
+                    "(Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) "
+                    "Chrome/139.0 Safari/537.36"
+                ),
+            )
+
+            page = context.new_page()
+
+            page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+
+            page.wait_for_timeout(2500)
+
+            body_text = _fz2_text(
+                page.locator("body").inner_text()
+            )
+
+            if (
+                re.search(
+                    r"Lawyers\s*[-–]\s*all practice areas",
+                    body_text,
+                    re.I,
+                )
+                and re.search(
+                    r"Dublin,\s*Ireland",
+                    body_text,
+                    re.I,
+                )
+            ):
+                apply_url = source + "#current-opportunities"
+
+                anchors = page.locator("a[href]")
+
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
+
+                    try:
+                        label = _fz2_text(
+                            a.inner_text(timeout=500)
+                        )
+                        href = a.get_attribute("href") or ""
+                    except Exception:
+                        continue
+
+                    if not href:
+                        continue
+
+                    try:
+                        context_text = _fz2_text(
+                            a.evaluate(
+                                """el => {
+                                    let n = el;
+                                    for (
+                                        let i = 0;
+                                        i < 7 && n;
+                                        i++, n = n.parentElement
+                                    ) {
+                                        const t = (
+                                            n.innerText || ''
+                                        )
+                                            .replace(/\\s+/g, ' ')
+                                            .trim();
+
+                                        if (
+                                            /Lawyers\\s*[-–]\\s*all practice areas/i.test(t) &&
+                                            /Dublin,?\\s*Ireland/i.test(t)
+                                        ) {
+                                            return t;
+                                        }
+                                    }
+
+                                    return '';
+                                }"""
+                            )
+                        )
+                    except Exception:
+                        context_text = ""
+
+                    if not context_text:
+                        continue
+
+                    if (
+                        label.lower() == "apply"
+                        or "apply" in label.lower()
+                        or "lawyers" in label.lower()
+                    ):
+                        apply_url = urllib.parse.urljoin(
+                            page.url,
+                            href,
+                        )
+                        break
+
+                jobs[apply_url] = {
+                    "company": company,
+                    "ats": "official",
+                    "title": "Lawyers - all practice areas",
+                    "location": "Dublin, Ireland",
+                    "url": apply_url,
+                    "updated_at": None,
+                    "description_text": body_text[:10000],
+                }
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        print(
+            f"  ! Dillon Eustace browser scrape failed: "
+            f"{exc}"
+        )
+
+    _mark_connector_health(
+        company,
+        bool(jobs),
+        (
+            "Official Dillon Eustace careers returned "
+            f"{len(jobs)} Dublin jobs"
+        ),
+        source,
+    )
+
+    print(
+        f"  Dillon Eustace official careers: "
+        f"{len(jobs)} jobs"
+    )
+
+    return list(jobs.values())
+
 def scrape_workhuman_official():
     company = "Workhuman"
     source = "https://www.workhuman.com/company/careers/list/"
@@ -21484,6 +22174,11 @@ def main():
             "Nucleo",
             "Concentrix (Ireland)",
             "LearnUpon",
+            "SolarWinds",
+            "BDO Ireland",
+            "BearingPoint",
+            "CarTrawler",
+            "Dillon Eustace",
         )
 
         _parallel_collect_isolated(
@@ -24057,6 +24752,11 @@ def _working_batch_base_scrape_direct_company(company: str):
         "Nucleo": scrape_nucleo_official,
         "Concentrix (Ireland)": scrape_concentrix_official,
         "LearnUpon": scrape_learnupon_official,
+        "SolarWinds": scrape_solarwinds_official,
+        "BDO Ireland": scrape_bdo_ireland_official,
+        "BearingPoint": scrape_bearingpoint_official,
+        "CarTrawler": scrape_cartrawler_official,
+        "Dillon Eustace": scrape_dillon_eustace_official,
         "Workhuman": scrape_workhuman_official,
         "Takeda": scrape_takeda_official,
         "Teva Pharmaceuticals": scrape_teva_official,
