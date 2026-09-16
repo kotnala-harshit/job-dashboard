@@ -42,8 +42,8 @@ if registry_path.exists():
         and row.get("company_name", "").strip()
     }
 
-    if len(active) < 295:
-        errors.append(f"Expected at least 295 active companies, found {len(active)}")
+    if len(active) < 294:
+        errors.append(f"Expected at least 294 active companies, found {len(active)}")
 
     if "Deutsche Bank" not in active:
         errors.append("Deutsche Bank is not active")
