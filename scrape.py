@@ -129,6 +129,8 @@ WORKDAY_COMPANIES = [
 ('Proofpoint', 'proofpoint', 'wd5', 'ProofpointCareers'), ('AIG', 'aig', 'wd1', 'aig'), ('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'),  ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS'), ("Microchip Technology", "microchiphr", "wd5", "External"),
 ]
 WORKDAY_COMPANIES.append(('Stryker', 'stryker', 'wd1', 'StrykerCareers'))
+WORKDAY_COMPANIES.append(("Jabil", "jabil", "wd5", "Jabil_Careers"))
+
 WORKDAY_COMPANIES.append(('Clio', 'clio', 'wd3', 'cliocareersite'))
 WORKDAY_COMPANIES.extend([
     ('KLA Corporation', 'kla', 'wd1', 'Search'),
@@ -336,6 +338,22 @@ def _build_company_registry_base(include_cache: bool = False):
         "Keelvar": "personio",
         "Cohesity": "workday",
         "Coca-Cola": "workday",
+
+        # Independently verified official sources currently returning
+        # zero Republic of Ireland vacancies. These are not manual sources.
+        "FactSet": "official-verified-zero",
+        "Morningstar": "official-verified-zero",
+        "Nokia": "official-verified-zero",
+        "Seagate": "official-verified-zero",
+        "Siemens Healthineers": "official-verified-zero",
+        "Texas Instruments": "official-verified-zero",
+
+        # Dedicated official collectors.
+        "Teva Pharmaceuticals": "direct",
+        "Amgen": "direct",
+        "Novartis": "direct",
+        "Waystone": "direct",
+        "WuXi Biologics": "direct",
     }
     status_by_key.update({_company_key(k): v for k, v in explicit_status_aliases.items()})
     for mapping in connector_maps:
@@ -347,7 +365,6 @@ def _build_company_registry_base(include_cache: bool = False):
     for company in (
         "Morgan Stanley",
         "UBS",
-        "Morningstar",
     ):
         status_by_key[_company_key(company)] = "manual-check"
 
@@ -729,6 +746,13 @@ DIRECT_COMPANY_CONNECTORS = {
     "SMBC Aviation Capital": "smbc_aviation_official",
     "Veeam": "greenhouse_official",
     "Chubb": "oracle_candidate_experience",
+
+    # Manual-search remediation batch.
+    "Teva Pharmaceuticals": "teva_eightfold_official",
+    "Amgen": "amgen_official",
+    "Novartis": "novartis_official",
+    "Waystone": "waystone_bamboohr_official",
+    "WuXi Biologics": "wuxi_official",
 }
 
 # Official Irish university vacancy boards use a shared collector.
@@ -20764,6 +20788,314 @@ def scrape_teva_official():
     return list(results.values())
 
 
+
+# ---------------------------------------------------------------------------
+# Manual Search remediation: validated official careers sources
+# ---------------------------------------------------------------------------
+
+def scrape_amgen_official():
+    company = "Amgen"
+    source = (
+        "https://careers.amgen.com/en/location/"
+        "ireland-jobs/87/2963597/2/155892000000000"
+    )
+
+    jobs = _browser_board_collect(
+        company,
+        [source],
+        (
+            "/en/job/",
+            "/job/",
+        ),
+        default_location="Ireland",
+        max_scrolls=20,
+        require_ireland=True,
+        source_tag="amgen_official",
+    )
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Amgen careers returned {len(jobs)} Ireland jobs",
+        source,
+    )
+
+    return jobs
+
+
+def scrape_novartis_official():
+    company = "Novartis"
+    source = (
+        "https://www.novartis.com/ie-en/careers/career-search"
+        "?country%5B0%5D=LOC_IE"
+        "&field_alternative_country%5B0%5D=LOC_IE"
+    )
+
+    jobs = _browser_board_collect(
+        company,
+        [source],
+        (
+            "/careers/career-search/job/details/",
+        ),
+        default_location="Dublin, Ireland",
+        max_scrolls=20,
+        require_ireland=True,
+        source_tag="novartis_official",
+    )
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Novartis careers returned {len(jobs)} Ireland jobs",
+        source,
+    )
+
+    return jobs
+
+
+def scrape_waystone_official():
+    company = "Waystone"
+    source = "https://www.waystone.com/careers/"
+
+    jobs = _browser_board_collect(
+        company,
+        [source],
+        (
+            "waystone.bamboohr.com",
+        ),
+        default_location="Ireland",
+        max_scrolls=15,
+        require_ireland=True,
+        source_tag="bamboohr",
+    )
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Waystone/BambooHR careers returned {len(jobs)} Ireland jobs",
+        source,
+    )
+
+    return jobs
+
+
+def scrape_wuxi_biologics_official():
+    company = "WuXi Biologics"
+    source = "https://www.wuxibiologics.com/join-us/"
+
+    try:
+        import requests
+        from bs4 import BeautifulSoup
+    except Exception as exc:
+        print(f"  ! WuXi dependencies unavailable: {exc}")
+        return []
+
+    session = requests.Session()
+    session.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 Chrome/129 Safari/537.36"
+        )
+    })
+
+    try:
+        response = session.get(source, timeout=30)
+        response.raise_for_status()
+    except Exception as exc:
+        _mark_connector_health(
+            company,
+            False,
+            f"Official WuXi careers page failed: {exc}",
+            source,
+        )
+        return []
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    results = {}
+
+    # Primary path:
+    # WuXi's official page renders its vacancies in table rows.
+    for row in soup.find_all("tr"):
+        row_text = " ".join(row.stripped_strings).strip()
+
+        if not row_text:
+            continue
+
+        if not region_ok(row_text):
+            continue
+
+        links = row.find_all("a", href=True)
+
+        if not links:
+            continue
+
+        job_link = None
+        title = ""
+
+        for link in links:
+            href = urllib.parse.urljoin(
+                source,
+                (link.get("href") or "").strip(),
+            )
+
+            low = href.lower()
+
+            if "/join-us-" in low:
+                job_link = href
+                candidate = " ".join(
+                    link.stripped_strings
+                ).strip()
+
+                if candidate:
+                    title = candidate
+                break
+
+        if not job_link:
+            continue
+
+        if not title:
+            cells = [
+                " ".join(cell.stripped_strings).strip()
+                for cell in row.find_all(["td", "th"])
+            ]
+
+            for cell in cells:
+                low = cell.lower()
+
+                if (
+                    cell
+                    and "ireland" not in low
+                    and not re.fullmatch(
+                        r"\d{4}-\d{2}-\d{2}",
+                        cell,
+                    )
+                ):
+                    title = cell
+                    break
+
+        if not title:
+            continue
+
+        date_match = re.search(
+            r"\b(20\d{2}-\d{2}-\d{2})\b",
+            row_text,
+        )
+
+        updated_at = (
+            date_match.group(1)
+            if date_match
+            else None
+        )
+
+        low_text = row_text.lower()
+
+        if "dundalk" in low_text:
+            location = "Dundalk, Ireland"
+        elif "dublin" in low_text:
+            location = "Dublin, Ireland"
+        elif "louth" in low_text:
+            location = "Co. Louth, Ireland"
+        else:
+            location = "Ireland"
+
+        results[job_link] = {
+            "company": company,
+            "ats": "wuxi_official",
+            "title": title[:300],
+            "location": location,
+            "url": job_link,
+            "updated_at": updated_at,
+            "description_text": row_text[:5000],
+        }
+
+    # Fallback:
+    # Some WordPress revisions render job cards rather than <tr>s.
+    # Inspect links to official /join-us-... detail pages and use the
+    # surrounding card text as Ireland evidence.
+    if not results:
+        for link in soup.find_all("a", href=True):
+            raw = (link.get("href") or "").strip()
+            href = urllib.parse.urljoin(source, raw)
+
+            if "/join-us-" not in href.lower():
+                continue
+
+            node = link
+            context = ""
+
+            for _ in range(6):
+                parent = getattr(node, "parent", None)
+
+                if parent is None:
+                    break
+
+                node = parent
+                candidate = " ".join(
+                    node.stripped_strings
+                ).strip()
+
+                if candidate:
+                    context = candidate
+
+                if (
+                    len(candidate) >= 20
+                    and len(candidate) <= 2500
+                    and region_ok(candidate)
+                ):
+                    break
+
+            if not region_ok(context):
+                continue
+
+            title = " ".join(
+                link.stripped_strings
+            ).strip()
+
+            if not title:
+                heading = node.find(
+                    ["h1", "h2", "h3", "h4", "h5"]
+                )
+
+                if heading:
+                    title = " ".join(
+                        heading.stripped_strings
+                    ).strip()
+
+            if not title:
+                continue
+
+            results[href] = {
+                "company": company,
+                "ats": "wuxi_official",
+                "title": title[:300],
+                "location": (
+                    "Dundalk, Ireland"
+                    if "dundalk" in context.lower()
+                    else "Ireland"
+                ),
+                "url": href,
+                "updated_at": None,
+                "description_text": context[:5000],
+            }
+
+    _mark_connector_health(
+        company,
+        True,
+        (
+            "Official WuXi Biologics careers page loaded; "
+            f"{len(results)} Ireland jobs"
+        ),
+        source,
+    )
+
+    print(
+        "  WuXi Biologics official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+
 def scrape_direct_company(company: str):
     # BEGIN SALE_READY_DIRECT_CONNECTORS
     # Canonical/alias names that must use their verified official collectors.
@@ -20971,6 +21303,10 @@ def scrape_direct_company(company: str):
         "Workhuman": scrape_workhuman_official,
         "Takeda": scrape_takeda_official,
         "Teva Pharmaceuticals": scrape_teva_official,
+        "Amgen": scrape_amgen_official,
+        "Novartis": scrape_novartis_official,
+        "Waystone": scrape_waystone_official,
+        "WuXi Biologics": scrape_wuxi_biologics_official,
             "Marsh McLennan": scrape_marsh_mclennan_official,
 }.get(company)
     return fn() if fn else []
