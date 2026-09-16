@@ -518,7 +518,7 @@ VERIFIED_LIVE_ZERO_COMPANIES = {
     "DXC Technology",
     "Eaton",
     "Fenergo",
-    "Qualcomm",
+    "PTSB (Permanent TSB)",
     "Red Hat",
     "HSBC Ireland",
     "CGI",
@@ -12300,7 +12300,7 @@ def scrape_qualcomm():
 
 def scrape_ptsb():
     """Scrape current PTSB vacancies from the official CoreHR POST search."""
-    company = "PTSB"
+    company = "PTSB (Permanent TSB)"
 
     form_url = (
         "https://my.corehr.com/pls/ptsbrecruit/"
@@ -19947,6 +19947,219 @@ def scrape_dillon_eustace_official():
 
     return list(jobs.values())
 
+
+def scrape_fexco_official():
+    company = "Fexco"
+    source_url = "https://careers.fexco.com/vacancies.html"
+    feed_url = "https://careers.fexco.com/utf8/ic_job_feeds.feed_engine"
+
+    sess = _session()
+    if not sess:
+        return []
+
+    params = {
+        "p_web_site_id": "4473",
+        "p_published_to": "WWW",
+        "p_language": "DEFAULT",
+        "p_direct": "Y",
+        "p_format": "MOBILE",
+        "p_include_exclude_from_list": "N",
+    }
+
+    try:
+        r = sess.get(
+            feed_url,
+            params=params,
+            timeout=40,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept-Language": "en-IE,en;q=0.9",
+            },
+        )
+        r.raise_for_status()
+        data = r.json()
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), source_url)
+        print(f"  ! Fexco official vacancies failed: {exc}")
+        return []
+
+    if isinstance(data, dict):
+        records = (
+            data.get("jobs")
+            or data.get("vacancies")
+            or data.get("results")
+            or data.get("data")
+            or []
+        )
+    elif isinstance(data, list):
+        records = data
+    else:
+        records = []
+
+    out = {}
+
+    for job in records:
+        if not isinstance(job, dict):
+            continue
+
+        if str(job.get("status") or "").lower() not in {"", "open"}:
+            continue
+
+        publication = job.get("publication") or {}
+        internet = publication.get("internet") or {}
+
+        if internet and str(internet.get("live") or "").upper() not in {"", "Y"}:
+            continue
+
+        title = str(job.get("title") or "").strip()
+        url = str(job.get("weblink") or "").strip()
+
+        classifications = job.get("classifications") or {}
+        locations = []
+
+        for group in classifications.values():
+            if not isinstance(group, dict):
+                continue
+
+            if str(group.get("name") or "").lower() != "location":
+                continue
+
+            for value in group.get("values") or []:
+                if isinstance(value, dict):
+                    loc = str(value.get("class_val") or "").strip()
+                    if loc:
+                        locations.append(loc)
+
+        ireland_locations = [
+            loc for loc in locations
+            if re.search(
+                r"\bIreland\b|\bDublin\b|\bCork\b|\bKerry\b|\bShannon\b|\bGalway\b|\bDundalk\b",
+                loc,
+                re.I,
+            )
+            and not re.search(r"\bNorthern Ireland\b|\bBelfast\b", loc, re.I)
+        ]
+
+        if not ireland_locations:
+            continue
+
+        location_blob = ", ".join(ireland_locations)
+
+        city = None
+        for candidate in (
+            "Dublin",
+            "Cork",
+            "Kerry",
+            "Shannon",
+            "Galway",
+            "Dundalk",
+        ):
+            if re.search(rf"\b{candidate}\b", location_blob, re.I):
+                city = candidate
+                break
+
+        location = f"{city}, Ireland" if city else "Ireland"
+
+        if not title or not url:
+            continue
+
+        out[url.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "fexco_official",
+            "title": title[:300],
+            "location": location,
+            "url": url,
+            "updated_at": job.get("timestamp"),
+            "description_text": "",
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Fexco vacancy feed loaded; {len(out)} Ireland jobs",
+        source_url,
+    )
+    print(f"  Fexco official Ireland careers: {len(out)} jobs")
+    return list(out.values())
+
+
+def scrape_teneo_ireland_official():
+    from bs4 import BeautifulSoup
+
+    company = "Teneo Ireland"
+    source_url = "https://www.teneo.com/careers/open-positions/"
+
+    try:
+        r = cffi_requests.get(
+            source_url,
+            timeout=40,
+            impersonate="chrome",
+            headers={"Accept-Language": "en-IE,en;q=0.9"},
+        )
+        r.raise_for_status()
+        body = r.text or ""
+    except Exception as exc:
+        _mark_connector_health(company, False, str(exc), source_url)
+        print(f"  ! Teneo Ireland official careers failed: {exc}")
+        return []
+
+    soup = BeautifulSoup(body, "html.parser")
+    out = {}
+
+    for card in soup.select("li[data-job]"):
+        loc_node = card.select_one("[data-job-office]")
+        title_node = card.select_one("[data-job-title]")
+        link = card.find("a", href=True)
+
+        if not loc_node or not title_node or not link:
+            continue
+
+        location = re.sub(
+            r"\s+",
+            " ",
+            loc_node.get_text(" ", strip=True),
+        ).strip()
+
+        if not re.search(r"\bDublin,\s*Ireland\b", location, re.I):
+            continue
+
+        title = re.sub(
+            r"\s+",
+            " ",
+            title_node.get_text(" ", strip=True),
+        ).strip()
+
+        href = urllib.parse.urljoin(source_url, link.get("href") or "")
+        desc_node = card.select_one("[data-job-content]")
+        desc = (
+            re.sub(r"\s+", " ", desc_node.get_text(" ", strip=True)).strip()
+            if desc_node
+            else ""
+        )
+
+        if not title or not href:
+            continue
+
+        out[href.rstrip("/").lower()] = {
+            "company": company,
+            "ats": "greenhouse_official",
+            "title": title[:300],
+            "location": "Dublin, Ireland",
+            "url": href,
+            "updated_at": None,
+            "description_text": desc[:7000],
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Teneo board loaded; {len(out)} Dublin jobs",
+        source_url,
+    )
+    print(f"  Teneo Ireland official careers: {len(out)} jobs")
+    return list(out.values())
+
+
 def scrape_workhuman_official():
     company = "Workhuman"
     source = "https://www.workhuman.com/company/careers/list/"
@@ -20468,7 +20681,10 @@ def scrape_direct_company(company: str):
         "permanent tsb": scrape_ptsb,
         "Permanent TSB": scrape_ptsb,
         "PTSB": scrape_ptsb,
+        "PTSB (Permanent TSB)": scrape_ptsb,
         "Qualcomm": scrape_qualcomm,
+        "Fexco": scrape_fexco_official,
+        "Teneo Ireland": scrape_teneo_ireland_official,
         "NTT DATA Services": scrape_ntt_data,
         "NTT Data": scrape_ntt_data,
         "NTT DATA": scrape_ntt_data,
@@ -22179,6 +22395,10 @@ def main():
             "BearingPoint",
             "CarTrawler",
             "Dillon Eustace",
+            "Qualcomm",
+            "PTSB (Permanent TSB)",
+            "Fexco",
+            "Teneo Ireland",
         )
 
         _parallel_collect_isolated(
@@ -24622,7 +24842,10 @@ def _working_batch_base_scrape_direct_company(company: str):
         "permanent tsb": scrape_ptsb,
         "Permanent TSB": scrape_ptsb,
         "PTSB": scrape_ptsb,
+        "PTSB (Permanent TSB)": scrape_ptsb,
         "Qualcomm": scrape_qualcomm,
+        "Fexco": scrape_fexco_official,
+        "Teneo Ireland": scrape_teneo_ireland_official,
         "NTT DATA Services": scrape_ntt_data,
         "NTT Data": scrape_ntt_data,
         "NTT DATA": scrape_ntt_data,
