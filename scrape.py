@@ -587,6 +587,7 @@ VERIFIED_LIVE_ZERO_COMPANIES = {
     "FactSet",
     "Morningstar",
     "Siemens Healthineers",
+    "TransferMate",
 }
 
 def _mark_connector_health(company, live=True, note=None, url=None):
@@ -753,6 +754,10 @@ DIRECT_COMPANY_CONNECTORS = {
     "Novartis": "novartis_official",
     "Waystone": "waystone_bamboohr_official",
     "WuXi Biologics": "wuxi_official",
+    "Fidelity Investments": "fidelity_investments_ireland",
+    "FBD Insurance": "fbd_successfactors",
+    "Zurich Insurance": "zurich_successfactors",
+    "TransferMate": "transfermate_official",
 }
 
 # Official Irish university vacancy boards use a shared collector.
@@ -21096,6 +21101,639 @@ def scrape_wuxi_biologics_official():
     return list(results.values())
 
 
+
+def scrape_fidelity_investments_official():
+    company = "Fidelity Investments"
+    source = "https://jobs.fidelity.com/ie/jobs/"
+
+    try:
+        from curl_cffi import requests as curl_requests
+        from bs4 import BeautifulSoup
+    except Exception as exc:
+        print(f"  ! Fidelity dependencies unavailable: {exc}")
+        return []
+
+    try:
+        response = curl_requests.get(
+            source,
+            impersonate="chrome",
+            timeout=30,
+        )
+    except Exception as exc:
+        _mark_connector_health(
+            company,
+            False,
+            f"Official Fidelity Ireland source failed: {exc}",
+            source,
+        )
+        print(f"  ! Fidelity request failed: {exc}")
+        return []
+
+    if response.status_code >= 400:
+        _mark_connector_health(
+            company,
+            False,
+            (
+                "Official Fidelity Ireland source returned "
+                f"HTTP {response.status_code}"
+            ),
+            source,
+        )
+        print(
+            f"  ! Fidelity Ireland HTTP "
+            f"{response.status_code}"
+        )
+        return []
+
+    soup = BeautifulSoup(
+        response.text,
+        "html.parser",
+    )
+
+    results = {}
+
+    for a in soup.find_all("a", href=True):
+        title = " ".join(
+            a.stripped_strings
+        ).strip()
+
+        href = urllib.parse.urljoin(
+            str(response.url),
+            a.get("href") or "",
+        )
+
+        if not re.search(
+            r"/ie/jobs/\d+/[^/]+/?$",
+            href,
+            flags=re.I,
+        ):
+            continue
+
+        if not title:
+            continue
+
+        node = a
+        context = ""
+
+        for _ in range(7):
+            parent = getattr(
+                node,
+                "parent",
+                None,
+            )
+
+            if parent is None:
+                break
+
+            node = parent
+
+            candidate = " ".join(
+                node.stripped_strings
+            ).strip()
+
+            if candidate:
+                context = candidate
+
+            if (
+                len(candidate) >= 25
+                and len(candidate) <= 2500
+            ):
+                low_candidate = candidate.lower()
+
+                if any(
+                    token in low_candidate
+                    for token in (
+                        "dublin",
+                        "galway",
+                        "ireland",
+                    )
+                ):
+                    break
+
+        low_context = context.lower()
+        low_title = title.lower()
+
+        if "galway" in low_context:
+            location = "Galway, Ireland"
+
+        elif "dublin" in low_context:
+            location = "Dublin, Ireland"
+
+        elif "galway" in low_title:
+            location = "Galway, Ireland"
+
+        elif "dublin" in low_title:
+            location = "Dublin, Ireland"
+
+        else:
+            location = "Ireland"
+
+        results[href] = {
+            "company": company,
+            "ats": "fidelity_official",
+            "title": title[:300],
+            "location": location,
+            "url": href,
+            "updated_at": None,
+            "description_text": context[:6000],
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        (
+            "Official Fidelity Investments Ireland "
+            f"index returned {len(results)} jobs"
+        ),
+        source,
+    )
+
+    print(
+        "  Fidelity Investments Ireland official: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+def scrape_fbd_insurance_official():
+    company = "FBD Insurance"
+    source = "https://careers.fbdgroup.com/search/"
+
+    try:
+        import requests
+        from bs4 import BeautifulSoup
+    except Exception as exc:
+        print(f"  ! FBD dependencies unavailable: {exc}")
+        return []
+
+    sess = requests.Session()
+    sess.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 AppleWebKit/537.36 "
+            "Chrome/129 Safari/537.36"
+        )
+    })
+
+    try:
+        r = sess.get(source, timeout=30)
+        r.raise_for_status()
+    except Exception as exc:
+        _mark_connector_health(
+            company,
+            False,
+            f"Official FBD search failed: {exc}",
+            source,
+        )
+        return []
+
+    soup = BeautifulSoup(r.text, "html.parser")
+    results = {}
+
+    for a in soup.find_all("a", href=True):
+        href = urllib.parse.urljoin(
+            source,
+            a.get("href") or "",
+        )
+
+        if "/job/" not in href.lower():
+            continue
+
+        title = " ".join(
+            a.stripped_strings
+        ).strip()
+
+        if not title:
+            continue
+
+        node = a
+        context = ""
+
+        for _ in range(5):
+            parent = getattr(
+                node,
+                "parent",
+                None,
+            )
+
+            if parent is None:
+                break
+
+            node = parent
+
+            candidate = " ".join(
+                node.stripped_strings
+            ).strip()
+
+            if candidate:
+                context = candidate
+
+            if (
+                len(candidate) >= 25
+                and len(candidate) <= 1800
+                and region_ok(candidate)
+            ):
+                break
+
+        if not region_ok(
+            f"{context} {title}"
+        ):
+            continue
+
+        low = context.lower()
+
+        location = "Ireland"
+
+        for place, label in (
+            ("dublin", "Dublin, Ireland"),
+            ("cork", "Cork, Ireland"),
+            ("galway", "Galway, Ireland"),
+            ("kildare", "Kildare, Ireland"),
+            ("kilkenny", "Kilkenny, Ireland"),
+            ("wexford", "Wexford, Ireland"),
+            ("offaly", "Offaly, Ireland"),
+            ("cavan", "Cavan, Ireland"),
+            ("tipperary", "Tipperary, Ireland"),
+            ("westmeath", "Westmeath, Ireland"),
+            ("donegal", "Donegal, Ireland"),
+        ):
+            if place in low:
+                location = label
+                break
+
+        results[href] = {
+            "company": company,
+            "ats": "successfactors",
+            "title": title[:300],
+            "location": location,
+            "url": href,
+            "updated_at": None,
+            "description_text": context[:5000],
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        (
+            "Official FBD SuccessFactors search "
+            f"returned {len(results)} Ireland jobs"
+        ),
+        source,
+    )
+
+    print(
+        "  FBD Insurance official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+def scrape_zurich_insurance_official():
+    company = "Zurich Insurance"
+
+    sources = [
+        (
+            "https://www.careers.zurich.com/search/"
+            "?q=&locationsearch=Ireland"
+        ),
+        (
+            "https://www.careers.zurich.com/search/"
+            "?q=&locationsearch=Dublin"
+        ),
+        (
+            "https://www.careers.zurich.com/search/"
+            "?q=&locationsearch=Wexford"
+        ),
+    ]
+
+    try:
+        import requests
+        from bs4 import BeautifulSoup
+    except Exception as exc:
+        print(f"  ! Zurich dependencies unavailable: {exc}")
+        return []
+
+    sess = requests.Session()
+
+    sess.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 AppleWebKit/537.36 "
+            "Chrome/129 Safari/537.36"
+        )
+    })
+
+    detail_urls = {}
+
+    for source in sources:
+        try:
+            r = sess.get(
+                source,
+                timeout=30,
+            )
+
+            if r.status_code >= 400:
+                continue
+
+            soup = BeautifulSoup(
+                r.text,
+                "html.parser",
+            )
+
+            for a in soup.find_all(
+                "a",
+                href=True,
+            ):
+                href = urllib.parse.urljoin(
+                    r.url,
+                    a.get("href") or "",
+                )
+
+                if "/job/" not in href.lower():
+                    continue
+
+                title = " ".join(
+                    a.stripped_strings
+                ).strip()
+
+                detail_urls[href] = title
+
+        except Exception as exc:
+            print(
+                f"  ! Zurich search page failed "
+                f"{source}: {exc}"
+            )
+
+    results = {}
+
+    for href, hint in list(
+        detail_urls.items()
+    )[:250]:
+
+        try:
+            r = sess.get(
+                href,
+                timeout=25,
+            )
+
+            if r.status_code >= 400:
+                continue
+
+            soup = BeautifulSoup(
+                r.text,
+                "html.parser",
+            )
+
+            page_text = " ".join(
+                soup.stripped_strings
+            )
+
+            evidence = (
+                f"{hint} {page_text} {href}"
+            )
+
+            if not region_ok(evidence):
+                continue
+
+            h1 = soup.find("h1")
+
+            title = (
+                " ".join(
+                    h1.stripped_strings
+                ).strip()
+                if h1
+                else hint
+            )
+
+            if not title:
+                continue
+
+            low_page = page_text.lower()
+            low_href = href.lower()
+
+            if "/job/dublin-" in low_href:
+                location = "Dublin, Ireland"
+
+            elif "/job/wexford-" in low_href:
+                if "dublin / wexford" in title.lower():
+                    location = "Dublin / Wexford, Ireland"
+                else:
+                    location = "Wexford, Ireland"
+
+            elif (
+                "dublin, ireland" in low_page
+                or re.search(r"\bdublin\b", low_page)
+            ):
+                location = "Dublin, Ireland"
+
+            elif (
+                "wexford, ireland" in low_page
+                or re.search(r"\bwexford\b", low_page)
+            ):
+                location = "Wexford, Ireland"
+
+            else:
+                location = "Ireland"
+
+            results[href] = {
+                "company": company,
+                "ats": "successfactors",
+                "title": title[:300],
+                "location": location,
+                "url": href,
+                "updated_at": None,
+                "description_text": page_text[:7000],
+            }
+
+        except Exception as exc:
+            print(
+                f"  ! Zurich detail failed "
+                f"{href}: {exc}"
+            )
+
+    source = sources[0]
+
+    _mark_connector_health(
+        company,
+        True,
+        (
+            "Official Zurich SuccessFactors Ireland "
+            f"search returned {len(results)} jobs"
+        ),
+        source,
+    )
+
+    print(
+        "  Zurich Insurance official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
+def scrape_transfermate_official():
+    company = "TransferMate"
+    source = (
+        "https://www.transfermate.com/"
+        "company/career-page"
+    )
+
+    try:
+        import requests
+        from bs4 import BeautifulSoup
+    except Exception as exc:
+        print(
+            f"  ! TransferMate dependencies unavailable: {exc}"
+        )
+        return []
+
+    sess = requests.Session()
+
+    sess.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 AppleWebKit/537.36 "
+            "Chrome/129 Safari/537.36"
+        )
+    })
+
+    try:
+        r = sess.get(
+            source,
+            timeout=30,
+        )
+
+        r.raise_for_status()
+
+    except Exception as exc:
+        _mark_connector_health(
+            company,
+            False,
+            f"Official TransferMate careers failed: {exc}",
+            source,
+        )
+
+        return []
+
+    soup = BeautifulSoup(
+        r.text,
+        "html.parser",
+    )
+
+    results = {}
+
+    text_nodes = soup.find_all(
+        string=re.compile(
+            r"\bLocation\s*:",
+            flags=re.I,
+        )
+    )
+
+    for node in text_nodes:
+        current = node.parent
+
+        context = ""
+
+        for _ in range(6):
+            if current is None:
+                break
+
+            candidate = " ".join(
+                current.stripped_strings
+            ).strip()
+
+            if candidate:
+                context = candidate
+
+            if (
+                "location:" in candidate.lower()
+                and len(candidate) <= 2500
+            ):
+                pass
+
+            current = current.parent
+
+        if not context:
+            continue
+
+        location_match = re.search(
+            r"Location\s*:\s*"
+            r"([^|]+?)"
+            r"(?:\s+Creation date:|$)",
+            context,
+            flags=re.I,
+        )
+
+        location_text = (
+            location_match.group(1).strip()
+            if location_match
+            else ""
+        )
+
+        if not region_ok(location_text):
+            continue
+
+        title_match = re.search(
+            r"^(.*?)\s+Department:",
+            context,
+            flags=re.I,
+        )
+
+        title = (
+            title_match.group(1).strip()
+            if title_match
+            else ""
+        )
+
+        if not title:
+            continue
+
+        link = node.parent.find_parent(
+            lambda tag:
+                getattr(tag, "find", None)
+                and tag.find("a", href=True)
+        )
+
+        a = (
+            link.find("a", href=True)
+            if link
+            else None
+        )
+
+        href = (
+            urllib.parse.urljoin(
+                source,
+                a.get("href") or "",
+            )
+            if a
+            else source
+        )
+
+        results[
+            f"{title}|{location_text}"
+        ] = {
+            "company": company,
+            "ats": "transfermate_official",
+            "title": title[:300],
+            "location": location_text,
+            "url": href,
+            "updated_at": None,
+            "description_text": context[:5000],
+        }
+
+    _mark_connector_health(
+        company,
+        True,
+        (
+            "Official TransferMate careers loaded; "
+            f"{len(results)} Ireland jobs"
+        ),
+        source,
+    )
+
+    print(
+        "  TransferMate official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
 def scrape_direct_company(company: str):
     # BEGIN SALE_READY_DIRECT_CONNECTORS
     # Canonical/alias names that must use their verified official collectors.
@@ -21307,6 +21945,10 @@ def scrape_direct_company(company: str):
         "Novartis": scrape_novartis_official,
         "Waystone": scrape_waystone_official,
         "WuXi Biologics": scrape_wuxi_biologics_official,
+        "Fidelity Investments": scrape_fidelity_investments_official,
+        "FBD Insurance": scrape_fbd_insurance_official,
+        "Zurich Insurance": scrape_zurich_insurance_official,
+        "TransferMate": scrape_transfermate_official,
             "Marsh McLennan": scrape_marsh_mclennan_official,
 }.get(company)
     return fn() if fn else []
@@ -21641,36 +22283,147 @@ def _skip_known_stale_generic_probe(platform, slug):
         or (platform == "personio" and slug in STALE_PERSONIO_XML_PROBES)
     )
 # Promote verified direct connectors into the hourly core run in batches of 10.
-PROVEN_REFRESH_BATCHES = (
-    ("Accenture", "EY Ireland", "KPMG Ireland", "Oracle", "SAP",
-     "Auxilion", "Capgemini", "Cognizant", "Dell Technologies", "IBM"),
-    ("Infosys", "NTT DATA", "Tata Consultancy Services (TCS)", "Wipro", "Bloomberg",
-     "Musgrave Group (SuperValu / Centra)", "Ryanair", "A&L Goodbody", "AECOM", "Agilent Technologies"),
-    ("AIB (Allied Irish Banks)", "Allianz Ireland", "AMCS Group", "Aon", "Arup",
-     "ASL Aviation Holdings", "AstraZeneca", "Bank of Ireland", "BioMarin", "BNP Paribas Ireland"),
-    ("DPS Group (Arcadis)", "ESB", "Grant Thornton Ireland", "Honeywell", "Huawei Ireland",
-     "Irish Life", "Irish Rail (Iarnród Éireann)", "Jacobs", "Johnson Controls", "NetApp"),
-    ("HCLTech", "OpenText", "Version 1", "Aer Lingus", "Ornua",
-     "Veeam", "AIG", "Alexion Pharmaceuticals", "Alter Domus", "Applied Materials"),
-    ("Arcadis", "Astellas Pharma", "AtkinsRéalis", "AXA Ireland", "AXA XL",
-     "Baker Tilly Ireland", "Bausch + Lomb", "Baxter International", "Becton Dickinson (BD)", "Bord Gáis Energy"),
-    ("Broadcom", "Central Bank of Ireland", "Chubb", "Citco", "Coca-Cola HBC Ireland",
-     "CRH", "daa (Dublin Airport Authority)", "DCC plc", "Dublin Port Company", "Eir"),
-    ("EirGrid", "Fenergo", "Forvis Mazars Ireland", "Gas Networks Ireland", "GE HealthCare",
-     "Glanbia / Tirlán", "Guidewire", "Heineken Ireland", "Hewlett Packard Enterprise (HPE)", "HSBC Ireland"),
-    ("IQVIA", "Optum", "Palo Alto Networks", "PM Group", "Proofpoint",
-     "Public Jobs / Civil Service", "Revenue", "Roche", "S&P Global", "Schneider Electric"),
-    ("Susquehanna International Group (SIG)", "Three Ireland", "Uisce Éireann (Irish Water)", "VHI Healthcare", "Vodafone Ireland",
-     "Wells Fargo", "Willis Towers Watson (WTW)", "Zscaler", "Aiven", "EXL"),
-    ("Hitachi Energy", "Motorola Solutions", "Trinity College Dublin", "University College Cork (UCC)", "Dublin City University (DCU)",
-     "University of Galway", "Munster Technological University (MTU)", "RCSI University of Medicine and Health Sciences",
-     "Technological University Dublin (TU Dublin)", "Atlantic Technological University (ATU)"),
-    ("Technological University of the Shannon (TUS)", "Advanced Micro Devices (AMD)", "Avolon", "Bank of America", "Barclays",
-     "BlackRock", "BNY", "Boston Scientific", "Citi", "Deutsche Bank"),
-    ("Fidelity International", "Goldman Sachs", "Johnson & Johnson", "JPMorgan Chase", "PepsiCo",
-     "Siemens", "SMBC Aviation Capital", "Microsoft", "Amazon", "Apple"),
-    ("Google", "Meta", "ServiceNow", "TikTok", "McKinsey & Company", "RSM Ireland"),
-)
+PROVEN_REFRESH_BATCHES = [['Accenture',
+  'EY Ireland',
+  'KPMG Ireland',
+  'Oracle',
+  'SAP',
+  'Auxilion',
+  'Capgemini',
+  'Cognizant',
+  'Dell Technologies',
+  'IBM'],
+ ['Infosys',
+  'NTT DATA',
+  'Tata Consultancy Services (TCS)',
+  'Wipro',
+  'Bloomberg',
+  'Musgrave Group (SuperValu / Centra)',
+  'Ryanair',
+  'A&L Goodbody',
+  'AECOM',
+  'Agilent Technologies'],
+ ['AIB (Allied Irish Banks)',
+  'Allianz Ireland',
+  'AMCS Group',
+  'Aon',
+  'Arup',
+  'ASL Aviation Holdings',
+  'AstraZeneca',
+  'Bank of Ireland',
+  'BioMarin',
+  'BNP Paribas Ireland'],
+ ['DPS Group (Arcadis)',
+  'ESB',
+  'Grant Thornton Ireland',
+  'Honeywell',
+  'Huawei Ireland',
+  'Irish Life',
+  'Irish Rail (Iarnród Éireann)',
+  'Jacobs',
+  'Johnson Controls',
+  'NetApp'],
+ ['HCLTech',
+  'OpenText',
+  'Version 1',
+  'Aer Lingus',
+  'Ornua',
+  'Veeam',
+  'AIG',
+  'Alexion Pharmaceuticals',
+  'Alter Domus',
+  'Applied Materials'],
+ ['Arcadis',
+  'Astellas Pharma',
+  'AtkinsRéalis',
+  'AXA Ireland',
+  'AXA XL',
+  'Baker Tilly Ireland',
+  'Bausch + Lomb',
+  'Baxter International',
+  'Becton Dickinson (BD)',
+  'Bord Gáis Energy'],
+ ['Broadcom',
+  'Central Bank of Ireland',
+  'Chubb',
+  'Citco',
+  'Coca-Cola HBC Ireland',
+  'CRH',
+  'daa (Dublin Airport Authority)',
+  'DCC plc',
+  'Dublin Port Company',
+  'Eir'],
+ ['EirGrid',
+  'Fenergo',
+  'Forvis Mazars Ireland',
+  'Gas Networks Ireland',
+  'GE HealthCare',
+  'Glanbia / Tirlán',
+  'Guidewire',
+  'Heineken Ireland',
+  'Hewlett Packard Enterprise (HPE)',
+  'HSBC Ireland'],
+ ['IQVIA',
+  'Optum',
+  'Palo Alto Networks',
+  'PM Group',
+  'Proofpoint',
+  'Public Jobs / Civil Service',
+  'Revenue',
+  'Roche',
+  'S&P Global',
+  'Schneider Electric'],
+ ['Susquehanna International Group (SIG)',
+  'Three Ireland',
+  'Uisce Éireann (Irish Water)',
+  'VHI Healthcare',
+  'Vodafone Ireland',
+  'Wells Fargo',
+  'Willis Towers Watson (WTW)',
+  'Zscaler',
+  'Aiven',
+  'EXL'],
+ ['Hitachi Energy',
+  'Motorola Solutions',
+  'Trinity College Dublin',
+  'University College Cork (UCC)',
+  'Dublin City University (DCU)',
+  'University of Galway',
+  'Munster Technological University (MTU)',
+  'RCSI University of Medicine and Health Sciences',
+  'Technological University Dublin (TU Dublin)',
+  'Atlantic Technological University (ATU)'],
+ ['Technological University of the Shannon (TUS)',
+  'Advanced Micro Devices (AMD)',
+  'Avolon',
+  'Bank of America',
+  'Barclays',
+  'BlackRock',
+  'BNY',
+  'Boston Scientific',
+  'Citi',
+  'Deutsche Bank'],
+ ['Fidelity International',
+  'Goldman Sachs',
+  'Johnson & Johnson',
+  'JPMorgan Chase',
+  'PepsiCo',
+  'Siemens',
+  'SMBC Aviation Capital',
+  'Microsoft',
+  'Amazon',
+  'Apple'],
+ ['Google',
+  'Meta',
+  'ServiceNow',
+  'TikTok',
+  'McKinsey & Company',
+  'RSM Ireland',
+  'Amgen',
+  'FBD Insurance',
+  'Fidelity Investments',
+  'Novartis'],
+ ['Teva Pharmaceuticals', 'TransferMate', 'Waystone', 'WuXi Biologics', 'Zurich Insurance']]
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
 }
