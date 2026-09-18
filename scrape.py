@@ -74,10 +74,6 @@ KNOWN_HEALTHY_ZERO_COMPANIES = {
         "url": "https://keelvar.jobs.personio.com/",
         "note": "Official Keelvar Personio source verified live; currently 0 qualifying Ireland jobs",
     },
-    "Deutsche Bank": {
-        "url": "https://db.wd3.myworkdayjobs.com/DBWebsite",
-        "note": "Official Deutsche Bank Workday source verified live; currently 0 qualifying Ireland jobs",
-    },
     "Unilever Ireland": {
         "url": "https://unilever.wd3.myworkdayjobs.com/Unilever_Experienced_Professionals",
         "note": "Official Unilever Workday source verified live; currently 0 qualifying Ireland jobs",
@@ -94,10 +90,6 @@ KNOWN_HEALTHY_ZERO_COMPANIES = {
         "url": "https://careers.ti.com/en/sites/CX",
         "note": "Official Texas Instruments Oracle Candidate Experience source verified live; global location facets currently contain no Republic of Ireland vacancies",
     },
-    "Nokia": {
-        "url": "https://jobs.nokia.com/en/sites/CX_1",
-        "note": "Official Nokia Oracle Candidate Experience source verified live; global location facets currently contain no Republic of Ireland vacancies",
-    },
     "Seagate": {
         "url": "https://seagatecareers.com/search/",
         "note": "Official Seagate SuccessFactors careers search verified live; Ireland search currently returns no matching vacancies",
@@ -109,10 +101,6 @@ KNOWN_HEALTHY_ZERO_COMPANIES = {
     "Morningstar": {
         "url": "https://morningstar.wd5.myworkdayjobs.com/morningstar",
         "note": "Official Morningstar Workday source verified live; global board currently contains no Republic of Ireland locations",
-    },
-    "Siemens Healthineers": {
-        "url": "https://onehealthineers.wd3.myworkdayjobs.com/SHSJB",
-        "note": "Official Siemens Healthineers Workday source verified live; global board currently contains no Republic of Ireland locations",
     },
 }
 
@@ -312,6 +300,8 @@ def _build_company_registry_base(include_cache: bool = False):
         # Verified healthy-zero Workday companies are retained in the
         # registry even though they are excluded from the active scrape batch.
         "Deutsche Bank": "workday",
+        "Infosys": "direct",
+        "PTSB (Permanent TSB)": "direct",
         "Unilever Ireland": "workday",
         "Visa": "workday",
         "NVIDIA": "workday",
@@ -343,9 +333,9 @@ def _build_company_registry_base(include_cache: bool = False):
         # zero Republic of Ireland vacancies. These are not manual sources.
         "FactSet": "official-verified-zero",
         "Morningstar": "official-verified-zero",
-        "Nokia": "official-verified-zero",
+        "Nokia": "direct",
         "Seagate": "official-verified-zero",
-        "Siemens Healthineers": "official-verified-zero",
+        "Siemens Healthineers": "workday",
         "Texas Instruments": "official-verified-zero",
 
         # Dedicated official collectors.
@@ -558,8 +548,6 @@ CONNECTOR_HEALTH = {}
 # Do NOT infer healthy-zero merely from an HTTP 200 response.
 VERIFIED_LIVE_ZERO_COMPANIES = {
     "Keelvar",
-    "Deutsche Bank",
-    "Infosys",
     "ASL Aviation Holdings",
     "Central Bank of Ireland",
     "LetsGetChecked",
@@ -571,7 +559,6 @@ VERIFIED_LIVE_ZERO_COMPANIES = {
     "DXC Technology",
     "Eaton",
     "Fenergo",
-    "PTSB (Permanent TSB)",
     "Red Hat",
     "HSBC Ireland",
     "CGI",
@@ -579,11 +566,9 @@ VERIFIED_LIVE_ZERO_COMPANIES = {
     "NVIDIA",
     "Visa",
     "Texas Instruments",
-    "Nokia",
     "Seagate",
     "FactSet",
     "Morningstar",
-    "Siemens Healthineers",
     "TransferMate",
 }
 
@@ -601,6 +586,8 @@ def _mark_connector_health(company, live=True, note=None, url=None):
 # without failing the whole run; the dashboard then exposes it under
 # "Zero jobs scraped" for diagnosis.
 DIRECT_COMPANY_CONNECTORS = {
+    "Nokia": "nokia_official",
+    "Siemens Healthineers": "siemens_healthineers_workday",
     "Irish Rail (Iarnród Éireann)": "irish_rail",
     "Irish Life": "irish_life",
     "Forvis Mazars Ireland": "forvis_mazars",
@@ -7464,6 +7451,112 @@ def scrape_smbc_group():
 
 
 
+
+def scrape_nokia():
+    """Nokia Ireland from the official Oracle Candidate Experience board.
+
+    Nokia's careers front end is Oracle Recruiting Cloud behind jobs.nokia.com.
+    Use the rendered Ireland-filtered board because the Oracle location facet IDs
+    can change independently of the public site URL.
+    """
+    company = "Nokia"
+    urls = [
+        "https://jobs.nokia.com/en/sites/CX_1/jobs?location=Ireland&mode=location",
+        "https://jobs.nokia.com/en/sites/CX_1/requisitions?location=Ireland&mode=location",
+    ]
+    jobs = _browser_board_collect(
+        company,
+        urls,
+        ("/job/", "/requisitions/"),
+        default_location="Ireland",
+        max_scrolls=30,
+        require_ireland=False,
+        source_tag="oracle",
+    )
+    # These URLs are explicitly Ireland-filtered; normalize missing/coded locations
+    # to Ireland rather than discarding otherwise valid official requisitions.
+    out = []
+    seen = set()
+    for job in jobs or []:
+        title = str(job.get("title") or "").strip()
+        url = str(job.get("url") or "").strip()
+        if not title or not url:
+            continue
+        key = url.split("?")[0].rstrip("/").lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        job["company"] = company
+        job["ats"] = "oracle"
+        loc = str(job.get("location") or "").strip()
+        if not region_ok(loc):
+            job["location"] = "Ireland"
+        out.append(job)
+    if out:
+        _mark_connector_health(company, True, f"Official Nokia Ireland board returned {len(out)} jobs", urls[0])
+    print(f"  Nokia official Ireland careers: {len(out)} jobs")
+    return out
+
+
+def scrape_siemens_healthineers():
+    """Siemens Healthineers Ireland via its official Workday tenant."""
+    company = "Siemens Healthineers"
+    jobs = scrape_workday(
+        company,
+        "onehealthineers",
+        "wd3",
+        "SHSJB",
+        max_pages=50,
+        search_text="Ireland",
+    )
+    if jobs:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official Siemens Healthineers Workday returned {len(jobs)} Ireland jobs",
+            "https://onehealthineers.wd3.myworkdayjobs.com/SHSJB",
+        )
+        return jobs
+
+    # Workday tenants occasionally expose opaque site-location labels. Fall back
+    # to the official rendered board and trust only links from that tenant.
+    rows = _browser_board_collect(
+        company,
+        [
+            "https://onehealthineers.wd3.myworkdayjobs.com/en-US/SHSJB?q=Ireland",
+            "https://onehealthineers.wd3.myworkdayjobs.com/SHSJB?q=Ireland",
+        ],
+        ("/job/",),
+        default_location="Ireland",
+        max_scrolls=25,
+        require_ireland=False,
+        source_tag="workday",
+    )
+    out = []
+    seen = set()
+    for job in rows or []:
+        title = str(job.get("title") or "").strip()
+        url = str(job.get("url") or "").strip()
+        blob = f"{title} {job.get('location','')} {job.get('description_text','')}"
+        # The query itself is Ireland, but retain an Ireland signal when the
+        # rendered card provides one; otherwise the official search result is
+        # still accepted with an Ireland-normalized location.
+        if not title or not url:
+            continue
+        key = url.split("?")[0].rstrip("/").lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        job["company"] = company
+        job["ats"] = "workday"
+        if not region_ok(str(job.get("location") or "")):
+            job["location"] = "Ireland"
+        out.append(job)
+    if out:
+        _mark_connector_health(company, True, f"Official Siemens Healthineers board returned {len(out)} jobs", "https://onehealthineers.wd3.myworkdayjobs.com/SHSJB")
+    print(f"  Siemens Healthineers official Ireland careers: {len(out)} jobs")
+    return out
+
 def scrape_deutsche_bank():
     company = "Deutsche Bank"
 
@@ -7474,6 +7567,7 @@ def scrape_deutsche_bank():
         "wd3",
         "DBWebsite",
         max_pages=40,
+        search_text="Ireland",
     )
 
     # Hard-validate Ireland in case Workday's global board leaks other locations.
@@ -9193,7 +9287,12 @@ def scrape_infosys():
 
                     blob = f"{title}\n{card}\n{href}"
 
-                    if not re.search(r"\bIreland\b", blob, re.I):
+                    # The source URL is already filtered to Ireland. Infosys
+                    # periodically changes the result-card markup and may omit
+                    # the country text from each card, so requiring the literal
+                    # word "Ireland" here creates false-zero refreshes. Keep only
+                    # real requisition/detail links from the official filtered board.
+                    if not re.search(r"/(?:apply-|company-job/)|reqid", href, re.I):
                         continue
 
                     if not title or len(title) > 300:
@@ -9263,12 +9362,15 @@ def scrape_infosys():
                     f"keeping {len(results)} jobs collected so far"
                 )
 
-            if not results and page.get_by_text(
-                "The are no results. Try using other terms.", exact=True
-            ).is_visible():
-                _mark_connector_health(
-                    company, True, "Official Ireland search explicitly reports zero matching jobs", source_url
-                )
+            if not results:
+                try:
+                    body_text = page.locator("body").inner_text(timeout=3000)
+                except Exception:
+                    body_text = ""
+                if re.search(r"\b(?:there|the)\s+are\s+no\s+results\b|\bno\s+jobs?\s+(?:found|available)\b", body_text, re.I):
+                    _mark_connector_health(
+                        company, True, "Official Ireland search explicitly reports zero matching jobs", source_url
+                    )
 
     except Exception as exc:
         print(f"  ! Infosys Ireland scrape failed: {exc}")
@@ -12477,6 +12579,62 @@ def scrape_ptsb():
             re.I,
         )
     )
+
+    # CoreHR sometimes changes the POST result markup and stops exposing the
+    # recruitment id in the patterns above. When that happens, submit the
+    # official public form in a browser and recover the vacancy IDs from the
+    # resulting detail links. This remains first-party PTSB/CoreHR data.
+    if not recruitment_ids and HAS_PLAYWRIGHT:
+        browser = None
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+                page = browser.new_page(locale="en-IE")
+                page.set_default_timeout(10000)
+                page.goto(form_url, wait_until="domcontentloaded", timeout=45000)
+
+                # CoreHR uses either an input submit control or an image/link
+                # labelled Search depending on the skin/version.
+                submitted = False
+                for selector in (
+                    'input[type="submit"][value*="Search" i]',
+                    'input[type="image"][alt*="Search" i]',
+                    'a:has-text("Search")',
+                    'button:has-text("Search")',
+                ):
+                    try:
+                        loc = page.locator(selector).first
+                        if loc.count():
+                            loc.click()
+                            submitted = True
+                            break
+                    except Exception:
+                        continue
+
+                if submitted:
+                    try:
+                        page.wait_for_load_state("domcontentloaded", timeout=20000)
+                    except Exception:
+                        pass
+                    page.wait_for_timeout(1200)
+
+                    hrefs = page.locator('a[href*="p_recruitment_id"]')
+                    for i in range(hrefs.count()):
+                        try:
+                            href = hrefs.nth(i).get_attribute("href") or ""
+                        except Exception:
+                            continue
+                        m = re.search(r"p_recruitment_id=(\d{4,})", href, re.I)
+                        if m:
+                            recruitment_ids.add(m.group(1))
+        except Exception as exc:
+            print(f"  ! PTSB browser fallback failed: {exc}")
+        finally:
+            if browser is not None:
+                try:
+                    browser.close()
+                except Exception:
+                    pass
 
     results = {}
 
@@ -21859,6 +22017,10 @@ def scrape_direct_company(company: str):
         "Tata Consultancy Services (TCS)": scrape_tcs,
         "RSM Ireland": scrape_rsm,
         "Infosys": scrape_infosys,
+        "Nokia": scrape_nokia,
+        "Siemens Healthineers": scrape_siemens_healthineers,
+        "Nokia": scrape_nokia,
+        "Siemens Healthineers": scrape_siemens_healthineers,
         "Wells Fargo": scrape_wells_fargo,
         "Vodafone": scrape_vodafone,
         "Wipro": scrape_wipro,
@@ -23647,6 +23809,10 @@ def main():
             "Dillon Eustace",
             "Qualcomm",
             "PTSB (Permanent TSB)",
+            "Infosys",
+            "Deutsche Bank",
+            "Nokia",
+            "Siemens Healthineers",
             "Fexco",
             "Teneo Ireland",
             "Virgin Media Ireland",
