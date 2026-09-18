@@ -732,6 +732,24 @@ DIRECT_COMPANY_CONNECTORS = {
     "FBD Insurance": "fbd_successfactors",
     "Zurich Insurance": "zurich_successfactors",
     "TransferMate": "transfermate_official",
+    "Introba": "priority_generic",
+    "ActionPoint": "priority_generic",
+    "Avanade": "priority_generic",
+    "Ekco": "priority_generic",
+    "Fujitsu": "priority_generic",
+    "Integrity360": "priority_generic",
+    "Noesis": "priority_generic",
+    "Akamai": "priority_generic",
+    "AirNav Ireland": "priority_generic",
+    "Alkermes": "priority_generic",
+    "Amundi": "priority_generic",
+    "An Post": "priority_generic",
+    "Aviva Ireland": "priority_generic",
+    "ASML": "priority_generic",
+    "ARYZTA Ireland": "priority_generic",
+    "Storm Technology": "priority_generic",
+    "Ergo": "priority_generic",
+    "Expleo Ireland": "priority_generic",
 }
 
 # Official Irish university vacancy boards use a shared collector.
@@ -21879,6 +21897,96 @@ def scrape_transfermate_official():
 
     return list(results.values())
 
+
+# BEGIN HARSHIT PRIORITY EMPLOYER EXPANSION
+PRIORITY_EXPANSION_OFFICIAL_BOARDS = {'Introba': 'https://www.introba.com/careers', 'ActionPoint': 'https://www.actionpoint.ie/careers/', 'Avanade': 'https://www.avanade.com/en/career/search-jobs', 'Ekco': 'https://careers.ek.co/jobs', 'Fujitsu': 'https://fujitsu.com/ie/about/careers', 'Integrity360': 'https://www.integrity360.com/careers', 'Noesis': 'https://www.noesis.pt/en/careers', 'Akamai': 'https://www.akamai.com/careers', 'AirNav Ireland': 'https://www.airnav.ie/careers', 'Alkermes': 'https://www.alkermes.com/careers', 'Amundi': 'https://about.amundi.com/Careers', 'An Post': 'https://www.anpost.com/About/Careers', 'Aviva Ireland': 'https://www.aviva.ie/about/careers/', 'ASML': 'https://www.asml.com/en/careers', 'ARYZTA Ireland': 'https://www.aryzta.com/careers/', 'Storm Technology': 'https://www.storm.ie/about/careers/', 'Ergo': 'https://www.ergogroup.ie/Careers/', 'Expleo Ireland': 'https://careers.expleo.com/en/'}
+PRIORITY_EXPANSION_DOMESTIC_DEFAULT = {'An Post', 'AirNav Ireland', 'Storm Technology', 'Aviva Ireland', 'ActionPoint'}
+
+def scrape_priority_expansion_official(company):
+    career_url = PRIORITY_EXPANSION_OFFICIAL_BOARDS.get(company)
+    if not career_url:
+        return []
+
+    require_ireland = company not in PRIORITY_EXPANSION_DOMESTIC_DEFAULT
+    urls = [career_url]
+
+    try:
+        html_text = _fetch_html(career_url) or ""
+        link_rx = re.compile(
+            r"<a\b[^>]+href=['\"]([^'\"]+)['\"][^>]*>(.*?)</a>",
+            re.I | re.S,
+        )
+        preferred_hosts = (
+            "teamtailor", "workdayjobs", "smartrecruiters", "greenhouse",
+            "lever.co", "recruitee", "workable", "oraclecloud", "phenom",
+            "avature", "successfactors", "careers.",
+        )
+        for href, label_html in link_rx.findall(html_text):
+            href = urllib.parse.urljoin(career_url, html.unescape(href or "")).split("#")[0]
+            label = re.sub(r"\s+", " ", _strip_html(label_html or "")).strip().lower()
+            low = href.lower()
+            if not href.startswith("http"):
+                continue
+            if (
+                any(host in low for host in preferred_hosts)
+                or any(term in label for term in ("open role", "open position", "search jobs", "view jobs", "vacancies"))
+            ):
+                if href not in urls:
+                    urls.append(href)
+            if len(urls) >= 5:
+                break
+    except Exception as exc:
+        print(f"  ! {company} priority-board discovery: {exc}")
+
+    patterns = (
+        "/jobs/", "/job/", "/vacancies/", "/vacancy/",
+        "/positions/", "/position/", "/requisitions/", "/requisition/",
+        "jobdetail", "job-detail", "job_details", "jobid=",
+    )
+
+    jobs = _browser_board_collect(
+        company,
+        urls,
+        patterns,
+        default_location="Ireland",
+        max_scrolls=8,
+        require_ireland=require_ireland,
+        source_tag="direct",
+    )
+
+    cleaned = {}
+    for job in jobs:
+        title = re.sub(r"\s+", " ", (job.get("title") or "")).strip()
+        url = (job.get("url") or "").strip()
+        location = (job.get("location") or "").strip()
+        if not title or not url or not is_real_job_title(title):
+            continue
+
+        evidence = f"{title} {location} {job.get('description_text') or ''} {url}"
+        if require_ireland and not region_ok(evidence):
+            continue
+        if not location and not require_ireland:
+            job["location"] = "Ireland"
+
+        key = url.split("?")[0].rstrip("/").lower()
+        if not key:
+            key = f"{title.lower()}|{job.get('location','').lower()}"
+        cleaned[key] = job
+
+    try:
+        _mark_connector_health(
+            company, True,
+            f"Official priority careers board loaded; {len(cleaned)} qualifying Ireland jobs",
+            career_url,
+        )
+    except Exception:
+        pass
+
+    print(f"  {company} priority official collector: {len(cleaned)} Ireland jobs")
+    return list(cleaned.values())
+# END HARSHIT PRIORITY EMPLOYER EXPANSION
+
+
 def scrape_direct_company(company: str):
     # BEGIN SALE_READY_DIRECT_CONNECTORS
     # Canonical/alias names that must use their verified official collectors.
@@ -21901,6 +22009,24 @@ def scrape_direct_company(company: str):
     if company in UNIVERSITY_CAREER_PAGES:
         return scrape_university_official(company)
     fn={
+        "Introba": lambda: scrape_priority_expansion_official("Introba"),
+        "ActionPoint": lambda: scrape_priority_expansion_official("ActionPoint"),
+        "Avanade": lambda: scrape_priority_expansion_official("Avanade"),
+        "Ekco": lambda: scrape_priority_expansion_official("Ekco"),
+        "Fujitsu": lambda: scrape_priority_expansion_official("Fujitsu"),
+        "Integrity360": lambda: scrape_priority_expansion_official("Integrity360"),
+        "Noesis": lambda: scrape_priority_expansion_official("Noesis"),
+        "Akamai": lambda: scrape_priority_expansion_official("Akamai"),
+        "AirNav Ireland": lambda: scrape_priority_expansion_official("AirNav Ireland"),
+        "Alkermes": lambda: scrape_priority_expansion_official("Alkermes"),
+        "Amundi": lambda: scrape_priority_expansion_official("Amundi"),
+        "An Post": lambda: scrape_priority_expansion_official("An Post"),
+        "Aviva Ireland": lambda: scrape_priority_expansion_official("Aviva Ireland"),
+        "ASML": lambda: scrape_priority_expansion_official("ASML"),
+        "ARYZTA Ireland": lambda: scrape_priority_expansion_official("ARYZTA Ireland"),
+        "Storm Technology": lambda: scrape_priority_expansion_official("Storm Technology"),
+        "Ergo": lambda: scrape_priority_expansion_official("Ergo"),
+        "Expleo Ireland": lambda: scrape_priority_expansion_official("Expleo Ireland"),
         "Alter Domus": scrape_alter_domus_ireland,
         "Baxter International": scrape_baxter_ireland,
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
@@ -22583,6 +22709,30 @@ PROVEN_REFRESH_BATCHES = [['Accenture',
   'GridBeyond',
   'Keysight Technologies'],
  ['Macquarie Group', 'Morgan Stanley', 'MSCI', 'NeoDyne', 'Perrigo', 'UBS', 'Nokia', 'Siemens Healthineers']]
+# BEGIN HARSHIT PRIORITY EMPLOYER BATCH REBALANCE
+_PRIORITY_EXPANSION_BATCH_COMPANIES = ['ARYZTA Ireland', 'ASML', 'ActionPoint', 'AirNav Ireland', 'Akamai', 'Alkermes', 'Amundi', 'An Post', 'Avanade', 'Aviva Ireland', 'DXC Technology', 'Ekco', 'Ergo', 'Expleo Ireland', 'Fujitsu', 'Integrity360', 'Introba', 'Noesis', 'Storm Technology']
+_flat_proven_refresh_companies = []
+_seen_proven_refresh_companies = set()
+
+for _batch in PROVEN_REFRESH_BATCHES:
+    for _company in _batch:
+        _key = _company_key(company_display_name(_company))
+        if _key not in _seen_proven_refresh_companies:
+            _seen_proven_refresh_companies.add(_key)
+            _flat_proven_refresh_companies.append(_company)
+
+for _company in _PRIORITY_EXPANSION_BATCH_COMPANIES:
+    _key = _company_key(company_display_name(_company))
+    if _key not in _seen_proven_refresh_companies:
+        _seen_proven_refresh_companies.add(_key)
+        _flat_proven_refresh_companies.append(_company)
+
+PROVEN_REFRESH_BATCHES = [
+    _flat_proven_refresh_companies[i:i + 10]
+    for i in range(0, len(_flat_proven_refresh_companies), 10)
+]
+# END HARSHIT PRIORITY EMPLOYER BATCH REBALANCE
+
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
 }

@@ -225,17 +225,27 @@ class RegistryTests(unittest.TestCase):
         with open(REGISTRY_PATH, newline="", encoding="utf-8-sig") as handle:
             rows = list(csv.DictReader(handle))
 
-        active = {
+        active_rows = [
             row["company_name"]
             for row in rows
             if row["include_in_scrape_registry"].lower() == "true"
-        }
+        ]
+        active = set(active_rows)
 
-        # Canonical master registry is deduplicated.
+        # Canonical master registry must be deduplicated, but its total size
+        # is intentionally allowed to grow as validated employers are added.
         # AMD is represented by Advanced Micro Devices (AMD) in the CSV,
         # while AMD remains available as a runtime alias.
-        self.assertEqual(294, len(active))
-        self.assertEqual(294, len(set(active)))
+        self.assertEqual(
+            len(active_rows),
+            len(active),
+            "Active master registry contains duplicate company names",
+        )
+        self.assertGreaterEqual(
+            len(active),
+            313,
+            "Active employer registry unexpectedly shrank",
+        )
 
         # Critical profile-focused companies that must remain active.
         required = {
