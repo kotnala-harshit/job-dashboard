@@ -51,8 +51,12 @@ The scraper:
 
 ## Automation schedule
 
-The scheduler runs the core boards plus integrated proven-company batches at
-`:03` every hour. Collection has a 45-minute limit within a 50-minute workflow.
+The scheduler runs the core boards plus integrated proven-company batches on an
+hourly primary trigger at `:23`. A recovery trigger at `:53` checks the timestamp
+of the last completed refresh and only runs the scraper when that refresh is at
+least 60 minutes stale. This gives a missed/delayed GitHub schedule a second
+chance without normally scraping twice per hour. Collection has a 45-minute
+limit within a 50-minute workflow.
 
 Batch 1 adds Accenture, EY Ireland, KPMG Ireland, Oracle, SAP, Auxilion,
 Capgemini, Cognizant, Dell Technologies, and IBM.
