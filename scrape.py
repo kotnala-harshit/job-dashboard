@@ -70,37 +70,32 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'vercel',
 # no qualifying Republic-of-Ireland vacancies. Keep these companies in
 # the registry/health model, but do not spend a Workday scrape on every run.
 KNOWN_HEALTHY_ZERO_COMPANIES = {
+    # Independently re-verified on 2026-09-18. Keep this list deliberately
+    # strict: a reachable careers page is not enough; the official source must
+    # support that there are currently no qualifying Republic-of-Ireland jobs.
     "Keelvar": {
         "url": "https://keelvar.jobs.personio.com/",
-        "note": "Official Keelvar Personio source verified live; currently 0 qualifying Ireland jobs",
+        "note": "Official Keelvar Personio board verified live; currently 0 qualifying Republic-of-Ireland jobs",
     },
     "Unilever Ireland": {
-        "url": "https://unilever.wd3.myworkdayjobs.com/Unilever_Experienced_Professionals",
-        "note": "Official Unilever Workday source verified live; currently 0 qualifying Ireland jobs",
+        "url": "https://careers.unilever.com/en/location/leinster-ireland-jobs/34155/2963597-7521314/3",
+        "note": "Official Unilever Ireland careers search verified live; currently 0 qualifying Republic-of-Ireland jobs",
     },
-    "Visa": {
-        "url": "https://visa.wd5.myworkdayjobs.com/Visa",
-        "note": "Official Visa Workday source verified live; currently 0 qualifying Ireland jobs",
+    "Keysight Technologies": {
+        "url": "https://careers.keysight.com/talent/jobs/locations",
+        "note": "Official Keysight active-location directory verified live; Ireland is not an active job location",
     },
-    "NVIDIA": {
-        "url": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite",
-        "note": "Official NVIDIA Workday source verified live; currently 0 qualifying Ireland jobs",
+    "MSCI": {
+        "url": "https://careers.msci.com/",
+        "note": "Official MSCI careers board verified live; currently no Republic-of-Ireland job location is active",
     },
-    "Texas Instruments": {
-        "url": "https://careers.ti.com/en/sites/CX",
-        "note": "Official Texas Instruments Oracle Candidate Experience source verified live; global location facets currently contain no Republic of Ireland vacancies",
+    "Figma": {
+        "url": "https://www.figma.com/careers/",
+        "note": "Official Figma careers board verified live; currently 0 qualifying Republic-of-Ireland jobs",
     },
-    "Seagate": {
-        "url": "https://seagatecareers.com/search/",
-        "note": "Official Seagate SuccessFactors careers search verified live; Ireland search currently returns no matching vacancies",
-    },
-    "FactSet": {
-        "url": "https://factset.wd108.myworkdayjobs.com/FactSetCareers",
-        "note": "Official FactSet Workday source verified live; global board currently contains no Republic of Ireland locations",
-    },
-    "Morningstar": {
-        "url": "https://morningstar.wd5.myworkdayjobs.com/morningstar",
-        "note": "Official Morningstar Workday source verified live; global board currently contains no Republic of Ireland locations",
+    "Quantexa": {
+        "url": "https://www.quantexa.com/careers/vacancies/",
+        "note": "Official Quantexa vacancies page verified live; currently reports 0 open jobs",
     },
 }
 
@@ -563,13 +558,8 @@ VERIFIED_LIVE_ZERO_COMPANIES = {
     "HSBC Ireland",
     "CGI",
     "Unilever Ireland",
-    "NVIDIA",
-    "Visa",
-    "Texas Instruments",
-    "Seagate",
-    "FactSet",
-    "Morningstar",
-    "TransferMate",
+    "Figma",
+    "Quantexa",
 }
 
 def _mark_connector_health(company, live=True, note=None, url=None):
@@ -22592,7 +22582,7 @@ PROVEN_REFRESH_BATCHES = [['Accenture',
   'Fitch Ratings',
   'GridBeyond',
   'Keysight Technologies'],
- ['Macquarie Group', 'Morgan Stanley', 'MSCI', 'NeoDyne', 'Perrigo', 'UBS']]
+ ['Macquarie Group', 'Morgan Stanley', 'MSCI', 'NeoDyne', 'Perrigo', 'UBS', 'Nokia', 'Siemens Healthineers']]
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
 }
@@ -28669,7 +28659,6 @@ def build_graduate_dashboard_state(results, company_registry):
 # Official-source remediation for the final Manual Search companies.
 
 VERIFIED_LIVE_ZERO_COMPANIES.update({
-    "Fitch Ratings",
     "Keysight Technologies",
     "MSCI",
 })
