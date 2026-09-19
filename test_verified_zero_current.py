@@ -7,14 +7,19 @@ expected = {
     "MSCI",
     "Figma",
     "Quantexa",
+    "NVIDIA",
+    "NXP Semiconductors",
+    "STMicroelectronics",
+    "Seagate",
+    "Storm Technology",
 }
 
 assert set(scrape.KNOWN_HEALTHY_ZERO_COMPANIES) == expected
 assert expected <= scrape.VERIFIED_LIVE_ZERO_COMPANIES
 
 for stale in {
-    "NVIDIA", "Visa", "Texas Instruments", "Seagate",
-    "FactSet", "Morningstar", "TransferMate", "Fitch Ratings",
+    "Visa", "Texas Instruments", "FactSet", "Morningstar",
+    "TransferMate", "Fitch Ratings",
 }:
     assert stale not in scrape.VERIFIED_LIVE_ZERO_COMPANIES, stale
 
