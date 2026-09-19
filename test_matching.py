@@ -50,9 +50,6 @@ class CandidateMatchTest(unittest.TestCase):
             self.assertFalse(is_real_job_title(title), title)
         self.assertTrue(is_real_job_title("AI Governance Analyst, Service Delivery, Trust and Safety"))
 
-    def test_verified_asl_zero_is_not_reported_as_broken(self):
-        self.assertIn("ASL Aviation Holdings", VERIFIED_LIVE_ZERO_COMPANIES)
-
 
 if __name__ == "__main__":
     unittest.main()

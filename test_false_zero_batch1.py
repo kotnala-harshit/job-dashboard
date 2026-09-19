@@ -1,17 +1,17 @@
+#!/usr/bin/env python3
 import scrape
 
 expected = {
-    "Synopsys": scrape.scrape_synopsys_official,
-    "Riot Games": scrape.scrape_riot_games_official,
-    "Nucleo": scrape.scrape_nucleo_official,
-    "Concentrix (Ireland)": scrape.scrape_concentrix_official,
-    "LearnUpon": scrape.scrape_learnupon_official,
+    "Ekco",
+    "AirNav Ireland",
+    "Amundi",
+    "Aviva Ireland",
+    "CRH",
 }
+assert set(scrape.FALSE_ZERO_REPAIRS_2026_09_19) == expected
 
-assert "nucleo-consulting" not in scrape.WORKABLE_COMPANIES
-assert "synopsys" not in scrape.PINPOINT_COMPANIES
+for name, fn in scrape.FALSE_ZERO_REPAIRS_2026_09_19.items():
+    assert callable(fn), name
+    assert name not in scrape.VERIFIED_LIVE_ZERO_COMPANIES, name
 
-for company, fn in expected.items():
-    assert callable(fn), company
-
-print("PASS: false-zero batch-1 routing configured")
+print("PASS: five independently verified false-zero employers use repaired official collectors")

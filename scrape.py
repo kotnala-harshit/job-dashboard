@@ -97,6 +97,26 @@ KNOWN_HEALTHY_ZERO_COMPANIES = {
         "url": "https://www.quantexa.com/careers/vacancies/",
         "note": "Official Quantexa vacancies page verified live; currently reports 0 open jobs",
     },
+    'NVIDIA': {
+        "url": 'https://www.nvidia.com/en-eu/contact/',
+        "note": 'Official NVIDIA worldwide office directory verified 2026-09-19; Europe list contains no Republic-of-Ireland office/location',
+    },
+    'NXP Semiconductors': {
+        "url": 'https://www.nxp.com/company/about-nxp/worldwide-locations:GLOBAL_SITES',
+        "note": 'Official NXP Worldwide Locations verified 2026-09-19; Europe/Middle East locations do not include Ireland',
+    },
+    'STMicroelectronics': {
+        "url": 'https://www.st.com/content/st_com/en/about/careers/career-benefits.html',
+        "note": 'Official ST careers location list verified 2026-09-19; current Europe locations do not include Ireland',
+    },
+    'Seagate': {
+        "url": 'https://www.seagate.com/gb/en/careers/meet-seagate/where-we-work/',
+        "note": 'Official Seagate global careers footprint verified 2026-09-19; island-of-Ireland careers location is Derry/Londonderry, Northern Ireland, not Republic of Ireland',
+    },
+    'Storm Technology': {
+        "url": 'https://www.storm.ie/about/careers/',
+        "note": 'Official Storm Technology careers page verified 2026-09-19; Open Positions section currently contains no listed vacancies',
+    },
 }
 
 WORKDAY_COMPANIES = [
@@ -541,26 +561,7 @@ CONNECTOR_HEALTH = {}
 # A company enters "Live source · 0 jobs" only after the official board has
 # been manually/independently verified as healthy and genuinely empty.
 # Do NOT infer healthy-zero merely from an HTTP 200 response.
-VERIFIED_LIVE_ZERO_COMPANIES = {
-    "Keelvar",
-    "ASL Aviation Holdings",
-    "Central Bank of Ireland",
-    "LetsGetChecked",
-    "Bayer",
-    "BT Ireland",
-    "Catalent",
-    "Charles River Laboratories",
-    "Cloudflare",
-    "DXC Technology",
-    "Eaton",
-    "Fenergo",
-    "Red Hat",
-    "HSBC Ireland",
-    "CGI",
-    "Unilever Ireland",
-    "Figma",
-    "Quantexa",
-}
+VERIFIED_LIVE_ZERO_COMPANIES = set(KNOWN_HEALTHY_ZERO_COMPANIES)
 
 def _mark_connector_health(company, live=True, note=None, url=None):
     CONNECTOR_HEALTH[company] = {
@@ -21987,7 +21988,172 @@ def scrape_priority_expansion_official(company):
 # END HARSHIT PRIORITY EMPLOYER EXPANSION
 
 
+
+# BEGIN VERIFIED FALSE-ZERO BATCH 2026-09-19
+def _scrape_verified_server_board(company, urls, href_needles, default_location="Ireland",
+                                   board_is_ireland_scoped=False):
+    from bs4 import BeautifulSoup
+
+    results = {}
+    needles = tuple(str(x).lower() for x in href_needles)
+
+    for source_url in urls:
+        page = _fetch_html(source_url) or ""
+        if not page:
+            continue
+
+        soup = BeautifulSoup(page, "html.parser")
+
+        for anchor in soup.find_all("a", href=True):
+            href = urllib.parse.urljoin(source_url, anchor.get("href") or "").split("#")[0]
+            low_href = href.lower()
+
+            if needles and not any(n in low_href for n in needles):
+                continue
+
+            title = re.sub(r"\s+", " ", anchor.get_text(" ", strip=True)).strip()
+            node = anchor
+            card_text = ""
+
+            for _ in range(7):
+                if not node:
+                    break
+                try:
+                    candidate = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
+                except Exception:
+                    candidate = ""
+                if candidate and len(candidate) <= 4000:
+                    card_text = candidate
+                if card_text and region_ok(card_text):
+                    break
+                node = getattr(node, "parent", None)
+
+            if (
+                not title
+                or title.lower() in {
+                    "read more", "view vacancy", "view job", "apply",
+                    "apply now", "learn more", "details",
+                }
+                or len(title) > 300
+            ):
+                search_node = node or anchor.parent
+                heading = search_node.find(["h1", "h2", "h3", "h4", "h5"]) if search_node else None
+                if heading:
+                    title = re.sub(r"\s+", " ", heading.get_text(" ", strip=True)).strip()
+
+            if not title or len(title) > 300 or not is_real_job_title(title):
+                continue
+
+            evidence = f"{title} {card_text} {href}"
+            if not board_is_ireland_scoped and not region_ok(evidence):
+                continue
+
+            location = default_location
+            m = re.search(
+                r"\b(Dublin|Cork|Galway|Limerick|Shannon|Waterford|Kilkenny|"
+                r"Leixlip|Kildare|Athlone|Dundalk)\b",
+                card_text,
+                re.I,
+            )
+            if m:
+                location = f"{m.group(1).title()}, Ireland"
+            elif re.search(r"\bIreland\b", card_text, re.I):
+                location = "Ireland"
+
+            key = low_href.rstrip("/")
+            if not key:
+                continue
+
+            results[key] = {
+                "company": company,
+                "ats": "direct",
+                "title": title,
+                "location": location,
+                "raw_location": location,
+                "url": href,
+                "updated_at": None,
+                "description_text": card_text[:5000],
+            }
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official repaired careers source loaded; {len(results)} Republic-of-Ireland jobs",
+        urls[0] if urls else None,
+    )
+    print(f"  {company} repaired official board: {len(results)} Ireland jobs")
+    return list(results.values())
+
+
+def scrape_ekco_repaired():
+    return _scrape_verified_server_board(
+        "Ekco",
+        ["https://careers.ek.co/jobs"],
+        ("careers.ek.co/jobs/",),
+        board_is_ireland_scoped=False,
+    )
+
+
+def scrape_airnav_repaired():
+    return _scrape_verified_server_board(
+        "AirNav Ireland",
+        [
+            "https://www.airnav.ie/careers/current-vacancies",
+            "https://www.airnav.ie/careers",
+        ],
+        ("/careers/current-vacancies/",),
+        board_is_ireland_scoped=True,
+    )
+
+
+def scrape_amundi_repaired():
+    return _scrape_verified_server_board(
+        "Amundi",
+        [
+            "https://www.jobs.amundi.com/Pages/Offre/ListeOffre.aspx?LCID=2057&showSearchUrl=1",
+            "https://www.jobs.amundi.com/Pages/Offre/ListeOffre.aspx?LCID=2057&page=2&showSearchUrl=1",
+        ],
+        ("detailoffre", "/offre/", "/job/"),
+        board_is_ireland_scoped=False,
+    )
+
+
+def scrape_aviva_ireland_repaired():
+    return _scrape_verified_server_board(
+        "Aviva Ireland",
+        ["https://www.aviva.ie/group/careers/"],
+        ("/group/careers/", "jobs.aviva", "workday", "/job/"),
+        board_is_ireland_scoped=True,
+    )
+
+
+def scrape_crh_repaired():
+    return _scrape_verified_server_board(
+        "CRH",
+        [
+            "https://jobs.crh.com/search/?q=&locationsearch=Ireland",
+            "https://jobs.crh.com/viewalljobs/",
+        ],
+        ("jobs.crh.com/job/",),
+        board_is_ireland_scoped=False,
+    )
+
+
+FALSE_ZERO_REPAIRS_2026_09_19 = {
+    "Ekco": scrape_ekco_repaired,
+    "AirNav Ireland": scrape_airnav_repaired,
+    "Amundi": scrape_amundi_repaired,
+    "Aviva Ireland": scrape_aviva_ireland_repaired,
+    "CRH": scrape_crh_repaired,
+}
+# END VERIFIED FALSE-ZERO BATCH 2026-09-19
+
+
 def scrape_direct_company(company: str):
+    repaired = FALSE_ZERO_REPAIRS_2026_09_19.get(company)
+    if repaired is not None:
+        return repaired()
+
     # BEGIN SALE_READY_DIRECT_CONNECTORS
     # Canonical/alias names that must use their verified official collectors.
     _verified_direct_connectors = {
