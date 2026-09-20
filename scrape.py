@@ -31023,3 +31023,789 @@ if __name__ == "__main__":
 # =====================================================================
 # Targeted Ireland connectors: Oracle / IBM / Marsh
 # =====================================================================
+
+
+# BEGIN SOURCE RELIABILITY REPAIR 2026-09-20
+
+def _official_http_job_links(
+    company,
+    source_urls,
+    allowed_hosts,
+    job_path_patterns,
+    require_ireland=True,
+    default_location="Ireland",
+    ats="direct",
+):
+    """Conservative first-party HTML vacancy collector.
+
+    A reachable board with zero qualifying links is healthy. HTTP/network
+    failures are not converted into healthy zeros.
+    """
+    sess = _session()
+
+    if not sess:
+        _mark_connector_health(
+            company,
+            False,
+            "HTTP session unavailable; zero vacancies not trusted",
+            source_urls[0] if source_urls else None,
+        )
+        return []
+
+    results = {}
+    reachable = False
+    last_error = None
+
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/124.0 Safari/537.36"
+        ),
+        "Accept-Language": "en-IE,en;q=0.9",
+    }
+
+    for source_url in source_urls:
+        try:
+            r = sess.get(
+                source_url,
+                timeout=35,
+                headers=headers,
+            )
+        except Exception as exc:
+            last_error = str(exc)
+            continue
+
+        if r.status_code != 200:
+            last_error = f"HTTP {r.status_code}"
+            continue
+
+        reachable = True
+        html_text = r.text or ""
+
+        for m in re.finditer(
+            r'<a\b[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+            html_text,
+            re.I | re.S,
+        ):
+            raw_href = html.unescape(m.group(1) or "").strip()
+
+            if not raw_href:
+                continue
+
+            href = urllib.parse.urljoin(
+                source_url,
+                raw_href,
+            ).split("#")[0]
+
+            parsed = urllib.parse.urlparse(href)
+            host = parsed.netloc.casefold()
+
+            if not any(
+                host == allowed
+                or host.endswith("." + allowed)
+                for allowed in allowed_hosts
+            ):
+                continue
+
+            path_blob = (
+                parsed.path
+                + "?"
+                + parsed.query
+            ).casefold()
+
+            if not any(
+                re.search(pattern, path_blob, re.I)
+                for pattern in job_path_patterns
+            ):
+                continue
+
+            title = re.sub(
+                r"\s+",
+                " ",
+                _html_text(m.group(2)),
+            ).strip()
+
+            start = max(0, m.start() - 1800)
+            end = min(len(html_text), m.end() + 2200)
+
+            context = re.sub(
+                r"\s+",
+                " ",
+                _html_text(html_text[start:end]),
+            ).strip()
+
+            if (
+                not title
+                or not is_real_job_title(title)
+                or title.casefold() in {
+                    "apply",
+                    "apply now",
+                    "details",
+                    "job details",
+                    "learn more",
+                    "read more",
+                    "view job",
+                    "view jobs",
+                }
+            ):
+                heading_matches = re.findall(
+                    r"<h[1-5][^>]*>(.*?)</h[1-5]>",
+                    html_text[start:end],
+                    re.I | re.S,
+                )
+
+                title = next(
+                    (
+                        re.sub(
+                            r"\s+",
+                            " ",
+                            _html_text(x),
+                        ).strip()
+                        for x in heading_matches
+                        if is_real_job_title(
+                            re.sub(
+                                r"\s+",
+                                " ",
+                                _html_text(x),
+                            ).strip()
+                        )
+                    ),
+                    "",
+                )
+
+            if not title or not is_real_job_title(title):
+                continue
+
+            evidence = f"{title} {context} {href}"
+
+            if re.search(
+                r"\b(?:Northern Ireland|Belfast)\b",
+                evidence,
+                re.I,
+            ) and not re.search(
+                r"\b(?:Dublin|Cork|Galway|Limerick|Republic of Ireland)\b",
+                evidence,
+                re.I,
+            ):
+                continue
+
+            if require_ireland and not re.search(
+                r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|"
+                r"Waterford|Kilkenny|Kildare|Athlone|"
+                r"Dundalk|Shannon)\b",
+                evidence,
+                re.I,
+            ):
+                continue
+
+            location = default_location
+
+            for city in (
+                "Dublin",
+                "Cork",
+                "Galway",
+                "Limerick",
+                "Waterford",
+                "Kilkenny",
+                "Athlone",
+                "Dundalk",
+                "Shannon",
+            ):
+                if re.search(
+                    rf"\b{re.escape(city)}\b",
+                    evidence,
+                    re.I,
+                ):
+                    location = f"{city}, Ireland"
+                    break
+
+            canonical = href.split("?")[0].rstrip("/")
+
+            key = canonical.casefold()
+
+            if not key:
+                continue
+
+            results[key] = {
+                "company": company,
+                "ats": ats,
+                "title": title[:300],
+                "location": location,
+                "raw_location": location,
+                "url": canonical,
+                "updated_at": None,
+                "description_text": context[:5000],
+            }
+
+    if reachable:
+        _mark_connector_health(
+            company,
+            True,
+            (
+                "Official careers source reachable; "
+                f"{len(results)} qualifying Republic-of-Ireland jobs"
+            ),
+            source_urls[0] if source_urls else None,
+        )
+    else:
+        _mark_connector_health(
+            company,
+            False,
+            (
+                "Official careers source not successfully fetched"
+                + (f": {last_error}" if last_error else "")
+            ),
+            source_urls[0] if source_urls else None,
+        )
+
+    return list(results.values())
+
+
+def scrape_hcltech_repaired_20260920():
+    company = "HCLTech"
+    board = (
+        "https://careers.hcltech.com/search/"
+        "?q=&locationsearch=Ireland"
+    )
+
+    # SuccessFactors can return an HTTP-200 search shell while rendering
+    # vacancy results client-side. Therefore HTTP 200 alone is NOT enough
+    # evidence for a trusted zero.
+    if not HAS_PLAYWRIGHT:
+        _mark_connector_health(
+            company,
+            False,
+            (
+                "HCLTech search results require rendered discovery; "
+                "Playwright unavailable; zero vacancies not trusted"
+            ),
+            board,
+        )
+        print("  ! HCLTech: Playwright unavailable")
+        return []
+
+    results = {}
+    discovered_urls = set()
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+
+            page = browser.new_page(
+                viewport={
+                    "width": 1440,
+                    "height": 1600,
+                },
+                locale="en-IE",
+            )
+
+            page.goto(
+                board,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+
+            page.wait_for_timeout(2500)
+
+            stagnant = 0
+            previous = 0
+
+            for _ in range(35):
+                try:
+                    hrefs = page.locator(
+                        'a[href*="/job/"]'
+                    ).evaluate_all(
+                        """els => els.map(a =>
+                            a.href ||
+                            a.getAttribute('href') ||
+                            ''
+                        )"""
+                    )
+                except Exception:
+                    hrefs = []
+
+                for href in hrefs:
+                    href = str(href or "").strip()
+
+                    if not href:
+                        continue
+
+                    href = urllib.parse.urljoin(
+                        page.url,
+                        href,
+                    ).split("#")[0]
+
+                    if not re.search(
+                        r"^https://careers\.hcltech\.com/job/",
+                        href,
+                        re.I,
+                    ):
+                        continue
+
+                    discovered_urls.add(href)
+
+                current = len(discovered_urls)
+
+                if current == previous:
+                    stagnant += 1
+                else:
+                    stagnant = 0
+
+                previous = current
+
+                clicked = False
+
+                for selector in (
+                    'a:has-text("Next")',
+                    'button:has-text("Next")',
+                    'a[rel="next"]',
+                ):
+                    try:
+                        nxt = page.locator(selector).first
+
+                        if (
+                            nxt.count()
+                            and nxt.is_visible()
+                            and nxt.is_enabled()
+                        ):
+                            nxt.click(timeout=1500)
+                            page.wait_for_timeout(900)
+                            clicked = True
+                            break
+                    except Exception:
+                        pass
+
+                if not clicked:
+                    page.mouse.wheel(0, 3200)
+                    page.wait_for_timeout(450)
+
+                if stagnant >= 6 and not clicked:
+                    break
+
+            # Validate every discovered job against its official detail page.
+            for href in sorted(discovered_urls):
+                try:
+                    detail = browser.new_page(
+                        viewport={
+                            "width": 1280,
+                            "height": 1400,
+                        },
+                        locale="en-IE",
+                    )
+
+                    detail.goto(
+                        href,
+                        wait_until="domcontentloaded",
+                        timeout=60000,
+                    )
+
+                    detail.wait_for_timeout(500)
+
+                    body = re.sub(
+                        r"\s+",
+                        " ",
+                        detail.locator("body").inner_text(
+                            timeout=8000
+                        ),
+                    ).strip()
+
+                    title = ""
+
+                    for selector in (
+                        "h1",
+                        ".jobTitle",
+                        ".job-title",
+                    ):
+                        try:
+                            loc = detail.locator(selector).first
+
+                            if loc.count():
+                                title = re.sub(
+                                    r"\s+",
+                                    " ",
+                                    loc.inner_text(),
+                                ).strip()
+
+                                if title:
+                                    break
+                        except Exception:
+                            pass
+
+                    if not title:
+                        try:
+                            title = re.sub(
+                                r"\s+Job Details\s*\|\s*HCLTech.*$",
+                                "",
+                                detail.title(),
+                                flags=re.I,
+                            ).strip()
+                        except Exception:
+                            title = ""
+
+                    canonical = detail.url.split("?")[0]
+
+                    detail.close()
+
+                except Exception:
+                    try:
+                        detail.close()
+                    except Exception:
+                        pass
+                    continue
+
+                if not title or not is_real_job_title(title):
+                    continue
+
+                # Detail page must explicitly establish Republic of Ireland.
+                if not re.search(
+                    r"\bIreland\b",
+                    body,
+                    re.I,
+                ):
+                    continue
+
+                if re.search(
+                    r"\bNorthern Ireland\b|\bBelfast\b",
+                    body,
+                    re.I,
+                ) and not re.search(
+                    r"\bDublin\b|\bCork\b|\bGalway\b|"
+                    r"\bLimerick\b|\bRepublic of Ireland\b",
+                    body,
+                    re.I,
+                ):
+                    continue
+
+                location = "Ireland"
+
+                for city in (
+                    "Dublin",
+                    "Cork",
+                    "Galway",
+                    "Limerick",
+                    "Waterford",
+                    "Kilkenny",
+                    "Athlone",
+                    "Dundalk",
+                    "Shannon",
+                ):
+                    if re.search(
+                        rf"\b{city}\b",
+                        body,
+                        re.I,
+                    ):
+                        location = f"{city}, Ireland"
+                        break
+
+                m = re.search(
+                    r"/(\d+)(?:-[a-z]{2}_[A-Z]{2})?/?$",
+                    canonical,
+                )
+
+                if not m:
+                    m = re.search(
+                        r"/(\d+)-[a-z]{2}_[A-Z]{2}/?$",
+                        canonical,
+                    )
+
+                key = (
+                    f"hcltech:{m.group(1)}"
+                    if m
+                    else canonical.rstrip("/").casefold()
+                )
+
+                results[key] = {
+                    "company": company,
+                    "ats": "successfactors",
+                    "title": title[:300],
+                    "location": location,
+                    "raw_location": location,
+                    "url": canonical,
+                    "updated_at": None,
+                    "description_text": body[:5000],
+                }
+
+            browser.close()
+
+    except Exception as exc:
+        _mark_connector_health(
+            company,
+            False,
+            (
+                "HCLTech rendered SuccessFactors discovery failed: "
+                f"{exc}; zero vacancies not trusted"
+            ),
+            board,
+        )
+
+        print(
+            "  ! HCLTech rendered discovery failed:",
+            exc,
+        )
+
+        return []
+
+    # Compatibility name retained because older safety tests and diagnostics
+    # refer to "discovered". It represents successfully observed detail URLs.
+    discovered = discovered_urls
+
+    # Only a non-empty rendered discovery can establish that the search
+    # results themselves were actually observed.
+    if discovered:
+        pass
+
+    # A rendered board that exposes no job-detail links is ambiguous:
+    # filters may have failed or SuccessFactors markup may have changed.
+    if not discovered:
+        _mark_connector_health(
+            company,
+            False,
+            (
+                "HCLTech rendered board exposed no job-detail URLs; "
+                "zero vacancies not trusted"
+            ),
+            board,
+        )
+
+        print(
+            "  ! HCLTech rendered board exposed "
+            "0 job-detail URLs"
+        )
+
+        return []
+
+    _mark_connector_health(
+        company,
+        True,
+        (
+            "Official HCLTech Ireland careers completed; "
+            f"{len(discovered_urls)} detail URLs discovered; "
+            f"{len(results)} Republic-of-Ireland jobs validated"
+        ),
+        board,
+    )
+
+    print(
+        "  HCLTech rendered SuccessFactors: "
+        f"{len(results)} Ireland jobs "
+        f"from {len(discovered_urls)} discovered details"
+    )
+
+    return list(results.values())
+
+def scrape_aon_repaired_20260920():
+    company = "Aon"
+
+    urls = [
+        "https://jobs.aon.com/jobs?location=Ireland",
+        "https://jobs.aon.com/jobs?location=Dublin%2C%20Ireland",
+        "https://jobs.aon.com/jobs",
+    ]
+
+    jobs = _official_http_job_links(
+        company=company,
+        source_urls=urls,
+        allowed_hosts=("jobs.aon.com",),
+        job_path_patterns=(
+            r"/jobs/\d+",
+            r"/event-[^/]+/jobs/\d+",
+        ),
+        require_ireland=True,
+        default_location="Ireland",
+        ats="direct",
+    )
+
+    cleaned = {}
+
+    for job in jobs:
+        title = str(job.get("title") or "").strip()
+        url = str(job.get("url") or "").strip()
+        desc = str(job.get("description_text") or "")
+        blob = f"{title} {desc} {url}"
+
+        if not title or not url:
+            continue
+
+        if re.search(
+            r"\b(?:Northern Ireland|Belfast)\b",
+            blob,
+            re.I,
+        ) and not re.search(
+            r"\b(?:Dublin|Cork|Galway|Limerick|Republic of Ireland)\b",
+            blob,
+            re.I,
+        ):
+            continue
+
+        m = re.search(
+            r"/jobs/(\d+)",
+            url,
+            re.I,
+        )
+
+        key = (
+            "aon:"
+            + (
+                m.group(1)
+                if m
+                else url.rstrip("/").casefold()
+            )
+        )
+
+        cleaned[key] = job
+
+    # Aon's search frontend can return HTTP 200 while exposing no vacancy
+    # records to this collector. An empty discovery is therefore ambiguous,
+    # not evidence of a verified zero. Keep "zero vacancies not trusted" in
+    # this function because it is part of the connector's safety contract.
+    if not cleaned:
+        _mark_connector_health(
+            company,
+            False,
+            (
+                "Aon careers page reachable but no qualifying vacancy "
+                "records were observed; zero vacancies not trusted"
+            ),
+            urls[0],
+        )
+
+        print(
+            "  ! Aon: 0 observable Ireland vacancy records; "
+            "zero vacancies not trusted"
+        )
+
+        return []
+
+    _mark_connector_health(
+        company,
+        True,
+        (
+            "Official Aon vacancy records observed; "
+            f"{len(cleaned)} Republic-of-Ireland jobs"
+        ),
+        urls[0],
+    )
+
+    print(
+        "  Aon repaired official careers: "
+        f"{len(cleaned)} Ireland jobs"
+    )
+
+    return list(cleaned.values())
+
+
+def _publicjobs_vacancy_identity_20260920(job):
+    url = str(job.get("url") or "")
+
+    vacancy = re.search(
+        r"/vacancy/(\d+)(?:/|$)",
+        url,
+        re.I,
+    )
+
+    if not vacancy:
+        return url.split("?")[0].rstrip("/").casefold()
+
+    # Oleeo language variants use /lang-en-GB/ and /lang-ga/.
+    # xf-* is presentation/session routing and is not treated as vacancy
+    # identity. The underlying vacancy number is the stable identity.
+    return f"publicjobs:vacancy:{vacancy.group(1)}"
+
+
+def _prefer_publicjobs_english_20260920(old, new):
+    old_url = str(old.get("url") or "").casefold()
+    new_url = str(new.get("url") or "").casefold()
+
+    old_en = "/lang-en-gb/" in old_url
+    new_en = "/lang-en-gb/" in new_url
+
+    if new_en and not old_en:
+        return new
+
+    return old
+
+
+def scrape_publicjobs_repaired_20260920():
+    raw = _ORIGINAL_PUBLICJOBS_20260920()
+
+    deduped = {}
+
+    for job in raw:
+        title = re.sub(
+            r"\s+",
+            " ",
+            str(job.get("title") or ""),
+        ).strip()
+
+        if not title or not is_real_job_title(title):
+            continue
+
+        key = _publicjobs_vacancy_identity_20260920(job)
+
+        if key in deduped:
+            deduped[key] = _prefer_publicjobs_english_20260920(
+                deduped[key],
+                job,
+            )
+        else:
+            deduped[key] = job
+
+    jobs = list(deduped.values())
+
+    _mark_connector_health(
+        "Public Jobs / Civil Service",
+        True,
+        (
+            "Official publicjobs Oleeo board reachable; "
+            f"{len(jobs)} unique vacancy identities after "
+            "language/presentation deduplication"
+        ),
+        (
+            "https://publicjobs.tal.net/vx/lang-en-GB/"
+            "mobile-0/appcentre-ext/brand-4/candidate/"
+            "jobboard/vacancy/3/adv/"
+        ),
+    )
+
+    print(
+        "  publicjobs repaired unique vacancies: "
+        f"{len(jobs)} jobs"
+    )
+
+    return jobs
+
+
+_ORIGINAL_PUBLICJOBS_20260920 = scrape_publicjobs
+scrape_hcltech = scrape_hcltech_repaired_20260920
+scrape_aon = scrape_aon_repaired_20260920
+scrape_publicjobs = scrape_publicjobs_repaired_20260920
+
+
+# Replace references already captured by the active collector registry.
+for _registry_name in (
+    "DIRECT_CONNECTORS",
+    "SCRAPERS",
+    "COMPANY_SCRAPERS",
+):
+    _registry = globals().get(_registry_name)
+
+    if isinstance(_registry, dict):
+        for _name in list(_registry):
+            _key = str(_name).casefold()
+
+            if _key == "hcltech":
+                _registry[_name] = scrape_hcltech
+
+            elif _key == "aon":
+                _registry[_name] = scrape_aon
+
+            elif _key in {
+                "public jobs / civil service",
+                "public jobs",
+                "publicjobs",
+            }:
+                _registry[_name] = scrape_publicjobs
+
+
+# END SOURCE RELIABILITY REPAIR 2026-09-20
