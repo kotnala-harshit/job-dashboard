@@ -5490,6 +5490,91 @@ def scrape_tiktok():
                         else:
                             location = "Ireland"
 
+                    # Guard against SPA state contamination. The rendered
+                    # detail text should identify the same vacancy as its h1/h2.
+                    # If it does not, keep the validated title/location/URL but
+                    # do not attach another vacancy's body text.
+                    # LifeAtTikTok is an SPA. body.inner_text() includes global
+                    # navigation and may include stale state from another vacancy.
+                    # Store only text from a job-local container that contains
+                    # evidence belonging to this vacancy. If none is trustworthy,
+                    # leave description empty rather than attach contaminated text.
+                    description = ""
+
+                    title_tokens = [
+                        token.lower()
+                        for token in re.findall(r"[A-Za-z0-9]+", title)
+                        if len(token) >= 5
+                        and token.lower() not in {
+                            "dublin",
+                            "ireland",
+                            "regular",
+                            "specialist",
+                            "manager",
+                            "engineer",
+                        }
+                    ]
+
+                    for selector in (
+                        "main",
+                        "article",
+                        '[class*="job-detail" i]',
+                        '[class*="jobDetail" i]',
+                        '[class*="description" i]',
+                    ):
+                        try:
+                            candidates = detail.locator(selector)
+
+                            for candidate_index in range(
+                                min(candidates.count(), 8)
+                            ):
+                                candidate_text = re.sub(
+                                    r"\\s+",
+                                    " ",
+                                    candidates.nth(
+                                        candidate_index
+                                    ).inner_text(timeout=1500),
+                                ).strip()
+
+                                if len(candidate_text) < 80:
+                                    continue
+
+                                if title_tokens and not any(
+                                    re.search(
+                                        rf"\\b{re.escape(token)}\\b",
+                                        candidate_text,
+                                        re.I,
+                                    )
+                                    for token in title_tokens[:6]
+                                ):
+                                    continue
+
+                                # Reject the known global LifeAtTikTok shell.
+                                shell_head = candidate_text[:900]
+
+                                if (
+                                    candidate_text.startswith(
+                                        "#LifeAtTikTok Teams How we hire Locations "
+                                        "Early Careers Blog Jobs Apply Company"
+                                    )
+                                    or (
+                                        "Teams How we hire Locations Early Careers"
+                                        in shell_head
+                                        and "Company About TikTok Newsroom"
+                                        in shell_head
+                                    )
+                                ):
+                                    continue
+
+                                description = candidate_text[:5000]
+                                break
+
+                            if description:
+                                break
+
+                        except Exception:
+                            pass
+
                     results[href] = {
                         "company": company,
                         "ats": "direct",
@@ -5498,7 +5583,7 @@ def scrape_tiktok():
                         "location": location[:200],
                         "url": href,
                         "updated_at": None,
-                        "description_text": body[:5000],
+                        "description_text": description,
                     }
 
                 except Exception as exc:
@@ -8073,6 +8158,12 @@ def scrape_hcltech():
     )
 
     if not HAS_PLAYWRIGHT:
+        _mark_connector_health(
+            company,
+            False,
+            "Official HCLTech Ireland careers requires Playwright; Playwright unavailable",
+            source,
+        )
         print("  ! HCLTech: Playwright unavailable")
         return []
 
@@ -8092,10 +8183,47 @@ def scrape_hcltech():
             )
 
             page = context.new_page()
-            page.goto(source, wait_until="domcontentloaded", timeout=90000)
+            response = page.goto(
+                source,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+
+            if response is not None and response.status >= 400:
+                raise RuntimeError(
+                    f"HCLTech Ireland careers returned HTTP {response.status}"
+                )
+
             page.wait_for_timeout(4000)
 
-            links = page.locator("a").evaluate_all(
+            # Avature may populate the filtered result list after the
+            # initial DOMContentLoaded event. Scroll the result surface before
+            # taking the anchor snapshot so a temporarily sparse DOM cannot be
+            # mistaken for a genuine zero-vacancy board.
+            previous_job_links = -1
+            stagnant = 0
+
+            for _ in range(30):
+                current_job_links = page.locator(
+                    'a[href*="/careers/JobDetail/"]'
+                ).count()
+
+                if current_job_links == previous_job_links:
+                    stagnant += 1
+                else:
+                    stagnant = 0
+
+                previous_job_links = current_job_links
+
+                if current_job_links > 0 and stagnant >= 3:
+                    break
+
+                page.mouse.wheel(0, 2800)
+                page.wait_for_timeout(500)
+
+            links = page.locator(
+                'a[href*="/careers/JobDetail/"]'
+            ).evaluate_all(
                 """els => els.map(a => ({
                     href: a.href || "",
                     text: (a.innerText || a.textContent || "").trim()
@@ -8126,9 +8254,7 @@ def scrape_hcltech():
                 if not m:
                     continue
 
-                job_id = m.group(1)
-
-                discovered[job_id] = {
+                discovered[m.group(1)] = {
                     "title": title,
                     "href": href.split("#")[0],
                 }
@@ -8163,8 +8289,11 @@ def scrape_hcltech():
 
                 except Exception:
                     pass
-
-                detail.close()
+                finally:
+                    try:
+                        detail.close()
+                    except Exception:
+                        pass
 
                 results[job_id] = {
                     "company": company,
@@ -8176,17 +8305,40 @@ def scrape_hcltech():
                     "description_text": description,
                 }
 
+            context.close()
             browser.close()
 
     except Exception as exc:
+        _mark_connector_health(
+            company,
+            False,
+            f"Official HCLTech Ireland careers failed: {exc}",
+            source,
+        )
         print(f"  ! HCLTech scrape failed: {exc}")
+        return []
 
-    print(
-        f"  HCLTech official Ireland careers: "
-        f"{len(results)} jobs"
-    )
+    # Do not infer a verified zero merely because the careers page
+    # returned HTTP 200. SuccessFactors can render an empty initial DOM.
+    if discovered:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official HCLTech Ireland careers completed; {len(results)} Republic-of-Ireland jobs returned",
+            source,
+        )
+    else:
+        _mark_connector_health(
+            company,
+            False,
+            "Official HCLTech Ireland careers loaded but no vacancy links were discovered; zero vacancies not trusted",
+            source,
+        )
 
+    print(f"  HCLTech official Ireland careers: {len(results)} jobs")
     return list(results.values())
+
+
 
 
 def scrape_hp():
@@ -8289,6 +8441,12 @@ def scrape_jacobs():
     )
 
     if not HAS_PLAYWRIGHT:
+        _mark_connector_health(
+            company,
+            False,
+            "Official Jacobs Ireland careers requires Playwright; Playwright unavailable",
+            source,
+        )
         print("  ! Jacobs: Playwright unavailable")
         return []
 
@@ -8305,14 +8463,49 @@ def scrape_jacobs():
 
             page = context.new_page()
 
-            page.goto(
+            response = page.goto(
                 source,
                 wait_until="domcontentloaded",
                 timeout=90000,
             )
+
+            if response is not None and response.status >= 400:
+                raise RuntimeError(
+                    f"Jacobs Ireland careers returned HTTP {response.status}"
+                )
+
             page.wait_for_timeout(4000)
 
-            links = page.locator("a").evaluate_all(
+            # Avature populates filtered results client-side. Wait/scroll
+            # until the vacancy-link count stabilizes before snapshotting the
+            # result anchors. An empty initial DOM is not a trusted zero.
+            previous_job_links = -1
+            stagnant_job_links = 0
+
+            for _ in range(30):
+                current_job_links = page.locator(
+                    'a[href*="/careers/JobDetail/"]'
+                ).count()
+
+                if current_job_links == previous_job_links:
+                    stagnant_job_links += 1
+                else:
+                    stagnant_job_links = 0
+
+                previous_job_links = current_job_links
+
+                if (
+                    current_job_links > 0
+                    and stagnant_job_links >= 3
+                ):
+                    break
+
+                page.mouse.wheel(0, 2800)
+                page.wait_for_timeout(500)
+
+            links = page.locator(
+                'a[href*="/careers/JobDetail/"]'
+            ).evaluate_all(
                 """els => els.map(a => ({
                     href: a.href || "",
                     text: (a.innerText || a.textContent || "").trim()
@@ -8339,7 +8532,6 @@ def scrape_jacobs():
                 if not title:
                     continue
 
-                # Exclude obvious Northern Ireland jobs.
                 if re.search(
                     r"\bBelfast\b|\bNorthern Ireland\b",
                     title,
@@ -8351,9 +8543,7 @@ def scrape_jacobs():
                 if not m:
                     continue
 
-                job_id = m.group(1)
-
-                discovered[job_id] = {
+                discovered[m.group(1)] = {
                     "title": title,
                     "href": href.split("#")[0],
                 }
@@ -8362,15 +8552,26 @@ def scrape_jacobs():
                 title = item["title"]
                 canonical = item["href"]
 
-                location = "Ireland"
-                description = ""
+                title_cities = [
+                    city
+                    for city in (
+                        "Dublin",
+                        "Cork",
+                        "Galway",
+                        "Limerick",
+                        "Waterford",
+                    )
+                    if re.search(rf"\b{city}\b", title, re.I)
+                ]
 
-                if re.search(r"\bDublin\b", title, re.I):
-                    location = "Dublin, Ireland"
-                elif re.search(r"\bCork\b", title, re.I):
-                    location = "Cork, Ireland"
-                elif re.search(r"\bGalway\b", title, re.I):
-                    location = "Galway, Ireland"
+                if len(title_cities) > 1:
+                    location = " / ".join(title_cities) + ", Ireland"
+                elif title_cities:
+                    location = f"{title_cities[0]}, Ireland"
+                else:
+                    location = "Ireland"
+
+                description = ""
 
                 detail = context.new_page()
 
@@ -8387,20 +8588,41 @@ def scrape_jacobs():
                     )
                     description = body[:5000]
 
-                    # Improve location from detail content.
-                    if re.search(r"\bDublin\b", body, re.I):
-                        location = "Dublin, Ireland"
-                    elif re.search(r"\bCork\b", body, re.I):
-                        location = "Cork, Ireland"
-                    elif re.search(r"\bGalway\b", body, re.I):
-                        location = "Galway, Ireland"
-                    elif re.search(r"\bLimerick\b", body, re.I):
-                        location = "Limerick, Ireland"
+                    if re.search(
+                        r"\bBelfast\b|\bNorthern Ireland\b",
+                        body,
+                        re.I,
+                    ) and not region_ok(title):
+                        continue
+
+                    # A city explicitly present in the vacancy title is more
+                    # specific than generic city references elsewhere in the
+                    # rendered detail page.
+                    if not title_cities:
+                        body_cities = [
+                            city
+                            for city in (
+                                "Dublin",
+                                "Cork",
+                                "Galway",
+                                "Limerick",
+                                "Waterford",
+                            )
+                            if re.search(rf"\b{city}\b", body, re.I)
+                        ]
+
+                        if len(body_cities) > 1:
+                            location = " / ".join(body_cities) + ", Ireland"
+                        elif body_cities:
+                            location = f"{body_cities[0]}, Ireland"
 
                 except Exception:
                     pass
-
-                detail.close()
+                finally:
+                    try:
+                        detail.close()
+                    except Exception:
+                        pass
 
                 results[job_id] = {
                     "company": company,
@@ -8412,17 +8634,41 @@ def scrape_jacobs():
                     "description_text": description,
                 }
 
+            context.close()
             browser.close()
 
     except Exception as exc:
+        _mark_connector_health(
+            company,
+            False,
+            f"Official Jacobs Ireland careers failed: {exc}",
+            source,
+        )
         print(f"  ! Jacobs scrape failed: {exc}")
+        return []
 
-    print(
-        f"  Jacobs official Ireland careers: "
-        f"{len(results)} jobs"
-    )
+    # A rendered Avature board with discovered vacancy links is healthy.
+    # A zero-result DOM is not sufficient evidence of a genuine hiring zero:
+    # client-side rendering can fail independently of the HTTP navigation.
+    if discovered:
+        _mark_connector_health(
+            company,
+            True,
+            f"Official Jacobs Ireland careers completed; {len(results)} Republic-of-Ireland jobs returned",
+            source,
+        )
+    else:
+        _mark_connector_health(
+            company,
+            False,
+            "Official Jacobs Ireland careers loaded but no Avature vacancy links were discovered; zero vacancies not trusted",
+            source,
+        )
 
+    print(f"  Jacobs official Ireland careers: {len(results)} jobs")
     return list(results.values())
+
+
 
 
 
@@ -11178,20 +11424,55 @@ def scrape_siemens():
 
 
 def scrape_musgrave():
-    company = "Musgrave"
+    company = "Musgrave Group (SuperValu / Centra)"
     source_url = "https://musgravegroup.com/careers/vacancies/"
 
     if not HAS_PLAYWRIGHT:
+        _mark_connector_health(
+            company,
+            False,
+            "Official Musgrave vacancies requires Playwright; Playwright unavailable",
+            source_url,
+        )
         print("  ! Musgrave: Playwright unavailable")
         return []
 
     results = {}
 
+    # Musgrave operates on both sides of the border. Explicit NI evidence must
+    # never be treated as a Republic-of-Ireland vacancy.
+    ni_pattern = re.compile(
+        r"\b(?:Northern Ireland|Belfast|Dungiven|Antrim|Armagh|"
+        r"Down|Fermanagh|Tyrone|Londonderry|Derry|"
+        r"Downpatrick|Moira|Lurgan|Cookstown|Carrickfergus|"
+        r"Portadown|Lisburn|Ballymena|Maghera|Dungannon|"
+        r"Portstewart|Irvinestown|Fintona|Portglenone|"
+        r"Limavady|Omagh|Ballynahinch|Crossgar|Killinchy|"
+        r"Banbridge|Newcastle)\b|"
+        r"\bBT\d{1,2}\s*\d?[A-Z]{0,2}\b",
+        re.I,
+    )
+
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
-            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
+            context = browser.new_context(
+                viewport={"width": 1440, "height": 1300},
+                locale="en-IE",
+            )
+            page = context.new_page()
+
+            response = page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+
+            if response is not None and response.status >= 400:
+                raise RuntimeError(
+                    f"Musgrave vacancies returned HTTP {response.status}"
+                )
+
             page.wait_for_timeout(2500)
 
             stagnant = 0
@@ -11202,22 +11483,35 @@ def scrape_musgrave():
 
                 for i in range(anchors.count()):
                     a = anchors.nth(i)
+
                     try:
                         raw = a.get_attribute("href") or ""
-                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
+                        href = urllib.parse.urljoin(
+                            page.url,
+                            raw,
+                        ).split("#")[0]
                     except Exception:
                         continue
 
                     low = href.lower()
 
-                    # Keep likely vacancy/detail links, reject navigation/social links.
                     if any(x in low for x in (
-                        "linkedin.com", "facebook.com", "instagram.com",
-                        "/careers/", "/about/", "/news/", "/contact/"
+                        "linkedin.com",
+                        "facebook.com",
+                        "instagram.com",
+                        "/careers/",
+                        "/about/",
+                        "/news/",
+                        "/contact/",
                     )) and "vacanc" not in low and "job" not in low:
                         continue
 
-                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
+                    title = re.sub(
+                        r"\s+",
+                        " ",
+                        _browser_text(a),
+                    ).strip()
+
                     node = a
                     card = ""
 
@@ -11226,14 +11520,20 @@ def scrape_musgrave():
                             txt = _browser_text(node)
                         except Exception:
                             txt = ""
+
                         if txt and len(txt) <= 3200:
                             card = txt
+
                         if re.search(
-                            r"\b(?:Dublin|Cork|Limerick|Galway|Waterford|Kildare|Meath|Westmeath|Kilkenny|Tipperary|Ireland)\b",
+                            r"\b(?:Dublin|Cork|Limerick|Galway|"
+                            r"Waterford|Kildare|Meath|Westmeath|"
+                            r"Kilkenny|Tipperary|Ireland|Belfast|"
+                            r"Dungiven|Northern Ireland)\b",
                             card,
                             re.I,
                         ):
                             break
+
                         try:
                             node = node.locator("..")
                         except Exception:
@@ -11241,23 +11541,32 @@ def scrape_musgrave():
 
                     blob = f"{title}\n{card}\n{href}"
 
-                    # Current vacancies page is already Musgrave scoped; use title/card evidence
-                    # and ignore obvious non-job navigation.
+                    if ni_pattern.search(blob):
+                        continue
+
                     bad_titles = {
-                        "", "careers", "current vacancies", "all current vacancies",
-                        "learn more", "read more", "home", "contact"
+                        "",
+                        "careers",
+                        "current vacancies",
+                        "all current vacancies",
+                        "learn more",
+                        "read more",
+                        "home",
+                        "contact",
                     }
+
                     if title.lower() in bad_titles:
                         continue
 
-                    # Require vacancy-ish content.
-                    if not (
-                        re.search(r"\b(?:Dublin|Cork|Limerick|Galway|Waterford|Kildare|Meath|Westmeath|Kilkenny|Tipperary|Ireland)\b", blob, re.I)
-                        or any(k in low for k in ("vacanc", "job", "career"))
+                    if not re.search(
+                        r"\b(?:Dublin|Cork|Limerick|Galway|"
+                        r"Waterford|Kildare|Meath|Westmeath|"
+                        r"Kilkenny|Tipperary|Ireland)\b",
+                        blob,
+                        re.I,
                     ):
                         continue
 
-                    # Avoid the generic vacancies landing page itself.
                     if href.rstrip("/") == source_url.rstrip("/"):
                         continue
 
@@ -11267,8 +11576,12 @@ def scrape_musgrave():
                             for x in card.splitlines()
                             if 5 <= len(x.strip()) <= 220
                         ]
+
                         title = next(
-                            (x for x in lines if x.lower() not in bad_titles),
+                            (
+                                x for x in lines
+                                if x.lower() not in bad_titles
+                            ),
                             "",
                         )
 
@@ -11276,9 +11589,18 @@ def scrape_musgrave():
                         continue
 
                     location = "Ireland"
+
                     for city in (
-                        "Dublin", "Cork", "Limerick", "Galway", "Waterford",
-                        "Kildare", "Meath", "Westmeath", "Kilkenny", "Tipperary"
+                        "Dublin",
+                        "Cork",
+                        "Limerick",
+                        "Galway",
+                        "Waterford",
+                        "Kildare",
+                        "Meath",
+                        "Westmeath",
+                        "Kilkenny",
+                        "Tipperary",
                     ):
                         if re.search(rf"\b{city}\b", blob, re.I):
                             location = f"{city}, Ireland"
@@ -11297,8 +11619,8 @@ def scrape_musgrave():
                         "description_text": card[:5000],
                     }
 
-                # Lazy load / pagination if present.
                 clicked = False
+
                 for selector in (
                     'button:has-text("Load more")',
                     'button:has-text("Show more")',
@@ -11307,6 +11629,7 @@ def scrape_musgrave():
                 ):
                     try:
                         btn = page.locator(selector)
+
                         if btn.count() and btn.first.is_visible():
                             btn.first.click(timeout=1200)
                             page.wait_for_timeout(450)
@@ -11321,16 +11644,34 @@ def scrape_musgrave():
                 current = len(results)
                 stagnant = stagnant + 1 if current == previous else 0
                 previous = current
+
                 if stagnant >= 8 and not clicked:
                     break
 
+            context.close()
             browser.close()
 
     except Exception as exc:
+        _mark_connector_health(
+            company,
+            False,
+            f"Official Musgrave vacancies failed: {exc}",
+            source_url,
+        )
         print(f"  ! Musgrave Ireland scrape failed: {exc}")
+        return []
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Musgrave vacancies completed; {len(results)} Republic-of-Ireland jobs returned",
+        source_url,
+    )
 
     print(f"  Musgrave official vacancies: {len(results)} jobs")
     return list(results.values())
+
+
 
 
 
