@@ -135,24 +135,61 @@ def inspect_job(job):
     return issues
 
 
+AUDIT_WARNING_COMPANIES_20260921 = (
+    "Aer Lingus", "Agilent Technologies", "Amazon", "Apex Group", "Arcadis",
+    "Arthur Cox", "Baxter International", "BioMarin", "Canto", "Circle K Ireland",
+    "Codec", "Crusoe", "Dawn Meats", "Decathlon Ireland", "Eurofins Scientific",
+    "Harvey Nash Ireland", "Infosys", "JD Sports Ireland", "Kitman Labs", "Mercer",
+    "Merit Medical", "Pure Storage", "Qualtrics", "Revenue", "SMBC Group",
+    "Tenable", "TikTok", "Virgin Media Ireland", "Aon", "HCLTech",
+)
+
 def live_overlay(companies):
     import scrape
-    collectors = {'Aon': getattr(scrape, 'scrape_aon', None), 'HCLTech': getattr(scrape, 'scrape_hcltech', None)}
+    aliases = {"Harvey Nash Ireland": "Harvey Nash"}
+    explicit = {
+        "Aer Lingus": lambda: scrape.scrape_aer_lingus(),
+        "Agilent Technologies": lambda: scrape.scrape_agilent(),
+        "Amazon": lambda: scrape.scrape_amazon(""),
+        "Arcadis": lambda: scrape.scrape_arcadis_ireland(),
+        "Baxter International": lambda: scrape.scrape_baxter_ireland(),
+        "BioMarin": lambda: scrape.scrape_biomarin_official(),
+        "Dawn Meats": lambda: scrape.scrape_dawn_meats(),
+        "Decathlon Ireland": lambda: scrape.scrape_decathlon_ireland(),
+        "Infosys": lambda: scrape.scrape_infosys(),
+        "Revenue": lambda: scrape.scrape_revenue_ie(),
+        "SMBC Group": lambda: scrape.scrape_smbc_group(),
+        "TikTok": lambda: scrape.scrape_tiktok(),
+        "Virgin Media Ireland": lambda: scrape.scrape_virgin_media_ireland(),
+        "Aon": lambda: scrape.scrape_aon(),
+        "HCLTech": lambda: scrape.scrape_hcltech(),
+    }
     jobs, health = [], {}
     for company in companies:
-        fn = collectors.get(company)
-        if not callable(fn):
-            continue
+        runtime = aliases.get(company, company)
         scrape.CONNECTOR_HEALTH.pop(company, None)
+        scrape.CONNECTOR_HEALTH.pop(runtime, None)
         try:
-            found = fn() or []
+            fn = explicit.get(company)
+            found = (fn() if fn else scrape.scrape_direct_company(runtime)) or []
         except Exception as exc:
             found = []
-            scrape._mark_connector_health(company, False, f'Live audit overlay failed: {type(exc).__name__}: {exc}')
-        jobs.extend(found)
-        info = scrape.CONNECTOR_HEALTH.get(company)
+            scrape._mark_connector_health(
+                company, False,
+                f"Live audit collector failed: {type(exc).__name__}: {exc}",
+            )
+        for job in found:
+            item = dict(job)
+            item["company"] = company
+            jobs.append(item)
+        info = scrape.CONNECTOR_HEALTH.get(company) or scrape.CONNECTOR_HEALTH.get(runtime)
         if isinstance(info, dict):
             health[company] = dict(info)
+        elif found:
+            health[company] = {
+                "live": True,
+                "note": f"Collector returned {len(found)} current validated jobs",
+            }
     return jobs, health
 
 
@@ -298,10 +335,11 @@ def main():
     if not proven_names:
         raise SystemExit("ERROR: historical proven-company population is empty")
 
-    overlay_jobs, overlay_health = live_overlay(("Aon", "HCLTech"))
-    if overlay_jobs:
-        overlay_companies = {ckey(j.get("company")) for j in overlay_jobs}
-        jobs = [j for j in jobs if ckey(j.get("company")) not in overlay_companies] + overlay_jobs
+    overlay_jobs, overlay_health = live_overlay(AUDIT_WARNING_COMPANIES_20260921)
+    overlay_checked = {ckey(c) for c in overlay_health}
+    overlay_checked.update(ckey(j.get("company")) for j in overlay_jobs)
+    if overlay_checked:
+        jobs = [j for j in jobs if ckey(j.get("company")) not in overlay_checked] + overlay_jobs
         jobs_by_company = defaultdict(list)
         for job in jobs:
             company = norm(job.get("company"))
