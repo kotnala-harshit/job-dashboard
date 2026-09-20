@@ -4,6 +4,7 @@ import argparse
 import json
 import re
 import sys
+import urllib.parse
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -114,7 +115,21 @@ def inspect_job(job):
     elif not re.match(r"^https?://", url, re.I):
         issues.append("invalid_url")
 
-    if NI_RE.search(f"{title} {location}"):
+    # A vacancy is not an NI leak merely because its title says
+    # "Dublin / Belfast". Multi-location vacancies are valid when the
+    # normalized location retained by the collector is Republic of Ireland.
+    # Flag NI only when the actual normalized location is NI and contains no
+    # explicit Republic-of-Ireland location evidence.
+    roi_location = re.search(
+        r"\\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford|"
+        r"Kilkenny|Kildare|Meath|Wicklow|Wexford|Louth|Donegal|"
+        r"Mayo|Clare|Kerry|Tipperary|Sligo|Carlow|Laois|Offaly|"
+        r"Westmeath|Longford|Leitrim|Cavan|Monaghan|Roscommon)\\b",
+        location,
+        re.I,
+    )
+
+    if NI_RE.search(location) and not roi_location:
         issues.append("northern_ireland_leak")
 
     return issues
@@ -124,7 +139,63 @@ def identity(job):
     url = norm(job.get("url") or job.get("apply_url"))
 
     if url:
-        return url.split("?")[0].rstrip("/").lower()
+        parsed = urllib.parse.urlsplit(url)
+        query = urllib.parse.parse_qsl(
+            parsed.query,
+            keep_blank_values=True,
+        )
+
+        identity_params = []
+
+        for name, value in query:
+            lname = name.lower()
+
+            if lname in {
+                "id", "jobid", "job_id", "job", "vacancy",
+                "vacancyid", "vacancy_id", "reqid", "req_id",
+                "requisitionid", "requisition_id", "jobseqno",
+            }:
+                identity_params.append((lname, value))
+
+        base = urllib.parse.urlunsplit(
+            (
+                parsed.scheme.lower(),
+                parsed.netloc.lower(),
+                parsed.path.rstrip("/"),
+                "",
+                "",
+            )
+        )
+
+        if identity_params:
+            return base + "?" + urllib.parse.urlencode(
+                sorted(identity_params)
+            )
+
+        # Some ATS platforms expose one generic detail endpoint and encode
+        # the vacancy identity only in the title/location. Do not collapse
+        # every vacancy on such platforms into one duplicate.
+        path_leaf = parsed.path.rstrip("/").rsplit("/", 1)[-1].lower()
+
+        generic_detail_endpoint = path_leaf in {
+            "pjobdetails.aspx",
+            "jobdetails",
+            "jobdetail",
+        }
+
+        if generic_detail_endpoint:
+            return "|".join(
+                (
+                    base,
+                    ckey(job.get("title")),
+                    ckey(
+                        job.get("location")
+                        or job.get("raw_location")
+                    ),
+                )
+            )
+
+        return base
 
     return "|".join(
         (
@@ -178,19 +249,22 @@ def main():
         if isinstance(info, dict)
     }
 
-    proven_names = set()
+    history_path = Path("company_history.json")
 
-    for batch in getattr(scrape, "PROVEN_REFRESH_BATCHES", []):
-        for company in batch:
-            try:
-                display = scrape.company_display_name(company)
-            except Exception:
-                display = company
+    if not history_path.exists():
+        raise SystemExit("ERROR: company_history.json not found")
 
-            proven_names.add(norm(display))
+    history_obj = load_json(history_path)
+    history_companies = history_obj.get("companies", history_obj)
 
-    for company in getattr(scrape, "KNOWN_HEALTHY_ZERO_COMPANIES", {}):
-        proven_names.add(norm(company))
+    proven_names = {
+        norm(company)
+        for company, info in history_companies.items()
+        if isinstance(info, dict) and info.get("ever_working")
+    }
+
+    if not proven_names:
+        raise SystemExit("ERROR: historical proven-company population is empty")
 
     rows = []
 

@@ -8259,6 +8259,63 @@ def scrape_hcltech():
                     "href": href.split("#")[0],
                 }
 
+            # SuccessFactors occasionally serves the Ireland landing page
+            # without populating its result-list DOM even though live Ireland
+            # vacancy pages exist. If that happens, query the public careers
+            # search surface and recover canonical HCLTech job-detail URLs.
+            if not discovered:
+                try:
+                    search_page = context.new_page()
+                    search_page.goto(
+                        "https://careers.hcltech.com/search/?q=&locationsearch=Ireland",
+                        wait_until="domcontentloaded",
+                        timeout=90000,
+                    )
+                    search_page.wait_for_timeout(2500)
+
+                    for _ in range(20):
+                        search_page.mouse.wheel(0, 2500)
+                        search_page.wait_for_timeout(350)
+
+                    fallback_links = search_page.locator(
+                        'a[href*="/job/"]'
+                    ).evaluate_all(
+                        """els => els.map(a => ({
+                            href: a.href || "",
+                            text: (a.innerText || a.textContent || "").trim()
+                        }))"""
+                    )
+
+                    for item in fallback_links:
+                        href = str(item.get("href") or "").strip()
+                        title = re.sub(
+                            r"\s+",
+                            " ",
+                            str(item.get("text") or ""),
+                        ).strip()
+
+                        m = re.search(
+                            r"/(\d+)-en_US(?:$|[?#])",
+                            href,
+                            re.I,
+                        )
+
+                        if not m or not title:
+                            continue
+
+                        discovered[m.group(1)] = {
+                            "title": title,
+                            "href": href.split("#")[0],
+                        }
+
+                    search_page.close()
+
+                except Exception as exc:
+                    print(
+                        "  ! HCLTech fallback search failed: "
+                        f"{exc}"
+                    )
+
             for job_id, item in discovered.items():
                 title = item["title"]
                 href = item["href"]
@@ -13660,6 +13717,33 @@ def scrape_ptsb():
 
 
 
+
+_NAVIGATION_JOB_TITLES = {
+    "job",
+    "jobs",
+    "career",
+    "careers",
+    "vacancy",
+    "vacancies",
+    "apply",
+    "apply now",
+    "job details",
+    "full details",
+    "more details",
+    "state boards",
+    "boird stáit",
+    "irish",
+    "gaeilge",
+    "béarla",
+    "english",
+}
+
+
+def _is_navigation_job_title(title):
+    value = re.sub(r"\s+", " ", str(title or "")).strip().lower()
+    return value in _NAVIGATION_JOB_TITLES
+
+
 def scrape_publicjobs():
     company = "publicjobs.ie"
     board = (
@@ -13751,6 +13835,25 @@ def scrape_publicjobs():
                 )
 
             if not title:
+                continue
+
+            # Oleeo exposes language selectors, State Boards navigation and
+            # other jobboard controls through URLs that resemble vacancies.
+            # They must never become dashboard jobs.
+            normalized_title = re.sub(r"\\s+", " ", title).strip()
+
+            if normalized_title.lower() in {
+                "job details",
+                "full details",
+                "apply",
+                "more details",
+                "state boards",
+                "boird stáit",
+                "irish",
+                "gaeilge",
+                "béarla",
+                "english",
+            }:
                 continue
 
             parsed_href = urllib.parse.urlsplit(href)
