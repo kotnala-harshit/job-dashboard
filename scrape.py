@@ -23460,45 +23460,179 @@ def experience_fit(title, description, candidate_years):
     return "Too Senior", minimum, maximum
 
 
+def _candidate_evidence_skills(profile):
+    evidence = profile.get("evidence") or {}
+
+    if evidence:
+        return {
+            skill
+            for skill, sources in evidence.items()
+            if sources
+        }
+
+    values = set()
+    for group in (profile.get("skills") or {}).values():
+        values.update(group)
+
+    return values
+
+
+def _job_skill_requirements(title, description, profile):
+    text = f"{title or ''} {description or ''}"
+    return extract_profile_skills(text, profile)
+
+
+def _select_cv_profile(role_family, required_skills, profile):
+    cv_profiles = profile.get("cv_profiles") or {}
+
+    if not cv_profiles:
+        return None, 0, []
+
+    best_name = None
+    best_score = -1
+    best_coverage = []
+
+    for name, cfg in cv_profiles.items():
+        cv_skills = set(cfg.get("skills") or [])
+        preferred_families = set(cfg.get("role_families") or [])
+
+        coverage = [
+            skill
+            for skill in required_skills
+            if skill in cv_skills
+        ]
+
+        score = len(coverage) * 3
+
+        if role_family in preferred_families:
+            score += 10
+
+        if score > best_score:
+            best_name = name
+            best_score = score
+            best_coverage = coverage
+
+    return best_name, max(0, best_score), best_coverage
+
+
 def candidate_match(job, description, profile):
     if not profile:
         return {
-            "candidate_match_score": None, "match_reasons": [], "missing_skills": [],
-            "matched_skills": [], "experience_fit": "Unknown"
+            "candidate_match_score": None,
+            "match_reasons": [],
+            "missing_skills": [],
+            "matched_skills": [],
+            "experience_fit": "Unknown",
+            "best_cv": None,
+            "cv_coverage_skills": [],
+            "evidence_missing_from_cv": [],
+            "candidate_evidence": {},
         }
 
     title = job.get("title") or ""
     role = classify_role_family(title, description, profile)
-    skills = extract_profile_skills(f"{title} {description}", profile)
-    candidate_skills = []
-    for values in (profile.get("skills") or {}).values():
-        candidate_skills.extend(values)
-    candidate_skill_set = set(candidate_skills)
 
-    matched = [s for s in skills if s in candidate_skill_set]
+    required_skills = _job_skill_requirements(
+        title,
+        description,
+        profile,
+    )
+
+    evidenced_skills = _candidate_evidence_skills(profile)
+
+    matched = [
+        skill
+        for skill in required_skills
+        if skill in evidenced_skills
+    ]
+
+    actual_gaps = [
+        skill
+        for skill in required_skills
+        if skill not in evidenced_skills
+    ]
+
     years = int(profile.get("experience_years") or 0)
-    exp_fit, exp_min, exp_max = experience_fit(title, description, years)
+
+    exp_fit, exp_min, exp_max = experience_fit(
+        title,
+        description,
+        years,
+    )
+
+    best_cv, cv_score, cv_coverage = _select_cv_profile(
+        role["family"],
+        required_skills,
+        profile,
+    )
+
+    selected_cv_skills = set(
+        (
+            profile.get("cv_profiles", {})
+            .get(best_cv, {})
+            .get("skills", [])
+        )
+        if best_cv
+        else []
+    )
+
+    evidence_missing_from_cv = [
+        skill
+        for skill in matched
+        if skill not in selected_cv_skills
+    ]
 
     score = role["role_score"]
-    # Skills refine a relevant role; they must not manufacture relevance for an
-    # unrelated title that happens to mention Python, AWS or analytics.
-    score += min(34, len(matched) * 4) if role["family"] != "Other" else min(8, len(matched) * 2)
-    score += {"Strong": 16, "Possible": 9, "Stretch": 3, "Overqualified": -5, "Too Senior": -25, "Unknown": 0}.get(exp_fit, 0)
+
+    if role["family"] != "Other":
+        score += min(34, len(matched) * 4)
+    else:
+        score += min(8, len(matched) * 2)
+
+    score += {
+        "Strong": 16,
+        "Possible": 9,
+        "Stretch": 3,
+        "Overqualified": -5,
+        "Too Senior": -25,
+        "Unknown": 0,
+    }.get(exp_fit, 0)
+
+    if required_skills:
+        evidence_ratio = len(matched) / len(required_skills)
+        score += int(round(evidence_ratio * 10))
+
+    if actual_gaps:
+        score -= min(18, len(actual_gaps) * 3)
+
+    if best_cv:
+        score += min(6, len(cv_coverage))
 
     loc_text = _norm_phrase(job.get("location"))
-    if any(_norm_phrase(x) in loc_text for x in profile.get("preferred_locations", []) if x != "Ireland"):
+
+    if any(
+        _norm_phrase(x) in loc_text
+        for x in profile.get("preferred_locations", [])
+        if x != "Ireland"
+    ):
         score += 5
-    elif "ireland" in loc_text or job.get("country") == "Ireland":
+    elif (
+        "ireland" in loc_text
+        or job.get("country") == "Ireland"
+    ):
         score += 3
 
     title_n = normalized_title(title)
-    for term, penalty in (profile.get("seniority_penalties") or {}).items():
+
+    for term, penalty in (
+        profile.get("seniority_penalties") or {}
+    ).items():
         if _norm_phrase(term) in title_n:
             score -= int(penalty)
             break
 
-    # Noise penalty for clearly irrelevant job families, without deleting the job from the broad engine.
     irrelevant_title = False
+
     for term in profile.get("negative_title_terms", []):
         if _norm_phrase(term) in title_n:
             score -= 18
@@ -23509,22 +23643,54 @@ def candidate_match(job, description, profile):
         score = min(score, 40)
 
     score = max(0, min(100, int(round(score))))
-    reasons = []
-    if role["family"] != "Other":
-        reasons.append(f"{role['family']} role family")
-    reasons.extend(matched[:7])
-    if exp_fit in {"Strong", "Possible"}:
-        reasons.append(f"Experience fit: {exp_fit}")
 
-    # Missing skills are candidate skills commonly referenced in the same role family but not present in this ad.
-    priority_missing = ["SQL", "Power BI", "Python", "ERP", "UAT", "Requirements Gathering", "ETL", "Stakeholder Management"]
-    missing = [x for x in priority_missing if x in candidate_skill_set and x not in matched][:4]
+    reasons = []
+
+    if role["family"] != "Other":
+        reasons.append(
+            f"{role['family']} role family"
+        )
+
+    reasons.extend(matched[:7])
+
+    if exp_fit in {"Strong", "Possible"}:
+        reasons.append(
+            f"Experience fit: {exp_fit}"
+        )
+
+    if best_cv:
+        reasons.append(
+            f"Best CV: {best_cv}"
+        )
+
+    evidence_map = profile.get("evidence") or {}
 
     return {
         "candidate_match_score": score,
-        "match_reasons": reasons[:10],
-        "missing_skills": missing,
-        "matched_skills": matched[:15],
+        "match_reasons": reasons[:12],
+
+        # These are requirements in the JD that the evidence profile
+        # actually supports.
+        "matched_skills": matched[:20],
+
+        # Correct semantics: requirements appearing in the JD for which
+        # the candidate profile has no substantiated evidence.
+        "missing_skills": actual_gaps[:12],
+
+        # Evidence exists somewhere in the canonical profile but the
+        # selected CV does not currently expose it.
+        "evidence_missing_from_cv":
+            evidence_missing_from_cv[:12],
+
+        "candidate_evidence": {
+            skill: evidence_map.get(skill, [])
+            for skill in matched[:20]
+        },
+
+        "best_cv": best_cv,
+        "cv_coverage_skills": cv_coverage[:20],
+        "cv_alignment_score": cv_score,
+
         "experience_fit": exp_fit,
         "experience_min": exp_min,
         "experience_max": exp_max,

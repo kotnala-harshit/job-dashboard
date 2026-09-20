@@ -1,7 +1,7 @@
 {
   "profile_id": "harshit-business-analytics-ie",
-  "version": 1,
-  "name": "Business Analytics / Data / Technology",
+  "version": 2,
+  "name": "Business Analytics / Data / Technology - Evidence Aware",
   "experience_years": 3,
   "preferred_locations": [
     "Ireland",
@@ -112,34 +112,47 @@
       "Excel",
       "Power BI",
       "Tableau",
-      "Data Analysis",
-      "Data Visualization",
-      "Statistics"
+      "Pandas",
+      "NumPy",
+      "Scikit-learn",
+      "Machine Learning",
+      "Predictive Analytics",
+      "Anomaly Detection",
+      "Forecasting"
     ],
     "data": [
       "ETL",
+      "SSIS",
       "Data Warehousing",
-      "Data Modeling",
       "Data Quality",
-      "Snowflake",
-      "Databricks"
+      "Databricks",
+      "MySQL",
+      "PostgreSQL"
     ],
     "business": [
       "Requirements Gathering",
       "Stakeholder Management",
       "Business Analysis",
-      "Process Mapping",
+      "Process Improvement",
+      "Functional Support",
+      "Documentation",
       "UAT",
-      "Agile",
-      "Scrum"
+      "Client Communication",
+      "Cross-Functional Collaboration",
+      "Training Delivery",
+      "Market Sizing",
+      "Customer Insights",
+      "Pricing Analysis",
+      "Go-to-Market Strategy",
+      "Unit Economics"
     ],
     "technology": [
       "AWS",
-      "Azure",
-      "Oracle",
       "ERP",
-      "APIs",
-      "Git"
+      "Microsoft D365",
+      "Git",
+      "Docker",
+      "CI/CD"
     ]
   },
   "skill_aliases": {
@@ -152,7 +165,31 @@
     "user acceptance testing": "UAT",
     "requirements elicitation": "Requirements Gathering",
     "stakeholder engagement": "Stakeholder Management",
-    "data warehouse": "Data Warehousing"
+    "data warehouse": "Data Warehousing",
+    "ssis": "SSIS",
+    "pandas": "Pandas",
+    "numpy": "NumPy",
+    "scikit learn": "Scikit-learn",
+    "sklearn": "Scikit-learn",
+    "machine learning": "Machine Learning",
+    "predictive modelling": "Predictive Analytics",
+    "predictive modeling": "Predictive Analytics",
+    "anomaly detection": "Anomaly Detection",
+    "forecasting": "Forecasting",
+    "process improvement": "Process Improvement",
+    "functional support": "Functional Support",
+    "client communication": "Client Communication",
+    "cross functional collaboration": "Cross-Functional Collaboration",
+    "training delivery": "Training Delivery",
+    "market sizing": "Market Sizing",
+    "customer insights": "Customer Insights",
+    "pricing analysis": "Pricing Analysis",
+    "go to market": "Go-to-Market Strategy",
+    "gtm": "Go-to-Market Strategy",
+    "unit economics": "Unit Economics",
+    "microsoft dynamics 365": "Microsoft D365",
+    "dynamics 365": "Microsoft D365",
+    "d365": "Microsoft D365"
   },
   "seniority_penalties": {
     "director": 28,
@@ -189,5 +226,253 @@
     "legal counsel",
     "product designer",
     "software developer"
-  ]
+  ],
+  "cv_profiles": {
+    "technical": {
+      "label": "Technical CV",
+      "role_families": [
+        "Data & BI",
+        "Data Engineering",
+        "Business Analytics",
+        "Graduate & Entry"
+      ],
+      "skills": [
+        "SQL",
+        "Python",
+        "R",
+        "Excel",
+        "Power BI",
+        "Tableau",
+        "ETL",
+        "Data Warehousing",
+        "Data Quality",
+        "Databricks",
+        "AWS",
+        "Git",
+        "ERP",
+        "UAT",
+        "Requirements Gathering",
+        "Stakeholder Management",
+        "Pandas",
+        "NumPy",
+        "Scikit-learn",
+        "SSIS",
+        "MySQL",
+        "PostgreSQL",
+        "Docker",
+        "CI/CD",
+        "Microsoft D365",
+        "Machine Learning",
+        "Anomaly Detection",
+        "Forecasting"
+      ]
+    },
+    "business": {
+      "label": "Business CV",
+      "role_families": [
+        "Business Analytics",
+        "Technology Consulting",
+        "Product & Operations",
+        "Graduate & Entry"
+      ],
+      "skills": [
+        "SQL",
+        "Python",
+        "R",
+        "Excel",
+        "Power BI",
+        "Tableau",
+        "ERP",
+        "Microsoft D365",
+        "Requirements Gathering",
+        "Stakeholder Management",
+        "Business Analysis",
+        "Process Improvement",
+        "Functional Support",
+        "Documentation",
+        "UAT",
+        "Client Communication",
+        "Cross-Functional Collaboration",
+        "Training Delivery",
+        "Market Sizing",
+        "Customer Insights",
+        "Pricing Analysis",
+        "Go-to-Market Strategy",
+        "Unit Economics",
+        "Predictive Analytics",
+        "Anomaly Detection"
+      ]
+    }
+  },
+  "evidence": {
+    "SQL": [
+      "technical_cv",
+      "business_cv",
+      "ucc_tutor",
+      "darsh"
+    ],
+    "Python": [
+      "technical_cv",
+      "business_cv",
+      "darsh",
+      "ucc_project"
+    ],
+    "R": [
+      "technical_cv",
+      "business_cv",
+      "ucc_tutor"
+    ],
+    "Excel": [
+      "technical_cv",
+      "business_cv"
+    ],
+    "Power BI": [
+      "technical_cv",
+      "business_cv",
+      "ucc_project",
+      "microsoft_certification"
+    ],
+    "Tableau": [
+      "technical_cv",
+      "business_cv"
+    ],
+    "ETL": [
+      "technical_cv",
+      "ucc_project"
+    ],
+    "Data Warehousing": [
+      "technical_cv"
+    ],
+    "Data Quality": [
+      "technical_cv"
+    ],
+    "Databricks": [
+      "technical_cv"
+    ],
+    "AWS": [
+      "technical_cv",
+      "aws_analytics"
+    ],
+    "Git": [
+      "technical_cv"
+    ],
+    "ERP": [
+      "technical_cv",
+      "business_cv",
+      "darsh"
+    ],
+    "Microsoft D365": [
+      "technical_cv",
+      "business_cv",
+      "darsh"
+    ],
+    "UAT": [
+      "technical_cv",
+      "business_cv",
+      "darsh"
+    ],
+    "Requirements Gathering": [
+      "technical_cv",
+      "business_cv",
+      "darsh"
+    ],
+    "Stakeholder Management": [
+      "business_cv",
+      "darsh",
+      "consulting"
+    ],
+    "Business Analysis": [
+      "business_cv",
+      "darsh"
+    ],
+    "Process Improvement": [
+      "business_cv",
+      "darsh"
+    ],
+    "Functional Support": [
+      "business_cv",
+      "darsh"
+    ],
+    "Documentation": [
+      "business_cv"
+    ],
+    "Client Communication": [
+      "business_cv",
+      "darsh"
+    ],
+    "Cross-Functional Collaboration": [
+      "business_cv",
+      "darsh"
+    ],
+    "Training Delivery": [
+      "business_cv",
+      "darsh",
+      "ucc_tutor"
+    ],
+    "Market Sizing": [
+      "business_cv",
+      "consulting"
+    ],
+    "Customer Insights": [
+      "business_cv",
+      "consulting"
+    ],
+    "Pricing Analysis": [
+      "business_cv",
+      "consulting"
+    ],
+    "Go-to-Market Strategy": [
+      "business_cv",
+      "consulting"
+    ],
+    "Unit Economics": [
+      "business_cv",
+      "consulting"
+    ],
+    "Pandas": [
+      "technical_cv",
+      "ucc_project"
+    ],
+    "NumPy": [
+      "technical_cv"
+    ],
+    "Scikit-learn": [
+      "technical_cv",
+      "ucc_project"
+    ],
+    "SSIS": [
+      "technical_cv",
+      "ucc_project"
+    ],
+    "MySQL": [
+      "technical_cv"
+    ],
+    "PostgreSQL": [
+      "technical_cv"
+    ],
+    "Docker": [
+      "technical_cv"
+    ],
+    "CI/CD": [
+      "technical_cv"
+    ],
+    "Machine Learning": [
+      "technical_cv",
+      "ucc_project"
+    ],
+    "Predictive Analytics": [
+      "technical_cv",
+      "business_cv",
+      "ucc_project"
+    ],
+    "Anomaly Detection": [
+      "technical_cv",
+      "business_cv",
+      "ucc_project"
+    ],
+    "Forecasting": [
+      "technical_cv",
+      "ucc_project"
+    ]
+  }
 }
