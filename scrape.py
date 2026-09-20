@@ -10315,7 +10315,49 @@ def _scrape_candidate_manager(company, source_url):
                     location = f"{city}, Ireland"
                     break
 
-        results[href.lower()] = {
+        parsed_job_url = urllib.parse.urlsplit(href)
+        parsed_job_params = urllib.parse.parse_qs(
+            parsed_job_url.query
+        )
+
+        stable_jid = (
+            parsed_job_params.get("jid")
+            or parsed_job_params.get("jobid")
+            or parsed_job_params.get("job_id")
+        )
+
+        if stable_jid and stable_jid[0]:
+            result_key = (
+                urllib.parse.urlunsplit(
+                    (
+                        parsed_job_url.scheme.lower(),
+                        parsed_job_url.netloc.lower(),
+                        parsed_job_url.path.rstrip("/"),
+                        "",
+                        "",
+                    )
+                )
+                + "?jid="
+                + str(stable_jid[0]).strip().lower()
+            )
+        else:
+            result_key = "|".join(
+                (
+                    urllib.parse.urlunsplit(
+                        (
+                            parsed_job_url.scheme.lower(),
+                            parsed_job_url.netloc.lower(),
+                            parsed_job_url.path.rstrip("/"),
+                            "",
+                            "",
+                        )
+                    ),
+                    re.sub(r"[^a-z0-9]+", "", title.lower()),
+                    re.sub(r"[^a-z0-9]+", "", location.lower()),
+                )
+            )
+
+        results[result_key] = {
             "company": company,
             "ats": "candidate_manager",
             "title": re.sub(r"\s+", " ", title).strip()[:300],
@@ -13924,6 +13966,16 @@ def scrape_publicjobs():
             if re.search(r"(page|start|offset|adv)", href, re.I):
                 queue.append(href)
 
+    _mark_connector_health(
+        "Public Jobs / Civil Service",
+        True,
+        (
+            "Official publicjobs Oleeo board reachable; "
+            f"{len(results)} vacancy records returned"
+        ),
+        board,
+    )
+
     print(f"  publicjobs Oleeo official board: {len(results)} jobs")
     return list(results.values())
 
@@ -14409,7 +14461,27 @@ def scrape_revenue_ie():
         if not title:
             continue
 
-        blob = f"{title} {href}".lower()
+        normalized_title = re.sub(
+            r"\\s+",
+            " ",
+            title,
+        ).strip()
+
+        if _is_navigation_job_title(normalized_title):
+            continue
+
+        if normalized_title.lower() in {
+            "revenue careers",
+            "career opportunities",
+            "recruitment",
+            "information booklet",
+            "application form",
+            "contact us",
+            "about us",
+        }:
+            continue
+
+        blob = f"{normalized_title} {href}".lower()
 
         if not any(x in blob for x in (
             "career",
@@ -14426,14 +14498,22 @@ def scrape_revenue_ie():
             continue
 
         # Ignore generic navigation.
-        if title.lower() in {
+        if normalized_title.lower() in {
             "careers",
             "apply",
             "home",
             "revenue",
             "more information",
+            "irish",
+            "gaeilge",
+            "béarla",
+            "english",
+            "state boards",
+            "boird stáit",
         }:
             continue
+
+        title = normalized_title
 
         # Nearby context usually carries the competition title + closing date.
         start = max(0, m.start() - 1800)
@@ -14485,6 +14565,16 @@ def scrape_revenue_ie():
             "updated_at": None,
             "description_text": card_text[:5000],
         }
+
+    _mark_connector_health(
+        "Revenue",
+        True,
+        (
+            "Official Revenue careers source reachable; "
+            f"{len(results)} current competition records returned"
+        ),
+        source_url,
+    )
 
     print(f"  Revenue.ie official career opportunities: {len(results)} jobs")
     return list(results.values())

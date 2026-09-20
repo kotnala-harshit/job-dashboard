@@ -151,9 +151,20 @@ def identity(job):
             lname = name.lower()
 
             if lname in {
-                "id", "jobid", "job_id", "job", "vacancy",
-                "vacancyid", "vacancy_id", "reqid", "req_id",
-                "requisitionid", "requisition_id", "jobseqno",
+                "id",
+                "jid",
+                "gh_jid",
+                "jobid",
+                "job_id",
+                "job",
+                "vacancy",
+                "vacancyid",
+                "vacancy_id",
+                "reqid",
+                "req_id",
+                "requisitionid",
+                "requisition_id",
+                "jobseqno",
             }:
                 identity_params.append((lname, value))
 
