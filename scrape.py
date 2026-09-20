@@ -14409,15 +14409,22 @@ def scrape_medtronic():
 
 
 def scrape_revenue_ie():
-    company = "Revenue.ie"
+    company = "Revenue"
     source_url = (
         "https://www.revenue.ie/en/corporate/"
         "information-about-revenue/careers/career-opportunities.aspx"
     )
 
     sess = _session()
+
     if not sess:
-        print("  ! Revenue.ie: HTTP session unavailable")
+        _mark_connector_health(
+            company,
+            False,
+            "HTTP session unavailable; zero vacancies not trusted",
+            source_url,
+        )
+        print("  ! Revenue: HTTP session unavailable")
         return []
 
     try:
@@ -14430,26 +14437,113 @@ def scrape_revenue_ie():
             },
         )
     except Exception as exc:
-        print(f"  ! Revenue.ie careers page failed: {exc}")
+        _mark_connector_health(
+            company,
+            False,
+            f"Official Revenue careers request failed: {exc}",
+            source_url,
+        )
+        print(f"  ! Revenue careers page failed: {exc}")
         return []
 
     if r.status_code != 200:
-        print(f"  ! Revenue.ie careers HTTP {r.status_code}")
+        _mark_connector_health(
+            company,
+            False,
+            (
+                "Official Revenue careers returned "
+                f"HTTP {r.status_code}; zero vacancies not trusted"
+            ),
+            source_url,
+        )
+        print(f"  ! Revenue careers HTTP {r.status_code}")
         return []
 
     html_text = r.text or ""
     results = {}
 
-    # Current Revenue competitions are exposed as headings/links on the careers page.
-    # Collect links to adverts, information booklets and application pages.
-    for m in re.finditer(
-        r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
-        html_text,
-        re.I | re.S,
-    ):
+    navigation_titles = {
+        "about us",
+        "apply",
+        "application form",
+        "assignment data protection statement",
+        "back to top",
+        "candidate data protection statement",
+        "career opportunities",
+        "careers",
+        "close",
+        "contact us",
+        "english",
+        "gaeilge",
+        "home",
+        "information booklet",
+        "irish",
+        "more information",
+        "overview",
+        "please rate how useful this page was to you",
+        "recruitment",
+        "revenue",
+        "revenue careers",
+        "tax education",
+        "béarla",
+    }
+
+    non_vacancy_url_fragments = (
+        "candidate-data-protection",
+        "assignment-data-protection",
+        "/tax-education/",
+        "/privacy",
+        "/accessibility",
+        "/contact",
+        "/about-us",
+    )
+
+    vacancy_title_terms = (
+        "accountant",
+        "administrative officer",
+        "analyst",
+        "assistant principal",
+        "auditor",
+        "clerical officer",
+        "customs officer",
+        "data ",
+        "economist",
+        "engineer",
+        "executive officer",
+        "graduate",
+        "inspector",
+        "investigator",
+        "manager",
+        "officer",
+        "principal officer",
+        "specialist",
+        "tax specialist",
+        "trainee",
+    )
+
+    vacancy_context_terms = (
+        "competition",
+        "closing date",
+        "applications",
+        "application",
+        "candidate information",
+        "information booklet",
+        "job specification",
+        "recruitment campaign",
+    )
+
+    anchors = list(
+        re.finditer(
+            r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+            html_text,
+            re.I | re.S,
+        )
+    )
+
+    for m in anchors:
         href = urllib.parse.urljoin(
             source_url,
-            m.group(1).replace("&amp;", "&"),
+            html.unescape(m.group(1)),
         ).split("#")[0]
 
         title = re.sub(
@@ -14461,125 +14555,112 @@ def scrape_revenue_ie():
         if not title:
             continue
 
-        normalized_title = re.sub(
-            r"\\s+",
+        title_l = title.casefold()
+        href_l = href.casefold()
+
+        if _is_navigation_job_title(title):
+            continue
+
+        if title_l in navigation_titles:
+            continue
+
+        if any(
+            fragment in href_l
+            for fragment in non_vacancy_url_fragments
+        ):
+            continue
+
+        context_start = max(0, m.start() - 1400)
+        context_end = min(len(html_text), m.end() + 1400)
+
+        context = re.sub(
+            r"\s+",
             " ",
-            title,
+            _html_text(
+                html_text[context_start:context_end]
+            ),
         ).strip()
 
-        if _is_navigation_job_title(normalized_title):
+        context_l = context.casefold()
+
+        title_has_role = any(
+            term in title_l
+            for term in vacancy_title_terms
+        )
+
+        context_has_vacancy = any(
+            term in context_l
+            for term in vacancy_context_terms
+        )
+
+        # Do not turn a generic careers/navigation link into a vacancy merely
+        # because words such as "career", "tax" or "apply" occur in its URL.
+        if not title_has_role:
             continue
 
-        if normalized_title.lower() in {
-            "revenue careers",
-            "career opportunities",
-            "recruitment",
-            "information booklet",
-            "application form",
-            "contact us",
-            "about us",
-        }:
+        # Revenue vacancy titles need nearby recruitment/competition evidence.
+        # This deliberately prefers a trustworthy zero over navigation garbage.
+        if not context_has_vacancy:
             continue
 
-        blob = f"{normalized_title} {href}".lower()
-
-        if not any(x in blob for x in (
-            "career",
-            "competition",
-            "officer",
-            "principal",
-            "assistant principal",
-            "graduate",
-            "tax",
-            "customs",
-            "apply",
-            "information booklet",
-        )):
-            continue
-
-        # Ignore generic navigation.
-        if normalized_title.lower() in {
-            "careers",
-            "apply",
-            "home",
-            "revenue",
-            "more information",
-            "irish",
-            "gaeilge",
-            "béarla",
-            "english",
-            "state boards",
-            "boird stáit",
-        }:
-            continue
-
-        title = normalized_title
-
-        # Nearby context usually carries the competition title + closing date.
-        start = max(0, m.start() - 1800)
-        end = min(len(html_text), m.end() + 1800)
-        card_text = _html_text(html_text[start:end])
-
-        # Prefer a meaningful nearby line if link text is generic.
-        if title.lower() in {"information booklet", "application form", "apply now"}:
-            lines = [
-                re.sub(r"\s+", " ", x).strip()
-                for x in card_text.splitlines()
-                if 8 <= len(x.strip()) <= 260
-            ]
-            title = next(
-                (
-                    x for x in lines
-                    if any(k in x.lower() for k in (
-                        "assistant principal",
-                        "administrative officer",
-                        "executive officer",
-                        "clerical officer",
-                        "customs officer",
-                        "graduate",
-                        "tax specialist",
-                    ))
-                ),
-                title,
-            )
-
-        if not title:
+        if len(title) < 5 or len(title) > 300:
             continue
 
         location = "Ireland"
-        if re.search(r"\bDublin\b", card_text, re.I):
+
+        if re.search(r"\bDublin\b", context, re.I):
             location = "Dublin, Ireland"
-        elif re.search(r"\bLimerick\b", card_text, re.I):
+        elif re.search(r"\bLimerick\b", context, re.I):
             location = "Limerick, Ireland"
-        elif re.search(r"\bNationwide\b|\bVarious Locations\b", card_text, re.I):
+        elif re.search(r"\bCork\b", context, re.I):
+            location = "Cork, Ireland"
+        elif re.search(
+            r"\bNationwide\b|\bVarious Locations\b",
+            context,
+            re.I,
+        ):
             location = "Nationwide, Ireland"
 
-        key = href.rstrip("/").lower() + "|" + title.lower()
+        # Same URL can legitimately be linked multiple times on the page.
+        # Identity therefore includes the normalized role title.
+        key = (
+            href.rstrip("/").casefold()
+            + "|"
+            + re.sub(
+                r"[^a-z0-9]+",
+                "",
+                title.casefold(),
+            )
+        )
 
         results[key] = {
             "company": company,
             "ats": "direct",
-            "title": title[:300],
+            "title": title,
             "location": location,
             "url": href,
             "updated_at": None,
-            "description_text": card_text[:5000],
+            "description_text": context[:5000],
         }
 
+    jobs = list(results.values())
+
     _mark_connector_health(
-        "Revenue",
+        company,
         True,
         (
             "Official Revenue careers source reachable; "
-            f"{len(results)} current competition records returned"
+            f"{len(jobs)} identifiable current competitions returned"
         ),
         source_url,
     )
 
-    print(f"  Revenue.ie official career opportunities: {len(results)} jobs")
-    return list(results.values())
+    print(
+        f"  Revenue official career opportunities: "
+        f"{len(jobs)} jobs"
+    )
 
-
+    return jobs
 
 def scrape_honeywell():
     company = "Honeywell"
@@ -23354,7 +23435,11 @@ def load_candidate_profile(path="profile.json"):
 
 
 def _norm_phrase(text):
-    return re.sub(r"[^a-z0-9+#]+", " ", str(text or "").lower()).strip()
+    """Normalize matching text while preserving Unicode letters."""
+    text = str(text or "").casefold()
+    text = re.sub(r"[^\w+#]+", " ", text, flags=re.UNICODE)
+    text = text.replace("_", " ")
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def normalized_title(title):
@@ -23374,6 +23459,12 @@ GENERIC_JOB_TITLES = {
     "careers", "categories", "degree", "experience", "filter", "filters",
     "job search", "job types", "jobs", "locations", "organizations",
     "roles", "search jobs", "skills qualifications", "sort by", "teams",
+    "close", "overview", "back to top",
+    "please rate how useful this page was to you",
+    "candidate data protection statement",
+    "assignment data protection statement",
+    "tax education", "irish", "gaeilge", "béarla", "english",
+    "state boards", "boird stáit",
 }
 
 
