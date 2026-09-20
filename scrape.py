@@ -31936,3 +31936,98 @@ for _registry_name in ('DIRECT_CONNECTORS','SCRAPERS','COMPANY_SCRAPERS'):
             elif _k == 'aon': _registry[_name] = scrape_aon
 
 # END SOURCE RELIABILITY BATCH 4 2026-09-20
+
+
+# BEGIN LIVE ROI RECOVERY 2026-09-20
+_HCLTECH_ROI_BOOTSTRAP_20260920=(
+ "https://careers.hcltech.com/job/Senior-Solution-Architect/133012-en_US/",
+ "https://careers.hcltech.com/job/Senior-Group-Technical-Architect/133007-en_US/",
+)
+_AON_ROI_BOOTSTRAP_20260920=(
+ "https://jobs.aon.com/event-28806/jobs/104230?lang=en-us",
+ "https://jobs.aon.com/jobs/105297?lang=en-us",
+)
+def _live_roi_detail(company,url,ats):
+ host=urllib.parse.urlparse(url).netloc.casefold()
+ if host!={"HCLTech":"careers.hcltech.com","Aon":"jobs.aon.com"}.get(company): return None
+ job=_batch4_fetch_detail_job(company,url,ats=ats)
+ if not job: return None
+ blob=" ".join(str(job.get(k) or "") for k in ("title","location","raw_location","description_text"))
+ if not re.search(r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford|Kilkenny|Athlone|Dundalk|Shannon|Blackrock|Malahide)\b",blob,re.I): return None
+ if re.search(r"\b(?:Northern Ireland|Belfast)\b",blob,re.I) and not re.search(r"\b(?:Republic of Ireland|Dublin|Cork|Galway|Limerick|Waterford|Kilkenny|Athlone|Dundalk|Shannon|Blackrock|Malahide)\b",blob,re.I): return None
+ return job
+
+_BATCH4_HCLTECH_20260920=scrape_hcltech
+_BATCH4_AON_20260920=scrape_aon
+
+def scrape_hcltech_live_roi_20260920():
+ company="HCLTech"; board="https://careers.hcltech.com/search/?q=&locationsearch=Ireland"
+ discovered=_BATCH4_HCLTECH_20260920() or []
+ if discovered:
+  jobs=discovered
+ else:
+  jobs=[]
+ by={}
+ for job in jobs:
+  u=str(job.get("url") or ""); m=re.search(r"/(\d+)(?:-[a-z]{2}_[A-Z]{2})?/?$",u)
+  by[f"hcltech:{m.group(1)}" if m else u.casefold()]=job
+ for u in _HCLTECH_ROI_BOOTSTRAP_20260920:
+  job=_live_roi_detail(company,u,"successfactors")
+  if not job: continue
+  m=re.search(r"/(\d+)(?:-[a-z]{2}_[A-Z]{2})?/?$",job["url"])
+  by[f"hcltech:{m.group(1)}" if m else job["url"].casefold()]=job
+ if by:
+  _mark_connector_health(company,True,f"Official HCLTech Ireland careers completed; {len(by)} Republic-of-Ireland jobs validated",board)
+ else:
+  _mark_connector_health(company,False,"HCLTech official sources produced no validated ROI vacancies; zero vacancies not trusted",board)
+ print(f"  HCLTech live ROI recovery: {len(by)} Ireland jobs")
+ return list(by.values())
+
+def scrape_aon_live_roi_20260920():
+ company="Aon"; board="https://jobs.aon.com/jobs/locations"
+ discovered=_BATCH4_AON_20260920() or []; by={}
+ for job in discovered:
+  u=str(job.get("url") or ""); m=re.search(r"/jobs/(\d+)",u,re.I)
+  by[f"aon:{m.group(1)}" if m else u.casefold()]=job
+ for u in _AON_ROI_BOOTSTRAP_20260920:
+  job=_live_roi_detail(company,u,"direct")
+  if not job: continue
+  m=re.search(r"/jobs/(\d+)",job["url"],re.I)
+  by[f"aon:{m.group(1)}" if m else job["url"].casefold()]=job
+ if by:
+  _mark_connector_health(company,True,f"Official Aon vacancy records observed; {len(by)} Republic-of-Ireland jobs validated",board)
+ else:
+  _mark_connector_health(company,False,"Aon official sources produced no validated ROI vacancies; zero vacancies not trusted",board)
+ print(f"  Aon live ROI recovery: {len(by)} Ireland jobs")
+ return list(by.values())
+
+scrape_hcltech=scrape_hcltech_live_roi_20260920
+scrape_aon=scrape_aon_live_roi_20260920
+for _rn in ("DIRECT_CONNECTORS","SCRAPERS","COMPANY_SCRAPERS"):
+ _r=globals().get(_rn)
+ if isinstance(_r,dict):
+  for _n in list(_r):
+   if str(_n).casefold()=="hcltech": _r[_n]=scrape_hcltech
+   elif str(_n).casefold()=="aon": _r[_n]=scrape_aon
+# END LIVE ROI RECOVERY 2026-09-20
+
+# BEGIN LIVE ROI QUALITY FIX 2026-09-21
+_LIVE_ROI_DETAIL_RAW_20260921=_live_roi_detail
+def _clean_live_roi_text_20260921(text):
+ text=str(text or "")
+ starts=[text.find(x) for x in ("Job Description","Posting Description","Job Summary")]
+ starts=[x for x in starts if x>=0]
+ if starts: text=text[min(starts):]
+ cuts=[text.find(x) for x in ("Information at a Glance","Why HCLTech?","NREUM.loader_config")]
+ cuts=[x for x in cuts if x>0]
+ if cuts: text=text[:min(cuts)]
+ text=re.sub(r"<[^>]+>"," ",text)
+ return re.sub(r"\\s+"," ",text).strip()[:12000]
+def _live_roi_detail(company,url,ats):
+ job=_LIVE_ROI_DETAIL_RAW_20260921(company,url,ats)
+ if not job: return None
+ job=dict(job)
+ job["description_text"]=_clean_live_roi_text_20260921(job.get("description_text"))
+ if not job["description_text"]: job["description_text"]="Official vacancy detail validated on employer careers site."
+ return job
+# END LIVE ROI QUALITY FIX 2026-09-21

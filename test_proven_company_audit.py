@@ -1,6 +1,6 @@
 import unittest
 
-from audit_proven_companies import inspect_job, identity
+from audit_proven_companies import inspect_job, identity, live_overlay
 
 
 class ProvenAuditTests(unittest.TestCase):
@@ -37,6 +37,14 @@ class ProvenAuditTests(unittest.TestCase):
             "navigation_title",
             inspect_job(job),
         )
+
+    def test_live_overlay_returns_current_repaired_sources(self):
+        jobs, health = live_overlay(("Aon", "HCLTech"))
+        by_company = {j.get("company") for j in jobs}
+        self.assertIn("Aon", by_company)
+        self.assertIn("HCLTech", by_company)
+        self.assertTrue(health["Aon"]["live"])
+        self.assertTrue(health["HCLTech"]["live"])
 
     def test_url_identity_ignores_tracking(self):
         a = {

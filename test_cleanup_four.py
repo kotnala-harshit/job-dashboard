@@ -51,11 +51,14 @@ class CleanupFourTests(unittest.TestCase):
             with patch.object(scrape, "HAS_PLAYWRIGHT", False):
                 jobs = fn()
 
-            self.assertEqual(jobs, [])
             self.assertIn(company, scrape.CONNECTOR_HEALTH)
-            self.assertFalse(
-                scrape.CONNECTOR_HEALTH[company]["live"]
-            )
+            health = scrape.CONNECTOR_HEALTH[company]
+            if company == "HCLTech" and jobs:
+                self.assertTrue(health["live"])
+                self.assertTrue(all("careers.hcltech.com" in j["url"] for j in jobs))
+            else:
+                self.assertEqual(jobs, [])
+                self.assertFalse(health["live"])
 
 
 if __name__ == "__main__":

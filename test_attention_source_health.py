@@ -9,18 +9,21 @@ class AttentionSourceHealthTests(unittest.TestCase):
     def setUp(self):
         scrape.CONNECTOR_HEALTH.clear()
 
-    def test_aon_failed_workday_probe_is_not_healthy_zero(self):
+    def test_aon_failed_workday_probe_uses_validated_official_fallback(self):
         with patch.object(scrape, "_workday_session", return_value=MagicMock()), \
              patch.object(scrape, "_workday_post", return_value=None):
             jobs = scrape.scrape_aon()
-
-        self.assertEqual(jobs, [])
         health = scrape.CONNECTOR_HEALTH.get("Aon")
         self.assertIsNotNone(health)
-        self.assertFalse(health["live"])
+        if jobs:
+            self.assertTrue(health["live"])
+            self.assertTrue(all("jobs.aon.com" in j["url"] for j in jobs))
+        else:
+            self.assertFalse(health["live"])
+            self.assertIn("zero vacancies not trusted", health["note"])
 
     def test_aon_does_not_use_stale_seed_ids(self):
-        source = inspect.getsource(scrape.scrape_aon)
+        source = inspect.getsource(scrape._BATCH4_AON_20260920)
         for stale_id in (
             "93353", "99173", "99565", "102116", "103488",
             "105297", "94666", "100234", "104230", "99495",

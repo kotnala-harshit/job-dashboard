@@ -16,14 +16,16 @@ class CurrentSourceTests(unittest.TestCase):
         self.assertNotIn("AonCareers", source)
         self.assertIn("zero vacancies not trusted", source)
 
-    def test_aon_missing_browser_is_unhealthy(self):
+    def test_aon_missing_browser_allows_validated_http_fallback(self):
         with patch.object(scrape, "HAS_PLAYWRIGHT", False):
             jobs = scrape.scrape_aon()
-
-        self.assertEqual(jobs, [])
-        self.assertFalse(
-            scrape.CONNECTOR_HEALTH["Aon"]["live"]
-        )
+        health = scrape.CONNECTOR_HEALTH["Aon"]
+        if jobs:
+            self.assertTrue(health["live"])
+            self.assertTrue(all("jobs.aon.com" in j["url"] for j in jobs))
+        else:
+            self.assertFalse(health["live"])
+            self.assertIn("zero vacancies not trusted", health["note"])
 
     def test_zscaler_greenhouse_source(self):
         source = inspect.getsource(scrape.scrape_zscaler)

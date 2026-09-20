@@ -135,6 +135,27 @@ def inspect_job(job):
     return issues
 
 
+def live_overlay(companies):
+    import scrape
+    collectors = {'Aon': getattr(scrape, 'scrape_aon', None), 'HCLTech': getattr(scrape, 'scrape_hcltech', None)}
+    jobs, health = [], {}
+    for company in companies:
+        fn = collectors.get(company)
+        if not callable(fn):
+            continue
+        scrape.CONNECTOR_HEALTH.pop(company, None)
+        try:
+            found = fn() or []
+        except Exception as exc:
+            found = []
+            scrape._mark_connector_health(company, False, f'Live audit overlay failed: {type(exc).__name__}: {exc}')
+        jobs.extend(found)
+        info = scrape.CONNECTOR_HEALTH.get(company)
+        if isinstance(info, dict):
+            health[company] = dict(info)
+    return jobs, health
+
+
 def identity(job):
     url = norm(job.get("url") or job.get("apply_url"))
 
@@ -276,6 +297,18 @@ def main():
 
     if not proven_names:
         raise SystemExit("ERROR: historical proven-company population is empty")
+
+    overlay_jobs, overlay_health = live_overlay(("Aon", "HCLTech"))
+    if overlay_jobs:
+        overlay_companies = {ckey(j.get("company")) for j in overlay_jobs}
+        jobs = [j for j in jobs if ckey(j.get("company")) not in overlay_companies] + overlay_jobs
+        jobs_by_company = defaultdict(list)
+        for job in jobs:
+            company = norm(job.get("company"))
+            if company:
+                jobs_by_company[ckey(company)].append(job)
+    for company, info in overlay_health.items():
+        health_by_company[ckey(company)] = info
 
     rows = []
 
