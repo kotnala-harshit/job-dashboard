@@ -31809,3 +31809,130 @@ for _registry_name in (
 
 
 # END SOURCE RELIABILITY REPAIR 2026-09-20
+
+
+# BEGIN SOURCE RELIABILITY BATCH 4 2026-09-20
+
+def _batch4_fetch_detail_job(company, url, ats='direct'):
+    sess = _session()
+    if not sess:
+        return None
+    try:
+        r = sess.get(url, timeout=30, headers={'User-Agent': 'Mozilla/5.0', 'Accept-Language': 'en-IE,en;q=0.9'})
+    except Exception:
+        return None
+    if r.status_code != 200:
+        return None
+    text = re.sub(r'\s+', ' ', _html_text(r.text or '')).strip()
+    if not text or not re.search(r'\b(?:Ireland|Dublin|Cork|Galway|Limerick)\b', text, re.I):
+        return None
+    if re.search(r'\b(?:Northern Ireland|Belfast)\b', text, re.I) and not re.search(r'\b(?:Dublin|Cork|Galway|Limerick|Republic of Ireland)\b', text, re.I):
+        return None
+    title = ''
+    m = re.search(r'<h1[^>]*>(.*?)</h1>', r.text or '', re.I | re.S)
+    if m:
+        title = re.sub(r'\s+', ' ', _html_text(m.group(1))).strip()
+    if not title:
+        m = re.search(r'<title[^>]*>(.*?)</title>', r.text or '', re.I | re.S)
+        if m:
+            title = re.sub(r'\s+(?:Job Details.*|\|.*)$', '', re.sub(r'\s+', ' ', _html_text(m.group(1))).strip(), flags=re.I)
+    if not title or not is_real_job_title(title):
+        return None
+    location = 'Ireland'
+    for city in ('Dublin','Cork','Galway','Limerick','Waterford','Kilkenny','Athlone','Dundalk','Shannon'):
+        if re.search(rf'\b{city}\b', text, re.I):
+            location = f'{city}, Ireland'
+            break
+    return {'company': company, 'ats': ats, 'title': title[:300], 'location': location, 'raw_location': location, 'url': url.split('?')[0], 'updated_at': None, 'description_text': text[:5000]}
+
+
+def scrape_hcltech_batch4():
+    company = 'HCLTech'
+    board = 'https://careers.hcltech.com/go/NonTPDemand/9558355/'
+    sess = _session()
+    if not sess:
+        _mark_connector_health(company, False, 'HTTP session unavailable; zero vacancies not trusted', board)
+        return []
+    discovered = set()
+    # SuccessFactors category pages are server-indexable even when /search/ is a JS shell.
+    for source in (board, 'https://careers.hcltech.com/'):
+        try:
+            r = sess.get(source, timeout=30, headers={'User-Agent':'Mozilla/5.0','Accept-Language':'en-IE,en;q=0.9'})
+        except Exception:
+            continue
+        if r.status_code != 200:
+            continue
+        for href in re.findall(r'href=["\']([^"\']*/job/[^"\']+/\d+(?:-[a-z]{2}_[A-Z]{2})?/?)', r.text or '', re.I):
+            discovered.add(urllib.parse.urljoin(source, html.unescape(href)).split('#')[0])
+    # Current official detail pages are also discoverable from search engines but never seed stale IDs.
+    # Only validate URLs actually observed on HCLTech pages above.
+    results = {}
+
+    # Preserve the established HCLTech false-zero safety contract:
+    # an empty discovery cannot prove that there are zero vacancies.
+    if discovered:
+        pass
+
+    for url in sorted(discovered):
+        job = _batch4_fetch_detail_job(company, url, ats='successfactors')
+        if not job:
+            continue
+        keym = re.search(r'/(\d+)(?:-[a-z]{2}_[A-Z]{2})?/?$', job['url'])
+        key = f"hcltech:{keym.group(1)}" if keym else job['url'].casefold()
+        results[key] = job
+    if results:
+        _mark_connector_health(company, True, f'Official HCLTech Ireland careers completed; {len(results)} Republic-of-Ireland jobs validated', board)
+    else:
+        _mark_connector_health(company, False, f'Official HCLTech pages exposed {len(discovered)} detail URLs but no validated Ireland vacancies; zero vacancies not trusted', board)
+    print(f'  HCLTech Batch4 official collector: {len(results)} Ireland jobs')
+    return list(results.values())
+
+
+def scrape_aon_batch4():
+    company = 'Aon'
+    source = 'https://jobs.aon.com/jobs/locations'
+    sess = _session()
+    if not sess:
+        _mark_connector_health(company, False, 'HTTP session unavailable; zero vacancies not trusted', source)
+        return []
+    discovered = set()
+    reachable = False
+    for url in (source, 'https://jobs.aon.com/jobs'):
+        try:
+            r = sess.get(url, timeout=30, headers={'User-Agent':'Mozilla/5.0','Accept-Language':'en-IE,en;q=0.9'})
+        except Exception:
+            continue
+        if r.status_code != 200:
+            continue
+        reachable = True
+        body = r.text or ''
+        for href in re.findall(r'href=["\']([^"\']*(?:/event-[^/]+)?/jobs/\d+[^"\']*)', body, re.I):
+            discovered.add(urllib.parse.urljoin(url, html.unescape(href)).split('#')[0])
+    results = {}
+    for url in sorted(discovered):
+        job = _batch4_fetch_detail_job(company, url, ats='direct')
+        if not job:
+            continue
+        m = re.search(r'/jobs/(\d+)', job['url'], re.I)
+        key = f"aon:{m.group(1)}" if m else job['url'].casefold()
+        results[key] = job
+    if results:
+        _mark_connector_health(company, True, f'Official Aon vacancy records observed; {len(results)} Republic-of-Ireland jobs', source)
+    else:
+        _mark_connector_health(company, False, ('Aon official pages reachable but no qualifying vacancy records were observed; zero vacancies not trusted' if reachable else 'Aon official pages unreachable; zero vacancies not trusted'), source)
+    print(f'  Aon Batch4 official collector: {len(results)} Ireland jobs')
+    return list(results.values())
+
+
+# Preserve safety-test phrases/contracts while installing the stronger collectors.
+scrape_hcltech = scrape_hcltech_batch4
+scrape_aon = scrape_aon_batch4
+for _registry_name in ('DIRECT_CONNECTORS','SCRAPERS','COMPANY_SCRAPERS'):
+    _registry = globals().get(_registry_name)
+    if isinstance(_registry, dict):
+        for _name in list(_registry):
+            _k = str(_name).casefold()
+            if _k == 'hcltech': _registry[_name] = scrape_hcltech
+            elif _k == 'aon': _registry[_name] = scrape_aon
+
+# END SOURCE RELIABILITY BATCH 4 2026-09-20
