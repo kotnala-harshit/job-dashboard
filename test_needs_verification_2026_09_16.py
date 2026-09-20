@@ -8,8 +8,6 @@ def main():
     for slug in ("cubic3", "quantexa", "trading212"):
         assert slug in scrape.ASHBY_COMPANIES, slug
 
-    for company in ("Quantexa", "Trading 212"):
-        assert company in scrape.VERIFIED_LIVE_ZERO_COMPANIES, company
 
     for company in (
         "CRH", "FBD Insurance", "Waystone", "Amgen", "Fidelity Investments",

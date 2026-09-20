@@ -50,14 +50,18 @@ def main():
     with patch.object(scrape, "_scrape_accenture_with_retry", return_value=[{"title": "Analyst"}]), patch.object(scrape, "scrape_workday") as workday:
         assert scrape.scrape_accenture() == [{"title": "Analyst"}]
         workday.assert_not_called()
-    session = Mock()
-    for location, expected in (("Singapore, Singapore", False), ("Belfast, Northern Ireland", False), ("Dublin, Ireland", True)):
-        session.get.return_value = Mock(status_code=200, text=(
-            f"<title>Analyst in {location} | Aon Corporation</title>"
-            "<h1>Analyst</h1><nav>Jobs in Ireland</nav>"
-        ))
-        with redirect_stdout(io.StringIO()), patch.object(scrape, "_session", return_value=session):
-            assert bool(scrape.scrape_aon()) is expected
+    with patch.object(scrape, "HAS_PLAYWRIGHT", False):
+        scrape.CONNECTOR_HEALTH.clear()
+        assert scrape.scrape_aon() == []
+        health = scrape.CONNECTOR_HEALTH.get("Aon")
+        assert health is not None
+        assert health["live"] is False
+
+    import inspect
+    aon_source = inspect.getsource(scrape.scrape_aon)
+    assert "jobs.aon.com/jobs" in aon_source
+    assert "aon.wd1.myworkdayjobs.com" not in aon_source
+    assert "zero vacancies not trusted" in aon_source
 
     submitted, paths = set(), set()
     lock = threading.Lock()

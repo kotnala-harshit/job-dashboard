@@ -42,7 +42,7 @@ for _slug in _NEEDS_VERIFICATION_ASHBY:
     if _slug not in ASHBY_COMPANIES:
         ASHBY_COMPANIES.append(_slug)
 
-VERIFIED_LIVE_ZERO_COMPANIES.update({"Quantexa", "Trading 212"})
+# Verified-zero classification is owned exclusively by KNOWN_HEALTHY_ZERO_COMPANIES.
 
 _needs_verification_previous_company_display_name = company_display_name
 def company_display_name(raw: str) -> str:

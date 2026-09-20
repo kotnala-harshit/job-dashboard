@@ -5,8 +5,6 @@ def main():
         assert slug in scrape.GREENHOUSE_COMPANIES, slug
     for slug in ("quantexa", "trading212"):
         assert slug in scrape.ASHBY_COMPANIES, slug
-    for company in ("Quantexa", "Trading 212"):
-        assert company in scrape.VERIFIED_LIVE_ZERO_COMPANIES, company
     for company in ("Teneo Ireland", "Figma", "Nucleo", "WuXi Biologics"):
         assert company in scrape.DIRECT_COMPANY_CONNECTORS, company
 

@@ -95,7 +95,7 @@ def scrape_direct_company(company: str, *args, **kwargs):
 for _company in _NV17_BROWSER:
     DIRECT_COMPANY_CONNECTORS[_company] = "needs_verification_browser_official"
 
-VERIFIED_LIVE_ZERO_COMPANIES.update({"Quantexa", "Trading 212"})
+# Verified-zero classification is owned exclusively by KNOWN_HEALTHY_ZERO_COMPANIES.
 
 _nv17_batched = {
     _company_key(company_display_name(name))

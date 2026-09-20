@@ -129,7 +129,7 @@ WORKDAY_COMPANIES = [
     ("Eli Lilly", "lilly", "wd115", "LLY"),
     ("CrowdStrike", "crowdstrike", "wd5", "crowdstrikecareers"),
     ("Kyndryl", "kyndryl", "wd5", "KyndrylProfessionalCareers"),
-('Proofpoint', 'proofpoint', 'wd5', 'ProofpointCareers'), ('AIG', 'aig', 'wd1', 'aig'), ('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'),  ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS'), ("Microchip Technology", "microchiphr", "wd5", "External"),
+('Proofpoint', 'proofpoint', 'wd5', 'ProofpointCareers'), ('AIG', 'aig', 'wd1', 'aig'), ('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'),  ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'),  ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS'), ("Microchip Technology", "microchiphr", "wd5", "External"),
 ]
 WORKDAY_COMPANIES.append(('Stryker', 'stryker', 'wd1', 'StrykerCareers'))
 WORKDAY_COMPANIES.append(("Jabil", "jabil", "wd5", "Jabil_Careers"))
@@ -8954,115 +8954,268 @@ def scrape_aer_lingus():
 
 def scrape_aon():
     company = "Aon"
-    source_url = "https://aon.wd1.myworkdayjobs.com/AonCareers"
+    source_url = "https://jobs.aon.com/jobs"
 
-    # scrape_workday() historically returns [] both for a genuine empty board
-    # and for transport/API failures. For Aon that distinction matters because
-    # the current endpoint can return HTTP 422. Probe the official Workday API
-    # first so an API failure can never be promoted to a healthy zero.
-    origin = "https://aon.wd1.myworkdayjobs.com"
-    api = f"{origin}/wday/cxs/aon/AonCareers/jobs"
-    headers = _workday_headers("aon", "wd1", "AonCareers")
-    session = _workday_session()
-
-    if session is None:
+    if not HAS_PLAYWRIGHT:
         _mark_connector_health(
             company,
             False,
-            "Official Aon Workday session unavailable",
+            "Official Aon careers requires Playwright; Playwright unavailable",
             source_url,
         )
+        print("  ! Aon: Playwright unavailable")
         return []
 
-    probe = _workday_post(
-        session,
-        api,
-        headers,
-        {},
-        20,
-        0,
-        "",
-    )
-
-    if probe is None:
-        _mark_connector_health(
-            company,
-            False,
-            "Official Aon Workday API probe failed",
-            source_url,
-        )
-        print("  ! Aon Workday API probe failed; zero vacancies NOT trusted")
-        return []
+    results = {}
 
     try:
-        probe.json()
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1600},
+            )
+            page = context.new_page()
+
+            response = page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=90000,
+            )
+
+            if response is not None and response.status >= 400:
+                raise RuntimeError(
+                    f"Aon careers returned HTTP {response.status}"
+                )
+
+            page.wait_for_timeout(3000)
+
+            previous_count = -1
+            stagnant = 0
+
+            for _ in range(40):
+                anchors = page.locator('a[href*="/jobs/"]')
+                current_count = anchors.count()
+
+                if current_count == previous_count:
+                    stagnant += 1
+                else:
+                    stagnant = 0
+
+                previous_count = current_count
+
+                if current_count > 0 and stagnant >= 4:
+                    break
+
+                page.mouse.wheel(0, 3000)
+                page.wait_for_timeout(500)
+
+            links = page.locator(
+                'a[href*="/jobs/"]'
+            ).evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            discovered = {}
+
+            for item in links:
+                href = str(item.get("href") or "").strip()
+                title = re.sub(
+                    r"\s+",
+                    " ",
+                    str(item.get("text") or ""),
+                ).strip()
+
+                if not href:
+                    continue
+
+                parsed = urllib.parse.urlparse(href)
+
+                if parsed.netloc.lower() != "jobs.aon.com":
+                    continue
+
+                path = parsed.path.rstrip("/")
+
+                if not re.match(
+                    r"^/jobs/[^/]+/?$",
+                    path,
+                    re.I,
+                ):
+                    continue
+
+                if path.lower() in {
+                    "/jobs/search",
+                    "/jobs/locations",
+                    "/jobs/categories",
+                }:
+                    continue
+
+                canonical = urllib.parse.urlunparse(
+                    (
+                        parsed.scheme or "https",
+                        parsed.netloc,
+                        parsed.path,
+                        "",
+                        "",
+                        "",
+                    )
+                )
+
+                discovered[canonical.lower()] = {
+                    "href": canonical,
+                    "anchor_title": title,
+                }
+
+            if not discovered:
+                context.close()
+                browser.close()
+
+                _mark_connector_health(
+                    company,
+                    False,
+                    "Official Aon careers loaded but no vacancy links were discovered; zero vacancies not trusted",
+                    source_url,
+                )
+
+                print(
+                    "  ! Aon careers loaded but no vacancy links "
+                    "were discovered; zero vacancies NOT trusted"
+                )
+                return []
+
+            for key, item in discovered.items():
+                href = item["href"]
+                anchor_title = item["anchor_title"]
+                detail = context.new_page()
+
+                try:
+                    detail_response = detail.goto(
+                        href,
+                        wait_until="domcontentloaded",
+                        timeout=45000,
+                    )
+
+                    if (
+                        detail_response is not None
+                        and detail_response.status >= 400
+                    ):
+                        continue
+
+                    detail.wait_for_timeout(500)
+                    body = detail.locator("body").inner_text(
+                        timeout=10000
+                    )
+
+                    title = ""
+
+                    try:
+                        title = re.sub(
+                            r"\s+",
+                            " ",
+                            detail.locator(
+                                "h1"
+                            ).first.inner_text(
+                                timeout=1500
+                            ),
+                        ).strip()
+                    except Exception:
+                        pass
+
+                    if not title:
+                        title = anchor_title
+
+                    if not title:
+                        continue
+
+                    evidence = f"{title}\n{body}"
+
+                    if re.search(
+                        r"\b(?:Belfast|Northern Ireland)\b",
+                        evidence,
+                        re.I,
+                    ):
+                        continue
+
+                    if not re.search(
+                        r"\b(?:Ireland|Dublin|Blackrock|Cork|"
+                        r"Galway|Limerick|Waterford|Kilkenny|"
+                        r"Kildare|Meath|Wicklow)\b",
+                        evidence,
+                        re.I,
+                    ):
+                        continue
+
+                    location = "Ireland"
+
+                    for city in (
+                        "Dublin",
+                        "Blackrock",
+                        "Cork",
+                        "Galway",
+                        "Limerick",
+                        "Waterford",
+                        "Kilkenny",
+                        "Kildare",
+                        "Meath",
+                        "Wicklow",
+                    ):
+                        if re.search(
+                            rf"\b{re.escape(city)}\b",
+                            evidence,
+                            re.I,
+                        ):
+                            location = f"{city}, Ireland"
+                            break
+
+                    results[key] = {
+                        "company": company,
+                        "ats": "icims",
+                        "title": title[:300],
+                        "location": location,
+                        "raw_location": location,
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": body[:5000],
+                    }
+
+                except Exception:
+                    pass
+                finally:
+                    try:
+                        detail.close()
+                    except Exception:
+                        pass
+
+            context.close()
+            browser.close()
+
     except Exception as exc:
         _mark_connector_health(
             company,
             False,
-            f"Official Aon Workday returned invalid JSON: {exc}",
+            f"Official Aon careers failed: {exc}",
             source_url,
         )
-        print("  ! Aon Workday returned invalid JSON; zero vacancies NOT trusted")
+        print(f"  ! Aon careers failed: {exc}")
         return []
-
-    try:
-        jobs = scrape_workday(
-            company,
-            "aon",
-            "wd1",
-            "AonCareers",
-            max_pages=30,
-        )
-    except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official Aon Workday failed: {exc}",
-            source_url,
-        )
-        print(f"  ! Aon Workday failed: {exc}")
-        return []
-
-    cleaned = {}
-    for job in jobs:
-        title = str(job.get("title") or "").strip()
-        location = str(
-            job.get("location")
-            or job.get("raw_location")
-            or ""
-        ).strip()
-        href = str(job.get("url") or "").strip()
-
-        if not title or not href:
-            continue
-
-        evidence = f"{title} {location}"
-
-        if re.search(r"\b(?:Belfast|Northern Ireland)\b", evidence, re.I):
-            continue
-
-        if not region_ok(evidence):
-            continue
-
-        job["company"] = company
-        job["ats"] = "workday"
-
-        key = href.split("?")[0].rstrip("/").lower()
-        cleaned[key] = job
 
     _mark_connector_health(
         company,
         True,
-        (
-            f"Official Aon Workday completed successfully; "
-            f"{len(cleaned)} Republic-of-Ireland jobs returned"
-        ),
+        f"Official Aon careers completed; {len(results)} Republic-of-Ireland jobs returned",
         source_url,
     )
 
-    print(f"  Aon official Ireland Workday: {len(cleaned)} jobs")
-    return list(cleaned.values())
+    print(
+        f"  Aon official Ireland careers: "
+        f"{len(results)} jobs"
+    )
+
+    return list(results.values())
+
 
 def scrape_hitachi_energy():
     company = "Hitachi Energy"
@@ -10391,111 +10544,67 @@ def scrape_exl():
 
 
 def scrape_zscaler():
-    """Zscaler Ireland/Irish-remote opportunities.
-
-    Zscaler is remote/hybrid and maintains an Ireland employment presence.
-    Only retain jobs whose rendered vacancy evidence explicitly establishes
-    Ireland availability.
-    """
-
-    if not HAS_PLAYWRIGHT:
-        return []
-
-    results = {}
-
-    urls = [
-        "https://www.zscaler.com/careers",
-    ]
+    company = "Zscaler"
+    source_url = "https://job-boards.greenhouse.io/zscaler"
 
     try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-
-            page = browser.new_page(
-                viewport={"width": 1440, "height": 1100},
-                locale="en-IE",
-            )
-
-            for url in urls:
-                try:
-                    page.goto(
-                        url,
-                        wait_until="domcontentloaded",
-                        timeout=90000,
-                    )
-                    page.wait_for_timeout(2500)
-                    _dismiss_cookie_banner(page)
-                except Exception as exc:
-                    print(f"  ! Zscaler careers page failed: {exc}")
-                    continue
-
-                anchors = page.locator("a[href]")
-
-                for i in range(anchors.count()):
-                    a = anchors.nth(i)
-
-                    try:
-                        href = urllib.parse.urljoin(
-                            page.url,
-                            a.get_attribute("href") or "",
-                        )
-                    except Exception:
-                        continue
-
-                    hlow = href.lower()
-
-                    if not any(x in hlow for x in (
-                        "/job/",
-                        "/jobs/",
-                        "careers/job",
-                        "career/job",
-                    )):
-                        continue
-
-                    title = _browser_text(a)
-
-                    node = a
-                    card = ""
-
-                    for _ in range(6):
-                        try:
-                            node = node.locator("..")
-                            candidate = _browser_text(node)
-                        except Exception:
-                            break
-
-                        if candidate and len(candidate) <= 3500:
-                            card = candidate
-
-                    evidence = f"{title} {card}"
-
-                    # Critical rule: generic Remote EMEA is not enough.
-                    if not region_ok(evidence):
-                        continue
-
-                    key = href.split("?")[0].rstrip("/").lower()
-
-                    if key in results:
-                        continue
-
-                    results[key] = {
-                        "company": "Zscaler",
-                        "ats": "direct",
-                        "title": title[:300] if title else "Zscaler vacancy",
-                        "location": _browser_location(card, "Ireland"),
-                        "url": href,
-                        "updated_at": None,
-                        "description_text": card[:5000],
-                    }
-
-            browser.close()
-
+        jobs = scrape_greenhouse("zscaler") or []
     except Exception as exc:
-        print(f"  ! Zscaler browser scrape failed: {exc}")
+        _mark_connector_health(
+            company,
+            False,
+            f"Official Zscaler Greenhouse failed: {exc}",
+            source_url,
+        )
+        print(f"  ! Zscaler Greenhouse failed: {exc}")
+        return []
 
-    print(f"  Zscaler official careers: {len(results)} Ireland jobs")
+    cleaned = {}
 
-    return list(results.values())
+    for job in jobs:
+        title = str(job.get("title") or "").strip()
+        location = str(
+            job.get("location")
+            or job.get("raw_location")
+            or ""
+        ).strip()
+        href = str(job.get("url") or "").strip()
+
+        if not title or not href:
+            continue
+
+        evidence = f"{title} {location}"
+
+        if re.search(
+            r"\b(?:Belfast|Northern Ireland)\b",
+            evidence,
+            re.I,
+        ):
+            continue
+
+        if not region_ok(location):
+            continue
+
+        job["company"] = company
+        job["ats"] = "greenhouse"
+
+        key = href.split("?")[0].rstrip("/").lower()
+        cleaned[key] = job
+
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Zscaler Greenhouse completed; {len(cleaned)} Republic-of-Ireland jobs returned",
+        source_url,
+    )
+
+    print(
+        f"  Zscaler official Greenhouse: "
+        f"{len(cleaned)} Ireland jobs"
+    )
+
+    return list(cleaned.values())
+
 
 
 
@@ -30442,7 +30551,6 @@ def scrape_direct_company(company: str):
 # health warning until independently verified as a genuine zero.
 
 # END_ATTENTION_COMPANY_REFRESH_FIX_V1
-
 if __name__ == "__main__":
 
     # Internal mode used by _parallel_collect_isolated().
