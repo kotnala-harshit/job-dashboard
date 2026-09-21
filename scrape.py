@@ -25464,7 +25464,7 @@ def main():
             errors.append(f"jooble ({query}): {e}")
         time.sleep(0.3)
 
-    if SCRAPE_MODE == "full" and _runs_phase("direct") and _targeted("Amazon"):
+    if SCRAPE_MODE == "full" and _runs_phase("core") and _targeted("Amazon"):
         try:
             found = scrape_amazon("")
             results.extend(found)
@@ -25473,7 +25473,7 @@ def main():
             errors.append(f"direct/Amazon: {e}")
         time.sleep(0.5)
 
-    if SCRAPE_MODE == "full" and _runs_phase("direct") and _targeted("Netflix"):
+    if SCRAPE_MODE == "full" and _runs_phase("core") and _targeted("Netflix"):
         try:
             found = scrape_netflix("")
             results.extend(found)
