@@ -19547,11 +19547,13 @@ def scrape_forvis_mazars():
 
 def scrape_dps_group():
     """
-    DPS Group is now part of Arcadis.
+    DPS Group is now part of Arcadis and no longer has an independent
+    vacancy board.
 
-    Use Arcadis' current official Ireland careers source rather than the
-    retired legacy DPS vacancy board. Preserve the dashboard's historical
-    DPS Group (Arcadis) company identity.
+    Do not relabel Arcadis' current vacancies as DPS Group vacancies. Arcadis
+    has its own active dashboard identity and official collector; returning
+    the same URLs here under the legacy DPS identity causes global URL
+    deduplication to hide the canonical Arcadis listings.
     """
     company = "DPS Group (Arcadis)"
     source_url = (
@@ -19559,76 +19561,21 @@ def scrape_dps_group():
         "?domain=arcadis.com&location=Ireland&sort_by=relevance"
     )
 
-    try:
-        jobs = scrape_arcadis_ireland()
-    except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official Arcadis Ireland connector failed: {exc}",
-            source_url,
-        )
-        print(f"  ! DPS Group / Arcadis scrape failed: {exc}")
-        return []
-
-    arcadis_health = CONNECTOR_HEALTH.get("Arcadis")
-
-    if arcadis_health and arcadis_health.get("live") is False:
-        _mark_connector_health(
-            company,
-            False,
-            (
-                "Current Arcadis Ireland careers source did not complete "
-                f"successfully: {arcadis_health.get('note') or 'unknown failure'}"
-            ),
-            arcadis_health.get("url") or source_url,
-        )
-        return []
-
-    results = {}
-
-    for job in jobs:
-        title = str(job.get("title") or "").strip()
-        location = str(
-            job.get("location")
-            or job.get("raw_location")
-            or ""
-        ).strip()
-        href = str(job.get("url") or "").strip()
-
-        if not title or not href:
-            continue
-
-        evidence = f"{title} {location}"
-
-        if re.search(r"\b(?:Belfast|Northern Ireland)\b", evidence, re.I):
-            continue
-
-        if not region_ok(evidence):
-            continue
-
-        copied = dict(job)
-        copied["company"] = company
-        copied.setdefault("ats", "eightfold")
-
-        key = href.split("?")[0].rstrip("/").lower()
-        results[key] = copied
-
     _mark_connector_health(
         company,
         True,
         (
-            f"Current official Arcadis Ireland careers source completed; "
-            f"{len(results)} Republic-of-Ireland jobs returned"
+            "DPS Group is part of Arcadis and has no separate current vacancy "
+            "board; current Arcadis vacancies are published under Arcadis"
         ),
         source_url,
     )
 
     print(
-        f"  DPS Group (Arcadis) via current Arcadis Ireland careers: "
-        f"{len(results)} jobs"
+        "  DPS Group (Arcadis): no separate vacancy feed; "
+        "current vacancies are owned by Arcadis"
     )
-    return list(results.values())
+    return []
 
 def scrape_eirgrid():
     company = "EirGrid Group"
