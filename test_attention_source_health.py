@@ -30,9 +30,17 @@ class AttentionSourceHealthTests(unittest.TestCase):
         ):
             self.assertNotIn(stale_id, source)
 
-    def test_dps_uses_current_arcadis_source(self):
+    def test_dps_does_not_relabel_current_arcadis_jobs(self):
         source = inspect.getsource(scrape.scrape_dps_group)
-        self.assertIn("scrape_arcadis_ireland", source)
+        self.assertNotIn("scrape_arcadis_ireland()", source)
+
+        scrape.CONNECTOR_HEALTH.clear()
+        jobs = scrape.scrape_dps_group()
+
+        self.assertEqual(jobs, [])
+        health = scrape.CONNECTOR_HEALTH.get("DPS Group (Arcadis)")
+        self.assertIsNotNone(health)
+        self.assertTrue(health["live"])
         self.assertNotIn("dpsgroupglobal.com", source)
 
     def test_tiktok_marks_playwright_absence_unhealthy(self):
