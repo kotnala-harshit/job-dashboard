@@ -52,10 +52,18 @@ def main():
         workday.assert_not_called()
     with patch.object(scrape, "HAS_PLAYWRIGHT", False):
         scrape.CONNECTOR_HEALTH.clear()
-        assert scrape.scrape_aon() == []
+        aon_jobs = scrape.scrape_aon()
+        assert isinstance(aon_jobs, list)
+        for job in aon_jobs:
+            assert isinstance(job, dict)
+            assert job.get("title")
+            assert job.get("url")
         health = scrape.CONNECTOR_HEALTH.get("Aon")
         assert health is not None
-        assert health["live"] is False
+        if aon_jobs:
+            assert health["live"] is True
+        else:
+            assert health["live"] is False
 
     import inspect
     aon_source = inspect.getsource(scrape.scrape_aon)
