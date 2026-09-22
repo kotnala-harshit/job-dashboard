@@ -31174,24 +31174,6 @@ for _company in ("Teneo Ireland", "Figma", "Nucleo", "WuXi Biologics"):
 
 # END NEEDS_VERIFICATION_2026_09_17
 
-if __name__ == "__main__":
-
-    # Internal mode used by _parallel_collect_isolated().
-    # It is intentionally handled before normal main() execution.
-    if "--isolated-task" in sys.argv:
-        import json
-
-        task_idx = sys.argv.index("--isolated-task")
-        result_idx = sys.argv.index("--isolated-result")
-
-        task_spec = json.loads(sys.argv[task_idx + 1])
-        result_path = sys.argv[result_idx + 1]
-
-        _run_isolated_task_child(task_spec, result_path)
-        raise SystemExit(0)
-
-
-    main()
 
 # =====================================================================
 # Targeted Ireland connectors: Oracle / IBM / Marsh
@@ -32204,3 +32186,29 @@ def _live_roi_detail(company,url,ats):
  if not job["description_text"]: job["description_text"]="Official vacancy detail validated on employer careers site."
  return job
 # END LIVE ROI QUALITY FIX 2026-09-21
+
+def _run_module_entrypoint():
+    """
+    Execute command-line modes only after the entire module has initialized.
+
+    Isolated collectors must see the same final connector definitions as
+    normal imports. In particular, connector overrides installed later in
+    this file must be active before an --isolated-task is dispatched.
+    """
+    if "--isolated-task" in sys.argv:
+        import json
+
+        task_idx = sys.argv.index("--isolated-task")
+        result_idx = sys.argv.index("--isolated-result")
+
+        task_spec = json.loads(sys.argv[task_idx + 1])
+        result_path = sys.argv[result_idx + 1]
+
+        _run_isolated_task_child(task_spec, result_path)
+        return
+
+    main()
+
+
+if __name__ == "__main__":
+    _run_module_entrypoint()
