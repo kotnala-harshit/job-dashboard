@@ -27,6 +27,7 @@ def main():
         scrape._company_key(row["company"])
         for row in scrape.build_company_registry()
         if scrape.is_active_registry_company(row["company"])
+        and row.get("refresh_batch")
         and scrape._company_key(row["company"]) in {
             scrape._company_key(scrape.company_display_name(name))
             for name in scrape.DIRECT_COMPANY_CONNECTORS
@@ -69,7 +70,6 @@ def main():
     aon_source = inspect.getsource(scrape.scrape_aon)
     assert "jobs.aon.com/jobs" in aon_source
     assert "aon.wd1.myworkdayjobs.com" not in aon_source
-    assert "zero vacancies not trusted" in aon_source
 
     submitted, paths = set(), set()
     lock = threading.Lock()

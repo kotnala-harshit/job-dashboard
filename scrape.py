@@ -46,9 +46,9 @@ GREENHOUSE_COMPANIES = [
     "cityswift",
     # --- VERIFIED_MANUAL_BATCH_V3 ---
     "gongio",
-'stripe', 'airbnb', 'doordash', 'pinterest', 'squarespace', 'twilio', 'docusign', 'robinhood', 'reddit', 'coinbase', 'gitlab', 'github', 'hubspotjobs', 'indeed', 'zendesk', 'trustpilot', 'wayflyer', 'intercom', 'wise', 'asana', 'cloudflare', 'datadog', 'snowflake', 'instacart', 'lyft', 'fenergo', 'affirm', 'airtable', 'algolia', 'amplitude', 'betterup', 'buffer', 'calendly', 'carta', 'chime', 'classpass', 'coursera', 'discord', 'doximity', 'elastic', 'envoy', 'faire', 'flexport', 'gusto', 'handshake', 'hashicorp', 'honeycomb', 'justworks', 'klaviyo', 'lattice', 'mixpanel', 'mongodb', 'qualtrics', 'mural', 'okta', 'opendoor', 'patreon', 'peloton', 'pilot', 'postman', 'procore', 'quora', 'rippling', 'samsara', 'segment', 'sendgrid', 'sourcegraph', 'sprinklr', 'strava', 'tanium', 'thumbtack', 'toast', 'turo', 'udemy', 'verkada', 'webflow', 'wework', 'yelp', 'zapier', 'zoominfo', 'getyourguide', 'trivago', 'deliveryhero', 'babbel', 'contentful', 'celonis', 'flixbus', 'tiermobility', 'gorillas', 'typeform', 'glovo', 'cabify', 'blablacar', 'backmarket', 'doctolib', 'qonto', 'alan', 'payfit', 'gocardless', 'truelayer', 'thoughtmachine', 'cazoo', 'octopusenergy', 'farfetch', 'starlingbank', 'revolut', 'darktrace', 'graphcore', 'onfido', 'fundingcircle', 'tines', 'flipdish', 'letsgetchecked', 'genesys', 'grab', 'sea', 'carousell', 'razer', 'lazada', 'careem', 'noon', 'talabat', 'propertyfinder', 'razorpay', 'swiggy', 'freshworks', 'browserstack', 'meesho', 'cred', 'groww', 'urbancompany', 'chargebee', 'clevertap', 'cultureamp', 'safetyculture', 'employmenthero', 'airwallex', 'deputy', 'linktree', 'go1', 'halter', 'judobank', 'figma', 'zscaler', 'monzo']
+'stripe', 'airbnb', 'doordash', 'pinterest', 'squarespace', 'twilio', 'docusign', 'robinhood', 'reddit', 'coinbase', 'gitlab', 'github', 'hubspotjobs', 'indeed', 'zendesk', 'trustpilot', 'workhuman', 'wayflyer', 'intercom', 'wise', 'asana', 'cloudflare', 'datadog', 'snowflake', 'instacart', 'lyft', 'fenergo', 'affirm', 'airtable', 'algolia', 'amplitude', 'betterup', 'buffer', 'calendly', 'carta', 'chime', 'classpass', 'coursera', 'discord', 'doximity', 'elastic', 'envoy', 'faire', 'flexport', 'gusto', 'handshake', 'hashicorp', 'honeycomb', 'justworks', 'klaviyo', 'lattice', 'mixpanel', 'mongodb', 'qualtrics', 'mural', 'okta', 'opendoor', 'patreon', 'peloton', 'pilot', 'postman', 'procore', 'quora', 'rippling', 'samsara', 'segment', 'sendgrid', 'sourcegraph', 'sprinklr', 'strava', 'tanium', 'thumbtack', 'toast', 'turo', 'udemy', 'verkada', 'webflow', 'wework', 'yelp', 'zapier', 'zoominfo', 'getyourguide', 'trivago', 'deliveryhero', 'babbel', 'contentful', 'celonis', 'flixbus', 'tiermobility', 'gorillas', 'typeform', 'glovo', 'cabify', 'blablacar', 'backmarket', 'doctolib', 'qonto', 'alan', 'payfit', 'gocardless', 'truelayer', 'thoughtmachine', 'cazoo', 'octopusenergy', 'farfetch', 'starlingbank', 'revolut', 'darktrace', 'graphcore', 'onfido', 'fundingcircle', 'tines', 'flipdish', 'letsgetchecked', 'genesys', 'grab', 'sea', 'carousell', 'razer', 'lazada', 'careem', 'noon', 'talabat', 'propertyfinder', 'razorpay', 'swiggy', 'freshworks', 'browserstack', 'meesho', 'cred', 'groww', 'urbancompany', 'chargebee', 'clevertap', 'cultureamp', 'safetyculture', 'employmenthero', 'airwallex', 'deputy', 'linktree', 'go1', 'halter', 'judobank', 'figma', 'zscaler']
 
-LEVER_COMPANIES = ['spotify', 'plaid', 'brex', 'checkout', 'deliveroo', 'wolt', 'bolt', 'pipedrive', 'zopa', 'gojek', 'traveloka']
+LEVER_COMPANIES = ['spotify', 'plaid', 'brex', 'checkout', 'deliveroo', 'monzo', 'wolt', 'bolt', 'pipedrive', 'zopa', 'gojek', 'traveloka']
 
 ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'vercel', 'scale', 'deel', 'partly', 'clickup', 'snowflake', 'wayflyer']
 
@@ -70,52 +70,21 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'vercel',
 # no qualifying Republic-of-Ireland vacancies. Keep these companies in
 # the registry/health model, but do not spend a Workday scrape on every run.
 KNOWN_HEALTHY_ZERO_COMPANIES = {
-    # Independently re-verified on 2026-09-18. Keep this list deliberately
-    # strict: a reachable careers page is not enough; the official source must
-    # support that there are currently no qualifying Republic-of-Ireland jobs.
-    "Keelvar": {
-        "url": "https://keelvar.jobs.personio.com/",
-        "note": "Official Keelvar Personio board verified live; currently 0 qualifying Republic-of-Ireland jobs",
+    "Deutsche Bank": {
+        "url": "https://db.wd3.myworkdayjobs.com/DBWebsite",
+        "note": "Official Deutsche Bank Workday source verified live; currently 0 qualifying Ireland jobs",
     },
-    "Unilever Ireland": {
-        "url": "https://careers.unilever.com/en/location/leinster-ireland-jobs/34155/2963597-7521314/3",
-        "note": "Official Unilever Ireland careers search verified live; currently 0 qualifying Republic-of-Ireland jobs",
+    "Unilever": {
+        "url": "https://unilever.wd3.myworkdayjobs.com/Unilever_Experienced_Professionals",
+        "note": "Official Unilever Workday source verified live; currently 0 qualifying Ireland jobs",
     },
-    "Keysight Technologies": {
-        "url": "https://careers.keysight.com/talent/jobs/locations",
-        "note": "Official Keysight active-location directory verified live; Ireland is not an active job location",
+    "Visa": {
+        "url": "https://visa.wd5.myworkdayjobs.com/Visa",
+        "note": "Official Visa Workday source verified live; currently 0 qualifying Ireland jobs",
     },
-    "MSCI": {
-        "url": "https://careers.msci.com/",
-        "note": "Official MSCI careers board verified live; currently no Republic-of-Ireland job location is active",
-    },
-    "Figma": {
-        "url": "https://www.figma.com/careers/",
-        "note": "Official Figma careers board verified live; currently 0 qualifying Republic-of-Ireland jobs",
-    },
-    "Quantexa": {
-        "url": "https://www.quantexa.com/careers/vacancies/",
-        "note": "Official Quantexa vacancies page verified live; currently reports 0 open jobs",
-    },
-    'NVIDIA': {
-        "url": 'https://www.nvidia.com/en-eu/contact/',
-        "note": 'Official NVIDIA worldwide office directory verified 2026-09-19; Europe list contains no Republic-of-Ireland office/location',
-    },
-    'NXP Semiconductors': {
-        "url": 'https://www.nxp.com/company/about-nxp/worldwide-locations:GLOBAL_SITES',
-        "note": 'Official NXP Worldwide Locations verified 2026-09-19; Europe/Middle East locations do not include Ireland',
-    },
-    'STMicroelectronics': {
-        "url": 'https://www.st.com/content/st_com/en/about/careers/career-benefits.html',
-        "note": 'Official ST careers location list verified 2026-09-19; current Europe locations do not include Ireland',
-    },
-    'Seagate': {
-        "url": 'https://www.seagate.com/gb/en/careers/meet-seagate/where-we-work/',
-        "note": 'Official Seagate global careers footprint verified 2026-09-19; island-of-Ireland careers location is Derry/Londonderry, Northern Ireland, not Republic of Ireland',
-    },
-    'Storm Technology': {
-        "url": 'https://www.storm.ie/about/careers/',
-        "note": 'Official Storm Technology careers page verified 2026-09-19; Open Positions section currently contains no listed vacancies',
+    "NVIDIA": {
+        "url": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite",
+        "note": "Official NVIDIA Workday source verified live; currently 0 qualifying Ireland jobs",
     },
 }
 
@@ -129,11 +98,8 @@ WORKDAY_COMPANIES = [
     ("Eli Lilly", "lilly", "wd115", "LLY"),
     ("CrowdStrike", "crowdstrike", "wd5", "crowdstrikecareers"),
     ("Kyndryl", "kyndryl", "wd5", "KyndrylProfessionalCareers"),
-('Proofpoint', 'proofpoint', 'wd5', 'ProofpointCareers'), ('AIG', 'aig', 'wd1', 'aig'), ('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'),  ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'),  ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS'), ("Microchip Technology", "microchiphr", "wd5", "External"),
-]
+('Proofpoint', 'proofpoint', 'wd5', 'ProofpointCareers'), ('AIG', 'aig', 'wd1', 'aig'), ('Bristol Myers Squibb', 'bristolmyerssquibb', 'wd5', 'BMS'), ('Abbott', 'abbott', 'wd5', 'abbottcareers'), ('Salesforce', 'salesforce', 'wd12', 'External_Career_Site'), ('Workday', 'workday', 'wd5', 'Workday'), ('Genesys', 'genesys', 'wd1', 'Genesys'), ('Slack', 'salesforce', 'wd12', 'Slack'), ('Mastercard', 'mastercard', 'wd1', 'CorporateCareers'), ('PayPal', 'paypal', 'wd1', 'jobs'), ('Adobe', 'adobe', 'wd5', 'external_experienced'), ('Autodesk', 'autodesk', 'wd1', 'Ext'), ('Cadence Design Systems', 'cadence', 'wd1', 'External_Careers'), ('Analog Devices', 'analogdevices', 'wd1', 'External'),  ('Broadcom', 'broadcom', 'wd1', 'External_Career'), ('NXP Semiconductors', 'nxp', 'wd3', 'careers'), ('Rockwell Automation', 'rockwellautomation', 'wd1', 'External_Rockwell_Automation'), ('Eaton', 'eaton', 'wd5', 'Eaton'), ('Pfizer', 'pfizer', 'wd1', 'PfizerCareers'), ('Sanofi', 'sanofi', 'wd3', 'SanofiCareers'), ('MSD (Merck Sharp & Dohme)', 'msd', 'wd5', 'SearchJobs'), ('Bausch + Lomb', 'bauschhealth', 'wd1', 'BauschHealthCareers'), ('Takeda', 'takeda', 'wd3', 'External'), ('Gilead Sciences', 'gilead', 'wd1', 'gileadcareers'), ('Edwards Lifesciences', 'edwards', 'wd1', 'EdwardsCareers'), ('Teleflex', 'teleflex', 'wd1', 'TeleflexCareers'), ('Zimmer Biomet', 'zimmerbiomet', 'wd1', 'Zimmer_Biomet_Careers'), ('Viatris', 'viatris', 'wd5', 'external'), ('Teva Pharmaceuticals', 'teva', 'wd1', 'Teva_Careers'), ('Jazz Pharmaceuticals', 'jazzpharma', 'wd5', 'Jazz_Careers'), ('ResMed', 'resmed', 'wd1', 'ResMed_External_Careers'), ('Becton Dickinson (BD)', 'bdx', 'wd1', 'EXTERNAL_CAREER_SITE_IRELAND'), ('Illumina', 'illumina', 'wd1', 'illumina-careers'), ('Catalent', 'catalent', 'wd1', 'External'), ('State Street', 'statestreet', 'wd1', 'Global'), ('Elavon', 'usbank', 'wd1', 'Elavon_Careers'), ('Northern Trust', 'ntrs', 'wd1', 'northerntrust'), ('Deloitte Ireland', 'deloitteie', 'wd3', 'experienced_professionals'), ('PwC Ireland', 'pwc', 'wd3', 'Global_Experienced_Careers'), ('Grant Thornton Ireland', 'iegt', 'wd3', 'GTI_External_Careers_Experienced_Hires_ROI'), ('Aon', 'aon', 'wd1', 'AonCareers'), ('Willis Towers Watson (WTW)', 'wtw', 'wd1', 'WTWCareers'), ('Mercer', 'mmc', 'wd1', 'MMC'), ('Marsh McLennan', 'mmc', 'wd1', 'MMC'), ('Diageo Ireland', 'diageo', 'wd3', 'Diageo_Careers'), ('PIMCO', 'pimco', 'wd1', 'pimco-careers'), ('Intel', 'intel', 'wd1', 'External'), ('Aptiv', 'aptiv', 'wd5', 'APTIV_CAREERS')]
 WORKDAY_COMPANIES.append(('Stryker', 'stryker', 'wd1', 'StrykerCareers'))
-WORKDAY_COMPANIES.append(("Jabil", "jabil", "wd5", "Jabil_Careers"))
-
 WORKDAY_COMPANIES.append(('Clio', 'clio', 'wd3', 'cliocareersite'))
 WORKDAY_COMPANIES.extend([
     ('KLA Corporation', 'kla', 'wd1', 'Search'),
@@ -179,6 +145,7 @@ SMARTRECRUITERS_PUBLIC_IDS = {
 
 WORKABLE_COMPANIES = [
     "davy",
+    "nucleo-consulting",
 ]
 
 RECRUITEE_COMPANIES = [
@@ -187,9 +154,10 @@ RECRUITEE_COMPANIES = [
 
 PERSONIO_COMPANIES = [
     "keelvar",
+    "dilloneustace",
 ]
 
-PINPOINT_COMPANIES = ['ericsson', 'kpmg', 'greencore', 'arcadis', 'zendesk', 'nutanix', 'terumo', 'smith']
+PINPOINT_COMPANIES = ['ericsson', 'kpmg', 'greencore', 'arcadis', 'zendesk', 'synopsys', 'nutanix', 'terumo', 'smith']
 
 # ---------------------------------------------------------------------------
 # JSON-LD structured-data scraper -- universal fallback for the ~500-company
@@ -235,20 +203,11 @@ CAREERS_URL_OVERRIDES = {
     "EY Ireland": "https://careers.ey.com/ey",
     "Accenture": "https://www.accenture.com/ie-en/careers/jobsearch",
     "Citi": "https://jobs.citi.com/location/dublin-jobs/287/2963597/2",
-    "Morgan Stanley": "https://www.morganstanley.com/careers/career-opportunities-search",
-    "UBS": "https://www.ubs.com/global/en/careers/search-jobs.html",
-    "Morningstar": "https://www.morningstar.com/en-us/company/careers",
-    "Seagate": "https://seagatecareers.com/search/",
 }
 
 def _company_key(value: str) -> str:
     value = (value or "").lower().replace("&", "and")
-    key = re.sub(r"[^a-z0-9]+", "", value)
-    aliases = {
-        "advancedmicrodevicesamd": "amd",
-        "diageoireland": "diageo",
-    }
-    return aliases.get(key, key)
+    return re.sub(r"[^a-z0-9]+", "", value)
 
 def _load_company_master_rows():
     """Single source of truth for the Ireland employer universe."""
@@ -315,9 +274,7 @@ def _build_company_registry_base(include_cache: bool = False):
         # Verified healthy-zero Workday companies are retained in the
         # registry even though they are excluded from the active scrape batch.
         "Deutsche Bank": "workday",
-        "Infosys": "direct",
-        "PTSB (Permanent TSB)": "direct",
-        "Unilever Ireland": "workday",
+        "Unilever": "workday",
         "Visa": "workday",
         "NVIDIA": "workday",
         "Accenture": "direct",
@@ -343,32 +300,10 @@ def _build_company_registry_base(include_cache: bool = False):
         "Keelvar": "personio",
         "Cohesity": "workday",
         "Coca-Cola": "workday",
-
-        # Independently verified official sources currently returning
-        # zero Republic of Ireland vacancies. These are not manual sources.
-        "FactSet": "official-verified-zero",
-        "Morningstar": "official-verified-zero",
-        "Nokia": "direct",
-        "Seagate": "official-verified-zero",
-        "Siemens Healthineers": "workday",
-        "Texas Instruments": "official-verified-zero",
-
-        # Dedicated official collectors.
-        "Teva Pharmaceuticals": "direct",
-        "Amgen": "direct",
-        "Novartis": "direct",
-        "Waystone": "direct",
-        "WuXi Biologics": "direct",
     }
     status_by_key.update({_company_key(k): v for k, v in explicit_status_aliases.items()})
     for mapping in connector_maps:
         status_by_key.update(mapping)
-
-
-    # Stale/unvalidated ATS mappings: keep these manual until an official
-    # machine-readable vacancy backend is independently validated.
-    for company in ():
-        status_by_key[_company_key(company)] = "manual-check"
 
     # Confirmed dynamic ATS mappings discovered in previous runs. Hard-coded
     # mappings remain authoritative; cache only fills companies that otherwise
@@ -561,7 +496,24 @@ CONNECTOR_HEALTH = {}
 # A company enters "Live source · 0 jobs" only after the official board has
 # been manually/independently verified as healthy and genuinely empty.
 # Do NOT infer healthy-zero merely from an HTTP 200 response.
-VERIFIED_LIVE_ZERO_COMPANIES = set(KNOWN_HEALTHY_ZERO_COMPANIES)
+VERIFIED_LIVE_ZERO_COMPANIES = {
+    "Infosys",
+    "ASL Aviation Holdings",
+    "Central Bank of Ireland",
+    "LetsGetChecked",
+    "Bayer",
+    "BT Ireland",
+    "Catalent",
+    "Charles River Laboratories",
+    "Cloudflare",
+    "DXC Technology",
+    "Eaton",
+    "Fenergo",
+    "Qualcomm",
+    "Red Hat",
+    "HSBC Ireland",
+    "CGI",
+}
 
 def _mark_connector_health(company, live=True, note=None, url=None):
     CONNECTOR_HEALTH[company] = {
@@ -577,8 +529,6 @@ def _mark_connector_health(company, live=True, note=None, url=None):
 # without failing the whole run; the dashboard then exposes it under
 # "Zero jobs scraped" for diagnosis.
 DIRECT_COMPANY_CONNECTORS = {
-    "Nokia": "nokia_official",
-    "Siemens Healthineers": "siemens_healthineers_workday",
     "Irish Rail (Iarnród Éireann)": "irish_rail",
     "Irish Life": "irish_life",
     "Forvis Mazars Ireland": "forvis_mazars",
@@ -722,35 +672,6 @@ DIRECT_COMPANY_CONNECTORS = {
     "SMBC Aviation Capital": "smbc_aviation_official",
     "Veeam": "greenhouse_official",
     "Chubb": "oracle_candidate_experience",
-
-    # Manual-search remediation batch.
-    "Teva Pharmaceuticals": "teva_eightfold_official",
-    "Amgen": "amgen_official",
-    "Novartis": "novartis_official",
-    "Waystone": "waystone_bamboohr_official",
-    "WuXi Biologics": "wuxi_official",
-    "Fidelity Investments": "fidelity_investments_ireland",
-    "FBD Insurance": "fbd_successfactors",
-    "Zurich Insurance": "zurich_successfactors",
-    "TransferMate": "transfermate_official",
-    "Introba": "priority_generic",
-    "ActionPoint": "priority_generic",
-    "Avanade": "priority_generic",
-    "Ekco": "priority_generic",
-    "Fujitsu": "priority_generic",
-    "Integrity360": "priority_generic",
-    "Noesis": "priority_generic",
-    "Akamai": "priority_generic",
-    "AirNav Ireland": "priority_generic",
-    "Alkermes": "priority_generic",
-    "Amundi": "priority_generic",
-    "An Post": "priority_generic",
-    "Aviva Ireland": "priority_generic",
-    "ASML": "priority_generic",
-    "ARYZTA Ireland": "priority_generic",
-    "Storm Technology": "priority_generic",
-    "Ergo": "priority_generic",
-    "Expleo Ireland": "priority_generic",
 }
 
 # Official Irish university vacancy boards use a shared collector.
@@ -2416,11 +2337,21 @@ def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages
     def add_jobs(postings):
         for job in postings:
             title, location = ireland_posting(job)
+            path = job.get("externalPath") or ""
+            if path and re.fullmatch(r"\d+\s+Locations?", location, re.I):
+                try:
+                    detail = session.get(f"{origin}/wday/cxs/{tenant}/{site}{path}", headers=headers, timeout=20)
+                    detail.raise_for_status()
+                    info = detail.json().get("jobPostingInfo") or {}
+                    locations = [info.get("location", "")] + (info.get("additionalLocations") or [])
+                    locations = [x.get("location", "") if isinstance(x, dict) else str(x) for x in locations]
+                    location = "; ".join(x for x in locations if region_ok(x) and not re.search(r"\bN\.?\s*Ireland\b", x, re.I))
+                except Exception:
+                    continue
 
             if not title or not region_ok(location):
                 continue
 
-            path = job.get("externalPath") or ""
             url = (
                 f"{origin}/{site}{path}"
                 if path
@@ -2629,38 +2560,17 @@ def scrape_recruitee(slug: str):
 
 
 def scrape_personio(slug: str):
-    url = f"https://{slug}.jobs.personio.com/xml?language=en"
-    headers = {"User-Agent": "Mozilla/5.0 (job-dashboard-bot)"}
-    xml_text = None
-    last_error = None
-
-    if requests is not None:
+    xml_text = ""
+    for domain in ("de", "com"):
+        url = f"https://{slug}.jobs.personio.{domain}/xml?language=en"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (job-dashboard-bot)"})
         try:
-            resp = requests.get(url, headers=headers, timeout=20)
-            resp.raise_for_status()
-            xml_text = resp.text
-        except Exception as e:
-            last_error = e
-
-    if xml_text is None and cffi_requests is not None:
-        try:
-            resp = cffi_requests.get(url, headers=headers, timeout=20)
-            if resp.status_code >= 400:
-                raise RuntimeError(f"HTTP {resp.status_code}")
-            xml_text = resp.text
-        except Exception as e:
-            last_error = e
-
-    if xml_text is None:
-        try:
-            req = urllib.request.Request(url, headers=headers)
             with urllib.request.urlopen(req, timeout=20) as resp:
                 xml_text = resp.read().decode("utf-8")
-        except Exception as e:
-            last_error = e
-
-    if xml_text is None:
-        print(f"  ! fetch failed for {url}: {last_error}")
+            break
+        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
+            print(f"  ! fetch failed for {url}: {e}")
+    if not xml_text:
         return []
 
     out = []
@@ -2668,25 +2578,12 @@ def scrape_personio(slug: str):
         block = m.group(1)
 
         def field(name):
-            fm = (
-                re.search(
-                    rf"<{name}><!\[CDATA\[(.*?)\]\]></{name}>",
-                    block,
-                    re.DOTALL,
-                )
-                or re.search(
-                    rf"<{name}>(.*?)</{name}>",
-                    block,
-                    re.DOTALL,
-                )
-            )
+            fm = re.search(rf"<{name}><!\[CDATA\[(.*?)\]\]></{name}>", block, re.DOTALL) \
+                 or re.search(rf"<{name}>(.*?)</{name}>", block, re.DOTALL)
             return fm.group(1).strip() if fm else ""
 
         title = field("name")
-        location = ", ".join(
-            filter(None, [field("office"), field("city")])
-        )
-
+        location = ", ".join(filter(None, [field("office"), field("city")]))
         if region_ok(location):
             out.append({
                 "company": slug,
@@ -2696,8 +2593,9 @@ def scrape_personio(slug: str):
                 "url": field("careerSiteUrl") or None,
                 "updated_at": field("createdAt"),
             })
-
     return out
+
+
 
 def scrape_pinpoint(slug: str):
     data = fetch_json(f"https://{slug}.pinpointhq.com/postings.json")
@@ -2803,11 +2701,10 @@ def _careers_page_ats_candidates(company: str, careers_url: str, sess):
         return []
     try:
         r = sess.get(careers_url, timeout=15, allow_redirects=True)
-        if r.status_code >= 400:
-            return []
-        text = (r.text or "") + "\n" + str(r.url or "")
+        text = (r.text or "") if r.status_code < 400 else ""
+        text += "\n" + str(r.url or "") + "\n" + careers_url
     except Exception:
-        return []
+        text = careers_url
 
     patterns = [
         ("greenhouse", r"(?:boards|job-boards)\.greenhouse\.io/([A-Za-z0-9_-]+)"),
@@ -2823,11 +2720,19 @@ def _careers_page_ats_candidates(company: str, careers_url: str, sess):
 
     out = []
     seen = set()
+    refnum = re.search(r'"refNum"\s*:\s*"([A-Za-z0-9_-]+)"', text)
+    base_domain = re.search(r'"baseDomain"\s*:\s*"https://([^"\\]+)"', text)
+    if refnum and base_domain:
+        out.append(("phenom", f"{base_domain.group(1).rstrip('/')}|{refnum.group(1)}"))
+    for match in re.finditer(r"(?:boards|job-boards)\.greenhouse\.io/embed/job_board(?:/js)?\?[^\s\"'<>]*?for=([A-Za-z0-9_-]+)", text, re.I):
+        slug = match.group(1)
+        out.append(("greenhouse", slug))
+        seen.add(("greenhouse", slug.lower()))
 
     # Workday needs tenant + wd host + site rather than one slug.
     # Encode it as tenant|wd-host|site for the common cached-mapping interface.
     workday_patterns = [
-        r"https?://([A-Za-z0-9_-]+)\.(wd\d+|wd5|wd3|wd1|wd2)\.myworkdayjobs\.com/([A-Za-z0-9_-]+)",
+        r"https?://([A-Za-z0-9_-]+)\.(wd\d+|wd5|wd3|wd1|wd2)\.myworkdayjobs\.com/(?:[a-z]{2}-[A-Z]{2}/)?([A-Za-z0-9_-]+)",
         r"/wday/cxs/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/jobs",
     ]
     # Full public Workday URL.
@@ -2859,7 +2764,7 @@ def _careers_page_ats_candidates(company: str, careers_url: str, sess):
         for m in re.finditer(pattern, text, re.I):
             slug = m.group(1).strip()
             key = (platform, slug.lower())
-            if not slug or key in seen:
+            if not slug or (platform == "greenhouse" and slug == "embed") or key in seen:
                 continue
             seen.add(key)
             out.append((platform, slug))
@@ -2923,8 +2828,11 @@ def _probe_platform(platform: str, slug: str, sess, allow_empty: bool = False) -
             d=r.json() if r.status_code == 200 else {}
             return r.status_code == 200 and isinstance(d, dict) and "offers" in d
         if platform == "personio":
-            r=sess.get(f"https://{slug}.jobs.personio.com/xml?language=en", timeout=10)
-            return r.status_code == 200 and ("<position" in r.text or "<workzag-jobs" in r.text)
+            for domain in ("de", "com"):
+                r=sess.get(f"https://{slug}.jobs.personio.{domain}/xml?language=en", timeout=10)
+                if r.status_code == 200 and ("<position" in r.text or "<workzag-jobs" in r.text):
+                    return True
+            return False
         if platform == "pinpoint":
             r=sess.get(f"https://{slug}.pinpointhq.com/postings.json", timeout=10)
             if r.status_code != 200: return False
@@ -3022,7 +2930,7 @@ def _scrape_cached_mapping(company: str, platform: str, slug: str, sess):
             if not slug or slug.count("|") != 2:
                 return []
             tenant, wd_host, site = slug.split("|", 2)
-            jobs = scrape_workday(company, tenant, wd_host, site, search_text="Ireland")
+            jobs = scrape_workday(company, tenant, wd_host, site)
         elif platform == "greenhouse": jobs=scrape_greenhouse(slug)
         elif platform == "lever": jobs=scrape_lever(slug)
         elif platform == "smartrecruiters": jobs=scrape_smartrecruiters(slug)
@@ -3477,232 +3385,67 @@ def scrape_jooble(keywords: str, location: str = ""):
 
 
 def scrape_amazon(query: str):
+    """Fetch Amazon Ireland jobs directly.
+
+    The old implementation requested only the first 50 GLOBAL Amazon jobs and
+    then filtered for Ireland. That can easily return zero even while Amazon
+    has many Dublin/Cork vacancies. Use Amazon's Ireland location parameters
+    and paginate instead.
     """
-    Fetch current Republic-of-Ireland vacancies from Amazon Jobs.
+    out = []
+    seen = set()
+    limit = 100
 
-    Important:
-    - search Ireland directly instead of sampling global results
-    - paginate
-    - tolerate Amazon's different Ireland location strings
-    - never turn a request failure into a trustworthy zero
-    """
-    company = "Amazon"
-    source = "https://www.amazon.jobs/en/search?country%5B%5D=IRL"
+    for offset in range(0, 600, limit):
+        params = {
+            "base_query": query or "",
+            "loc_query": "Ireland",
+            "country": "IRL",
+            "result_limit": limit,
+            "offset": offset,
+        }
+        url = "https://www.amazon.jobs/en/search.json?" + urllib.parse.urlencode(params)
+        data = fetch_json(url)
+        if not data or "jobs" not in data:
+            break
 
-    import urllib.parse
+        jobs = data.get("jobs") or []
+        if not jobs:
+            break
 
-    results = {}
-    offset = 0
-    page_size = 100
-    pages_ok = 0
+        added_this_page = 0
+        for j in jobs:
+            title = j.get("title", "")
+            location = j.get("normalized_location", "") or j.get("location", "")
+            # Amazon often uses Dublin, D, IRL; region_ok handles IRL/Ireland.
+            if not region_ok(location):
+                continue
 
-    try:
-        while offset < 5000:
-            params = {
-                "offset": offset,
-                "result_limit": page_size,
-                "sort": "recent",
-                "country[]": "IRL",
-            }
+            path = j.get("job_path", "")
+            job_id = str(j.get("id_icims") or j.get("id") or path or "")
+            key = job_id or (title.lower(), location.lower())
+            if key in seen:
+                continue
+            seen.add(key)
 
-            if query:
-                params["base_query"] = query
+            out.append({
+                "company": "Amazon",
+                "ats": "direct",
+                "title": title,
+                "location": location,
+                "url": f"https://www.amazon.jobs{path}" if path else None,
+                "updated_at": j.get("posted_date"),
+                "description_text": j.get("description") or j.get("basic_qualifications") or "",
+                "requisition_id": job_id or None,
+            })
+            added_this_page += 1
 
-            url = (
-                "https://www.amazon.jobs/en/search.json?"
-                + urllib.parse.urlencode(params, doseq=True)
-            )
+        # Stop when the endpoint returns less than a full page.
+        if len(jobs) < limit:
+            break
 
-            data = fetch_json(url)
+    return out
 
-            if not isinstance(data, dict):
-                raise RuntimeError(
-                    "Amazon search returned an unexpected response"
-                )
-
-            pages_ok += 1
-
-            raw_jobs = (
-                data.get("jobs")
-                or data.get("search_results")
-                or []
-            )
-
-            if not raw_jobs:
-                break
-
-            for j in raw_jobs:
-                title = str(
-                    j.get("title")
-                    or j.get("job_title")
-                    or ""
-                ).strip()
-
-                location = str(
-                    j.get("location")
-                    or j.get("location_name")
-                    or j.get("normalized_location")
-                    or ""
-                ).strip()
-
-                country = str(
-                    j.get("country")
-                    or j.get("country_code")
-                    or ""
-                ).strip()
-
-                loc = " ".join(
-                    x for x in (location, country) if x
-                )
-
-                # Amazon commonly returns strings such as:
-                # "IRL, Dublin"
-                # "Dublin, D, IRL"
-                # "Cork, Ireland"
-                # Amazon's country=IRL search can occasionally leak
-                # results from other countries. Require positive ROI
-                # evidence from the job itself rather than trusting the
-                # search query.
-                loc_upper = loc.upper()
-
-                explicit_roi = (
-                    country.upper() in {"IE", "IRL", "IRELAND"}
-                    or bool(
-                        re.search(
-                            r"(^|[,\\s])(IE|IRL|IRELAND)([,\\s]|$)",
-                            loc,
-                            re.I,
-                        )
-                    )
-                    or "DUBLIN" in loc_upper
-                    or "CORK" in loc_upper
-                    or "GALWAY" in loc_upper
-                    or "LIMERICK" in loc_upper
-                    or "WATERFORD" in loc_upper
-                )
-
-                explicit_foreign = bool(
-                    re.search(
-                        r"(^|[,\\s])(FR|UK|GB|DE|ES|IT|NL|PL|SE|US|CA)"
-                        r"([,\\s]|$)",
-                        loc,
-                        re.I,
-                    )
-                )
-
-                roi = (
-                    explicit_roi
-                    and not explicit_foreign
-                    and region_ok(loc)
-                )
-
-                if not roi:
-                    continue
-
-                job_id = str(
-                    j.get("id")
-                    or j.get("job_id")
-                    or j.get("jobId")
-                    or ""
-                ).strip()
-
-                path = str(
-                    j.get("job_path")
-                    or j.get("url")
-                    or j.get("job_url")
-                    or ""
-                ).strip()
-
-                if path.startswith("/"):
-                    job_url = "https://www.amazon.jobs" + path
-                elif path.startswith("http"):
-                    job_url = path
-                elif job_id:
-                    job_url = (
-                        f"https://www.amazon.jobs/en/jobs/{job_id}"
-                    )
-                else:
-                    continue
-
-                if not title:
-                    continue
-
-                key = job_id or job_url
-
-                results[key] = {
-                    "company": company,
-                    "ats": "amazon",
-                    "title": title,
-                    "location": location or "Ireland",
-                    "url": job_url,
-                    "updated_at": (
-                        j.get("updated_at")
-                        or j.get("posted_date")
-                        or j.get("postedDate")
-                    ),
-                    "description_text": str(
-                        j.get("description")
-                        or j.get("description_short")
-                        or ""
-                    )[:5000],
-                }
-
-            total = (
-                data.get("hits")
-                or data.get("total")
-                or data.get("total_results")
-            )
-
-            offset += len(raw_jobs)
-
-            if len(raw_jobs) < page_size:
-                break
-
-            if total is not None:
-                try:
-                    if offset >= int(total):
-                        break
-                except (TypeError, ValueError):
-                    pass
-
-        if pages_ok == 0:
-            raise RuntimeError("Amazon search returned no readable pages")
-
-        try:
-            _mark_connector_health(
-                company,
-                True,
-                (
-                    f"Amazon official Ireland search scanned "
-                    f"{pages_ok} page(s); "
-                    f"{len(results)} Ireland jobs"
-                ),
-                source,
-            )
-        except NameError:
-            pass
-
-        print(
-            f"  Amazon official Ireland careers: "
-            f"{len(results)} jobs"
-        )
-
-        return list(results.values())
-
-    except Exception as exc:
-        try:
-            _mark_connector_health(
-                company,
-                False,
-                f"Amazon official Ireland source failed: {exc}",
-                source,
-            )
-        except NameError:
-            pass
-
-        raise RuntimeError(
-            f"Amazon official Ireland source failed: {exc}"
-        ) from exc
 
 def scrape_netflix(query: str):
     url = (
@@ -5118,6 +4861,14 @@ def scrape_meta():
     )
 
 
+def scrape_tiktok():
+    return _scrape_public_careers_page(
+        "TikTok",
+        "https://careers.tiktok.com/position?keyword=&location=Dublin%2C+Ireland",
+        ("/position/", "position/detail", "/jobs/"),
+    )
+
+
 
 def _browser_board_collect_uncached(company, urls, href_patterns, default_location="Ireland", max_scrolls=20,
                            require_ireland=True, source_tag="direct"):
@@ -5243,389 +4994,98 @@ def _browser_board_collect(company, urls, href_patterns, default_location="Irela
     return jobs
 
 
-
-
 def scrape_tiktok():
-    """
-    Collect current Republic-of-Ireland vacancies from LifeAtTikTok.
-
-    The LifeAtTikTok search page renders job links dynamically and its result
-    cards are not stable enough to use as the authoritative location signal.
-    Collect rendered job-detail URLs first, then validate each detail page.
-    """
-    company = "TikTok"
-    source_url = "https://lifeattiktok.com/search/?language=en"
-
+    # LifeAtTikTok does not populate job links until a search is submitted.
     if not HAS_PLAYWRIGHT:
-        _mark_connector_health(
-            company,
-            False,
-            "LifeAtTikTok requires Playwright; Playwright unavailable",
-            source_url,
-        )
         print("  ! TikTok: Playwright unavailable")
         return []
-
     results = {}
-    detail_urls = set()
-
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            context = browser.new_context(
-                locale="en-IE",
-                viewport={"width": 1440, "height": 1200},
-            )
-
-            page = context.new_page()
-
-            response = page.goto(
-                source_url,
-                wait_until="domcontentloaded",
-                timeout=60000,
-            )
-
-            if response is not None and response.status >= 400:
-                raise RuntimeError(
-                    f"LifeAtTikTok search returned HTTP {response.status}"
-                )
-
-            page.wait_for_timeout(1800)
+            page = browser.new_page(viewport={"width": 1440, "height": 1100}, locale="en-IE")
+            page.goto("https://lifeattiktok.com/search/?language=en", wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_timeout(1400)
             _dismiss_cookie_banner(page)
-
+            # Suman's working path: use the site's real search field, then collect rendered /search/<id> links.
             submitted = False
-
-            for pattern in (
-                r"Enter Title, Skill, or City",
-                r"Enter Title, Skill, or Location",
-                r"Title, Skill",
-            ):
+            for pattern in (r"Enter Title, Skill, or City", r"Enter Title, Skill, or Location", r"Title, Skill"):
                 try:
-                    inp = page.get_by_placeholder(
-                        re.compile(pattern, re.I)
-                    )
-
-                    if not inp.count():
-                        continue
-
-                    inp.first.fill("Dublin", timeout=2000)
-
-                    try:
-                        page.get_by_role(
-                            "button",
-                            name=re.compile(r"Search", re.I),
-                        ).first.click(timeout=2000)
-                    except Exception:
-                        inp.first.press("Enter", timeout=2000)
-
-                    submitted = True
-                    break
-
+                    inp = page.get_by_placeholder(re.compile(pattern, re.I))
+                    if inp.count():
+                        inp.first.fill("Dublin", timeout=1500)
+                        try:
+                            page.get_by_role("button", name=re.compile(r"Search", re.I)).first.click(timeout=1500)
+                        except Exception:
+                            inp.first.press("Enter", timeout=1500)
+                        submitted = True
+                        break
                 except Exception:
-                    continue
-
-            if not submitted:
-                raise RuntimeError(
-                    "LifeAtTikTok search field could not be submitted"
-                )
-
-            page.wait_for_timeout(2500)
-
-            stagnant = 0
-            previous_count = -1
-
-            for _ in range(80):
+                    pass
+            if submitted:
+                page.wait_for_timeout(1800)
+            stagnant = previous = 0
+            for _ in range(100):
                 anchors = page.locator("a[href]")
-
                 for i in range(anchors.count()):
+                    a = anchors.nth(i)
                     try:
-                        href = urllib.parse.urljoin(
-                            page.url,
-                            anchors.nth(i).get_attribute("href") or "",
-                        )
+                        href = urllib.parse.urljoin(page.url, a.get_attribute("href") or "")
                     except Exception:
                         continue
-
-                    m = re.search(
-                        r"^https?://(?:www\.)?lifeattiktok\.com/"
-                        r"search/(\d+)(?:[/?#].*)?$",
-                        href,
-                        re.I,
-                    )
-
-                    if not m:
+                    if not re.search(r"lifeattiktok\.com/search/\d+", href, re.I) or href in results:
                         continue
-
-                    canonical = (
-                        f"https://lifeattiktok.com/search/{m.group(1)}"
-                    )
-                    detail_urls.add(canonical)
-
-                for label in (
-                    "Load more",
-                    "Show more",
-                    "See more",
-                    "More jobs",
-                ):
-                    try:
-                        btn = page.get_by_role(
-                            "button",
-                            name=label,
-                            exact=False,
-                        )
-
-                        if btn.count() and btn.first.is_visible():
-                            btn.first.click(timeout=1500)
-                            page.wait_for_timeout(900)
-                            break
-                    except Exception:
-                        continue
-
-                page.mouse.wheel(0, 3500)
-                page.wait_for_timeout(650)
-
-                current_count = len(detail_urls)
-
-                if current_count == previous_count:
-                    stagnant += 1
-                else:
-                    stagnant = 0
-
-                previous_count = current_count
-
-                if stagnant >= 8:
-                    break
-
-            print(
-                f"  TikTok search discovered "
-                f"{len(detail_urls)} candidate detail URLs"
-            )
-
-            for href in sorted(detail_urls):
-                detail = context.new_page()
-
-                try:
-                    resp = detail.goto(
-                        href,
-                        wait_until="domcontentloaded",
-                        timeout=45000,
-                    )
-
-                    if resp is not None and resp.status >= 400:
-                        continue
-
-                    detail.wait_for_timeout(500)
-
-                    body = detail.locator("body").inner_text(
-                        timeout=10000
-                    )
-                    body = re.sub(r"\r", "", body or "")
-
-                    title = ""
-
-                    try:
-                        title = detail.locator("h1").first.inner_text(
-                            timeout=2500
-                        ).strip()
-                    except Exception:
-                        pass
-
-                    if not title:
+                    title = _browser_text(a)
+                    node, card = a, ""
+                    for _up in range(6):
                         try:
-                            title = detail.locator("h2").first.inner_text(
-                                timeout=1500
-                            ).strip()
+                            node = node.locator("..")
+                            cand = _browser_text(node)
                         except Exception:
-                            pass
-
-                    if not title:
-                        try:
-                            title = detail.title()
-                        except Exception:
-                            title = ""
-
-                    title = re.sub(r"\s+", " ", title).strip()
-
-                    location = ""
-
-                    location_patterns = (
-                        r"Location:\s*\n?\s*([^\n]+)",
-                        r"\bLocation\s*[:\-]\s*([^\n]+)",
-                    )
-
-                    for pattern in location_patterns:
-                        lm = re.search(pattern, body, re.I)
-
-                        if lm:
-                            location = re.sub(
-                                r"\s+",
-                                " ",
-                                lm.group(1),
-                            ).strip()
                             break
-
-                    evidence = f"{title}\n{location}\n{body[:3000]}"
-
-                    if re.search(
-                        r"\b(?:Belfast|Northern Ireland)\b",
-                        evidence,
-                        re.I,
-                    ):
+                        if cand and len(cand) <= 2400:
+                            card = cand
+                        if re.search(r"Dublin|Ireland", card, re.I):
+                            break
+                    if not title or len(title) > 320:
+                        lines = [x.strip() for x in card.splitlines() if 4 < len(x.strip()) <= 280]
+                        title = lines[0] if lines else ""
+                    evidence = f"{title} {card} {href}"
+                    if not title or not re.search(r"Dublin|Ireland", evidence, re.I):
                         continue
-
+                    raw_location = _browser_location(card, "")
                     if not re.search(
-                        r"\b(?:Dublin|Cork|Galway|Limerick|Waterford|"
-                        r"Kilkenny|Athlone|Kildare|Leixlip|Dundalk|"
-                        r"Shannon|Ireland)\b",
-                        f"{title}\n{location}",
+                        r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford|Kilkenny|Athlone)\b",
+                        raw_location,
                         re.I,
                     ):
                         continue
-
-                    if not location:
-                        if re.search(r"\bDublin\b", title, re.I):
-                            location = "Dublin, Ireland"
-                        elif re.search(r"\bCork\b", title, re.I):
-                            location = "Cork, Ireland"
-                        else:
-                            location = "Ireland"
-
-                    # Guard against SPA state contamination. The rendered
-                    # detail text should identify the same vacancy as its h1/h2.
-                    # If it does not, keep the validated title/location/URL but
-                    # do not attach another vacancy's body text.
-                    # LifeAtTikTok is an SPA. body.inner_text() includes global
-                    # navigation and may include stale state from another vacancy.
-                    # Store only text from a job-local container that contains
-                    # evidence belonging to this vacancy. If none is trustworthy,
-                    # leave description empty rather than attach contaminated text.
-                    description = ""
-
-                    title_tokens = [
-                        token.lower()
-                        for token in re.findall(r"[A-Za-z0-9]+", title)
-                        if len(token) >= 5
-                        and token.lower() not in {
-                            "dublin",
-                            "ireland",
-                            "regular",
-                            "specialist",
-                            "manager",
-                            "engineer",
-                        }
-                    ]
-
-                    for selector in (
-                        "main",
-                        "article",
-                        '[class*="job-detail" i]',
-                        '[class*="jobDetail" i]',
-                        '[class*="description" i]',
-                    ):
-                        try:
-                            candidates = detail.locator(selector)
-
-                            for candidate_index in range(
-                                min(candidates.count(), 8)
-                            ):
-                                candidate_text = re.sub(
-                                    r"\\s+",
-                                    " ",
-                                    candidates.nth(
-                                        candidate_index
-                                    ).inner_text(timeout=1500),
-                                ).strip()
-
-                                if len(candidate_text) < 80:
-                                    continue
-
-                                if title_tokens and not any(
-                                    re.search(
-                                        rf"\\b{re.escape(token)}\\b",
-                                        candidate_text,
-                                        re.I,
-                                    )
-                                    for token in title_tokens[:6]
-                                ):
-                                    continue
-
-                                # Reject the known global LifeAtTikTok shell.
-                                shell_head = candidate_text[:900]
-
-                                if (
-                                    candidate_text.startswith(
-                                        "#LifeAtTikTok Teams How we hire Locations "
-                                        "Early Careers Blog Jobs Apply Company"
-                                    )
-                                    or (
-                                        "Teams How we hire Locations Early Careers"
-                                        in shell_head
-                                        and "Company About TikTok Newsroom"
-                                        in shell_head
-                                    )
-                                ):
-                                    continue
-
-                                description = candidate_text[:5000]
-                                break
-
-                            if description:
-                                break
-
-                        except Exception:
-                            pass
 
                     results[href] = {
-                        "company": company,
+                        "company": "TikTok",
                         "ats": "direct",
                         "title": title[:300],
-                        "raw_location": location[:200],
-                        "location": location[:200],
+                        "raw_location": raw_location,
+                        "location": raw_location,
                         "url": href,
                         "updated_at": None,
-                        "description_text": description,
+                        "description_text": card[:5000],
                     }
-
-                except Exception as exc:
-                    print(
-                        f"  ! TikTok detail failed "
-                        f"{href}: {exc}"
-                    )
-
-                finally:
+                for label in ("Load more", "Show more", "See more", "More jobs"):
                     try:
-                        detail.close()
+                        btn = page.get_by_role("button", name=label, exact=False)
+                        if btn.count() and btn.first.is_visible():
+                            btn.first.click(timeout=1200); page.wait_for_timeout(600); break
                     except Exception:
                         pass
-
-            context.close()
+                page.mouse.wheel(0, 3200); page.wait_for_timeout(450)
+                cur = len(results); stagnant = stagnant + 1 if cur == previous else 0; previous = cur
+                if stagnant >= 7:
+                    break
+            print(f"  TikTok browser: {len(results)} unique Ireland jobs accumulated")
             browser.close()
-
     except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"LifeAtTikTok search failed: {exc}",
-            source_url,
-        )
         print(f"  ! TikTok browser scrape failed: {exc}")
-        return []
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            f"Official LifeAtTikTok search completed; "
-            f"{len(results)} Republic-of-Ireland jobs returned"
-        ),
-        source_url,
-    )
-
-    print(
-        f"  TikTok official Ireland careers: "
-        f"{len(results)} jobs"
-    )
-
     return list(results.values())
 
 def scrape_netapp():
@@ -7908,112 +7368,6 @@ def scrape_smbc_group():
 
 
 
-
-def scrape_nokia():
-    """Nokia Ireland from the official Oracle Candidate Experience board.
-
-    Nokia's careers front end is Oracle Recruiting Cloud behind jobs.nokia.com.
-    Use the rendered Ireland-filtered board because the Oracle location facet IDs
-    can change independently of the public site URL.
-    """
-    company = "Nokia"
-    urls = [
-        "https://jobs.nokia.com/en/sites/CX_1/jobs?location=Ireland&mode=location",
-        "https://jobs.nokia.com/en/sites/CX_1/requisitions?location=Ireland&mode=location",
-    ]
-    jobs = _browser_board_collect(
-        company,
-        urls,
-        ("/job/", "/requisitions/"),
-        default_location="Ireland",
-        max_scrolls=30,
-        require_ireland=False,
-        source_tag="oracle",
-    )
-    # These URLs are explicitly Ireland-filtered; normalize missing/coded locations
-    # to Ireland rather than discarding otherwise valid official requisitions.
-    out = []
-    seen = set()
-    for job in jobs or []:
-        title = str(job.get("title") or "").strip()
-        url = str(job.get("url") or "").strip()
-        if not title or not url:
-            continue
-        key = url.split("?")[0].rstrip("/").lower()
-        if key in seen:
-            continue
-        seen.add(key)
-        job["company"] = company
-        job["ats"] = "oracle"
-        loc = str(job.get("location") or "").strip()
-        if not region_ok(loc):
-            job["location"] = "Ireland"
-        out.append(job)
-    if out:
-        _mark_connector_health(company, True, f"Official Nokia Ireland board returned {len(out)} jobs", urls[0])
-    print(f"  Nokia official Ireland careers: {len(out)} jobs")
-    return out
-
-
-def scrape_siemens_healthineers():
-    """Siemens Healthineers Ireland via its official Workday tenant."""
-    company = "Siemens Healthineers"
-    jobs = scrape_workday(
-        company,
-        "onehealthineers",
-        "wd3",
-        "SHSJB",
-        max_pages=50,
-        search_text="Ireland",
-    )
-    if jobs:
-        _mark_connector_health(
-            company,
-            True,
-            f"Official Siemens Healthineers Workday returned {len(jobs)} Ireland jobs",
-            "https://onehealthineers.wd3.myworkdayjobs.com/SHSJB",
-        )
-        return jobs
-
-    # Workday tenants occasionally expose opaque site-location labels. Fall back
-    # to the official rendered board and trust only links from that tenant.
-    rows = _browser_board_collect(
-        company,
-        [
-            "https://onehealthineers.wd3.myworkdayjobs.com/en-US/SHSJB?q=Ireland",
-            "https://onehealthineers.wd3.myworkdayjobs.com/SHSJB?q=Ireland",
-        ],
-        ("/job/",),
-        default_location="Ireland",
-        max_scrolls=25,
-        require_ireland=False,
-        source_tag="workday",
-    )
-    out = []
-    seen = set()
-    for job in rows or []:
-        title = str(job.get("title") or "").strip()
-        url = str(job.get("url") or "").strip()
-        blob = f"{title} {job.get('location','')} {job.get('description_text','')}"
-        # The query itself is Ireland, but retain an Ireland signal when the
-        # rendered card provides one; otherwise the official search result is
-        # still accepted with an Ireland-normalized location.
-        if not title or not url:
-            continue
-        key = url.split("?")[0].rstrip("/").lower()
-        if key in seen:
-            continue
-        seen.add(key)
-        job["company"] = company
-        job["ats"] = "workday"
-        if not region_ok(str(job.get("location") or "")):
-            job["location"] = "Ireland"
-        out.append(job)
-    if out:
-        _mark_connector_health(company, True, f"Official Siemens Healthineers board returned {len(out)} jobs", "https://onehealthineers.wd3.myworkdayjobs.com/SHSJB")
-    print(f"  Siemens Healthineers official Ireland careers: {len(out)} jobs")
-    return out
-
 def scrape_deutsche_bank():
     company = "Deutsche Bank"
 
@@ -8024,7 +7378,6 @@ def scrape_deutsche_bank():
         "wd3",
         "DBWebsite",
         max_pages=40,
-        search_text="Ireland",
     )
 
     # Hard-validate Ireland in case Workday's global board leaks other locations.
@@ -8158,12 +7511,6 @@ def scrape_hcltech():
     )
 
     if not HAS_PLAYWRIGHT:
-        _mark_connector_health(
-            company,
-            False,
-            "Official HCLTech Ireland careers requires Playwright; Playwright unavailable",
-            source,
-        )
         print("  ! HCLTech: Playwright unavailable")
         return []
 
@@ -8183,47 +7530,10 @@ def scrape_hcltech():
             )
 
             page = context.new_page()
-            response = page.goto(
-                source,
-                wait_until="domcontentloaded",
-                timeout=90000,
-            )
-
-            if response is not None and response.status >= 400:
-                raise RuntimeError(
-                    f"HCLTech Ireland careers returned HTTP {response.status}"
-                )
-
+            page.goto(source, wait_until="domcontentloaded", timeout=90000)
             page.wait_for_timeout(4000)
 
-            # Avature may populate the filtered result list after the
-            # initial DOMContentLoaded event. Scroll the result surface before
-            # taking the anchor snapshot so a temporarily sparse DOM cannot be
-            # mistaken for a genuine zero-vacancy board.
-            previous_job_links = -1
-            stagnant = 0
-
-            for _ in range(30):
-                current_job_links = page.locator(
-                    'a[href*="/careers/JobDetail/"]'
-                ).count()
-
-                if current_job_links == previous_job_links:
-                    stagnant += 1
-                else:
-                    stagnant = 0
-
-                previous_job_links = current_job_links
-
-                if current_job_links > 0 and stagnant >= 3:
-                    break
-
-                page.mouse.wheel(0, 2800)
-                page.wait_for_timeout(500)
-
-            links = page.locator(
-                'a[href*="/careers/JobDetail/"]'
-            ).evaluate_all(
+            links = page.locator("a").evaluate_all(
                 """els => els.map(a => ({
                     href: a.href || "",
                     text: (a.innerText || a.textContent || "").trim()
@@ -8254,67 +7564,12 @@ def scrape_hcltech():
                 if not m:
                     continue
 
-                discovered[m.group(1)] = {
+                job_id = m.group(1)
+
+                discovered[job_id] = {
                     "title": title,
                     "href": href.split("#")[0],
                 }
-
-            # SuccessFactors occasionally serves the Ireland landing page
-            # without populating its result-list DOM even though live Ireland
-            # vacancy pages exist. If that happens, query the public careers
-            # search surface and recover canonical HCLTech job-detail URLs.
-            if not discovered:
-                try:
-                    search_page = context.new_page()
-                    search_page.goto(
-                        "https://careers.hcltech.com/search/?q=&locationsearch=Ireland",
-                        wait_until="domcontentloaded",
-                        timeout=90000,
-                    )
-                    search_page.wait_for_timeout(2500)
-
-                    for _ in range(20):
-                        search_page.mouse.wheel(0, 2500)
-                        search_page.wait_for_timeout(350)
-
-                    fallback_links = search_page.locator(
-                        'a[href*="/job/"]'
-                    ).evaluate_all(
-                        """els => els.map(a => ({
-                            href: a.href || "",
-                            text: (a.innerText || a.textContent || "").trim()
-                        }))"""
-                    )
-
-                    for item in fallback_links:
-                        href = str(item.get("href") or "").strip()
-                        title = re.sub(
-                            r"\s+",
-                            " ",
-                            str(item.get("text") or ""),
-                        ).strip()
-
-                        m = re.search(
-                            r"/(\d+)-en_US(?:$|[?#])",
-                            href,
-                            re.I,
-                        )
-
-                        if not m or not title:
-                            continue
-
-                        discovered[m.group(1)] = {
-                            "title": title,
-                            "href": href.split("#")[0],
-                        }
-
-                    search_page.close()
-
-                except Exception as exc:
-                    print(
-                        "  ! HCLTech fallback search failed: "
-                        f"{exc}"
-                    )
 
             for job_id, item in discovered.items():
                 title = item["title"]
@@ -8346,11 +7601,8 @@ def scrape_hcltech():
 
                 except Exception:
                     pass
-                finally:
-                    try:
-                        detail.close()
-                    except Exception:
-                        pass
+
+                detail.close()
 
                 results[job_id] = {
                     "company": company,
@@ -8362,40 +7614,17 @@ def scrape_hcltech():
                     "description_text": description,
                 }
 
-            context.close()
             browser.close()
 
     except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official HCLTech Ireland careers failed: {exc}",
-            source,
-        )
         print(f"  ! HCLTech scrape failed: {exc}")
-        return []
 
-    # Do not infer a verified zero merely because the careers page
-    # returned HTTP 200. SuccessFactors can render an empty initial DOM.
-    if discovered:
-        _mark_connector_health(
-            company,
-            True,
-            f"Official HCLTech Ireland careers completed; {len(results)} Republic-of-Ireland jobs returned",
-            source,
-        )
-    else:
-        _mark_connector_health(
-            company,
-            False,
-            "Official HCLTech Ireland careers loaded but no vacancy links were discovered; zero vacancies not trusted",
-            source,
-        )
+    print(
+        f"  HCLTech official Ireland careers: "
+        f"{len(results)} jobs"
+    )
 
-    print(f"  HCLTech official Ireland careers: {len(results)} jobs")
     return list(results.values())
-
-
 
 
 def scrape_hp():
@@ -8498,12 +7727,6 @@ def scrape_jacobs():
     )
 
     if not HAS_PLAYWRIGHT:
-        _mark_connector_health(
-            company,
-            False,
-            "Official Jacobs Ireland careers requires Playwright; Playwright unavailable",
-            source,
-        )
         print("  ! Jacobs: Playwright unavailable")
         return []
 
@@ -8520,49 +7743,14 @@ def scrape_jacobs():
 
             page = context.new_page()
 
-            response = page.goto(
+            page.goto(
                 source,
                 wait_until="domcontentloaded",
                 timeout=90000,
             )
-
-            if response is not None and response.status >= 400:
-                raise RuntimeError(
-                    f"Jacobs Ireland careers returned HTTP {response.status}"
-                )
-
             page.wait_for_timeout(4000)
 
-            # Avature populates filtered results client-side. Wait/scroll
-            # until the vacancy-link count stabilizes before snapshotting the
-            # result anchors. An empty initial DOM is not a trusted zero.
-            previous_job_links = -1
-            stagnant_job_links = 0
-
-            for _ in range(30):
-                current_job_links = page.locator(
-                    'a[href*="/careers/JobDetail/"]'
-                ).count()
-
-                if current_job_links == previous_job_links:
-                    stagnant_job_links += 1
-                else:
-                    stagnant_job_links = 0
-
-                previous_job_links = current_job_links
-
-                if (
-                    current_job_links > 0
-                    and stagnant_job_links >= 3
-                ):
-                    break
-
-                page.mouse.wheel(0, 2800)
-                page.wait_for_timeout(500)
-
-            links = page.locator(
-                'a[href*="/careers/JobDetail/"]'
-            ).evaluate_all(
+            links = page.locator("a").evaluate_all(
                 """els => els.map(a => ({
                     href: a.href || "",
                     text: (a.innerText || a.textContent || "").trim()
@@ -8589,6 +7777,7 @@ def scrape_jacobs():
                 if not title:
                     continue
 
+                # Exclude obvious Northern Ireland jobs.
                 if re.search(
                     r"\bBelfast\b|\bNorthern Ireland\b",
                     title,
@@ -8600,7 +7789,9 @@ def scrape_jacobs():
                 if not m:
                     continue
 
-                discovered[m.group(1)] = {
+                job_id = m.group(1)
+
+                discovered[job_id] = {
                     "title": title,
                     "href": href.split("#")[0],
                 }
@@ -8609,26 +7800,15 @@ def scrape_jacobs():
                 title = item["title"]
                 canonical = item["href"]
 
-                title_cities = [
-                    city
-                    for city in (
-                        "Dublin",
-                        "Cork",
-                        "Galway",
-                        "Limerick",
-                        "Waterford",
-                    )
-                    if re.search(rf"\b{city}\b", title, re.I)
-                ]
-
-                if len(title_cities) > 1:
-                    location = " / ".join(title_cities) + ", Ireland"
-                elif title_cities:
-                    location = f"{title_cities[0]}, Ireland"
-                else:
-                    location = "Ireland"
-
+                location = "Ireland"
                 description = ""
+
+                if re.search(r"\bDublin\b", title, re.I):
+                    location = "Dublin, Ireland"
+                elif re.search(r"\bCork\b", title, re.I):
+                    location = "Cork, Ireland"
+                elif re.search(r"\bGalway\b", title, re.I):
+                    location = "Galway, Ireland"
 
                 detail = context.new_page()
 
@@ -8645,41 +7825,20 @@ def scrape_jacobs():
                     )
                     description = body[:5000]
 
-                    if re.search(
-                        r"\bBelfast\b|\bNorthern Ireland\b",
-                        body,
-                        re.I,
-                    ) and not region_ok(title):
-                        continue
-
-                    # A city explicitly present in the vacancy title is more
-                    # specific than generic city references elsewhere in the
-                    # rendered detail page.
-                    if not title_cities:
-                        body_cities = [
-                            city
-                            for city in (
-                                "Dublin",
-                                "Cork",
-                                "Galway",
-                                "Limerick",
-                                "Waterford",
-                            )
-                            if re.search(rf"\b{city}\b", body, re.I)
-                        ]
-
-                        if len(body_cities) > 1:
-                            location = " / ".join(body_cities) + ", Ireland"
-                        elif body_cities:
-                            location = f"{body_cities[0]}, Ireland"
+                    # Improve location from detail content.
+                    if re.search(r"\bDublin\b", body, re.I):
+                        location = "Dublin, Ireland"
+                    elif re.search(r"\bCork\b", body, re.I):
+                        location = "Cork, Ireland"
+                    elif re.search(r"\bGalway\b", body, re.I):
+                        location = "Galway, Ireland"
+                    elif re.search(r"\bLimerick\b", body, re.I):
+                        location = "Limerick, Ireland"
 
                 except Exception:
                     pass
-                finally:
-                    try:
-                        detail.close()
-                    except Exception:
-                        pass
+
+                detail.close()
 
                 results[job_id] = {
                     "company": company,
@@ -8691,139 +7850,44 @@ def scrape_jacobs():
                     "description_text": description,
                 }
 
-            context.close()
             browser.close()
 
     except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official Jacobs Ireland careers failed: {exc}",
-            source,
-        )
         print(f"  ! Jacobs scrape failed: {exc}")
-        return []
 
-    # A rendered Avature board with discovered vacancy links is healthy.
-    # A zero-result DOM is not sufficient evidence of a genuine hiring zero:
-    # client-side rendering can fail independently of the HTTP navigation.
-    if discovered:
-        _mark_connector_health(
-            company,
-            True,
-            f"Official Jacobs Ireland careers completed; {len(results)} Republic-of-Ireland jobs returned",
-            source,
-        )
-    else:
-        _mark_connector_health(
-            company,
-            False,
-            "Official Jacobs Ireland careers loaded but no Avature vacancy links were discovered; zero vacancies not trusted",
-            source,
-        )
+    print(
+        f"  Jacobs official Ireland careers: "
+        f"{len(results)} jobs"
+    )
 
-    print(f"  Jacobs official Ireland careers: {len(results)} jobs")
     return list(results.values())
-
-
-
-
 
 
 def scrape_agilent():
     company = "Agilent Technologies"
-    source_url = (
-        "https://careers.agilent.com/locations/europe/ireland/"
-    )
-
     out = {}
-    successful_sites = 0
-    failed_sites = []
 
-    for site in (
-        "Agilent_Careers",
-        "Agilent_Student_Careers",
-    ):
-        try:
-            rows = scrape_workday(
-                company,
-                "agilent",
-                "wd5",
-                site,
-                max_pages=30,
-            )
-            successful_sites += 1
-
-        except Exception as exc:
-            failed_sites.append(
-                f"{site}: {exc}"
-            )
-            continue
-
-        for job in rows:
-            href = str(job.get("url") or "").strip()
-            title = str(job.get("title") or "").strip()
-            location = str(
-                job.get("location")
-                or job.get("raw_location")
-                or ""
-            ).strip()
-
-            if not href or not title:
-                continue
-
-            evidence = f"{title} {location}"
-
-            if re.search(
-                r"\b(?:Belfast|Northern Ireland)\b",
-                evidence,
-                re.I,
-            ):
-                continue
-
-            if not region_ok(location):
-                continue
-
-            copied = dict(job)
-            copied["company"] = company
-            copied["ats"] = "workday"
-
-            key = href.split("?")[0].rstrip("/").lower()
-            out[key] = copied
-
-    if successful_sites == 0:
-        _mark_connector_health(
+    for site in ("Agilent_Careers", "Agilent_Student_Careers"):
+        rows = scrape_workday(
             company,
-            False,
-            (
-                "Both official Agilent Workday career sites failed"
-                + (
-                    f": {'; '.join(failed_sites)}"
-                    if failed_sites
-                    else ""
-                )
-            ),
-            source_url,
+            "agilent",
+            "wd5",
+            site,
+            max_pages=30,
         )
 
-    else:
-        _mark_connector_health(
-            company,
-            True,
-            (
-                f"Official Agilent Ireland careers checked across "
-                f"{successful_sites}/2 Workday sites; "
-                f"{len(out)} Republic-of-Ireland jobs returned"
-            ),
-            source_url,
-        )
+        for j in rows:
+            href = str(j.get("url") or "")
+            if not href:
+                continue
 
-    print(
-        f"  Agilent official Ireland Workday: "
-        f"{len(out)} jobs"
-    )
+            j["company"] = company
+            out[href.split("?")[0].rstrip("/").lower()] = j
 
+    print(f"  Agilent official Ireland Workday: {len(out)} jobs")
     return list(out.values())
+
+
 
 def scrape_algoodbody():
     company = "A&L Goodbody"
@@ -9008,269 +8072,153 @@ def scrape_aer_lingus():
     print(f"  Aer Lingus verified current careers: {len(jobs)} jobs")
     return jobs
 
-
 def scrape_aon():
     company = "Aon"
-    source_url = "https://jobs.aon.com/jobs"
 
-    if not HAS_PLAYWRIGHT:
-        _mark_connector_health(
-            company,
-            False,
-            "Official Aon careers requires Playwright; Playwright unavailable",
-            source_url,
-        )
-        print("  ! Aon: Playwright unavailable")
-        return []
+    # Current Ireland job-detail seeds. Search/listing pages are protected by
+    # Jibe/iCIMS, but these official job-detail pages are server-rendered.
+    seeds = [
+        "93353",   # Risk Engineering Management Consultant
+        "99173",   # Business Development Specialist
+        "99565",   # Financial Planning Consultant
+        "102116",  # Actuarial Consultant
+        "103488",  # Head of Compliance / MLRO
+        "105297",  # Personal Lines Account Executive
+        "94666",   # Associate Retirement Consultant
+        "100234",  # Financial Business Analytics Partner
+        "104230",  # Claims Handler
+        "99495",   # Senior Business Analyst
+    ]
 
     results = {}
+    queue = list(dict.fromkeys(seeds))
+    seen = set()
 
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-            context = browser.new_context(
-                locale="en-IE",
-                viewport={"width": 1440, "height": 1600},
-            )
-            page = context.new_page()
-
-            response = page.goto(
-                source_url,
-                wait_until="domcontentloaded",
-                timeout=90000,
-            )
-
-            if response is not None and response.status >= 400:
-                raise RuntimeError(
-                    f"Aon careers returned HTTP {response.status}"
-                )
-
-            page.wait_for_timeout(3000)
-
-            previous_count = -1
-            stagnant = 0
-
-            for _ in range(40):
-                anchors = page.locator('a[href*="/jobs/"]')
-                current_count = anchors.count()
-
-                if current_count == previous_count:
-                    stagnant += 1
-                else:
-                    stagnant = 0
-
-                previous_count = current_count
-
-                if current_count > 0 and stagnant >= 4:
-                    break
-
-                page.mouse.wheel(0, 3000)
-                page.wait_for_timeout(500)
-
-            links = page.locator(
-                'a[href*="/jobs/"]'
-            ).evaluate_all(
-                """els => els.map(a => ({
-                    href: a.href || "",
-                    text: (a.innerText || a.textContent || "").trim()
-                }))"""
-            )
-
-            discovered = {}
-
-            for item in links:
-                href = str(item.get("href") or "").strip()
-                title = re.sub(
-                    r"\s+",
-                    " ",
-                    str(item.get("text") or ""),
-                ).strip()
-
-                if not href:
-                    continue
-
-                parsed = urllib.parse.urlparse(href)
-
-                if parsed.netloc.lower() != "jobs.aon.com":
-                    continue
-
-                path = parsed.path.rstrip("/")
-
-                if not re.match(
-                    r"^/jobs/[^/]+/?$",
-                    path,
-                    re.I,
-                ):
-                    continue
-
-                if path.lower() in {
-                    "/jobs/search",
-                    "/jobs/locations",
-                    "/jobs/categories",
-                }:
-                    continue
-
-                canonical = urllib.parse.urlunparse(
-                    (
-                        parsed.scheme or "https",
-                        parsed.netloc,
-                        parsed.path,
-                        "",
-                        "",
-                        "",
-                    )
-                )
-
-                discovered[canonical.lower()] = {
-                    "href": canonical,
-                    "anchor_title": title,
-                }
-
-            if not discovered:
-                context.close()
-                browser.close()
-
-                _mark_connector_health(
-                    company,
-                    False,
-                    "Official Aon careers loaded but no vacancy links were discovered; zero vacancies not trusted",
-                    source_url,
-                )
-
-                print(
-                    "  ! Aon careers loaded but no vacancy links "
-                    "were discovered; zero vacancies NOT trusted"
-                )
-                return []
-
-            for key, item in discovered.items():
-                href = item["href"]
-                anchor_title = item["anchor_title"]
-                detail = context.new_page()
-
-                try:
-                    detail_response = detail.goto(
-                        href,
-                        wait_until="domcontentloaded",
-                        timeout=45000,
-                    )
-
-                    if (
-                        detail_response is not None
-                        and detail_response.status >= 400
-                    ):
-                        continue
-
-                    detail.wait_for_timeout(500)
-                    body = detail.locator("body").inner_text(
-                        timeout=10000
-                    )
-
-                    title = ""
-
-                    try:
-                        title = re.sub(
-                            r"\s+",
-                            " ",
-                            detail.locator(
-                                "h1"
-                            ).first.inner_text(
-                                timeout=1500
-                            ),
-                        ).strip()
-                    except Exception:
-                        pass
-
-                    if not title:
-                        title = anchor_title
-
-                    if not title:
-                        continue
-
-                    evidence = f"{title}\n{body}"
-
-                    if re.search(
-                        r"\b(?:Belfast|Northern Ireland)\b",
-                        evidence,
-                        re.I,
-                    ):
-                        continue
-
-                    if not re.search(
-                        r"\b(?:Ireland|Dublin|Blackrock|Cork|"
-                        r"Galway|Limerick|Waterford|Kilkenny|"
-                        r"Kildare|Meath|Wicklow)\b",
-                        evidence,
-                        re.I,
-                    ):
-                        continue
-
-                    location = "Ireland"
-
-                    for city in (
-                        "Dublin",
-                        "Blackrock",
-                        "Cork",
-                        "Galway",
-                        "Limerick",
-                        "Waterford",
-                        "Kilkenny",
-                        "Kildare",
-                        "Meath",
-                        "Wicklow",
-                    ):
-                        if re.search(
-                            rf"\b{re.escape(city)}\b",
-                            evidence,
-                            re.I,
-                        ):
-                            location = f"{city}, Ireland"
-                            break
-
-                    results[key] = {
-                        "company": company,
-                        "ats": "icims",
-                        "title": title[:300],
-                        "location": location,
-                        "raw_location": location,
-                        "url": href,
-                        "updated_at": None,
-                        "description_text": body[:5000],
-                    }
-
-                except Exception:
-                    pass
-                finally:
-                    try:
-                        detail.close()
-                    except Exception:
-                        pass
-
-            context.close()
-            browser.close()
-
-    except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official Aon careers failed: {exc}",
-            source_url,
-        )
-        print(f"  ! Aon careers failed: {exc}")
+    sess = _session()
+    if not sess:
+        print("  ! Aon: HTTP session unavailable")
         return []
 
-    _mark_connector_health(
-        company,
-        True,
-        f"Official Aon careers completed; {len(results)} Republic-of-Ireland jobs returned",
-        source_url,
-    )
+    while queue and len(seen) < 80:
+        jid = str(queue.pop(0)).strip()
+        if not jid or jid in seen:
+            continue
+        seen.add(jid)
+
+        href = f"https://jobs.aon.com/jobs/{jid}?lang=en-us"
+
+        try:
+            r = sess.get(
+                href,
+                timeout=30,
+                headers={
+                    "User-Agent": (
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/140 Safari/537.36"
+                    ),
+                    "Accept-Language": "en-IE,en;q=0.9",
+                },
+            )
+        except Exception:
+            continue
+
+        if r.status_code != 200:
+            continue
+
+        html_text = r.text or ""
+        text = _html_text(html_text)
+
+        # Discover related Aon jobs linked from the official detail page.
+        for mm in re.finditer(
+            r'(?:/event-\d+)?/jobs/(\d+)',
+            html_text,
+            re.I,
+        ):
+            new_id = mm.group(1)
+            if new_id not in seen and new_id not in queue:
+                queue.append(new_id)
+
+        # Navigation mentions Ireland even on foreign vacancies. The official
+        # document title identifies the vacancy's own location.
+        page_title = re.search(r"<title\b[^>]*>(.*?)</title>", html_text, re.I | re.S)
+        location_match = re.search(
+            r"\bin\s+([^|]+,\s*Ireland)\s*\|\s*Aon Corporation\s*$",
+            _html_text(page_title.group(1)) if page_title else "",
+            re.I,
+        )
+        if not location_match or re.search(r"Belfast|Northern Ireland", location_match.group(1), re.I):
+            continue
+        head = location_match.group(1)
+
+        title = ""
+        hm = re.search(r'<h1\b[^>]*>(.*?)</h1>', html_text, re.I | re.S)
+        if hm:
+            title = _html_text(hm.group(1)).strip()
+
+        if not title:
+            tm = re.search(
+                r'<meta[^>]+property=["\']og:title["\'][^>]+content=["\']([^"\']+)',
+                html_text,
+                re.I,
+            )
+            title = _html_text(tm.group(1)).strip() if tm else ""
+
+        if not title:
+            tm = re.search(r'<title\b[^>]*>(.*?)</title>', html_text, re.I | re.S)
+            title = _html_text(tm.group(1)).strip() if tm else ""
+
+        # Aon's board also exposes NFP Corp roles. Keep only genuine Aon
+        # Corporation vacancies for the Aon company bucket.
+        if re.search(r'\|\s*NFP Corp\b', title, re.I):
+            continue
+
+        title = re.sub(
+            r'\s+in\s+[A-Za-z .-]+,\s*Ireland\s*\|\s*Aon Corporation\s*$',
+            '',
+            title,
+            flags=re.I,
+        ).strip()
+        title = re.sub(r'\s*\|\s*Aon Corporation\s*$', '', title, flags=re.I).strip()
+        title = re.sub(r'\s*[-|]\s*Aon Careers.*$', '', title, flags=re.I).strip()
+
+        if not title:
+            continue
+
+        location = "Ireland"
+        lm = re.search(
+            r'\b(Dublin|Malahide|Blackrock|Cork|Galway|Limerick),\s*Ireland\b',
+            head,
+            re.I,
+        )
+        if lm:
+            location = f"{lm.group(1).strip()}, Ireland"
+
+        canonical = f"https://jobs.aon.com/jobs/{jid}?lang=en-us"
+        results[jid] = {
+            "company": company,
+            "ats": "direct",
+            "title": title[:300],
+            "location": location[:120],
+            "url": canonical,
+            "updated_at": None,
+            "description_text": text[:5000],
+        }
+
+    try:
+        _mark_connector_health(
+            company,
+            bool(results),
+            f"Official Aon detail-page crawl returned {len(results)} verified Ireland jobs",
+            "https://jobs.aon.com/jobs",
+        )
+    except Exception:
+        pass
 
     print(
-        f"  Aon official Ireland careers: "
-        f"{len(results)} jobs"
+        f"  Aon official detail crawl: {len(seen)} pages checked; "
+        f"{len(results)} Ireland jobs"
     )
-
     return list(results.values())
 
 
@@ -10149,12 +9097,7 @@ def scrape_infosys():
 
                     blob = f"{title}\n{card}\n{href}"
 
-                    # The source URL is already filtered to Ireland. Infosys
-                    # periodically changes the result-card markup and may omit
-                    # the country text from each card, so requiring the literal
-                    # word "Ireland" here creates false-zero refreshes. Keep only
-                    # real requisition/detail links from the official filtered board.
-                    if not re.search(r"/(?:apply-|company-job/)|reqid", href, re.I):
+                    if not re.search(r"\bIreland\b", blob, re.I):
                         continue
 
                     if not title or len(title) > 300:
@@ -10224,15 +9167,12 @@ def scrape_infosys():
                     f"keeping {len(results)} jobs collected so far"
                 )
 
-            if not results:
-                try:
-                    body_text = page.locator("body").inner_text(timeout=3000)
-                except Exception:
-                    body_text = ""
-                if re.search(r"\b(?:there|the)\s+are\s+no\s+results\b|\bno\s+jobs?\s+(?:found|available)\b", body_text, re.I):
-                    _mark_connector_health(
-                        company, True, "Official Ireland search explicitly reports zero matching jobs", source_url
-                    )
+            if not results and page.get_by_text(
+                "The are no results. Try using other terms.", exact=True
+            ).is_visible():
+                _mark_connector_health(
+                    company, True, "Official Ireland search explicitly reports zero matching jobs", source_url
+                )
 
     except Exception as exc:
         print(f"  ! Infosys Ireland scrape failed: {exc}")
@@ -10315,49 +9255,7 @@ def _scrape_candidate_manager(company, source_url):
                     location = f"{city}, Ireland"
                     break
 
-        parsed_job_url = urllib.parse.urlsplit(href)
-        parsed_job_params = urllib.parse.parse_qs(
-            parsed_job_url.query
-        )
-
-        stable_jid = (
-            parsed_job_params.get("jid")
-            or parsed_job_params.get("jobid")
-            or parsed_job_params.get("job_id")
-        )
-
-        if stable_jid and stable_jid[0]:
-            result_key = (
-                urllib.parse.urlunsplit(
-                    (
-                        parsed_job_url.scheme.lower(),
-                        parsed_job_url.netloc.lower(),
-                        parsed_job_url.path.rstrip("/"),
-                        "",
-                        "",
-                    )
-                )
-                + "?jid="
-                + str(stable_jid[0]).strip().lower()
-            )
-        else:
-            result_key = "|".join(
-                (
-                    urllib.parse.urlunsplit(
-                        (
-                            parsed_job_url.scheme.lower(),
-                            parsed_job_url.netloc.lower(),
-                            parsed_job_url.path.rstrip("/"),
-                            "",
-                            "",
-                        )
-                    ),
-                    re.sub(r"[^a-z0-9]+", "", title.lower()),
-                    re.sub(r"[^a-z0-9]+", "", location.lower()),
-                )
-            )
-
-        results[result_key] = {
+        results[href.lower()] = {
             "company": company,
             "ats": "candidate_manager",
             "title": re.sub(r"\s+", " ", title).strip()[:300],
@@ -10643,67 +9541,111 @@ def scrape_exl():
 
 
 def scrape_zscaler():
-    company = "Zscaler"
-    source_url = "https://job-boards.greenhouse.io/zscaler"
+    """Zscaler Ireland/Irish-remote opportunities.
 
-    try:
-        jobs = scrape_greenhouse("zscaler") or []
-    except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official Zscaler Greenhouse failed: {exc}",
-            source_url,
-        )
-        print(f"  ! Zscaler Greenhouse failed: {exc}")
+    Zscaler is remote/hybrid and maintains an Ireland employment presence.
+    Only retain jobs whose rendered vacancy evidence explicitly establishes
+    Ireland availability.
+    """
+
+    if not HAS_PLAYWRIGHT:
         return []
 
-    cleaned = {}
+    results = {}
 
-    for job in jobs:
-        title = str(job.get("title") or "").strip()
-        location = str(
-            job.get("location")
-            or job.get("raw_location")
-            or ""
-        ).strip()
-        href = str(job.get("url") or "").strip()
+    urls = [
+        "https://www.zscaler.com/careers",
+    ]
 
-        if not title or not href:
-            continue
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
 
-        evidence = f"{title} {location}"
+            page = browser.new_page(
+                viewport={"width": 1440, "height": 1100},
+                locale="en-IE",
+            )
 
-        if re.search(
-            r"\b(?:Belfast|Northern Ireland)\b",
-            evidence,
-            re.I,
-        ):
-            continue
+            for url in urls:
+                try:
+                    page.goto(
+                        url,
+                        wait_until="domcontentloaded",
+                        timeout=90000,
+                    )
+                    page.wait_for_timeout(2500)
+                    _dismiss_cookie_banner(page)
+                except Exception as exc:
+                    print(f"  ! Zscaler careers page failed: {exc}")
+                    continue
 
-        if not region_ok(location):
-            continue
+                anchors = page.locator("a[href]")
 
-        job["company"] = company
-        job["ats"] = "greenhouse"
+                for i in range(anchors.count()):
+                    a = anchors.nth(i)
 
-        key = href.split("?")[0].rstrip("/").lower()
-        cleaned[key] = job
+                    try:
+                        href = urllib.parse.urljoin(
+                            page.url,
+                            a.get_attribute("href") or "",
+                        )
+                    except Exception:
+                        continue
 
-    _mark_connector_health(
-        company,
-        True,
-        f"Official Zscaler Greenhouse completed; {len(cleaned)} Republic-of-Ireland jobs returned",
-        source_url,
-    )
+                    hlow = href.lower()
 
-    print(
-        f"  Zscaler official Greenhouse: "
-        f"{len(cleaned)} Ireland jobs"
-    )
+                    if not any(x in hlow for x in (
+                        "/job/",
+                        "/jobs/",
+                        "careers/job",
+                        "career/job",
+                    )):
+                        continue
 
-    return list(cleaned.values())
+                    title = _browser_text(a)
 
+                    node = a
+                    card = ""
+
+                    for _ in range(6):
+                        try:
+                            node = node.locator("..")
+                            candidate = _browser_text(node)
+                        except Exception:
+                            break
+
+                        if candidate and len(candidate) <= 3500:
+                            card = candidate
+
+                    evidence = f"{title} {card}"
+
+                    # Critical rule: generic Remote EMEA is not enough.
+                    if not region_ok(evidence):
+                        continue
+
+                    key = href.split("?")[0].rstrip("/").lower()
+
+                    if key in results:
+                        continue
+
+                    results[key] = {
+                        "company": "Zscaler",
+                        "ats": "direct",
+                        "title": title[:300] if title else "Zscaler vacancy",
+                        "location": _browser_location(card, "Ireland"),
+                        "url": href,
+                        "updated_at": None,
+                        "description_text": card[:5000],
+                    }
+
+            browser.close()
+
+    except Exception as exc:
+        print(f"  ! Zscaler browser scrape failed: {exc}")
+
+    print(f"  Zscaler official careers: {len(results)} Ireland jobs")
+
+    return list(results.values())
 
 
 
@@ -11632,55 +10574,20 @@ def scrape_siemens():
 
 
 def scrape_musgrave():
-    company = "Musgrave Group (SuperValu / Centra)"
+    company = "Musgrave"
     source_url = "https://musgravegroup.com/careers/vacancies/"
 
     if not HAS_PLAYWRIGHT:
-        _mark_connector_health(
-            company,
-            False,
-            "Official Musgrave vacancies requires Playwright; Playwright unavailable",
-            source_url,
-        )
         print("  ! Musgrave: Playwright unavailable")
         return []
 
     results = {}
 
-    # Musgrave operates on both sides of the border. Explicit NI evidence must
-    # never be treated as a Republic-of-Ireland vacancy.
-    ni_pattern = re.compile(
-        r"\b(?:Northern Ireland|Belfast|Dungiven|Antrim|Armagh|"
-        r"Down|Fermanagh|Tyrone|Londonderry|Derry|"
-        r"Downpatrick|Moira|Lurgan|Cookstown|Carrickfergus|"
-        r"Portadown|Lisburn|Ballymena|Maghera|Dungannon|"
-        r"Portstewart|Irvinestown|Fintona|Portglenone|"
-        r"Limavady|Omagh|Ballynahinch|Crossgar|Killinchy|"
-        r"Banbridge|Newcastle)\b|"
-        r"\bBT\d{1,2}\s*\d?[A-Z]{0,2}\b",
-        re.I,
-    )
-
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            context = browser.new_context(
-                viewport={"width": 1440, "height": 1300},
-                locale="en-IE",
-            )
-            page = context.new_page()
-
-            response = page.goto(
-                source_url,
-                wait_until="domcontentloaded",
-                timeout=90000,
-            )
-
-            if response is not None and response.status >= 400:
-                raise RuntimeError(
-                    f"Musgrave vacancies returned HTTP {response.status}"
-                )
-
+            page = browser.new_page(viewport={"width": 1440, "height": 1300}, locale="en-IE")
+            page.goto(source_url, wait_until="domcontentloaded", timeout=90000)
             page.wait_for_timeout(2500)
 
             stagnant = 0
@@ -11691,35 +10598,22 @@ def scrape_musgrave():
 
                 for i in range(anchors.count()):
                     a = anchors.nth(i)
-
                     try:
                         raw = a.get_attribute("href") or ""
-                        href = urllib.parse.urljoin(
-                            page.url,
-                            raw,
-                        ).split("#")[0]
+                        href = urllib.parse.urljoin(page.url, raw).split("#")[0]
                     except Exception:
                         continue
 
                     low = href.lower()
 
+                    # Keep likely vacancy/detail links, reject navigation/social links.
                     if any(x in low for x in (
-                        "linkedin.com",
-                        "facebook.com",
-                        "instagram.com",
-                        "/careers/",
-                        "/about/",
-                        "/news/",
-                        "/contact/",
+                        "linkedin.com", "facebook.com", "instagram.com",
+                        "/careers/", "/about/", "/news/", "/contact/"
                     )) and "vacanc" not in low and "job" not in low:
                         continue
 
-                    title = re.sub(
-                        r"\s+",
-                        " ",
-                        _browser_text(a),
-                    ).strip()
-
+                    title = re.sub(r"\s+", " ", _browser_text(a)).strip()
                     node = a
                     card = ""
 
@@ -11728,20 +10622,14 @@ def scrape_musgrave():
                             txt = _browser_text(node)
                         except Exception:
                             txt = ""
-
                         if txt and len(txt) <= 3200:
                             card = txt
-
                         if re.search(
-                            r"\b(?:Dublin|Cork|Limerick|Galway|"
-                            r"Waterford|Kildare|Meath|Westmeath|"
-                            r"Kilkenny|Tipperary|Ireland|Belfast|"
-                            r"Dungiven|Northern Ireland)\b",
+                            r"\b(?:Dublin|Cork|Limerick|Galway|Waterford|Kildare|Meath|Westmeath|Kilkenny|Tipperary|Ireland)\b",
                             card,
                             re.I,
                         ):
                             break
-
                         try:
                             node = node.locator("..")
                         except Exception:
@@ -11749,32 +10637,23 @@ def scrape_musgrave():
 
                     blob = f"{title}\n{card}\n{href}"
 
-                    if ni_pattern.search(blob):
-                        continue
-
+                    # Current vacancies page is already Musgrave scoped; use title/card evidence
+                    # and ignore obvious non-job navigation.
                     bad_titles = {
-                        "",
-                        "careers",
-                        "current vacancies",
-                        "all current vacancies",
-                        "learn more",
-                        "read more",
-                        "home",
-                        "contact",
+                        "", "careers", "current vacancies", "all current vacancies",
+                        "learn more", "read more", "home", "contact"
                     }
-
                     if title.lower() in bad_titles:
                         continue
 
-                    if not re.search(
-                        r"\b(?:Dublin|Cork|Limerick|Galway|"
-                        r"Waterford|Kildare|Meath|Westmeath|"
-                        r"Kilkenny|Tipperary|Ireland)\b",
-                        blob,
-                        re.I,
+                    # Require vacancy-ish content.
+                    if not (
+                        re.search(r"\b(?:Dublin|Cork|Limerick|Galway|Waterford|Kildare|Meath|Westmeath|Kilkenny|Tipperary|Ireland)\b", blob, re.I)
+                        or any(k in low for k in ("vacanc", "job", "career"))
                     ):
                         continue
 
+                    # Avoid the generic vacancies landing page itself.
                     if href.rstrip("/") == source_url.rstrip("/"):
                         continue
 
@@ -11784,12 +10663,8 @@ def scrape_musgrave():
                             for x in card.splitlines()
                             if 5 <= len(x.strip()) <= 220
                         ]
-
                         title = next(
-                            (
-                                x for x in lines
-                                if x.lower() not in bad_titles
-                            ),
+                            (x for x in lines if x.lower() not in bad_titles),
                             "",
                         )
 
@@ -11797,18 +10672,9 @@ def scrape_musgrave():
                         continue
 
                     location = "Ireland"
-
                     for city in (
-                        "Dublin",
-                        "Cork",
-                        "Limerick",
-                        "Galway",
-                        "Waterford",
-                        "Kildare",
-                        "Meath",
-                        "Westmeath",
-                        "Kilkenny",
-                        "Tipperary",
+                        "Dublin", "Cork", "Limerick", "Galway", "Waterford",
+                        "Kildare", "Meath", "Westmeath", "Kilkenny", "Tipperary"
                     ):
                         if re.search(rf"\b{city}\b", blob, re.I):
                             location = f"{city}, Ireland"
@@ -11827,8 +10693,8 @@ def scrape_musgrave():
                         "description_text": card[:5000],
                     }
 
+                # Lazy load / pagination if present.
                 clicked = False
-
                 for selector in (
                     'button:has-text("Load more")',
                     'button:has-text("Show more")',
@@ -11837,7 +10703,6 @@ def scrape_musgrave():
                 ):
                     try:
                         btn = page.locator(selector)
-
                         if btn.count() and btn.first.is_visible():
                             btn.first.click(timeout=1200)
                             page.wait_for_timeout(450)
@@ -11852,34 +10717,16 @@ def scrape_musgrave():
                 current = len(results)
                 stagnant = stagnant + 1 if current == previous else 0
                 previous = current
-
                 if stagnant >= 8 and not clicked:
                     break
 
-            context.close()
             browser.close()
 
     except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official Musgrave vacancies failed: {exc}",
-            source_url,
-        )
         print(f"  ! Musgrave Ireland scrape failed: {exc}")
-        return []
-
-    _mark_connector_health(
-        company,
-        True,
-        f"Official Musgrave vacancies completed; {len(results)} Republic-of-Ireland jobs returned",
-        source_url,
-    )
 
     print(f"  Musgrave official vacancies: {len(results)} jobs")
     return list(results.values())
-
-
 
 
 
@@ -13431,7 +12278,7 @@ def scrape_qualcomm():
 
 def scrape_ptsb():
     """Scrape current PTSB vacancies from the official CoreHR POST search."""
-    company = "PTSB (Permanent TSB)"
+    company = "PTSB"
 
     form_url = (
         "https://my.corehr.com/pls/ptsbrecruit/"
@@ -13534,62 +12381,6 @@ def scrape_ptsb():
             re.I,
         )
     )
-
-    # CoreHR sometimes changes the POST result markup and stops exposing the
-    # recruitment id in the patterns above. When that happens, submit the
-    # official public form in a browser and recover the vacancy IDs from the
-    # resulting detail links. This remains first-party PTSB/CoreHR data.
-    if not recruitment_ids and HAS_PLAYWRIGHT:
-        browser = None
-        try:
-            with sync_playwright() as pw:
-                browser = pw.chromium.launch(headless=True)
-                page = browser.new_page(locale="en-IE")
-                page.set_default_timeout(10000)
-                page.goto(form_url, wait_until="domcontentloaded", timeout=45000)
-
-                # CoreHR uses either an input submit control or an image/link
-                # labelled Search depending on the skin/version.
-                submitted = False
-                for selector in (
-                    'input[type="submit"][value*="Search" i]',
-                    'input[type="image"][alt*="Search" i]',
-                    'a:has-text("Search")',
-                    'button:has-text("Search")',
-                ):
-                    try:
-                        loc = page.locator(selector).first
-                        if loc.count():
-                            loc.click()
-                            submitted = True
-                            break
-                    except Exception:
-                        continue
-
-                if submitted:
-                    try:
-                        page.wait_for_load_state("domcontentloaded", timeout=20000)
-                    except Exception:
-                        pass
-                    page.wait_for_timeout(1200)
-
-                    hrefs = page.locator('a[href*="p_recruitment_id"]')
-                    for i in range(hrefs.count()):
-                        try:
-                            href = hrefs.nth(i).get_attribute("href") or ""
-                        except Exception:
-                            continue
-                        m = re.search(r"p_recruitment_id=(\d{4,})", href, re.I)
-                        if m:
-                            recruitment_ids.add(m.group(1))
-        except Exception as exc:
-            print(f"  ! PTSB browser fallback failed: {exc}")
-        finally:
-            if browser is not None:
-                try:
-                    browser.close()
-                except Exception:
-                    pass
 
     results = {}
 
@@ -13759,33 +12550,6 @@ def scrape_ptsb():
 
 
 
-
-_NAVIGATION_JOB_TITLES = {
-    "job",
-    "jobs",
-    "career",
-    "careers",
-    "vacancy",
-    "vacancies",
-    "apply",
-    "apply now",
-    "job details",
-    "full details",
-    "more details",
-    "state boards",
-    "boird stáit",
-    "irish",
-    "gaeilge",
-    "béarla",
-    "english",
-}
-
-
-def _is_navigation_job_title(title):
-    value = re.sub(r"\s+", " ", str(title or "")).strip().lower()
-    return value in _NAVIGATION_JOB_TITLES
-
-
 def scrape_publicjobs():
     company = "publicjobs.ie"
     board = (
@@ -13879,25 +12643,6 @@ def scrape_publicjobs():
             if not title:
                 continue
 
-            # Oleeo exposes language selectors, State Boards navigation and
-            # other jobboard controls through URLs that resemble vacancies.
-            # They must never become dashboard jobs.
-            normalized_title = re.sub(r"\\s+", " ", title).strip()
-
-            if normalized_title.lower() in {
-                "job details",
-                "full details",
-                "apply",
-                "more details",
-                "state boards",
-                "boird stáit",
-                "irish",
-                "gaeilge",
-                "béarla",
-                "english",
-            }:
-                continue
-
             parsed_href = urllib.parse.urlsplit(href)
             public_path = parsed_href.path.rstrip("/").lower()
 
@@ -13965,16 +12710,6 @@ def scrape_publicjobs():
 
             if re.search(r"(page|start|offset|adv)", href, re.I):
                 queue.append(href)
-
-    _mark_connector_health(
-        "Public Jobs / Civil Service",
-        True,
-        (
-            "Official publicjobs Oleeo board reachable; "
-            f"{len(results)} vacancy records returned"
-        ),
-        board,
-    )
 
     print(f"  publicjobs Oleeo official board: {len(results)} jobs")
     return list(results.values())
@@ -14409,22 +13144,15 @@ def scrape_medtronic():
 
 
 def scrape_revenue_ie():
-    company = "Revenue"
+    company = "Revenue.ie"
     source_url = (
         "https://www.revenue.ie/en/corporate/"
         "information-about-revenue/careers/career-opportunities.aspx"
     )
 
     sess = _session()
-
     if not sess:
-        _mark_connector_health(
-            company,
-            False,
-            "HTTP session unavailable; zero vacancies not trusted",
-            source_url,
-        )
-        print("  ! Revenue: HTTP session unavailable")
+        print("  ! Revenue.ie: HTTP session unavailable")
         return []
 
     try:
@@ -14437,113 +13165,26 @@ def scrape_revenue_ie():
             },
         )
     except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official Revenue careers request failed: {exc}",
-            source_url,
-        )
-        print(f"  ! Revenue careers page failed: {exc}")
+        print(f"  ! Revenue.ie careers page failed: {exc}")
         return []
 
     if r.status_code != 200:
-        _mark_connector_health(
-            company,
-            False,
-            (
-                "Official Revenue careers returned "
-                f"HTTP {r.status_code}; zero vacancies not trusted"
-            ),
-            source_url,
-        )
-        print(f"  ! Revenue careers HTTP {r.status_code}")
+        print(f"  ! Revenue.ie careers HTTP {r.status_code}")
         return []
 
     html_text = r.text or ""
     results = {}
 
-    navigation_titles = {
-        "about us",
-        "apply",
-        "application form",
-        "assignment data protection statement",
-        "back to top",
-        "candidate data protection statement",
-        "career opportunities",
-        "careers",
-        "close",
-        "contact us",
-        "english",
-        "gaeilge",
-        "home",
-        "information booklet",
-        "irish",
-        "more information",
-        "overview",
-        "please rate how useful this page was to you",
-        "recruitment",
-        "revenue",
-        "revenue careers",
-        "tax education",
-        "béarla",
-    }
-
-    non_vacancy_url_fragments = (
-        "candidate-data-protection",
-        "assignment-data-protection",
-        "/tax-education/",
-        "/privacy",
-        "/accessibility",
-        "/contact",
-        "/about-us",
-    )
-
-    vacancy_title_terms = (
-        "accountant",
-        "administrative officer",
-        "analyst",
-        "assistant principal",
-        "auditor",
-        "clerical officer",
-        "customs officer",
-        "data ",
-        "economist",
-        "engineer",
-        "executive officer",
-        "graduate",
-        "inspector",
-        "investigator",
-        "manager",
-        "officer",
-        "principal officer",
-        "specialist",
-        "tax specialist",
-        "trainee",
-    )
-
-    vacancy_context_terms = (
-        "competition",
-        "closing date",
-        "applications",
-        "application",
-        "candidate information",
-        "information booklet",
-        "job specification",
-        "recruitment campaign",
-    )
-
-    anchors = list(
-        re.finditer(
-            r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
-            html_text,
-            re.I | re.S,
-        )
-    )
-
-    for m in anchors:
+    # Current Revenue competitions are exposed as headings/links on the careers page.
+    # Collect links to adverts, information booklets and application pages.
+    for m in re.finditer(
+        r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+        html_text,
+        re.I | re.S,
+    ):
         href = urllib.parse.urljoin(
             source_url,
-            html.unescape(m.group(1)),
+            m.group(1).replace("&amp;", "&"),
         ).split("#")[0]
 
         title = re.sub(
@@ -14555,112 +13196,87 @@ def scrape_revenue_ie():
         if not title:
             continue
 
-        title_l = title.casefold()
-        href_l = href.casefold()
+        blob = f"{title} {href}".lower()
 
-        if _is_navigation_job_title(title):
+        if not any(x in blob for x in (
+            "career",
+            "competition",
+            "officer",
+            "principal",
+            "assistant principal",
+            "graduate",
+            "tax",
+            "customs",
+            "apply",
+            "information booklet",
+        )):
             continue
 
-        if title_l in navigation_titles:
+        # Ignore generic navigation.
+        if title.lower() in {
+            "careers",
+            "apply",
+            "home",
+            "revenue",
+            "more information",
+        }:
             continue
 
-        if any(
-            fragment in href_l
-            for fragment in non_vacancy_url_fragments
-        ):
-            continue
+        # Nearby context usually carries the competition title + closing date.
+        start = max(0, m.start() - 1800)
+        end = min(len(html_text), m.end() + 1800)
+        card_text = _html_text(html_text[start:end])
 
-        context_start = max(0, m.start() - 1400)
-        context_end = min(len(html_text), m.end() + 1400)
+        # Prefer a meaningful nearby line if link text is generic.
+        if title.lower() in {"information booklet", "application form", "apply now"}:
+            lines = [
+                re.sub(r"\s+", " ", x).strip()
+                for x in card_text.splitlines()
+                if 8 <= len(x.strip()) <= 260
+            ]
+            title = next(
+                (
+                    x for x in lines
+                    if any(k in x.lower() for k in (
+                        "assistant principal",
+                        "administrative officer",
+                        "executive officer",
+                        "clerical officer",
+                        "customs officer",
+                        "graduate",
+                        "tax specialist",
+                    ))
+                ),
+                title,
+            )
 
-        context = re.sub(
-            r"\s+",
-            " ",
-            _html_text(
-                html_text[context_start:context_end]
-            ),
-        ).strip()
-
-        context_l = context.casefold()
-
-        title_has_role = any(
-            term in title_l
-            for term in vacancy_title_terms
-        )
-
-        context_has_vacancy = any(
-            term in context_l
-            for term in vacancy_context_terms
-        )
-
-        # Do not turn a generic careers/navigation link into a vacancy merely
-        # because words such as "career", "tax" or "apply" occur in its URL.
-        if not title_has_role:
-            continue
-
-        # Revenue vacancy titles need nearby recruitment/competition evidence.
-        # This deliberately prefers a trustworthy zero over navigation garbage.
-        if not context_has_vacancy:
-            continue
-
-        if len(title) < 5 or len(title) > 300:
+        if not title:
             continue
 
         location = "Ireland"
-
-        if re.search(r"\bDublin\b", context, re.I):
+        if re.search(r"\bDublin\b", card_text, re.I):
             location = "Dublin, Ireland"
-        elif re.search(r"\bLimerick\b", context, re.I):
+        elif re.search(r"\bLimerick\b", card_text, re.I):
             location = "Limerick, Ireland"
-        elif re.search(r"\bCork\b", context, re.I):
-            location = "Cork, Ireland"
-        elif re.search(
-            r"\bNationwide\b|\bVarious Locations\b",
-            context,
-            re.I,
-        ):
+        elif re.search(r"\bNationwide\b|\bVarious Locations\b", card_text, re.I):
             location = "Nationwide, Ireland"
 
-        # Same URL can legitimately be linked multiple times on the page.
-        # Identity therefore includes the normalized role title.
-        key = (
-            href.rstrip("/").casefold()
-            + "|"
-            + re.sub(
-                r"[^a-z0-9]+",
-                "",
-                title.casefold(),
-            )
-        )
+        key = href.rstrip("/").lower() + "|" + title.lower()
 
         results[key] = {
             "company": company,
             "ats": "direct",
-            "title": title,
+            "title": title[:300],
             "location": location,
             "url": href,
             "updated_at": None,
-            "description_text": context[:5000],
+            "description_text": card_text[:5000],
         }
 
-    jobs = list(results.values())
+    print(f"  Revenue.ie official career opportunities: {len(results)} jobs")
+    return list(results.values())
 
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official Revenue careers source reachable; "
-            f"{len(jobs)} identifiable current competitions returned"
-        ),
-        source_url,
-    )
 
-    print(
-        f"  Revenue official career opportunities: "
-        f"{len(jobs)} jobs"
-    )
-
-    return jobs
 
 def scrape_honeywell():
     company = "Honeywell"
@@ -19544,38 +18160,204 @@ def scrape_forvis_mazars():
     return list(results.values())
 
 
-
 def scrape_dps_group():
     """
-    DPS Group is now part of Arcadis and no longer has an independent
-    vacancy board.
+    DPS Group official Ireland jobs page.
 
-    Do not relabel Arcadis' current vacancies as DPS Group vacancies. Arcadis
-    has its own active dashboard identity and official collector; returning
-    the same URLs here under the legacy DPS identity causes global URL
-    deduplication to hide the canonical Arcadis listings.
+    Collect only actual /job/... detail URLs and read the real job title
+    from each detail page instead of using generic 'SEE JOB DETAILS' text.
     """
     company = "DPS Group (Arcadis)"
-    source_url = (
-        "https://jobs.arcadis.com/careers"
-        "?domain=arcadis.com&location=Ireland&sort_by=relevance"
-    )
+    source_url = "https://www.dpsgroupglobal.com/careers/jobs/"
 
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "DPS Group is part of Arcadis and has no separate current vacancy "
-            "board; current Arcadis vacancies are published under Arcadis"
-        ),
-        source_url,
-    )
+    if not HAS_PLAYWRIGHT:
+        try:
+            _mark_connector_health(
+                company,
+                False,
+                "Official DPS Group jobs page requires JavaScript; Playwright unavailable",
+                source_url,
+            )
+        except Exception:
+            pass
+        return []
 
-    print(
-        "  DPS Group (Arcadis): no separate vacancy feed; "
-        "current vacancies are owned by Arcadis"
-    )
-    return []
+    results = {}
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            context = browser.new_context(
+                locale="en-IE",
+                viewport={"width": 1440, "height": 1400},
+            )
+
+            page = context.new_page()
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+            page.wait_for_timeout(5000)
+
+            links = page.locator("a").evaluate_all(
+                """els => els.map(a => ({
+                    href: a.href || "",
+                    text: (a.innerText || a.textContent || "").trim()
+                }))"""
+            )
+
+            candidates = {}
+
+            for item in links:
+                href = str(item.get("href") or "").strip()
+
+                # Real DPS vacancy pages only.
+                if not re.match(
+                    r"^https?://(?:www\.)?dpsgroupglobal\.com/job/[^/#?]+/?(?:[?#].*)?$",
+                    href,
+                    re.I,
+                ):
+                    continue
+
+                canonical = href.split("#", 1)[0].split("?", 1)[0]
+                candidates[canonical.rstrip("/").lower()] = canonical
+
+            for canonical in candidates.values():
+                detail = context.new_page()
+
+                try:
+                    resp = detail.goto(
+                        canonical,
+                        wait_until="domcontentloaded",
+                        timeout=45000,
+                    )
+                    detail.wait_for_timeout(800)
+
+                    if resp and resp.status >= 400:
+                        detail.close()
+                        continue
+
+                    body = detail.locator("body").inner_text(
+                        timeout=10000
+                    )
+                    body = re.sub(r"\r", "", body)
+
+                    # Republic of Ireland validation.
+                    if not re.search(
+                        r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford)\b",
+                        body,
+                        re.I,
+                    ):
+                        detail.close()
+                        continue
+
+                    title = ""
+
+                    try:
+                        title = detail.locator("h1").first.inner_text(
+                            timeout=3000
+                        ).strip()
+                    except Exception:
+                        pass
+
+                    if not title:
+                        try:
+                            title = detail.title()
+                        except Exception:
+                            title = ""
+
+                    title = re.sub(r"\s+", " ", title).strip()
+
+                    # Clean common site-name suffixes.
+                    title = re.sub(
+                        r"\s*[\|\-–—]\s*(?:DPS Group|DPS Engineering).*$",
+                        "",
+                        title,
+                        flags=re.I,
+                    ).strip()
+
+                    if not title:
+                        detail.close()
+                        continue
+
+                    # Reject navigation/generic labels.
+                    if title.lower() in {
+                        "see job details",
+                        "jobs",
+                        "careers",
+                        "dps group",
+                    }:
+                        detail.close()
+                        continue
+
+                    location = "Ireland"
+
+                    lm = re.search(
+                        r"\b(Dublin|Cork|Galway|Limerick|Waterford)"
+                        r"(?:,\s*(?:Co\.\s*)?[A-Za-z ]+)?"
+                        r"(?:,\s*Ireland)?\b",
+                        body,
+                        re.I,
+                    )
+                    if lm:
+                        location = f"{lm.group(1).strip()}, Ireland"
+
+                    key = canonical.rstrip("/").lower()
+
+                    results[key] = {
+                        "company": company,
+                        "ats": "direct",
+                        "title": title[:300],
+                        "location": location,
+                        "url": canonical,
+                        "updated_at": None,
+                        "description_text": body[:5000],
+                    }
+
+                except Exception:
+                    pass
+                finally:
+                    try:
+                        detail.close()
+                    except Exception:
+                        pass
+
+            context.close()
+            browser.close()
+
+    except Exception as exc:
+        try:
+            _mark_connector_health(
+                company,
+                False,
+                f"Official DPS Group jobs page blocked/unavailable: {exc}",
+                source_url,
+            )
+        except Exception:
+            pass
+
+        print(f"  ! DPS Group scrape failed: {exc}")
+        return []
+
+    try:
+        _mark_connector_health(
+            company,
+            bool(results),
+            f"Official DPS Group careers page returned {len(results)} verified Ireland jobs",
+            source_url,
+        )
+    except Exception:
+        pass
+
+    print(f"  DPS Group official Ireland careers: {len(results)} jobs")
+    return list(results.values())
+
+
+
+
+
+
 
 def scrape_eirgrid():
     company = "EirGrid Group"
@@ -20009,3106 +18791,7 @@ def scrape_tesco_ireland_current():
     return list(results.values())
 
 
-
-
-
-def _fz_text(value):
-    value = html.unescape(str(value or ""))
-    value = re.sub(r"<[^>]+>", " ", value)
-    return re.sub(r"\s+", " ", value).strip()
-
-
-def scrape_synopsys_official():
-    company = "Synopsys"
-    source = "https://careers.synopsys.com/location/ireland-jobs/44408/2963597/2"
-
-    try:
-        r = _session().get(
-            source,
-            timeout=30,
-            headers={"User-Agent": "Mozilla/5.0"},
-        )
-        r.raise_for_status()
-    except Exception as exc:
-        print(f"  ! Synopsys fetch failed: {exc}")
-        return []
-
-    jobs = {}
-
-    pattern = (
-        r'<a[^>]+href=["\']'
-        r'(/job/dublin/[^"\']+)'
-        r'["\'][^>]*>(.*?)</a>'
-    )
-
-    for match in re.finditer(pattern, r.text, re.I | re.S):
-        path = html.unescape(match.group(1))
-        title = _fz_text(match.group(2))
-
-        title = re.sub(
-            r"\s+Dublin,\s*Ireland\s+Category:.*$",
-            "",
-            title,
-            flags=re.I,
-        ).strip()
-
-        if not title:
-            continue
-
-        url = urllib.parse.urljoin(source, path)
-
-        jobs[url] = {
-            "company": company,
-            "ats": "official",
-            "title": title,
-            "location": "Dublin, Ireland",
-            "url": url,
-            "updated_at": None,
-            "description_text": "",
-        }
-
-    _mark_connector_health(
-        company,
-        bool(jobs),
-        f"Official Synopsys Ireland page returned {len(jobs)} jobs",
-        source,
-    )
-
-    print(f"  Synopsys official Ireland careers: {len(jobs)} jobs")
-    return list(jobs.values())
-
-
-def scrape_riot_games_official():
-    company = "Riot Games"
-    source = "https://www.riotgames.com/en/work-with-us/offices/dublin"
-    sess = _session()
-
-    try:
-        response = sess.get(
-            source,
-            timeout=30,
-            headers={"User-Agent": "Mozilla/5.0"},
-        )
-        response.raise_for_status()
-        body = response.text
-    except Exception as exc:
-        print(f"  ! Riot Games fetch failed: {exc}")
-        return []
-
-    ids = []
-
-    for pattern in (
-        r"/en/j/(\d+)",
-        r"/en/work-with-us/job/(\d+)/",
-        r"\\?/en/j/(\d+)",
-        r"\\?/en/work-with-us/job/(\d+)/",
-    ):
-        ids.extend(re.findall(pattern, body, re.I))
-
-    jobs = {}
-
-    for job_id in dict.fromkeys(ids):
-        url = f"https://www.riotgames.com/en/j/{job_id}"
-
-        try:
-            detail = sess.get(
-                url,
-                timeout=25,
-                headers={"User-Agent": "Mozilla/5.0"},
-                allow_redirects=True,
-            )
-            detail.raise_for_status()
-        except Exception:
-            continue
-
-        plain = _fz_text(detail.text)
-
-        if "dublin" not in plain.lower():
-            continue
-
-        title = ""
-
-        h1 = re.search(
-            r"<h1[^>]*>(.*?)</h1>",
-            detail.text,
-            re.I | re.S,
-        )
-
-        if h1:
-            title = _fz_text(h1.group(1))
-
-        if not title:
-            tm = re.search(
-                r"<title>(.*?)</title>",
-                detail.text,
-                re.I | re.S,
-            )
-            if tm:
-                title = _fz_text(tm.group(1))
-                title = re.sub(
-                    r"\s*\|\s*Riot Games.*$",
-                    "",
-                    title,
-                    flags=re.I,
-                ).strip()
-
-        if not title or "global offices" in title.lower():
-            continue
-
-        final_url = detail.url or url
-
-        jobs[final_url] = {
-            "company": company,
-            "ats": "official",
-            "title": title,
-            "location": "Dublin, Ireland",
-            "url": final_url,
-            "updated_at": None,
-            "description_text": plain[:10000],
-        }
-
-    _mark_connector_health(
-        company,
-        bool(jobs),
-        f"Official Riot Dublin source returned {len(jobs)} jobs",
-        source,
-    )
-
-    print(f"  Riot Games official Dublin careers: {len(jobs)} jobs")
-    return list(jobs.values())
-
-
-def scrape_nucleo_official():
-    company = "Nucleo"
-    source = "https://nucleogroup.com/careers/"
-
-    try:
-        r = _session().get(
-            source,
-            timeout=30,
-            headers={"User-Agent": "Mozilla/5.0"},
-        )
-        r.raise_for_status()
-    except Exception as exc:
-        print(f"  ! Nucleo fetch failed: {exc}")
-        return []
-
-    text = _fz_text(r.text)
-
-    section_match = re.search(
-        r"Open Vacancies\s+(.*?)\s+No roles match your search",
-        text,
-        re.I | re.S,
-    )
-
-    section = section_match.group(1) if section_match else text
-
-    pattern = (
-        r"(.{3,120}?)\s+"
-        r"Posted\s+(?:today|\d+\s+(?:day|days|week|weeks|month|months)\s+ago)"
-        r"\s+Dublin,\s*Ireland"
-    )
-
-    jobs = {}
-
-    for match in re.finditer(pattern, section, re.I):
-        title = _fz_text(match.group(1))
-
-        title = re.sub(
-            r"^.*?Open Vacancies\s+",
-            "",
-            title,
-            flags=re.I,
-        ).strip()
-
-        if not title:
-            continue
-
-        slug = re.sub(
-            r"[^a-z0-9]+",
-            "-",
-            title.lower(),
-        ).strip("-")
-
-        url = source + "#job-" + slug
-
-        jobs[url] = {
-            "company": company,
-            "ats": "official",
-            "title": title,
-            "location": "Dublin, Ireland",
-            "url": url,
-            "updated_at": None,
-            "description_text": "",
-        }
-
-    _mark_connector_health(
-        company,
-        bool(jobs),
-        f"Official Nucleo careers page returned {len(jobs)} Dublin jobs",
-        source,
-    )
-
-    print(f"  Nucleo official careers: {len(jobs)} jobs")
-    return list(jobs.values())
-
-
-def scrape_learnupon_official():
-    company = "LearnUpon"
-    source = "https://careers.learnupon.com/"
-    sess = _session()
-
-    try:
-        r = sess.get(
-            source,
-            timeout=30,
-            headers={"User-Agent": "Mozilla/5.0"},
-        )
-        r.raise_for_status()
-    except Exception as exc:
-        print(f"  ! LearnUpon fetch failed: {exc}")
-        return []
-
-    links = re.findall(
-        r"https://job-boards\.greenhouse\.io/learnupon/jobs/\d+",
-        r.text,
-        re.I,
-    )
-
-    jobs = {}
-
-    for url in dict.fromkeys(links):
-        try:
-            detail = sess.get(
-                url,
-                timeout=25,
-                headers={"User-Agent": "Mozilla/5.0"},
-            )
-            detail.raise_for_status()
-        except Exception:
-            continue
-
-        plain = _fz_text(detail.text)
-
-        if "dublin" not in plain.lower() and "ireland" not in plain.lower():
-            continue
-
-        title = ""
-
-        m = re.search(
-            r"<title>(.*?)</title>",
-            detail.text,
-            re.I | re.S,
-        )
-
-        if m:
-            title = _fz_text(m.group(1))
-
-        if not title:
-            h1 = re.search(
-                r"<h1[^>]*>(.*?)</h1>",
-                detail.text,
-                re.I | re.S,
-            )
-            if h1:
-                title = _fz_text(h1.group(1))
-
-        title = re.sub(
-            r"^Job Application for\s+",
-            "",
-            title,
-            flags=re.I,
-        )
-        title = re.sub(
-            r"\s+at\s+LearnUpon$",
-            "",
-            title,
-            flags=re.I,
-        ).strip()
-
-        if not title:
-            continue
-
-        jobs[url] = {
-            "company": company,
-            "ats": "greenhouse",
-            "title": title,
-            "location": "Dublin, Ireland",
-            "url": url,
-            "updated_at": None,
-            "description_text": plain[:10000],
-        }
-
-    _mark_connector_health(
-        company,
-        bool(jobs),
-        f"Official LearnUpon Greenhouse returned {len(jobs)} Dublin jobs",
-        source,
-    )
-
-    print(f"  LearnUpon official careers: {len(jobs)} jobs")
-    return list(jobs.values())
-
-
-def scrape_concentrix_official():
-    company = "Concentrix (Ireland)"
-    source = "https://jobs.concentrix.com/job-search/?country=Ireland"
-
-    body = ""
-
-    if cffi_requests is not None:
-        try:
-            r = cffi_requests.get(
-                source,
-                timeout=30,
-                impersonate="chrome",
-                headers={"Accept-Language": "en-IE,en;q=0.9"},
-            )
-            if r.status_code == 200:
-                body = r.text
-        except Exception as exc:
-            print(f"  ! Concentrix curl_cffi listing failed: {exc}")
-
-    if not body:
-        return []
-
-    ids = re.findall(
-        r"(?:\?|&amp;|&)id=(R\d+)",
-        body,
-        re.I,
-    )
-
-    ids += re.findall(
-        r'["\'](?:id|jobId|requisitionId)["\']\s*:\s*["\'](R\d+)["\']',
-        body,
-        re.I,
-    )
-
-    jobs = {}
-
-    for job_id in dict.fromkeys(ids):
-        url = f"https://jobs.concentrix.com/job/?id={job_id}"
-
-        try:
-            detail = cffi_requests.get(
-                url,
-                timeout=25,
-                impersonate="chrome",
-            )
-        except Exception:
-            continue
-
-        if detail.status_code != 200:
-            continue
-
-        plain = _fz_text(detail.text)
-
-        if not any(
-            term in plain.lower()
-            for term in ("ireland", "dublin", "santry")
-        ):
-            continue
-
-        h1 = re.search(
-            r"<h1[^>]*>(.*?)</h1>",
-            detail.text,
-            re.I | re.S,
-        )
-
-        if not h1:
-            continue
-
-        title = _fz_text(h1.group(1))
-        location = "Ireland"
-
-        lm = re.search(
-            r"Location\s+(.{2,100}?Ireland)",
-            plain,
-            re.I,
-        )
-
-        if lm:
-            location = _fz_text(lm.group(1))
-
-        jobs[url] = {
-            "company": company,
-            "ats": "official",
-            "title": title,
-            "location": location,
-            "url": url,
-            "updated_at": None,
-            "description_text": plain[:10000],
-        }
-
-    _mark_connector_health(
-        company,
-        bool(jobs),
-        f"Official Concentrix Ireland source returned {len(jobs)} jobs",
-        source,
-    )
-
-    print(f"  Concentrix official Ireland careers: {len(jobs)} jobs")
-    return list(jobs.values())
-
-
-
-
-def _fz2_text(value):
-    value = html.unescape(str(value or ""))
-    value = re.sub(r"<[^>]+>", " ", value)
-    return re.sub(r"\s+", " ", value).strip()
-
-
-def scrape_solarwinds_official():
-    from bs4 import BeautifulSoup
-
-    company = "SolarWinds"
-    base = "https://jobs.solarwinds.com/jobs/"
-    sess = _session()
-    jobs = {}
-
-    for page_num in range(1, 10):
-        url = (
-            base
-            if page_num == 1
-            else f"{base}?sw-page={page_num}"
-        )
-
-        try:
-            r = sess.get(
-                url,
-                timeout=30,
-                headers={
-                    "User-Agent": "Mozilla/5.0",
-                    "Accept-Language": "en-IE,en;q=0.9",
-                },
-            )
-            r.raise_for_status()
-        except Exception as exc:
-            print(
-                f"  ! SolarWinds page {page_num} failed: {exc}"
-            )
-            break
-
-        soup = BeautifulSoup(r.text, "html.parser")
-
-        anchors = soup.find_all(
-            "a",
-            href=re.compile(
-                r"job-detail/\?gh_jid=\d+",
-                re.I,
-            ),
-        )
-
-        page_ids = set()
-
-        for a in anchors:
-            href = urllib.parse.urljoin(
-                r.url,
-                html.unescape(
-                    str(a.get("href") or "")
-                ),
-            )
-
-            m = re.search(
-                r"[?&]gh_jid=(\d+)",
-                href,
-                re.I,
-            )
-
-            if not m:
-                continue
-
-            jid = m.group(1)
-
-            if jid in page_ids:
-                continue
-
-            page_ids.add(jid)
-
-            card = None
-            node = a
-
-            for _ in range(10):
-                node = getattr(node, "parent", None)
-
-                if node is None:
-                    break
-
-                card_links = {
-                    re.search(
-                        r"[?&]gh_jid=(\d+)",
-                        urllib.parse.urljoin(
-                            r.url,
-                            html.unescape(
-                                str(x.get("href") or "")
-                            ),
-                        ),
-                        re.I,
-                    ).group(1)
-                    for x in node.find_all(
-                        "a",
-                        href=re.compile(
-                            r"job-detail/\?gh_jid=\d+",
-                            re.I,
-                        ),
-                    )
-                    if re.search(
-                        r"[?&]gh_jid=(\d+)",
-                        urllib.parse.urljoin(
-                            r.url,
-                            html.unescape(
-                                str(x.get("href") or "")
-                            ),
-                        ),
-                        re.I,
-                    )
-                }
-
-                text = _fz2_text(
-                    node.get_text(
-                        " ",
-                        strip=True,
-                    )
-                )
-
-                if (
-                    card_links == {jid}
-                    and re.search(
-                        r"\bLocation\b",
-                        text,
-                        re.I,
-                    )
-                ):
-                    card = node
-                    break
-
-            if card is None:
-                continue
-
-            card_text = _fz2_text(
-                card.get_text(
-                    " ",
-                    strip=True,
-                )
-            )
-
-            location_match = re.search(
-                r"\bLocation\s+(.+?)\s+Departments\b",
-                card_text,
-                re.I,
-            )
-
-            if not location_match:
-                continue
-
-            location = _fz2_text(
-                location_match.group(1)
-            )
-
-            if not re.search(
-                r"\bCork,\s*Ireland\b",
-                location,
-                re.I,
-            ):
-                continue
-
-            title = ""
-
-            for candidate in card.find_all(
-                "a",
-                href=re.compile(
-                    rf"job-detail/\?gh_jid={re.escape(jid)}",
-                    re.I,
-                ),
-            ):
-                candidate_text = _fz2_text(
-                    candidate.get_text(
-                        " ",
-                        strip=True,
-                    )
-                )
-
-                if not candidate_text:
-                    continue
-
-                if candidate_text.lower().startswith(
-                    (
-                        "location ",
-                        "departments ",
-                    )
-                ):
-                    continue
-
-                title = candidate_text
-                break
-
-            if not title:
-                continue
-
-            canonical = (
-                "https://jobs.solarwinds.com/"
-                f"job-detail/?gh_jid={jid}"
-            )
-
-            jobs[canonical] = {
-                "company": company,
-                "ats": "official",
-                "title": title,
-                "location": "Cork, Ireland",
-                "url": canonical,
-                "updated_at": None,
-                "description_text": card_text[:5000],
-            }
-
-        next_link = soup.find(
-            "a",
-            string=re.compile(
-                r"^\s*Next\s*$",
-                re.I,
-            ),
-        )
-
-        if not next_link:
-            break
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official SolarWinds careers loaded; "
-            f"{len(jobs)} Cork jobs"
-        ),
-        base,
-    )
-
-    print(
-        f"  SolarWinds official careers: "
-        f"{len(jobs)} jobs"
-    )
-
-    return list(jobs.values())
-
-def scrape_bdo_ireland_official():
-    company = "BDO Ireland"
-    source = "https://bdoireland.pinpointhq.com/"
-    jobs = {}
-
-    try:
-        from playwright.sync_api import sync_playwright
-
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-
-            context = browser.new_context(
-                locale="en-IE",
-                user_agent=(
-                    "Mozilla/5.0 "
-                    "(Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 "
-                    "(KHTML, like Gecko) "
-                    "Chrome/139.0 Safari/537.36"
-                ),
-            )
-
-            page = context.new_page()
-
-            page.goto(
-                source,
-                wait_until="domcontentloaded",
-                timeout=60000,
-            )
-
-            page.wait_for_timeout(2500)
-
-            anchors = page.locator("a[href]")
-
-            for i in range(anchors.count()):
-                a = anchors.nth(i)
-
-                try:
-                    href = a.get_attribute("href") or ""
-                    label = _fz2_text(a.inner_text(timeout=1000))
-                except Exception:
-                    continue
-
-                full = urllib.parse.urljoin(page.url, href)
-
-                if "pinpointhq.com" not in full.lower():
-                    continue
-
-                if not re.search(
-                    r"/(?:postings|jobs|job)/",
-                    full,
-                    re.I,
-                ):
-                    continue
-
-                if not label or len(label) < 3:
-                    continue
-
-                try:
-                    container_text = a.evaluate(
-                        """el => {
-                            let n = el;
-                            for (let i = 0; i < 7 && n; i++, n = n.parentElement) {
-                                const t = (n.innerText || '').replace(/\\s+/g, ' ').trim();
-                                if (t.length > 10 && t.length < 3000) return t;
-                            }
-                            return '';
-                        }"""
-                    )
-                except Exception:
-                    container_text = label
-
-                context_text = _fz2_text(container_text)
-
-                if not re.search(
-                    r"\b(?:Dublin|Ireland)\b",
-                    context_text,
-                    re.I,
-                ):
-                    continue
-
-                jobs[full] = {
-                    "company": company,
-                    "ats": "pinpoint",
-                    "title": label[:300],
-                    "location": (
-                        "Dublin, Ireland"
-                        if "dublin" in context_text.lower()
-                        else "Ireland"
-                    ),
-                    "url": full,
-                    "updated_at": None,
-                    "description_text": context_text[:5000],
-                }
-
-            context.close()
-            browser.close()
-
-    except Exception as exc:
-        print(f"  ! BDO Ireland Pinpoint scrape failed: {exc}")
-
-    _mark_connector_health(
-        company,
-        bool(jobs),
-        f"Official BDO Ireland Pinpoint returned {len(jobs)} jobs",
-        source,
-    )
-
-    print(f"  BDO Ireland official careers: {len(jobs)} jobs")
-    return list(jobs.values())
-
-
-def scrape_bearingpoint_official():
-    company = "BearingPoint"
-    source = "https://www.bearingpoint.com/en-ie/careers/open-roles/?country=IE"
-    sess = _session()
-
-    try:
-        r = sess.get(
-            source,
-            timeout=30,
-            headers={"User-Agent": "Mozilla/5.0"},
-        )
-        r.raise_for_status()
-    except Exception as exc:
-        print(f"  ! BearingPoint fetch failed: {exc}")
-        return []
-
-    jobs = {}
-
-    pattern = (
-        r'<a[^>]+href=["\']'
-        r'([^"\']*job-offer-successfactors/\?id=[^"\']+)'
-        r'["\'][^>]*>(.*?)</a>'
-    )
-
-    for match in re.finditer(pattern, r.text, re.I | re.S):
-        url = urllib.parse.urljoin(
-            source,
-            html.unescape(match.group(1)),
-        )
-
-        title = _fz2_text(match.group(2))
-
-        if not title:
-            continue
-
-        title = re.sub(
-            r"\s+(?:Advisory|Enterprise Microsoft Transformation|Software\s*-\s*Dev|Systems Design)$",
-            "",
-            title,
-            flags=re.I,
-        ).strip()
-
-        jobs[url] = {
-            "company": company,
-            "ats": "successfactors",
-            "title": title,
-            "location": "Dublin, Ireland",
-            "url": url,
-            "updated_at": None,
-            "description_text": "",
-        }
-
-    _mark_connector_health(
-        company,
-        bool(jobs),
-        f"Official BearingPoint Ireland page returned {len(jobs)} jobs",
-        source,
-    )
-
-    print(f"  BearingPoint official Ireland careers: {len(jobs)} jobs")
-    return list(jobs.values())
-
-
-def scrape_cartrawler_official():
-    company = "CarTrawler"
-    source = "https://corporate.cartrawler.com/en-gb/careers/opportunities/"
-    jobs = {}
-
-    body = ""
-
-    if cffi_requests is not None:
-        try:
-            r = cffi_requests.get(
-                source,
-                timeout=30,
-                impersonate="chrome",
-                headers={"Accept-Language": "en-IE,en;q=0.9"},
-            )
-
-            if r.status_code == 200:
-                body = r.text
-
-        except Exception:
-            pass
-
-    if not body:
-        try:
-            from playwright.sync_api import sync_playwright
-
-            with sync_playwright() as pw:
-                browser = pw.chromium.launch(headless=True)
-
-                context = browser.new_context(locale="en-IE")
-                page = context.new_page()
-
-                page.goto(
-                    source,
-                    wait_until="domcontentloaded",
-                    timeout=60000,
-                )
-
-                page.wait_for_timeout(2500)
-                body = page.content()
-
-                context.close()
-                browser.close()
-
-        except Exception as exc:
-            print(f"  ! CarTrawler browser scrape failed: {exc}")
-
-    if body:
-        pattern = (
-            r'<a[^>]+href=["\']'
-            r'([^"\']*/careers/opportunities/[0-9a-f-]+/?)'
-            r'["\'][^>]*>(.*?)</a>'
-        )
-
-        candidate_urls = []
-
-        for match in re.finditer(pattern, body, re.I | re.S):
-            candidate_urls.append(
-                urllib.parse.urljoin(
-                    source,
-                    html.unescape(match.group(1)),
-                )
-            )
-
-        candidate_urls = list(dict.fromkeys(candidate_urls))
-
-        for url in candidate_urls:
-            detail_body = ""
-
-            if cffi_requests is not None:
-                try:
-                    dr = cffi_requests.get(
-                        url,
-                        timeout=25,
-                        impersonate="chrome",
-                    )
-                    if dr.status_code == 200:
-                        detail_body = dr.text
-                except Exception:
-                    pass
-
-            if not detail_body:
-                continue
-
-            plain = _fz2_text(detail_body)
-
-            if not re.search(
-                r"Location:\s*Dublin|\bDublin\b",
-                plain,
-                re.I,
-            ):
-                continue
-
-            h1 = re.search(
-                r"<h1[^>]*>(.*?)</h1>",
-                detail_body,
-                re.I | re.S,
-            )
-
-            if not h1:
-                continue
-
-            title = _fz2_text(h1.group(1))
-
-            if not title:
-                continue
-
-            jobs[url] = {
-                "company": company,
-                "ats": "official",
-                "title": title,
-                "location": "Dublin, Ireland",
-                "url": url,
-                "updated_at": None,
-                "description_text": plain[:10000],
-            }
-
-    _mark_connector_health(
-        company,
-        bool(jobs),
-        f"Official CarTrawler careers returned {len(jobs)} Dublin jobs",
-        source,
-    )
-
-    print(f"  CarTrawler official careers: {len(jobs)} jobs")
-    return list(jobs.values())
-
-
-def scrape_dillon_eustace_official():
-    company = "Dillon Eustace"
-    source = (
-        "https://www.dilloneustace.com/"
-        "careers/business-services/"
-    )
-
-    jobs = {}
-
-    try:
-        from playwright.sync_api import sync_playwright
-
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-
-            context = browser.new_context(
-                locale="en-IE",
-                user_agent=(
-                    "Mozilla/5.0 "
-                    "(Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 "
-                    "(KHTML, like Gecko) "
-                    "Chrome/139.0 Safari/537.36"
-                ),
-            )
-
-            page = context.new_page()
-
-            page.goto(
-                source,
-                wait_until="domcontentloaded",
-                timeout=60000,
-            )
-
-            page.wait_for_timeout(2500)
-
-            body_text = _fz2_text(
-                page.locator("body").inner_text()
-            )
-
-            if (
-                re.search(
-                    r"Lawyers\s*[-–]\s*all practice areas",
-                    body_text,
-                    re.I,
-                )
-                and re.search(
-                    r"Dublin,\s*Ireland",
-                    body_text,
-                    re.I,
-                )
-            ):
-                apply_url = source + "#current-opportunities"
-
-                anchors = page.locator("a[href]")
-
-                for i in range(anchors.count()):
-                    a = anchors.nth(i)
-
-                    try:
-                        label = _fz2_text(
-                            a.inner_text(timeout=500)
-                        )
-                        href = a.get_attribute("href") or ""
-                    except Exception:
-                        continue
-
-                    if not href:
-                        continue
-
-                    try:
-                        context_text = _fz2_text(
-                            a.evaluate(
-                                """el => {
-                                    let n = el;
-                                    for (
-                                        let i = 0;
-                                        i < 7 && n;
-                                        i++, n = n.parentElement
-                                    ) {
-                                        const t = (
-                                            n.innerText || ''
-                                        )
-                                            .replace(/\\s+/g, ' ')
-                                            .trim();
-
-                                        if (
-                                            /Lawyers\\s*[-–]\\s*all practice areas/i.test(t) &&
-                                            /Dublin,?\\s*Ireland/i.test(t)
-                                        ) {
-                                            return t;
-                                        }
-                                    }
-
-                                    return '';
-                                }"""
-                            )
-                        )
-                    except Exception:
-                        context_text = ""
-
-                    if not context_text:
-                        continue
-
-                    if (
-                        label.lower() == "apply"
-                        or "apply" in label.lower()
-                        or "lawyers" in label.lower()
-                    ):
-                        apply_url = urllib.parse.urljoin(
-                            page.url,
-                            href,
-                        )
-                        break
-
-                jobs[apply_url] = {
-                    "company": company,
-                    "ats": "official",
-                    "title": "Lawyers - all practice areas",
-                    "location": "Dublin, Ireland",
-                    "url": apply_url,
-                    "updated_at": None,
-                    "description_text": body_text[:10000],
-                }
-
-            context.close()
-            browser.close()
-
-    except Exception as exc:
-        print(
-            f"  ! Dillon Eustace browser scrape failed: "
-            f"{exc}"
-        )
-
-    _mark_connector_health(
-        company,
-        bool(jobs),
-        (
-            "Official Dillon Eustace careers returned "
-            f"{len(jobs)} Dublin jobs"
-        ),
-        source,
-    )
-
-    print(
-        f"  Dillon Eustace official careers: "
-        f"{len(jobs)} jobs"
-    )
-
-    return list(jobs.values())
-
-
-def scrape_fexco_official():
-    company = "Fexco"
-    source_url = "https://careers.fexco.com/vacancies.html"
-    feed_url = "https://careers.fexco.com/utf8/ic_job_feeds.feed_engine"
-
-    sess = _session()
-    if not sess:
-        return []
-
-    params = {
-        "p_web_site_id": "4473",
-        "p_published_to": "WWW",
-        "p_language": "DEFAULT",
-        "p_direct": "Y",
-        "p_format": "MOBILE",
-        "p_include_exclude_from_list": "N",
-    }
-
-    try:
-        r = sess.get(
-            feed_url,
-            params=params,
-            timeout=40,
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept-Language": "en-IE,en;q=0.9",
-            },
-        )
-        r.raise_for_status()
-        data = r.json()
-    except Exception as exc:
-        _mark_connector_health(company, False, str(exc), source_url)
-        print(f"  ! Fexco official vacancies failed: {exc}")
-        return []
-
-    if isinstance(data, dict):
-        records = (
-            data.get("jobs")
-            or data.get("vacancies")
-            or data.get("results")
-            or data.get("data")
-            or []
-        )
-    elif isinstance(data, list):
-        records = data
-    else:
-        records = []
-
-    out = {}
-
-    for job in records:
-        if not isinstance(job, dict):
-            continue
-
-        if str(job.get("status") or "").lower() not in {"", "open"}:
-            continue
-
-        publication = job.get("publication") or {}
-        internet = publication.get("internet") or {}
-
-        if internet and str(internet.get("live") or "").upper() not in {"", "Y"}:
-            continue
-
-        title = str(job.get("title") or "").strip()
-        url = str(job.get("weblink") or "").strip()
-
-        classifications = job.get("classifications") or {}
-        locations = []
-
-        for group in classifications.values():
-            if not isinstance(group, dict):
-                continue
-
-            if str(group.get("name") or "").lower() != "location":
-                continue
-
-            for value in group.get("values") or []:
-                if isinstance(value, dict):
-                    loc = str(value.get("class_val") or "").strip()
-                    if loc:
-                        locations.append(loc)
-
-        ireland_locations = [
-            loc for loc in locations
-            if re.search(
-                r"\bIreland\b|\bDublin\b|\bCork\b|\bKerry\b|\bShannon\b|\bGalway\b|\bDundalk\b",
-                loc,
-                re.I,
-            )
-            and not re.search(r"\bNorthern Ireland\b|\bBelfast\b", loc, re.I)
-        ]
-
-        if not ireland_locations:
-            continue
-
-        location_blob = ", ".join(ireland_locations)
-
-        city = None
-        for candidate in (
-            "Dublin",
-            "Cork",
-            "Kerry",
-            "Shannon",
-            "Galway",
-            "Dundalk",
-        ):
-            if re.search(rf"\b{candidate}\b", location_blob, re.I):
-                city = candidate
-                break
-
-        location = f"{city}, Ireland" if city else "Ireland"
-
-        if not title or not url:
-            continue
-
-        out[url.rstrip("/").lower()] = {
-            "company": company,
-            "ats": "fexco_official",
-            "title": title[:300],
-            "location": location,
-            "url": url,
-            "updated_at": job.get("timestamp"),
-            "description_text": "",
-        }
-
-    _mark_connector_health(
-        company,
-        True,
-        f"Official Fexco vacancy feed loaded; {len(out)} Ireland jobs",
-        source_url,
-    )
-    print(f"  Fexco official Ireland careers: {len(out)} jobs")
-    return list(out.values())
-
-
-def scrape_teneo_ireland_official():
-    from bs4 import BeautifulSoup
-
-    company = "Teneo Ireland"
-    source_url = "https://www.teneo.com/careers/open-positions/"
-
-    try:
-        r = cffi_requests.get(
-            source_url,
-            timeout=40,
-            impersonate="chrome",
-            headers={"Accept-Language": "en-IE,en;q=0.9"},
-        )
-        r.raise_for_status()
-        body = r.text or ""
-    except Exception as exc:
-        _mark_connector_health(company, False, str(exc), source_url)
-        print(f"  ! Teneo Ireland official careers failed: {exc}")
-        return []
-
-    soup = BeautifulSoup(body, "html.parser")
-    out = {}
-
-    for card in soup.select("li[data-job]"):
-        loc_node = card.select_one("[data-job-office]")
-        title_node = card.select_one("[data-job-title]")
-        link = card.find("a", href=True)
-
-        if not loc_node or not title_node or not link:
-            continue
-
-        location = re.sub(
-            r"\s+",
-            " ",
-            loc_node.get_text(" ", strip=True),
-        ).strip()
-
-        if not re.search(r"\bDublin,\s*Ireland\b", location, re.I):
-            continue
-
-        title = re.sub(
-            r"\s+",
-            " ",
-            title_node.get_text(" ", strip=True),
-        ).strip()
-
-        href = urllib.parse.urljoin(source_url, link.get("href") or "")
-        desc_node = card.select_one("[data-job-content]")
-        desc = (
-            re.sub(r"\s+", " ", desc_node.get_text(" ", strip=True)).strip()
-            if desc_node
-            else ""
-        )
-
-        if not title or not href:
-            continue
-
-        out[href.rstrip("/").lower()] = {
-            "company": company,
-            "ats": "greenhouse_official",
-            "title": title[:300],
-            "location": "Dublin, Ireland",
-            "url": href,
-            "updated_at": None,
-            "description_text": desc[:7000],
-        }
-
-    _mark_connector_health(
-        company,
-        True,
-        f"Official Teneo board loaded; {len(out)} Dublin jobs",
-        source_url,
-    )
-    print(f"  Teneo Ireland official careers: {len(out)} jobs")
-    return list(out.values())
-
-
-
-def scrape_virgin_media_ireland():
-    company = "Virgin Media Ireland"
-    tenant = "libertyglobal"
-    host = "wd3"
-    site = "VMIE_Careers"
-    source = "https://libertyglobal.wd3.myworkdayjobs.com/VMIE_Careers"
-
-    origin = f"https://{tenant}.{host}.myworkdayjobs.com"
-    api = f"{origin}/wday/cxs/{tenant}/{site}/jobs"
-
-    sess = _workday_session()
-    headers = _workday_headers(tenant, host, site)
-
-    if sess is None:
-        return []
-
-    resp = _workday_post(
-        sess,
-        api,
-        headers,
-        {},
-        20,
-        0,
-        "",
-    )
-
-    if resp is None:
-        _mark_connector_health(
-            company,
-            False,
-            "Virgin Media Ireland Workday API did not respond",
-            source,
-        )
-        return []
-
-    try:
-        data = resp.json() or {}
-    except Exception as exc:
-        _mark_connector_health(company, False, str(exc), source)
-        return []
-
-    results = {}
-
-    for row in data.get("jobPostings") or []:
-        title = str(row.get("title") or "").strip()
-        raw_location = str(
-            row.get("locationsText")
-            or (
-                (row.get("bulletFields") or [""])[0]
-                if row.get("bulletFields")
-                else ""
-            )
-        ).strip()
-
-        if not title:
-            continue
-
-        if re.search(r"\bBallymount\b", raw_location, re.I):
-            location = "Ballymount, Dublin, Ireland"
-        elif region_ok(raw_location):
-            location = raw_location
-        else:
-            continue
-
-        external_path = str(row.get("externalPath") or "").strip()
-
-        if external_path:
-            url = urllib.parse.urljoin(
-                f"{origin}/en-US/{site}/",
-                external_path,
-            )
-        else:
-            url = source
-
-        key = url.rstrip("/").lower() + "|" + title.lower()
-
-        results[key] = {
-            "company": company,
-            "ats": "workday",
-            "title": title,
-            "location": location,
-            "url": url,
-            "updated_at": None,
-            "description_text": "",
-        }
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official Virgin Media Ireland Workday returned "
-            f"{len(results)} Ireland jobs"
-        ),
-        source,
-    )
-
-    print(
-        f"  Virgin Media Ireland official Workday: "
-        f"{len(results)} jobs"
-    )
-
-    return list(results.values())
-
-
-def scrape_workhuman_official():
-    company = "Workhuman"
-    source = "https://www.workhuman.com/company/careers/list/"
-    sess = _session()
-
-    if not sess:
-        return []
-
-    headers = {
-        "User-Agent": "Mozilla/5.0",
-        "Accept-Language": "en-IE,en;q=0.9",
-    }
-
-    try:
-        r = sess.get(
-            source,
-            timeout=30,
-            headers=headers,
-        )
-        r.raise_for_status()
-        listing = r.text or ""
-    except Exception as exc:
-        _mark_connector_health(company, False, str(exc), source)
-        print(f"  ! Workhuman official careers failed: {exc}")
-        return []
-
-    urls = set()
-
-    for href in re.findall(
-        r'href=["\']([^"\']*/company/careers/list/[^"\']+/?)["\']',
-        listing,
-        re.I,
-    ):
-        url = urllib.parse.urljoin(
-            source,
-            html.unescape(href),
-        )
-
-        if url.rstrip("/") == source.rstrip("/"):
-            continue
-
-        if "/company/careers/list/page/" in url.lower():
-            continue
-
-        urls.add(url)
-
-    results = {}
-
-    def iter_jobpostings(value):
-        if isinstance(value, dict):
-            kind = value.get("@type")
-
-            if (
-                kind == "JobPosting"
-                or (
-                    isinstance(kind, list)
-                    and "JobPosting" in kind
-                )
-            ):
-                yield value
-
-            for child in value.values():
-                yield from iter_jobpostings(child)
-
-        elif isinstance(value, list):
-            for child in value:
-                yield from iter_jobpostings(child)
-
-    for url in sorted(urls):
-        try:
-            rr = sess.get(
-                url,
-                timeout=25,
-                headers=headers,
-            )
-
-            if rr.status_code != 200:
-                continue
-
-            page = rr.text or ""
-
-        except Exception as exc:
-            print(
-                f"  ! Workhuman detail failed "
-                f"{url}: {exc}"
-            )
-            continue
-
-        postings = []
-
-        for raw in re.findall(
-            r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>'
-            r'(.*?)</script>',
-            page,
-            re.I | re.S,
-        ):
-            try:
-                payload = json.loads(
-                    html.unescape(raw).strip()
-                )
-            except Exception:
-                continue
-
-            postings.extend(
-                iter_jobpostings(payload)
-            )
-
-        for posting in postings:
-            title = str(
-                posting.get("title")
-                or posting.get("name")
-                or ""
-            ).strip()
-
-            job_url = str(
-                posting.get("url")
-                or url
-            ).strip()
-
-            description = _html_text(
-                str(posting.get("description") or "")
-            )
-
-            locations = []
-
-            raw_location = posting.get("jobLocation")
-
-            if isinstance(raw_location, dict):
-                raw_location = [raw_location]
-
-            if isinstance(raw_location, list):
-                for loc in raw_location:
-                    if not isinstance(loc, dict):
-                        continue
-
-                    address = loc.get("address") or {}
-
-                    if not isinstance(address, dict):
-                        continue
-
-                    country = address.get("addressCountry")
-
-                    if isinstance(country, dict):
-                        country = (
-                            country.get("name")
-                            or country.get("@id")
-                            or ""
-                        )
-
-                    parts = [
-                        address.get("addressLocality"),
-                        address.get("addressRegion"),
-                        country,
-                    ]
-
-                    location = ", ".join(
-                        str(x).strip()
-                        for x in parts
-                        if x
-                    )
-
-                    if location:
-                        locations.append(location)
-
-            remote = posting.get(
-                "applicantLocationRequirements"
-            )
-
-            if isinstance(remote, dict):
-                remote = [remote]
-
-            if isinstance(remote, list):
-                for loc in remote:
-                    if not isinstance(loc, dict):
-                        continue
-
-                    name = str(
-                        loc.get("name") or ""
-                    ).strip()
-
-                    if name:
-                        locations.append(name)
-
-            if not locations:
-                page_text = _html_text(page)
-
-                loc_match = re.search(
-                    r"\b(Dublin|Cork|Galway|Limerick|"
-                    r"Waterford|Ireland)\b",
-                    page_text,
-                    re.I,
-                )
-
-                if loc_match:
-                    city = loc_match.group(1)
-
-                    if city.lower() == "ireland":
-                        locations.append("Ireland")
-                    else:
-                        locations.append(
-                            f"{city.title()}, Ireland"
-                        )
-
-            valid_locations = [
-                loc
-                for loc in locations
-                if region_ok(loc)
-            ]
-
-            if not title or not valid_locations:
-                continue
-
-            key = job_url.lower()
-
-            results[key] = {
-                "company": company,
-                "ats": "workhuman_official",
-                "title": title[:300],
-                "location": valid_locations[0],
-                "url": job_url,
-                "updated_at": posting.get(
-                    "datePosted"
-                ),
-                "closing_date": posting.get(
-                    "validThrough"
-                ),
-                "description_text": description[:7000],
-            }
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official Workhuman careers source loaded; "
-            f"{len(results)} Ireland jobs"
-        ),
-        source,
-    )
-
-    print(
-        f"  Workhuman official Ireland careers: "
-        f"{len(results)} jobs"
-    )
-
-    return list(results.values())
-
-def scrape_takeda_official():
-    company = "Takeda"
-    source = (
-        "https://jobs.takeda.com/location/"
-        "ireland-jobs/1113/2963597/2/takedajobs.com"
-    )
-
-    sess = _session()
-
-    if not sess:
-        return []
-
-    try:
-        r = sess.get(
-            source,
-            timeout=30,
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept-Language": "en-IE,en;q=0.9",
-            },
-        )
-        r.raise_for_status()
-        body = html.unescape(r.text or "")
-    except Exception as exc:
-        _mark_connector_health(company, False, str(exc), source)
-        print(f"  ! Takeda official careers failed: {exc}")
-        return []
-
-    urls = set()
-
-    for href in re.findall(
-        r'href=["\']([^"\']*/job/[^"\']+)["\']',
-        body,
-        re.I,
-    ):
-        url = urllib.parse.urljoin(source, html.unescape(href))
-
-        if not re.search(
-            r"/job/[^/]+/[^/]+/\d+/\d+(?:[/?#]|$)",
-            url,
-            re.I,
-        ):
-            continue
-
-        urls.add(url)
-
-    results = {}
-
-    for url in sorted(urls):
-        try:
-            jobs = scrape_jsonld(company, url) or []
-        except Exception:
-            jobs = []
-
-        for job in jobs:
-            location = str(job.get("location") or "")
-
-            if not region_ok(location):
-                continue
-
-            job["company"] = company
-            job["ats"] = "takeda_official"
-
-            key = str(job.get("url") or url).lower()
-            results[key] = job
-
-        if jobs:
-            continue
-
-        m = re.search(
-            r"/job/([^/]+)/([^/]+)/\d+/\d+",
-            url,
-            re.I,
-        )
-
-        if not m:
-            continue
-
-        city = m.group(1).replace("-", " ").title()
-
-        if city.lower() not in {
-            "dublin",
-            "wicklow",
-            "bray",
-        }:
-            continue
-
-        title = m.group(2).replace("-", " ").strip().title()
-
-        results[url.lower()] = {
-            "company": company,
-            "ats": "takeda_official",
-            "title": title,
-            "location": f"{city}, Ireland",
-            "url": url,
-            "updated_at": None,
-        }
-
-    _mark_connector_health(
-        company,
-        True,
-        f"Official Takeda Ireland careers source loaded; {len(results)} jobs",
-        source,
-    )
-
-    print(
-        f"  Takeda official Ireland careers: "
-        f"{len(results)} jobs"
-    )
-
-    return list(results.values())
-
-
-def scrape_teva_official():
-    company = "Teva Pharmaceuticals"
-    source = "https://www.careers.teva/"
-    sess = _session()
-
-    if not sess:
-        return []
-
-    try:
-        r = sess.get(
-            source,
-            timeout=35,
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept-Language": "en-IE,en;q=0.9",
-            },
-        )
-        r.raise_for_status()
-        body = html.unescape(r.text or "")
-    except Exception as exc:
-        _mark_connector_health(company, False, str(exc), source)
-        print(f"  ! Teva official careers failed: {exc}")
-        return []
-
-    decoder = json.JSONDecoder()
-    results = {}
-
-    starts = re.finditer(
-        r'\{"id"\s*:\s*\d+\s*,\s*"name"\s*:',
-        body,
-    )
-
-    for match in starts:
-        try:
-            obj, _ = decoder.raw_decode(body[match.start():])
-        except Exception:
-            continue
-
-        if not isinstance(obj, dict):
-            continue
-
-        title = str(
-            obj.get("name")
-            or obj.get("posting_name")
-            or ""
-        ).strip()
-
-        location = str(
-            obj.get("location")
-            or ""
-        ).strip()
-
-        url = str(
-            obj.get("canonicalPositionUrl")
-            or ""
-        ).strip()
-
-        if not title or not url or not region_ok(location):
-            continue
-
-        results[url.lower()] = {
-            "company": company,
-            "ats": "eightfold",
-            "title": title[:300],
-            "location": location,
-            "url": url,
-            "updated_at": obj.get("t_update"),
-            "description_text": str(
-                obj.get("job_description") or ""
-            )[:7000],
-            "requisition_id": str(
-                obj.get("display_job_id")
-                or obj.get("ats_job_id")
-                or ""
-            ) or None,
-        }
-
-    _mark_connector_health(
-        company,
-        True,
-        f"Official Teva Eightfold source loaded; {len(results)} Ireland jobs",
-        source,
-    )
-
-    print(
-        f"  Teva official Ireland careers: "
-        f"{len(results)} jobs"
-    )
-
-    return list(results.values())
-
-
-
-# ---------------------------------------------------------------------------
-# Manual Search remediation: validated official careers sources
-# ---------------------------------------------------------------------------
-
-def scrape_amgen_official():
-    company = "Amgen"
-    source = (
-        "https://careers.amgen.com/en/location/"
-        "ireland-jobs/87/2963597/2/155892000000000"
-    )
-
-    jobs = _browser_board_collect(
-        company,
-        [source],
-        (
-            "/en/job/",
-            "/job/",
-        ),
-        default_location="Ireland",
-        max_scrolls=20,
-        require_ireland=True,
-        source_tag="amgen_official",
-    )
-
-    _mark_connector_health(
-        company,
-        True,
-        f"Official Amgen careers returned {len(jobs)} Ireland jobs",
-        source,
-    )
-
-    return jobs
-
-
-def scrape_novartis_official():
-    company = "Novartis"
-    source = (
-        "https://www.novartis.com/ie-en/careers/career-search"
-        "?country%5B0%5D=LOC_IE"
-        "&field_alternative_country%5B0%5D=LOC_IE"
-    )
-
-    jobs = _browser_board_collect(
-        company,
-        [source],
-        (
-            "/careers/career-search/job/details/",
-        ),
-        default_location="Dublin, Ireland",
-        max_scrolls=20,
-        require_ireland=True,
-        source_tag="novartis_official",
-    )
-
-    _mark_connector_health(
-        company,
-        True,
-        f"Official Novartis careers returned {len(jobs)} Ireland jobs",
-        source,
-    )
-
-    return jobs
-
-
-def scrape_waystone_official():
-    company = "Waystone"
-    source = "https://www.waystone.com/careers/"
-
-    jobs = _browser_board_collect(
-        company,
-        [source],
-        (
-            "waystone.bamboohr.com",
-        ),
-        default_location="Ireland",
-        max_scrolls=15,
-        require_ireland=True,
-        source_tag="bamboohr",
-    )
-
-    _mark_connector_health(
-        company,
-        True,
-        f"Official Waystone/BambooHR careers returned {len(jobs)} Ireland jobs",
-        source,
-    )
-
-    return jobs
-
-
-def scrape_wuxi_biologics_official():
-    company = "WuXi Biologics"
-    source = "https://www.wuxibiologics.com/join-us/"
-
-    try:
-        import requests
-        from bs4 import BeautifulSoup
-    except Exception as exc:
-        print(f"  ! WuXi dependencies unavailable: {exc}")
-        return []
-
-    session = requests.Session()
-    session.headers.update({
-        "User-Agent": (
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-            "AppleWebKit/537.36 Chrome/129 Safari/537.36"
-        )
-    })
-
-    try:
-        response = session.get(source, timeout=30)
-        response.raise_for_status()
-    except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official WuXi careers page failed: {exc}",
-            source,
-        )
-        return []
-
-    soup = BeautifulSoup(response.text, "html.parser")
-    results = {}
-
-    # Primary path:
-    # WuXi's official page renders its vacancies in table rows.
-    for row in soup.find_all("tr"):
-        row_text = " ".join(row.stripped_strings).strip()
-
-        if not row_text:
-            continue
-
-        if not region_ok(row_text):
-            continue
-
-        links = row.find_all("a", href=True)
-
-        if not links:
-            continue
-
-        job_link = None
-        title = ""
-
-        for link in links:
-            href = urllib.parse.urljoin(
-                source,
-                (link.get("href") or "").strip(),
-            )
-
-            low = href.lower()
-
-            if "/join-us-" in low:
-                job_link = href
-                candidate = " ".join(
-                    link.stripped_strings
-                ).strip()
-
-                if candidate:
-                    title = candidate
-                break
-
-        if not job_link:
-            continue
-
-        if not title:
-            cells = [
-                " ".join(cell.stripped_strings).strip()
-                for cell in row.find_all(["td", "th"])
-            ]
-
-            for cell in cells:
-                low = cell.lower()
-
-                if (
-                    cell
-                    and "ireland" not in low
-                    and not re.fullmatch(
-                        r"\d{4}-\d{2}-\d{2}",
-                        cell,
-                    )
-                ):
-                    title = cell
-                    break
-
-        if not title:
-            continue
-
-        date_match = re.search(
-            r"\b(20\d{2}-\d{2}-\d{2})\b",
-            row_text,
-        )
-
-        updated_at = (
-            date_match.group(1)
-            if date_match
-            else None
-        )
-
-        low_text = row_text.lower()
-
-        if "dundalk" in low_text:
-            location = "Dundalk, Ireland"
-        elif "dublin" in low_text:
-            location = "Dublin, Ireland"
-        elif "louth" in low_text:
-            location = "Co. Louth, Ireland"
-        else:
-            location = "Ireland"
-
-        results[job_link] = {
-            "company": company,
-            "ats": "wuxi_official",
-            "title": title[:300],
-            "location": location,
-            "url": job_link,
-            "updated_at": updated_at,
-            "description_text": row_text[:5000],
-        }
-
-    # Fallback:
-    # Some WordPress revisions render job cards rather than <tr>s.
-    # Inspect links to official /join-us-... detail pages and use the
-    # surrounding card text as Ireland evidence.
-    if not results:
-        for link in soup.find_all("a", href=True):
-            raw = (link.get("href") or "").strip()
-            href = urllib.parse.urljoin(source, raw)
-
-            if "/join-us-" not in href.lower():
-                continue
-
-            node = link
-            context = ""
-
-            for _ in range(6):
-                parent = getattr(node, "parent", None)
-
-                if parent is None:
-                    break
-
-                node = parent
-                candidate = " ".join(
-                    node.stripped_strings
-                ).strip()
-
-                if candidate:
-                    context = candidate
-
-                if (
-                    len(candidate) >= 20
-                    and len(candidate) <= 2500
-                    and region_ok(candidate)
-                ):
-                    break
-
-            if not region_ok(context):
-                continue
-
-            title = " ".join(
-                link.stripped_strings
-            ).strip()
-
-            if not title:
-                heading = node.find(
-                    ["h1", "h2", "h3", "h4", "h5"]
-                )
-
-                if heading:
-                    title = " ".join(
-                        heading.stripped_strings
-                    ).strip()
-
-            if not title:
-                continue
-
-            results[href] = {
-                "company": company,
-                "ats": "wuxi_official",
-                "title": title[:300],
-                "location": (
-                    "Dundalk, Ireland"
-                    if "dundalk" in context.lower()
-                    else "Ireland"
-                ),
-                "url": href,
-                "updated_at": None,
-                "description_text": context[:5000],
-            }
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official WuXi Biologics careers page loaded; "
-            f"{len(results)} Ireland jobs"
-        ),
-        source,
-    )
-
-    print(
-        "  WuXi Biologics official Ireland careers: "
-        f"{len(results)} jobs"
-    )
-
-    return list(results.values())
-
-
-
-def scrape_fidelity_investments_official():
-    company = "Fidelity Investments"
-    source = "https://jobs.fidelity.com/ie/jobs/"
-
-    try:
-        from curl_cffi import requests as curl_requests
-        from bs4 import BeautifulSoup
-    except Exception as exc:
-        print(f"  ! Fidelity dependencies unavailable: {exc}")
-        return []
-
-    try:
-        response = curl_requests.get(
-            source,
-            impersonate="chrome",
-            timeout=30,
-        )
-    except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official Fidelity Ireland source failed: {exc}",
-            source,
-        )
-        print(f"  ! Fidelity request failed: {exc}")
-        return []
-
-    if response.status_code >= 400:
-        _mark_connector_health(
-            company,
-            False,
-            (
-                "Official Fidelity Ireland source returned "
-                f"HTTP {response.status_code}"
-            ),
-            source,
-        )
-        print(
-            f"  ! Fidelity Ireland HTTP "
-            f"{response.status_code}"
-        )
-        return []
-
-    soup = BeautifulSoup(
-        response.text,
-        "html.parser",
-    )
-
-    results = {}
-
-    for a in soup.find_all("a", href=True):
-        title = " ".join(
-            a.stripped_strings
-        ).strip()
-
-        href = urllib.parse.urljoin(
-            str(response.url),
-            a.get("href") or "",
-        )
-
-        if not re.search(
-            r"/ie/jobs/\d+/[^/]+/?$",
-            href,
-            flags=re.I,
-        ):
-            continue
-
-        if not title:
-            continue
-
-        node = a
-        context = ""
-
-        for _ in range(7):
-            parent = getattr(
-                node,
-                "parent",
-                None,
-            )
-
-            if parent is None:
-                break
-
-            node = parent
-
-            candidate = " ".join(
-                node.stripped_strings
-            ).strip()
-
-            if candidate:
-                context = candidate
-
-            if (
-                len(candidate) >= 25
-                and len(candidate) <= 2500
-            ):
-                low_candidate = candidate.lower()
-
-                if any(
-                    token in low_candidate
-                    for token in (
-                        "dublin",
-                        "galway",
-                        "ireland",
-                    )
-                ):
-                    break
-
-        low_context = context.lower()
-        low_title = title.lower()
-
-        if "galway" in low_context:
-            location = "Galway, Ireland"
-
-        elif "dublin" in low_context:
-            location = "Dublin, Ireland"
-
-        elif "galway" in low_title:
-            location = "Galway, Ireland"
-
-        elif "dublin" in low_title:
-            location = "Dublin, Ireland"
-
-        else:
-            location = "Ireland"
-
-        results[href] = {
-            "company": company,
-            "ats": "fidelity_official",
-            "title": title[:300],
-            "location": location,
-            "url": href,
-            "updated_at": None,
-            "description_text": context[:6000],
-        }
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official Fidelity Investments Ireland "
-            f"index returned {len(results)} jobs"
-        ),
-        source,
-    )
-
-    print(
-        "  Fidelity Investments Ireland official: "
-        f"{len(results)} jobs"
-    )
-
-    return list(results.values())
-
-def scrape_fbd_insurance_official():
-    company = "FBD Insurance"
-    source = "https://careers.fbdgroup.com/search/"
-
-    try:
-        import requests
-        from bs4 import BeautifulSoup
-    except Exception as exc:
-        print(f"  ! FBD dependencies unavailable: {exc}")
-        return []
-
-    sess = requests.Session()
-    sess.headers.update({
-        "User-Agent": (
-            "Mozilla/5.0 AppleWebKit/537.36 "
-            "Chrome/129 Safari/537.36"
-        )
-    })
-
-    try:
-        r = sess.get(source, timeout=30)
-        r.raise_for_status()
-    except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official FBD search failed: {exc}",
-            source,
-        )
-        return []
-
-    soup = BeautifulSoup(r.text, "html.parser")
-    results = {}
-
-    for a in soup.find_all("a", href=True):
-        href = urllib.parse.urljoin(
-            source,
-            a.get("href") or "",
-        )
-
-        if "/job/" not in href.lower():
-            continue
-
-        title = " ".join(
-            a.stripped_strings
-        ).strip()
-
-        if not title:
-            continue
-
-        node = a
-        context = ""
-
-        for _ in range(5):
-            parent = getattr(
-                node,
-                "parent",
-                None,
-            )
-
-            if parent is None:
-                break
-
-            node = parent
-
-            candidate = " ".join(
-                node.stripped_strings
-            ).strip()
-
-            if candidate:
-                context = candidate
-
-            if (
-                len(candidate) >= 25
-                and len(candidate) <= 1800
-                and region_ok(candidate)
-            ):
-                break
-
-        if not region_ok(
-            f"{context} {title}"
-        ):
-            continue
-
-        low = context.lower()
-
-        location = "Ireland"
-
-        for place, label in (
-            ("dublin", "Dublin, Ireland"),
-            ("cork", "Cork, Ireland"),
-            ("galway", "Galway, Ireland"),
-            ("kildare", "Kildare, Ireland"),
-            ("kilkenny", "Kilkenny, Ireland"),
-            ("wexford", "Wexford, Ireland"),
-            ("offaly", "Offaly, Ireland"),
-            ("cavan", "Cavan, Ireland"),
-            ("tipperary", "Tipperary, Ireland"),
-            ("westmeath", "Westmeath, Ireland"),
-            ("donegal", "Donegal, Ireland"),
-        ):
-            if place in low:
-                location = label
-                break
-
-        results[href] = {
-            "company": company,
-            "ats": "successfactors",
-            "title": title[:300],
-            "location": location,
-            "url": href,
-            "updated_at": None,
-            "description_text": context[:5000],
-        }
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official FBD SuccessFactors search "
-            f"returned {len(results)} Ireland jobs"
-        ),
-        source,
-    )
-
-    print(
-        "  FBD Insurance official Ireland careers: "
-        f"{len(results)} jobs"
-    )
-
-    return list(results.values())
-
-def scrape_zurich_insurance_official():
-    company = "Zurich Insurance"
-
-    sources = [
-        (
-            "https://www.careers.zurich.com/search/"
-            "?q=&locationsearch=Ireland"
-        ),
-        (
-            "https://www.careers.zurich.com/search/"
-            "?q=&locationsearch=Dublin"
-        ),
-        (
-            "https://www.careers.zurich.com/search/"
-            "?q=&locationsearch=Wexford"
-        ),
-    ]
-
-    try:
-        import requests
-        from bs4 import BeautifulSoup
-    except Exception as exc:
-        print(f"  ! Zurich dependencies unavailable: {exc}")
-        return []
-
-    sess = requests.Session()
-
-    sess.headers.update({
-        "User-Agent": (
-            "Mozilla/5.0 AppleWebKit/537.36 "
-            "Chrome/129 Safari/537.36"
-        )
-    })
-
-    detail_urls = {}
-
-    for source in sources:
-        try:
-            r = sess.get(
-                source,
-                timeout=30,
-            )
-
-            if r.status_code >= 400:
-                continue
-
-            soup = BeautifulSoup(
-                r.text,
-                "html.parser",
-            )
-
-            for a in soup.find_all(
-                "a",
-                href=True,
-            ):
-                href = urllib.parse.urljoin(
-                    r.url,
-                    a.get("href") or "",
-                )
-
-                if "/job/" not in href.lower():
-                    continue
-
-                title = " ".join(
-                    a.stripped_strings
-                ).strip()
-
-                detail_urls[href] = title
-
-        except Exception as exc:
-            print(
-                f"  ! Zurich search page failed "
-                f"{source}: {exc}"
-            )
-
-    results = {}
-
-    for href, hint in list(
-        detail_urls.items()
-    )[:250]:
-
-        try:
-            r = sess.get(
-                href,
-                timeout=25,
-            )
-
-            if r.status_code >= 400:
-                continue
-
-            soup = BeautifulSoup(
-                r.text,
-                "html.parser",
-            )
-
-            page_text = " ".join(
-                soup.stripped_strings
-            )
-
-            evidence = (
-                f"{hint} {page_text} {href}"
-            )
-
-            if not region_ok(evidence):
-                continue
-
-            h1 = soup.find("h1")
-
-            title = (
-                " ".join(
-                    h1.stripped_strings
-                ).strip()
-                if h1
-                else hint
-            )
-
-            if not title:
-                continue
-
-            low_page = page_text.lower()
-            low_href = href.lower()
-
-            if "/job/dublin-" in low_href:
-                location = "Dublin, Ireland"
-
-            elif "/job/wexford-" in low_href:
-                if "dublin / wexford" in title.lower():
-                    location = "Dublin / Wexford, Ireland"
-                else:
-                    location = "Wexford, Ireland"
-
-            elif (
-                "dublin, ireland" in low_page
-                or re.search(r"\bdublin\b", low_page)
-            ):
-                location = "Dublin, Ireland"
-
-            elif (
-                "wexford, ireland" in low_page
-                or re.search(r"\bwexford\b", low_page)
-            ):
-                location = "Wexford, Ireland"
-
-            else:
-                location = "Ireland"
-
-            results[href] = {
-                "company": company,
-                "ats": "successfactors",
-                "title": title[:300],
-                "location": location,
-                "url": href,
-                "updated_at": None,
-                "description_text": page_text[:7000],
-            }
-
-        except Exception as exc:
-            print(
-                f"  ! Zurich detail failed "
-                f"{href}: {exc}"
-            )
-
-    source = sources[0]
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official Zurich SuccessFactors Ireland "
-            f"search returned {len(results)} jobs"
-        ),
-        source,
-    )
-
-    print(
-        "  Zurich Insurance official Ireland careers: "
-        f"{len(results)} jobs"
-    )
-
-    return list(results.values())
-
-def scrape_transfermate_official():
-    company = "TransferMate"
-    source = (
-        "https://www.transfermate.com/"
-        "company/career-page"
-    )
-
-    try:
-        import requests
-        from bs4 import BeautifulSoup
-    except Exception as exc:
-        print(
-            f"  ! TransferMate dependencies unavailable: {exc}"
-        )
-        return []
-
-    sess = requests.Session()
-
-    sess.headers.update({
-        "User-Agent": (
-            "Mozilla/5.0 AppleWebKit/537.36 "
-            "Chrome/129 Safari/537.36"
-        )
-    })
-
-    try:
-        r = sess.get(
-            source,
-            timeout=30,
-        )
-
-        r.raise_for_status()
-
-    except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            f"Official TransferMate careers failed: {exc}",
-            source,
-        )
-
-        return []
-
-    soup = BeautifulSoup(
-        r.text,
-        "html.parser",
-    )
-
-    results = {}
-
-    text_nodes = soup.find_all(
-        string=re.compile(
-            r"\bLocation\s*:",
-            flags=re.I,
-        )
-    )
-
-    for node in text_nodes:
-        current = node.parent
-
-        context = ""
-
-        for _ in range(6):
-            if current is None:
-                break
-
-            candidate = " ".join(
-                current.stripped_strings
-            ).strip()
-
-            if candidate:
-                context = candidate
-
-            if (
-                "location:" in candidate.lower()
-                and len(candidate) <= 2500
-            ):
-                pass
-
-            current = current.parent
-
-        if not context:
-            continue
-
-        location_match = re.search(
-            r"Location\s*:\s*"
-            r"([^|]+?)"
-            r"(?:\s+Creation date:|$)",
-            context,
-            flags=re.I,
-        )
-
-        location_text = (
-            location_match.group(1).strip()
-            if location_match
-            else ""
-        )
-
-        if not region_ok(location_text):
-            continue
-
-        title_match = re.search(
-            r"^(.*?)\s+Department:",
-            context,
-            flags=re.I,
-        )
-
-        title = (
-            title_match.group(1).strip()
-            if title_match
-            else ""
-        )
-
-        if not title:
-            continue
-
-        link = node.parent.find_parent(
-            lambda tag:
-                getattr(tag, "find", None)
-                and tag.find("a", href=True)
-        )
-
-        a = (
-            link.find("a", href=True)
-            if link
-            else None
-        )
-
-        href = (
-            urllib.parse.urljoin(
-                source,
-                a.get("href") or "",
-            )
-            if a
-            else source
-        )
-
-        results[
-            f"{title}|{location_text}"
-        ] = {
-            "company": company,
-            "ats": "transfermate_official",
-            "title": title[:300],
-            "location": location_text,
-            "url": href,
-            "updated_at": None,
-            "description_text": context[:5000],
-        }
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official TransferMate careers loaded; "
-            f"{len(results)} Ireland jobs"
-        ),
-        source,
-    )
-
-    print(
-        "  TransferMate official Ireland careers: "
-        f"{len(results)} jobs"
-    )
-
-    return list(results.values())
-
-
-# BEGIN HARSHIT PRIORITY EMPLOYER EXPANSION
-PRIORITY_EXPANSION_OFFICIAL_BOARDS = {'Introba': 'https://www.introba.com/careers', 'ActionPoint': 'https://www.actionpoint.ie/careers/', 'Avanade': 'https://www.avanade.com/en/career/search-jobs', 'Ekco': 'https://careers.ek.co/jobs', 'Fujitsu': 'https://fujitsu.com/ie/about/careers', 'Integrity360': 'https://www.integrity360.com/careers', 'Noesis': 'https://www.noesis.pt/en/careers', 'Akamai': 'https://www.akamai.com/careers', 'AirNav Ireland': 'https://www.airnav.ie/careers', 'Alkermes': 'https://www.alkermes.com/careers', 'Amundi': 'https://about.amundi.com/Careers', 'An Post': 'https://www.anpost.com/About/Careers', 'Aviva Ireland': 'https://www.aviva.ie/about/careers/', 'ASML': 'https://www.asml.com/en/careers', 'ARYZTA Ireland': 'https://www.aryzta.com/careers/', 'Storm Technology': 'https://www.storm.ie/about/careers/', 'Ergo': 'https://www.ergogroup.ie/Careers/', 'Expleo Ireland': 'https://careers.expleo.com/en/'}
-PRIORITY_EXPANSION_DOMESTIC_DEFAULT = {'An Post', 'AirNav Ireland', 'Storm Technology', 'Aviva Ireland', 'ActionPoint'}
-
-def scrape_priority_expansion_official(company):
-    career_url = PRIORITY_EXPANSION_OFFICIAL_BOARDS.get(company)
-    if not career_url:
-        return []
-
-    require_ireland = company not in PRIORITY_EXPANSION_DOMESTIC_DEFAULT
-    urls = [career_url]
-
-    try:
-        html_text = _fetch_html(career_url) or ""
-        link_rx = re.compile(
-            r"<a\b[^>]+href=['\"]([^'\"]+)['\"][^>]*>(.*?)</a>",
-            re.I | re.S,
-        )
-        preferred_hosts = (
-            "teamtailor", "workdayjobs", "smartrecruiters", "greenhouse",
-            "lever.co", "recruitee", "workable", "oraclecloud", "phenom",
-            "avature", "successfactors", "careers.",
-        )
-        for href, label_html in link_rx.findall(html_text):
-            href = urllib.parse.urljoin(career_url, html.unescape(href or "")).split("#")[0]
-            label = re.sub(r"\s+", " ", _strip_html(label_html or "")).strip().lower()
-            low = href.lower()
-            if not href.startswith("http"):
-                continue
-            if (
-                any(host in low for host in preferred_hosts)
-                or any(term in label for term in ("open role", "open position", "search jobs", "view jobs", "vacancies"))
-            ):
-                if href not in urls:
-                    urls.append(href)
-            if len(urls) >= 5:
-                break
-    except Exception as exc:
-        print(f"  ! {company} priority-board discovery: {exc}")
-
-    patterns = (
-        "/jobs/", "/job/", "/vacancies/", "/vacancy/",
-        "/positions/", "/position/", "/requisitions/", "/requisition/",
-        "jobdetail", "job-detail", "job_details", "jobid=",
-    )
-
-    jobs = _browser_board_collect(
-        company,
-        urls,
-        patterns,
-        default_location="Ireland",
-        max_scrolls=8,
-        require_ireland=require_ireland,
-        source_tag="direct",
-    )
-
-    cleaned = {}
-    for job in jobs:
-        title = re.sub(r"\s+", " ", (job.get("title") or "")).strip()
-        url = (job.get("url") or "").strip()
-        location = (job.get("location") or "").strip()
-        if not title or not url or not is_real_job_title(title):
-            continue
-
-        evidence = f"{title} {location} {job.get('description_text') or ''} {url}"
-        if require_ireland and not region_ok(evidence):
-            continue
-        if not location and not require_ireland:
-            job["location"] = "Ireland"
-
-        key = url.split("?")[0].rstrip("/").lower()
-        if not key:
-            key = f"{title.lower()}|{job.get('location','').lower()}"
-        cleaned[key] = job
-
-    try:
-        _mark_connector_health(
-            company, True,
-            f"Official priority careers board loaded; {len(cleaned)} qualifying Ireland jobs",
-            career_url,
-        )
-    except Exception:
-        pass
-
-    print(f"  {company} priority official collector: {len(cleaned)} Ireland jobs")
-    return list(cleaned.values())
-# END HARSHIT PRIORITY EMPLOYER EXPANSION
-
-
-
-# BEGIN VERIFIED FALSE-ZERO BATCH 2026-09-19
-def _scrape_verified_server_board(company, urls, href_needles, default_location="Ireland",
-                                   board_is_ireland_scoped=False):
-    from bs4 import BeautifulSoup
-
-    results = {}
-    needles = tuple(str(x).lower() for x in href_needles)
-
-    for source_url in urls:
-        page = _fetch_html(source_url) or ""
-        if not page:
-            continue
-
-        soup = BeautifulSoup(page, "html.parser")
-
-        for anchor in soup.find_all("a", href=True):
-            href = urllib.parse.urljoin(source_url, anchor.get("href") or "").split("#")[0]
-            low_href = href.lower()
-
-            if needles and not any(n in low_href for n in needles):
-                continue
-
-            title = re.sub(r"\s+", " ", anchor.get_text(" ", strip=True)).strip()
-            node = anchor
-            card_text = ""
-
-            for _ in range(7):
-                if not node:
-                    break
-                try:
-                    candidate = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
-                except Exception:
-                    candidate = ""
-                if candidate and len(candidate) <= 4000:
-                    card_text = candidate
-                if card_text and region_ok(card_text):
-                    break
-                node = getattr(node, "parent", None)
-
-            if (
-                not title
-                or title.lower() in {
-                    "read more", "view vacancy", "view job", "apply",
-                    "apply now", "learn more", "details",
-                }
-                or len(title) > 300
-            ):
-                search_node = node or anchor.parent
-                heading = search_node.find(["h1", "h2", "h3", "h4", "h5"]) if search_node else None
-                if heading:
-                    title = re.sub(r"\s+", " ", heading.get_text(" ", strip=True)).strip()
-
-            if not title or len(title) > 300 or not is_real_job_title(title):
-                continue
-
-            evidence = f"{title} {card_text} {href}"
-            if not board_is_ireland_scoped and not region_ok(evidence):
-                continue
-
-            location = default_location
-            m = re.search(
-                r"\b(Dublin|Cork|Galway|Limerick|Shannon|Waterford|Kilkenny|"
-                r"Leixlip|Kildare|Athlone|Dundalk)\b",
-                card_text,
-                re.I,
-            )
-            if m:
-                location = f"{m.group(1).title()}, Ireland"
-            elif re.search(r"\bIreland\b", card_text, re.I):
-                location = "Ireland"
-
-            key = low_href.rstrip("/")
-            if not key:
-                continue
-
-            results[key] = {
-                "company": company,
-                "ats": "direct",
-                "title": title,
-                "location": location,
-                "raw_location": location,
-                "url": href,
-                "updated_at": None,
-                "description_text": card_text[:5000],
-            }
-
-    _mark_connector_health(
-        company,
-        True,
-        f"Official repaired careers source loaded; {len(results)} Republic-of-Ireland jobs",
-        urls[0] if urls else None,
-    )
-    print(f"  {company} repaired official board: {len(results)} Ireland jobs")
-    return list(results.values())
-
-
-def scrape_ekco_repaired():
-    return _scrape_verified_server_board(
-        "Ekco",
-        ["https://careers.ek.co/jobs"],
-        ("careers.ek.co/jobs/",),
-        board_is_ireland_scoped=False,
-    )
-
-
-def scrape_airnav_repaired():
-    return _scrape_verified_server_board(
-        "AirNav Ireland",
-        [
-            "https://www.airnav.ie/careers/current-vacancies",
-            "https://www.airnav.ie/careers",
-        ],
-        ("/careers/current-vacancies/",),
-        board_is_ireland_scoped=True,
-    )
-
-
-def scrape_amundi_repaired():
-    return _scrape_verified_server_board(
-        "Amundi",
-        [
-            "https://www.jobs.amundi.com/Pages/Offre/ListeOffre.aspx?LCID=2057&showSearchUrl=1",
-            "https://www.jobs.amundi.com/Pages/Offre/ListeOffre.aspx?LCID=2057&page=2&showSearchUrl=1",
-        ],
-        ("detailoffre", "/offre/", "/job/"),
-        board_is_ireland_scoped=False,
-    )
-
-
-def scrape_aviva_ireland_repaired():
-    return _scrape_verified_server_board(
-        "Aviva Ireland",
-        ["https://www.aviva.ie/group/careers/"],
-        ("/group/careers/", "jobs.aviva", "workday", "/job/"),
-        board_is_ireland_scoped=True,
-    )
-
-
-def scrape_crh_repaired():
-    return _scrape_verified_server_board(
-        "CRH",
-        [
-            "https://jobs.crh.com/search/?q=&locationsearch=Ireland",
-            "https://jobs.crh.com/viewalljobs/",
-        ],
-        ("jobs.crh.com/job/",),
-        board_is_ireland_scoped=False,
-    )
-
-
-FALSE_ZERO_REPAIRS_2026_09_19 = {
-    "Ekco": scrape_ekco_repaired,
-    "AirNav Ireland": scrape_airnav_repaired,
-    "Amundi": scrape_amundi_repaired,
-    "Aviva Ireland": scrape_aviva_ireland_repaired,
-    "CRH": scrape_crh_repaired,
-}
-# END VERIFIED FALSE-ZERO BATCH 2026-09-19
-
-
 def scrape_direct_company(company: str):
-    repaired = FALSE_ZERO_REPAIRS_2026_09_19.get(company)
-    if repaired is not None:
-        return repaired()
-
     # BEGIN SALE_READY_DIRECT_CONNECTORS
     # Canonical/alias names that must use their verified official collectors.
     _verified_direct_connectors = {
@@ -23130,24 +18813,6 @@ def scrape_direct_company(company: str):
     if company in UNIVERSITY_CAREER_PAGES:
         return scrape_university_official(company)
     fn={
-        "Introba": lambda: scrape_priority_expansion_official("Introba"),
-        "ActionPoint": lambda: scrape_priority_expansion_official("ActionPoint"),
-        "Avanade": lambda: scrape_priority_expansion_official("Avanade"),
-        "Ekco": lambda: scrape_priority_expansion_official("Ekco"),
-        "Fujitsu": lambda: scrape_priority_expansion_official("Fujitsu"),
-        "Integrity360": lambda: scrape_priority_expansion_official("Integrity360"),
-        "Noesis": lambda: scrape_priority_expansion_official("Noesis"),
-        "Akamai": lambda: scrape_priority_expansion_official("Akamai"),
-        "AirNav Ireland": lambda: scrape_priority_expansion_official("AirNav Ireland"),
-        "Alkermes": lambda: scrape_priority_expansion_official("Alkermes"),
-        "Amundi": lambda: scrape_priority_expansion_official("Amundi"),
-        "An Post": lambda: scrape_priority_expansion_official("An Post"),
-        "Aviva Ireland": lambda: scrape_priority_expansion_official("Aviva Ireland"),
-        "ASML": lambda: scrape_priority_expansion_official("ASML"),
-        "ARYZTA Ireland": lambda: scrape_priority_expansion_official("ARYZTA Ireland"),
-        "Storm Technology": lambda: scrape_priority_expansion_official("Storm Technology"),
-        "Ergo": lambda: scrape_priority_expansion_official("Ergo"),
-        "Expleo Ireland": lambda: scrape_priority_expansion_official("Expleo Ireland"),
         "Alter Domus": scrape_alter_domus_ireland,
         "Baxter International": scrape_baxter_ireland,
         "Baker Tilly Ireland": scrape_baker_tilly_ireland,
@@ -23196,11 +18861,7 @@ def scrape_direct_company(company: str):
         "permanent tsb": scrape_ptsb,
         "Permanent TSB": scrape_ptsb,
         "PTSB": scrape_ptsb,
-        "PTSB (Permanent TSB)": scrape_ptsb,
         "Qualcomm": scrape_qualcomm,
-        "Fexco": scrape_fexco_official,
-        "Teneo Ireland": scrape_teneo_ireland_official,
-        "Virgin Media Ireland": scrape_virgin_media_ireland,
         "NTT DATA Services": scrape_ntt_data,
         "NTT Data": scrape_ntt_data,
         "NTT DATA": scrape_ntt_data,
@@ -23254,10 +18915,6 @@ def scrape_direct_company(company: str):
         "Tata Consultancy Services (TCS)": scrape_tcs,
         "RSM Ireland": scrape_rsm,
         "Infosys": scrape_infosys,
-        "Nokia": scrape_nokia,
-        "Siemens Healthineers": scrape_siemens_healthineers,
-        "Nokia": scrape_nokia,
-        "Siemens Healthineers": scrape_siemens_healthineers,
         "Wells Fargo": scrape_wells_fargo,
         "Vodafone": scrape_vodafone,
         "Wipro": scrape_wipro,
@@ -23329,22 +18986,6 @@ def scrape_direct_company(company: str):
         "Dawn Meats": scrape_dawn_meats,
         "DHL Ireland": scrape_dhl_ireland_official,
         "Decathlon Ireland": scrape_decathlon_ireland,
-        "Synopsys": scrape_synopsys_official,
-        "Riot Games": scrape_riot_games_official,
-        "Nucleo": scrape_nucleo_official,
-        "Concentrix (Ireland)": scrape_concentrix_official,
-        "LearnUpon": scrape_learnupon_official,
-        "Workhuman": scrape_workhuman_official,
-        "Takeda": scrape_takeda_official,
-        "Teva Pharmaceuticals": scrape_teva_official,
-        "Amgen": scrape_amgen_official,
-        "Novartis": scrape_novartis_official,
-        "Waystone": scrape_waystone_official,
-        "WuXi Biologics": scrape_wuxi_biologics_official,
-        "Fidelity Investments": scrape_fidelity_investments_official,
-        "FBD Insurance": scrape_fbd_insurance_official,
-        "Zurich Insurance": scrape_zurich_insurance_official,
-        "TransferMate": scrape_transfermate_official,
             "Marsh McLennan": scrape_marsh_mclennan_official,
 }.get(company)
     return fn() if fn else []
@@ -23382,11 +19023,7 @@ def load_candidate_profile(path="profile.json"):
 
 
 def _norm_phrase(text):
-    """Normalize matching text while preserving Unicode letters."""
-    text = str(text or "").casefold()
-    text = re.sub(r"[^\w+#]+", " ", text, flags=re.UNICODE)
-    text = text.replace("_", " ")
-    return re.sub(r"\s+", " ", text).strip()
+    return re.sub(r"[^a-z0-9+#]+", " ", str(text or "").lower()).strip()
 
 
 def normalized_title(title):
@@ -23406,12 +19043,6 @@ GENERIC_JOB_TITLES = {
     "careers", "categories", "degree", "experience", "filter", "filters",
     "job search", "job types", "jobs", "locations", "organizations",
     "roles", "search jobs", "skills qualifications", "sort by", "teams",
-    "close", "overview", "back to top",
-    "please rate how useful this page was to you",
-    "candidate data protection statement",
-    "assignment data protection statement",
-    "tax education", "irish", "gaeilge", "béarla", "english",
-    "state boards", "boird stáit",
 }
 
 
@@ -23498,179 +19129,45 @@ def experience_fit(title, description, candidate_years):
     return "Too Senior", minimum, maximum
 
 
-def _candidate_evidence_skills(profile):
-    evidence = profile.get("evidence") or {}
-
-    if evidence:
-        return {
-            skill
-            for skill, sources in evidence.items()
-            if sources
-        }
-
-    values = set()
-    for group in (profile.get("skills") or {}).values():
-        values.update(group)
-
-    return values
-
-
-def _job_skill_requirements(title, description, profile):
-    text = f"{title or ''} {description or ''}"
-    return extract_profile_skills(text, profile)
-
-
-def _select_cv_profile(role_family, required_skills, profile):
-    cv_profiles = profile.get("cv_profiles") or {}
-
-    if not cv_profiles:
-        return None, 0, []
-
-    best_name = None
-    best_score = -1
-    best_coverage = []
-
-    for name, cfg in cv_profiles.items():
-        cv_skills = set(cfg.get("skills") or [])
-        preferred_families = set(cfg.get("role_families") or [])
-
-        coverage = [
-            skill
-            for skill in required_skills
-            if skill in cv_skills
-        ]
-
-        score = len(coverage) * 3
-
-        if role_family in preferred_families:
-            score += 10
-
-        if score > best_score:
-            best_name = name
-            best_score = score
-            best_coverage = coverage
-
-    return best_name, max(0, best_score), best_coverage
-
-
 def candidate_match(job, description, profile):
     if not profile:
         return {
-            "candidate_match_score": None,
-            "match_reasons": [],
-            "missing_skills": [],
-            "matched_skills": [],
-            "experience_fit": "Unknown",
-            "best_cv": None,
-            "cv_coverage_skills": [],
-            "evidence_missing_from_cv": [],
-            "candidate_evidence": {},
+            "candidate_match_score": None, "match_reasons": [], "missing_skills": [],
+            "matched_skills": [], "experience_fit": "Unknown"
         }
 
     title = job.get("title") or ""
     role = classify_role_family(title, description, profile)
+    skills = extract_profile_skills(f"{title} {description}", profile)
+    candidate_skills = []
+    for values in (profile.get("skills") or {}).values():
+        candidate_skills.extend(values)
+    candidate_skill_set = set(candidate_skills)
 
-    required_skills = _job_skill_requirements(
-        title,
-        description,
-        profile,
-    )
-
-    evidenced_skills = _candidate_evidence_skills(profile)
-
-    matched = [
-        skill
-        for skill in required_skills
-        if skill in evidenced_skills
-    ]
-
-    actual_gaps = [
-        skill
-        for skill in required_skills
-        if skill not in evidenced_skills
-    ]
-
+    matched = [s for s in skills if s in candidate_skill_set]
     years = int(profile.get("experience_years") or 0)
-
-    exp_fit, exp_min, exp_max = experience_fit(
-        title,
-        description,
-        years,
-    )
-
-    best_cv, cv_score, cv_coverage = _select_cv_profile(
-        role["family"],
-        required_skills,
-        profile,
-    )
-
-    selected_cv_skills = set(
-        (
-            profile.get("cv_profiles", {})
-            .get(best_cv, {})
-            .get("skills", [])
-        )
-        if best_cv
-        else []
-    )
-
-    evidence_missing_from_cv = [
-        skill
-        for skill in matched
-        if skill not in selected_cv_skills
-    ]
+    exp_fit, exp_min, exp_max = experience_fit(title, description, years)
 
     score = role["role_score"]
-
-    if role["family"] != "Other":
-        score += min(34, len(matched) * 4)
-    else:
-        score += min(8, len(matched) * 2)
-
-    score += {
-        "Strong": 16,
-        "Possible": 9,
-        "Stretch": 3,
-        "Overqualified": -5,
-        "Too Senior": -25,
-        "Unknown": 0,
-    }.get(exp_fit, 0)
-
-    if required_skills:
-        evidence_ratio = len(matched) / len(required_skills)
-        score += int(round(evidence_ratio * 10))
-
-    if actual_gaps:
-        score -= min(18, len(actual_gaps) * 3)
-
-    if best_cv:
-        score += min(6, len(cv_coverage))
+    # Skills refine a relevant role; they must not manufacture relevance for an
+    # unrelated title that happens to mention Python, AWS or analytics.
+    score += min(34, len(matched) * 4) if role["family"] != "Other" else min(8, len(matched) * 2)
+    score += {"Strong": 16, "Possible": 9, "Stretch": 3, "Overqualified": -5, "Too Senior": -25, "Unknown": 0}.get(exp_fit, 0)
 
     loc_text = _norm_phrase(job.get("location"))
-
-    if any(
-        _norm_phrase(x) in loc_text
-        for x in profile.get("preferred_locations", [])
-        if x != "Ireland"
-    ):
+    if any(_norm_phrase(x) in loc_text for x in profile.get("preferred_locations", []) if x != "Ireland"):
         score += 5
-    elif (
-        "ireland" in loc_text
-        or job.get("country") == "Ireland"
-    ):
+    elif "ireland" in loc_text or job.get("country") == "Ireland":
         score += 3
 
     title_n = normalized_title(title)
-
-    for term, penalty in (
-        profile.get("seniority_penalties") or {}
-    ).items():
+    for term, penalty in (profile.get("seniority_penalties") or {}).items():
         if _norm_phrase(term) in title_n:
             score -= int(penalty)
             break
 
+    # Noise penalty for clearly irrelevant job families, without deleting the job from the broad engine.
     irrelevant_title = False
-
     for term in profile.get("negative_title_terms", []):
         if _norm_phrase(term) in title_n:
             score -= 18
@@ -23681,54 +19178,22 @@ def candidate_match(job, description, profile):
         score = min(score, 40)
 
     score = max(0, min(100, int(round(score))))
-
     reasons = []
-
     if role["family"] != "Other":
-        reasons.append(
-            f"{role['family']} role family"
-        )
-
+        reasons.append(f"{role['family']} role family")
     reasons.extend(matched[:7])
-
     if exp_fit in {"Strong", "Possible"}:
-        reasons.append(
-            f"Experience fit: {exp_fit}"
-        )
+        reasons.append(f"Experience fit: {exp_fit}")
 
-    if best_cv:
-        reasons.append(
-            f"Best CV: {best_cv}"
-        )
-
-    evidence_map = profile.get("evidence") or {}
+    # Missing skills are candidate skills commonly referenced in the same role family but not present in this ad.
+    priority_missing = ["SQL", "Power BI", "Python", "ERP", "UAT", "Requirements Gathering", "ETL", "Stakeholder Management"]
+    missing = [x for x in priority_missing if x in candidate_skill_set and x not in matched][:4]
 
     return {
         "candidate_match_score": score,
-        "match_reasons": reasons[:12],
-
-        # These are requirements in the JD that the evidence profile
-        # actually supports.
-        "matched_skills": matched[:20],
-
-        # Correct semantics: requirements appearing in the JD for which
-        # the candidate profile has no substantiated evidence.
-        "missing_skills": actual_gaps[:12],
-
-        # Evidence exists somewhere in the canonical profile but the
-        # selected CV does not currently expose it.
-        "evidence_missing_from_cv":
-            evidence_missing_from_cv[:12],
-
-        "candidate_evidence": {
-            skill: evidence_map.get(skill, [])
-            for skill in matched[:20]
-        },
-
-        "best_cv": best_cv,
-        "cv_coverage_skills": cv_coverage[:20],
-        "cv_alignment_score": cv_score,
-
+        "match_reasons": reasons[:10],
+        "missing_skills": missing,
+        "matched_skills": matched[:15],
         "experience_fit": exp_fit,
         "experience_min": exp_min,
         "experience_max": exp_max,
@@ -23831,205 +19296,17 @@ SCRAPE_PHASE = os.environ.get("SCRAPE_PHASE", "all").strip().lower()
 SCRAPE_WORKERS = max(2, min(32, int(os.environ.get("SCRAPE_WORKERS", "16"))))
 SCRAPE_SHARD_INDEX = max(0, int(os.environ.get("SCRAPE_SHARD_INDEX", "0")))
 SCRAPE_SHARD_COUNT = max(1, int(os.environ.get("SCRAPE_SHARD_COUNT", "1")))
-
-STALE_GENERIC_ATS_PROBES = {
-    ("greenhouse", "snowflake"),
-    ("greenhouse", "wayflyer"),
-    ("greenhouse", "fenergo"),
-    ("greenhouse", "genesys"),
-}
-
-STALE_PERSONIO_XML_PROBES = {
-    "dilloneustace",
-}
-
-def _skip_known_stale_generic_probe(platform, slug):
-    """Suppress only generic ATS endpoints already verified stale.
-
-    Direct-company connectors and other fallback mechanisms remain untouched.
-    """
-    platform = str(platform or "").strip().lower()
-    slug = str(slug or "").strip().lower()
-    return (
-        (platform, slug) in STALE_GENERIC_ATS_PROBES
-        or (platform == "personio" and slug in STALE_PERSONIO_XML_PROBES)
-    )
 # Promote verified direct connectors into the hourly core run in batches of 10.
-PROVEN_REFRESH_BATCHES = [['Accenture',
-  'EY Ireland',
-  'KPMG Ireland',
-  'Oracle',
-  'SAP',
-  'Auxilion',
-  'Capgemini',
-  'Cognizant',
-  'Dell Technologies',
-  'IBM'],
- ['Infosys',
-  'NTT DATA',
-  'Tata Consultancy Services (TCS)',
-  'Wipro',
-  'Bloomberg',
-  'Musgrave Group (SuperValu / Centra)',
-  'Ryanair',
-  'A&L Goodbody',
-  'AECOM',
-  'Agilent Technologies'],
- ['AIB (Allied Irish Banks)',
-  'Allianz Ireland',
-  'AMCS Group',
-  'Aon',
-  'Arup',
-  'ASL Aviation Holdings',
-  'AstraZeneca',
-  'Bank of Ireland',
-  'BioMarin',
-  'BNP Paribas Ireland'],
- ['DPS Group (Arcadis)',
-  'ESB',
-  'Grant Thornton Ireland',
-  'Honeywell',
-  'Huawei Ireland',
-  'Irish Life',
-  'Irish Rail (Iarnród Éireann)',
-  'Jacobs',
-  'Johnson Controls',
-  'NetApp'],
- ['HCLTech',
-  'OpenText',
-  'Version 1',
-  'Aer Lingus',
-  'Ornua',
-  'Veeam',
-  'AIG',
-  'Alexion Pharmaceuticals',
-  'Alter Domus',
-  'Applied Materials'],
- ['Arcadis',
-  'Astellas Pharma',
-  'AtkinsRéalis',
-  'AXA Ireland',
-  'AXA XL',
-  'Baker Tilly Ireland',
-  'Bausch + Lomb',
-  'Baxter International',
-  'Becton Dickinson (BD)',
-  'Bord Gáis Energy'],
- ['Broadcom',
-  'Central Bank of Ireland',
-  'Chubb',
-  'Citco',
-  'Coca-Cola HBC Ireland',
-  'CRH',
-  'daa (Dublin Airport Authority)',
-  'DCC plc',
-  'Dublin Port Company',
-  'Eir'],
- ['EirGrid',
-  'Fenergo',
-  'Forvis Mazars Ireland',
-  'Gas Networks Ireland',
-  'GE HealthCare',
-  'Glanbia / Tirlán',
-  'Guidewire',
-  'Heineken Ireland',
-  'Hewlett Packard Enterprise (HPE)',
-  'HSBC Ireland'],
- ['IQVIA',
-  'Optum',
-  'Palo Alto Networks',
-  'PM Group',
-  'Proofpoint',
-  'Public Jobs / Civil Service',
-  'Revenue',
-  'Roche',
-  'S&P Global',
-  'Schneider Electric'],
- ['Susquehanna International Group (SIG)',
-  'Three Ireland',
-  'Uisce Éireann (Irish Water)',
-  'VHI Healthcare',
-  'Vodafone Ireland',
-  'Wells Fargo',
-  'Willis Towers Watson (WTW)',
-  'Zscaler',
-  'Aiven',
-  'EXL'],
- ['Hitachi Energy',
-  'Motorola Solutions',
-  'Trinity College Dublin',
-  'University College Cork (UCC)',
-  'Dublin City University (DCU)',
-  'University of Galway',
-  'Munster Technological University (MTU)',
-  'RCSI University of Medicine and Health Sciences',
-  'Technological University Dublin (TU Dublin)',
-  'Atlantic Technological University (ATU)'],
- ['Technological University of the Shannon (TUS)',
-  'Advanced Micro Devices (AMD)',
-  'Avolon',
-  'Bank of America',
-  'Barclays',
-  'BlackRock',
-  'BNY',
-  'Boston Scientific',
-  'Citi',
-  'Deutsche Bank'],
- ['Fidelity International',
-  'Goldman Sachs',
-  'Johnson & Johnson',
-  'JPMorgan Chase',
-  'PepsiCo',
-  'Siemens',
-  'SMBC Aviation Capital',
-  'Microsoft',
-  'Amazon',
-  'Apple'],
- ['Google',
-  'Meta',
-  'ServiceNow',
-  'TikTok',
-  'McKinsey & Company',
-  'RSM Ireland',
-  'Amgen',
-  'FBD Insurance',
-  'Fidelity Investments',
-  'Novartis'],
- ['Teva Pharmaceuticals',
-  'TransferMate',
-  'Waystone',
-  'WuXi Biologics',
-  'Zurich Insurance',
-  'Compliance & Risks',
-  'Daon',
-  'Fitch Ratings',
-  'GridBeyond',
-  'Keysight Technologies'],
- ['Macquarie Group', 'Morgan Stanley', 'MSCI', 'NeoDyne', 'Perrigo', 'UBS', 'Nokia', 'Siemens Healthineers']]
-# BEGIN HARSHIT PRIORITY EMPLOYER BATCH REBALANCE
-_PRIORITY_EXPANSION_BATCH_COMPANIES = ['ARYZTA Ireland', 'ASML', 'ActionPoint', 'AirNav Ireland', 'Akamai', 'Alkermes', 'Amundi', 'An Post', 'Avanade', 'Aviva Ireland', 'DXC Technology', 'Ekco', 'Ergo', 'Expleo Ireland', 'Fujitsu', 'Integrity360', 'Introba', 'Noesis', 'Storm Technology']
-_flat_proven_refresh_companies = []
-_seen_proven_refresh_companies = set()
-
-for _batch in PROVEN_REFRESH_BATCHES:
-    for _company in _batch:
-        _key = _company_key(company_display_name(_company))
-        if _key not in _seen_proven_refresh_companies:
-            _seen_proven_refresh_companies.add(_key)
-            _flat_proven_refresh_companies.append(_company)
-
-for _company in _PRIORITY_EXPANSION_BATCH_COMPANIES:
-    _key = _company_key(company_display_name(_company))
-    if _key not in _seen_proven_refresh_companies:
-        _seen_proven_refresh_companies.add(_key)
-        _flat_proven_refresh_companies.append(_company)
-
-PROVEN_REFRESH_BATCHES = [
-    _flat_proven_refresh_companies[i:i + 10]
-    for i in range(0, len(_flat_proven_refresh_companies), 10)
-]
-# END HARSHIT PRIORITY EMPLOYER BATCH REBALANCE
-
+PROVEN_REFRESH_BATCHES = (
+    ("Accenture", "EY Ireland", "KPMG Ireland", "Oracle", "SAP",
+     "Auxilion", "Capgemini", "Cognizant", "Dell Technologies", "IBM"),
+    ("Infosys", "NTT DATA", "Tata Consultancy Services (TCS)", "Wipro", "Bloomberg",
+     "Musgrave Group (SuperValu / Centra)", "Ryanair", "A&L Goodbody", "AECOM", "Agilent Technologies"),
+    ("AIB (Allied Irish Banks)", "Allianz Ireland", "AMCS Group", "Aon", "Arup",
+     "ASL Aviation Holdings", "AstraZeneca", "Bank of Ireland", "BioMarin", "BNP Paribas Ireland"),
+    ("DPS Group (Arcadis)", "ESB", "Grant Thornton Ireland", "Honeywell", "Huawei Ireland",
+     "Irish Life", "Irish Rail (Iarnród Éireann)", "Jacobs", "Johnson Controls", "NetApp"),
+)
 TARGET_COMPANIES = {
     _company_key(x) for x in os.environ.get("TARGET_COMPANIES", "").split(",") if x.strip()
 }
@@ -24131,6 +19408,10 @@ def _run_isolated_task_child(task_spec, result_path):
 
     if task_type == "direct":
         found = scrape_direct_company(company) or []
+    elif task_type == "audit":
+        import zero_audit
+        found = zero_audit.collect(company) or []
+        CONNECTOR_HEALTH.update(zero_audit.scrape.CONNECTOR_HEALTH)
     elif task_type == "jsonld":
         found = scrape_jsonld(
             task_spec["company"],
@@ -24173,10 +19454,10 @@ def _parallel_collect_isolated(
                 "company": company,
                 "url": rest[0],
             }
-        if label != "direct":
+        if label not in {"direct", "audit"}:
             raise ValueError(f"Unknown isolated task label: {label!r}")
         return {
-            "type": "direct",
+            "type": label,
             "company": company,
         }
 
@@ -24212,18 +19493,10 @@ def _parallel_collect_isolated(
                         raise ValueError("invalid job list")
                     results.extend(found)
                     CONNECTOR_HEALTH.update(payload["connector_health"])
-                    if company not in payload["connector_health"] and found:
-                        # Returning verified jobs proves that the connector
-                        # worked. An empty result does not: collectors that
-                        # return zero must explicitly report source health.
-                        # This keeps vacancy count separate from source health
-                        # without turning an unverified zero into either a
-                        # healthy source or a source failure.
-                        _mark_connector_health(
-                            company,
-                            True,
-                            f"Official connector returned {len(found)} jobs",
-                        )
+                    if company not in payload["connector_health"]:
+                        _mark_connector_health(company, bool(found),
+                            f"Official connector returned {len(found)} jobs" if found
+                            else "No verified jobs returned; vacancy status unconfirmed")
                     print(f"isolated/{spec['type']}/{company}: {len(found)} jobs", flush=True)
                 except Exception as exc:
                     message = f"isolated/{spec['type']}/{company}: {exc}"
@@ -25238,43 +20511,14 @@ def main():
                 results, errors, workers=4, timeout_seconds=180,
             )
 
-        supplemental_direct_companies = (
-            "Workhuman",
-            "Takeda",
-            "Teva Pharmaceuticals",
-            "Synopsys",
-            "Riot Games",
-            "Nucleo",
-            "Concentrix (Ireland)",
-            "LearnUpon",
-            "SolarWinds",
-            "BDO Ireland",
-            "BearingPoint",
-            "CarTrawler",
-            "Dillon Eustace",
-            "Qualcomm",
-            "PTSB (Permanent TSB)",
-            "Infosys",
-            "Deutsche Bank",
-            "Nokia",
-            "Siemens Healthineers",
-            "Fexco",
-            "Teneo Ireland",
-            "Virgin Media Ireland",
-        )
-
-        _parallel_collect_isolated(
-            [
-                ("direct", company)
-                for company in supplemental_direct_companies
-                if _targeted(company)
-                and is_active_registry_company(company)
-            ],
-            results,
-            errors,
-            workers=3,
-            timeout_seconds=120,
-        )
+    if SCRAPE_MODE == "full" and SCRAPE_PHASE == "core":
+        audit = json.loads(Path(__file__).with_name("zero_audit.json").read_text())
+        for offset in range(0, len(audit["companies"]), 10):
+            _parallel_collect_isolated(
+                [("audit", row["company"]) for row in audit["companies"][offset:offset + 10]
+                 if row.get("route") and not row.get("alias_of") and _targeted(row["company"])],
+                results, errors, workers=4, timeout_seconds=180,
+            )
 
     # AMD and Citi are explicitly promoted into FAST because their official
     # direct boards are important to the dashboard. Keep every other direct
@@ -25314,28 +20558,6 @@ def main():
             if index % SCRAPE_SHARD_COUNT == SCRAPE_SHARD_INDEX
             and _targeted(company) and is_active_registry_company(company)
         ]
-
-        existing_direct = {
-            company
-            for _label, company, *_rest in direct_tasks
-        }
-
-        for company in (
-            "Workhuman",
-            "Takeda",
-            "Teva Pharmaceuticals",
-            "Synopsys",
-            "Riot Games",
-            "Nucleo",
-            "Concentrix (Ireland)",
-            "LearnUpon",
-        ):
-            if (
-                company not in existing_direct
-                and _targeted(company)
-                and is_active_registry_company(company)
-            ):
-                direct_tasks.append(("direct", company))
         # Direct/browser career sites are the highest-risk collectors:
         # isolate each company so one hung Playwright process cannot hold the
         # entire FULL refresh until the global 75-minute timeout.
@@ -25411,7 +20633,7 @@ def main():
             errors.append(f"jooble ({query}): {e}")
         time.sleep(0.3)
 
-    if SCRAPE_MODE == "full" and _runs_phase("core") and _targeted("Amazon"):
+    if SCRAPE_MODE == "full" and _runs_phase("direct") and _targeted("Amazon"):
         try:
             found = scrape_amazon("")
             results.extend(found)
@@ -25420,7 +20642,7 @@ def main():
             errors.append(f"direct/Amazon: {e}")
         time.sleep(0.5)
 
-    if SCRAPE_MODE == "full" and _runs_phase("core") and _targeted("Netflix"):
+    if SCRAPE_MODE == "full" and _runs_phase("direct") and _targeted("Netflix"):
         try:
             found = scrape_netflix("")
             results.extend(found)
@@ -26187,32 +21409,6 @@ def main():
 
     results = deduped
 
-    # Connector health describes the latest source check, while jobs describe
-    # vacancies. A company with current jobs cannot simultaneously be recorded
-    # as having a failed latest source check unless a later connector attempt
-    # explicitly failed. Normalize canonical company names here after all
-    # collection/deduplication has completed.
-    _health_aliases = {
-        "Musgrave": "Musgrave Group (SuperValu / Centra)",
-    }
-    for _alias, _canonical in _health_aliases.items():
-        if _alias in CONNECTOR_HEALTH and _canonical not in CONNECTOR_HEALTH:
-            CONNECTOR_HEALTH[_canonical] = dict(CONNECTOR_HEALTH[_alias])
-
-    _companies_with_current_jobs = {
-        company_display_name(j.get("company", ""))
-        for j in results
-        if j.get("company")
-    }
-    for _company in _companies_with_current_jobs:
-        _health = CONNECTOR_HEALTH.get(_company)
-        if _health and _health.get("live") is False:
-            _health["live"] = True
-            _health["note"] = (
-                "Current Ireland vacancies returned successfully; "
-                "previous failed/empty health state superseded"
-            )
-
     # Tag every job with a parsed posting date + recency bucket, so the
     # dashboard can filter by "last 24h / 7d / 30d" without re-parsing.
     for j in results:
@@ -26353,16 +21549,6 @@ def main():
         if j.get("company")
     }
 
-    # Preserve verified healthy-zero status for connectors intentionally
-    # excluded from the active scrape batch.
-    for _company, _info in KNOWN_HEALTHY_ZERO_COMPANIES.items():
-        CONNECTOR_HEALTH[_company] = {
-            "live": True,
-            "note": _info["note"],
-            "url": _info["url"],
-            "checked_at": datetime.now(timezone.utc).isoformat(),
-        }
-
     manual_check = []
     for item in company_registry:
         key = _company_key(item["company"])
@@ -26402,7 +21588,7 @@ def main():
             state = "working"
             reason = "Ireland jobs returned in this run"
         elif (
-            item["company"] in VERIFIED_LIVE_ZERO_COMPANIES
+            CONNECTOR_HEALTH.get(item["company"], {}).get("verified_zero")
             and CONNECTOR_HEALTH.get(item["company"], {}).get("live")
         ):
             state = "live_zero"
@@ -27730,11 +22916,7 @@ def _working_batch_base_scrape_direct_company(company: str):
         "permanent tsb": scrape_ptsb,
         "Permanent TSB": scrape_ptsb,
         "PTSB": scrape_ptsb,
-        "PTSB (Permanent TSB)": scrape_ptsb,
         "Qualcomm": scrape_qualcomm,
-        "Fexco": scrape_fexco_official,
-        "Teneo Ireland": scrape_teneo_ireland_official,
-        "Virgin Media Ireland": scrape_virgin_media_ireland,
         "NTT DATA Services": scrape_ntt_data,
         "NTT Data": scrape_ntt_data,
         "NTT DATA": scrape_ntt_data,
@@ -27859,20 +23041,7 @@ def _working_batch_base_scrape_direct_company(company: str):
         "Dawn Meats": scrape_dawn_meats,
         "DHL Ireland": scrape_dhl_ireland_official,
         "Decathlon Ireland": scrape_decathlon_ireland,
-        "Synopsys": scrape_synopsys_official,
-        "Riot Games": scrape_riot_games_official,
-        "Nucleo": scrape_nucleo_official,
-        "Concentrix (Ireland)": scrape_concentrix_official,
-        "LearnUpon": scrape_learnupon_official,
-        "SolarWinds": scrape_solarwinds_official,
-        "BDO Ireland": scrape_bdo_ireland_official,
-        "BearingPoint": scrape_bearingpoint_official,
-        "CarTrawler": scrape_cartrawler_official,
-        "Dillon Eustace": scrape_dillon_eustace_official,
-        "Workhuman": scrape_workhuman_official,
-        "Takeda": scrape_takeda_official,
-        "Teva Pharmaceuticals": scrape_teva_official,
-        "Marsh McLennan": scrape_marsh_mclennan_official,
+            "Marsh McLennan": scrape_marsh_mclennan_official,
 }.get(company)
     return fn() if fn else []
 
@@ -29216,6 +24385,7 @@ _va_previous_direct = scrape_direct_company
 
 def scrape_direct_company(company, *args, **kwargs):
     overrides = {
+        "Amazon": lambda: scrape_amazon(""),
         "BNY": scrape_bny,
         "Goldman Sachs": scrape_goldman_sachs,
         "Viatel": scrape_viatel,
@@ -29696,6 +24866,8 @@ GRADUATE_DISCOVERY_TERMS = [
 
 def build_company_registry(include_cache=False):
     registry = _build_company_registry_base(include_cache=include_cache)
+    audit_path = Path(__file__).with_name("zero_audit.json")
+    audited = {r["company"]: r for r in json.loads(audit_path.read_text())["companies"]} if audit_path.exists() else {}
 
     aliases = {
         "EY": "EY Ireland",
@@ -29716,6 +24888,7 @@ def build_company_registry(include_cache=False):
 
     for item in registry:
         company = item.get("company") or item.get("name") or ""
+        item["zero_audit"] = audited.get(company)
         item["refresh_batch"] = next(
             (number for number, batch in enumerate(PROVEN_REFRESH_BATCHES, 1) if company in batch),
             None,
@@ -29745,79 +24918,6 @@ def build_company_registry(include_cache=False):
             item["graduate_open_months"] = []
             item["graduate_deadline"] = None
             item["graduate_expected_open"] = None
-
-    # Backward-compatible runtime aliases.
-
-    # Keep the CSV canonical/deduplicated while allowing legacy names
-
-    # used by tests, caches and older generated data to resolve automatically.
-
-    _registry_by_company = {
-
-        entry.get("company"): entry
-
-        for entry in registry
-
-        if entry.get("company")
-
-    }
-
-
-    if "AMD" not in _registry_by_company:
-
-        canonical = _registry_by_company.get("Advanced Micro Devices (AMD)")
-
-        if canonical:
-
-            alias = dict(canonical)
-
-            alias["company"] = "AMD"
-
-            alias["canonical_company"] = "Advanced Micro Devices (AMD)"
-
-            registry.append(alias)
-
-
-    # Backward-compatible Diageo alias.
-
-
-    _registry_by_company = {
-
-
-        entry.get("company"): entry
-
-
-        for entry in registry
-
-
-        if entry.get("company")
-
-
-    }
-
-
-
-    if "Diageo" not in _registry_by_company:
-
-
-        canonical = _registry_by_company.get("Diageo Ireland")
-
-
-        if canonical:
-
-
-            alias = dict(canonical)
-
-
-            alias["company"] = "Diageo"
-
-
-            alias["canonical_company"] = "Diageo Ireland"
-
-
-            registry.append(alias)
-
-
 
     return registry
 
@@ -30135,2066 +25235,10 @@ def build_graduate_dashboard_state(results, company_registry):
 
 
 
+if __name__ == "__main__":
 
-# FINAL_11_MANUAL_REMEDIATION
-# Official-source remediation for the final Manual Search companies.
-
-VERIFIED_LIVE_ZERO_COMPANIES.update({
-    "Keysight Technologies",
-    "MSCI",
-})
-
-DIRECT_COMPANY_CONNECTORS.update({
-    "Compliance & Risks": "adherent_official",
-    "Daon": "daon_official",
-    "Fitch Ratings": "fitch_official",
-    "GridBeyond": "gridbeyond_official",
-    "Keysight Technologies": "keysight_official",
-    "Macquarie Group": "macquarie_official",
-    "Morgan Stanley": "morgan_stanley_workday_official",
-    "MSCI": "msci_official",
-    "NeoDyne": "neodyne_official",
-    "Perrigo": "perrigo_successfactors_official",
-    "UBS": "ubs_kenexa_official",
-})
-
-
-def _final11_get(url, *, timeout=30, curl=False):
-    if curl:
-        try:
-            from curl_cffi import requests as curl_requests
-            return curl_requests.get(
-                url,
-                impersonate="chrome",
-                timeout=timeout,
-            )
-        except Exception:
-            pass
-
-    import requests
-
-    return requests.get(
-        url,
-        headers={
-            "User-Agent": (
-                "Mozilla/5.0 AppleWebKit/537.36 "
-                "Chrome/129 Safari/537.36"
-            )
-        },
-        timeout=timeout,
-    )
-
-
-def scrape_adherent_official():
-    company = "Compliance & Risks"
-    source = "https://www.adherent.com/careers/"
-
-    from bs4 import BeautifulSoup
-
-    try:
-        r = _final11_get(source, curl=True)
-        r.raise_for_status()
-    except Exception as exc:
-        _mark_connector_health(
-            company, False,
-            f"Adherent careers source failed: {exc}",
-            source,
-        )
-        return []
-
-    soup = BeautifulSoup(r.text, "html.parser")
-    candidates = {}
-
-    for a in soup.find_all("a", href=True):
-        href = urllib.parse.urljoin(source, a.get("href") or "")
-        title = " ".join(a.stripped_strings).strip()
-
-        if (
-            "/careers/" not in href.lower()
-            or href.rstrip("/") == source.rstrip("/")
-            or not title
-        ):
-            continue
-
-        candidates[href] = title
-
-    results = {}
-
-    for href, hint in candidates.items():
-        try:
-            dr = _final11_get(href, curl=True, timeout=25)
-
-            if dr.status_code >= 400:
-                continue
-
-            detail = BeautifulSoup(dr.text, "html.parser")
-            page_text = " ".join(detail.stripped_strings)
-
-            if not region_ok(f"{page_text} {href}"):
-                continue
-
-            h1 = detail.find("h1")
-            title = (
-                " ".join(h1.stripped_strings).strip()
-                if h1 else hint
-            )
-
-            low = page_text.lower()
-
-            if "cork" in low:
-                location = "Cork, Ireland"
-            elif "ireland remote" in low or "remote ireland" in low:
-                location = "Remote, Ireland"
-            else:
-                location = "Ireland"
-
-            results[href] = {
-                "company": company,
-                "ats": "adherent_official",
-                "title": title[:300],
-                "location": location,
-                "url": href,
-                "updated_at": None,
-                "description_text": page_text[:7000],
-            }
-
-        except Exception:
-            continue
-
-    _mark_connector_health(
-        company, True,
-        f"Adherent official careers returned {len(results)} Ireland jobs",
-        source,
-    )
-
-    print(f"  Compliance & Risks / Adherent: {len(results)} Ireland jobs")
-    return list(results.values())
-
-
-def scrape_daon_official():
-    company = "Daon"
-    source = "https://www.daon.com/job-openings/"
-
-    from bs4 import BeautifulSoup
-
-    try:
-        r = _final11_get(source, curl=True)
-        r.raise_for_status()
-    except Exception as exc:
-        _mark_connector_health(
-            company, False,
-            f"Daon official openings failed: {exc}",
-            source,
-        )
-        return []
-
-    soup = BeautifulSoup(r.text, "html.parser")
-    results = {}
-
-    for heading in soup.find_all(["h2", "h3", "h4", "h5", "h6"]):
-        title = " ".join(heading.stripped_strings).strip()
-
-        if not title or title.lower() in {
-            "current openings",
-            "join our team",
-        }:
-            continue
-
-        node = heading
-        context = title
-
-        for _ in range(6):
-            node = getattr(node, "parent", None)
-
-            if node is None:
-                break
-
-            candidate = " ".join(node.stripped_strings).strip()
-
-            if candidate:
-                context = candidate
-
-            if (
-                len(candidate) <= 2500
-                and any(
-                    place in candidate.lower()
-                    for place in ("dublin", "leinster", "ireland")
-                )
-            ):
-                break
-
-        if not region_ok(context):
-            continue
-
-        link = None
-
-        if node is not None:
-            a = node.find("a", href=True)
-
-            if a:
-                link = urllib.parse.urljoin(
-                    source,
-                    a.get("href") or "",
-                )
-
-        low = context.lower()
-
-        if "dublin" in low:
-            location = "Dublin, Ireland"
-        else:
-            location = "Ireland"
-
-        key = link or f"{source}#{urllib.parse.quote(title)}"
-
-        results[key] = {
-            "company": company,
-            "ats": "daon_official",
-            "title": title[:300],
-            "location": location,
-            "url": link or source,
-            "updated_at": None,
-            "description_text": context[:6000],
-        }
-
-    _mark_connector_health(
-        company, True,
-        f"Daon official openings returned {len(results)} Ireland jobs",
-        source,
-    )
-
-    print(f"  Daon official Ireland careers: {len(results)} jobs")
-    return list(results.values())
-
-
-def scrape_gridbeyond_official():
-    company = "GridBeyond"
-    source = "https://gridbeyond.com/about-us-2/careers-2/"
-
-    from bs4 import BeautifulSoup
-
-    try:
-        r = _final11_get(source, curl=True)
-        r.raise_for_status()
-    except Exception as exc:
-        _mark_connector_health(
-            company, False,
-            f"GridBeyond official careers failed: {exc}",
-            source,
-        )
-        return []
-
-    soup = BeautifulSoup(r.text, "html.parser")
-    page_text = " ".join(soup.stripped_strings)
-    results = {}
-
-    for text_node in soup.find_all(
-        string=re.compile(r"Dublin\s*,?\s*Ireland", re.I)
-    ):
-        node = text_node.parent
-        context = ""
-
-        for _ in range(7):
-            if node is None:
-                break
-
-            candidate = " ".join(node.stripped_strings).strip()
-
-            if candidate:
-                context = candidate
-
-            if (
-                "dublin" in candidate.lower()
-                and len(candidate) >= 40
-                and len(candidate) <= 6000
-            ):
-                break
-
-            node = node.parent
-
-        if not context:
-            continue
-
-        title_match = re.search(
-            r"([A-Z][^\n]{2,120}?)\s*[–-]\s*Dublin\s*,?\s*Ireland",
-            context,
-            flags=re.I,
-        )
-
-        if title_match:
-            title = title_match.group(1).strip()
-        else:
-            title = "GridBeyond Ireland Opportunity"
-
-        if len(title) > 180:
-            title = "Senior Data Engineer"
-
-        key = f"{source}#{urllib.parse.quote(title)}"
-
-        results[key] = {
-            "company": company,
-            "ats": "gridbeyond_official",
-            "title": title,
-            "location": "Dublin, Ireland",
-            "url": source,
-            "updated_at": None,
-            "description_text": context[:7000],
-        }
-
-    _mark_connector_health(
-        company, True,
-        f"GridBeyond official careers returned {len(results)} Ireland jobs",
-        source,
-    )
-
-    print(f"  GridBeyond official Ireland careers: {len(results)} jobs")
-    return list(results.values())
-
-
-def scrape_neodyne_official():
-    company = "NeoDyne"
-    source = "https://neodyne.com/careers/"
-
-    from bs4 import BeautifulSoup
-
-    try:
-        r = _final11_get(source, curl=True)
-        r.raise_for_status()
-    except Exception as exc:
-        _mark_connector_health(
-            company, False,
-            f"NeoDyne official careers failed: {exc}",
-            source,
-        )
-        return []
-
-    soup = BeautifulSoup(r.text, "html.parser")
-    results = {}
-
-    for tr in soup.find_all("tr"):
-        cells = [
-            " ".join(td.stripped_strings).strip()
-            for td in tr.find_all(["td", "th"])
-        ]
-
-        if len(cells) < 3:
-            continue
-
-        row_text = " | ".join(cells)
-
-        if not region_ok(row_text):
-            continue
-
-        title = cells[1].strip()
-
-        if not title or title.lower() == "job title":
-            continue
-
-        location = cells[2].strip() or "Ireland"
-
-        if "ireland" not in location.lower():
-            location = f"{location}, Ireland"
-
-        a = tr.find("a", href=True)
-        href = (
-            urllib.parse.urljoin(source, a.get("href") or "")
-            if a else source
-        )
-
-        key = f"{title}|{location}|{href}"
-
-        results[key] = {
-            "company": company,
-            "ats": "neodyne_official",
-            "title": title[:300],
-            "location": location[:200],
-            "url": href,
-            "updated_at": None,
-            "description_text": row_text[:3000],
-        }
-
-    _mark_connector_health(
-        company, True,
-        f"NeoDyne official careers returned {len(results)} Ireland jobs",
-        source,
-    )
-
-    print(f"  NeoDyne official Ireland careers: {len(results)} jobs")
-    return list(results.values())
-
-
-def scrape_perrigo_official():
-    company = "Perrigo"
-    source = "https://careers.perrigo.com/search/?q=&locationsearch=Dublin"
-
-    from bs4 import BeautifulSoup
-
-    try:
-        r = _final11_get(source, curl=True)
-        r.raise_for_status()
-    except Exception as exc:
-        _mark_connector_health(
-            company, False,
-            f"Perrigo official careers failed: {exc}",
-            source,
-        )
-        return []
-
-    soup = BeautifulSoup(r.text, "html.parser")
-    results = {}
-
-    for a in soup.find_all("a", href=True):
-        href = urllib.parse.urljoin(
-            str(r.url),
-            a.get("href") or "",
-        )
-
-        if "/job/" not in href.lower():
-            continue
-
-        title = " ".join(a.stripped_strings).strip()
-
-        if not title:
-            continue
-
-        node = a
-        context = ""
-
-        for _ in range(6):
-            node = getattr(node, "parent", None)
-
-            if node is None:
-                break
-
-            candidate = " ".join(node.stripped_strings).strip()
-
-            if candidate:
-                context = candidate
-
-            if (
-                len(candidate) <= 3000
-                and region_ok(candidate)
-            ):
-                break
-
-        if not region_ok(f"{context} {href}"):
-            continue
-
-        low = f"{context} {href}".lower()
-
-        if "dublin" in low:
-            location = "Dublin, Ireland"
-        else:
-            location = "Ireland"
-
-        results[href] = {
-            "company": company,
-            "ats": "successfactors",
-            "title": title[:300],
-            "location": location,
-            "url": href,
-            "updated_at": None,
-            "description_text": context[:5000],
-        }
-
-    _mark_connector_health(
-        company, True,
-        f"Perrigo official careers returned {len(results)} Ireland jobs",
-        source,
-    )
-
-    print(f"  Perrigo official Ireland careers: {len(results)} jobs")
-    return list(results.values())
-
-
-def scrape_morgan_stanley_official():
-    company = "Morgan Stanley"
-    board = "https://ms.wd5.myworkdayjobs.com"
-    source = f"{board}/en-US/External"
-    api = f"{board}/wday/cxs/ms/External/jobs"
-
-    import requests
-
-    session = requests.Session()
-    session.headers.update({
-        "User-Agent": (
-            "Mozilla/5.0 AppleWebKit/537.36 "
-            "Chrome/129 Safari/537.36"
-        ),
-        "Content-Type": "application/json",
-    })
-
-    results = {}
-    offset = 0
-
-    for _ in range(20):
-        try:
-            r = session.post(
-                api,
-                json={
-                    "appliedFacets": {},
-                    "limit": 20,
-                    "offset": offset,
-                    "searchText": "Ireland",
-                },
-                timeout=30,
-            )
-
-            if r.status_code >= 400:
-                break
-
-            payload = r.json()
-            postings = payload.get("jobPostings") or []
-
-        except Exception:
-            break
-
-        if not postings:
-            break
-
-        for row in postings:
-            title = str(row.get("title") or "").strip()
-            location = str(row.get("locationsText") or "").strip()
-            path = str(row.get("externalPath") or "").strip()
-
-            evidence = f"{title} {location} {path}"
-
-            if not region_ok(evidence):
-                continue
-
-            href = urllib.parse.urljoin(source + "/", path.lstrip("/"))
-
-            results[href] = {
-                "company": company,
-                "ats": "workday",
-                "title": title[:300],
-                "location": location or "Ireland",
-                "url": href,
-                "updated_at": None,
-                "description_text": "",
-            }
-
-        offset += len(postings)
-
-        if offset >= int(payload.get("total") or offset):
-            break
-
-    _mark_connector_health(
-        company, True,
-        f"Morgan Stanley official Workday returned {len(results)} Ireland jobs",
-        source,
-    )
-
-    print(f"  Morgan Stanley official Ireland careers: {len(results)} jobs")
-    return list(results.values())
-
-
-def scrape_fitch_official():
-    company = "Fitch Ratings"
-    base = "https://careers.fitch.group"
-    source = (
-        base
-        + "/go/View-All-Jobs/8883701"
-        + "?q=&sortColumn=sort_location&sortDirection=asc"
-    )
-
-    from bs4 import BeautifulSoup
-
-    results = {}
-    scanned = 0
-
-    for offset in range(0, 400, 20):
-        url = (
-            f"{base}/go/View-All-Jobs/8883701/{offset}/"
-            f"?q=&sortColumn=sort_location&sortDirection=asc"
-            if offset else source
-        )
-
-        try:
-            r = _final11_get(url, curl=True)
-            if r.status_code >= 400:
-                continue
-        except Exception:
-            continue
-
-        scanned += 1
-        soup = BeautifulSoup(r.text, "html.parser")
-
-        for tr in soup.find_all("tr"):
-            text_row = " ".join(tr.stripped_strings).strip()
-
-            if not region_ok(text_row):
-                continue
-
-            a = tr.find("a", href=True)
-
-            if not a:
-                continue
-
-            title = " ".join(a.stripped_strings).strip()
-            href = urllib.parse.urljoin(base, a.get("href") or "")
-
-            if not title:
-                continue
-
-            results[href] = {
-                "company": company,
-                "ats": "successfactors",
-                "title": title[:300],
-                "location": "Ireland",
-                "url": href,
-                "updated_at": None,
-                "description_text": text_row[:5000],
-            }
-
-    healthy = scanned > 0
-
-    _mark_connector_health(
-        company, healthy,
-        (
-            f"Fitch official global board scanned {scanned} pages; "
-            f"{len(results)} Ireland jobs"
-        ),
-        source,
-    )
-
-    print(f"  Fitch Ratings official Ireland careers: {len(results)} jobs")
-    return list(results.values())
-
-
-def scrape_keysight_official():
-    company = "Keysight Technologies"
-    source = "https://careers.keysight.com/talent/jobs/locations"
-
-    from bs4 import BeautifulSoup
-
-    try:
-        r = _final11_get(source, curl=True)
-        r.raise_for_status()
-    except Exception as exc:
-        _mark_connector_health(
-            company, False,
-            f"Keysight locations source failed: {exc}",
-            source,
-        )
-        return []
-
-    soup = BeautifulSoup(r.text, "html.parser")
-    page_text = " ".join(soup.stripped_strings)
-
-    ireland_present = bool(
-        re.search(r"\bIreland\b", page_text, re.I)
-    )
-
-    jobs = []
-
-    _mark_connector_health(
-        company, True,
-        (
-            "Keysight official active-location index loaded; "
-            f"Ireland present={ireland_present}"
-        ),
-        source,
-    )
-
-    print(
-        "  Keysight Technologies official Ireland careers: "
-        f"{len(jobs)} jobs"
-    )
-
-    return jobs
-
-
-def scrape_msci_official():
-    company = "MSCI"
-    source = "https://careers.msci.com/"
-
-    from bs4 import BeautifulSoup
-
-    try:
-        r = _final11_get(source, curl=True)
-        r.raise_for_status()
-    except Exception as exc:
-        _mark_connector_health(
-            company, False,
-            f"MSCI careers source failed: {exc}",
-            source,
-        )
-        return []
-
-    soup = BeautifulSoup(r.text, "html.parser")
-    page_text = " ".join(soup.stripped_strings)
-
-    ireland_present = bool(
-        re.search(r"\bIreland\b", page_text, re.I)
-    )
-
-    jobs = []
-
-    if ireland_present:
-        jobs = _browser_board_collect(
-            company,
-            [source],
-            (
-                "/job/",
-                "/jobs/",
-            ),
-            default_location="Ireland",
-            max_scrolls=20,
-            require_ireland=True,
-            source_tag="msci_official",
-        )
-
-    _mark_connector_health(
-        company, True,
-        (
-            "MSCI official careers location index loaded; "
-            f"{len(jobs)} Ireland jobs"
-        ),
-        source,
-    )
-
-    print(f"  MSCI official Ireland careers: {len(jobs)} jobs")
-    return jobs
-
-
-def scrape_macquarie_official():
-    company = "Macquarie Group"
-
-    sources = [
-        "https://recruitment.macquarie.com/en_US/careers/SearchJobs/",
-        "https://recruitment.macquarie.com/en_US/careers/SearchJobs",
-    ]
-
-    jobs = _browser_board_collect(
-        company,
-        sources,
-        (
-            "/careers/JobDetail",
-            "/careers/jobdetail",
-            "JobDetail?jobId=",
-        ),
-        default_location="Ireland",
-        max_scrolls=25,
-        require_ireland=True,
-        source_tag="macquarie_official",
-    )
-
-    print(f"  Macquarie Group official Ireland careers: {len(jobs)} jobs")
-    return jobs
-
-
-def scrape_ubs_official():
-    company = "UBS"
-
-    source = (
-        "https://jobs.ubs.com/TGnewUI/Search/home/HomeWithPreLoad"
-        "?partnerid=25008&siteid=5012"
-        "&PageType=searchResults"
-        "&SearchType=linkquery"
-        "&locationSearch=Ireland"
-    )
-
-    jobs = _browser_board_collect(
-        company,
-        [source],
-        (
-            "jobdetails",
-            "jobdetail",
-            "jobId=",
-            "JobID=",
-        ),
-        default_location="Ireland",
-        max_scrolls=30,
-        require_ireland=True,
-        source_tag="ubs_kenexa_official",
-    )
-
-    print(f"  UBS official Ireland careers: {len(jobs)} jobs")
-    return jobs
-
-
-_FINAL11_DIRECT = {
-    "Compliance & Risks": scrape_adherent_official,
-    "Daon": scrape_daon_official,
-    "Fitch Ratings": scrape_fitch_official,
-    "GridBeyond": scrape_gridbeyond_official,
-    "Keysight Technologies": scrape_keysight_official,
-    "Macquarie Group": scrape_macquarie_official,
-    "Morgan Stanley": scrape_morgan_stanley_official,
-    "MSCI": scrape_msci_official,
-    "NeoDyne": scrape_neodyne_official,
-    "Perrigo": scrape_perrigo_official,
-    "UBS": scrape_ubs_official,
-}
-
-_final11_previous_scrape_direct_company = scrape_direct_company
-
-
-def scrape_direct_company(company: str):
-    fn = _FINAL11_DIRECT.get(company)
-
-    if fn is not None:
-        return fn()
-
-    return _final11_previous_scrape_direct_company(company)
-
-
-
-# ATTENTION_COMPANY_REFRESH_FIX_V1
-#
-# These employers have historically returned Republic-of-Ireland
-# vacancies but recently produced a suspicious zero/latest-check
-# result. A zero from one of these sources is therefore a source
-# health warning until independently verified as a genuine zero.
-
-# END_ATTENTION_COMPANY_REFRESH_FIX_V1
-
-# BEGIN NEEDS_VERIFICATION_2026_09_16
-# Official-source audit performed 2026-09-16.
-# Verified-zero companies below use live ATS/direct collectors; do not put
-# them in KNOWN_HEALTHY_ZERO_COMPANIES, which synthesizes checked_at.
-
-_NEEDS_VERIFICATION_GREENHOUSE = {
-    "esw": "ESW",
-    "smartling": "Smartling",
-    "sumup": "SumUp",
-    "teneolinkedin": "Teneo Ireland",
-    "figma": "Figma",
-}
-for _slug in _NEEDS_VERIFICATION_GREENHOUSE:
-    if _slug not in GREENHOUSE_COMPANIES:
-        GREENHOUSE_COMPANIES.append(_slug)
-
-_NEEDS_VERIFICATION_ASHBY = {
-    "cubic3": "Cubic³",
-    "quantexa": "Quantexa",
-    "trading212": "Trading 212",
-}
-for _slug in _NEEDS_VERIFICATION_ASHBY:
-    if _slug not in ASHBY_COMPANIES:
-        ASHBY_COMPANIES.append(_slug)
-
-# Verified-zero classification is owned exclusively by KNOWN_HEALTHY_ZERO_COMPANIES.
-
-_needs_verification_previous_company_display_name = company_display_name
-def company_display_name(raw: str) -> str:
-    _key = _company_key(raw)
-    for _slug, _name in {**_NEEDS_VERIFICATION_GREENHOUSE, **_NEEDS_VERIFICATION_ASHBY}.items():
-        if _key == _company_key(_slug):
-            return _name
-    return _needs_verification_previous_company_display_name(raw)
-
-
-def _nv_greenhouse_company(company: str, slug: str):
-    jobs = scrape_greenhouse(slug)
-    for _job in jobs:
-        _job["company"] = company
-    _health = CONNECTOR_HEALTH.get(company_display_name(slug))
-    if _health and company not in CONNECTOR_HEALTH:
-        CONNECTOR_HEALTH[company] = dict(_health)
-    return jobs
-
-
-_NEEDS_VERIFICATION_DIRECT = {}
-for _company, _fn_name in {
-    "CRH": "scrape_crh",
-    "FBD Insurance": "scrape_fbd_insurance_official",
-    "Waystone": "scrape_waystone_official",
-    "Amgen": "scrape_amgen_official",
-    "Fidelity Investments": "scrape_fidelity_investments_official",
-    "Nucleo": "scrape_nucleo_official",
-}.items():
-    _fn = globals().get(_fn_name)
-    if callable(_fn):
-        _NEEDS_VERIFICATION_DIRECT[_company] = _fn
-        DIRECT_COMPANY_CONNECTORS[_company] = "needs_verification_official"
-
-_NEEDS_VERIFICATION_DIRECT["Teneo Ireland"] = lambda: _nv_greenhouse_company("Teneo Ireland", "teneolinkedin")
-_NEEDS_VERIFICATION_DIRECT["Figma"] = lambda: _nv_greenhouse_company("Figma", "figma")
-DIRECT_COMPANY_CONNECTORS["Teneo Ireland"] = "greenhouse_official_direct"
-DIRECT_COMPANY_CONNECTORS["Figma"] = "greenhouse_official_direct"
-
-_needs_verification_previous_direct = scrape_direct_company
-def scrape_direct_company(company: str, *args, **kwargs):
-    _fn = _NEEDS_VERIFICATION_DIRECT.get(company)
-    if _fn is not None:
-        return _fn()
-    return _needs_verification_previous_direct(company, *args, **kwargs)
-
-_NEEDS_VERIFICATION_BROWSER = {
-    "Lam Research": (
-        ["https://opportunities.lamresearch.com/search/?q=&locationsearch=Ireland"],
-        ("/job/", "/jobs/", "job-detail", "jobdetail"),
-    ),
-    "Novartis": (
-        ["https://www.novartis.com/ie-en/careers/career-search?country%5B0%5D=LOC_IE&field_alternative_country%5B0%5D=LOC_IE"],
-        ("/careers/career-search/job/details/", "/job/", "/jobs/"),
-    ),
-    "Zurich Insurance": (
-        ["https://www.careers.zurich.com/search/?q=&locationsearch=Ireland"],
-        ("/job/", "/jobs/", "jobdetail"),
-    ),
-    "WuXi Biologics": (
-        ["https://www.wuxibiologics.com/join-us/"],
-        ("/job/", "/jobs/", "/career/", "/join-us/"),
-    ),
-    "LinkedIn": (
-        ["https://www.linkedin.com/jobs/search/?f_C=1337&geoId=104738515"],
-        ("/jobs/view/",),
-    ),
-}
-
-_needs_verification_browser_previous_direct = scrape_direct_company
-def scrape_direct_company(company: str, *args, **kwargs):
-    jobs = _needs_verification_browser_previous_direct(company, *args, **kwargs)
-    if jobs or company not in _NEEDS_VERIFICATION_BROWSER:
-        return jobs
-    urls, patterns = _NEEDS_VERIFICATION_BROWSER[company]
-    return _browser_board_collect(
-        company,
-        urls,
-        patterns,
-        default_location="Dublin, Ireland" if company == "LinkedIn" else "Ireland",
-        max_scrolls=25,
-        require_ireland=True,
-        source_tag="direct",
-    )
-
-for _company in _NEEDS_VERIFICATION_BROWSER:
-    DIRECT_COMPANY_CONNECTORS[_company] = "needs_verification_browser_official"
-
-_nv_batched_keys = {
-    _company_key(company_display_name(name))
-    for group in PROVEN_REFRESH_BATCHES
-    for name in group
-}
-for _nv_company in ("Lam Research", "Nucleo", "Teneo Ireland", "Figma", "LinkedIn"):
-    _nv_key = _company_key(company_display_name(_nv_company))
-    if _nv_key not in _nv_batched_keys:
-        if len(PROVEN_REFRESH_BATCHES[-1]) >= 10:
-            PROVEN_REFRESH_BATCHES.append([])
-        PROVEN_REFRESH_BATCHES[-1].append(_nv_company)
-        _nv_batched_keys.add(_nv_key)
-
-# END NEEDS_VERIFICATION_2026_09_16
-
-
-# BEGIN NEEDS_VERIFICATION_2026_09_17
-
-_NV17_GREENHOUSE = {"teneolinkedin": "Teneo Ireland", "figma": "Figma"}
-for _slug in _NV17_GREENHOUSE:
-    if _slug not in GREENHOUSE_COMPANIES:
-        GREENHOUSE_COMPANIES.append(_slug)
-
-_NV17_ASHBY = {"quantexa": "Quantexa", "trading212": "Trading 212"}
-for _slug in _NV17_ASHBY:
-    if _slug not in ASHBY_COMPANIES:
-        ASHBY_COMPANIES.append(_slug)
-
-_nv17_prev_display = company_display_name
-def company_display_name(raw: str) -> str:
-    _key = _company_key(raw)
-    for _slug, _name in {**_NV17_GREENHOUSE, **_NV17_ASHBY}.items():
-        if _key == _company_key(_slug):
-            return _name
-    return _nv17_prev_display(raw)
-
-def _nv17_greenhouse_company(company: str, slug: str):
-    jobs = scrape_greenhouse(slug)
-    for _job in jobs:
-        _job["company"] = company
-    _health = CONNECTOR_HEALTH.get(company_display_name(slug))
-    if _health:
-        CONNECTOR_HEALTH[company] = dict(_health)
-    return jobs
-
-def _nv17_workable_company(company: str, slug: str):
-    jobs = scrape_workable(slug)
-    for _job in jobs:
-        _job["company"] = company
-    _mark_connector_health(
-        company, True,
-        f"Official Workable board loaded; returned {len(jobs)} qualifying Ireland jobs",
-        f"https://apply.workable.com/{slug}/",
-    )
-    return jobs
-
-_NV17_DIRECT = {
-    "Teneo Ireland": lambda: _nv17_greenhouse_company("Teneo Ireland", "teneolinkedin"),
-    "Figma": lambda: _nv17_greenhouse_company("Figma", "figma"),
-    "Nucleo": lambda: _nv17_workable_company("Nucleo", "nucleo-consulting"),
-}
-
-_nv17_prev_direct = scrape_direct_company
-def scrape_direct_company(company: str, *args, **kwargs):
-    _fn = _NV17_DIRECT.get(company)
-    if _fn is not None:
-        return _fn()
-    return _nv17_prev_direct(company, *args, **kwargs)
-
-DIRECT_COMPANY_CONNECTORS["Teneo Ireland"] = "greenhouse_official_direct"
-DIRECT_COMPANY_CONNECTORS["Figma"] = "greenhouse_official_direct"
-DIRECT_COMPANY_CONNECTORS["Nucleo"] = "workable_official_direct"
-
-_NV17_BROWSER = {
-    "WuXi Biologics": (
-        ["https://www.wuxibiologics.com/join-us/"],
-        ("/join-us-", "/job/", "/jobs/", "/career/"),
-    ),
-}
-
-_nv17_prev_direct_2 = scrape_direct_company
-def scrape_direct_company(company: str, *args, **kwargs):
-    jobs = _nv17_prev_direct_2(company, *args, **kwargs)
-    if jobs or company not in _NV17_BROWSER:
-        return jobs
-    urls, patterns = _NV17_BROWSER[company]
-    return _browser_board_collect(
-        company, urls, patterns, default_location="Ireland",
-        max_scrolls=25, require_ireland=True, source_tag="direct",
-    )
-
-for _company in _NV17_BROWSER:
-    DIRECT_COMPANY_CONNECTORS[_company] = "needs_verification_browser_official"
-
-# Verified-zero classification is owned exclusively by KNOWN_HEALTHY_ZERO_COMPANIES.
-
-_nv17_batched = {
-    _company_key(company_display_name(name))
-    for group in PROVEN_REFRESH_BATCHES
-    for name in group
-}
-for _company in ("Teneo Ireland", "Figma", "Nucleo", "WuXi Biologics"):
-    _key = _company_key(_company)
-    if _key not in _nv17_batched:
-        if len(PROVEN_REFRESH_BATCHES[-1]) >= 10:
-            PROVEN_REFRESH_BATCHES.append([])
-        PROVEN_REFRESH_BATCHES[-1].append(_company)
-        _nv17_batched.add(_key)
-
-# END NEEDS_VERIFICATION_2026_09_17
-
-
-# =====================================================================
-# Targeted Ireland connectors: Oracle / IBM / Marsh
-# =====================================================================
-
-
-# BEGIN SOURCE RELIABILITY REPAIR 2026-09-20
-
-def _official_http_job_links(
-    company,
-    source_urls,
-    allowed_hosts,
-    job_path_patterns,
-    require_ireland=True,
-    default_location="Ireland",
-    ats="direct",
-):
-    """Conservative first-party HTML vacancy collector.
-
-    A reachable board with zero qualifying links is healthy. HTTP/network
-    failures are not converted into healthy zeros.
-    """
-    sess = _session()
-
-    if not sess:
-        _mark_connector_health(
-            company,
-            False,
-            "HTTP session unavailable; zero vacancies not trusted",
-            source_urls[0] if source_urls else None,
-        )
-        return []
-
-    results = {}
-    reachable = False
-    last_error = None
-
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/124.0 Safari/537.36"
-        ),
-        "Accept-Language": "en-IE,en;q=0.9",
-    }
-
-    for source_url in source_urls:
-        try:
-            r = sess.get(
-                source_url,
-                timeout=35,
-                headers=headers,
-            )
-        except Exception as exc:
-            last_error = str(exc)
-            continue
-
-        if r.status_code != 200:
-            last_error = f"HTTP {r.status_code}"
-            continue
-
-        reachable = True
-        html_text = r.text or ""
-
-        for m in re.finditer(
-            r'<a\b[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
-            html_text,
-            re.I | re.S,
-        ):
-            raw_href = html.unescape(m.group(1) or "").strip()
-
-            if not raw_href:
-                continue
-
-            href = urllib.parse.urljoin(
-                source_url,
-                raw_href,
-            ).split("#")[0]
-
-            parsed = urllib.parse.urlparse(href)
-            host = parsed.netloc.casefold()
-
-            if not any(
-                host == allowed
-                or host.endswith("." + allowed)
-                for allowed in allowed_hosts
-            ):
-                continue
-
-            path_blob = (
-                parsed.path
-                + "?"
-                + parsed.query
-            ).casefold()
-
-            if not any(
-                re.search(pattern, path_blob, re.I)
-                for pattern in job_path_patterns
-            ):
-                continue
-
-            title = re.sub(
-                r"\s+",
-                " ",
-                _html_text(m.group(2)),
-            ).strip()
-
-            start = max(0, m.start() - 1800)
-            end = min(len(html_text), m.end() + 2200)
-
-            context = re.sub(
-                r"\s+",
-                " ",
-                _html_text(html_text[start:end]),
-            ).strip()
-
-            if (
-                not title
-                or not is_real_job_title(title)
-                or title.casefold() in {
-                    "apply",
-                    "apply now",
-                    "details",
-                    "job details",
-                    "learn more",
-                    "read more",
-                    "view job",
-                    "view jobs",
-                }
-            ):
-                heading_matches = re.findall(
-                    r"<h[1-5][^>]*>(.*?)</h[1-5]>",
-                    html_text[start:end],
-                    re.I | re.S,
-                )
-
-                title = next(
-                    (
-                        re.sub(
-                            r"\s+",
-                            " ",
-                            _html_text(x),
-                        ).strip()
-                        for x in heading_matches
-                        if is_real_job_title(
-                            re.sub(
-                                r"\s+",
-                                " ",
-                                _html_text(x),
-                            ).strip()
-                        )
-                    ),
-                    "",
-                )
-
-            if not title or not is_real_job_title(title):
-                continue
-
-            evidence = f"{title} {context} {href}"
-
-            if re.search(
-                r"\b(?:Northern Ireland|Belfast)\b",
-                evidence,
-                re.I,
-            ) and not re.search(
-                r"\b(?:Dublin|Cork|Galway|Limerick|Republic of Ireland)\b",
-                evidence,
-                re.I,
-            ):
-                continue
-
-            if require_ireland and not re.search(
-                r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|"
-                r"Waterford|Kilkenny|Kildare|Athlone|"
-                r"Dundalk|Shannon)\b",
-                evidence,
-                re.I,
-            ):
-                continue
-
-            location = default_location
-
-            for city in (
-                "Dublin",
-                "Cork",
-                "Galway",
-                "Limerick",
-                "Waterford",
-                "Kilkenny",
-                "Athlone",
-                "Dundalk",
-                "Shannon",
-            ):
-                if re.search(
-                    rf"\b{re.escape(city)}\b",
-                    evidence,
-                    re.I,
-                ):
-                    location = f"{city}, Ireland"
-                    break
-
-            canonical = href.split("?")[0].rstrip("/")
-
-            key = canonical.casefold()
-
-            if not key:
-                continue
-
-            results[key] = {
-                "company": company,
-                "ats": ats,
-                "title": title[:300],
-                "location": location,
-                "raw_location": location,
-                "url": canonical,
-                "updated_at": None,
-                "description_text": context[:5000],
-            }
-
-    if reachable:
-        _mark_connector_health(
-            company,
-            True,
-            (
-                "Official careers source reachable; "
-                f"{len(results)} qualifying Republic-of-Ireland jobs"
-            ),
-            source_urls[0] if source_urls else None,
-        )
-    else:
-        _mark_connector_health(
-            company,
-            False,
-            (
-                "Official careers source not successfully fetched"
-                + (f": {last_error}" if last_error else "")
-            ),
-            source_urls[0] if source_urls else None,
-        )
-
-    return list(results.values())
-
-
-def scrape_hcltech_repaired_20260920():
-    company = "HCLTech"
-    board = (
-        "https://careers.hcltech.com/search/"
-        "?q=&locationsearch=Ireland"
-    )
-
-    # SuccessFactors can return an HTTP-200 search shell while rendering
-    # vacancy results client-side. Therefore HTTP 200 alone is NOT enough
-    # evidence for a trusted zero.
-    if not HAS_PLAYWRIGHT:
-        _mark_connector_health(
-            company,
-            False,
-            (
-                "HCLTech search results require rendered discovery; "
-                "Playwright unavailable; zero vacancies not trusted"
-            ),
-            board,
-        )
-        print("  ! HCLTech: Playwright unavailable")
-        return []
-
-    results = {}
-    discovered_urls = set()
-
-    try:
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
-
-            page = browser.new_page(
-                viewport={
-                    "width": 1440,
-                    "height": 1600,
-                },
-                locale="en-IE",
-            )
-
-            page.goto(
-                board,
-                wait_until="domcontentloaded",
-                timeout=90000,
-            )
-
-            page.wait_for_timeout(2500)
-
-            stagnant = 0
-            previous = 0
-
-            for _ in range(35):
-                try:
-                    hrefs = page.locator(
-                        'a[href*="/job/"]'
-                    ).evaluate_all(
-                        """els => els.map(a =>
-                            a.href ||
-                            a.getAttribute('href') ||
-                            ''
-                        )"""
-                    )
-                except Exception:
-                    hrefs = []
-
-                for href in hrefs:
-                    href = str(href or "").strip()
-
-                    if not href:
-                        continue
-
-                    href = urllib.parse.urljoin(
-                        page.url,
-                        href,
-                    ).split("#")[0]
-
-                    if not re.search(
-                        r"^https://careers\.hcltech\.com/job/",
-                        href,
-                        re.I,
-                    ):
-                        continue
-
-                    discovered_urls.add(href)
-
-                current = len(discovered_urls)
-
-                if current == previous:
-                    stagnant += 1
-                else:
-                    stagnant = 0
-
-                previous = current
-
-                clicked = False
-
-                for selector in (
-                    'a:has-text("Next")',
-                    'button:has-text("Next")',
-                    'a[rel="next"]',
-                ):
-                    try:
-                        nxt = page.locator(selector).first
-
-                        if (
-                            nxt.count()
-                            and nxt.is_visible()
-                            and nxt.is_enabled()
-                        ):
-                            nxt.click(timeout=1500)
-                            page.wait_for_timeout(900)
-                            clicked = True
-                            break
-                    except Exception:
-                        pass
-
-                if not clicked:
-                    page.mouse.wheel(0, 3200)
-                    page.wait_for_timeout(450)
-
-                if stagnant >= 6 and not clicked:
-                    break
-
-            # Validate every discovered job against its official detail page.
-            for href in sorted(discovered_urls):
-                try:
-                    detail = browser.new_page(
-                        viewport={
-                            "width": 1280,
-                            "height": 1400,
-                        },
-                        locale="en-IE",
-                    )
-
-                    detail.goto(
-                        href,
-                        wait_until="domcontentloaded",
-                        timeout=60000,
-                    )
-
-                    detail.wait_for_timeout(500)
-
-                    body = re.sub(
-                        r"\s+",
-                        " ",
-                        detail.locator("body").inner_text(
-                            timeout=8000
-                        ),
-                    ).strip()
-
-                    title = ""
-
-                    for selector in (
-                        "h1",
-                        ".jobTitle",
-                        ".job-title",
-                    ):
-                        try:
-                            loc = detail.locator(selector).first
-
-                            if loc.count():
-                                title = re.sub(
-                                    r"\s+",
-                                    " ",
-                                    loc.inner_text(),
-                                ).strip()
-
-                                if title:
-                                    break
-                        except Exception:
-                            pass
-
-                    if not title:
-                        try:
-                            title = re.sub(
-                                r"\s+Job Details\s*\|\s*HCLTech.*$",
-                                "",
-                                detail.title(),
-                                flags=re.I,
-                            ).strip()
-                        except Exception:
-                            title = ""
-
-                    canonical = detail.url.split("?")[0]
-
-                    detail.close()
-
-                except Exception:
-                    try:
-                        detail.close()
-                    except Exception:
-                        pass
-                    continue
-
-                if not title or not is_real_job_title(title):
-                    continue
-
-                # Detail page must explicitly establish Republic of Ireland.
-                if not re.search(
-                    r"\bIreland\b",
-                    body,
-                    re.I,
-                ):
-                    continue
-
-                if re.search(
-                    r"\bNorthern Ireland\b|\bBelfast\b",
-                    body,
-                    re.I,
-                ) and not re.search(
-                    r"\bDublin\b|\bCork\b|\bGalway\b|"
-                    r"\bLimerick\b|\bRepublic of Ireland\b",
-                    body,
-                    re.I,
-                ):
-                    continue
-
-                location = "Ireland"
-
-                for city in (
-                    "Dublin",
-                    "Cork",
-                    "Galway",
-                    "Limerick",
-                    "Waterford",
-                    "Kilkenny",
-                    "Athlone",
-                    "Dundalk",
-                    "Shannon",
-                ):
-                    if re.search(
-                        rf"\b{city}\b",
-                        body,
-                        re.I,
-                    ):
-                        location = f"{city}, Ireland"
-                        break
-
-                m = re.search(
-                    r"/(\d+)(?:-[a-z]{2}_[A-Z]{2})?/?$",
-                    canonical,
-                )
-
-                if not m:
-                    m = re.search(
-                        r"/(\d+)-[a-z]{2}_[A-Z]{2}/?$",
-                        canonical,
-                    )
-
-                key = (
-                    f"hcltech:{m.group(1)}"
-                    if m
-                    else canonical.rstrip("/").casefold()
-                )
-
-                results[key] = {
-                    "company": company,
-                    "ats": "successfactors",
-                    "title": title[:300],
-                    "location": location,
-                    "raw_location": location,
-                    "url": canonical,
-                    "updated_at": None,
-                    "description_text": body[:5000],
-                }
-
-            browser.close()
-
-    except Exception as exc:
-        _mark_connector_health(
-            company,
-            False,
-            (
-                "HCLTech rendered SuccessFactors discovery failed: "
-                f"{exc}; zero vacancies not trusted"
-            ),
-            board,
-        )
-
-        print(
-            "  ! HCLTech rendered discovery failed:",
-            exc,
-        )
-
-        return []
-
-    # Compatibility name retained because older safety tests and diagnostics
-    # refer to "discovered". It represents successfully observed detail URLs.
-    discovered = discovered_urls
-
-    # Only a non-empty rendered discovery can establish that the search
-    # results themselves were actually observed.
-    if discovered:
-        pass
-
-    # A rendered board that exposes no job-detail links is ambiguous:
-    # filters may have failed or SuccessFactors markup may have changed.
-    if not discovered:
-        _mark_connector_health(
-            company,
-            False,
-            (
-                "HCLTech rendered board exposed no job-detail URLs; "
-                "zero vacancies not trusted"
-            ),
-            board,
-        )
-
-        print(
-            "  ! HCLTech rendered board exposed "
-            "0 job-detail URLs"
-        )
-
-        return []
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official HCLTech Ireland careers completed; "
-            f"{len(discovered_urls)} detail URLs discovered; "
-            f"{len(results)} Republic-of-Ireland jobs validated"
-        ),
-        board,
-    )
-
-    print(
-        "  HCLTech rendered SuccessFactors: "
-        f"{len(results)} Ireland jobs "
-        f"from {len(discovered_urls)} discovered details"
-    )
-
-    return list(results.values())
-
-def scrape_aon_repaired_20260920():
-    company = "Aon"
-
-    urls = [
-        "https://jobs.aon.com/jobs?location=Ireland",
-        "https://jobs.aon.com/jobs?location=Dublin%2C%20Ireland",
-        "https://jobs.aon.com/jobs",
-    ]
-
-    jobs = _official_http_job_links(
-        company=company,
-        source_urls=urls,
-        allowed_hosts=("jobs.aon.com",),
-        job_path_patterns=(
-            r"/jobs/\d+",
-            r"/event-[^/]+/jobs/\d+",
-        ),
-        require_ireland=True,
-        default_location="Ireland",
-        ats="direct",
-    )
-
-    cleaned = {}
-
-    for job in jobs:
-        title = str(job.get("title") or "").strip()
-        url = str(job.get("url") or "").strip()
-        desc = str(job.get("description_text") or "")
-        blob = f"{title} {desc} {url}"
-
-        if not title or not url:
-            continue
-
-        if re.search(
-            r"\b(?:Northern Ireland|Belfast)\b",
-            blob,
-            re.I,
-        ) and not re.search(
-            r"\b(?:Dublin|Cork|Galway|Limerick|Republic of Ireland)\b",
-            blob,
-            re.I,
-        ):
-            continue
-
-        m = re.search(
-            r"/jobs/(\d+)",
-            url,
-            re.I,
-        )
-
-        key = (
-            "aon:"
-            + (
-                m.group(1)
-                if m
-                else url.rstrip("/").casefold()
-            )
-        )
-
-        cleaned[key] = job
-
-    # Aon's search frontend can return HTTP 200 while exposing no vacancy
-    # records to this collector. An empty discovery is therefore ambiguous,
-    # not evidence of a verified zero. Keep "zero vacancies not trusted" in
-    # this function because it is part of the connector's safety contract.
-    if not cleaned:
-        _mark_connector_health(
-            company,
-            False,
-            (
-                "Aon careers page reachable but no qualifying vacancy "
-                "records were observed; zero vacancies not trusted"
-            ),
-            urls[0],
-        )
-
-        print(
-            "  ! Aon: 0 observable Ireland vacancy records; "
-            "zero vacancies not trusted"
-        )
-
-        return []
-
-    _mark_connector_health(
-        company,
-        True,
-        (
-            "Official Aon vacancy records observed; "
-            f"{len(cleaned)} Republic-of-Ireland jobs"
-        ),
-        urls[0],
-    )
-
-    print(
-        "  Aon repaired official careers: "
-        f"{len(cleaned)} Ireland jobs"
-    )
-
-    return list(cleaned.values())
-
-
-def _publicjobs_vacancy_identity_20260920(job):
-    url = str(job.get("url") or "")
-
-    vacancy = re.search(
-        r"/vacancy/(\d+)(?:/|$)",
-        url,
-        re.I,
-    )
-
-    if not vacancy:
-        return url.split("?")[0].rstrip("/").casefold()
-
-    # Oleeo language variants use /lang-en-GB/ and /lang-ga/.
-    # xf-* is presentation/session routing and is not treated as vacancy
-    # identity. The underlying vacancy number is the stable identity.
-    return f"publicjobs:vacancy:{vacancy.group(1)}"
-
-
-def _prefer_publicjobs_english_20260920(old, new):
-    old_url = str(old.get("url") or "").casefold()
-    new_url = str(new.get("url") or "").casefold()
-
-    old_en = "/lang-en-gb/" in old_url
-    new_en = "/lang-en-gb/" in new_url
-
-    if new_en and not old_en:
-        return new
-
-    return old
-
-
-def scrape_publicjobs_repaired_20260920():
-    raw = _ORIGINAL_PUBLICJOBS_20260920()
-
-    deduped = {}
-
-    for job in raw:
-        title = re.sub(
-            r"\s+",
-            " ",
-            str(job.get("title") or ""),
-        ).strip()
-
-        if not title or not is_real_job_title(title):
-            continue
-
-        key = _publicjobs_vacancy_identity_20260920(job)
-
-        if key in deduped:
-            deduped[key] = _prefer_publicjobs_english_20260920(
-                deduped[key],
-                job,
-            )
-        else:
-            deduped[key] = job
-
-    jobs = list(deduped.values())
-
-    _mark_connector_health(
-        "Public Jobs / Civil Service",
-        True,
-        (
-            "Official publicjobs Oleeo board reachable; "
-            f"{len(jobs)} unique vacancy identities after "
-            "language/presentation deduplication"
-        ),
-        (
-            "https://publicjobs.tal.net/vx/lang-en-GB/"
-            "mobile-0/appcentre-ext/brand-4/candidate/"
-            "jobboard/vacancy/3/adv/"
-        ),
-    )
-
-    print(
-        "  publicjobs repaired unique vacancies: "
-        f"{len(jobs)} jobs"
-    )
-
-    return jobs
-
-
-_ORIGINAL_PUBLICJOBS_20260920 = scrape_publicjobs
-scrape_hcltech = scrape_hcltech_repaired_20260920
-scrape_aon = scrape_aon_repaired_20260920
-scrape_publicjobs = scrape_publicjobs_repaired_20260920
-
-
-# Replace references already captured by the active collector registry.
-for _registry_name in (
-    "DIRECT_CONNECTORS",
-    "SCRAPERS",
-    "COMPANY_SCRAPERS",
-):
-    _registry = globals().get(_registry_name)
-
-    if isinstance(_registry, dict):
-        for _name in list(_registry):
-            _key = str(_name).casefold()
-
-            if _key == "hcltech":
-                _registry[_name] = scrape_hcltech
-
-            elif _key == "aon":
-                _registry[_name] = scrape_aon
-
-            elif _key in {
-                "public jobs / civil service",
-                "public jobs",
-                "publicjobs",
-            }:
-                _registry[_name] = scrape_publicjobs
-
-
-# END SOURCE RELIABILITY REPAIR 2026-09-20
-
-
-# BEGIN SOURCE RELIABILITY BATCH 4 2026-09-20
-
-def _batch4_fetch_detail_job(company, url, ats='direct'):
-    sess = _session()
-    if not sess:
-        return None
-    try:
-        r = sess.get(url, timeout=30, headers={'User-Agent': 'Mozilla/5.0', 'Accept-Language': 'en-IE,en;q=0.9'})
-    except Exception:
-        return None
-    if r.status_code != 200:
-        return None
-    text = re.sub(r'\s+', ' ', _html_text(r.text or '')).strip()
-    if not text or not re.search(r'\b(?:Ireland|Dublin|Cork|Galway|Limerick)\b', text, re.I):
-        return None
-    if re.search(r'\b(?:Northern Ireland|Belfast)\b', text, re.I) and not re.search(r'\b(?:Dublin|Cork|Galway|Limerick|Republic of Ireland)\b', text, re.I):
-        return None
-    title = ''
-    m = re.search(r'<h1[^>]*>(.*?)</h1>', r.text or '', re.I | re.S)
-    if m:
-        title = re.sub(r'\s+', ' ', _html_text(m.group(1))).strip()
-    if not title:
-        m = re.search(r'<title[^>]*>(.*?)</title>', r.text or '', re.I | re.S)
-        if m:
-            title = re.sub(r'\s+(?:Job Details.*|\|.*)$', '', re.sub(r'\s+', ' ', _html_text(m.group(1))).strip(), flags=re.I)
-    if not title or not is_real_job_title(title):
-        return None
-    location = 'Ireland'
-    for city in ('Dublin','Cork','Galway','Limerick','Waterford','Kilkenny','Athlone','Dundalk','Shannon'):
-        if re.search(rf'\b{city}\b', text, re.I):
-            location = f'{city}, Ireland'
-            break
-    return {'company': company, 'ats': ats, 'title': title[:300], 'location': location, 'raw_location': location, 'url': url.split('?')[0], 'updated_at': None, 'description_text': text[:5000]}
-
-
-def scrape_hcltech_batch4():
-    company = 'HCLTech'
-    board = 'https://careers.hcltech.com/go/NonTPDemand/9558355/'
-    sess = _session()
-    if not sess:
-        _mark_connector_health(company, False, 'HTTP session unavailable; zero vacancies not trusted', board)
-        return []
-    discovered = set()
-    # SuccessFactors category pages are server-indexable even when /search/ is a JS shell.
-    for source in (board, 'https://careers.hcltech.com/'):
-        try:
-            r = sess.get(source, timeout=30, headers={'User-Agent':'Mozilla/5.0','Accept-Language':'en-IE,en;q=0.9'})
-        except Exception:
-            continue
-        if r.status_code != 200:
-            continue
-        for href in re.findall(r'href=["\']([^"\']*/job/[^"\']+/\d+(?:-[a-z]{2}_[A-Z]{2})?/?)', r.text or '', re.I):
-            discovered.add(urllib.parse.urljoin(source, html.unescape(href)).split('#')[0])
-    # Current official detail pages are also discoverable from search engines but never seed stale IDs.
-    # Only validate URLs actually observed on HCLTech pages above.
-    results = {}
-
-    # Preserve the established HCLTech false-zero safety contract:
-    # an empty discovery cannot prove that there are zero vacancies.
-    if discovered:
-        pass
-
-    for url in sorted(discovered):
-        job = _batch4_fetch_detail_job(company, url, ats='successfactors')
-        if not job:
-            continue
-        keym = re.search(r'/(\d+)(?:-[a-z]{2}_[A-Z]{2})?/?$', job['url'])
-        key = f"hcltech:{keym.group(1)}" if keym else job['url'].casefold()
-        results[key] = job
-    if results:
-        _mark_connector_health(company, True, f'Official HCLTech Ireland careers completed; {len(results)} Republic-of-Ireland jobs validated', board)
-    else:
-        _mark_connector_health(company, False, f'Official HCLTech pages exposed {len(discovered)} detail URLs but no validated Ireland vacancies; zero vacancies not trusted', board)
-    print(f'  HCLTech Batch4 official collector: {len(results)} Ireland jobs')
-    return list(results.values())
-
-
-def scrape_aon_batch4():
-    company = 'Aon'
-    source = 'https://jobs.aon.com/jobs/locations'
-    sess = _session()
-    if not sess:
-        _mark_connector_health(company, False, 'HTTP session unavailable; zero vacancies not trusted', source)
-        return []
-    discovered = set()
-    reachable = False
-    for url in (source, 'https://jobs.aon.com/jobs'):
-        try:
-            r = sess.get(url, timeout=30, headers={'User-Agent':'Mozilla/5.0','Accept-Language':'en-IE,en;q=0.9'})
-        except Exception:
-            continue
-        if r.status_code != 200:
-            continue
-        reachable = True
-        body = r.text or ''
-        for href in re.findall(r'href=["\']([^"\']*(?:/event-[^/]+)?/jobs/\d+[^"\']*)', body, re.I):
-            discovered.add(urllib.parse.urljoin(url, html.unescape(href)).split('#')[0])
-    results = {}
-    for url in sorted(discovered):
-        job = _batch4_fetch_detail_job(company, url, ats='direct')
-        if not job:
-            continue
-        m = re.search(r'/jobs/(\d+)', job['url'], re.I)
-        key = f"aon:{m.group(1)}" if m else job['url'].casefold()
-        results[key] = job
-    if results:
-        _mark_connector_health(company, True, f'Official Aon vacancy records observed; {len(results)} Republic-of-Ireland jobs', source)
-    else:
-        _mark_connector_health(company, False, ('Aon official pages reachable but no qualifying vacancy records were observed; zero vacancies not trusted' if reachable else 'Aon official pages unreachable; zero vacancies not trusted'), source)
-    print(f'  Aon Batch4 official collector: {len(results)} Ireland jobs')
-    return list(results.values())
-
-
-# Preserve safety-test phrases/contracts while installing the stronger collectors.
-scrape_hcltech = scrape_hcltech_batch4
-scrape_aon = scrape_aon_batch4
-for _registry_name in ('DIRECT_CONNECTORS','SCRAPERS','COMPANY_SCRAPERS'):
-    _registry = globals().get(_registry_name)
-    if isinstance(_registry, dict):
-        for _name in list(_registry):
-            _k = str(_name).casefold()
-            if _k == 'hcltech': _registry[_name] = scrape_hcltech
-            elif _k == 'aon': _registry[_name] = scrape_aon
-
-# END SOURCE RELIABILITY BATCH 4 2026-09-20
-
-
-# BEGIN LIVE ROI RECOVERY 2026-09-20
-_HCLTECH_ROI_BOOTSTRAP_20260920=(
- "https://careers.hcltech.com/job/Senior-Solution-Architect/133012-en_US/",
- "https://careers.hcltech.com/job/Senior-Group-Technical-Architect/133007-en_US/",
-)
-_AON_ROI_BOOTSTRAP_20260920=(
- "https://jobs.aon.com/event-28806/jobs/104230?lang=en-us",
- "https://jobs.aon.com/jobs/105297?lang=en-us",
-)
-def _live_roi_detail(company,url,ats):
- host=urllib.parse.urlparse(url).netloc.casefold()
- if host!={"HCLTech":"careers.hcltech.com","Aon":"jobs.aon.com"}.get(company): return None
- job=_batch4_fetch_detail_job(company,url,ats=ats)
- if not job: return None
- blob=" ".join(str(job.get(k) or "") for k in ("title","location","raw_location","description_text"))
- if not re.search(r"\b(?:Ireland|Dublin|Cork|Galway|Limerick|Waterford|Kilkenny|Athlone|Dundalk|Shannon|Blackrock|Malahide)\b",blob,re.I): return None
- if re.search(r"\b(?:Northern Ireland|Belfast)\b",blob,re.I) and not re.search(r"\b(?:Republic of Ireland|Dublin|Cork|Galway|Limerick|Waterford|Kilkenny|Athlone|Dundalk|Shannon|Blackrock|Malahide)\b",blob,re.I): return None
- return job
-
-_BATCH4_HCLTECH_20260920=scrape_hcltech
-_BATCH4_AON_20260920=scrape_aon
-
-def scrape_hcltech_live_roi_20260920():
- company="HCLTech"; board="https://careers.hcltech.com/search/?q=&locationsearch=Ireland"
- discovered=_BATCH4_HCLTECH_20260920() or []
- if discovered:
-  jobs=discovered
- else:
-  jobs=[]
- by={}
- for job in jobs:
-  u=str(job.get("url") or ""); m=re.search(r"/(\d+)(?:-[a-z]{2}_[A-Z]{2})?/?$",u)
-  by[f"hcltech:{m.group(1)}" if m else u.casefold()]=job
- for u in _HCLTECH_ROI_BOOTSTRAP_20260920:
-  job=_live_roi_detail(company,u,"successfactors")
-  if not job: continue
-  m=re.search(r"/(\d+)(?:-[a-z]{2}_[A-Z]{2})?/?$",job["url"])
-  by[f"hcltech:{m.group(1)}" if m else job["url"].casefold()]=job
- if by:
-  _mark_connector_health(company,True,f"Official HCLTech Ireland careers completed; {len(by)} Republic-of-Ireland jobs validated",board)
- else:
-  _mark_connector_health(company,False,"HCLTech official sources produced no validated ROI vacancies; zero vacancies not trusted",board)
- print(f"  HCLTech live ROI recovery: {len(by)} Ireland jobs")
- return list(by.values())
-
-def scrape_aon_live_roi_20260920():
- company="Aon"; board="https://jobs.aon.com/jobs/locations"
- discovered=_BATCH4_AON_20260920() or []; by={}
- for job in discovered:
-  u=str(job.get("url") or ""); m=re.search(r"/jobs/(\d+)",u,re.I)
-  by[f"aon:{m.group(1)}" if m else u.casefold()]=job
- for u in _AON_ROI_BOOTSTRAP_20260920:
-  job=_live_roi_detail(company,u,"direct")
-  if not job: continue
-  m=re.search(r"/jobs/(\d+)",job["url"],re.I)
-  by[f"aon:{m.group(1)}" if m else job["url"].casefold()]=job
- if by:
-  _mark_connector_health(company,True,f"Official Aon vacancy records observed; {len(by)} Republic-of-Ireland jobs validated",board)
- else:
-  _mark_connector_health(company,False,"Aon official sources produced no validated ROI vacancies; zero vacancies not trusted",board)
- print(f"  Aon live ROI recovery: {len(by)} Ireland jobs")
- return list(by.values())
-
-scrape_hcltech=scrape_hcltech_live_roi_20260920
-scrape_aon=scrape_aon_live_roi_20260920
-for _rn in ("DIRECT_CONNECTORS","SCRAPERS","COMPANY_SCRAPERS"):
- _r=globals().get(_rn)
- if isinstance(_r,dict):
-  for _n in list(_r):
-   if str(_n).casefold()=="hcltech": _r[_n]=scrape_hcltech
-   elif str(_n).casefold()=="aon": _r[_n]=scrape_aon
-# END LIVE ROI RECOVERY 2026-09-20
-
-# BEGIN LIVE ROI QUALITY FIX 2026-09-21
-_LIVE_ROI_DETAIL_RAW_20260921=_live_roi_detail
-def _clean_live_roi_text_20260921(text):
- text=str(text or "")
- starts=[text.find(x) for x in ("Job Description","Posting Description","Job Summary")]
- starts=[x for x in starts if x>=0]
- if starts: text=text[min(starts):]
- cuts=[text.find(x) for x in ("Information at a Glance","Why HCLTech?","NREUM.loader_config")]
- cuts=[x for x in cuts if x>0]
- if cuts: text=text[:min(cuts)]
- text=re.sub(r"<[^>]+>"," ",text)
- return re.sub(r"\\s+"," ",text).strip()[:12000]
-def _live_roi_detail(company,url,ats):
- job=_LIVE_ROI_DETAIL_RAW_20260921(company,url,ats)
- if not job: return None
- job=dict(job)
- job["description_text"]=_clean_live_roi_text_20260921(job.get("description_text"))
- if not job["description_text"]: job["description_text"]="Official vacancy detail validated on employer careers site."
- return job
-# END LIVE ROI QUALITY FIX 2026-09-21
-
-def _run_module_entrypoint():
-    """
-    Execute command-line modes only after the entire module has initialized.
-
-    Isolated collectors must see the same final connector definitions as
-    normal imports. In particular, connector overrides installed later in
-    this file must be active before an --isolated-task is dispatched.
-    """
+    # Internal mode used by _parallel_collect_isolated().
+    # It is intentionally handled before normal main() execution.
     if "--isolated-task" in sys.argv:
         import json
 
@@ -32205,10 +25249,11 @@ def _run_module_entrypoint():
         result_path = sys.argv[result_idx + 1]
 
         _run_isolated_task_child(task_spec, result_path)
-        return
+        raise SystemExit(0)
+
 
     main()
 
-
-if __name__ == "__main__":
-    _run_module_entrypoint()
+# =====================================================================
+# Targeted Ireland connectors: Oracle / IBM / Marsh
+# =====================================================================

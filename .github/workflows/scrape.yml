@@ -2,21 +2,14 @@ name: Refresh Ireland Job Radar
 
 on:
   schedule:
-    # Primary hourly refresh. Avoid the top of the hour, where GitHub notes
-    # scheduled workflows are more likely to be delayed under load.
-    - cron: '23 * * * *'
-    # Recovery trigger. It exits before dependency installation unless the
-    # previous published refresh is stale, so a dropped primary gets a second
-    # chance without normally running the scraper twice per hour.
-    - cron: '53 * * * *'
+    - cron: '03 * * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
 
-# One refresh at a time. A delayed primary and its recovery trigger must not
-# publish concurrently. The queued recovery will re-check freshness after the
-# primary finishes and then exit cheaply if it is no longer needed.
+# One refresh at a time. Scheduled runs wait rather than cancelling a scrape
+# that is already publishing the dashboard.
 concurrency:
   group: ireland-job-radar-refresh
   cancel-in-progress: false
@@ -27,57 +20,14 @@ jobs:
     timeout-minutes: 50
     steps:
       - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          ref: main
-
-      - name: Decide whether this trigger needs a refresh
-        id: refresh_due
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          # Manual dispatches and the primary :23 schedule always run.
-          if [ "${{ github.event_name }}" != "schedule" ] || [ "${{ github.event.schedule }}" = "23 * * * *" ]; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # The :53 schedule is a recovery trigger. Run it only if the last
-          # completed/published refresh is at least one hour old or unreadable.
-          python3 - <<'PY' >> "$GITHUB_OUTPUT"
-          import datetime as dt
-          import json
-          from pathlib import Path
-
-          due = True
-          path = Path("last_full_refresh.json")
-          try:
-              payload = json.loads(path.read_text(encoding="utf-8"))
-              raw = payload["completed_at"]
-              completed = dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
-              if completed.tzinfo is None:
-                  completed = completed.replace(tzinfo=dt.timezone.utc)
-              age = dt.datetime.now(dt.timezone.utc) - completed.astimezone(dt.timezone.utc)
-              due = age >= dt.timedelta(minutes=60)
-          except Exception:
-              due = True
-
-          print(f"run={'true' if due else 'false'}")
-          PY
-
+        with: {fetch-depth: 0}
       - uses: actions/setup-python@v6
-        if: steps.refresh_due.outputs.run == 'true'
         with: {python-version: '3.11'}
-
       - name: Install dependencies
-        if: steps.refresh_due.outputs.run == 'true'
         run: |
           pip install requests beautifulsoup4 curl_cffi playwright
           python -m playwright install --with-deps chromium
-
       - name: Collect and publish core boards and proven batches
-        if: steps.refresh_due.outputs.run == 'true'
         env:
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
@@ -85,18 +35,12 @@ jobs:
           CAREERJET_API_KEY: ${{ secrets.CAREERJET_API_KEY }}
         run: |
           set -euo pipefail
-          git fetch origin main
-          git reset --hard origin/main
-          python apply_needs_verification_fixes.py
-          python apply_needs_verification_fixes_2026_09_17.py
+          python test_zero_audit.py
           python test_refresh_publish.py
-          python test_needs_verification_2026_09_16.py
-          python test_needs_verification_2026_09_17.py
           python test_proven_batch.py
           timeout --signal=TERM --kill-after=30s 45m env SCRAPE_MODE=full SCRAPE_PHASE=core SCRAPE_WORKERS=20 python -u scrape.py
           python -c 'import datetime,json; json.dump({"completed_at":datetime.datetime.now(datetime.timezone.utc).isoformat()},open("last_full_refresh.json","w"),indent=2)'
           python health_check.py
-          git restore scrape.py
           git config user.name job-radar-bot
           git config user.email actions@users.noreply.github.com
           git add data.json seen_jobs.json company_history.json sponsorship_history.json last_full_refresh.json graduate_programme_history.json ats_platform_cache.json jsonld_cache.json browser_scrape_cache.json
