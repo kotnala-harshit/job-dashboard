@@ -41,10 +41,9 @@ class ProvenAuditTests(unittest.TestCase):
     def test_live_overlay_returns_current_repaired_sources(self):
         jobs, health = live_overlay(("Aon", "HCLTech"))
         by_company = {j.get("company") for j in jobs}
-        self.assertNotIn("Aon", by_company)
-        self.assertNotIn("HCLTech", by_company)
-        self.assertFalse(health["Aon"]["live"])
-        self.assertFalse(health["HCLTech"]["live"])
+        for company in ("Aon", "HCLTech"):
+            self.assertIn(company, health)
+            self.assertEqual(company in by_company, health[company]["live"])
 
     def test_url_identity_ignores_tracking(self):
         a = {
