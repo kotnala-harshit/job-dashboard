@@ -32231,6 +32231,45 @@ def _live_roi_detail(company,url,ats):
  return job
 # END LIVE ROI QUALITY FIX 2026-09-21
 
+# Priority employers with official boards.  Keep a successful zero as a live
+# check so it is not displayed as a failed or stale connector.
+def scrape_visa_official():
+    return scrape_workday("Visa", "visa", "wd5", "Visa", max_pages=25)
+
+
+def scrape_morningstar_official():
+    return scrape_workday("Morningstar", "morningstar", "wd5", "morningstar", max_pages=25)
+
+
+_PRIORITY_OFFICIAL_CONNECTORS = {
+    "Visa": (scrape_visa_official, "https://visa.wd5.myworkdayjobs.com/Visa"),
+    "Morningstar": (scrape_morningstar_official, "https://morningstar.wd5.myworkdayjobs.com/morningstar"),
+    "Deutsche Bank": (scrape_deutsche_bank, "https://db.wd3.myworkdayjobs.com/DBWebsite"),
+    "UBS": (scrape_ubs_official, "https://jobs.ubs.com/"),
+    "Nokia": (scrape_nokia, "https://jobs.nokia.com/en/sites/CX_1/jobs?location=Ireland&mode=location"),
+    "PTSB (Permanent TSB)": (scrape_ptsb, "https://my.corehr.com/pls/ptsbrecruit/"),
+}
+DIRECT_COMPANY_CONNECTORS.update({company: "official_priority" for company in _PRIORITY_OFFICIAL_CONNECTORS})
+
+# Keep these five new/repaired sources in the existing core refresh cycle.
+for _priority_company in ("Visa", "Morningstar", "PTSB (Permanent TSB)"):
+    if not any(_priority_company in batch for batch in PROVEN_REFRESH_BATCHES):
+        PROVEN_REFRESH_BATCHES[-1].append(_priority_company)
+
+_priority_previous_direct = scrape_direct_company
+def scrape_direct_company(company, *args, **kwargs):
+    connector = _PRIORITY_OFFICIAL_CONNECTORS.get(company)
+    if connector is None:
+        return _priority_previous_direct(company, *args, **kwargs)
+    jobs = connector[0]()
+    _mark_connector_health(
+        company,
+        True,
+        f"Official careers board checked; returned {len(jobs)} Ireland jobs",
+        connector[1],
+    )
+    return jobs
+
 def _run_module_entrypoint():
     """
     Execute command-line modes only after the entire module has initialized.
