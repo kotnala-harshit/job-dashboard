@@ -25296,15 +25296,21 @@ def main():
         audit_path = Path(__file__).with_name("zero_audit.json")
         if audit_path.exists():
             audit = json.loads(audit_path.read_text())
-            for offset in range(0, len(audit["companies"]), 10):
-                _parallel_collect_isolated(
-                    [("audit", row["company"]) for row in audit["companies"][offset:offset + 10]
-                     if row.get("route") and not row.get("alias_of") and _targeted(row["company"])],
-                    results,
-                    errors,
-                    workers=4,
-                    timeout_seconds=180,
-                )
+            audit_companies = [row for row in audit["companies"] if row.get("route") and not row.get("alias_of")]
+            batch_size = 10
+            total_batches = max(1, (len(audit_companies) + batch_size - 1) // batch_size)
+            requested = os.getenv("ZERO_AUDIT_BATCH")
+            batch_index = (int(requested) - 1) if requested else (datetime.now(timezone.utc).hour % total_batches)
+            batch_index %= total_batches
+            batch = audit_companies[batch_index * batch_size:(batch_index + 1) * batch_size]
+            print(f"Zero audit publish batch {batch_index + 1}/{total_batches}: {len(batch)} companies")
+            _parallel_collect_isolated(
+                [("audit", row["company"]) for row in batch if _targeted(row["company"])],
+                results,
+                errors,
+                workers=4,
+                timeout_seconds=180,
+            )
 
     # AMD and Citi are explicitly promoted into FAST because their official
     # direct boards are important to the dashboard. Keep every other direct
