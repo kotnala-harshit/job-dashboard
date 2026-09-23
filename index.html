@@ -2257,19 +2257,31 @@ function getCurrentLiveCompanyNames() {
 }
 
 function getTrueZeroCompanies() {
-  // This tab answers the simple current-state question: which configured
-  // employers have no live Ireland jobs in this dataset right now?
-  const liveNames = getCurrentLiveCompanyNames();
-  const coverageByName = new Map(ALL_COVERAGE.map(c => [c.company, c]));
-  return ALL_REGISTRY
-    .filter(c => c && c.company && c.automatic === true && !liveNames.has(c.company) && !liveNames.has(c.zero_audit?.alias_of))
-    .map(c => ({
-      ...c,
-      ...(coverageByName.get(c.company) || {}),
-      url: c.careers_url || c.url || ''
-    }))
-    .sort((a, b) => a.company.localeCompare(b.company));
-}
+      const liveNames = new Set(
+        ALL_JOBS
+          .map(j => j.company)
+          .filter(Boolean)
+      );
+
+      const verifiedZeroNames = new Set(
+        ALL_COVERAGE
+          .filter(c => c.state === 'live_zero')
+          .map(c => c.company)
+      );
+
+      return ALL_REGISTRY
+        .filter(r =>
+          r.automatic === true &&
+          verifiedZeroNames.has(r.company) &&
+          !liveNames.has(r.company) &&
+          !liveNames.has(r.zero_audit?.alias_of)
+        )
+        .map(r => {
+          const coverage =
+            ALL_COVERAGE.find(c => c.company === r.company) || {};
+          return { ...r, ...coverage };
+        });
+    }
 
 function getZeroJobCompanies() {
   /*

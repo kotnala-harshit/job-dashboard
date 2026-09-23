@@ -70,6 +70,7 @@ def main():
     aon_source = inspect.getsource(scrape.scrape_aon)
     assert "jobs.aon.com/jobs" in aon_source
     assert "aon.wd1.myworkdayjobs.com" not in aon_source
+    assert "zero vacancies not trusted" in aon_source
 
     submitted, paths = set(), set()
     lock = threading.Lock()
