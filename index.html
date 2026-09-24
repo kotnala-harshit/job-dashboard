@@ -873,7 +873,7 @@ body{background:#f3f4f6!important}
 <main>
   <div class="subhead">
     <div class="tabs">
-      <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs</div>
+      <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs & graduates</div>
       <div id="tabMyApps" class="tab" onclick="showTab('myapps')">My Applications</div>
       <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
       <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
@@ -1902,7 +1902,7 @@ if (search) {
       `(${profileEligibleCount})`;
   }
 
-  document.getElementById('tabLive').textContent = `Live matches (${filtered.length})`;
+  document.getElementById('tabLive').textContent = `Live jobs & graduates (${filtered.length})`;
   const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
   document.getElementById('tabDir').textContent = `Careers pages (${directoryCount})`;
 
@@ -2767,6 +2767,10 @@ setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
 
 <script>
 (() => {
+  // Graduate vacancies are already part of data.jobs and receive the same
+  // new-listing, company, and employment-type filters as every live role.
+  // Keep programme monitoring in the refresh data, without a second UI.
+  return;
   let RADAR_DATA = null;
   let GRAD_STATUS = 'live';
   let GRAD_ROWS = [];
