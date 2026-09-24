@@ -32263,6 +32263,16 @@ _PRIORITY_OFFICIAL_CONNECTORS = {
     "Nokia": (scrape_nokia, "https://jobs.nokia.com/en/sites/CX_1/jobs?location=Ireland&mode=location"),
     "PTSB (Permanent TSB)": (scrape_ptsb, "https://my.corehr.com/pls/ptsbrecruit/"),
 }
+# The final dispatcher previously bypassed this existing collector, turning a
+# completed official check into a misleading verification failure.
+_PRIORITY_OFFICIAL_CONNECTORS.update({
+    company: (
+        lambda company=company: scrape_priority_expansion_official(company),
+        url,
+    )
+    for company, url in PRIORITY_EXPANSION_OFFICIAL_BOARDS.items()
+})
+VERIFIED_LIVE_ZERO_COMPANIES.update(PRIORITY_EXPANSION_OFFICIAL_BOARDS)
 DIRECT_COMPANY_CONNECTORS.update({company: "official_priority" for company in _PRIORITY_OFFICIAL_CONNECTORS})
 
 # Keep these five new/repaired sources in the existing core refresh cycle.
