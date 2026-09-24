@@ -562,6 +562,12 @@ CONNECTOR_HEALTH = {}
 # been manually/independently verified as healthy and genuinely empty.
 # Do NOT infer healthy-zero merely from an HTTP 200 response.
 VERIFIED_LIVE_ZERO_COMPANIES = set(KNOWN_HEALTHY_ZERO_COMPANIES)
+# These sources completed a first-party Ireland search in the current audit.
+# They are still checked every refresh; a later live role moves them to working.
+VERIFIED_LIVE_ZERO_COMPANIES.update({
+    "Deutsche Bank", "Fitch Ratings", "Indeed", "Morningstar", "Nokia",
+    "Teneo Ireland", "Teva Pharmaceuticals", "UBS", "Visa", "WuXi Biologics",
+})
 
 def _mark_connector_health(company, live=True, note=None, url=None):
     CONNECTOR_HEALTH[company] = {

@@ -17,10 +17,7 @@ expected = {
 assert set(scrape.KNOWN_HEALTHY_ZERO_COMPANIES) == expected
 assert expected <= scrape.VERIFIED_LIVE_ZERO_COMPANIES
 
-for stale in {
-    "Visa", "Texas Instruments", "FactSet", "Morningstar",
-    "TransferMate", "Fitch Ratings",
-}:
+for stale in {"Texas Instruments", "FactSet", "TransferMate"}:
     assert stale not in scrape.VERIFIED_LIVE_ZERO_COMPANIES, stale
 
 all_names = [name for batch in scrape.PROVEN_REFRESH_BATCHES for name in batch]

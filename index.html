@@ -1132,20 +1132,17 @@ function companyCareersUrl(name) {
 }
 
 function companyLogo(name) {
-  const hardCodedLogo = COMPANY_LOGOS[name];
-  if (hardCodedLogo) {
-    const fallback = escapeHtml(companyInitials(name));
-    return `<img src="${escapeHtml(hardCodedLogo)}" alt="" loading="lazy" data-fallback="${fallback}" onerror="this.parentNode.textContent=this.dataset.fallback">`;
-  }
   const careersUrl = companyCareersUrl(name);
-  if (!careersUrl) return escapeHtml(companyInitials(name));
+  const hardCodedLogo = COMPANY_LOGOS[name];
+  const fallback = escapeHtml(companyInitials(name));
+  let logoUrl = hardCodedLogo;
   try {
-    const favicon = new URL('/favicon.ico', careersUrl).href;
-    const fallback = escapeHtml(companyInitials(name));
-    return `<img src="${escapeHtml(favicon)}" alt="" loading="lazy" data-fallback="${fallback}" onerror="this.parentNode.textContent=this.dataset.fallback">`;
-  } catch (_) {
-    return escapeHtml(companyInitials(name));
-  }
+    if (!logoUrl && careersUrl) logoUrl = new URL('/favicon.ico', careersUrl).href;
+    if (!logoUrl) return fallback;
+    const domain = new URL(careersUrl || logoUrl).hostname;
+    const backup = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
+    return `<img src="${escapeHtml(logoUrl)}" alt="" loading="lazy" data-fallback="${fallback}" data-logo-backup="${escapeHtml(backup)}" onerror="if(!this.dataset.logoRetry){this.dataset.logoRetry='1';this.src=this.dataset.logoBackup}else this.parentNode.textContent=this.dataset.fallback">`;
+  } catch (_) { return fallback; }
 }
 
 function companyIdentity(name, detail) {
