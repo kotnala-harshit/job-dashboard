@@ -1128,6 +1128,12 @@ COMPANY_LOGOS["Guidewire"] = "https://www.guidewire.com/favicon.ico";
 COMPANY_LOGOS["Proofpoint"] = "https://www.proofpoint.com/favicon.ico";
 COMPANY_LOGOS["Figma"] = "https://www.figma.com/favicon.ico";
 
+// Recruiting platforms brand their favicons as Workday/Oracle, not the employer.
+// Keep these on the employer's official public domain.
+const COMPANY_BRAND_DOMAINS = {
+  "Accenture":"accenture.com","Adobe":"adobe.com","Analog Devices":"analog.com","Aon":"aon.com","Autodesk":"autodesk.com","Bausch + Lomb":"bausch.com","Becton Dickinson (BD)":"bd.com","Broadcom":"broadcom.com","Cadence Design Systems":"cadence.com","Catalent":"catalent.com","Cubic³":"cubic3.com","DXC Technology":"dxc.com","Deloitte Ireland":"deloitte.com","Diageo Ireland":"diageo.com","Eaton":"eaton.com","Elavon":"elavon.com","Eli Lilly":"lilly.com","Genesys":"genesys.com","Gilead Sciences":"gilead.com","Grant Thornton Ireland":"grantthornton.ie","Honeywell":"honeywell.com","JPMorgan Chase":"jpmorganchase.com","MSD (Merck Sharp & Dohme)":"msd.com","Marsh McLennan":"marshmclennan.com","Mastercard":"mastercard.com","Medtronic":"medtronic.com","Mercer":"mercer.com","Motorola Solutions":"motorolasolutions.com","Northern Trust":"northerntrust.com","Oracle":"oracle.com","PayPal":"paypal.com","Pfizer":"pfizer.com","Pure Storage":"purestorage.com","PwC Ireland":"pwc.ie","Salesforce":"salesforce.com","Sanofi":"sanofi.com","State Street":"statestreet.com","Viatris":"viatris.com","Workday":"workday.com","Zimmer Biomet":"zimmerbiomet.com"
+};
+
 function companyCareersUrl(name) {
   const row = ALL_REGISTRY.find(c => c.company === name);
   return row?.careers_url || row?.url || '';
@@ -1140,7 +1146,7 @@ function companyLogo(name) {
   try {
     const source = careersUrl || hardCodedLogo;
     if (!source) return fallback;
-    const domain = new URL(source).hostname;
+    const domain = COMPANY_BRAND_DOMAINS[name] || new URL(source).hostname;
     // Career sites often return a blank favicon with HTTP 200. Use the
     // domain favicon service first, then their own icon, then initials.
     const logoUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
