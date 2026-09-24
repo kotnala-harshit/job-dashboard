@@ -716,7 +716,9 @@ body{background:#f3f4f6!important}
   background:#fff;color:#18181b;font-size:12px;font-weight:800;letter-spacing:.02em;
   border:1px solid var(--line);overflow:hidden
 }
-.company-avatar img{width:26px;height:26px;object-fit:contain;display:block}
+.company-avatar{position:relative}
+.company-avatar img{width:26px;height:26px;object-fit:contain;display:block;position:relative;z-index:1}
+.logo-fallback{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;font-weight:800;letter-spacing:.02em}
 .company-identity{display:flex;align-items:center;gap:10px;min-width:0}
 .company-identity .company-avatar{width:34px;height:34px;flex-basis:34px}
 .company-identity .company-avatar img{width:22px;height:22px}
@@ -1143,7 +1145,7 @@ function companyLogo(name) {
     // domain favicon service first, then their own icon, then initials.
     const logoUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
     const backup = hardCodedLogo || new URL('/favicon.ico', source).href;
-    return `<img src="${escapeHtml(logoUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer" data-fallback="${fallback}" data-logo-backup="${escapeHtml(backup)}" onerror="if(!this.dataset.logoRetry){this.dataset.logoRetry='1';this.src=this.dataset.logoBackup}else this.parentNode.textContent=this.dataset.fallback">`;
+    return `<span class="logo-fallback">${fallback}</span><img src="${escapeHtml(logoUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer" data-logo-backup="${escapeHtml(backup)}" onerror="if(!this.dataset.logoRetry){this.dataset.logoRetry='1';this.src=this.dataset.logoBackup}else this.remove()">`;
   } catch (_) { return fallback; }
 }
 
