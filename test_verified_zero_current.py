@@ -27,6 +27,9 @@ assert audited.isdisjoint(scrape.KNOWN_HEALTHY_ZERO_COMPANIES)
 dashboard = json.load(open("data.json", encoding="utf-8"))
 states = {row["company"]: row["state"] for row in dashboard["coverage_diagnostics"]}
 assert all(states[name] == "live_zero" for name in audited)
+registry_names = {row["company"] for row in dashboard["registry_companies"]}
+assert set(dashboard["proven_working_companies"]) <= registry_names
+assert dashboard["proven_working_company_count"] == len(dashboard["proven_working_companies"]) == 266
 
 all_names = [name for batch in scrape.PROVEN_REFRESH_BATCHES for name in batch]
 assert "Nokia" in all_names

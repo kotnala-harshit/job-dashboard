@@ -26549,10 +26549,11 @@ def main():
         if entry and entry.get("ever_working"):
             entry["current_live_jobs"] = len(current_jobs_by_company.get(company_name, []))
 
+    active_registry_names = {item["company"] for item in company_registry}
     proven_working_companies = sorted(
         name
         for name, entry in history_companies.items()
-        if isinstance(entry, dict) and entry.get("ever_working")
+        if name in active_registry_names and isinstance(entry, dict) and entry.get("ever_working")
     )
 
     historical_distinct_jobs_seen = sum(

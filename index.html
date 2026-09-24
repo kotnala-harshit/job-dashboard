@@ -2326,13 +2326,15 @@ function getZeroJobCompanies() {
 
 function getProvenWorkingCompanies() {
   const liveCounts = new Map();
+  const registryByName = new Map(ALL_REGISTRY.map(c => [c.company, c]));
   ALL_JOBS.forEach(j => {
     if (j.company) liveCounts.set(j.company, (liveCounts.get(j.company) || 0) + 1);
   });
 
   return PROVEN_WORKING_COMPANIES
+    .filter(name => registryByName.has(name))
     .map(name => {
-      const registry = ALL_REGISTRY.find(c => c.company === name) || {};
+      const registry = registryByName.get(name) || {};
       const hist = COMPANY_HISTORY[name] || {};
       return {
         ...registry,
