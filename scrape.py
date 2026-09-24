@@ -133,6 +133,7 @@ WORKDAY_COMPANIES = [
 ]
 WORKDAY_COMPANIES.append(('Stryker', 'stryker', 'wd1', 'StrykerCareers'))
 WORKDAY_COMPANIES.append(("Jabil", "jabil", "wd5", "Jabil_Careers"))
+WORKDAY_COMPANIES.append(("Marvell Technology", "marvell", "wd1", "MarvellCareers"))
 
 WORKDAY_COMPANIES.append(('Clio', 'clio', 'wd3', 'cliocareersite'))
 WORKDAY_COMPANIES.extend([
@@ -567,6 +568,7 @@ VERIFIED_LIVE_ZERO_COMPANIES = set(KNOWN_HEALTHY_ZERO_COMPANIES)
 VERIFIED_LIVE_ZERO_COMPANIES.update({
     "Deutsche Bank", "Fitch Ratings", "Indeed", "Morningstar", "Nokia",
     "Teneo Ireland", "Teva Pharmaceuticals", "UBS", "Visa", "WuXi Biologics",
+    "Kyndryl", "Marvell Technology", "Rockwell Automation",
 })
 
 def _mark_connector_health(company, live=True, note=None, url=None):
@@ -2522,6 +2524,12 @@ def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages
 
         add_jobs(fetch(legacy, search_text or ""))
 
+    _mark_connector_health(
+        company,
+        True,
+        f"Official Workday board checked; returned {len(out)} Ireland jobs",
+        f"{origin}/{site}",
+    )
     return out
 
 
