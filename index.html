@@ -878,7 +878,6 @@ body{background:#f3f4f6!important}
       <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs & graduates</div>
       <div id="tabMyApps" class="tab" onclick="showTab('myapps')">My Applications</div>
       <div id="tabDir" class="tab" onclick="showTab('dir')">Careers pages</div>
-      <div id="tabManual" class="tab" onclick="showTab('manual')">Manual search needed</div>
       <div id="tabLiveZero" class="tab" onclick="showTab('livezero')">No live jobs</div>
       <div id="tabZero" class="tab" onclick="showTab('zero')">False zero / broken</div>
       <div id="tabLiveCompanies" class="tab" onclick="showTab('livecompanies')">Companies with live jobs</div>
@@ -902,11 +901,6 @@ body{background:#f3f4f6!important}
 
   <div id="directoryPane">
     <div id="dirGrid" class="dir-grid"></div>
-  </div>
-
-  <div id="manualPane">
-    <div id="manualSummary" class="diag-summary"></div>
-    <div id="manualGrid" class="dir-grid"></div>
   </div>
 
   <div id="liveZeroPane">
@@ -1131,7 +1125,7 @@ COMPANY_LOGOS["Figma"] = "https://www.figma.com/favicon.ico";
 // Recruiting platforms brand their favicons as Workday/Oracle, not the employer.
 // Keep these on the employer's official public domain.
 const COMPANY_BRAND_DOMAINS = {
-  "Accenture":"accenture.com","Adobe":"adobe.com","Analog Devices":"analog.com","Aon":"aon.com","Autodesk":"autodesk.com","Bausch + Lomb":"bausch.com","Becton Dickinson (BD)":"bd.com","Broadcom":"broadcom.com","Cadence Design Systems":"cadence.com","Catalent":"catalent.com","Cubic³":"cubic3.com","DXC Technology":"dxc.com","Deloitte Ireland":"deloitte.com","Diageo Ireland":"diageo.com","Eaton":"eaton.com","Elavon":"elavon.com","Eli Lilly":"lilly.com","Genesys":"genesys.com","Gilead Sciences":"gilead.com","Grant Thornton Ireland":"grantthornton.ie","Honeywell":"honeywell.com","JPMorgan Chase":"jpmorganchase.com","MSD (Merck Sharp & Dohme)":"msd.com","Marsh McLennan":"marshmclennan.com","Mastercard":"mastercard.com","Medtronic":"medtronic.com","Mercer":"mercer.com","Motorola Solutions":"motorolasolutions.com","Northern Trust":"northerntrust.com","Oracle":"oracle.com","PayPal":"paypal.com","Pfizer":"pfizer.com","Pure Storage":"purestorage.com","PwC Ireland":"pwc.ie","Salesforce":"salesforce.com","Sanofi":"sanofi.com","State Street":"statestreet.com","Viatris":"viatris.com","Workday":"workday.com","Zimmer Biomet":"zimmerbiomet.com"
+  "AbbVie":"abbvie.com","Accenture":"accenture.com","Adobe":"adobe.com","Analog Devices":"analog.com","Aon":"aon.com","Autodesk":"autodesk.com","Bausch + Lomb":"bausch.com","Becton Dickinson (BD)":"bd.com","Boston Scientific":"bostonscientific.com","Broadcom":"broadcom.com","Cadence Design Systems":"cadence.com","Catalent":"catalent.com","Cohesity":"cohesity.com","Cubic³":"cubic3.com","DXC Technology":"dxc.com","Deloitte Ireland":"deloitte.com","Diageo Ireland":"diageo.com","Eaton":"eaton.com","Elavon":"elavon.com","Eli Lilly":"lilly.com","Fujitsu":"fujitsu.com","Genesys":"genesys.com","Gilead Sciences":"gilead.com","Grant Thornton Ireland":"grantthornton.ie","Honeywell":"honeywell.com","Illumina":"illumina.com","Intel":"intel.com","Johnson Controls":"johnsoncontrols.com","JPMorgan Chase":"jpmorganchase.com","Keysight Technologies":"keysight.com","MSD (Merck Sharp & Dohme)":"msd.com","Marsh McLennan":"marshmclennan.com","Mastercard":"mastercard.com","Medtronic":"medtronic.com","Mercer":"mercer.com","Microsoft":"microsoft.com","Motorola Solutions":"motorolasolutions.com","Northern Trust":"northerntrust.com","Oracle":"oracle.com","PIMCO":"pimco.com","PayPal":"paypal.com","Pfizer":"pfizer.com","Pure Storage":"purestorage.com","PwC Ireland":"pwc.ie","Rockwell Automation":"rockwellautomation.com","Salesforce":"salesforce.com","Sanofi":"sanofi.com","State Street":"statestreet.com","Takeda":"takeda.com","Teva Pharmaceuticals":"tevapharm.com","Viatris":"viatris.com","Visa":"visa.com","Workday":"workday.com","WuXi Biologics":"wuxibiologics.com","Zimmer Biomet":"zimmerbiomet.com"
 };
 
 function companyCareersUrl(name) {
@@ -1913,12 +1907,10 @@ if (search) {
   const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
   document.getElementById('tabDir').textContent = `Careers pages (${directoryCount})`;
 
-  const manualCompanies = getManualCompanies();
   const trueZeroCompanies = getTrueZeroCompanies();
   const zeroCompanies = getZeroJobCompanies();
   const provenCompanies = getProvenWorkingCompanies();
 
-  document.getElementById('tabManual').textContent = `Manual search needed (${manualCompanies.length})`;
   document.getElementById('tabLiveZero').textContent = `No live jobs (${trueZeroCompanies.length})`;
   document.getElementById('tabZero').textContent = `Needs verification (${zeroCompanies.length})`;
   document.getElementById('tabProvenCompanies').textContent = `Proven working (${provenCompanies.length})`;
@@ -2437,7 +2429,6 @@ function renderDiagnostics(search) {
   search = normalizeSearch(search);
   const selectedCompany = document.getElementById('fCompany').value;
 
-  const manualCompanies = getManualCompanies();
   const trueZeroCompanies = getTrueZeroCompanies();
   const zeroCompanies = getZeroJobCompanies();
 
@@ -2446,12 +2437,8 @@ function renderDiagnostics(search) {
     (!search || normalizeSearch(c.company).includes(search))
   ).length;
 
-  const manualVisible = visibleCount(manualCompanies);
   const trueZeroVisible = visibleCount(trueZeroCompanies);
   const zeroVisible = visibleCount(zeroCompanies);
-
-  document.getElementById('manualSummary').textContent =
-    `${manualVisible} shown · ${manualCompanies.length} total companies require manual careers-page checking because no working automatic connector is currently available.`;
 
   document.getElementById('liveZeroSummary').textContent =
     `${trueZeroVisible} shown · ${trueZeroCompanies.length} configured companies currently have no live Ireland jobs in this dataset.`;
@@ -2459,7 +2446,6 @@ function renderDiagnostics(search) {
   document.getElementById('zeroSummary').textContent =
     `${zeroVisible} shown · ${zeroCompanies.length} companies returned 0 qualifying Ireland jobs, but that zero has not yet been independently verified.`;
 
-  renderCompanyDiagnosticList('manualGrid', manualCompanies, search, selectedCompany, 'manual');
   renderCompanyDiagnosticList('liveZeroGrid', trueZeroCompanies, search, selectedCompany, 'livezero');
   renderCompanyDiagnosticList('zeroGrid', zeroCompanies, search, selectedCompany, 'zero');
 }
@@ -2469,7 +2455,6 @@ function showTab(which) {
   document.getElementById('livePane').style.display = which === 'live' ? 'block' : 'none';
   document.getElementById('myAppsPane').style.display = which === 'myapps' ? 'block' : 'none';
   document.getElementById('directoryPane').style.display = which === 'dir' ? 'block' : 'none';
-  document.getElementById('manualPane').style.display = which === 'manual' ? 'block' : 'none';
   document.getElementById('liveZeroPane').style.display = which === 'livezero' ? 'block' : 'none';
   document.getElementById('zeroPane').style.display = which === 'zero' ? 'block' : 'none';
   document.getElementById('liveCompaniesPane').style.display = which === 'livecompanies' ? 'block' : 'none';
@@ -2478,7 +2463,6 @@ function showTab(which) {
   document.getElementById('tabLive').classList.toggle('active', which === 'live');
   document.getElementById('tabMyApps').classList.toggle('active', which === 'myapps');
   document.getElementById('tabDir').classList.toggle('active', which === 'dir');
-  document.getElementById('tabManual').classList.toggle('active', which === 'manual');
   document.getElementById('tabLiveZero').classList.toggle('active', which === 'livezero');
   document.getElementById('tabZero').classList.toggle('active', which === 'zero');
   document.getElementById('tabLiveCompanies').classList.toggle('active', which === 'livecompanies');
@@ -2495,7 +2479,6 @@ function showTab(which) {
   }
 
   if (
-    which === 'manual' ||
     which === 'livezero' ||
     which === 'zero'
   ) {
