@@ -31,6 +31,14 @@ REGISTRY_PATH = "ireland_job_radar_HARSHIT_MASTER.csv"
 
 
 class RegistryTests(unittest.TestCase):
+    def test_master_csv_is_sorted_by_priority_score(self):
+        with open(REGISTRY_PATH, encoding="utf-8-sig", newline="") as source:
+            scores = [
+                float(row["harshit_priority_score"])
+                for row in csv.DictReader(source)
+            ]
+        self.assertEqual(scores, sorted(scores, reverse=True))
+
     def test_rejects_northern_ireland_abbreviation(self):
         self.assertFalse(region_ok("No City, England, Wales, N Ireland"))
 
