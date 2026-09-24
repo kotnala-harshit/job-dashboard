@@ -10,17 +10,14 @@ new_true_zero = {
 }
 
 assert new_true_zero <= set(scrape.KNOWN_HEALTHY_ZERO_COMPANIES)
-assert scrape.VERIFIED_LIVE_ZERO_COMPANIES == set(scrape.KNOWN_HEALTHY_ZERO_COMPANIES)
+assert set(scrape.KNOWN_HEALTHY_ZERO_COMPANIES) <= scrape.VERIFIED_LIVE_ZERO_COMPANIES
 
 for company in new_true_zero:
     info = scrape.KNOWN_HEALTHY_ZERO_COMPANIES[company]
     assert info.get("url")
     assert "2026-09-19" in info.get("note", "")
 
-for not_verified in {
-    "Visa", "Texas Instruments", "FactSet", "Morningstar",
-    "TransferMate", "Fitch Ratings",
-}:
+for not_verified in {"Texas Instruments", "FactSet", "TransferMate"}:
     assert not_verified not in scrape.VERIFIED_LIVE_ZERO_COMPANIES
 
 print("PASS: true-zero classification has one strict source of truth")

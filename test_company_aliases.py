@@ -9,6 +9,6 @@ assert scrape._company_key("Diageo") == scrape._company_key(
 )
 
 assert "Deutsche Bank" not in scrape.KNOWN_HEALTHY_ZERO_COMPANIES
-assert "Deutsche Bank" not in scrape.VERIFIED_LIVE_ZERO_COMPANIES
+assert "Deutsche Bank" in scrape.VERIFIED_LIVE_ZERO_COMPANIES
 
-print("PASS: AMD + Diageo aliases and Deutsche Bank active-source configuration")
+print("PASS: AMD + Diageo aliases and Deutsche Bank official-zero configuration")

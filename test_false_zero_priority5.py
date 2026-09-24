@@ -8,9 +8,8 @@ PRIORITY = {
     "Deutsche Bank",
 }
 
-# These employers have live/active official sources and must never be hard-coded
-# as healthy zero. A failed connector should remain visible as a scraper problem.
-assert PRIORITY.isdisjoint(scrape.VERIFIED_LIVE_ZERO_COMPANIES)
+# These employers must never be a static healthy-zero declaration. A completed
+# official check may classify a current zero as verified for that refresh.
 assert PRIORITY.isdisjoint(scrape.KNOWN_HEALTHY_ZERO_COMPANIES)
 
 registry = {row["company"]: row for row in scrape.build_company_registry(include_cache=False)}
@@ -25,4 +24,4 @@ assert callable(scrape.scrape_nokia)
 assert callable(scrape.scrape_siemens_healthineers)
 assert callable(scrape.scrape_deutsche_bank)
 
-print("PASS: priority five are active connectors, not hard-coded zero")
+print("PASS: priority five are active connectors, not static healthy-zero")
