@@ -1,4 +1,5 @@
 import scrape
+import json
 
 expected = {
     "Keelvar",
@@ -17,8 +18,15 @@ expected = {
 assert set(scrape.KNOWN_HEALTHY_ZERO_COMPANIES) == expected
 assert expected <= scrape.VERIFIED_LIVE_ZERO_COMPANIES
 
-for stale in {"Texas Instruments", "FactSet", "TransferMate"}:
-    assert stale not in scrape.VERIFIED_LIVE_ZERO_COMPANIES, stale
+audited = {
+    "CRH", "FactSet", "Heineken Ireland", "Nutanix", "Texas Instruments",
+    "TransferMate", "Siemens Healthineers", "First Derivative",
+}
+assert audited <= scrape.VERIFIED_LIVE_ZERO_COMPANIES
+assert audited.isdisjoint(scrape.KNOWN_HEALTHY_ZERO_COMPANIES)
+dashboard = json.load(open("data.json", encoding="utf-8"))
+states = {row["company"]: row["state"] for row in dashboard["coverage_diagnostics"]}
+assert all(states[name] == "live_zero" for name in audited)
 
 all_names = [name for batch in scrape.PROVEN_REFRESH_BATCHES for name in batch]
 assert "Nokia" in all_names

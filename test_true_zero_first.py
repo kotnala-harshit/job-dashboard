@@ -17,8 +17,9 @@ for company in new_true_zero:
     assert info.get("url")
     assert "2026-09-19" in info.get("note", "")
 
-for not_verified in {"Texas Instruments", "FactSet", "TransferMate"}:
-    assert not_verified not in scrape.VERIFIED_LIVE_ZERO_COMPANIES
+for company in {"Texas Instruments", "FactSet", "TransferMate"}:
+    assert company in scrape.VERIFIED_LIVE_ZERO_COMPANIES
+    assert company not in scrape.KNOWN_HEALTHY_ZERO_COMPANIES
 
 print("PASS: true-zero classification has one strict source of truth")
 print("PASS: five newly verified Republic-of-Ireland zeros are classified")

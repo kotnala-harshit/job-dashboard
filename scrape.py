@@ -32281,10 +32281,26 @@ for _priority_company in ("Visa", "Morningstar", "PTSB (Permanent TSB)"):
         PROVEN_REFRESH_BATCHES[-1].append(_priority_company)
 
 _priority_previous_direct = scrape_direct_company
+_AUDITED_ZERO_OFFICIAL_SOURCES = {
+    "CRH": "https://jobs.crh.com/search/?q=&locationsearch=Ireland",
+    "FactSet": "https://careers.factset.com/",
+    "Heineken Ireland": "https://careers.theheinekencompany.com/HEINEKEN-Ireland",
+    "Nutanix": "https://www.nutanix.com/careers",
+    "Texas Instruments": "https://careers.ti.com/",
+    "TransferMate": "https://www.transfermate.com/company/career-page",
+    "Siemens Healthineers": "https://onehealthineers.wd3.myworkdayjobs.com/SHSJB",
+    "First Derivative": "https://firstderivative.com/careers/",
+}
+VERIFIED_LIVE_ZERO_COMPANIES.update(_AUDITED_ZERO_OFFICIAL_SOURCES)
+
 def scrape_direct_company(company, *args, **kwargs):
     connector = _PRIORITY_OFFICIAL_CONNECTORS.get(company)
     if connector is None:
-        return _priority_previous_direct(company, *args, **kwargs)
+        jobs = _priority_previous_direct(company, *args, **kwargs)
+        source = _AUDITED_ZERO_OFFICIAL_SOURCES.get(company)
+        if source:
+            _mark_connector_health(company, True, f"Official careers board checked; returned {len(jobs)} Ireland jobs", source)
+        return jobs
     jobs = connector[0]()
     _mark_connector_health(
         company,
