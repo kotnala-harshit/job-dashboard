@@ -103,5 +103,7 @@ jobs:
           git add data.json seen_jobs.json company_history.json sponsorship_history.json last_full_refresh.json graduate_programme_history.json ats_platform_cache.json jsonld_cache.json browser_scrape_cache.json
           git diff --staged --quiet && exit 0
           git commit -m "Refresh Ireland Job Radar $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          git pull --rebase origin main
+          # A dashboard edit can land while a long refresh is collecting. Keep
+          # the fresh generated outputs if they conflict, while rebasing code.
+          git pull --rebase -X theirs origin main
           git push origin HEAD:main
