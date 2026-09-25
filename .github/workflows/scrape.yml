@@ -2,21 +2,16 @@ name: Refresh Ireland Job Radar
 
 on:
   schedule:
-    # Primary hourly refresh. Avoid the top of the hour, where GitHub notes
-    # scheduled workflows are more likely to be delayed under load.
-    - cron: '23 * * * *'
-    # Recovery trigger. It exits before dependency installation unless the
-    # previous published refresh is stale, so a dropped primary gets a second
-    # chance without normally running the scraper twice per hour.
-    - cron: '53 * * * *'
+    # GitHub can delay or drop scheduled events. Four off-peak triggers give
+    # the stale-data check several chances each hour without extra scrapes.
+    - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
 
-# One refresh at a time. A delayed primary and its recovery trigger must not
-# publish concurrently. The queued recovery will re-check freshness after the
-# primary finishes and then exit cheaply if it is no longer needed.
+# One refresh at a time. Queued scheduler events re-check freshness after the
+# active refresh finishes and exit cheaply when no work is due.
 concurrency:
   group: ireland-job-radar-refresh
   cancel-in-progress: false
@@ -37,14 +32,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Manual dispatches and the primary :23 schedule always run.
-          if [ "${{ github.event_name }}" != "schedule" ] || [ "${{ github.event.schedule }}" = "23 * * * *" ]; then
+          # Manual dispatches always run. Scheduled triggers run only when
+          # the last completed refresh is sufficiently old.
+          if [ "${{ github.event_name }}" != "schedule" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # The :53 schedule is a recovery trigger. Run it only if the last
-          # completed/published refresh is at least one hour old or unreadable.
+          # Run only if the last completed/published refresh is at least
+          # 55 minutes old or unreadable.
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import datetime as dt
           import json
@@ -59,7 +55,7 @@ jobs:
               if completed.tzinfo is None:
                   completed = completed.replace(tzinfo=dt.timezone.utc)
               age = dt.datetime.now(dt.timezone.utc) - completed.astimezone(dt.timezone.utc)
-              due = age >= dt.timedelta(minutes=60)
+              due = age >= dt.timedelta(minutes=55)
           except Exception:
               due = True
 
