@@ -256,7 +256,11 @@ def _load_company_master_rows():
     import csv
     try:
         with open(MASTER_COMPANY_CSV, encoding="utf-8-sig", newline="") as f:
-            return [r for r in csv.DictReader(f) if (r.get("company_name") or "").strip()]
+            rows = [r for r in csv.DictReader(f) if (r.get("company_name") or "").strip()]
+        unique = {}
+        for row in rows:
+            unique.setdefault(_company_key(row["company_name"]), row)
+        return list(unique.values())
     except Exception as exc:
         print(f"  ! {MASTER_COMPANY_CSV} unavailable: {exc}")
         return []

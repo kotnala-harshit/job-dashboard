@@ -3,11 +3,11 @@
   "graduate_early_careers": {
     "intake_year": "multiple",
     "target_intake_year": 2027,
-    "companies_monitored": 315,
+    "companies_monitored": 321,
     "companies_with_known_programmes": 54,
     "status_counts": {
       "live": 53,
-      "monitoring": 246,
+      "monitoring": 252,
       "expected_soon": 16
     },
     "live_job_count": 152,
@@ -78,8 +78,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dun",
           "ireland",
@@ -128,21 +126,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 21,
-          "total": 21,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (21 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2026,
         "graduate_priority": "B"
@@ -164,8 +147,6 @@
         "sector": "Tech",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "apple",
           "graduate",
@@ -261,21 +242,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 73,
-          "total": 73,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (73 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2026,
         "graduate_priority": "B"
@@ -297,8 +263,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "arista",
@@ -342,21 +306,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 51,
-          "total": 51,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (51 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2026,
         "graduate_priority": "B"
@@ -379,8 +328,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "baldoyle",
           "dublin",
@@ -424,21 +371,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 71,
-          "total": 71,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (71 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2026,
         "graduate_priority": "B"
@@ -460,8 +392,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "analyst",
           "data",
@@ -509,21 +439,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 44,
-          "total": 44,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (44 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A+"
@@ -545,8 +460,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "sites",
           "assets",
@@ -642,21 +555,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 18,
-          "total": 18,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (18 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A+"
@@ -678,8 +576,6 @@
         "sector": "Consulting",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "data",
@@ -721,21 +617,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 211,
-          "total": 211,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (211 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A+"
@@ -757,8 +638,6 @@
         "sector": "Consulting",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "assurance",
@@ -802,21 +681,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 211,
-          "total": 211,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (211 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A+"
@@ -838,8 +702,6 @@
         "sector": "Consulting",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "consulting",
@@ -881,21 +743,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 211,
-          "total": 211,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (211 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A+"
@@ -917,8 +764,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "accounting",
           "finance",
@@ -965,21 +810,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 44,
-          "total": 44,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (44 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1001,8 +831,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "analyst",
@@ -1049,21 +877,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 44,
-          "total": 44,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (44 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1085,8 +898,6 @@
         "sector": "Tech",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "apple",
           "engineering",
@@ -1182,21 +993,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 73,
-          "total": 73,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (73 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1218,8 +1014,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "bdo",
@@ -1267,21 +1061,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 27,
-          "total": 27,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (27 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1305,8 +1084,6 @@
         "employment_type": "full_time",
         "sector": "Other",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "bny",
           "dublin",
@@ -1348,21 +1125,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 32,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 61,
-          "total": 61,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (61 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1384,8 +1146,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "sites",
           "assets",
@@ -1481,21 +1241,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 18,
-          "total": 18,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (18 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1517,8 +1262,6 @@
         "sector": "Consulting",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "consulting",
           "business",
@@ -1560,21 +1303,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 211,
-          "total": 211,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (211 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1596,8 +1324,6 @@
         "sector": "Consulting",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "graduate",
@@ -1640,21 +1366,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 211,
-          "total": 211,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (211 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1676,8 +1387,6 @@
         "sector": "Consulting",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "consulting",
           "graduate",
@@ -1719,21 +1428,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 211,
-          "total": 211,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (211 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1755,8 +1449,6 @@
         "sector": "Consulting",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "consulting",
           "graduate",
@@ -1798,21 +1490,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 211,
-          "total": 211,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (211 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1834,8 +1511,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "ireland",
@@ -1882,21 +1557,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 59,
-          "total": 59,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (59 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -1919,8 +1579,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "accounting",
           "cork",
@@ -1965,21 +1623,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 107,
-          "total": 107,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (107 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "A"
@@ -2001,8 +1644,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "aecom",
@@ -2048,21 +1689,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 190,
-          "total": 190,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (190 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -2084,8 +1710,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "aib",
           "graduate",
@@ -2130,21 +1754,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 44,
-          "total": 44,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (44 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -2166,8 +1775,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "capital",
           "graduate",
@@ -2214,21 +1821,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 44,
-          "total": 44,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (44 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -2250,8 +1842,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "delivery",
           "enterprise",
@@ -2298,21 +1888,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 44,
-          "total": 44,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (44 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -2334,8 +1909,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "audit",
           "graduate",
@@ -2383,21 +1956,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 44,
-          "total": 44,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (44 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -2419,8 +1977,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "affairs",
           "corporate",
@@ -2469,21 +2025,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 44,
-          "total": 44,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (44 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -2505,8 +2046,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "affairs",
           "corporate",
@@ -2554,21 +2093,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 44,
-          "total": 44,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (44 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -2590,8 +2114,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "banking",
           "graduate",
@@ -2638,21 +2160,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 44,
-          "total": 44,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (44 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -2674,8 +2181,6 @@
         "sector": "Tech",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "operations",
           "graduate",
@@ -2771,21 +2276,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 73,
-          "total": 73,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (73 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -2807,8 +2297,6 @@
         "sector": "Tech",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "operations",
           "apple",
@@ -2904,21 +2392,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 73,
-          "total": 73,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (73 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -2940,8 +2413,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "bdo",
@@ -2988,21 +2459,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 27,
-          "total": 27,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (27 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3024,8 +2480,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "bdo",
@@ -3073,21 +2527,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 27,
-          "total": 27,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (27 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3109,8 +2548,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "bdo",
@@ -3158,21 +2595,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 27,
-          "total": 27,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (27 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3194,8 +2616,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "bdo",
@@ -3240,21 +2660,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 27,
-          "total": 27,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (27 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3276,8 +2681,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "bdo",
@@ -3324,21 +2727,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 27,
-          "total": 27,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (27 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3360,8 +2748,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "audit",
@@ -3411,21 +2797,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 10,
-          "total": 10,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (10 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3447,8 +2818,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "audit",
@@ -3498,21 +2867,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 10,
-          "total": 10,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (10 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3534,8 +2888,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "cta",
@@ -3585,21 +2937,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 10,
-          "total": 10,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (10 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3621,8 +2958,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "cta",
@@ -3672,21 +3007,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 10,
-          "total": 10,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (10 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3708,8 +3028,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "sites",
           "assets",
@@ -3805,21 +3123,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 18,
-          "total": 18,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (18 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3841,8 +3144,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "sites",
           "assets",
@@ -3938,21 +3239,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 18,
-          "total": 18,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (18 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -3975,8 +3261,6 @@
         "sector": "Bank",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "bank",
@@ -4022,21 +3306,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 68,
-          "total": 68,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (68 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4058,8 +3327,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "boston",
@@ -4103,21 +3370,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 53,
-          "total": 53,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (53 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4139,8 +3391,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Galway",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "boston",
@@ -4184,21 +3434,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 53,
-          "total": 53,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (53 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4220,8 +3455,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "boston",
@@ -4265,21 +3498,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 53,
-          "total": 53,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (53 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4301,8 +3519,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Galway",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "boston",
@@ -4346,21 +3562,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 53,
-          "total": 53,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (53 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4382,8 +3583,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "engineer",
           "graduate",
@@ -4428,21 +3627,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 53,
-          "total": 53,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (53 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4464,8 +3648,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "ireland",
@@ -4508,21 +3690,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 6,
-          "total": 6,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (6 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4544,8 +3711,6 @@
         "sector": "Consulting",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "actuarial",
           "graduate",
@@ -4587,21 +3752,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 211,
-          "total": 211,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (211 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4623,8 +3773,6 @@
         "sector": "Consulting",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "assurance",
@@ -4666,21 +3814,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 211,
-          "total": 211,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (211 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4702,8 +3835,6 @@
         "sector": "Consulting",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "graduate",
@@ -4745,21 +3876,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 211,
-          "total": 211,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (211 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4781,8 +3897,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "ireland",
@@ -4843,21 +3957,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 22,
-          "total": 22,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (22 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4879,8 +3978,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "ireland",
@@ -4927,21 +4024,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 113,
-          "total": 113,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (113 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -4963,8 +4045,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "ireland",
@@ -5011,21 +4091,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 113,
-          "total": 113,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (113 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5047,8 +4112,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "ireland",
@@ -5095,21 +4158,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 113,
-          "total": 113,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (113 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5131,8 +4179,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "ireland",
@@ -5179,21 +4225,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 113,
-          "total": 113,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (113 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5215,8 +4246,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "ireland",
@@ -5263,21 +4292,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 113,
-          "total": 113,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (113 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5299,8 +4313,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "ireland",
@@ -5347,21 +4359,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 113,
-          "total": 113,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (113 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5383,8 +4380,6 @@
         "sector": "Insurance",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "graduate",
@@ -5428,21 +4423,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 32,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 14,
-          "total": 14,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (14 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5464,8 +4444,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "ireland",
@@ -5511,21 +4489,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 59,
-          "total": 59,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (59 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5547,8 +4510,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "ireland",
@@ -5593,21 +4554,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 59,
-          "total": 59,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (59 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5629,8 +4575,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "ireland",
@@ -5675,21 +4619,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 59,
-          "total": 59,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (59 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5711,8 +4640,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "design",
           "electrical",
@@ -5807,21 +4734,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5843,8 +4755,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "power",
           "electrical",
@@ -5939,21 +4849,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -5975,8 +4870,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "power",
           "electrical",
@@ -6071,21 +4964,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -6107,8 +4985,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "automation",
           "graduate",
@@ -6212,21 +5088,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -6248,8 +5109,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "power",
           "electrical",
@@ -6344,21 +5203,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -6380,8 +5224,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "design",
           "electrical",
@@ -6476,21 +5318,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -6512,8 +5339,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "automation",
           "graduate",
@@ -6617,21 +5442,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -6653,8 +5463,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "power",
           "electrical",
@@ -6749,21 +5557,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -6785,8 +5578,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "automation",
           "graduate",
@@ -6890,21 +5681,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -6926,8 +5702,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "design",
           "electrical",
@@ -7022,21 +5796,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 40,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -7059,8 +5818,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "pfizer",
           "ringaskiddy",
@@ -7103,21 +5860,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 12,
-          "total": 12,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (12 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -7140,8 +5882,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "castle",
           "grange",
@@ -7185,21 +5925,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 12,
-          "total": 12,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (12 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -7222,8 +5947,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Kildare",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "newbridge",
           "pfizer",
@@ -7266,21 +5989,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 12,
-          "total": 12,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (12 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -7302,8 +6010,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "dublin",
@@ -7369,21 +6075,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 1,
-          "total": 1,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "Not enough history yet (1 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -7406,8 +6097,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "advanced",
           "cork",
@@ -7453,21 +6142,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 107,
-          "total": 107,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (107 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -7490,8 +6164,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "gqo",
@@ -7537,21 +6209,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 107,
-          "total": 107,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (107 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -7574,8 +6231,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "biomedical",
           "cork",
@@ -7632,21 +6287,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 107,
-          "total": 107,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (107 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -7669,8 +6309,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "electrical",
@@ -7726,21 +6364,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 107,
-          "total": 107,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (107 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -7763,8 +6386,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "engineering",
@@ -7820,21 +6441,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 107,
-          "total": 107,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (107 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -7856,8 +6462,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "susquehanna",
           "technical",
@@ -7965,21 +6569,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 21,
-          "total": 21,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (21 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -8000,8 +6589,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "business",
           "graduate",
@@ -8044,21 +6631,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 32,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 17,
-          "total": 17,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (17 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": 2027,
         "graduate_priority": "B"
@@ -8080,8 +6652,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "data",
           "ireland",
@@ -8150,21 +6720,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 12,
-          "total": 12,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (12 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A+"
@@ -8186,8 +6741,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "fidelity",
@@ -8231,21 +6784,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 32,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 17,
-          "total": 17,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (17 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A+"
@@ -8267,8 +6805,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Galway",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "fidelity",
           "galway",
@@ -8312,21 +6848,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 32,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 17,
-          "total": 17,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (17 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A+"
@@ -8350,8 +6871,6 @@
         "employment_type": "graduate",
         "sector": "Aviation/Semi-state",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "airport",
@@ -8400,21 +6919,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 50,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 34,
-          "total": 34,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (34 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A+"
@@ -8436,8 +6940,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "ireland",
@@ -8486,21 +6988,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 20,
-          "total": 20,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (20 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A"
@@ -8522,8 +7009,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "kerry",
           "sep",
@@ -8575,21 +7060,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 33,
-          "total": 33,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (33 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A"
@@ -8611,8 +7081,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "capabilities",
           "commercial",
@@ -8655,21 +7123,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 53,
-          "total": 53,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (53 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A"
@@ -8691,8 +7144,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "risk",
           "graduate",
@@ -8788,21 +7239,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 47,
-          "total": 47,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (47 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A"
@@ -8825,8 +7261,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "analyst",
           "dublin",
@@ -8871,21 +7305,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 28,
-          "total": 28,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (28 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A"
@@ -8908,8 +7327,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Limerick",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "analyst",
           "graduate",
@@ -8954,21 +7371,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 132,
-          "total": 132,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (132 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A"
@@ -8991,8 +7393,6 @@
         "sector": "Tech",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "commercial",
           "dublin",
@@ -9039,21 +7439,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 205,
-          "total": 205,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (205 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A"
@@ -9077,8 +7462,6 @@
         "employment_type": "graduate",
         "sector": "Aviation/Semi-state",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "airport",
@@ -9125,21 +7508,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 50,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 34,
-          "total": 34,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (34 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "A"
@@ -9162,8 +7530,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "abbott",
           "dietitian",
@@ -9205,21 +7571,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 117,
-          "total": 117,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (117 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -9241,8 +7592,6 @@
         "sector": "Airline",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "aer",
           "lingus",
@@ -9338,21 +7687,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 3,
-          "total": 3,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "Not enough history yet (3 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -9374,8 +7708,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "general",
@@ -9452,21 +7784,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 12,
-          "total": 12,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (12 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -9489,8 +7806,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Limerick",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "analog",
           "devices",
@@ -9535,21 +7850,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 160,
-          "total": 160,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (160 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -9572,8 +7872,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "analog",
@@ -9621,21 +7919,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 160,
-          "total": 160,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (160 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -9658,8 +7941,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "ireland",
           "analog",
@@ -9707,21 +7988,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 160,
-          "total": 160,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (160 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -9744,8 +8010,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Limerick",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "analog",
           "automation",
@@ -9789,21 +8053,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 160,
-          "total": 160,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (160 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -9825,8 +8074,6 @@
         "sector": "Tech",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "name",
           "value",
@@ -9922,21 +8169,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 73,
-          "total": 73,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (73 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -9958,8 +8190,6 @@
         "sector": "Tech",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "apple",
           "pay",
@@ -10055,21 +8285,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 73,
-          "total": 73,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (73 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -10091,8 +8306,6 @@
         "sector": "Tech",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "programme",
@@ -10188,21 +8401,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 73,
-          "total": 73,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (73 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -10224,8 +8422,6 @@
         "sector": "Tech",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "operations",
           "graduate",
@@ -10321,21 +8517,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 73,
-          "total": 73,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (73 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -10357,8 +8538,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "service",
           "career",
@@ -10406,21 +8585,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 19,
-          "total": 19,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (19 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -10442,8 +8606,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "logistics",
           "careers",
@@ -10489,21 +8651,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 19,
-          "total": 19,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (19 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -10525,8 +8672,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "ireland",
@@ -10577,21 +8722,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 20,
-          "total": 20,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (20 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -10613,8 +8743,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "electrical",
           "cork",
@@ -10663,21 +8791,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 20,
-          "total": 20,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (20 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -10699,8 +8812,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "ireland",
@@ -10748,21 +8859,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 20,
-          "total": 20,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (20 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -10784,8 +8880,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "mechanical",
@@ -10833,21 +8927,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 20,
-          "total": 20,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (20 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -10869,8 +8948,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "mechanical",
           "cork",
@@ -10920,21 +8997,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 20,
-          "total": 20,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (20 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -10956,8 +9018,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "ireland",
@@ -11006,21 +9066,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 20,
-          "total": 20,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (20 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11042,8 +9087,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "project",
@@ -11091,21 +9134,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 20,
-          "total": 20,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (20 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11127,8 +9155,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "cork",
           "ireland",
@@ -11178,21 +9204,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 20,
-          "total": 20,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (20 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11214,8 +9225,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "kerry",
           "sep",
@@ -11265,21 +9274,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 33,
-          "total": 33,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (33 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11301,8 +9295,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "sep",
@@ -11355,21 +9347,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 33,
-          "total": 33,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (33 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11391,8 +9368,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "sep",
           "kerry",
@@ -11443,21 +9418,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 33,
-          "total": 33,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (33 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11479,8 +9439,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "sep",
@@ -11528,21 +9486,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 33,
-          "total": 33,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (33 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11564,8 +9507,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "kerry",
@@ -11616,21 +9557,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 33,
-          "total": 33,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (33 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11652,8 +9578,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "engineering",
           "projects",
@@ -11724,21 +9648,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 16,
-          "total": 16,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (16 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11761,8 +9670,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "associate",
           "cork",
@@ -11809,21 +9716,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 23,
-          "total": 23,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (23 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11846,8 +9738,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "assurance",
           "cork",
@@ -11892,21 +9782,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 23,
-          "total": 23,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (23 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -11929,8 +9804,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "chain",
           "cork",
@@ -11975,21 +9848,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 23,
-          "total": 23,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (23 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -12011,8 +9869,6 @@
         "sector": "Tech",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "google",
           "early",
@@ -12078,21 +9934,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 295,
-          "total": 295,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (295 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -12115,8 +9956,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "careers",
           "early",
@@ -12159,21 +9998,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 30,
-          "total": 30,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (30 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -12196,8 +10020,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "compression",
           "intel",
@@ -12245,21 +10067,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 30,
-          "total": 30,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (30 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -12281,8 +10088,6 @@
         "sector": "Insurance",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "irish",
           "life",
@@ -12326,21 +10131,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 14,
-          "total": 14,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (14 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -12362,8 +10152,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "jacobs",
           "construction",
@@ -12459,21 +10247,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 52,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 47,
-          "total": 47,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (47 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -12495,8 +10268,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Cork",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "jacobs",
           "graduate",
@@ -12592,21 +10363,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 47,
-          "total": 47,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (47 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -12628,8 +10384,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "jacobs",
           "graduate",
@@ -12725,21 +10479,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 47,
-          "total": 47,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (47 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -12761,8 +10500,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "jacobs",
           "graduate",
@@ -12858,21 +10595,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 47,
-          "total": 47,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (47 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -12894,8 +10616,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "jacobs",
           "graduate",
@@ -12991,21 +10711,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 47,
-          "total": 47,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (47 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -13027,8 +10732,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "transport",
           "graduate",
@@ -13124,21 +10827,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 70,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 47,
-          "total": 47,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (47 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -13161,8 +10849,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Galway",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "galway",
           "county",
@@ -13207,21 +10893,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 69,
-          "total": 69,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (69 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -13243,8 +10914,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "electrical",
           "design",
@@ -13339,21 +11008,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -13375,8 +11029,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "systems",
           "control",
@@ -13471,21 +11123,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -13507,8 +11144,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "design",
           "electrical",
@@ -13603,21 +11238,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -13639,8 +11259,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Ireland (other)",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "engineering",
           "mechanical",
@@ -13744,21 +11362,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 37,
-          "total": 37,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (37 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -13780,8 +11383,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "d02",
           "dublin",
@@ -13830,21 +11431,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 23,
-          "total": 23,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (23 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -13866,8 +11452,6 @@
         "sector": "Fintech",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "quot",
           "strong",
@@ -13962,21 +11546,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 102,
-          "total": 102,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (102 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -13998,8 +11567,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "county",
           "ireland",
@@ -14079,21 +11646,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 25,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 61,
-          "total": 61,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (61 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -14116,8 +11668,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Limerick",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "application",
           "business",
@@ -14163,21 +11713,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 32,
-          "total": 32,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (32 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -14200,8 +11735,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Limerick",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "center",
           "engineer",
@@ -14246,21 +11779,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 32,
-          "total": 32,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (32 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -14283,8 +11801,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Limerick",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "center",
           "engineer",
@@ -14331,21 +11847,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 32,
-          "total": 32,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (32 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -14368,8 +11869,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Limerick",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "graduate",
           "ireland",
@@ -14411,21 +11910,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 32,
-          "total": 32,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (32 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -14448,8 +11932,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Galway",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "county",
           "engineering",
@@ -14493,21 +11975,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 60,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 71,
-          "total": 71,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (71 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -14530,8 +11997,6 @@
         "sector": "Other",
         "country": "Ireland",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "chain",
           "cross",
@@ -14576,21 +12041,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 45,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 71,
-          "total": 71,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (71 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -14614,8 +12064,6 @@
         "employment_type": "graduate",
         "sector": "Aviation/Semi-state",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "airport",
@@ -14662,21 +12110,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 50,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 34,
-          "total": 34,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (34 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -14700,8 +12133,6 @@
         "employment_type": "graduate",
         "sector": "Aviation/Semi-state",
         "ireland_area": "Dublin",
-        "visa_sponsorship": "not_mentioned",
-        "visa_snippet": null,
         "match_keywords": [
           "dublin",
           "airport",
@@ -14749,21 +12180,6 @@
         "last_verified_at": "2026-09-25T08:27:19.903365+00:00",
         "active": true,
         "discovery_score": 50,
-        "employer_sponsorship_history": {
-          "sponsors": 0,
-          "no_sponsorship": 0,
-          "not_mentioned": 34,
-          "total": 34,
-          "sponsor_rate": 0.0,
-          "explicit_positive_rate": null,
-          "label": "No sponsorship language found (34 postings)",
-          "category": "no_data",
-          "official_permits_total": 0,
-          "official_permits_by_year": {},
-          "official_matched_employer_names": []
-        },
-        "official_permits_total": 0,
-        "official_permits_by_year": {},
         "graduate_opportunity": true,
         "graduate_intake": null,
         "graduate_priority": "B"
@@ -14791,7 +12207,7 @@
     "older": 784,
     "unknown": 1732
   },
-  "total_companies_checked": 315,
+  "total_companies_checked": 321,
   "registry_companies": [
     {
       "company": "Accenture",
@@ -15083,7 +12499,7 @@
         10
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "GridBeyond",
@@ -16919,7 +14335,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Version 1",
@@ -17306,7 +14722,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-14T12:10:49.761712+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "First Derivative",
@@ -17794,7 +15210,7 @@
         10
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Compliance & Risks",
@@ -18560,7 +15976,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-23T17:39:23.136854+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Kerry Group",
@@ -18763,7 +16179,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-15T15:48:54.895620+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Ryanair",
@@ -19272,7 +16688,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-18T13:19:55.503791+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "NeoDyne",
@@ -19336,7 +16752,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-16T16:18:25.926475+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "A&L Goodbody",
@@ -19462,7 +16878,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Agilent Technologies",
@@ -19588,7 +17004,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-24T10:34:54.337539+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "AIG",
@@ -19981,7 +17397,7 @@
         10
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Alter Domus",
@@ -20474,7 +17890,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Aptiv",
@@ -20613,7 +18029,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Arista Networks",
@@ -20677,7 +18093,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-11T14:33:37.829662+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Arthur Cox",
@@ -21139,7 +18555,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-21T17:47:16.801867+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "AstraZeneca",
@@ -21629,7 +19045,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Bank of Ireland",
@@ -21700,7 +19116,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Bausch + Lomb",
@@ -21930,7 +19346,7 @@
         10
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Becton Dickinson (BD)",
@@ -22620,7 +20036,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-21T17:47:16.801867+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Chubb",
@@ -23118,7 +20534,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-24T10:34:54.337539+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Danaher Corporation",
@@ -23946,7 +21362,7 @@
         10
       ],
       "graduate_first_seen": "2026-09-18T07:49:31.935355+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Elavon",
@@ -24883,7 +22299,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-22T10:53:55.631206+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Genesys",
@@ -25009,7 +22425,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-14T12:10:49.761712+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Glanbia / Tirlán",
@@ -25154,7 +22570,7 @@
         10
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Heineken Ireland",
@@ -25698,7 +23114,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-17T13:43:28.672710+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Irish Rail (Iarnród Éireann)",
@@ -25886,7 +23302,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-12T19:59:35.607193+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Johnson Controls",
@@ -26484,7 +23900,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Merit Medical",
@@ -27072,7 +24488,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Notion",
@@ -29152,7 +26568,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-23T17:39:23.136854+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "SumUp",
@@ -29304,7 +26720,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Synopsys",
@@ -29384,9 +26800,9 @@
     {
       "company": "Takeda",
       "country": "Ireland",
-      "platform": "aggregator-covered",
+      "platform": "manual-check",
       "careers_url": "https://takeda.wd3.myworkdayjobs.com/External",
-      "automatic": true,
+      "automatic": false,
       "source_type": "employer",
       "category": "Finance / Risk",
       "dashboard_rank": "359",
@@ -30359,7 +27775,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-21T17:47:16.801867+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Viatris",
@@ -30423,7 +27839,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Virgin Media Ireland",
@@ -32862,7 +30278,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-18T17:29:48.204902+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "AbbVie",
@@ -32988,7 +30404,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-22T15:45:08.904728+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Analog Devices",
@@ -33052,7 +30468,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Avolon",
@@ -33276,7 +30692,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-12T19:59:35.607193+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "BlackRock",
@@ -33428,7 +30844,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Citi",
@@ -33714,7 +31130,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-18T13:19:55.503791+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Intel",
@@ -33778,7 +31194,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Johnson & Johnson",
@@ -33855,7 +31271,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "JPMorgan Chase",
@@ -34066,7 +31482,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-16T13:00:57.684378+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Morgan Stanley",
@@ -34277,7 +31693,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-15T11:37:28.017669+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Siemens",
@@ -35053,7 +32469,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-15T19:14:39.337628+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "Coinbase",
@@ -35254,7 +32670,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-12T19:59:35.607193+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "HubSpot",
@@ -35651,7 +33067,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "ServiceNow",
@@ -35852,7 +33268,7 @@
         9
       ],
       "graduate_first_seen": "2026-09-07T14:11:41.391859+00:00",
-      "graduate_last_seen": "2026-09-25T08:27:40.673970+00:00"
+      "graduate_last_seen": "2026-09-25T12:48:47.178389+00:00"
     },
     {
       "company": "TikTok",
@@ -36213,6 +33629,378 @@
         }
       },
       "refresh_batch": 14,
+      "graduate_monitoring": true,
+      "graduate_intake": 2027,
+      "graduate_search_terms": [
+        "graduate",
+        "graduate programme",
+        "graduate program",
+        "early careers",
+        "early career",
+        "future talent",
+        "emerging talent",
+        "campus",
+        "new grad",
+        "entry level",
+        "entry-level",
+        "analyst programme",
+        "analyst program",
+        "associate programme",
+        "associate program",
+        "rotational programme",
+        "rotational program",
+        "technology graduate",
+        "data graduate",
+        "analytics graduate",
+        "ai graduate",
+        "digital graduate",
+        "consulting graduate",
+        "business graduate",
+        "trainee",
+        "apprentice"
+      ],
+      "graduate_programme": false,
+      "graduate_status": "monitoring",
+      "graduate_priority": null,
+      "graduate_programmes": [],
+      "graduate_open_months": [],
+      "graduate_deadline": null,
+      "graduate_expected_open": null,
+      "graduate_historical_open_months": [],
+      "graduate_first_seen": null,
+      "graduate_last_seen": null
+    },
+    {
+      "company": "Rippling",
+      "country": "Ireland",
+      "platform": "greenhouse",
+      "careers_url": "https://www.rippling.com/careers/open-roles",
+      "automatic": true,
+      "source_type": "employer",
+      "category": "HR / Finance / IT SaaS",
+      "dashboard_rank": "47",
+      "harshit_priority_score": "91",
+      "priority_tier": "P1 — Focus",
+      "profile_priority": "Business or Technical — choose by vacancy",
+      "best_fit_role_families": "Implementation; Business Operations; Data Analytics; Solutions Consulting",
+      "secondary_finance_score": "",
+      "dashboard_default_visibility": "visible",
+      "dashboard_optional_group": "core_harshit",
+      "source_status": "official_verified",
+      "ireland_relevance_basis": "Dublin European HQ with active Dublin implementation and data hiring",
+      "evidence_status": "Verified",
+      "zero_audit": null,
+      "refresh_batch": null,
+      "graduate_monitoring": true,
+      "graduate_intake": 2027,
+      "graduate_search_terms": [
+        "graduate",
+        "graduate programme",
+        "graduate program",
+        "early careers",
+        "early career",
+        "future talent",
+        "emerging talent",
+        "campus",
+        "new grad",
+        "entry level",
+        "entry-level",
+        "analyst programme",
+        "analyst program",
+        "associate programme",
+        "associate program",
+        "rotational programme",
+        "rotational program",
+        "technology graduate",
+        "data graduate",
+        "analytics graduate",
+        "ai graduate",
+        "digital graduate",
+        "consulting graduate",
+        "business graduate",
+        "trainee",
+        "apprentice"
+      ],
+      "graduate_programme": false,
+      "graduate_status": "monitoring",
+      "graduate_priority": null,
+      "graduate_programmes": [],
+      "graduate_open_months": [],
+      "graduate_deadline": null,
+      "graduate_expected_open": null,
+      "graduate_historical_open_months": [],
+      "graduate_first_seen": null,
+      "graduate_last_seen": null
+    },
+    {
+      "company": "CACEIS",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://groupecreditagricole.jobs/en/our-jobs-offer/",
+      "automatic": false,
+      "source_type": "employer",
+      "category": "Asset Servicing / Financial Services",
+      "dashboard_rank": "73",
+      "harshit_priority_score": "84",
+      "priority_tier": "P2 — Strong",
+      "profile_priority": "Business or Technical — choose by vacancy",
+      "best_fit_role_families": "Business Analyst; Data; Change; Operations; Technology",
+      "secondary_finance_score": "",
+      "dashboard_default_visibility": "visible",
+      "dashboard_optional_group": "core_harshit",
+      "source_status": "official_verified",
+      "ireland_relevance_basis": "Active Dublin hiring including business-analysis roles",
+      "evidence_status": "Verified",
+      "zero_audit": null,
+      "refresh_batch": null,
+      "graduate_monitoring": true,
+      "graduate_intake": 2027,
+      "graduate_search_terms": [
+        "graduate",
+        "graduate programme",
+        "graduate program",
+        "early careers",
+        "early career",
+        "future talent",
+        "emerging talent",
+        "campus",
+        "new grad",
+        "entry level",
+        "entry-level",
+        "analyst programme",
+        "analyst program",
+        "associate programme",
+        "associate program",
+        "rotational programme",
+        "rotational program",
+        "technology graduate",
+        "data graduate",
+        "analytics graduate",
+        "ai graduate",
+        "digital graduate",
+        "consulting graduate",
+        "business graduate",
+        "trainee",
+        "apprentice"
+      ],
+      "graduate_programme": false,
+      "graduate_status": "monitoring",
+      "graduate_priority": null,
+      "graduate_programmes": [],
+      "graduate_open_months": [],
+      "graduate_deadline": null,
+      "graduate_expected_open": null,
+      "graduate_historical_open_months": [],
+      "graduate_first_seen": null,
+      "graduate_last_seen": null
+    },
+    {
+      "company": "Veeva Systems",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://careers.veeva.com/",
+      "automatic": false,
+      "source_type": "employer",
+      "category": "Life Sciences SaaS",
+      "dashboard_rank": "148",
+      "harshit_priority_score": "84",
+      "priority_tier": "P2 — Strong",
+      "profile_priority": "Business or Technical — choose by vacancy",
+      "best_fit_role_families": "Professional Services; Implementation; Business Consulting; Data",
+      "secondary_finance_score": "",
+      "dashboard_default_visibility": "visible",
+      "dashboard_optional_group": "core_harshit",
+      "source_status": "official_verified",
+      "ireland_relevance_basis": "Republic of Ireland professional-services/implementation hiring",
+      "evidence_status": "Verified",
+      "zero_audit": null,
+      "refresh_batch": null,
+      "graduate_monitoring": true,
+      "graduate_intake": 2027,
+      "graduate_search_terms": [
+        "graduate",
+        "graduate programme",
+        "graduate program",
+        "early careers",
+        "early career",
+        "future talent",
+        "emerging talent",
+        "campus",
+        "new grad",
+        "entry level",
+        "entry-level",
+        "analyst programme",
+        "analyst program",
+        "associate programme",
+        "associate program",
+        "rotational programme",
+        "rotational program",
+        "technology graduate",
+        "data graduate",
+        "analytics graduate",
+        "ai graduate",
+        "digital graduate",
+        "consulting graduate",
+        "business graduate",
+        "trainee",
+        "apprentice"
+      ],
+      "graduate_programme": false,
+      "graduate_status": "monitoring",
+      "graduate_priority": null,
+      "graduate_programmes": [],
+      "graduate_open_months": [],
+      "graduate_deadline": null,
+      "graduate_expected_open": null,
+      "graduate_historical_open_months": [],
+      "graduate_first_seen": null,
+      "graduate_last_seen": null
+    },
+    {
+      "company": "Competition and Consumer Protection Commission (CCPC)",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.ccpc.ie/about-us/careers/current-vacancies/",
+      "automatic": false,
+      "source_type": "employer",
+      "category": "Government / Regulator",
+      "dashboard_rank": "155",
+      "harshit_priority_score": "82",
+      "priority_tier": "P2 — Strong",
+      "profile_priority": "Business CV",
+      "best_fit_role_families": "Business Analyst; Data; Digital Transformation; Research",
+      "secondary_finance_score": "",
+      "dashboard_default_visibility": "visible",
+      "dashboard_optional_group": "core_harshit",
+      "source_status": "official_verified",
+      "ireland_relevance_basis": "Dublin-based Irish regulator with direct recruitment",
+      "evidence_status": "Verified",
+      "zero_audit": null,
+      "refresh_batch": null,
+      "graduate_monitoring": true,
+      "graduate_intake": 2027,
+      "graduate_search_terms": [
+        "graduate",
+        "graduate programme",
+        "graduate program",
+        "early careers",
+        "early career",
+        "future talent",
+        "emerging talent",
+        "campus",
+        "new grad",
+        "entry level",
+        "entry-level",
+        "analyst programme",
+        "analyst program",
+        "associate programme",
+        "associate program",
+        "rotational programme",
+        "rotational program",
+        "technology graduate",
+        "data graduate",
+        "analytics graduate",
+        "ai graduate",
+        "digital graduate",
+        "consulting graduate",
+        "business graduate",
+        "trainee",
+        "apprentice"
+      ],
+      "graduate_programme": false,
+      "graduate_status": "monitoring",
+      "graduate_priority": null,
+      "graduate_programmes": [],
+      "graduate_open_months": [],
+      "graduate_deadline": null,
+      "graduate_expected_open": null,
+      "graduate_historical_open_months": [],
+      "graduate_first_seen": null,
+      "graduate_last_seen": null
+    },
+    {
+      "company": "Vanguard",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://www.vanguardjobs.com/",
+      "automatic": false,
+      "source_type": "employer",
+      "category": "Asset Management / Finance",
+      "dashboard_rank": "156",
+      "harshit_priority_score": "82",
+      "priority_tier": "P2 — Strong",
+      "profile_priority": "Technical CV",
+      "best_fit_role_families": "Data Analyst; Analytics; Investment Operations; Technology",
+      "secondary_finance_score": "",
+      "dashboard_default_visibility": "visible",
+      "dashboard_optional_group": "core_harshit",
+      "source_status": "official_verified",
+      "ireland_relevance_basis": "Dublin hiring presence including analytics/data roles",
+      "evidence_status": "Verified",
+      "zero_audit": null,
+      "refresh_batch": null,
+      "graduate_monitoring": true,
+      "graduate_intake": 2027,
+      "graduate_search_terms": [
+        "graduate",
+        "graduate programme",
+        "graduate program",
+        "early careers",
+        "early career",
+        "future talent",
+        "emerging talent",
+        "campus",
+        "new grad",
+        "entry level",
+        "entry-level",
+        "analyst programme",
+        "analyst program",
+        "associate programme",
+        "associate program",
+        "rotational programme",
+        "rotational program",
+        "technology graduate",
+        "data graduate",
+        "analytics graduate",
+        "ai graduate",
+        "digital graduate",
+        "consulting graduate",
+        "business graduate",
+        "trainee",
+        "apprentice"
+      ],
+      "graduate_programme": false,
+      "graduate_status": "monitoring",
+      "graduate_priority": null,
+      "graduate_programmes": [],
+      "graduate_open_months": [],
+      "graduate_deadline": null,
+      "graduate_expected_open": null,
+      "graduate_historical_open_months": [],
+      "graduate_first_seen": null,
+      "graduate_last_seen": null
+    },
+    {
+      "company": "Kefron",
+      "country": "Ireland",
+      "platform": "manual-check",
+      "careers_url": "https://kefron.com/careers/",
+      "automatic": false,
+      "source_type": "employer",
+      "category": "Document / Information Management Technology",
+      "dashboard_rank": "286",
+      "harshit_priority_score": "72",
+      "priority_tier": "P3 — Selective",
+      "profile_priority": "Business CV",
+      "best_fit_role_families": "Implementation; Business Systems; Digital Transformation",
+      "secondary_finance_score": "",
+      "dashboard_default_visibility": "visible",
+      "dashboard_optional_group": "core_harshit",
+      "source_status": "official_verified",
+      "ireland_relevance_basis": "Dublin technology/implementation hiring presence",
+      "evidence_status": "Verified",
+      "zero_audit": null,
+      "refresh_batch": null,
       "graduate_monitoring": true,
       "graduate_intake": 2027,
       "graduate_search_terms": [
