@@ -79,6 +79,3 @@ Each direct collector runs once in an isolated process, with four collectors
 at a time and a three-minute limit per company. Their jobs pass through the same Ireland validation,
 deduplication, ranking, history, and graduate processing as the core boards.
 The Proven working tab shows batch membership and unsuccessful checks.
-
-Run `python test_proven_batch.py` and `python test_refresh_publish.py` from the
-repository directory to check batch execution and publication without network access.
