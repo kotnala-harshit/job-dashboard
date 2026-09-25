@@ -15,7 +15,6 @@ It includes:
 - Job recency and newly discovered roles
 - Candidate match scoring
 - Employment-type classification
-- Visa-sponsorship signals where available
 - Source and connector diagnostics
 - Company states such as working, proven zero, configured zero, no validated connector, and false-zero/broken cases
 - Browser-local Saved and Applied states for lightweight tracking

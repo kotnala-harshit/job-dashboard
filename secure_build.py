@@ -1296,7 +1296,6 @@ for forbidden in (
     "seen_jobs.json",
     "company_history.json",
     "profile.json",
-    "sponsorship_history.json",
     "official_permit_stats.json",
 ):
 

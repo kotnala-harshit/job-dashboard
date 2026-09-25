@@ -218,21 +218,6 @@
     border-top: 1px solid var(--line);
     gap: 8px;
   }
-  .visa-badge {
-    font-size: 10.5px;
-    font-family: var(--mono);
-    padding: 3px 8px;
-    border-radius: 20px;
-    border: 1px solid var(--line);
-    color: var(--muted);
-    flex: 1;
-    line-height: 1.3;
-  }
-  .visa-badge.sponsors { background: var(--teal-dim); color: var(--teal); border-color: #3fcf9a44; }
-  .visa-badge.no { background: var(--rose-dim); color: var(--rose); border-color: #e2643b44; }
-  .visa-stack { display:flex; flex-direction:column; gap:4px; flex:1; min-width:0; }
-  .visa-history { font:10px var(--mono); color:var(--muted); line-height:1.35; }
-  .visa-history strong { color:var(--text); }
   .apply-hint { font-size: 11px; color: var(--amber); font-weight: 700; white-space: nowrap; }
 
   .empty {
@@ -578,75 +563,6 @@ body{background:#f3f4f6!important}
 
 
 /*
- * Give visa/employer information the entire card width.
- */
-.card .visa-stack,
-.job-card-overlap-fixed .visa-stack,
-.job-card-overlap-fixed .job-card-safe-meta {
-    display: block !important;
-
-    width: 100% !important;
-    min-width: 100% !important;
-    max-width: 100% !important;
-
-    flex: none !important;
-
-    margin: 0 0 10px 0 !important;
-
-    white-space: normal !important;
-    word-break: normal !important;
-    overflow-wrap: break-word !important;
-
-    overflow: visible !important;
-}
-
-
-/*
- * The badge was previously being compressed into a ~10px column.
- */
-.card .visa-badge,
-.job-card-overlap-fixed .visa-badge {
-    display: inline-block !important;
-
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-
-    flex: none !important;
-
-    white-space: normal !important;
-    word-break: keep-all !important;
-    overflow-wrap: normal !important;
-
-    writing-mode: horizontal-tb !important;
-    text-orientation: mixed !important;
-
-    vertical-align: top !important;
-}
-
-
-/*
- * Employer-history text must remain normal horizontal prose.
- */
-.card .visa-history,
-.job-card-overlap-fixed .visa-history {
-    display: block !important;
-
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-
-    white-space: normal !important;
-    word-break: normal !important;
-    overflow-wrap: break-word !important;
-
-    writing-mode: horizontal-tb !important;
-
-    line-height: 1.45 !important;
-}
-
-
-/*
  * The action row belongs BELOW metadata.
  */
 .card .job-card-safe-actions,
@@ -688,10 +604,7 @@ body{background:#f3f4f6!important}
  * Prevent any descendant metadata text from inheriting an accidental
  * vertical writing mode or ultra-aggressive word breaking.
  */
-.card-foot *,
-.visa-stack *,
-.visa-history *,
-.visa-badge * {
+.card-foot * {
     writing-mode: horizontal-tb !important;
     text-orientation: mixed !important;
 }
@@ -730,7 +643,6 @@ body{background:#f3f4f6!important}
 .job-details summary{cursor:pointer;color:#52525b;font-size:11.5px;font-weight:650;list-style-position:inside}
 .job-details[open] summary{margin-bottom:8px;color:#18181b}
 .detail-line{font:10.5px var(--mono);color:var(--muted);margin:8px 0}
-.job-details .visa-stack{margin:8px 0 0!important;min-width:0!important;width:100%!important}
 .job-card-safe-actions{display:flex!important;align-items:center!important;gap:6px!important;width:100%!important;margin:0!important;padding:0!important}
 .state-btn,.open-job-btn,.ignore-btn{padding:7px 9px!important;font-size:11px!important;cursor:pointer!important;background:#fff!important;color:#52525b!important}
 .state-btn.active{background:#18181b!important;color:#fff!important;border-color:#18181b!important}
@@ -824,15 +736,6 @@ body{background:#f3f4f6!important}
     <select id="fNew">
       <option value="">All postings</option>
       <option value="new">Discovered in past 24h</option>
-    </select>
-    <select id="fVisa">
-      <option value="">Any visa status</option>
-      <option value="sponsors">Current job mentions sponsorship</option>
-      <option value="historical_sponsor">Employer has sponsorship history</option>
-      <option value="official_permits">Employer has official permit record</option>
-      <option value="no_sponsorship">Current job says no sponsorship</option>
-      <option value="not_mentioned">Current job does not mention visa</option>
-      <option value="other">Other / unclear</option>
     </select>
     <select id="fProfileMode" aria-label="CV profile">
       <option value="balanced">Balanced CV</option>
@@ -1060,13 +963,6 @@ function fillSelect(selectId, values, formatLabel) {
   if (unique.includes(current)) select.value = current;
 }
 
-function visaLabel(status) {
-  if (status === 'sponsors') return { cls: 'sponsors', text: 'Mentions sponsorship' };
-  if (status === 'no_sponsorship') return { cls: 'no', text: 'No sponsorship stated' };
-  return { cls: '', text: 'Visa not mentioned' };
-}
-
-
 function personalJobMatch(job) {
   return {
     score: Number(job.candidate_match_score || 0),
@@ -1235,7 +1131,7 @@ function loadData(data) {
 }
 
 function clearFilters() {
-  for (const id of ['fSearch', 'fCompany', 'fLocation', 'fSector', 'fSource', 'fPosted', 'fEmployment', 'fEmploymentLevel', 'fNew', 'fVisa', 'fStatus']) {
+  for (const id of ['fSearch', 'fCompany', 'fLocation', 'fSector', 'fSource', 'fPosted', 'fEmployment', 'fEmploymentLevel', 'fNew', 'fStatus']) {
     const el = document.getElementById(id);
     if (el) el.value = '';
   }
@@ -1259,7 +1155,6 @@ function setupInstantFilters() {
     'fSort',
     'fStatus',
     'fNew',
-    'fVisa',
   ];
 
   ids.forEach(id => {
@@ -1612,9 +1507,6 @@ function employmentTypeValues(job) {
 function buildJobCard(j) {
   const postedDate = getJobPostedDate(j);
   const fresh = ageHours(postedDate) <= 24;
-  const badge = visaLabel(j.visa_sponsorship || 'not_mentioned');
-  const visaHistory = j.employer_sponsorship_history || {};
-  const permitTotal = Number(j.official_permits_total || visaHistory.official_permits_total || 0);
   const pm = personalJobMatch(j);
   const applicationState = jobState(j);
   const employmentLevel = classifyEmploymentLevel(j);
@@ -1646,17 +1538,10 @@ function buildJobCard(j) {
       ${employmentTypeValues(j).map(value => `<span class="chip type">${escapeHtml(employmentTypeLabel(value))}</span>`).join('')}
     </div>
     <details class="job-details">
-      <summary>Match details, source & visa</summary>
+      <summary>Match details & source</summary>
       ${(pm.reasons || []).length ? `<div class="reason-row"><span class="reason-good">Matched:</span> ${escapeHtml((pm.reasons || []).join(' · '))}</div>` : ''}
       ${(pm.missing || []).length ? `<div class="reason-row"><span class="reason-missing">Potential gaps:</span> ${escapeHtml((pm.missing || []).join(' · '))}</div>` : ''}
       <div class="detail-line">Source: ${escapeHtml(j.ats || 'unknown')} · Sector: ${escapeHtml(j.sector || 'Other')}</div>
-      <div class="visa-stack job-card-safe-meta">
-        <span class="visa-badge ${badge.cls}" title="${escapeHtml(j.visa_snippet || '')}">${escapeHtml(badge.text)}</span>
-        <div class="visa-history">
-          <strong>Employer history:</strong> ${escapeHtml(visaHistory.label || 'No sponsorship history yet')}
-          ${permitTotal > 0 ? ` · <strong>${permitTotal}</strong> official permits` : ''}
-        </div>
-      </div>
     </details>
     <div class="card-foot">
       <div class="job-card-safe-actions">
@@ -1766,7 +1651,6 @@ function applyFilters() {
   const sortMode = document.getElementById('fSort')?.value || 'fit';
   const statusFilter = document.getElementById('fStatus')?.value || '';
   const newOnly = document.getElementById('fNew').value;
-  const visa = document.getElementById('fVisa').value;
 
   const employmentFilter = document.getElementById('fEmployment')?.value || '';
   const employmentLevelFilter =
@@ -1793,11 +1677,6 @@ if (search) {
     if (profileMatchOnly && !isTargetRole(j, profileMode)) return false;
     if (statusFilter && jobState(j) !== statusFilter) return false;
     if (newOnly === 'new' && !firstSeenWithin(j)) return false;
-    const v = j.visa_sponsorship || 'not_mentioned';
-    const vh = j.employer_sponsorship_history || {};
-    if (visa === 'historical_sponsor' && Number(vh.sponsors || 0) <= 0) return false;
-    if (visa === 'official_permits' && Number(j.official_permits_total || vh.official_permits_total || 0) <= 0) return false;
-    if (visa && !['historical_sponsor','official_permits'].includes(visa) && v !== visa) return false;
     if (posted && !postedWithin(getJobPostedDate(j), posted)) return false;
     if (employmentFilter && !employmentTypeValues(j).includes(employmentFilter)) return false;
     if (employmentLevelFilter && classifyEmploymentLevel(j) !== employmentLevelFilter) return false;
@@ -2544,21 +2423,6 @@ setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
     flex-shrink: 0 !important;
 }
 
-.job-card-overlap-fixed .job-card-safe-meta {
-    position: static !important;
-
-    max-height: none !important;
-    height: auto !important;
-
-    overflow: visible !important;
-    overflow-wrap: anywhere !important;
-    word-break: normal !important;
-
-    line-height: 1.35 !important;
-
-    margin-bottom: 4px !important;
-}
-
 .job-card-overlap-fixed button,
 .job-card-overlap-fixed a {
     flex-shrink: 0;
@@ -2571,12 +2435,7 @@ setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
 /*
  * The card footer must stack vertically.
  *
- * Previously:
- *   visa metadata + width:100% action row
- * lived inside a horizontal flex container.
- *
- * That squeezed the metadata down to a few pixels and caused
- * words to render one character per line.
+ * This keeps action controls aligned inside every card.
  */
 .job-card-overlap-fixed .card-foot {
     display: flex !important;
@@ -2588,59 +2447,6 @@ setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
     min-width: 0 !important;
 
     gap: 10px !important;
-}
-
-
-/* Visa / employer information gets the full card width. */
-.job-card-overlap-fixed .visa-stack,
-.job-card-overlap-fixed .job-card-safe-meta {
-    display: flex !important;
-    flex-direction: column !important;
-
-    flex: none !important;
-
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-
-    overflow: visible !important;
-
-    white-space: normal !important;
-    word-break: normal !important;
-    overflow-wrap: break-word !important;
-}
-
-
-/*
- * Do not allow .visa-badge { flex:1 } to collapse against
- * the actions row.
- */
-.job-card-overlap-fixed .visa-badge {
-    flex: none !important;
-
-    display: block !important;
-
-    width: fit-content !important;
-    max-width: 100% !important;
-
-    white-space: normal !important;
-
-    word-break: normal !important;
-    overflow-wrap: break-word !important;
-}
-
-
-/* History should remain ordinary readable horizontal text. */
-.job-card-overlap-fixed .visa-history {
-    display: block !important;
-
-    width: 100% !important;
-
-    white-space: normal !important;
-    word-break: normal !important;
-    overflow-wrap: break-word !important;
-
-    line-height: 1.45 !important;
 }
 
 
