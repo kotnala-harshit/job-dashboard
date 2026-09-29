@@ -31232,6 +31232,19 @@ def scrape_ccpc_official():
     return list(jobs.values())
 
 
+def scrape_caceis_official():
+    company = "CACEIS"
+    source = "https://groupecreditagricole.jobs/en/our-offers/locations/100/"
+    jobs = _official_http_job_links(
+        company, [source], ("groupecreditagricole.jobs",),
+        (r"/en/our-jobs-offer/",), default_location="Dublin, Ireland",
+    )
+    jobs = [job for job in jobs if "-136-" in job["url"]]
+    if CONNECTOR_HEALTH.get(company, {}).get("live"):
+        _mark_connector_health(company, True, f"Official CACEIS Ireland listing reachable; {len(jobs)} qualifying jobs", source)
+    return jobs
+
+
 def scrape_hcltech_repaired_20260920():
     company = "HCLTech"
     board = (
@@ -32068,9 +32081,14 @@ def scrape_direct_company(company, *args, **kwargs):
     return jobs
 
 
-DIRECT_COMPANY_CONNECTORS["Competition and Consumer Protection Commission (CCPC)"] = "ccpc_official"
+DIRECT_COMPANY_CONNECTORS.update({
+    "CACEIS": "caceis_official",
+    "Competition and Consumer Protection Commission (CCPC)": "ccpc_official",
+})
 _ccpc_previous_direct = scrape_direct_company
 def scrape_direct_company(company, *args, **kwargs):
+    if company == "CACEIS":
+        return scrape_caceis_official()
     if company == "Competition and Consumer Protection Commission (CCPC)":
         return scrape_ccpc_official()
     return _ccpc_previous_direct(company, *args, **kwargs)
