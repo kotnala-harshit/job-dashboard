@@ -31197,6 +31197,41 @@ def _official_http_job_links(
     return list(results.values())
 
 
+def scrape_ccpc_official():
+    """Collect the current CCPC vacancy cards from its official Ireland page."""
+    company = "Competition and Consumer Protection Commission (CCPC)"
+    source = "https://www.ccpc.ie/about-us/careers/current-vacancies/"
+    sess = _session()
+    if not sess:
+        _mark_connector_health(company, False, "HTTP session unavailable; zero vacancies not trusted", source)
+        return []
+    try:
+        response = sess.get(source, timeout=35, headers={"User-Agent": "Mozilla/5.0", "Accept-Language": "en-IE,en;q=0.9"})
+    except Exception as exc:
+        _mark_connector_health(company, False, f"Official careers source not successfully fetched: {exc}", source)
+        return []
+    if response.status_code != 200:
+        _mark_connector_health(company, False, f"Official careers source returned HTTP {response.status_code}", source)
+        return []
+
+    jobs = {}
+    for title, href in re.findall(
+        r"<h3\b[^>]*>(.*?)</h3>.*?<a\b[^>]+href=[\"']([^\"']*current-vacancies/vacancy[^\"']*)",
+        response.text or "", re.I | re.S,
+    ):
+        title = re.sub(r"\s+", " ", _html_text(title)).strip()
+        url = urllib.parse.urljoin(source, html.unescape(href)).split("?")[0].rstrip("/")
+        if title and is_real_job_title(title):
+            jobs[url.casefold()] = {
+                "company": company, "ats": "direct", "title": title[:300],
+                "location": "Dublin, Ireland", "raw_location": "Dublin, Ireland",
+                "url": url, "updated_at": None,
+                "description_text": "Official CCPC vacancy listed on its Ireland careers page.",
+            }
+    _mark_connector_health(company, True, f"Official CCPC careers source reachable; {len(jobs)} qualifying Republic-of-Ireland jobs", source)
+    return list(jobs.values())
+
+
 def scrape_hcltech_repaired_20260920():
     company = "HCLTech"
     board = (
@@ -32031,6 +32066,14 @@ def scrape_direct_company(company, *args, **kwargs):
         connector[1],
     )
     return jobs
+
+
+DIRECT_COMPANY_CONNECTORS["Competition and Consumer Protection Commission (CCPC)"] = "ccpc_official"
+_ccpc_previous_direct = scrape_direct_company
+def scrape_direct_company(company, *args, **kwargs):
+    if company == "Competition and Consumer Protection Commission (CCPC)":
+        return scrape_ccpc_official()
+    return _ccpc_previous_direct(company, *args, **kwargs)
 
 def _run_module_entrypoint():
     """
