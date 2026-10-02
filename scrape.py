@@ -2742,15 +2742,17 @@ def _probe_platform(platform: str, slug: str, sess, allow_empty: bool = False) -
             return isinstance(d, (list, dict))
         if platform == "eightfold":
             host, domain = (slug.split("|", 1) if "|" in slug else (f"{slug}.eightfold.ai", None))
-            r=sess.get(f"https://{host}/careers", timeout=10)
+            r = sess.get(f"https://{host}/careers", timeout=10)
             if r.status_code != 200: return False
-            if domain:
-                rr=sess.get(f"https://{host}/api/pcsx/search", params={"domain":domain,"query":"","location":"Ireland","start":0}, timeout=10)
-                return rr.status_code == 200 and isinstance(rr.json(), dict)
-            m=_EF_GROUP_ID_RE.search(r.text)
-            if not m: return False
-            rr=sess.get(f"https://{slug}.eightfold.ai/api/pcsx/search", params={"domain":m.group(1),"query":"","location":"","start":0}, timeout=10)
-            return rr.status_code == 200 and isinstance(rr.json(), dict)
+            if not domain:
+                match = _EF_GROUP_ID_RE.search(r.text)
+                if not match: return False
+                domain = match.group(1)
+            rr = _eightfold_search(sess, host, domain, 0)
+            if rr.status_code != 200: return False
+            data = rr.json()
+            payload = (data.get("data") or data) if isinstance(data, dict) else {}
+            return isinstance(payload.get("positions", payload.get("results")), list)
         if platform == "phenom":
             if "|" not in slug: return False
             domain, refnum = slug.split("|",1)
@@ -2760,6 +2762,14 @@ def _probe_platform(platform: str, slug: str, sess, allow_empty: bool = False) -
     except Exception:
         return False
     return False
+
+
+def _eightfold_search(sess, host, domain, start):
+    params = {"domain": domain, "query": "", "location": "Ireland", "start": start}
+    response = sess.get(f"https://{host}/api/pcsx/search", params=params, timeout=15)
+    if response.status_code in {403, 404}:
+        response = sess.get(f"https://{host}/api/apply/v2/jobs", params=params, timeout=15)
+    return response
 
 
 def _scrape_eightfold(company: str, slug: str, sess):
@@ -2774,7 +2784,7 @@ def _scrape_eightfold(company: str, slug: str, sess):
         start=0
         seen_ids=set()
         for _ in range(20):
-            r=sess.get(f"https://{host}/api/pcsx/search",params={"domain":domain,"query":"","location":"Ireland","start":start},timeout=15)
+            r = _eightfold_search(sess, host, domain, start)
             if r.status_code!=200: break
             d=r.json(); payload=d.get("data") or d; jobs=payload.get("positions") or payload.get("results") or []
             if not jobs: break
@@ -2794,10 +2804,11 @@ def _scrape_eightfold(company: str, slug: str, sess):
                     try:
                         updated=datetime.fromtimestamp(posted,timezone.utc).isoformat() if isinstance(posted,(int,float)) else str(posted)
                     except Exception: updated=str(posted)
-                out.append({"company":company,"ats":"eightfold","title":j.get("name") or j.get("title") or "","location":loc,"url":j.get("canonicalPositionUrl") or j.get("apply_url") or f"https://{slug}.eightfold.ai/careers/job/{jid}","updated_at":updated,"description_text":_strip_html(j.get("job_description") or j.get("description") or "")})
+                out.append({"company":company,"ats":"eightfold","title":j.get("name") or j.get("title") or "","location":loc,"url":j.get("canonicalPositionUrl") or j.get("apply_url") or f"https://{host}/careers/job/{jid}","updated_at":updated,"description_text":_strip_html(j.get("job_description") or j.get("description") or "")})
             if new==0: break
             start += len(jobs)
-            if len(jobs)<10: break
+            total = payload.get("count") or payload.get("total")
+            if isinstance(total, int) and start >= total: break
     except Exception as e:
         print(f"  ! eightfold/{slug}: {e}")
     return out

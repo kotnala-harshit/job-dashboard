@@ -1,6 +1,6 @@
 {
   "profile_id": "harshit-business-analytics-ie",
-  "version": 3,
+  "version": 4,
   "name": "Business Analysis, ERP Implementation & Data/BI \u2014 October 2026 CVs",
   "experience_years": 3,
   "preferred_locations": [
@@ -203,7 +203,8 @@
       "Process Mapping",
       "Change Adoption",
       "Inventory Management",
-      "Order Management"
+      "Order Management",
+      "Financial Markets"
     ],
     "technology": [
       "AWS",
@@ -215,7 +216,9 @@
       "Java",
       "JavaScript",
       "Jupyter",
-      "Google Cloud"
+      "Google Cloud",
+      "Data Structures",
+      "Algorithms"
     ]
   },
   "skill_aliases": {
@@ -372,7 +375,9 @@
         "Process Improvement",
         "Client Communication",
         "Training Delivery",
-        "Predictive Analytics"
+        "Predictive Analytics",
+        "Data Structures",
+        "Algorithms"
       ]
     },
     "business": {
@@ -413,7 +418,8 @@
         "Process Mapping",
         "Change Adoption",
         "Inventory Management",
-        "Order Management"
+        "Order Management",
+        "Financial Markets"
       ]
     }
   },
@@ -610,6 +616,15 @@
     "Google Cloud": [
       "technical_cv_2026_10_02",
       "business_cv_2026_10_02"
+    ],
+    "Financial Markets": [
+      "business_cv_2026_10_02_latest"
+    ],
+    "Data Structures": [
+      "technical_cv_2026_10_02_latest"
+    ],
+    "Algorithms": [
+      "technical_cv_2026_10_02_latest"
     ]
   },
   "updated_at": "2026-10-02",
@@ -692,6 +707,32 @@
     "Java": 2,
     "JavaScript": 2,
     "Jupyter": 2,
-    "Google Cloud": 2
+    "Google Cloud": 2,
+    "Financial Markets": 2,
+    "Data Structures": 1,
+    "Algorithms": 1
+  },
+  "cv_certifications": {
+    "business": [
+      "Microsoft Power BI Data Analyst Associate",
+      "McKinsey Forward",
+      "Financial Markets \u2013 Yale University",
+      "Foundations of Business Strategy \u2013 UVA",
+      "Alteryx Designer Core",
+      "Google Cloud: Cloud Engineer",
+      "Applied Data Science with Python \u2013 Michigan",
+      "Engineering Project Management \u2013 Rice University"
+    ],
+    "technical": [
+      "Microsoft Power BI Data Analyst Associate",
+      "Deep Learning \u2013 DeepLearning.AI",
+      "Applied Data Science with Python \u2013 Michigan",
+      "Data Science \u2013 Johns Hopkins",
+      "Engineering Project Management \u2013 Rice University",
+      "Alteryx Designer Core",
+      "Google Cloud: Cloud Engineer",
+      "Data Structures & Algorithms \u2013 UC San Diego",
+      "McKinsey Forward"
+    ]
   }
 }

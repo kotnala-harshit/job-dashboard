@@ -29,6 +29,10 @@ def check():
     }]}
     assert zero_audit.workday_country_zero(board)
     assert not zero_audit.workday_country_zero({**board, "total": 4})
+    overlap = {**board, "facets": [{"facetParameter": "Location_Country", "values": [{"id": "us", "descriptor": "United States", "count": 3}, {"id": "uk", "descriptor": "United Kingdom", "count": 1}]}]}
+    assert zero_audit.workday_country_zero(overlap)
+    overlap["facets"][0]["values"].append({"id": "ie", "descriptor": "Ireland", "count": 1})
+    assert not zero_audit.workday_country_zero(overlap)
     for document, expected in ((b"<workzag-jobs/>", True), (b"<html>Blocked</html>", False), (b"not xml", False)):
         with patch("urllib.request.urlopen", side_effect=lambda *a, **k: BytesIO(document)):
             assert zero_audit.personio_feed_zero("test") is expected
@@ -51,6 +55,27 @@ def check():
     session = SimpleNamespace(get=lambda *a, **k: SimpleNamespace(raise_for_status=lambda: None, json=lambda: {"hiringOrganization": {"name": "Marsh"}, "jobPostingInfo": {"location": "Dublin"}}))
     with patch.object(scrape, "_workday_session", return_value=session), patch.object(scrape, "_workday_post", return_value=response), patch.object(scrape.time, "sleep"):
         assert scrape.scrape_workday("Mercer", "mmc", "wd1", "MMC", max_pages=1) == []
+
+    country_html = '<div class="ts-ol-pagination__title">Nombre de résultats : 3 offre(s)</div><select id="GeographicalAreaCollection"><option value="0">Choose</option><option value="29">Allemagne (1)</option><optgroup label="France (2)"><option value="79">France (2)</option><option value="208">Paris (2)</option></optgroup></select>'
+    assert zero_audit.caceis_country_zero(country_html) == 3
+    assert zero_audit.caceis_country_zero(country_html.replace("Allemagne", "Irlande")) is None
+    assert zero_audit.caceis_country_zero(country_html.replace("3 offre", "4 offre")) is None
+    storm = '<div class="job-card"><div class="card-header"><a href="job-detail.php?jobid=1">Support Analyst</a></div><div class="card-body"><p>Location: Dublin Business Area: IT</p></div></div>'
+    assert zero_audit.official_page_jobs("Storm Technology", storm)[0]["location"] == "Dublin"
+    from unittest.mock import Mock
+    session = Mock()
+    session.get.side_effect = [SimpleNamespace(status_code=403), SimpleNamespace(status_code=200)]
+    assert scrape._eightfold_search(session, "careers.example.com", "example.com", 0).status_code == 200
+    assert session.get.call_args.args[0] == "https://careers.example.com/api/apply/v2/jobs"
+
+    row = {"response": {"id": "1", "unifiedUrlTitle": "Analyst", "unifiedStandardTitle": "Analyst", "jobLocationShort": ["Belfast, Northern Ireland", "Dublin, Ireland"], "brandUrl": "default"}}
+    session = Mock()
+    session.post.return_value.json.return_value = {"jobSearchResult": [row], "totalJobs": 1}
+    with patch.object(scrape, "_session", return_value=session):
+        jobs = zero_audit.collect_successfactors("CRH", "https://jobs.crh.com")
+        assert len(jobs) == 1 and jobs[0]["location"] == "Dublin, Ireland"
+        assert jobs[0]["url"].endswith("/default/job/Analyst/1-en_US")
+        assert session.post.call_count == 1
 
     scrape.CONNECTOR_HEALTH.clear()
     def failed():

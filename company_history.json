@@ -724,7 +724,7 @@
     },
     "TikTok": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-10-02T07:25:39.291277+00:00",
+      "last_working_seen": "2026-10-02T18:21:53.959275+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://lifeattiktok.com/search/7637565331448187189",
@@ -773,7 +773,7 @@
         "https://lifeattiktok.com/search/7689043128191469877"
       ],
       "distinct_jobs_seen": 44,
-      "current_live_jobs": 0
+      "current_live_jobs": 12
     },
     "EY Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
@@ -5933,7 +5933,7 @@
     },
     "Danaher Corporation": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-10-02T07:25:39.291277+00:00",
+      "last_working_seen": "2026-10-02T18:21:53.959275+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://danaher.wd1.myworkdayjobs.com/DanaherJobs/job/Dublin-Leinster-Ireland/Product-Sales-Specialist--AKTA-and-chromatography_R1314542/apply",
@@ -5954,7 +5954,7 @@
         "https://danaher.wd1.myworkdayjobs.com/DanaherJobs/job/OCallaghan-Mills-Ireland/Technician--Production-Operations--G4-Night-shift-_R1316297/apply"
       ],
       "distinct_jobs_seen": 16,
-      "current_live_jobs": 0
+      "current_live_jobs": 1
     },
     "Kerry Group": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
@@ -10549,13 +10549,14 @@
     },
     "GridBeyond": {
       "first_working_seen": "2026-09-16T16:18:25.767453+00:00",
-      "last_working_seen": "2026-09-30T08:47:02.626167+00:00",
+      "last_working_seen": "2026-10-02T18:21:53.959275+00:00",
       "ever_working": true,
       "seen_job_keys": [
+        "https://gridbeyond.bamboohr.com/careers/133",
         "https://gridbeyond.com/about-us-2/careers-2/"
       ],
-      "distinct_jobs_seen": 1,
-      "current_live_jobs": 0
+      "distinct_jobs_seen": 2,
+      "current_live_jobs": 1
     },
     "Daon": {
       "first_working_seen": "2026-09-16T16:18:25.767453+00:00",
@@ -16750,6 +16751,64 @@
         "https://www.ccpc.ie/about-us/careers/current-vacancies/vacancy--legal-advisor"
       ],
       "distinct_jobs_seen": 5
+    },
+    "CRH": {
+      "first_working_seen": "2026-10-02T18:21:53.959275+00:00",
+      "last_working_seen": "2026-10-02T18:21:53.959275+00:00",
+      "ever_working": true,
+      "current_live_jobs": 6,
+      "seen_job_keys": [
+        "https://jobs.crh.com/default/job/Executive-Assistant%2C-International-Leadership-Team/529118-en_US",
+        "https://jobs.crh.com/default/job/Finance-Graduate/529211-en_US",
+        "https://jobs.crh.com/default/job/Head-of-Site-Operations-Network-Access-Products/528802-en_US",
+        "https://jobs.crh.com/default/job/Senior-Internal-Audit-Manager-Technology-Amsterdam-or-Dublin/527945-en_US",
+        "https://jobs.crh.com/default/job/Senior-Internal-Auditor-Dublin-or-Amsterdam/526213-en_US",
+        "https://jobs.crh.com/default/job/Web-Content-Coordinator%2C-Strategic-Intelligence-%28Maternity-cover%29-Dublin-or-Madrid/528681-en_US"
+      ],
+      "distinct_jobs_seen": 6
+    },
+    "Storm Technology": {
+      "first_working_seen": "2026-10-02T18:21:53.959275+00:00",
+      "last_working_seen": "2026-10-02T18:21:53.959275+00:00",
+      "ever_working": true,
+      "current_live_jobs": 3,
+      "seen_job_keys": [
+        "https://careers.storm.ie/job-detail.php?jobid=321329",
+        "https://careers.storm.ie/job-detail.php?jobid=321607",
+        "https://careers.storm.ie/job-detail.php?jobid=326169"
+      ],
+      "distinct_jobs_seen": 3
+    },
+    "Teva Pharmaceuticals": {
+      "first_working_seen": "2026-10-02T18:21:53.959275+00:00",
+      "last_working_seen": "2026-10-02T18:21:53.959275+00:00",
+      "ever_working": true,
+      "current_live_jobs": 1,
+      "seen_job_keys": [
+        "https://www.careers.teva/careers/job/563602812781275"
+      ],
+      "distinct_jobs_seen": 1
+    },
+    "TransferMate": {
+      "first_working_seen": "2026-10-02T18:21:53.959275+00:00",
+      "last_working_seen": "2026-10-02T18:21:53.959275+00:00",
+      "ever_working": true,
+      "current_live_jobs": 2,
+      "seen_job_keys": [
+        "https://clunetech.teamtailor.com/jobs/8434629-senior-hr-business-partner-15-month-contract",
+        "https://clunetech.teamtailor.com/jobs/8463169-partner-implementation-manager"
+      ],
+      "distinct_jobs_seen": 2
+    },
+    "WuXi Biologics": {
+      "first_working_seen": "2026-10-02T18:21:53.959275+00:00",
+      "last_working_seen": "2026-10-02T18:21:53.959275+00:00",
+      "ever_working": true,
+      "current_live_jobs": 1,
+      "seen_job_keys": [
+        "https://www.wuxibiologics.com/join-us-site-quality-head/"
+      ],
+      "distinct_jobs_seen": 1
     }
   },
   "tracking_started": "2026-08-16",
