@@ -29,4 +29,5 @@ jobs:
         run: |
           pip install beautifulsoup4
           python test_zero_audit.py
+          python test_candidate_match.py
           python health_check.py

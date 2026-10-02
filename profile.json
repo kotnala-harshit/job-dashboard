@@ -1,7 +1,7 @@
 {
   "profile_id": "harshit-business-analytics-ie",
-  "version": 2,
-  "name": "Business Analytics / Data / Technology - Evidence Aware",
+  "version": 3,
+  "name": "Business Analysis, ERP Implementation & Data/BI \u2014 October 2026 CVs",
   "experience_years": 3,
   "preferred_locations": [
     "Ireland",
@@ -18,20 +18,16 @@
         "business analyst",
         "business analytics",
         "analytics consultant",
-        "data analyst",
-        "insights analyst",
-        "reporting analyst",
         "commercial analyst",
         "operations analyst",
         "strategy analyst",
-        "product analyst",
-        "risk analyst",
-        "financial crime analyst"
-      ]
+        "product analyst"
+      ],
+      "preferred_cv": "business"
     },
     "Data & BI": {
       "tier": "A",
-      "weight": 40,
+      "weight": 43,
       "titles": [
         "data analyst",
         "bi analyst",
@@ -39,16 +35,23 @@
         "power bi",
         "data visualization",
         "reporting developer",
-        "analytics engineer",
         "data consultant",
         "data governance",
         "data quality",
-        "insights analyst"
-      ]
+        "insights analyst",
+        "bi developer",
+        "reporting specialist",
+        "mi analyst",
+        "management information analyst",
+        "data reporting",
+        "analytics analyst",
+        "reporting analyst"
+      ],
+      "preferred_cv": "technical"
     },
     "Data Engineering": {
-      "tier": "A",
-      "weight": 35,
+      "tier": "B",
+      "weight": 29,
       "titles": [
         "data engineer",
         "etl developer",
@@ -56,11 +59,13 @@
         "data platform",
         "data integration",
         "sql developer"
-      ]
+      ],
+      "preferred_cv": "technical",
+      "experience_years": 0
     },
     "Technology Consulting": {
       "tier": "A",
-      "weight": 36,
+      "weight": 44,
       "titles": [
         "technology consultant",
         "digital consultant",
@@ -72,12 +77,23 @@
         "functional consultant",
         "business systems analyst",
         "systems analyst",
-        "application support analyst"
-      ]
+        "application support analyst",
+        "implementation analyst",
+        "implementation specialist",
+        "erp analyst",
+        "erp implementation",
+        "dynamics 365 consultant",
+        "d365 consultant",
+        "retail systems analyst",
+        "business process analyst",
+        "change analyst",
+        "uat analyst"
+      ],
+      "preferred_cv": "business"
     },
     "Product & Operations": {
       "tier": "B",
-      "weight": 31,
+      "weight": 36,
       "titles": [
         "product analyst",
         "product operations",
@@ -87,12 +103,17 @@
         "project analyst",
         "process analyst",
         "supply chain analyst",
-        "planning analyst"
-      ]
+        "planning analyst",
+        "strategy and operations",
+        "strategy & operations",
+        "gtm strategy",
+        "revenue operations analyst"
+      ],
+      "preferred_cv": "business"
     },
     "Graduate & Entry": {
       "tier": "A",
-      "weight": 38,
+      "weight": 34,
       "titles": [
         "graduate",
         "graduate programme",
@@ -101,7 +122,33 @@
         "junior analyst",
         "associate analyst",
         "intern"
+      ],
+      "required_title_terms": [
+        "analytics",
+        "data",
+        "business",
+        "technology",
+        "consulting",
+        "risk",
+        "operations",
+        "finance",
+        "information systems"
       ]
+    },
+    "Applied Analytics & Risk": {
+      "tier": "B",
+      "weight": 34,
+      "preferred_cv": "technical",
+      "titles": [
+        "data scientist",
+        "machine learning analyst",
+        "market surveillance",
+        "fraud analyst",
+        "risk analyst",
+        "financial crime analyst",
+        "model validation analyst"
+      ],
+      "experience_years": 0
     }
   },
   "skills": {
@@ -118,7 +165,13 @@
       "Machine Learning",
       "Predictive Analytics",
       "Anomaly Detection",
-      "Forecasting"
+      "Forecasting",
+      "Alteryx",
+      "Regression",
+      "Classification",
+      "Clustering",
+      "FinBERT",
+      "Deep Learning"
     ],
     "data": [
       "ETL",
@@ -127,7 +180,9 @@
       "Data Quality",
       "Databricks",
       "MySQL",
-      "PostgreSQL"
+      "PostgreSQL",
+      "Data Pipelines",
+      "Data Cleaning"
     ],
     "business": [
       "Requirements Gathering",
@@ -144,7 +199,11 @@
       "Customer Insights",
       "Pricing Analysis",
       "Go-to-Market Strategy",
-      "Unit Economics"
+      "Unit Economics",
+      "Process Mapping",
+      "Change Adoption",
+      "Inventory Management",
+      "Order Management"
     ],
     "technology": [
       "AWS",
@@ -152,13 +211,16 @@
       "Microsoft D365",
       "Git",
       "Docker",
-      "CI/CD"
+      "CI/CD",
+      "Java",
+      "JavaScript",
+      "Jupyter",
+      "Google Cloud"
     ]
   },
   "skill_aliases": {
     "powerbi": "Power BI",
     "power-bi": "Power BI",
-    "business intelligence": "Power BI",
     "structured query language": "SQL",
     "python3": "Python",
     "extract transform load": "ETL",
@@ -189,7 +251,20 @@
     "unit economics": "Unit Economics",
     "microsoft dynamics 365": "Microsoft D365",
     "dynamics 365": "Microsoft D365",
-    "d365": "Microsoft D365"
+    "d365": "Microsoft D365",
+    "requirements": "Requirements Gathering",
+    "process mapping": "Process Mapping",
+    "change adoption": "Change Adoption",
+    "data pipeline": "Data Pipelines",
+    "data cleaning": "Data Cleaning",
+    "isolation forest": "Anomaly Detection",
+    "gcp": "Google Cloud",
+    "google cloud platform": "Google Cloud",
+    "alteryx designer": "Alteryx",
+    "power bi data analyst": "Power BI",
+    "pyspark": "Apache Spark",
+    "spark": "Apache Spark",
+    "azure data factory": "Azure Data Factory"
   },
   "seniority_penalties": {
     "director": 28,
@@ -200,7 +275,10 @@
     "staff": 20,
     "senior manager": 18,
     "manager": 18,
-    "lead": 15
+    "lead": 15,
+    "senior": 10,
+    "team leader": 20,
+    "supervisor": 18
   },
   "negative_title_terms": [
     "nurse",
@@ -225,7 +303,14 @@
     "renewals manager",
     "legal counsel",
     "product designer",
-    "software developer"
+    "software developer",
+    "mba intern",
+    "phd intern",
+    "postdoctoral",
+    "chartered accountant",
+    "tax trainee",
+    "audit trainee",
+    "actuarial"
   ],
   "cv_profiles": {
     "technical": {
@@ -234,7 +319,9 @@
         "Data & BI",
         "Data Engineering",
         "Business Analytics",
-        "Graduate & Entry"
+        "Graduate & Entry",
+        "Applied Analytics & Risk",
+        "Technology Consulting"
       ],
       "skills": [
         "SQL",
@@ -264,7 +351,28 @@
         "Microsoft D365",
         "Machine Learning",
         "Anomaly Detection",
-        "Forecasting"
+        "Forecasting",
+        "Alteryx",
+        "Java",
+        "JavaScript",
+        "Jupyter",
+        "Google Cloud",
+        "Data Pipelines",
+        "Data Cleaning",
+        "Regression",
+        "Classification",
+        "Clustering",
+        "FinBERT",
+        "Deep Learning",
+        "Market Sizing",
+        "Pricing Analysis",
+        "Go-to-Market Strategy",
+        "Unit Economics",
+        "Business Analysis",
+        "Process Improvement",
+        "Client Communication",
+        "Training Delivery",
+        "Predictive Analytics"
       ]
     },
     "business": {
@@ -283,7 +391,6 @@
         "Power BI",
         "Tableau",
         "ERP",
-        "Microsoft D365",
         "Requirements Gathering",
         "Stakeholder Management",
         "Business Analysis",
@@ -300,179 +407,291 @@
         "Go-to-Market Strategy",
         "Unit Economics",
         "Predictive Analytics",
-        "Anomaly Detection"
+        "Anomaly Detection",
+        "Alteryx",
+        "Google Cloud",
+        "Process Mapping",
+        "Change Adoption",
+        "Inventory Management",
+        "Order Management"
       ]
     }
   },
   "evidence": {
     "SQL": [
-      "technical_cv",
-      "business_cv",
-      "ucc_tutor",
-      "darsh"
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
     ],
     "Python": [
-      "technical_cv",
-      "business_cv",
-      "darsh",
-      "ucc_project"
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
     ],
     "R": [
-      "technical_cv",
-      "business_cv",
-      "ucc_tutor"
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
     ],
     "Excel": [
-      "technical_cv",
-      "business_cv"
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
     ],
     "Power BI": [
-      "technical_cv",
-      "business_cv",
-      "ucc_project",
-      "microsoft_certification"
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
     ],
     "Tableau": [
-      "technical_cv",
-      "business_cv"
-    ],
-    "ETL": [
-      "technical_cv",
-      "ucc_project"
-    ],
-    "Data Warehousing": [
-      "technical_cv"
-    ],
-    "Data Quality": [
-      "technical_cv"
-    ],
-    "Databricks": [
-      "technical_cv"
-    ],
-    "AWS": [
-      "technical_cv",
-      "aws_analytics"
-    ],
-    "Git": [
-      "technical_cv"
-    ],
-    "ERP": [
-      "technical_cv",
-      "business_cv",
-      "darsh"
-    ],
-    "Microsoft D365": [
-      "technical_cv",
-      "business_cv",
-      "darsh"
-    ],
-    "UAT": [
-      "technical_cv",
-      "business_cv",
-      "darsh"
-    ],
-    "Requirements Gathering": [
-      "technical_cv",
-      "business_cv",
-      "darsh"
-    ],
-    "Stakeholder Management": [
-      "business_cv",
-      "darsh",
-      "consulting"
-    ],
-    "Business Analysis": [
-      "business_cv",
-      "darsh"
-    ],
-    "Process Improvement": [
-      "business_cv",
-      "darsh"
-    ],
-    "Functional Support": [
-      "business_cv",
-      "darsh"
-    ],
-    "Documentation": [
-      "business_cv"
-    ],
-    "Client Communication": [
-      "business_cv",
-      "darsh"
-    ],
-    "Cross-Functional Collaboration": [
-      "business_cv",
-      "darsh"
-    ],
-    "Training Delivery": [
-      "business_cv",
-      "darsh",
-      "ucc_tutor"
-    ],
-    "Market Sizing": [
-      "business_cv",
-      "consulting"
-    ],
-    "Customer Insights": [
-      "business_cv",
-      "consulting"
-    ],
-    "Pricing Analysis": [
-      "business_cv",
-      "consulting"
-    ],
-    "Go-to-Market Strategy": [
-      "business_cv",
-      "consulting"
-    ],
-    "Unit Economics": [
-      "business_cv",
-      "consulting"
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
     ],
     "Pandas": [
-      "technical_cv",
-      "ucc_project"
+      "technical_cv_2026_10_02"
     ],
     "NumPy": [
-      "technical_cv"
+      "technical_cv_2026_10_02"
     ],
     "Scikit-learn": [
-      "technical_cv",
-      "ucc_project"
-    ],
-    "SSIS": [
-      "technical_cv",
-      "ucc_project"
-    ],
-    "MySQL": [
-      "technical_cv"
-    ],
-    "PostgreSQL": [
-      "technical_cv"
-    ],
-    "Docker": [
-      "technical_cv"
-    ],
-    "CI/CD": [
-      "technical_cv"
+      "technical_cv_2026_10_02"
     ],
     "Machine Learning": [
-      "technical_cv",
-      "ucc_project"
+      "technical_cv_2026_10_02"
     ],
     "Predictive Analytics": [
-      "technical_cv",
-      "business_cv",
-      "ucc_project"
+      "business_cv_2026_10_02",
+      "technical_cv_2026_10_02"
     ],
     "Anomaly Detection": [
-      "technical_cv",
-      "business_cv",
-      "ucc_project"
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
     ],
     "Forecasting": [
-      "technical_cv",
-      "ucc_project"
+      "technical_cv_2026_10_02"
+    ],
+    "Alteryx": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Regression": [
+      "technical_cv_2026_10_02"
+    ],
+    "Classification": [
+      "technical_cv_2026_10_02"
+    ],
+    "Clustering": [
+      "technical_cv_2026_10_02"
+    ],
+    "FinBERT": [
+      "technical_cv_2026_10_02"
+    ],
+    "Deep Learning": [
+      "technical_cv_2026_10_02"
+    ],
+    "ETL": [
+      "technical_cv_2026_10_02"
+    ],
+    "SSIS": [
+      "technical_cv_2026_10_02"
+    ],
+    "Data Warehousing": [
+      "technical_cv_2026_10_02"
+    ],
+    "Data Quality": [
+      "technical_cv_2026_10_02"
+    ],
+    "Databricks": [
+      "technical_cv_2026_10_02"
+    ],
+    "MySQL": [
+      "technical_cv_2026_10_02"
+    ],
+    "PostgreSQL": [
+      "technical_cv_2026_10_02"
+    ],
+    "Data Pipelines": [
+      "technical_cv_2026_10_02"
+    ],
+    "Data Cleaning": [
+      "technical_cv_2026_10_02"
+    ],
+    "Requirements Gathering": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Stakeholder Management": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Business Analysis": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Process Improvement": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Functional Support": [
+      "business_cv_2026_10_02"
+    ],
+    "Documentation": [
+      "business_cv_2026_10_02"
+    ],
+    "UAT": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Client Communication": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Cross-Functional Collaboration": [
+      "business_cv_2026_10_02"
+    ],
+    "Training Delivery": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Market Sizing": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Customer Insights": [
+      "business_cv_2026_10_02"
+    ],
+    "Pricing Analysis": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Go-to-Market Strategy": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Unit Economics": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Process Mapping": [
+      "business_cv_2026_10_02"
+    ],
+    "Change Adoption": [
+      "business_cv_2026_10_02"
+    ],
+    "Inventory Management": [
+      "business_cv_2026_10_02"
+    ],
+    "Order Management": [
+      "business_cv_2026_10_02"
+    ],
+    "AWS": [
+      "technical_cv_2026_10_02"
+    ],
+    "ERP": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
+    ],
+    "Microsoft D365": [
+      "technical_cv_2026_10_02"
+    ],
+    "Git": [
+      "technical_cv_2026_10_02"
+    ],
+    "Docker": [
+      "technical_cv_2026_10_02"
+    ],
+    "CI/CD": [
+      "technical_cv_2026_10_02"
+    ],
+    "Java": [
+      "technical_cv_2026_10_02"
+    ],
+    "JavaScript": [
+      "technical_cv_2026_10_02"
+    ],
+    "Jupyter": [
+      "technical_cv_2026_10_02"
+    ],
+    "Google Cloud": [
+      "technical_cv_2026_10_02",
+      "business_cv_2026_10_02"
     ]
+  },
+  "updated_at": "2026-10-02",
+  "source_documents": [
+    "Harshit Business CV.pdf",
+    "Harshit Technical CV.pdf"
+  ],
+  "requirement_skills": [
+    "Azure",
+    "Azure Data Factory",
+    "Apache Spark",
+    "Snowflake",
+    "dbt",
+    "Kubernetes",
+    "SAP",
+    "Workday",
+    "Salesforce",
+    "MLOps",
+    "Scala",
+    "ACCA",
+    "ACA",
+    "CFA",
+    "AML",
+    "KYC"
+  ],
+  "skill_weights": {
+    "SQL": 4,
+    "Python": 4,
+    "R": 3,
+    "Excel": 3,
+    "Power BI": 3,
+    "Tableau": 2,
+    "Pandas": 2,
+    "NumPy": 2,
+    "Scikit-learn": 2,
+    "Machine Learning": 2,
+    "Predictive Analytics": 2,
+    "Anomaly Detection": 2,
+    "Forecasting": 2,
+    "Alteryx": 2,
+    "Regression": 2,
+    "Classification": 2,
+    "Clustering": 2,
+    "FinBERT": 2,
+    "Deep Learning": 2,
+    "ETL": 2,
+    "SSIS": 2,
+    "Data Warehousing": 2,
+    "Data Quality": 2,
+    "Databricks": 2,
+    "MySQL": 2,
+    "PostgreSQL": 2,
+    "Data Pipelines": 2,
+    "Data Cleaning": 2,
+    "Requirements Gathering": 4,
+    "Stakeholder Management": 4,
+    "Business Analysis": 4,
+    "Process Improvement": 4,
+    "Functional Support": 4,
+    "Documentation": 4,
+    "UAT": 4,
+    "Client Communication": 4,
+    "Cross-Functional Collaboration": 4,
+    "Training Delivery": 4,
+    "Market Sizing": 3,
+    "Customer Insights": 3,
+    "Pricing Analysis": 3,
+    "Go-to-Market Strategy": 2,
+    "Unit Economics": 3,
+    "Process Mapping": 4,
+    "Change Adoption": 4,
+    "Inventory Management": 2,
+    "Order Management": 2,
+    "AWS": 2,
+    "ERP": 4,
+    "Microsoft D365": 2,
+    "Git": 2,
+    "Docker": 2,
+    "CI/CD": 2,
+    "Java": 2,
+    "JavaScript": 2,
+    "Jupyter": 2,
+    "Google Cloud": 2
   }
 }

@@ -965,7 +965,7 @@ function fillSelect(selectId, values, formatLabel) {
 
 function personalJobMatch(job) {
   return {
-    score: Number(job.candidate_match_score || 0),
+    score: effectiveMatchScore(job),
     reasons: Array.isArray(job.match_reasons) ? job.match_reasons : [],
     missing: Array.isArray(job.missing_skills) ? job.missing_skills : [],
     experienceFit: job.experience_fit || 'Unknown',
@@ -973,12 +973,12 @@ function personalJobMatch(job) {
   };
 }
 function effectiveMatchScore(job) {
-  return Number(job.candidate_match_score || 0);
+  return Number(job.cv_match_scores?.[selectedProfileMode()] ?? job.candidate_match_score ?? 0);
 }
 
 const PROFILE_RULES = {
-  technical: /\b(data analyst|analytics analyst|bi analyst|business intelligence|reporting analyst|insights? analyst|analytics engineer|junior data engineer|data governance|data quality|power bi|sql developer|risk analyst|fraud analyst)\b/i,
-  business: /\b(business analyst|business systems analyst|systems analyst|erp|implementation consultant|functional consultant|technology consultant|application support analyst|operations analyst|process analyst|project analyst|programme analyst|program analyst|commercial analyst|supply chain analyst|planning analyst|transformation consultant|solutions consultant)\b/i,
+  technical: /\b(data analyst|analytics analyst|bi analyst|bi developer|business intelligence|reporting analyst|reporting specialist|insights? analyst|analytics engineer|data engineer|data scientist|machine learning analyst|market surveillance|data governance|data quality|power bi|sql developer|risk analyst|fraud analyst|financial crime analyst)\b/i,
+  business: /\b(business analyst|business systems analyst|systems analyst|erp|implementation (consultant|analyst|specialist)|functional consultant|technology consultant|application support analyst|operations analyst|process analyst|project analyst|programme analyst|program analyst|commercial analyst|supply chain analyst|planning analyst|transformation consultant|solutions consultant|change analyst|uat analyst|strategy.{0,6}operations|gtm strategy)\b/i,
   early: /\b(graduate|graduate programme|graduate program|entry[- ]level|junior|trainee|intern(ship)?|placement|apprentice|fixed[- ]term|\bftc\b|\d+[- ]month contract)\b/i
 };
 const PROFILE_NOISE = /\b(software engineer|software developer|engineering manager|account executive|sales manager|sales operations|sales development|marketing operations|customer success|renewals manager|legal counsel|nurse|doctor|pharmacist|mechanic|electrician|driver|chef|warehouse operative|retail assistant|sales assistant|security guard)\b/i;
@@ -990,6 +990,7 @@ function selectedProfileMode() {
 
 function isTargetRole(job, mode = selectedProfileMode()) {
   const title = String(job.title || '');
+  if (job.experience_fit === 'Too Senior' || /\b(mba intern|phd intern|postdoctoral|actuarial)\b/i.test(title)) return false;
   if (PROFILE_NOISE.test(title) || PROFILE_TOO_SENIOR.test(title)) return false;
   if (mode === 'technical') return PROFILE_RULES.technical.test(title);
   if (mode === 'business') return PROFILE_RULES.business.test(title);
@@ -1527,7 +1528,7 @@ function buildJobCard(j) {
       </div>
     </div>
     <div class="score-row">
-      ${j.candidate_match_score != null ? `<span class="score-badge match">${j.candidate_match_score}% Match</span>` : ''}
+      ${j.candidate_match_score != null ? `<span class="score-badge match">${effectiveMatchScore(j)}/100 fit</span>` : ''}
       ${j.role_family && j.role_family !== 'Other' ? `<span class="chip">${escapeHtml(j.role_family)}</span>` : ''}
       ${pm.experienceFit ? `<span class="chip">${escapeHtml(pm.experienceFit)}</span>` : ''}
       ${bucketLabel ? `<span class="chip postedToday">${bucketLabel}</span>` : ''}
@@ -1539,6 +1540,8 @@ function buildJobCard(j) {
     </div>
     <details class="job-details">
       <summary>Match details & source</summary>
+      ${j.scoring_evidence === 'title_only' ? '<div class="reason-row">Limited job details: verify requirements before applying.</div>' : ''}
+      ${j.best_cv ? `<div class="reason-row">Suggested CV: ${escapeHtml(j.best_cv)} · Fit score is a ranking aid, not an interview probability.</div>` : ''}
       ${(pm.reasons || []).length ? `<div class="reason-row"><span class="reason-good">Matched:</span> ${escapeHtml((pm.reasons || []).join(' · '))}</div>` : ''}
       ${(pm.missing || []).length ? `<div class="reason-row"><span class="reason-missing">Potential gaps:</span> ${escapeHtml((pm.missing || []).join(' · '))}</div>` : ''}
       <div class="detail-line">Source: ${escapeHtml(j.ats || 'unknown')} · Sector: ${escapeHtml(j.sector || 'Other')}</div>

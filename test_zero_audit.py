@@ -39,6 +39,19 @@ def check():
     airnav = '<li><a class="title" href="/careers/current-vacancies/ict">ICT Infrastructure Analyst</a><p class="highlight">Dublin</p><a class="cta" href="/careers/current-vacancies/ict">View Vacancy</a></li>'
     assert zero_audit.official_page_jobs("AirNav Ireland", airnav)[0]["title"] == "ICT Infrastructure Analyst"
 
+    sap = aryzta.replace("Clondalkin, IE", "Dublin 24, IE, D24WA02")
+    assert zero_audit.official_page_jobs("SAP legacy", sap)[0]["location"] == "Dublin 24, Ireland, D24WA02"
+    wtw = '<tr data-job-url="1"><td class="job-search-results-title"><a href="/jobs/1">Property Underwriter</a></td><td class="job-search-results-location">Dublin, Ireland</td></tr>'
+    assert len(zero_audit.official_page_jobs("Willis Towers Watson (WTW)", wtw)) == 1
+
+    # Shared MMC feed must not relabel Marsh jobs as Mercer.
+    from types import SimpleNamespace
+    postings = [{"title": "Data Analyst", "locationsText": "Dublin", "externalPath": "/job/1"}]
+    response = SimpleNamespace(json=lambda: {"jobPostings": postings, "facets": [{"facetParameter": "country", "values": [{"id": "IE", "descriptor": "Ireland"}]}]})
+    session = SimpleNamespace(get=lambda *a, **k: SimpleNamespace(raise_for_status=lambda: None, json=lambda: {"hiringOrganization": {"name": "Marsh"}, "jobPostingInfo": {"location": "Dublin"}}))
+    with patch.object(scrape, "_workday_session", return_value=session), patch.object(scrape, "_workday_post", return_value=response), patch.object(scrape.time, "sleep"):
+        assert scrape.scrape_workday("Mercer", "mmc", "wd1", "MMC", max_pages=1) == []
+
     scrape.CONNECTOR_HEALTH.clear()
     def failed():
         scrape._mark_connector_health("Visa", False, "HTTP 403")

@@ -110,9 +110,9 @@
       "company": "Apex Group",
       "source_url": "https://www.apexgroup.com/careers/",
       "status": "jobs_found",
-      "candidate_jobs": 6,
-      "checked_at": "2026-09-23T00:52:14.945116+00:00",
-      "note": "workday/theapexgroup|wd3|apexgroupcareers: 6 candidate Ireland jobs",
+      "candidate_jobs": 8,
+      "checked_at": "2026-10-02T15:15:22.369710+00:00",
+      "note": "workday/theapexgroup|wd3|apexgroupcareers: 8 candidate Ireland jobs",
       "route": {
         "platform": "workday",
         "slug": "theapexgroup|wd3|apexgroupcareers"
@@ -166,9 +166,9 @@
       "company": "Arthur Cox",
       "source_url": "https://www.arthurcox.com/careers/",
       "status": "jobs_found",
-      "candidate_jobs": 8,
-      "checked_at": "2026-09-23T00:52:29.284173+00:00",
-      "note": "pinpoint/arthurcox: 8 candidate Ireland jobs",
+      "candidate_jobs": 7,
+      "checked_at": "2026-10-02T15:15:20.519184+00:00",
+      "note": "pinpoint/arthurcox: 7 candidate Ireland jobs",
       "route": {
         "platform": "pinpoint",
         "slug": "arthurcox"
@@ -223,19 +223,22 @@
       "source_url": "https://www.avolon.aero/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-09-23T00:52:31.110235+00:00",
+      "checked_at": "2026-10-02T15:17:07.465684+00:00",
       "note": "direct/Avolon: 0 candidate Ireland jobs",
-      "route": null
+      "route": {
+        "platform": "direct",
+        "slug": "Avolon"
+      }
     },
     {
       "number": 18,
       "batch": 2,
       "company": "AXA Ireland",
       "source_url": "https://www.axa.ie/careers/",
-      "status": "jobs_found",
-      "candidate_jobs": 1,
-      "checked_at": "2026-09-23T00:53:09.869951+00:00",
-      "note": "direct/AXA Ireland: 1 candidate Ireland jobs",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:16:16.095782+00:00",
+      "note": "direct/AXA Ireland: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
         "slug": "AXA Ireland"
@@ -318,9 +321,12 @@
       "source_url": "https://jobs.baxter.com/search-jobs/Ireland",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-09-23T00:57:12.966750+00:00",
+      "checked_at": "2026-10-02T15:17:02.681486+00:00",
       "note": "direct/Baxter International: 0 candidate Ireland jobs; workday/baxter|wd1|baxter: 0 candidate Ireland jobs",
-      "route": null
+      "route": {
+        "platform": "direct",
+        "slug": "Baxter International"
+      }
     },
     {
       "number": 25,
@@ -427,9 +433,12 @@
       "source_url": "https://www.canto.com/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-09-23T00:57:14.790505+00:00",
-      "note": "greenhouse/canto: 0 candidate Ireland jobs; Empty cached board is not linked from the current official careers page; zero unconfirmed",
-      "route": null
+      "checked_at": "2026-10-02T15:15:34.918866+00:00",
+      "note": "greenhouse/canto: 0 candidate Ireland jobs; Not every current official board has complete zero evidence; zero unconfirmed",
+      "route": {
+        "platform": "greenhouse",
+        "slug": "canto"
+      }
     },
     {
       "number": 33,
@@ -507,9 +516,9 @@
       "company": "Codec",
       "source_url": "https://www.codec.ie/careers",
       "status": "jobs_found",
-      "candidate_jobs": 11,
-      "checked_at": "2026-09-23T00:57:19.423974+00:00",
-      "note": "pinpoint/codec: 11 candidate Ireland jobs",
+      "candidate_jobs": 8,
+      "checked_at": "2026-10-02T15:15:10.656067+00:00",
+      "note": "pinpoint/codec: 8 candidate Ireland jobs",
       "route": {
         "platform": "pinpoint",
         "slug": "codec"
@@ -536,7 +545,7 @@
       "source_url": "https://www.crh.com/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:13.052992+00:00",
+      "checked_at": "2026-10-02T15:15:37.112986+00:00",
       "note": "direct/CRH: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -551,7 +560,7 @@
       "source_url": "https://www.crusoe.ai/careers",
       "status": "jobs_found",
       "candidate_jobs": 12,
-      "checked_at": "2026-09-23T00:58:34.303042+00:00",
+      "checked_at": "2026-10-02T15:16:59.419257+00:00",
       "note": "ashby/Crusoe: 12 candidate Ireland jobs",
       "route": {
         "platform": "ashby",
@@ -592,9 +601,9 @@
       "company": "Databricks",
       "source_url": "https://www.databricks.com/company/careers/open-positions",
       "status": "jobs_found",
-      "candidate_jobs": 1,
-      "checked_at": "2026-09-23T00:58:34.576565+00:00",
-      "note": "greenhouse/databricks: 1 candidate Ireland jobs",
+      "candidate_jobs": 2,
+      "checked_at": "2026-10-02T15:14:52.625163+00:00",
+      "note": "greenhouse/databricks: 2 candidate Ireland jobs",
       "route": {
         "platform": "greenhouse",
         "slug": "databricks"
@@ -621,7 +630,7 @@
       "source_url": "https://careers.db.com/professionals/search-roles/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:13:20.060391+00:00",
+      "checked_at": "2026-10-02T15:17:31.299324+00:00",
       "note": "direct/Deutsche Bank: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -636,9 +645,12 @@
       "source_url": "https://www.dhl.com/ie-en/home/careers.html",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-09-23T11:00:14.287715+00:00",
+      "checked_at": "2026-10-02T15:15:59.921964+00:00",
       "note": "phenom/careers.dhl.com|DPDHGLOBAL: 0 candidate Ireland jobs",
-      "route": null
+      "route": {
+        "platform": "phenom",
+        "slug": "careers.dhl.com|DPDHGLOBAL"
+      }
     },
     {
       "number": 48,
@@ -741,9 +753,9 @@
       "company": "Eurofins Scientific",
       "source_url": "https://careers.eurofins.com/ie/",
       "status": "jobs_found",
-      "candidate_jobs": 8,
-      "checked_at": "2026-09-23T02:21:04.599876+00:00",
-      "note": "smartrecruiters/Eurofins: 8 candidate Ireland jobs",
+      "candidate_jobs": 15,
+      "checked_at": "2026-10-02T15:15:48.827511+00:00",
+      "note": "smartrecruiters/Eurofins: 15 candidate Ireland jobs",
       "route": {
         "platform": "smartrecruiters",
         "slug": "Eurofins"
@@ -790,10 +802,10 @@
       "batch": 6,
       "company": "Fidelity International",
       "source_url": "https://careers.fidelityinternational.com/",
-      "status": "jobs_found",
-      "candidate_jobs": 5,
-      "checked_at": "2026-09-23T01:18:19.972553+00:00",
-      "note": "direct/Fidelity International: 5 candidate Ireland jobs",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:17:22.099170+00:00",
+      "note": "direct/Fidelity International: 0 candidate Ireland jobs; workday/fil|wd3|001: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
         "slug": "Fidelity International"
@@ -806,9 +818,12 @@
       "source_url": "https://firstderivative.com/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-09-23T01:18:20.223470+00:00",
+      "checked_at": "2026-10-02T15:15:03.811878+00:00",
       "note": "pinpoint/firstderivative: 0 candidate Ireland jobs",
-      "route": null
+      "route": {
+        "platform": "pinpoint",
+        "slug": "firstderivative"
+      }
     },
     {
       "number": 61,
@@ -915,7 +930,7 @@
       "source_url": "https://www.heinekenireland.ie/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:21.711803+00:00",
+      "checked_at": "2026-10-02T15:15:53.337469+00:00",
       "note": "direct/Heineken Ireland: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -972,7 +987,7 @@
       "source_url": "https://www.indeed.jobs/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:25.100065+00:00",
+      "checked_at": "2026-10-02T15:15:52.703010+00:00",
       "note": "greenhouse/indeed: 0 candidate Ireland jobs; Not every current official board has complete zero evidence; zero unconfirmed",
       "route": {
         "platform": "greenhouse",
@@ -987,7 +1002,7 @@
       "source_url": "https://www.infosys.com/careers.html",
       "status": "verified_zero",
       "candidate_jobs": 0,
-      "checked_at": "2026-09-23T03:01:18.873385+00:00",
+      "checked_at": "2026-10-02T15:14:58.122982+00:00",
       "note": "Official Ireland search explicitly reports zero matching jobs",
       "route": {
         "platform": "direct",
@@ -1043,7 +1058,7 @@
       "source_url": "https://www.keelvar.com/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:11:53.370053+00:00",
+      "checked_at": "2026-10-02T15:15:04.646771+00:00",
       "note": "personio/keelvar: 0 candidate Ireland jobs",
       "route": {
         "platform": "personio",
@@ -1058,7 +1073,7 @@
       "source_url": "https://www.kitmanlabs.com/careers/",
       "status": "verified_zero",
       "candidate_jobs": 0,
-      "checked_at": "2026-09-23T11:10:57.161843+00:00",
+      "checked_at": "2026-10-02T15:15:14.129620+00:00",
       "note": "Complete official feed checked: 0 postings, no eligible Ireland locations",
       "route": {
         "platform": "lever",
@@ -1072,11 +1087,11 @@
       "source_url": "https://www.kyndryl.com/us/en/careers",
       "status": "verified_zero",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:32.583303+00:00",
-      "note": "Official country filters checked: 46 postings, no eligible Ireland locations",
+      "checked_at": "2026-10-02T15:15:55.637471+00:00",
+      "note": "Official country filters checked: 882 postings, no eligible Ireland locations",
       "route": {
         "platform": "workday",
-        "slug": "kyndryl|wd5|KyndrylEarlyCareers"
+        "slug": "kyndryl|wd5|KyndrylProfessionalCareers"
       },
       "baseline_source_http_status": 200
     },
@@ -1126,7 +1141,7 @@
       "source_url": "https://www.marvell.com/company/careers.html",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:13:38.626276+00:00",
+      "checked_at": "2026-10-02T15:17:28.370620+00:00",
       "note": "workday/marvell|wd1|MarvellCareers: 0 candidate Ireland jobs",
       "route": {
         "platform": "workday",
@@ -1154,9 +1169,9 @@
       "company": "Merit Medical",
       "source_url": "https://www.merit.com/careers/",
       "status": "jobs_found",
-      "candidate_jobs": 9,
-      "checked_at": "2026-09-23T03:37:02.013973+00:00",
-      "note": "workday/merit|wd503|Merit: 9 candidate Ireland jobs",
+      "candidate_jobs": 8,
+      "checked_at": "2026-10-02T15:16:07.625018+00:00",
+      "note": "workday/merit|wd503|Merit: 8 candidate Ireland jobs",
       "route": {
         "platform": "workday",
         "slug": "merit|wd503|Merit"
@@ -1247,7 +1262,7 @@
       "source_url": "https://www.murex.com/en/careers/overview",
       "status": "jobs_found",
       "candidate_jobs": 1,
-      "checked_at": "2026-09-23T11:11:08.791206+00:00",
+      "checked_at": "2026-10-02T15:15:11.697230+00:00",
       "note": "workday/murex|wd3|MurexCareerPage1: 1 candidate Ireland jobs",
       "route": {
         "platform": "workday",
@@ -1275,9 +1290,12 @@
       "source_url": "https://www.nutanix.com/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-09-23T04:26:21.957986+00:00",
+      "checked_at": "2026-10-02T15:16:22.100776+00:00",
       "note": "pinpoint/nutanix: 0 candidate Ireland jobs",
-      "route": null
+      "route": {
+        "platform": "pinpoint",
+        "slug": "nutanix"
+      }
     },
     {
       "number": 95,
@@ -1286,7 +1304,7 @@
       "source_url": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:15:26.284066+00:00",
+      "checked_at": "2026-10-02T15:22:20.323944+00:00",
       "note": "timeout: ",
       "route": {
         "platform": "workday",
@@ -1301,7 +1319,7 @@
       "source_url": "https://nxp.wd3.myworkdayjobs.com/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:13:55.843767+00:00",
+      "checked_at": "2026-10-02T15:17:48.998414+00:00",
       "note": "workday/nxp|wd3|careers: 0 candidate Ireland jobs",
       "route": {
         "platform": "workday",
@@ -1400,7 +1418,7 @@
       "source_url": "https://www.ptsb.ie/about-us/careers/",
       "status": "jobs_found",
       "candidate_jobs": 3,
-      "checked_at": "2026-09-23T06:57:13.885060+00:00",
+      "checked_at": "2026-10-02T15:16:27.511016+00:00",
       "note": "pinpoint/ptsb: 3 candidate Ireland jobs",
       "route": {
         "platform": "pinpoint",
@@ -1428,7 +1446,7 @@
       "source_url": "https://job-boards.greenhouse.io/purestorage",
       "status": "jobs_found",
       "candidate_jobs": 1,
-      "checked_at": "2026-09-23T06:57:15.453578+00:00",
+      "checked_at": "2026-10-02T15:16:28.498772+00:00",
       "note": "greenhouse/purestorage: 1 candidate Ireland jobs",
       "route": {
         "platform": "greenhouse",
@@ -1456,9 +1474,12 @@
       "source_url": "https://www.qualtrics.com/careers/us/en/search-results?keywords=Dublin",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-09-23T06:57:23.594573+00:00",
-      "note": "greenhouse/qualtrics: 0 candidate Ireland jobs; phenom/www.qualtrics.com/careers|QUALUS: 0 candidate Ireland jobs",
-      "route": null
+      "checked_at": "2026-10-02T15:16:34.241278+00:00",
+      "note": "greenhouse/qualtrics: 0 candidate Ireland jobs",
+      "route": {
+        "platform": "greenhouse",
+        "slug": "qualtrics"
+      }
     },
     {
       "number": 108,
@@ -1467,7 +1488,7 @@
       "source_url": "https://www.quantexa.com/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:37.069256+00:00",
+      "checked_at": "2026-10-02T15:16:33.301140+00:00",
       "note": "ashby/quantexa: 0 candidate Ireland jobs",
       "route": {
         "platform": "ashby",
@@ -1494,10 +1515,10 @@
       "batch": 11,
       "company": "Revenue",
       "source_url": "https://www.revenue.ie/en/corporate/information-about-revenue/careers/index.aspx",
-      "status": "jobs_found",
-      "candidate_jobs": 8,
-      "checked_at": "2026-09-23T06:57:29.551328+00:00",
-      "note": "direct/Revenue: 8 candidate Ireland jobs",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:16:32.463126+00:00",
+      "note": "direct/Revenue: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
         "slug": "Revenue"
@@ -1524,7 +1545,7 @@
       "source_url": "https://rockwellautomation.wd1.myworkdayjobs.com/External_Rockwell_Automation",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:52.597406+00:00",
+      "checked_at": "2026-10-02T15:16:52.328394+00:00",
       "note": "workday/rockwellautomation|wd1|External_Rockwell_Automation: 0 candidate Ireland jobs",
       "route": {
         "platform": "workday",
@@ -1551,10 +1572,10 @@
       "batch": 12,
       "company": "S&P Global",
       "source_url": "https://www.spglobal.com/en/careers/overview",
-      "status": "jobs_found",
-      "candidate_jobs": 1,
-      "checked_at": "2026-09-23T08:11:46.911816+00:00",
-      "note": "direct/S&P Global: 1 candidate Ireland jobs",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:16:38.084066+00:00",
+      "note": "direct/S&P Global: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
         "slug": "S&P Global"
@@ -1637,7 +1658,7 @@
       "source_url": "https://jobs.solarwinds.com/",
       "status": "jobs_found",
       "candidate_jobs": 2,
-      "checked_at": "2026-09-23T08:11:52.055899+00:00",
+      "checked_at": "2026-10-02T15:15:03.267793+00:00",
       "note": "greenhouse/solarwinds: 2 candidate Ireland jobs",
       "route": {
         "platform": "greenhouse",
@@ -1651,7 +1672,7 @@
       "source_url": "https://www.st.com/content/st_com/en/about/careers.html",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:58.997821+00:00",
+      "checked_at": "2026-10-02T15:16:53.736633+00:00",
       "note": "eightfold/stmicroelectronics: endpoint validation failed",
       "route": {
         "platform": "eightfold",
@@ -1745,9 +1766,9 @@
       "company": "Tenable",
       "source_url": "https://www.tenable.com/careers",
       "status": "jobs_found",
-      "candidate_jobs": 4,
-      "checked_at": "2026-09-23T08:19:32.364737+00:00",
-      "note": "greenhouse/tenableinc: 4 candidate Ireland jobs",
+      "candidate_jobs": 2,
+      "checked_at": "2026-10-02T15:16:41.941556+00:00",
+      "note": "greenhouse/tenableinc: 2 candidate Ireland jobs",
       "route": {
         "platform": "greenhouse",
         "slug": "tenableinc"
@@ -1760,7 +1781,7 @@
       "source_url": "https://www.teneo.com/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:11:59.221899+00:00",
+      "checked_at": "2026-10-02T15:15:13.362963+00:00",
       "note": "direct/Teneo Ireland: 0 candidate Ireland jobs; greenhouse/teneolinkedin: 0 candidate Ireland jobs; greenhouse/teneo: 0 candidate Ireland jobs; Not every current official board has complete zero evidence; zero unconfirmed",
       "route": {
         "platform": "direct",
@@ -1775,7 +1796,7 @@
       "source_url": "https://teva.wd1.myworkdayjobs.com/Teva_Careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:46.551678+00:00",
+      "checked_at": "2026-10-02T15:16:44.202560+00:00",
       "note": "direct/Teva Pharmaceuticals: 0 candidate Ireland jobs; workday/teva|wd1|Teva_Careers: endpoint validation failed",
       "route": {
         "platform": "direct",
@@ -1802,10 +1823,10 @@
       "batch": 14,
       "company": "TikTok",
       "source_url": "https://careers.tiktok.com/position?keyword=&location=Dublin%2C+Ireland",
-      "status": "jobs_found",
-      "candidate_jobs": 12,
-      "checked_at": "2026-09-23T08:58:19.031818+00:00",
-      "note": "direct/TikTok: 12 candidate Ireland jobs",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:20:11.095727+00:00",
+      "note": "direct/TikTok: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
         "slug": "TikTok"
@@ -1831,9 +1852,9 @@
       "company": "Trend Micro",
       "source_url": "https://www.trendmicro.com/en_ie/about/careers.html",
       "status": "jobs_found",
-      "candidate_jobs": 3,
-      "checked_at": "2026-09-23T08:58:08.835142+00:00",
-      "note": "workday/trendmicro|wd3|External: 3 candidate Ireland jobs",
+      "candidate_jobs": 4,
+      "checked_at": "2026-10-02T15:16:53.051305+00:00",
+      "note": "workday/trendmicro|wd3|External: 4 candidate Ireland jobs",
       "route": {
         "platform": "workday",
         "slug": "trendmicro|wd3|External"
@@ -1860,7 +1881,7 @@
       "source_url": "https://www.ubs.com/global/en/careers/search-jobs.html",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:54.041076+00:00",
+      "checked_at": "2026-10-02T15:18:04.816009+00:00",
       "note": "direct/UBS: 0 candidate Ireland jobs; pinpoint/ubs: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -1889,7 +1910,7 @@
       "source_url": "https://careers.unilever.com/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:13:20.410209+00:00",
+      "checked_at": "2026-10-02T15:17:39.813199+00:00",
       "note": "workday/unilever|wd3|Unilever_Experienced_Professionals: 0 candidate Ireland jobs",
       "route": {
         "platform": "workday",
@@ -1930,10 +1951,10 @@
       "batch": 15,
       "company": "Veeam",
       "source_url": "https://careers.veeam.com/",
-      "status": "jobs_found",
-      "candidate_jobs": 1,
-      "checked_at": "2026-09-23T08:58:26.464117+00:00",
-      "note": "direct/Veeam: 1 candidate Ireland jobs",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:15:15.942950+00:00",
+      "note": "direct/Veeam: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
         "slug": "Veeam"
@@ -1974,8 +1995,8 @@
       "source_url": "https://careers.smartrecruiters.com/Visa",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:13:24.008076+00:00",
-      "note": "direct/Visa: 0 candidate Ireland jobs",
+      "checked_at": "2026-10-02T15:17:29.536627+00:00",
+      "note": "direct/Visa: 0 candidate Ireland jobs; smartrecruiters/fantastic: 0 candidate Ireland jobs; smartrecruiters/product: 0 candidate Ireland jobs; smartrecruiters/sr-company-logo-prod: 0 candidate Ireland jobs; smartrecruiters/sr-logo: 0 candidate Ireland jobs; smartrecruiters/career-site-ui: 0 candidate Ireland jobs; smartrecruiters/sr-careersite-image-prod-aws-dc5: 0 candidate Ireland jobs; smartrecruiters/Getting_Started: endpoint validation failed; smartrecruiters/Visa: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
         "slug": "Visa"
@@ -2014,11 +2035,11 @@
       "number": 147,
       "batch": 15,
       "company": "Willis Towers Watson (WTW)",
-      "source_url": "https://careers.wtwco.com/search-page",
+      "source_url": "https://careers.wtwco.com/jobs/search?cities%5B%5D=Dublin",
       "status": "jobs_found",
-      "candidate_jobs": 1,
-      "checked_at": "2026-09-23T08:58:37.622349+00:00",
-      "note": "direct/Willis Towers Watson (WTW): 1 candidate Ireland jobs",
+      "candidate_jobs": 2,
+      "checked_at": "2026-10-02T16:30:54.638892+00:00",
+      "note": "direct/Willis Towers Watson (WTW): 2 candidate Ireland jobs",
       "route": {
         "platform": "direct",
         "slug": "Willis Towers Watson (WTW)"
@@ -2045,7 +2066,7 @@
       "source_url": "https://www.introba.com/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:11:49.267628+00:00",
+      "checked_at": "2026-10-02T15:14:57.486424+00:00",
       "note": "direct/Introba: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2060,7 +2081,7 @@
       "source_url": "https://www.actionpoint.ie/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:11:49.372497+00:00",
+      "checked_at": "2026-10-02T15:14:56.932707+00:00",
       "note": "direct/ActionPoint: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2075,7 +2096,7 @@
       "source_url": "https://www.avanade.com/en/career",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:11:58.038358+00:00",
+      "checked_at": "2026-10-02T15:15:03.267759+00:00",
       "note": "direct/Avanade: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2090,7 +2111,7 @@
       "source_url": "https://fujitsu.com/ie/about/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:11:45.124284+00:00",
+      "checked_at": "2026-10-02T15:14:51.633834+00:00",
       "note": "direct/Fujitsu: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2104,7 +2125,7 @@
       "source_url": "https://www.integrity360.com/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:11:56.088760+00:00",
+      "checked_at": "2026-10-02T15:15:10.727064+00:00",
       "note": "direct/Integrity360: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2119,8 +2140,8 @@
       "source_url": "https://opportunities.noesis.pt/jobs",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:11:56.375102+00:00",
-      "note": "direct/Noesis: 0 candidate Ireland jobs",
+      "checked_at": "2026-10-02T15:15:05.494602+00:00",
+      "note": "official_page/Noesis: 0 candidate Ireland jobs; direct/Noesis: 0 candidate Ireland jobs",
       "route": {
         "platform": "official_page",
         "slug": "Noesis"
@@ -2149,7 +2170,7 @@
       "source_url": "https://www.storm.ie/about/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:02.819049+00:00",
+      "checked_at": "2026-10-02T15:15:09.600905+00:00",
       "note": "direct/Storm Technology: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2179,7 +2200,7 @@
       "source_url": "https://www.akamai.com/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:12.810384+00:00",
+      "checked_at": "2026-10-02T15:15:29.596471+00:00",
       "note": "direct/Akamai: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2209,7 +2230,7 @@
       "source_url": "https://about.amundi.com/Careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:08.948126+00:00",
+      "checked_at": "2026-10-02T15:15:25.800331+00:00",
       "note": "direct/Amundi: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2224,7 +2245,7 @@
       "source_url": "https://www.anpost.com/Working-with-An-Post/Careers",
       "status": "jobs_found",
       "candidate_jobs": 14,
-      "checked_at": "2026-10-02T12:12:04.762904+00:00",
+      "checked_at": "2026-10-02T15:15:19.713999+00:00",
       "note": "direct/An Post: 14 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2254,7 +2275,7 @@
       "source_url": "https://www.asml.com/en/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:24.836292+00:00",
+      "checked_at": "2026-10-02T15:15:42.208311+00:00",
       "note": "direct/ASML: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2269,7 +2290,7 @@
       "source_url": "https://www.aviva.ie/about/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:21.033140+00:00",
+      "checked_at": "2026-10-02T15:15:37.170725+00:00",
       "note": "direct/Aviva Ireland: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2284,7 +2305,7 @@
       "source_url": "https://www.fitchratings.com/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:22.607850+00:00",
+      "checked_at": "2026-10-02T15:16:12.810933+00:00",
       "note": "direct/Fitch Ratings: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2299,7 +2320,7 @@
       "source_url": "https://about.keysight.com/en/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:26.240846+00:00",
+      "checked_at": "2026-10-02T15:15:55.228730+00:00",
       "note": "direct/Keysight Technologies: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2314,7 +2335,7 @@
       "source_url": "https://www.morningstar.com/en-us/company/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:36.060732+00:00",
+      "checked_at": "2026-10-02T15:16:21.417852+00:00",
       "note": "direct/Morningstar: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2329,7 +2350,7 @@
       "source_url": "https://www.msci.com/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:30.463098+00:00",
+      "checked_at": "2026-10-02T15:16:15.659408+00:00",
       "note": "direct/MSCI: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2344,7 +2365,7 @@
       "source_url": "https://www.nokia.com/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:39.411505+00:00",
+      "checked_at": "2026-10-02T15:16:30.798092+00:00",
       "note": "direct/Nokia: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2359,7 +2380,7 @@
       "source_url": "https://seagatecareers.com/search/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:40.865303+00:00",
+      "checked_at": "2026-10-02T15:16:38.700814+00:00",
       "note": "No validated collector discovered from official careers page",
       "route": null,
       "baseline_source_http_status": 200
@@ -2371,7 +2392,7 @@
       "source_url": "https://www.transfermate.com/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:50.370041+00:00",
+      "checked_at": "2026-10-02T15:16:48.238102+00:00",
       "note": "direct/TransferMate: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2386,7 +2407,7 @@
       "source_url": "https://www.wuxibiologics.com/careers/",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:13:30.698878+00:00",
+      "checked_at": "2026-10-02T15:17:38.616319+00:00",
       "note": "direct/WuXi Biologics: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
@@ -2401,7 +2422,7 @@
       "source_url": "https://www.figma.com/careers/",
       "status": "verified_zero",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:12:58.846663+00:00",
+      "checked_at": "2026-10-02T15:17:08.230861+00:00",
       "note": "Complete official feed checked: 164 postings, no eligible Ireland locations",
       "route": {
         "platform": "greenhouse",
@@ -2416,68 +2437,329 @@
       "source_url": "https://www.siemens-healthineers.com/careers",
       "status": "needs_attention",
       "candidate_jobs": 0,
-      "checked_at": "2026-10-02T12:13:06.987424+00:00",
+      "checked_at": "2026-10-02T15:17:21.825838+00:00",
       "note": "direct/Siemens Healthineers: 0 candidate Ireland jobs; workday/onehealthineers|wd3|SHSJB: 0 candidate Ireland jobs",
       "route": {
         "platform": "direct",
         "slug": "Siemens Healthineers"
       },
       "baseline_source_http_status": 200
+    },
+    {
+      "number": 175,
+      "batch": 18,
+      "company": "GridBeyond",
+      "source_url": "https://gridbeyond.com/careers/",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:14:54.102438+00:00",
+      "note": "direct/GridBeyond: 0 candidate Ireland jobs",
+      "route": {
+        "platform": "direct",
+        "slug": "GridBeyond"
+      }
+    },
+    {
+      "number": 176,
+      "batch": 18,
+      "company": "SAP",
+      "source_url": "https://jobs.sap.com/en/jobs/?locations=Dublin",
+      "status": "jobs_found",
+      "candidate_jobs": 9,
+      "checked_at": "2026-10-02T16:35:37.548055+00:00",
+      "note": "official_page/SAP: 9 candidate Ireland jobs",
+      "route": {
+        "platform": "official_page",
+        "slug": "SAP"
+      }
+    },
+    {
+      "number": 177,
+      "batch": 18,
+      "company": "Compliance & Risks",
+      "source_url": "https://www.complianceandrisks.com/",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:15:10.852374+00:00",
+      "note": "direct/Compliance & Risks: 0 candidate Ireland jobs",
+      "route": {
+        "platform": "direct",
+        "slug": "Compliance & Risks"
+      }
+    },
+    {
+      "number": 178,
+      "batch": 18,
+      "company": "Rippling",
+      "source_url": "https://www.rippling.com/careers/open-roles",
+      "status": "jobs_found",
+      "candidate_jobs": 20,
+      "checked_at": "2026-10-02T16:35:41.362064+00:00",
+      "note": "official_page/Rippling: 20 candidate Ireland jobs",
+      "route": {
+        "platform": "official_page",
+        "slug": "Rippling"
+      }
+    },
+    {
+      "number": 179,
+      "batch": 18,
+      "company": "Agilent Technologies",
+      "source_url": "https://careers.agilent.com/",
+      "status": "jobs_found",
+      "candidate_jobs": 1,
+      "checked_at": "2026-10-02T15:15:29.559858+00:00",
+      "note": "direct/Agilent Technologies: 1 candidate Ireland jobs",
+      "route": {
+        "platform": "direct",
+        "slug": "Agilent Technologies"
+      }
+    },
+    {
+      "number": 180,
+      "batch": 18,
+      "company": "ASL Aviation Holdings",
+      "source_url": "https://www.aslaviationholdings.com/careers/",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:15:28.396223+00:00",
+      "note": "direct/ASL Aviation Holdings: 0 candidate Ireland jobs",
+      "route": {
+        "platform": "direct",
+        "slug": "ASL Aviation Holdings"
+      }
+    },
+    {
+      "number": 181,
+      "batch": 19,
+      "company": "Danaher Corporation",
+      "source_url": "https://jobs.danaher.com/global/en/search-results?m=3&location=Ireland",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:15:46.207882+00:00",
+      "note": "phenom/jobs.danaher.com|DANAGLOBAL: 0 candidate Ireland jobs",
+      "route": {
+        "platform": "phenom",
+        "slug": "jobs.danaher.com|DANAGLOBAL"
+      }
+    },
+    {
+      "number": 182,
+      "batch": 19,
+      "company": "DPS Group (Arcadis)",
+      "source_url": "https://www.dpsgroupglobal.com/careers",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:15:43.739140+00:00",
+      "note": "direct/DPS Group (Arcadis): 0 candidate Ireland jobs; recruitee/dps: 0 candidate Ireland jobs",
+      "route": {
+        "platform": "direct",
+        "slug": "DPS Group (Arcadis)"
+      }
+    },
+    {
+      "number": 183,
+      "batch": 19,
+      "company": "FactSet",
+      "source_url": "https://careers.factset.com/",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:15:45.830468+00:00",
+      "note": "No validated collector discovered from official careers page",
+      "route": null
+    },
+    {
+      "number": 184,
+      "batch": 19,
+      "company": "Kuehne+Nagel Ireland",
+      "source_url": "https://jobs.kuehne-nagel.com/global/en/search-results?m=3&location=Ireland",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:16:09.253212+00:00",
+      "note": "phenom/jobs.kuehne-nagel.com|KUNAGLOBAL: 0 candidate Ireland jobs",
+      "route": {
+        "platform": "phenom",
+        "slug": "jobs.kuehne-nagel.com|KUNAGLOBAL"
+      }
+    },
+    {
+      "number": 185,
+      "batch": 19,
+      "company": "Macquarie Group",
+      "source_url": "https://www.macquarie.com/au/en/careers.html",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:16:14.698486+00:00",
+      "note": "direct/Macquarie Group: 0 candidate Ireland jobs",
+      "route": {
+        "platform": "direct",
+        "slug": "Macquarie Group"
+      }
+    },
+    {
+      "number": 186,
+      "batch": 19,
+      "company": "Mercer",
+      "source_url": "https://mmc.wd1.myworkdayjobs.com/MMC",
+      "status": "jobs_found",
+      "candidate_jobs": 7,
+      "checked_at": "2026-10-02T16:33:05.188346+00:00",
+      "note": "workday/mmc|wd1|MMC: 7 candidate Ireland jobs",
+      "route": {
+        "platform": "workday",
+        "slug": "mmc|wd1|MMC"
+      }
+    },
+    {
+      "number": 187,
+      "batch": 19,
+      "company": "Novartis",
+      "source_url": "https://www.novartis.com/careers/career-search?country%5B1%5D=LOC_IE",
+      "status": "jobs_found",
+      "candidate_jobs": 14,
+      "checked_at": "2026-10-02T16:30:55.575000+00:00",
+      "note": "official_page/Novartis: 14 candidate Ireland jobs",
+      "route": {
+        "platform": "official_page",
+        "slug": "Novartis"
+      }
+    },
+    {
+      "number": 188,
+      "batch": 19,
+      "company": "Texas Instruments",
+      "source_url": "https://careers.ti.com/",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:16:46.395013+00:00",
+      "note": "No validated collector discovered from official careers page",
+      "route": null
+    },
+    {
+      "number": 189,
+      "batch": 19,
+      "company": "CACEIS",
+      "source_url": "https://groupecreditagricole.jobs/en/our-jobs-offer/",
+      "status": "needs_attention",
+      "candidate_jobs": 0,
+      "checked_at": "2026-10-02T15:17:00.912369+00:00",
+      "note": "direct/CACEIS: 0 candidate Ireland jobs",
+      "route": {
+        "platform": "direct",
+        "slug": "CACEIS"
+      }
+    },
+    {
+      "number": 190,
+      "batch": 19,
+      "company": "Competition and Consumer Protection Commission (CCPC)",
+      "source_url": "https://www.ccpc.ie/about-us/careers/current-vacancies/",
+      "status": "jobs_found",
+      "candidate_jobs": 5,
+      "checked_at": "2026-10-02T15:17:04.951897+00:00",
+      "note": "direct/Competition and Consumer Protection Commission (CCPC): 5 candidate Ireland jobs",
+      "route": {
+        "platform": "direct",
+        "slug": "Competition and Consumer Protection Commission (CCPC)"
+      }
     }
   ],
   "latest_audit": {
-    "completed_at": "2026-10-02T12:20:30.583936+00:00",
-    "companies_checked": 43,
-    "recovered_jobs": 37,
+    "completed_at": "2026-10-02T16:36:45.639685+00:00",
+    "companies_checked": 84,
+    "recovered_jobs": 145,
     "companies": [
+      "Databricks",
+      "GridBeyond",
       "Introba",
+      "SAP",
       "ActionPoint",
       "Avanade",
       "Fujitsu",
+      "Infosys",
       "Integrity360",
       "Kyndryl",
       "Noesis",
+      "SolarWinds",
+      "First Derivative",
       "Keelvar",
-      "Expleo Ireland",
       "Storm Technology",
+      "Compliance & Risks",
+      "Murex",
+      "Codec",
+      "Kitman Labs",
       "Teneo Ireland",
-      "AirNav Ireland",
+      "Rippling",
+      "Willis Towers Watson (WTW)",
+      "Veeam",
+      "Agilent Technologies",
       "Akamai",
-      "Alkermes",
       "Amundi",
       "An Post",
-      "ARYZTA Ireland",
+      "Apex Group",
+      "Arthur Cox",
+      "ASL Aviation Holdings",
       "ASML",
       "Aviva Ireland",
+      "AXA Ireland",
+      "Baxter International",
+      "Canto",
       "CRH",
+      "Danaher Corporation",
+      "DHL Ireland",
+      "DPS Group (Arcadis)",
+      "Eurofins Scientific",
+      "FactSet",
       "Fitch Ratings",
       "Heineken Ireland",
       "Indeed",
       "Keysight Technologies",
+      "Kuehne+Nagel Ireland",
+      "Macquarie Group",
       "Marvell Technology",
+      "Mercer",
+      "Merit Medical",
       "Morningstar",
       "MSCI",
       "Nokia",
+      "Novartis",
+      "Nutanix",
       "NVIDIA",
       "NXP Semiconductors",
+      "PTSB (Permanent TSB)",
+      "Pure Storage",
+      "Qualtrics",
       "Quantexa",
+      "Revenue",
       "Rockwell Automation",
+      "S&P Global",
       "Seagate",
       "STMicroelectronics",
+      "Tenable",
       "Teva Pharmaceuticals",
+      "Texas Instruments",
       "TransferMate",
+      "Trend Micro",
       "UBS",
       "WuXi Biologics",
+      "Crusoe",
+      "CACEIS",
+      "Competition and Consumer Protection Commission (CCPC)",
       "Figma",
+      "Avolon",
       "Deutsche Bank",
+      "Fidelity International",
       "Siemens Healthineers",
       "Unilever Ireland",
-      "Visa"
+      "Visa",
+      "TikTok"
     ],
     "status_counts": {
-      "needs_attention": 36,
-      "verified_zero": 2,
-      "jobs_found": 5
-    }
+      "jobs_found": 21,
+      "needs_attention": 59,
+      "verified_zero": 4
+    },
+    "already_listed_under_parent": 7,
+    "newly_added_jobs": 138
   }
 }

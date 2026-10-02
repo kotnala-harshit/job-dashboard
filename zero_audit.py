@@ -8,6 +8,11 @@ import xml.etree.ElementTree as ET
 import scrape
 
 OFFICIAL_PAGES = {
+    "Rippling": ("https://www.rippling.com/careers/open-roles", "a[href*='ats.rippling.com/rippling/jobs/']", "div:first-child > span:first-child", "div:first-child > div > span:last-child"),
+    "SAP legacy": ("https://careers.sap.com/go/Ireland/9053801/", "tr.data-row", "a.jobTitle-link", ".jobLocation"),
+    "SAP": ("https://jobs.sap.com/en/jobs/?locations=Dublin", "article.card-job", "h2 a", "li:has(span.sr-only):-soup-contains(Locations)"),
+    "Novartis": ("https://www.novartis.com/careers/career-search?country%5B1%5D=LOC_IE", "tr:has(.views-field-field-job-title)", ".views-field-field-job-title a", ".views-field-field-job-country"),
+    "Willis Towers Watson (WTW)": ("https://careers.wtwco.com/jobs/search?cities%5B%5D=Dublin", "tr[data-job-url]", ".job-search-results-title a", ".job-search-results-location"),
     "AirNav Ireland": ("https://www.airnav.ie/careers/current-vacancies", "li:has(a.title[href*='/careers/current-vacancies/'])", "a.title", "p.highlight"),
     "ARYZTA Ireland": ("https://careers.aryzta.com/go/Ireland-Jobs/1345801/", "tr.data-row", "a.jobTitle-link", ".jobLocation"),
     "Expleo Ireland": ("https://expleo-jobs-ie-en.icims.com/jobs/search?ss=1&in_iframe=1", ".iCIMS_JobCardItem", ".title a", ".iCIMS_JobHeaderData"),
@@ -27,14 +32,14 @@ def official_page_jobs(company, html):
         title = card.select_one(title_selector)
         location = card.select_one(location_selector) if location_selector else None
         location = location.get_text(" ", strip=True) if location else ("Ireland" if company in {"AirNav Ireland", "ARYZTA Ireland", "Riot Games"} else "")
-        location = re.sub(r",\s*IE$", ", Ireland", location, flags=re.I)
+        location = re.sub(r",\s*IE(?=,|$)", ", Ireland", location, flags=re.I)
         link = card.get("href") or (title.get("href") if title else None)
         if company == "Expleo Ireland":
             location = re.sub(r"^IE-", "Ireland - ", location)
             title = title.select_one("h3") if title else None
         if title and link and scrape.region_ok(location):
             jobs.append({"company": company, "ats": "direct", "title": title.get_text(" ", strip=True),
-                         "location": location, "url": urljoin(url, link), "updated_at": None})
+                         "location": location, "url": urljoin(url, link), "updated_at": (card.select_one("time").get("datetime") if card.select_one("time") else card.select_one(".views-field-field-job-posted-date").get_text(strip=True) if card.select_one(".views-field-field-job-posted-date") else None)})
     return jobs
 
 
@@ -42,6 +47,18 @@ def collect_official_page(company):
     from bs4 import BeautifulSoup
     from urllib.parse import urljoin, urlparse
     url = OFFICIAL_PAGES[company][0]
+    if company == "Rippling":
+        with scrape.sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            try:
+                page = browser.new_page()
+                page.goto(url, wait_until="domcontentloaded", timeout=60000)
+                search = page.get_by_placeholder("Search roles")
+                search.fill("Ireland")
+                page.wait_for_timeout(3500)
+                return list({job["url"]: job for job in official_page_jobs(company, page.content())}.values())
+            finally:
+                browser.close()
     host = urlparse(url).netloc
     session = scrape._session()
     visited, jobs = set(), {}
@@ -56,6 +73,10 @@ def collect_official_page(company):
         url = urljoin(url, next_link["href"]) if next_link else None
         if url and urlparse(url).netloc != host:
             break
+    if company == "SAP":
+        for job in collect_official_page("SAP legacy"):
+            job["company"] = "SAP"
+            jobs[job["url"]] = job
     return list(jobs.values())
 
 

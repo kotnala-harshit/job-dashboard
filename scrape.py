@@ -2202,11 +2202,16 @@ def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages
         for job in postings:
             title, location = ireland_posting(job)
             path = job.get("externalPath") or ""
-            if path and re.fullmatch(r"\d+\s+Locations?", location, re.I):
+            description = ""
+            if path and (company == "Mercer" or re.fullmatch(r"\d+\s+Locations?", location, re.I)):
                 try:
                     detail = session.get(f"{origin}/wday/cxs/{tenant}/{site}{path}", headers=headers, timeout=20)
                     detail.raise_for_status()
-                    info = detail.json().get("jobPostingInfo") or {}
+                    detail_data = detail.json()
+                    if company == "Mercer" and not re.search(r"\bMercer\b", (detail_data.get("hiringOrganization") or {}).get("name", ""), re.I):
+                        continue
+                    info = detail_data.get("jobPostingInfo") or {}
+                    description = info.get("jobDescription") or ""
                     locations = [info.get("location", "")] + (info.get("additionalLocations") or [])
                     locations = [x.get("location", "") if isinstance(x, dict) else str(x) for x in locations]
                     location = "; ".join(x for x in locations if region_ok(x) and not re.search(r"\bN\.?\s*Ireland\b", x, re.I))
@@ -2238,6 +2243,7 @@ def scrape_workday(company: str, tenant: str, wd_host: str, site: str, max_pages
                 "ats": "workday",
                 "title": title,
                 "raw_location": location,
+                "description_text": description,
                 "location": location,
                 "url": url,
                 "updated_at": job.get("postedOn"),
@@ -2613,7 +2619,7 @@ def _careers_page_ats_candidates(company: str, careers_url: str, sess):
         ("greenhouse", r"(?:boards|job-boards)\.greenhouse\.io/([A-Za-z0-9_-]+)"),
         ("lever", r"jobs\.lever\.co/([A-Za-z0-9_-]+)"),
         ("ashby", r"jobs\.ashbyhq\.com/([A-Za-z0-9_-]+)"),
-        ("smartrecruiters", r"(?:jobs\.)?smartrecruiters\.com/([A-Za-z0-9_-]+)"),
+        ("smartrecruiters", r"https?://(?:jobs\.|careers\.)?smartrecruiters\.com/([A-Za-z0-9_-]+)"),
         ("workable", r"apply\.workable\.com/([A-Za-z0-9_-]+)"),
         ("recruitee", r"https?://([A-Za-z0-9-]+)\.recruitee\.com"),
         ("personio", r"https?://([A-Za-z0-9-]+)\.jobs\.personio\.(?:de|com)"),
@@ -23223,12 +23229,17 @@ def classify_role_family(title, description, profile):
     title_n = normalized_title(title)
     best = ("Other", "None", 0, [])
     for family, cfg in (profile.get("role_families") or {}).items():
+        if cfg.get("required_title_terms") and not any(
+            re.search(r"\b" + re.escape(normalized_title(term)) + r"\b", title_n)
+            for term in cfg["required_title_terms"]
+        ):
+            continue
         hits = []
         for phrase in cfg.get("titles", []):
-            p = _norm_phrase(phrase)
+            p = normalized_title(phrase)
             # Role identity comes from the title. Descriptions routinely mention
             # adjacent teams and were misclassifying sales/legal roles as data jobs.
-            if p and p in title_n:
+            if p and re.search(r"\b" + re.escape(p) + r"\b", title_n):
                 hits.append(phrase)
         score = cfg.get("weight", 0) + min(8, len(hits) * 2) if hits else 0
         if score > best[2]:
@@ -23245,6 +23256,8 @@ def extract_profile_skills(text, profile):
             canonical[_norm_phrase(skill)] = skill
     for alias, target in aliases.items():
         canonical[_norm_phrase(alias)] = target
+    for skill in profile.get("requirement_skills", []):
+        canonical[_norm_phrase(skill)] = skill
 
     found = []
     for token, label in canonical.items():
@@ -23272,28 +23285,27 @@ def parse_experience_range(text):
                 ranges.append((nums[0], nums[0] + 2))
     if not ranges:
         return (None, None)
-    # Prefer the lowest plausible requirement, since descriptions often mention multiple unrelated ranges.
-    ranges.sort(key=lambda x: (x[0], x[1]))
-    return ranges[0]
+    # A smaller tool-specific requirement does not waive the overall minimum.
+    return max(ranges, key=lambda x: (x[0], x[1]))
 
 
 def experience_fit(title, description, candidate_years):
     title_n = normalized_title(title)
     minimum, maximum = parse_experience_range(description)
-    senior_terms = ["director", "vice president", "vp", "head of", "principal", "staff", "senior manager"]
-    if any(term in title_n for term in senior_terms):
+    senior_terms = ["director", "vice president", "vp", "head of", "principal", "staff", "senior manager", "team leader", "team lead"]
+    if any(re.search(r"\b" + re.escape(term) + r"\b", title_n) for term in senior_terms):
         return "Too Senior", minimum, maximum
-    if any(term in title_n for term in ["graduate", "entry", "junior", "associate", "analyst"]):
-        if candidate_years >= 5 and "graduate" in title_n:
-            return "Overqualified", minimum, maximum
-        return "Strong", minimum, maximum
     if minimum is None:
+        if re.search(r"\b(senior|lead|manager)\b", title_n):
+            return "Stretch", minimum, maximum
+        if re.search(r"\b(graduate|entry|junior|trainee)\b", title_n):
+            return "Strong", minimum, maximum
         return "Possible", minimum, maximum
     if minimum <= candidate_years <= (maximum or candidate_years + 2):
         return "Strong", minimum, maximum
-    if minimum <= candidate_years + 2:
+    if minimum <= candidate_years + 1:
         return "Possible", minimum, maximum
-    if minimum <= candidate_years + 4:
+    if minimum <= candidate_years + 3:
         return "Stretch", minimum, maximum
     return "Too Senior", minimum, maximum
 
@@ -23344,6 +23356,8 @@ def _select_cv_profile(role_family, required_skills, profile):
 
         if role_family in preferred_families:
             score += 10
+        if (profile.get("role_families", {}).get(role_family, {}).get("preferred_cv") == name):
+            score += 8
 
         if score > best_score:
             best_name = name
@@ -23375,6 +23389,12 @@ def candidate_match(job, description, profile):
         description,
         profile,
     )
+    # Retain known requirements when rescoring a saved listing without its JD.
+    if not description:
+        required_skills = list(dict.fromkeys(
+            required_skills + (job.get("ranking_skills") or
+                               (job.get("matched_skills", []) + job.get("missing_skills", [])))
+        ))
 
     evidenced_skills = _candidate_evidence_skills(profile)
 
@@ -23390,13 +23410,19 @@ def candidate_match(job, description, profile):
         if skill not in evidenced_skills
     ]
 
-    years = int(profile.get("experience_years") or 0)
+    years = profile.get("role_families", {}).get(role["family"], {}).get(
+        "experience_years", profile.get("experience_years") or 0
+    )
 
     exp_fit, exp_min, exp_max = experience_fit(
         title,
-        description,
+        description or (f"Minimum of {job['experience_min']} years experience"
+                        if job.get("experience_min") is not None else ""),
         years,
     )
+
+    if years == 0 and exp_min is None and not re.search(r"\b(junior|graduate|intern|trainee|entry)\b", title, re.I):
+        exp_fit = "Stretch"
 
     best_cv, cv_score, cv_coverage = _select_cv_profile(
         role["family"],
@@ -23422,8 +23448,9 @@ def candidate_match(job, description, profile):
 
     score = role["role_score"]
 
+    skill_weights = profile.get("skill_weights", {})
     if role["family"] != "Other":
-        score += min(34, len(matched) * 4)
+        score += min(30, sum(skill_weights.get(skill, 3) for skill in matched))
     else:
         score += min(8, len(matched) * 2)
 
@@ -23465,20 +23492,27 @@ def candidate_match(job, description, profile):
     for term, penalty in (
         profile.get("seniority_penalties") or {}
     ).items():
-        if _norm_phrase(term) in title_n:
+        if re.search(r"\b" + re.escape(normalized_title(term)) + r"\b", title_n):
             score -= int(penalty)
             break
 
     irrelevant_title = False
 
     for term in profile.get("negative_title_terms", []):
-        if _norm_phrase(term) in title_n:
+        if re.search(r"\b" + re.escape(normalized_title(term)) + r"\b", title_n):
             score -= 18
             irrelevant_title = True
             break
 
     if irrelevant_title or role["family"] == "Other":
         score = min(score, 40)
+    if exp_fit == "Too Senior":
+        score = min(score, 35)
+    elif exp_fit == "Stretch":
+        score = min(score, 65)
+    evidence_basis = "job_description" if description else "saved_requirements" if job.get("scoring_evidence") != "title_only" and (job.get("ranking_skills") or job.get("matched_skills") or job.get("missing_skills") or exp_min is not None) else "title_only"
+    if evidence_basis == "title_only":
+        score = min(score, 65)
 
     score = max(0, min(100, int(round(score))))
 
@@ -23502,9 +23536,17 @@ def candidate_match(job, description, profile):
         )
 
     evidence_map = profile.get("evidence") or {}
+    cv_scores = {}
+    for name, cfg in (profile.get("cv_profiles") or {}).items():
+        uncovered = [skill for skill in matched if skill not in cfg.get("skills", [])]
+        cv_scores[name] = max(0, score - sum(skill_weights.get(skill, 3) for skill in uncovered))
 
     return {
         "candidate_match_score": score,
+        "cv_match_scores": cv_scores,
+        "ranking_skills": required_skills,
+        "scoring_evidence": evidence_basis,
+        "ranking_profile_version": profile.get("version"),
         "match_reasons": reasons[:12],
 
         # These are requirements in the JD that the evidence profile
@@ -25090,6 +25132,10 @@ def main():
             batch_index = (int(requested) - 1) if requested else (datetime.now(timezone.utc).hour % total_batches)
             batch_index %= total_batches
             batch = audit_companies[batch_index * batch_size:(batch_index + 1) * batch_size]
+            # Repaired routes must run every core refresh when the old collector misses them.
+            collected = {job["company"] for job in results}
+            recovered = [row for row in audit_companies if row.get("status") == "jobs_found" and row["company"] not in collected]
+            batch = list({row["company"]: row for row in recovered + batch}.values())
             print(f"Zero audit publish batch {batch_index + 1}/{total_batches}: {len(batch)} companies")
             _parallel_collect_isolated(
                 [("audit", row["company"]) for row in batch if _targeted(row["company"])],
@@ -25859,7 +25905,7 @@ def main():
         "adzuna": 30, "jooble": 25, "careerjet": 20,
     }
     aggregator_sources = {"adzuna", "jooble", "careerjet"}
-    results.sort(key=lambda j: source_priority.get((j.get("ats") or "").lower(), 50), reverse=True)
+    results.sort(key=lambda j: (j.get("company") == "Mercer", source_priority.get((j.get("ats") or "").lower(), 50)), reverse=True)
 
     seen_urls = set()
     seen_signatures = set()
@@ -31969,6 +32015,14 @@ DIRECT_COMPANY_CONNECTORS.update({company: "official_priority" for company in _P
 def _audited_official_page(company):
     import zero_audit
     return zero_audit.collect_official_page(company)
+
+for _company, _url in {
+    "Rippling": "https://www.rippling.com/careers/open-roles",
+    "SAP": "https://jobs.sap.com/en/jobs/?locations=Dublin",
+    "Novartis": "https://www.novartis.com/careers/career-search?country%5B1%5D=LOC_IE",
+    "Willis Towers Watson (WTW)": "https://careers.wtwco.com/jobs/search?cities%5B%5D=Dublin",
+}.items():
+    _PRIORITY_OFFICIAL_CONNECTORS[_company] = (lambda company=_company: _audited_official_page(company), _url)
 
 for _company in ("AirNav Ireland", "ARYZTA Ireland", "Expleo Ireland", "Noesis"):
     _PRIORITY_OFFICIAL_CONNECTORS[_company] = (
