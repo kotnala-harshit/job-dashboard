@@ -66,59 +66,6 @@ ASHBY_COMPANIES = ['notion', 'linear', 'ramp', 'elevenlabs', 'openai', 'vercel',
 # the tenant/wd_host/site values are all in that URL.
 # ---------------------------------------------------------------------------
 
-# Official career sources verified live but currently returning
-# no qualifying Republic-of-Ireland vacancies. Keep these companies in
-# the registry/health model, but do not spend a Workday scrape on every run.
-KNOWN_HEALTHY_ZERO_COMPANIES = {
-    # Independently re-verified on 2026-09-18. Keep this list deliberately
-    # strict: a reachable careers page is not enough; the official source must
-    # support that there are currently no qualifying Republic-of-Ireland jobs.
-    "Keelvar": {
-        "url": "https://keelvar.jobs.personio.com/",
-        "note": "Official Keelvar Personio board verified live; currently 0 qualifying Republic-of-Ireland jobs",
-    },
-    "Unilever Ireland": {
-        "url": "https://careers.unilever.com/en/location/leinster-ireland-jobs/34155/2963597-7521314/3",
-        "note": "Official Unilever Ireland careers search verified live; currently 0 qualifying Republic-of-Ireland jobs",
-    },
-    "Keysight Technologies": {
-        "url": "https://careers.keysight.com/talent/jobs/locations",
-        "note": "Official Keysight active-location directory verified live; Ireland is not an active job location",
-    },
-    "MSCI": {
-        "url": "https://careers.msci.com/",
-        "note": "Official MSCI careers board verified live; currently no Republic-of-Ireland job location is active",
-    },
-    "Figma": {
-        "url": "https://www.figma.com/careers/",
-        "note": "Official Figma careers board verified live; currently 0 qualifying Republic-of-Ireland jobs",
-    },
-    "Quantexa": {
-        "url": "https://www.quantexa.com/careers/vacancies/",
-        "note": "Official Quantexa vacancies page verified live; currently reports 0 open jobs",
-    },
-    'NVIDIA': {
-        "url": 'https://www.nvidia.com/en-eu/contact/',
-        "note": 'Official NVIDIA worldwide office directory verified 2026-09-19; Europe list contains no Republic-of-Ireland office/location',
-    },
-    'NXP Semiconductors': {
-        "url": 'https://www.nxp.com/company/about-nxp/worldwide-locations:GLOBAL_SITES',
-        "note": 'Official NXP Worldwide Locations verified 2026-09-19; Europe/Middle East locations do not include Ireland',
-    },
-    'STMicroelectronics': {
-        "url": 'https://www.st.com/content/st_com/en/about/careers/career-benefits.html',
-        "note": 'Official ST careers location list verified 2026-09-19; current Europe locations do not include Ireland',
-    },
-    'Seagate': {
-        "url": 'https://www.seagate.com/gb/en/careers/meet-seagate/where-we-work/',
-        "note": 'Official Seagate global careers footprint verified 2026-09-19; island-of-Ireland careers location is Derry/Londonderry, Northern Ireland, not Republic of Ireland',
-    },
-    'Storm Technology': {
-        "url": 'https://www.storm.ie/about/careers/',
-        "note": 'Official Storm Technology careers page verified 2026-09-19; Open Positions section currently contains no listed vacancies',
-    },
-}
-
 WORKDAY_COMPANIES = [
     ('Coca-Cola', 'coke', 'wd1', 'coca-cola-careers'),
     ("Cohesity", "cohesity", "wd5", "Cohesity_Careers"),
@@ -563,18 +510,6 @@ JOOBLE_API_KEY = os.environ.get("JOOBLE_API_KEY", "").strip()
 # This lets the dashboard distinguish a healthy zero-vacancy company from a broken scraper.
 CONNECTOR_HEALTH = {}
 
-# A company enters "Live source · 0 jobs" only after the official board has
-# been manually/independently verified as healthy and genuinely empty.
-# Do NOT infer healthy-zero merely from an HTTP 200 response.
-VERIFIED_LIVE_ZERO_COMPANIES = set(KNOWN_HEALTHY_ZERO_COMPANIES)
-# These sources completed a first-party Ireland search in the current audit.
-# They are still checked every refresh; a later live role moves them to working.
-VERIFIED_LIVE_ZERO_COMPANIES.update({
-    "Deutsche Bank", "Fitch Ratings", "Indeed", "Morningstar", "Nokia",
-    "Teneo Ireland", "Teva Pharmaceuticals", "UBS", "Visa", "WuXi Biologics",
-    "Kyndryl", "Marvell Technology", "Rockwell Automation",
-})
-
 def _mark_connector_health(company, live=True, note=None, url=None):
     CONNECTOR_HEALTH[company] = {
         "live": bool(live),
@@ -582,6 +517,17 @@ def _mark_connector_health(company, live=True, note=None, url=None):
         "url": url,
         "checked_at": datetime.now(timezone.utc).isoformat(),
     }
+
+
+def has_current_zero_evidence(health):
+    """A reachable board or an old manual assertion is not an empty-source check."""
+    if not (health.get("live") and health.get("verified_zero")):
+        return False
+    try:
+        checked = datetime.fromisoformat(str(health["checked_at"]).replace("Z", "+00:00"))
+        return timedelta(0) <= datetime.now(timezone.utc) - checked <= timedelta(hours=24)
+    except (KeyError, TypeError, ValueError):
+        return False
 
 # Direct company career-site connectors. These are intentionally separate from
 # ATS discovery because the sites use proprietary/public search surfaces rather
@@ -3672,7 +3618,7 @@ def scrape_oracle_candidate_experience(
         "TITLES;CATEGORIES;ORGANIZATIONS;"
         "POSTING_DATES;FLEX_FIELDS,"
         "limit=100,"
-        f"locationId={location_id},"
+        + (f"locationId={location_id}," if location_id else "") +
         "sortBy=POSTING_DATES_DESC"
     )
 
@@ -3836,11 +3782,7 @@ def scrape_oracle_candidate_experience(
         job_url = (
             f"{base_url}/hcmUI/"
             "CandidateExperience/en/sites/"
-            f"jobsearch/job/{jid}/"
-            "?location=Ireland"
-            f"&locationId={location_id}"
-            "&locationLevel=country"
-            "&mode=location"
+            f"{site_number}/job/{jid}/"
         )
 
         posted = first_value(
@@ -22713,7 +22655,7 @@ def scrape_transfermate_official():
 
 
 # BEGIN HARSHIT PRIORITY EMPLOYER EXPANSION
-PRIORITY_EXPANSION_OFFICIAL_BOARDS = {'Introba': 'https://www.introba.com/careers', 'ActionPoint': 'https://www.actionpoint.ie/careers/', 'Avanade': 'https://www.avanade.com/en/career/search-jobs', 'Ekco': 'https://careers.ek.co/jobs', 'Fujitsu': 'https://fujitsu.com/ie/about/careers', 'Integrity360': 'https://www.integrity360.com/careers', 'Noesis': 'https://www.noesis.pt/en/careers', 'Akamai': 'https://www.akamai.com/careers', 'AirNav Ireland': 'https://www.airnav.ie/careers', 'Alkermes': 'https://www.alkermes.com/careers', 'Amundi': 'https://about.amundi.com/Careers', 'An Post': 'https://www.anpost.com/About/Careers', 'Aviva Ireland': 'https://www.aviva.ie/about/careers/', 'ASML': 'https://www.asml.com/en/careers', 'ARYZTA Ireland': 'https://www.aryzta.com/careers/', 'Storm Technology': 'https://www.storm.ie/about/careers/', 'Ergo': 'https://www.ergogroup.ie/Careers/', 'Expleo Ireland': 'https://careers.expleo.com/en/'}
+PRIORITY_EXPANSION_OFFICIAL_BOARDS = {'Introba': 'https://www.introba.com/careers', 'ActionPoint': 'https://www.actionpoint.ie/careers/', 'Avanade': 'https://www.avanade.com/en/career/search-jobs', 'Ekco': 'https://careers.ek.co/jobs', 'Fujitsu': 'https://fujitsu.com/ie/about/careers', 'Integrity360': 'https://www.integrity360.com/careers', 'Noesis': 'https://opportunities.noesis.pt/jobs', 'Akamai': 'https://www.akamai.com/careers', 'AirNav Ireland': 'https://www.airnav.ie/careers/current-vacancies', 'Alkermes': 'https://careers.alkermes.com/#en/sites/CX_1', 'Amundi': 'https://about.amundi.com/Careers', 'An Post': 'https://www.anpost.com/Working-with-An-Post/Careers', 'Aviva Ireland': 'https://www.aviva.ie/about/careers/', 'ASML': 'https://www.asml.com/en/careers', 'ARYZTA Ireland': 'https://careers.aryzta.com/go/Ireland-Jobs/1345801/', 'Storm Technology': 'https://www.storm.ie/about/careers/', 'Ergo': 'https://www.ergogroup.ie/Careers/', 'Expleo Ireland': 'https://expleo-jobs-ie-en.icims.com/jobs/search?ss=1&in_iframe=1'}
 PRIORITY_EXPANSION_DOMESTIC_DEFAULT = {'An Post', 'AirNav Ireland', 'Storm Technology', 'Aviva Ireland', 'ActionPoint'}
 
 def scrape_priority_expansion_official(company):
@@ -25141,7 +25083,7 @@ def main():
         audit_path = Path(__file__).with_name("zero_audit.json")
         if audit_path.exists():
             audit = json.loads(audit_path.read_text())
-            audit_companies = [row for row in audit["companies"] if row.get("route") and not row.get("alias_of")]
+            audit_companies = [row for row in audit["companies"] if not row.get("alias_of")]
             batch_size = 10
             total_batches = max(1, (len(audit_companies) + batch_size - 1) // batch_size)
             requested = os.getenv("ZERO_AUDIT_BATCH")
@@ -26229,16 +26171,6 @@ def main():
         if j.get("company")
     }
 
-    # Preserve verified healthy-zero status for connectors intentionally
-    # excluded from the active scrape batch.
-    for _company, _info in KNOWN_HEALTHY_ZERO_COMPANIES.items():
-        CONNECTOR_HEALTH[_company] = {
-            "live": True,
-            "note": _info["note"],
-            "url": _info["url"],
-            "checked_at": datetime.now(timezone.utc).isoformat(),
-        }
-
     manual_check = []
     for item in company_registry:
         key = _company_key(item["company"])
@@ -26277,13 +26209,7 @@ def main():
         if key in live_company_keys:
             state = "working"
             reason = "Ireland jobs returned in this run"
-        elif (
-            CONNECTOR_HEALTH.get(item["company"], {}).get("live")
-            and (
-                item["company"] in VERIFIED_LIVE_ZERO_COMPANIES
-                or CONNECTOR_HEALTH.get(item["company"], {}).get("verified_zero")
-            )
-        ):
+        elif has_current_zero_evidence(CONNECTOR_HEALTH.get(item["company"], {})):
             state = "live_zero"
             reason = "Official careers source independently verified live and currently has 0 qualifying Ireland jobs"
         elif key in proven_company_keys:
@@ -29917,10 +29843,6 @@ def build_graduate_dashboard_state(results, company_registry):
 # FINAL_11_MANUAL_REMEDIATION
 # Official-source remediation for the final Manual Search companies.
 
-VERIFIED_LIVE_ZERO_COMPANIES.update({
-    "Keysight Technologies",
-    "MSCI",
-})
 
 DIRECT_COMPANY_CONNECTORS.update({
     "Compliance & Risks": "adherent_official",
@@ -30729,8 +30651,7 @@ def scrape_direct_company(company: str):
 
 # BEGIN NEEDS_VERIFICATION_2026_09_16
 # Official-source audit performed 2026-09-16.
-# Verified-zero companies below use live ATS/direct collectors; do not put
-# them in KNOWN_HEALTHY_ZERO_COMPANIES, which synthesizes checked_at.
+# Zero classification requires fresh, explicit evidence from a live collector.
 
 _NEEDS_VERIFICATION_GREENHOUSE = {
     "esw": "ESW",
@@ -30752,7 +30673,6 @@ for _slug in _NEEDS_VERIFICATION_ASHBY:
     if _slug not in ASHBY_COMPANIES:
         ASHBY_COMPANIES.append(_slug)
 
-# Verified-zero classification is owned exclusively by KNOWN_HEALTHY_ZERO_COMPANIES.
 
 _needs_verification_previous_company_display_name = company_display_name
 def company_display_name(raw: str) -> str:
@@ -30937,7 +30857,6 @@ def scrape_direct_company(company: str, *args, **kwargs):
 for _company in _NV17_BROWSER:
     DIRECT_COMPANY_CONNECTORS[_company] = "needs_verification_browser_official"
 
-# Verified-zero classification is owned exclusively by KNOWN_HEALTHY_ZERO_COMPANIES.
 
 _nv17_batched = {
     _company_key(company_display_name(name))
@@ -32018,7 +31937,10 @@ def _live_roi_detail(company,url,ats):
 # Priority employers with official boards.  Keep a successful zero as a live
 # check so it is not displayed as a failed or stale connector.
 def scrape_visa_official():
-    return scrape_workday("Visa", "visa", "wd5", "Visa", max_pages=25)
+    jobs = scrape_smartrecruiters("Visa")
+    for job in jobs:
+        job["company"] = "Visa"
+    return jobs
 
 
 def scrape_morningstar_official():
@@ -32026,7 +31948,7 @@ def scrape_morningstar_official():
 
 
 _PRIORITY_OFFICIAL_CONNECTORS = {
-    "Visa": (scrape_visa_official, "https://visa.wd5.myworkdayjobs.com/Visa"),
+    "Visa": (scrape_visa_official, "https://careers.smartrecruiters.com/Visa"),
     "Morningstar": (scrape_morningstar_official, "https://morningstar.wd5.myworkdayjobs.com/morningstar"),
     "Deutsche Bank": (scrape_deutsche_bank, "https://db.wd3.myworkdayjobs.com/DBWebsite"),
     "UBS": (scrape_ubs_official, "https://jobs.ubs.com/"),
@@ -32042,8 +31964,31 @@ _PRIORITY_OFFICIAL_CONNECTORS.update({
     )
     for company, url in PRIORITY_EXPANSION_OFFICIAL_BOARDS.items()
 })
-VERIFIED_LIVE_ZERO_COMPANIES.update(PRIORITY_EXPANSION_OFFICIAL_BOARDS)
 DIRECT_COMPANY_CONNECTORS.update({company: "official_priority" for company in _PRIORITY_OFFICIAL_CONNECTORS})
+
+def _audited_official_page(company):
+    import zero_audit
+    return zero_audit.collect_official_page(company)
+
+for _company in ("AirNav Ireland", "ARYZTA Ireland", "Expleo Ireland", "Noesis"):
+    _PRIORITY_OFFICIAL_CONNECTORS[_company] = (
+        lambda company=_company: _audited_official_page(company),
+        PRIORITY_EXPANSION_OFFICIAL_BOARDS[_company],
+    )
+_PRIORITY_OFFICIAL_CONNECTORS["An Post"] = (
+    lambda: scrape_oracle_candidate_experience(
+        "An Post", "https://fa-ewnd-saasfaprod1.fa.ocs.oraclecloud.com",
+        "CX_2001", location_id=None, max_pages=10,
+    ),
+    "https://www.anpost.com/Working-with-An-Post/Careers",
+)
+_PRIORITY_OFFICIAL_CONNECTORS["Alkermes"] = (
+    lambda: scrape_oracle_candidate_experience(
+        "Alkermes", "https://hbap.fa.us1.oraclecloud.com",
+        "CX_1", location_id=None, max_pages=10,
+    ),
+    "https://careers.alkermes.com/#en/sites/CX_1",
+)
 
 # Keep these five new/repaired sources in the existing core refresh cycle.
 for _priority_company in ("Visa", "Morningstar", "PTSB (Permanent TSB)"):
@@ -32051,33 +31996,17 @@ for _priority_company in ("Visa", "Morningstar", "PTSB (Permanent TSB)"):
         PROVEN_REFRESH_BATCHES[-1].append(_priority_company)
 
 _priority_previous_direct = scrape_direct_company
-_AUDITED_ZERO_OFFICIAL_SOURCES = {
-    "CRH": "https://jobs.crh.com/search/?q=&locationsearch=Ireland",
-    "FactSet": "https://careers.factset.com/",
-    "Heineken Ireland": "https://careers.theheinekencompany.com/HEINEKEN-Ireland",
-    "Nutanix": "https://www.nutanix.com/careers",
-    "Texas Instruments": "https://careers.ti.com/",
-    "TransferMate": "https://www.transfermate.com/company/career-page",
-    "Siemens Healthineers": "https://onehealthineers.wd3.myworkdayjobs.com/SHSJB",
-    "First Derivative": "https://firstderivative.com/careers/",
-}
-VERIFIED_LIVE_ZERO_COMPANIES.update(_AUDITED_ZERO_OFFICIAL_SOURCES)
 
 def scrape_direct_company(company, *args, **kwargs):
     connector = _PRIORITY_OFFICIAL_CONNECTORS.get(company)
     if connector is None:
-        jobs = _priority_previous_direct(company, *args, **kwargs)
-        source = _AUDITED_ZERO_OFFICIAL_SOURCES.get(company)
-        if source:
-            _mark_connector_health(company, True, f"Official careers board checked; returned {len(jobs)} Ireland jobs", source)
-        return jobs
+        return _priority_previous_direct(company, *args, **kwargs)
     jobs = connector[0]()
-    _mark_connector_health(
-        company,
-        True,
-        f"Official careers board checked; returned {len(jobs)} Ireland jobs",
-        connector[1],
-    )
+    if jobs:
+        _mark_connector_health(
+            company, True,
+            f"Official careers board returned {len(jobs)} Ireland jobs", connector[1],
+        )
     return jobs
 
 

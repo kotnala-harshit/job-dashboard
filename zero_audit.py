@@ -3,17 +3,19 @@ import json
 import re
 from pathlib import Path
 import urllib.request
+import xml.etree.ElementTree as ET
 
 import scrape
 
 OFFICIAL_PAGES = {
+    "AirNav Ireland": ("https://www.airnav.ie/careers/current-vacancies", "li:has(a.title[href*='/careers/current-vacancies/'])", "a.title", "p.highlight"),
+    "ARYZTA Ireland": ("https://careers.aryzta.com/go/Ireland-Jobs/1345801/", "tr.data-row", "a.jobTitle-link", ".jobLocation"),
+    "Expleo Ireland": ("https://expleo-jobs-ie-en.icims.com/jobs/search?ss=1&in_iframe=1", ".iCIMS_JobCardItem", ".title a", ".iCIMS_JobHeaderData"),
+    "Noesis": ("https://opportunities.noesis.pt/jobs", "a.job-card", ".title", ".details span"),
     "Riot Games": ("https://www.riotgames.com/en/work-with-us/offices/dublin", ".job-list__body a.js-job-url", ".job-row__col--primary", None),
     "Synopsys": ("https://careers.synopsys.com/location/ireland-jobs/44408/2963597/2", "a.sr-job-link", "h2", ".job-location"),
 }
 
-OFFICIAL_ZERO_PAGES = {
-    "Quantexa": ("https://www.quantexa.com/careers/vacancies/", r"\b0 jobs in all departments\b"),
-}
 
 
 def official_page_jobs(company, html):
@@ -24,16 +26,44 @@ def official_page_jobs(company, html):
     for card in BeautifulSoup(html, "html.parser").select(selector):
         title = card.select_one(title_selector)
         location = card.select_one(location_selector) if location_selector else None
-        location = location.get_text(" ", strip=True) if location else ("Dublin, Ireland" if company == "Riot Games" else "")
-        if title and card.get("href") and scrape.region_ok(location):
-            jobs.append({"company": company, "ats": "official", "title": title.get_text(" ", strip=True),
-                         "location": location, "url": urljoin(url, card["href"]), "updated_at": None})
+        location = location.get_text(" ", strip=True) if location else ("Ireland" if company in {"AirNav Ireland", "ARYZTA Ireland", "Riot Games"} else "")
+        location = re.sub(r",\s*IE$", ", Ireland", location, flags=re.I)
+        link = card.get("href") or (title.get("href") if title else None)
+        if company == "Expleo Ireland":
+            location = re.sub(r"^IE-", "Ireland - ", location)
+            title = title.select_one("h3") if title else None
+        if title and link and scrape.region_ok(location):
+            jobs.append({"company": company, "ats": "direct", "title": title.get_text(" ", strip=True),
+                         "location": location, "url": urljoin(url, link), "updated_at": None})
     return jobs
+
+
+def collect_official_page(company):
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin, urlparse
+    url = OFFICIAL_PAGES[company][0]
+    host = urlparse(url).netloc
+    session = scrape._session()
+    visited, jobs = set(), {}
+    # ponytail: bounded pagination; raise the cap if an official board exceeds 20 pages.
+    while url and url not in visited and len(visited) < 20:
+        visited.add(url)
+        response = session.get(url, timeout=25)
+        response.raise_for_status()
+        for job in official_page_jobs(company, response.text):
+            jobs[job["url"]] = job
+        next_link = BeautifulSoup(response.text, "html.parser").select_one('a[rel="next"][href], a[title="Next page"][href]')
+        url = urljoin(url, next_link["href"]) if next_link else None
+        if url and urlparse(url).netloc != host:
+            break
+    return list(jobs.values())
 
 
 def complete_feed_zero(platform, data):
     """Only complete feeds with explicit locations can establish a zero."""
-    if platform not in {"greenhouse", "ashby", "lever", "personio"} or not isinstance(data, (dict, list)):
+    if platform not in {"greenhouse", "ashby", "lever", "personio"}:
+        return False
+    if not isinstance(data, list if platform == "lever" else dict):
         return False
     rows = data if platform == "lever" else data.get("jobs") if "jobs" in data else data.get("positions")
     if not isinstance(rows, list):
@@ -60,16 +90,17 @@ def workday_country_zero(data):
     if not isinstance(data, dict) or not isinstance(data.get("jobPostings"), list) or not isinstance(data.get("total"), int):
         return False
     if data["total"] == 0:
-        return True
+        return not data["jobPostings"]
     pending = list(data.get("facets") or [])
     while pending:
         facet = pending.pop()
         if not isinstance(facet, dict):
             continue
         values = facet.get("values") or []
-        if facet.get("facetParameter") in {"locationCountry", "locationHierarchy1"} and values:
+        if facet.get("facetParameter") == "locationCountry" and values:
             return all(isinstance(v, dict) and v.get("descriptor") and v.get("id")
-                       and not re.search(r"ireland|remote|global|EMEA|Europe", v["descriptor"], re.I) for v in values)
+                       and isinstance(v.get("count"), int)
+                       and not re.search(r"ireland|remote|global|EMEA|Europe", v["descriptor"], re.I) for v in values) and sum(v["count"] for v in values) == data["total"]
         pending.extend(values)
         pending.extend(facet.get("facets") or [])
     return False
@@ -90,11 +121,17 @@ def personio_feed_zero(slug):
             pass
     if not xml:
         return False
-    positions = re.findall(r"<position>(.*?)</position>", xml, re.DOTALL)
+    try:
+        root = ET.fromstring(xml)
+    except ET.ParseError:
+        return False
+    if root.tag != "workzag-jobs":
+        return False
+    positions = root.findall("position")
     if not positions:
         return True
     for block in positions:
-        fields = " ".join(re.findall(r"<(?:office|city)>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?</(?:office|city)>", block, re.DOTALL))
+        fields = " ".join(block.findtext(field) or "" for field in ("office", "city"))
         if not fields or scrape.region_ok(fields) or re.search(r"remote|EMEA|Europe|global|worldwide", fields, re.I):
             return False
     return True
@@ -137,23 +174,13 @@ def collect(company):
     tried = set()
     attempts = []
     empty_route = None
+    verified_routes = set()
     # An audit may discover a corrected route; reuse it on subsequent refreshes.
     audit_path = Path(__file__).with_name("zero_audit.json")
     if audit_path.exists():
         previous = next((r for r in json.loads(audit_path.read_text())["companies"] if r["company"] == company), {})
         if previous.get("route"):
             routes.insert(0, previous["route"])
-    if company in OFFICIAL_ZERO_PAGES:
-        url, pattern = OFFICIAL_ZERO_PAGES[company]
-        try:
-            response = session.get(url, timeout=25)
-            response.raise_for_status()
-            if re.search(pattern, response.text, re.I):
-                scrape._mark_connector_health(company, True, "Official vacancies page reports 0 open roles", url)
-                scrape.CONNECTOR_HEALTH[company].update(verified_zero=True, audit_route={"platform": "official_zero_page", "slug": company})
-                return []
-        except Exception as exc:
-            attempts.append(f"official_zero_page/{company}: {type(exc).__name__}")
 
     def run(route):
         nonlocal empty_route
@@ -162,9 +189,7 @@ def collect(company):
             return []
         tried.add((platform, slug))
         if platform == "official_page":
-            response = session.get(OFFICIAL_PAGES[company][0], timeout=25)
-            response.raise_for_status()
-            jobs = official_page_jobs(company, response.text)
+            jobs = collect_official_page(company)
         elif platform == "direct":
             jobs = scrape.scrape_direct_company(slug) or []
         elif platform == "workable" or scrape._probe_platform(platform, slug, session, allow_empty=True):
@@ -189,6 +214,7 @@ def collect(company):
             data = None if platform == "personio" else scrape.fetch_json(url)
             if personio_feed_zero(slug) if platform == "personio" else complete_feed_zero(platform, data):
                 empty_route = (route, url, 0 if platform == "personio" else len(data if platform == "lever" else data["jobs"]))
+                verified_routes.add((platform, slug))
         elif platform == "workday":
             tenant, host, site = slug.split("|")
             url = f"https://{tenant}.{host}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs"
@@ -196,6 +222,7 @@ def collect(company):
             data = response.json() if response is not None else None
             if workday_country_zero(data):
                 empty_route = (route, url, data["total"])
+                verified_routes.add((platform, slug))
         return jobs
 
     def safe_run(route):
@@ -217,11 +244,10 @@ def collect(company):
         jobs = safe_run({"platform": platform, "slug": slug})
         if jobs:
             return jobs
-    if empty_route and empty_route[0]["platform"] in {"greenhouse", "ashby", "lever", "personio"}:
-        route = empty_route[0]
-        if (route["platform"], route["slug"]) not in discovered:
-            attempts.append("Empty cached board is not linked from the current official careers page; zero unconfirmed")
-            empty_route = None
+    # One empty board (e.g. early careers) cannot clear a second unchecked board.
+    if empty_route and (not discovered or not set(discovered).issubset(verified_routes)):
+        attempts.append("Not every current official board has complete zero evidence; zero unconfirmed")
+        empty_route = None
     health = scrape.CONNECTOR_HEALTH.get(company, {})
     if empty_route:
         route, url, total = empty_route

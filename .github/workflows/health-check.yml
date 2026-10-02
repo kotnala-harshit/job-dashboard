@@ -26,4 +26,7 @@ jobs:
           python-version: "3.11"
 
       - name: Validate dashboard
-        run: python health_check.py
+        run: |
+          pip install beautifulsoup4
+          python test_zero_audit.py
+          python health_check.py

@@ -2134,6 +2134,12 @@ function getCurrentLiveCompanyNames() {
   return new Set(ALL_JOBS.map(j => j.company).filter(Boolean));
 }
 
+function hasCurrentZeroEvidence(company) {
+  const health = CONNECTOR_HEALTH[company];
+  const age = Date.now() - Date.parse(health?.checked_at);
+  return health?.live === true && health?.verified_zero === true && age >= 0 && age <= 86400000;
+}
+
 function getTrueZeroCompanies() {
       const liveNames = new Set(
         ALL_JOBS
@@ -2143,7 +2149,7 @@ function getTrueZeroCompanies() {
 
       const verifiedZeroNames = new Set(
         ALL_COVERAGE
-          .filter(c => c.state === 'live_zero')
+          .filter(c => c.state === 'live_zero' && hasCurrentZeroEvidence(c.company))
           .map(c => c.company)
       );
 
@@ -2157,14 +2163,13 @@ function getTrueZeroCompanies() {
         .map(r => {
           const coverage =
             ALL_COVERAGE.find(c => c.company === r.company) || {};
-          return { ...r, ...coverage };
+          return { ...r, ...coverage, url: coverage.careers_url || r.careers_url || r.url };
         });
     }
 
 function getZeroJobCompanies() {
   /*
-   * FALSE ZERO / BROKEN means the backend explicitly classified
-   * the current connector result as configured_zero.
+   * Historical success does not establish that today's empty result is genuine.
    */
   const liveNames = getCurrentLiveCompanyNames();
 
@@ -2178,7 +2183,8 @@ function getZeroJobCompanies() {
     .filter(c =>
       c &&
       c.company &&
-      c.state === 'configured_zero' &&
+      (['configured_zero', 'proven_zero'].includes(c.state) ||
+        (c.state === 'live_zero' && !hasCurrentZeroEvidence(c.company))) &&
       !liveNames.has(c.company)
     )
     .map(c => {
@@ -2188,7 +2194,6 @@ function getZeroJobCompanies() {
       return {
         ...registry,
         ...c,
-        state: 'configured_zero',
         url:
           c.careers_url ||
           c.url ||
@@ -2295,8 +2300,8 @@ function renderCompanyDiagnosticList(gridId, companies, search, selectedCompany,
       const detail = mode === 'manual'
         ? `${c.platform || 'manual-check'} · no working job-level connector`
         : mode === 'livezero'
-          ? `${health?.verified_zero && health?.live ? 'Verified zero Ireland jobs' : 'Needs verification — zero is unconfirmed'} · ${health?.note || c.zero_audit?.note || 'Source has not been verified this refresh'}${c.zero_audit ? ` · Audit #${c.zero_audit.number}, batch ${c.zero_audit.batch}` : ''}`
-          : `${c.platform || 'automatic'} · returned 0 jobs · ${c.reason || (health && health.note) || 'source/connector needs verification'}`;
+          ? `Verified zero Ireland jobs · ${health?.note || ''} · Checked ${health?.checked_at ? new Date(health.checked_at).toLocaleString() : 'unknown'}`
+          : `${c.platform || 'automatic'} · returned 0 jobs · ${health?.note || c.reason || 'source/connector needs verification'}`;
 
       card.innerHTML = `
         ${companyIdentity(c.company, escapeHtml(detail))}
@@ -2322,7 +2327,7 @@ function renderDiagnostics(search) {
   const zeroVisible = visibleCount(zeroCompanies);
 
   document.getElementById('liveZeroSummary').textContent =
-    `${trueZeroVisible} shown · ${trueZeroCompanies.length} configured companies currently have no live Ireland jobs in this dataset.`;
+    `${trueZeroVisible} shown · ${trueZeroCompanies.length} companies have an explicitly verified empty Ireland source.`;
 
   document.getElementById('zeroSummary').textContent =
     `${zeroVisible} shown · ${zeroCompanies.length} companies returned 0 qualifying Ireland jobs, but that zero has not yet been independently verified.`;
