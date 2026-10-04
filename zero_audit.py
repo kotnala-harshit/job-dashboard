@@ -331,6 +331,17 @@ def collect(company):
             jobs = collect_official_page(company)
         elif platform == "direct":
             jobs = scrape.scrape_direct_company(slug) or []
+        elif platform == "workday":
+            tenant, host, site = slug.split("|")
+            url = f"https://{tenant}.{host}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs"
+            response = scrape._workday_post(scrape._workday_session(), url, scrape._workday_headers(tenant, host, site), {}, 20, 0, "")
+            data = response.json() if response is not None else None
+            if workday_country_zero(data):
+                empty_route = (route, url, data["total"])
+                verified_routes.add((platform, slug))
+                attempts.append(f"workday/{slug}: complete country filters have no Ireland postings")
+                return []
+            jobs = scrape._scrape_cached_mapping(company, platform, slug, session) if data is not None else []
         elif platform == "workable" or scrape._probe_platform(platform, slug, session, allow_empty=True):
             jobs = scrape._scrape_cached_mapping(company, platform, slug, session)
         else:
@@ -343,8 +354,8 @@ def collect(company):
                 j["company"] = company
             scrape._mark_connector_health(company, True, attempts[-1], source)
             scrape.CONNECTOR_HEALTH[company]["audit_route"] = route
-        elif platform == "official_page" and scrape.has_current_zero_evidence(scrape.CONNECTOR_HEALTH.get(company, {})):
-            empty_route = (route, OFFICIAL_PAGES[company][0], scrape.CONNECTOR_HEALTH[company]["official_total"])
+        elif platform in {"official_page", "direct"} and scrape.has_current_zero_evidence(scrape.CONNECTOR_HEALTH.get(company, {})):
+            empty_route = (route, scrape.CONNECTOR_HEALTH[company].get("url", source), scrape.CONNECTOR_HEALTH[company]["official_total"])
             verified_routes.add((platform, slug))
         elif platform in {"greenhouse", "ashby", "lever", "personio"}:
             url = {
@@ -356,14 +367,6 @@ def collect(company):
             data = None if platform == "personio" else scrape.fetch_json(url)
             if personio_feed_zero(slug) if platform == "personio" else complete_feed_zero(platform, data):
                 empty_route = (route, url, 0 if platform == "personio" else len(data if platform == "lever" else data["jobs"]))
-                verified_routes.add((platform, slug))
-        elif platform == "workday":
-            tenant, host, site = slug.split("|")
-            url = f"https://{tenant}.{host}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs"
-            response = scrape._workday_post(scrape._workday_session(), url, scrape._workday_headers(tenant, host, site), {}, 20, 0, "")
-            data = response.json() if response is not None else None
-            if workday_country_zero(data):
-                empty_route = (route, url, data["total"])
                 verified_routes.add((platform, slug))
         return jobs
 
@@ -387,7 +390,7 @@ def collect(company):
         if jobs:
             return jobs
     # One empty board (e.g. early careers) cannot clear a second unchecked board.
-    if empty_route and empty_route[0]["platform"] != "official_page" and (not discovered or not set(discovered).issubset(verified_routes)):
+    if empty_route and empty_route[0]["platform"] not in {"official_page", "direct"} and (not discovered or not set(discovered).issubset(verified_routes)):
         attempts.append("Not every current official board has complete zero evidence; zero unconfirmed")
         empty_route = None
     health = scrape.CONNECTOR_HEALTH.get(company, {})

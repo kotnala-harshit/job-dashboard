@@ -8,6 +8,12 @@ import zero_audit
 
 
 def check():
+    rows = [{"company": "empty", "status": "verified_zero"}, {"company": "repaired", "status": "jobs_found"}, {"company": "unknown", "status": "needs_attention"}]
+    assert [r["company"] for r in scrape.audit_refresh_rows(rows, {"repaired"}, [])] == ["empty"]
+    assert len(scrape.audit_refresh_rows(rows, set(), rows[:1])) == 2
+    assert scrape.oracle_complete_zero([{"PrimaryLocation": "Germany"}], 1)
+    for entries, total in [([{"PrimaryLocation": "Ireland"}], 1), ([{"PrimaryLocation": "Germany"}], 2), ([{}], 1), ([{"PrimaryLocation": "Germany", "secondaryLocations": [{"Name": "Dublin"}]}], 1), ([{"PrimaryLocation": "Remote EMEA"}], 1)]:
+        assert not scrape.oracle_complete_zero(entries, total)
     now = datetime.now(timezone.utc)
     evidence = {"live": True, "verified_zero": True, "checked_at": now.isoformat()}
     assert scrape.has_current_zero_evidence(evidence)
@@ -50,6 +56,11 @@ def check():
 
     # Shared MMC feed must not relabel Marsh jobs as Mercer.
     from types import SimpleNamespace
+    route = {"platform": "workday", "slug": "test|wd1|careers"}
+    with patch.object(scrape, "_workday_session", return_value=None), patch.object(scrape, "build_company_registry", return_value=[{"company": "Test Empty", "careers_url": "https://example.com"}]), patch.object(zero_audit, "configured_routes", return_value=[route]), patch.object(scrape, "_workday_post", return_value=SimpleNamespace(json=lambda: board)), patch.object(scrape, "_careers_page_ats_candidates", return_value=[("workday", route["slug"])]), patch.object(scrape, "_scrape_cached_mapping") as full_scan:
+        assert zero_audit.collect("Test Empty") == []
+        assert scrape.has_current_zero_evidence(scrape.CONNECTOR_HEALTH["Test Empty"])
+        full_scan.assert_not_called()
     postings = [{"title": "Data Analyst", "locationsText": "Dublin", "externalPath": "/job/1"}]
     response = SimpleNamespace(json=lambda: {"jobPostings": postings, "facets": [{"facetParameter": "country", "values": [{"id": "IE", "descriptor": "Ireland"}]}]})
     session = SimpleNamespace(get=lambda *a, **k: SimpleNamespace(raise_for_status=lambda: None, json=lambda: {"hiringOrganization": {"name": "Marsh"}, "jobPostingInfo": {"location": "Dublin"}}))

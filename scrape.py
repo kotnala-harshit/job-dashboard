@@ -3606,6 +3606,21 @@ def _absolute_url(base: str, href: str) -> str:
 
 
 
+def oracle_complete_zero(rows, total):
+    # Unknown or broadly remote locations cannot establish an Ireland zero.
+    return total == len(rows) and all(
+        row.get("PrimaryLocation")
+        and not region_ok(row["PrimaryLocation"])
+        and not re.search(r"ireland|dublin|cork|galway|limerick|waterford|kilkenny|athlone|sligo|letterkenny|remote|global|worldwide|emea|europe", json.dumps({k: row.get(k) for k in ("PrimaryLocation", "secondaryLocations", "otherWorkLocations", "workLocation")}), re.I)
+        for row in rows
+    )
+
+
+def audit_refresh_rows(rows, collected, batch):
+    recovered = [row for row in rows if row.get("status") in {"jobs_found", "verified_zero"} and row["company"] not in collected]
+    return list({row["company"]: row for row in recovered + batch}.values())
+
+
 def scrape_oracle_candidate_experience(
     company="Oracle",
     base_url=(
@@ -3677,6 +3692,10 @@ def scrape_oracle_candidate_experience(
             exc,
         )
         return []
+
+    if location_id is None and "TotalJobsCount" in container and oracle_complete_zero(requisitions, total):
+        _mark_connector_health(company, True, f"Complete official Oracle feed: {total} postings, no Ireland locations", endpoint)
+        CONNECTOR_HEALTH[company].update(verified_zero=True, official_total=total)
 
     if not requisitions:
         print("  ! Oracle Candidate Experience returned no requisitions")
@@ -25143,10 +25162,10 @@ def main():
             batch_index = (int(requested) - 1) if requested else (datetime.now(timezone.utc).hour % total_batches)
             batch_index %= total_batches
             batch = audit_companies[batch_index * batch_size:(batch_index + 1) * batch_size]
-            # Repaired routes must run every core refresh when the old collector misses them.
+            # Recheck both repaired boards and verified zeros every core refresh.
+            # Otherwise an ordinary empty collector discards the last zero evidence.
             collected = {job["company"] for job in results}
-            recovered = [row for row in audit_companies if row.get("status") == "jobs_found" and row["company"] not in collected]
-            batch = list({row["company"]: row for row in recovered + batch}.values())
+            batch = audit_refresh_rows(audit_companies, collected, batch)
             print(f"Zero audit publish batch {batch_index + 1}/{total_batches}: {len(batch)} companies")
             _parallel_collect_isolated(
                 [("audit", row["company"]) for row in batch if _targeted(row["company"])],
@@ -32054,6 +32073,17 @@ _PRIORITY_OFFICIAL_CONNECTORS["Alkermes"] = (
     ),
     "https://careers.alkermes.com/#en/sites/CX_1",
 )
+
+# API hosts published by these employers' current Oracle career sites.
+for _company, _host, _site, _url in (
+    ("Nokia", "https://fa-evmr-saasfaprod1.fa.ocs.oraclecloud.com", "CX_1", "https://jobs.nokia.com/en/sites/CX_1/jobs"),
+    ("Texas Instruments", "https://edbz.fa.us2.oraclecloud.com", "CX", "https://careers.ti.com/en/sites/CX/jobs"),
+):
+    _PRIORITY_OFFICIAL_CONNECTORS[_company] = (
+        lambda company=_company, host=_host, site=_site: scrape_oracle_candidate_experience(company, host, site, location_id=None, max_pages=20),
+        _url,
+    )
+    DIRECT_COMPANY_CONNECTORS[_company] = "official_priority"
 
 # Keep these five new/repaired sources in the existing core refresh cycle.
 for _priority_company in ("Visa", "Morningstar", "PTSB (Permanent TSB)"):
