@@ -7901,7 +7901,7 @@
     },
     "DPS Group (Arcadis)": {
       "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
-      "last_working_seen": "2026-09-21T20:01:49.955935+00:00",
+      "last_working_seen": "2026-10-04T13:40:26.290881+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.arcadis.com/careers/job/563671531729128?domain=arcadis.com",
@@ -7920,17 +7920,27 @@
         "https://jobs.arcadis.com/careers/job/563671532969967?domain=arcadis.com",
         "https://jobs.arcadis.com/careers/job/563671532970097?domain=arcadis.com",
         "https://jobs.arcadis.com/careers/job/563671532970099?domain=arcadis.com",
+        "https://www.dpsgroupglobal.com/job/construction-coordinator/",
+        "https://www.dpsgroupglobal.com/job/documentation-specialist/",
+        "https://www.dpsgroupglobal.com/job/ehs-specialist/",
+        "https://www.dpsgroupglobal.com/job/ehs-systems-specialist/",
+        "https://www.dpsgroupglobal.com/job/electrical-project-manager/",
+        "https://www.dpsgroupglobal.com/job/hvac-cqv-engineer/",
+        "https://www.dpsgroupglobal.com/job/lab-cqv-engineer/",
+        "https://www.dpsgroupglobal.com/job/lead-technical-architect/",
         "https://www.dpsgroupglobal.com/job/maintenance-planner/",
         "https://www.dpsgroupglobal.com/job/maintenance-technician/",
         "https://www.dpsgroupglobal.com/job/mechanical-design-engineer-wastewater-treatment-projects-2/",
         "https://www.dpsgroupglobal.com/job/mechanical-design-engineer-wastewater-treatment-projects/",
+        "https://www.dpsgroupglobal.com/job/process-engineer-cqv/",
         "https://www.dpsgroupglobal.com/job/production-permitter/",
         "https://www.dpsgroupglobal.com/job/project-manager-2/",
+        "https://www.dpsgroupglobal.com/job/qc-analyst/",
         "https://www.dpsgroupglobal.com/job/senior-packaging-engineer/",
         "https://www.dpsgroupglobal.com/job/utilities-project-engineer/"
       ],
-      "distinct_jobs_seen": 24,
-      "current_live_jobs": 0
+      "distinct_jobs_seen": 34,
+      "current_live_jobs": 10
     },
     "IBM": {
       "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
@@ -17487,6 +17497,61 @@
         "https://www.wuxibiologics.com/join-us-site-quality-head/"
       ],
       "distinct_jobs_seen": 1
+    },
+    "Integrity360": {
+      "first_working_seen": "2026-10-04T13:40:26.290881+00:00",
+      "last_working_seen": "2026-10-04T13:40:26.290881+00:00",
+      "ever_working": true,
+      "current_live_jobs": 2,
+      "seen_job_keys": [
+        "https://integrity360.bamboohr.com/careers/678",
+        "https://integrity360.bamboohr.com/careers/785"
+      ],
+      "distinct_jobs_seen": 2
+    },
+    "ASML": {
+      "first_working_seen": "2026-10-04T13:40:26.290881+00:00",
+      "last_working_seen": "2026-10-04T13:40:26.290881+00:00",
+      "ever_working": true,
+      "current_live_jobs": 2,
+      "seen_job_keys": [
+        "https://www.asml.com/en/careers/find-your-job/cymer-field-service-engineer-j00352783",
+        "https://www.asml.com/en/careers/find-your-job/euv-upgrades-installs-scanner-engineer-j00349290"
+      ],
+      "distinct_jobs_seen": 2
+    },
+    "Aviva Ireland": {
+      "first_working_seen": "2026-10-04T13:40:26.290881+00:00",
+      "last_working_seen": "2026-10-04T13:40:26.290881+00:00",
+      "ever_working": true,
+      "current_live_jobs": 24,
+      "seen_job_keys": [
+        "https://aviva.talent-community.com/projects/Actuarial--Projects-Lead/74554",
+        "https://aviva.talent-community.com/projects/Actuarial-Analysis-%26-Insight-Lead/74558",
+        "https://aviva.talent-community.com/projects/Actuarial-Data-Scientist/74559",
+        "https://aviva.talent-community.com/projects/Actuarial-Governance-Trainee/75167",
+        "https://aviva.talent-community.com/projects/Actuarial-Reporting-Lead/74552",
+        "https://aviva.talent-community.com/projects/Actuarial-System-Architect/74403",
+        "https://aviva.talent-community.com/projects/Capital-Management-Actuary/69755",
+        "https://aviva.talent-community.com/projects/Commercial-Motor-Underwriter/72872",
+        "https://aviva.talent-community.com/projects/Document-Processing-Admin/75136",
+        "https://aviva.talent-community.com/projects/Engineering-Manager/71824",
+        "https://aviva.talent-community.com/projects/Group-Protection-Administrator/73438",
+        "https://aviva.talent-community.com/projects/Head-of-Broker-%28Retail%29-Distribution/73843",
+        "https://aviva.talent-community.com/projects/Head-of-Pensions-Policy%2C-Governance-%26-Oversight/70690",
+        "https://aviva.talent-community.com/projects/Injury-Claims-Handler/52660",
+        "https://aviva.talent-community.com/projects/Insurance-Careers-with-Aviva-Claims-in-Ballybrit-Galway/47089",
+        "https://aviva.talent-community.com/projects/Insurance-Careers-with-Aviva-Claims-in-Cork/49158",
+        "https://aviva.talent-community.com/projects/Life-EB-Claims-Administrator/73042",
+        "https://aviva.talent-community.com/projects/Motor-Engineer/74401",
+        "https://aviva.talent-community.com/projects/Operational-Delivery-%26-Insights-Lead/70038",
+        "https://aviva.talent-community.com/projects/Retirement-Payroll-Administrator/72111",
+        "https://aviva.talent-community.com/projects/Risk-Claims-Administration-Support/73529",
+        "https://aviva.talent-community.com/projects/Senior-Compliance-Manager/74540",
+        "https://aviva.talent-community.com/projects/Senior-FSPO-Complaints-Manager/74323",
+        "https://aviva.talent-community.com/projects/Specialist-Governance-Actuary/75166"
+      ],
+      "distinct_jobs_seen": 24
     }
   },
   "tracking_started": "2026-08-16",

@@ -2,12 +2,13 @@
 import json
 import re
 from pathlib import Path
-import urllib.request
 import xml.etree.ElementTree as ET
 
 import scrape
 
 OFFICIAL_PAGES = {
+    "ASML": ("https://www.asml.com/en/careers/find-your-job?job_country=Ireland", "a.search-results__item", "h3", ".search-results__fields li:first-child"),
+    "DPS Group (Arcadis)": ("https://www.dpsgroupglobal.com/careers/jobs/", ".boxstyle-info__copy", ".boxstyle-info__copy--info > a", ".info--list__item:first-child"),
     "CACEIS": ("https://jobs.caceis.com/offre-de-emploi/liste-offres.aspx", ".ts-offer-list-item", ".ts-offer-list-item__title-link", ".ts-offer-list-item__description"),
     "ASL Aviation Holdings": ("https://cezanneondemand.intervieweb.it/aslaviationgroup/en/career", ".vacancy__header", ".vacancy__title a", "[title=Location]"),
     "Storm Technology": ("https://careers.storm.ie/", ".job-card", ".card-header a", ".card-body p"),
@@ -37,6 +38,8 @@ def official_page_jobs(company, html):
         location = card.select_one(location_selector) if location_selector else None
         location = location.get_text(" ", strip=True) if location else ("Ireland" if company in {"AirNav Ireland", "ARYZTA Ireland", "Riot Games"} else "")
         location = re.sub(r",\s*IE(?=,|$)", ", Ireland", location, flags=re.I)
+        if company == "DPS Group (Arcadis)":
+            location = location.removeprefix("Location:").strip()
         if company == "Storm Technology":
             location = location.split("Business Area:")[0].replace("Location:", "").strip()
         link = card.get("href") or (title.get("href") if title else None)
@@ -71,42 +74,78 @@ def collect_official_page(company):
     from bs4 import BeautifulSoup
     from urllib.parse import urljoin, urlparse
     url = OFFICIAL_PAGES[company][0]
-    if company == "Rippling":
+    if company in {"Rippling", "DPS Group (Arcadis)", "ASML"}:
         with scrape.sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
             try:
                 page = browser.new_page()
                 page.goto(url, wait_until="domcontentloaded", timeout=60000)
-                search = page.get_by_placeholder("Search roles")
-                search.fill("Ireland")
+                if company == "Rippling":
+                    page.get_by_placeholder("Search roles").fill("Ireland")
                 page.wait_for_timeout(3500)
-                return list({job["url"]: job for job in official_page_jobs(company, page.content())}.values())
+                jobs = {}
+                for _ in range(20):
+                    jobs.update({job["url"]: job for job in official_page_jobs(company, page.content())})
+                    more = page.locator("#load_more_jobs") if company == "DPS Group (Arcadis)" else None
+                    if more is None or not more.count() or not more.is_visible():
+                        break
+                    previous = page.locator(OFFICIAL_PAGES[company][1]).count()
+                    more.click()
+                    page.wait_for_timeout(1500)
+                    jobs.update({job["url"]: job for job in official_page_jobs(company, page.content())})
+                    if page.locator(OFFICIAL_PAGES[company][1]).count() == previous:
+                        break
+                return list(jobs.values())
             finally:
                 browser.close()
     host = urlparse(url).netloc
     session = scrape._session()
     visited, jobs = set(), {}
+    listed, expected = {}, None
     # ponytail: bounded pagination; raise the cap if an official board exceeds 20 pages.
     while url and url not in visited and len(visited) < 20:
         visited.add(url)
         response = session.get(url, timeout=25)
         response.raise_for_status()
         if company == "CACEIS":
+            soup = BeautifulSoup(response.text, "html.parser")
+            count = re.search(r"Nombre de résultats\s*:\s*(\d+)", soup.get_text(" ", strip=True))
+            expected = int(count[1]) if count else None
+            for card in soup.select(".ts-offer-list-item"):
+                link = card.select_one(".ts-offer-list-item__title-link")
+                location = ", ".join(x.get_text(" ", strip=True) for x in card.select(".ts-offer-list-item__description li")[1:]).strip(", ")
+                if link:
+                    listed[link["href"]] = location
             total = caceis_country_zero(response.text)
             if total is not None:
                 scrape._mark_connector_health(company, True, f"Complete official country filters: {total} postings, no Ireland locations", url)
                 scrape.CONNECTOR_HEALTH[company].update(verified_zero=True, official_total=total)
         for job in official_page_jobs(company, response.text):
             jobs[job["url"]] = job
-        next_link = BeautifulSoup(response.text, "html.parser").select_one('a[rel="next"][href], a[title="Next page"][href]')
+        next_link = BeautifulSoup(response.text, "html.parser").select_one('a[rel="next"][href], a[title="Next page"][href], a.ts-ol-pagination-list-item__link--next[href]')
         url = urljoin(url, next_link["href"]) if next_link else None
         if url and urlparse(url).netloc != host:
             break
+    if company == "CACEIS" and not url and expected is not None and len(listed) == expected and all(foreign_location(location) for location in listed.values()):
+        scrape._mark_connector_health(company, True, f"Complete official listing checked: {expected} postings, no Ireland locations", OFFICIAL_PAGES[company][0])
+        scrape.CONNECTOR_HEALTH[company].update(verified_zero=True, official_total=expected)
     if company == "SAP":
         for job in collect_official_page("SAP legacy"):
             job["company"] = "SAP"
             jobs[job["url"]] = job
     return list(jobs.values())
+
+
+def foreign_location(location, remote=False):
+    """A remote job explicitly restricted to another country is not Ireland-wide."""
+    if not isinstance(location, str) or not location.strip() or scrape.region_ok(location):
+        return False
+    if re.search(r"ireland|\birlande?\b|EMEA|Europe|global|worldwide|anywhere", location, re.I):
+        return False
+    if remote or re.search(r"remote", location, re.I):
+        countries = r"United States|USA|United Kingdom|UK|Canada|Germany|France|Spain|Portugal|Italy|Netherlands|Belgium|Denmark|Poland|Türkiye|Turkey|United Arab Emirates|Australia|India"
+        return bool(re.search(rf"(?:^|[,;]\s*)(?:{countries})(?:\s*[-–]\s*Remote)?$", location.strip(), re.I))
+    return True
 
 
 def complete_feed_zero(platform, data):
@@ -129,9 +168,7 @@ def complete_feed_zero(platform, data):
         elif platform == "personio":
             location = (job.get("office") or {}).get("name", "") if isinstance(job.get("office"), dict) else location
         locations = [location] + [x.get("location", "") for x in job.get("secondaryLocations", []) if isinstance(x, dict)]
-        if not location or any(not isinstance(x, str) or scrape.region_ok(x) for x in locations):
-            return False
-        if job.get("isRemote") or any(re.search(r"remote|EMEA|Europe|global|worldwide", x, re.I) for x in locations):
+        if not all(foreign_location(x, job.get("isRemote", False)) for x in locations):
             return False
     return True
 
@@ -159,14 +196,11 @@ def workday_country_zero(data):
 
 def personio_feed_zero(slug):
     xml = ""
-    for domain in ("de", "com"):
-        req = urllib.request.Request(
-            f"https://{slug}.jobs.personio.{domain}/xml?language=en",
-            headers={"User-Agent": "Mozilla/5.0 (job-dashboard-bot)"},
-        )
+    for domain in ("com", "de"):
         try:
-            with urllib.request.urlopen(req, timeout=20) as resp:
-                xml = resp.read().decode("utf-8", "ignore")
+            response = scrape._session().get(f"https://{slug}.jobs.personio.{domain}/xml?language=en", timeout=20)
+            response.raise_for_status()
+            xml = response.text
             break
         except Exception:
             pass
@@ -183,7 +217,7 @@ def personio_feed_zero(slug):
         return True
     for block in positions:
         fields = " ".join(block.findtext(field) or "" for field in ("office", "city"))
-        if not fields or scrape.region_ok(fields) or re.search(r"remote|EMEA|Europe|global|worldwide", fields, re.I):
+        if not foreign_location(fields.strip()):
             return False
     return True
 
@@ -262,7 +296,65 @@ def collect_transfermate():
     return jobs
 
 
+def collect_aviva():
+    base = "https://aviva.talent-community.com"
+    jobs = {}
+    session = scrape._session()
+    for offset in range(0, 2000, 200):
+        response = session.post(base + "/v1/api/publicsearch/project/query", json={"filters": [], "query": "", "size": 200, "offset": offset, "sort": [{"name": "public_sort_order", "dir": "asc"}, {"name": "score", "dir": "desc"}, {"name": "created", "dir": "desc"}]}, timeout=30)
+        response.raise_for_status()
+        data = response.json()
+        for row in data["results"]:
+            locations = [loc.get("city") or "Ireland" for loc in row.get("locations", []) if loc.get("countryCode") == "IE"]
+            if not locations and row.get("siteCountry") == "IE":
+                locations = [row.get("siteCity") or "Ireland"]
+            url = row.get("jobPublicUrl", "")
+            if locations and row.get("status") == "ACTIVE" and not row.get("archived") and not row.get("filled") and url.startswith(base + "/projects/"):
+                jobs[url] = {"company": "Aviva Ireland", "ats": "direct", "title": row["title"], "location": "; ".join(locations) + ", Ireland", "url": url, "updated_at": row.get("created"), "description_text": scrape._strip_html(row.get("description", ""))}
+        if not data["results"] or offset + len(data["results"]) >= data["totalResults"]:
+            break
+    return list(jobs.values())
+
+
+def collect_msci():
+    base = "https://careers.msci.com"
+    session = scrape._session()
+    page = session.get(base, timeout=25)
+    page.raise_for_status()
+    app = re.search(r'window.AG_ID\s*=\s*"([^"\n]+)"', page.text)[1]
+    key = re.search(r'window.AG_KEY\s*=\s*"([^"\n]+)"', page.text)[1]
+    index = json.loads(re.search(r'window.AG_INDEX\s*=\s*(\{[^;]+\})', page.text)[1])["default"]
+    response = session.post(f"https://{app.lower()}-dsn.algolia.net/1/indexes/*/queries", headers={"x-algolia-application-id": app, "x-algolia-api-key": key}, json={"requests": [{"indexName": index, "params": "query=&hitsPerPage=1000"}]}, timeout=30)
+    response.raise_for_status()
+    data = response.json()["results"][0]
+    jobs = [{"company": "MSCI", "ats": "direct", "title": row["title"], "location": row["town_city_country"], "url": base + row["jd_url"], "updated_at": None} for row in data["hits"] if scrape.region_ok(row.get("town_city_country", ""))]
+    if not jobs and data["nbHits"] == len(data["hits"]) and all(foreign_location(row.get("town_city_country")) for row in data["hits"]):
+        scrape._mark_connector_health("MSCI", True, "Complete official MSCI search feed has no Ireland locations", base)
+        scrape.CONNECTOR_HEALTH["MSCI"].update(verified_zero=True, official_total=data["nbHits"])
+    return jobs
+
+
+def check_deutsche_bank_zero():
+    # The public search returns a complete bounded feed; never infer zero from a cap.
+    url = "https://api-deutschebank.beesite.de/search/"
+    query = {"LanguageCode": "en", "SearchParameters": {"FirstItem": 1, "CountItem": 2000, "MatchedObjectDescriptor": ["PositionLocation.CountryName", "PositionLocation.CityName", "PositionTitle"]}, "SearchCriteria": []}
+    response = scrape._session().get(url, params={"data": json.dumps(query)}, timeout=40)
+    response.raise_for_status()
+    data = response.json()["SearchResult"]
+    rows = data["SearchResultItems"]
+    locations = [row["MatchedObjectDescriptor"].get("PositionLocation", []) for row in rows]
+    if data["SearchResultCountAll"] == len(rows) and all(group and all(loc.get("CountryName") and loc["CountryName"].lower() not in {"irland", "ireland", "irlande"} and foreign_location(loc.get("CityName", "") + ", " + loc["CountryName"]) for loc in group) for group in locations):
+        scrape._mark_connector_health("Deutsche Bank", True, "Complete official Deutsche Bank search feed has no Ireland locations", url)
+        scrape.CONNECTOR_HEALTH["Deutsche Bank"].update(verified_zero=True, official_total=len(rows))
+    return []
+
+
 CORRECTED_ROUTES = {
+    "Aviva Ireland": {"platform": "official_api", "slug": "Aviva Ireland"},
+    "MSCI": {"platform": "official_api", "slug": "MSCI"},
+    "Deutsche Bank": {"platform": "official_api", "slug": "Deutsche Bank"},
+    "Integrity360": {"platform": "bamboohr", "slug": "integrity360"},
+    "Veeam": {"platform": "greenhouse", "slug": "veeamsoftware"},
     "Teva Pharmaceuticals": {"platform": "eightfold", "slug": "www.careers.teva|tevapharm.com"},
     "CRH": {"platform": "successfactors", "slug": "https://jobs.crh.com"},
     "GridBeyond": {"platform": "bamboohr", "slug": "gridbeyond"},
@@ -321,7 +413,9 @@ def collect(company):
         if (platform, slug) in tried:
             return []
         tried.add((platform, slug))
-        if platform == "successfactors":
+        if platform == "official_api":
+            jobs = {"MSCI": collect_msci, "Deutsche Bank": check_deutsche_bank_zero, "Aviva Ireland": collect_aviva}[company]()
+        elif platform == "successfactors":
             jobs = collect_successfactors(company, slug)
         elif platform == "bamboohr":
             jobs = collect_bamboohr(company, slug)
@@ -354,7 +448,7 @@ def collect(company):
                 j["company"] = company
             scrape._mark_connector_health(company, True, attempts[-1], source)
             scrape.CONNECTOR_HEALTH[company]["audit_route"] = route
-        elif platform in {"official_page", "direct"} and scrape.has_current_zero_evidence(scrape.CONNECTOR_HEALTH.get(company, {})):
+        elif platform in {"official_page", "direct", "official_api"} and scrape.has_current_zero_evidence(scrape.CONNECTOR_HEALTH.get(company, {})):
             empty_route = (route, scrape.CONNECTOR_HEALTH[company].get("url", source), scrape.CONNECTOR_HEALTH[company]["official_total"])
             verified_routes.add((platform, slug))
         elif platform in {"greenhouse", "ashby", "lever", "personio"}:
@@ -390,14 +484,14 @@ def collect(company):
         if jobs:
             return jobs
     # One empty board (e.g. early careers) cannot clear a second unchecked board.
-    if empty_route and empty_route[0]["platform"] not in {"official_page", "direct"} and (not discovered or not set(discovered).issubset(verified_routes)):
+    if empty_route and empty_route[0]["platform"] not in {"official_page", "direct", "official_api"} and (not discovered or not set(discovered).issubset(verified_routes)):
         attempts.append("Not every current official board has complete zero evidence; zero unconfirmed")
         empty_route = None
     health = scrape.CONNECTOR_HEALTH.get(company, {})
     if empty_route:
         route, url, total = empty_route
         evidence = "Official country filters" if route["platform"] == "workday" else "Complete official feed"
-        scrape._mark_connector_health(company, True, f"{evidence} checked: {total} postings, no eligible Ireland locations", url)
+        scrape._mark_connector_health(company, True, f"{evidence} checked: " + (f"{total} postings, " if route["platform"] != "personio" else "") + "no eligible Ireland locations", url)
         scrape.CONNECTOR_HEALTH[company].update(verified_zero=True, audit_route=route)
     elif company == "Infosys" and health.get("live") and "explicitly reports zero" in health.get("note", ""):
         health["verified_zero"] = True

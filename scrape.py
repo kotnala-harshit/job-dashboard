@@ -2616,6 +2616,7 @@ def _careers_page_ats_candidates(company: str, careers_url: str, sess):
         text = careers_url
 
     patterns = [
+        ("greenhouse", r"my\.greenhouse\.io/[^\s\"'<>]*?job_board=([A-Za-z0-9_-]+)"),
         ("greenhouse", r"(?:boards|job-boards)\.greenhouse\.io/([A-Za-z0-9_-]+)"),
         ("lever", r"jobs\.lever\.co/([A-Za-z0-9_-]+)"),
         ("ashby", r"jobs\.ashbyhq\.com/([A-Za-z0-9_-]+)"),
@@ -22691,7 +22692,7 @@ def scrape_transfermate_official():
 
 
 # BEGIN HARSHIT PRIORITY EMPLOYER EXPANSION
-PRIORITY_EXPANSION_OFFICIAL_BOARDS = {'Introba': 'https://www.introba.com/careers', 'ActionPoint': 'https://www.actionpoint.ie/careers/', 'Avanade': 'https://www.avanade.com/en/career/search-jobs', 'Ekco': 'https://careers.ek.co/jobs', 'Fujitsu': 'https://fujitsu.com/ie/about/careers', 'Integrity360': 'https://www.integrity360.com/careers', 'Noesis': 'https://opportunities.noesis.pt/jobs', 'Akamai': 'https://www.akamai.com/careers', 'AirNav Ireland': 'https://www.airnav.ie/careers/current-vacancies', 'Alkermes': 'https://careers.alkermes.com/#en/sites/CX_1', 'Amundi': 'https://about.amundi.com/Careers', 'An Post': 'https://www.anpost.com/Working-with-An-Post/Careers', 'Aviva Ireland': 'https://www.aviva.ie/about/careers/', 'ASML': 'https://www.asml.com/en/careers', 'ARYZTA Ireland': 'https://careers.aryzta.com/go/Ireland-Jobs/1345801/', 'Storm Technology': 'https://www.storm.ie/about/careers/', 'Ergo': 'https://www.ergogroup.ie/Careers/', 'Expleo Ireland': 'https://expleo-jobs-ie-en.icims.com/jobs/search?ss=1&in_iframe=1'}
+PRIORITY_EXPANSION_OFFICIAL_BOARDS = {'Introba': 'https://www.introba.com/careers', 'ActionPoint': 'https://www.actionpoint.ie/careers/', 'Avanade': 'https://www.avanade.com/en/career/search-jobs', 'Ekco': 'https://careers.ek.co/jobs', 'Fujitsu': 'https://fujitsu.com/ie/about/careers', 'Integrity360': 'https://www.integrity360.com/careers', 'Noesis': 'https://opportunities.noesis.pt/jobs', 'Akamai': 'https://www.akamai.com/careers', 'AirNav Ireland': 'https://www.airnav.ie/careers/current-vacancies', 'Alkermes': 'https://careers.alkermes.com/#en/sites/CX_1', 'Amundi': 'https://about.amundi.com/Careers', 'An Post': 'https://www.anpost.com/Working-with-An-Post/Careers', 'Aviva Ireland': 'https://www.aviva.ie/group/careers/', 'ASML': 'https://www.asml.com/en/careers', 'ARYZTA Ireland': 'https://careers.aryzta.com/go/Ireland-Jobs/1345801/', 'Storm Technology': 'https://www.storm.ie/about/careers/', 'Ergo': 'https://www.ergogroup.ie/Careers/', 'Expleo Ireland': 'https://expleo-jobs-ie-en.icims.com/jobs/search?ss=1&in_iframe=1'}
 PRIORITY_EXPANSION_DOMESTIC_DEFAULT = {'An Post', 'AirNav Ireland', 'Storm Technology', 'Aviva Ireland', 'ActionPoint'}
 
 def scrape_priority_expansion_official(company):

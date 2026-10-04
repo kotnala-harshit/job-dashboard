@@ -1,7 +1,7 @@
 """Run with python3 test_zero_audit.py; no network requests."""
 from datetime import datetime, timezone, timedelta
 from unittest.mock import patch
-from io import BytesIO
+from types import SimpleNamespace
 
 import scrape
 import zero_audit
@@ -23,6 +23,10 @@ def check():
         assert not scrape.has_current_zero_evidence({**evidence, **change})
     assert not scrape.has_current_zero_evidence({"live": True})
 
+    assert zero_audit.foreign_location("USA - Remote")
+    assert zero_audit.foreign_location("Remote, California, USA")
+    for location in ("Remote", "Remote EMEA", "Remote Europe / Germany", "Remote, Ireland", "Remote, UK / Ireland", "Dublin"):
+        assert not zero_audit.foreign_location(location)
     assert zero_audit.complete_feed_zero("greenhouse", {"jobs": []})
     assert not zero_audit.complete_feed_zero("greenhouse", [])
     assert not zero_audit.complete_feed_zero("greenhouse", {"jobs": [{"location": {"name": "Dublin"}}]})
@@ -40,7 +44,7 @@ def check():
     overlap["facets"][0]["values"].append({"id": "ie", "descriptor": "Ireland", "count": 1})
     assert not zero_audit.workday_country_zero(overlap)
     for document, expected in ((b"<workzag-jobs/>", True), (b"<html>Blocked</html>", False), (b"not xml", False)):
-        with patch("urllib.request.urlopen", side_effect=lambda *a, **k: BytesIO(document)):
+        with patch.object(scrape, "_session", return_value=SimpleNamespace(get=lambda *a, **k: SimpleNamespace(text=document.decode(), raise_for_status=lambda: None))):
             assert zero_audit.personio_feed_zero("test") is expected
 
     aryzta = '<tr class="data-row"><td><a class="jobTitle-link" href="/job/123">Key Account Manager</a></td><td class="jobLocation">Clondalkin, IE</td></tr>'
@@ -55,7 +59,6 @@ def check():
     assert len(zero_audit.official_page_jobs("Willis Towers Watson (WTW)", wtw)) == 1
 
     # Shared MMC feed must not relabel Marsh jobs as Mercer.
-    from types import SimpleNamespace
     route = {"platform": "workday", "slug": "test|wd1|careers"}
     with patch.object(scrape, "_workday_session", return_value=None), patch.object(scrape, "build_company_registry", return_value=[{"company": "Test Empty", "careers_url": "https://example.com"}]), patch.object(zero_audit, "configured_routes", return_value=[route]), patch.object(scrape, "_workday_post", return_value=SimpleNamespace(json=lambda: board)), patch.object(scrape, "_careers_page_ats_candidates", return_value=[("workday", route["slug"])]), patch.object(scrape, "_scrape_cached_mapping") as full_scan:
         assert zero_audit.collect("Test Empty") == []
@@ -87,6 +90,44 @@ def check():
         assert len(jobs) == 1 and jobs[0]["location"] == "Dublin, Ireland"
         assert jobs[0]["url"].endswith("/default/job/Analyst/1-en_US")
         assert session.post.call_count == 1
+
+    # Current API collectors must reject non-Irish and inactive results.
+    session = Mock()
+    row = {"id": 1, "title": "Claims Administrator", "status": "ACTIVE", "siteCountry": "IE", "siteCity": "Dublin", "jobPublicUrl": "https://aviva.talent-community.com/projects/claims/1"}
+    session.post.return_value.json.return_value = {"results": [row, {**row, "siteCountry": "GB"}, {**row, "archived": True}], "totalResults": 3}
+    with patch.object(scrape, "_session", return_value=session):
+        assert len(zero_audit.collect_aviva()) == 1
+        assert session.post.call_count == 1
+    session.get.return_value.text = 'window.AG_ID = "APP"; window.AG_KEY = "public-search-key"; window.AG_INDEX = {"default":"jobs"};'
+    session.post.return_value.json.return_value = {"results": [{"hits": [{"title": "Analyst", "town_city_country": "Dublin | Ireland", "jd_url": "/job/1"}], "nbHits": 1}]}
+    with patch.object(scrape, "_session", return_value=session):
+        assert len(zero_audit.collect_msci()) == 1
+    session.get.return_value.json.return_value = {"SearchResult": {"SearchResultCountAll": 1, "SearchResultItems": [{"MatchedObjectDescriptor": {"PositionLocation": [{"CountryName": "Irland", "CityName": "Dublin"}]}}]}}
+    scrape.CONNECTOR_HEALTH.pop("Deutsche Bank", None)
+    with patch.object(scrape, "_session", return_value=session):
+        zero_audit.check_deutsche_bank_zero()
+        assert not scrape.has_current_zero_evidence(scrape.CONNECTOR_HEALTH.get("Deutsche Bank", {}))
+    session.get.return_value.text = '<a href="https://my.greenhouse.io/users/sign_in?job_board=veeamsoftware">Job alerts</a>'
+    session.get.return_value.status_code = 200
+    session.get.return_value.url = "https://careers.veeam.com"
+    assert ("greenhouse", "veeamsoftware") in scrape._careers_page_ats_candidates("Veeam", "https://careers.veeam.com", session)
+    dps = '<div class="boxstyle-info__copy"><div class="boxstyle-info__copy--info"><a href="/job/1">QC Analyst</a><div><div class="info--list__item">Location: Kerry</div></div></div></div>'
+    assert zero_audit.official_page_jobs("DPS Group (Arcadis)", dps)[0]["location"] == "Kerry"
+    asml = '<a class="search-results__item" href="/en/careers/find-your-job/1"><h3>Field Service Engineer</h3><ul class="search-results__fields"><li>Leixlip, Ireland</li></ul></a>'
+    assert len(zero_audit.official_page_jobs("ASML", asml)) == 1
+
+    def caceis_page(title, city, more=""):
+        return f'<div>Nombre de résultats : 2</div><li class="ts-offer-list-item"><a class="ts-offer-list-item__title-link" href="/{title}">{title}</a><ul class="ts-offer-list-item__description"><li>CDI</li><li></li><li>{city}</li></ul></li>{more}'
+    pages = [caceis_page("Analyst", "Paris", '<a class="ts-ol-pagination-list-item__link--next" href="?page=2">Next</a>'), caceis_page("Manager", "Putrajaya")]
+    session.get.side_effect = [SimpleNamespace(text=text, raise_for_status=lambda: None) for text in pages]
+    with patch.object(scrape, "_session", return_value=session):
+        assert zero_audit.collect_official_page("CACEIS") == []
+        assert scrape.has_current_zero_evidence(scrape.CONNECTOR_HEALTH["CACEIS"])
+    scrape.CONNECTOR_HEALTH.pop("CACEIS")
+    session.get.side_effect = [SimpleNamespace(text=pages[1], raise_for_status=lambda: None)]
+    with patch.object(scrape, "_session", return_value=session):
+        assert zero_audit.collect_official_page("CACEIS") == []
+        assert not scrape.has_current_zero_evidence(scrape.CONNECTOR_HEALTH.get("CACEIS", {}))
 
     scrape.CONNECTOR_HEALTH.clear()
     def failed():
