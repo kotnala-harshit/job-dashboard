@@ -674,6 +674,7 @@ body{background:#f3f4f6!important}
     </div>
   </div>
   <div id="genTime">Connecting to live data...</div>
+  <div id="linkAuditSummary" style="font-size:11px;color:var(--muted)"></div>
 <div class="filter-row" style="margin-top: 14px;">
     <div class="search-wrap">
       <input id="fSearch" type="text" placeholder="Search jobs, companies, skills, e.g. JPM, Amazon, Power BI..." />
@@ -859,12 +860,11 @@ function loadRadarState() {
   try { JOB_STATES = JSON.parse(localStorage.getItem(JOB_STATE_KEY) || '{}'); } catch(e) { JOB_STATES = {}; }
 }
 function jobId(j) { return String(j.url || `${j.company}|${j.title}|${j.location || ''}`); }
-function isIgnored(j) { return IGNORED_JOBS.includes(jobId(j)); }
-function jobState(j) { return JOB_STATES[jobId(j)] || ''; }
+function isIgnored(j) { return [jobId(j), ...(j.duplicate_urls || [])].some(id => IGNORED_JOBS.includes(id)); }
+function jobState(j) { return JOB_STATES[jobId(j)] ?? (j.duplicate_urls || []).map(id => JOB_STATES[id]).find(state => state === 'applied') ?? (j.duplicate_urls || []).map(id => JOB_STATES[id]).find(Boolean) ?? ''; }
 function setJobState(j, state) {
   const id = jobId(j);
-  if (JOB_STATES[id] === state) delete JOB_STATES[id];
-  else JOB_STATES[id] = state;
+  JOB_STATES[id] = jobState(j) === state ? '' : state;
   localStorage.setItem(JOB_STATE_KEY, JSON.stringify(JOB_STATES));
   applyFilters();
 }
@@ -1110,6 +1110,8 @@ function loadData(data) {
   } else {
     generatedTime.textContent = '';
   }
+  const audit = data.job_link_audit;
+  document.getElementById('linkAuditSummary').textContent = audit?.completed_at ? `Link audit updated ${new Date(audit.completed_at).toLocaleString('en-IE')} · ${audit.remaining_status_counts?.reachable || 0} reachable · ${ALL_JOBS.filter(j => j.link_check?.status !== 'reachable').length} need a manual check` : '';
   document.getElementById('stLive').textContent = ALL_JOBS.length;
   document.getElementById('stCompanies').textContent = data.total_companies_checked ?? '—';
   const directoryCount = new Set([...ALL_REGISTRY.filter(c => c.careers_url || c.url).map(c => c.company), ...ALL_MANUAL.map(c => c.company)]).size;
@@ -1198,11 +1200,11 @@ async function autoFetchJobs() {
     const resp = await fetch(DATA_URL + '?t=' + Date.now(), { cache: 'no-store' });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     loadData(await resp.json());
-    document.getElementById('liveStatus').textContent = '● live';
+    document.getElementById('liveStatus').textContent = '● Up to date · checks every 5 min';
     document.getElementById('liveStatus').classList.remove('stale');
   } catch (err) {
     console.error('Dashboard data load failed:', err);
-    document.getElementById('liveStatus').textContent = '○ data.json unavailable';
+    document.getElementById('liveStatus').textContent = '○ Update failed · showing last loaded jobs';
     document.getElementById('liveStatus').classList.add('stale');
   }
 }
@@ -1538,8 +1540,10 @@ function buildJobCard(j) {
       ${employmentLevelText ? `<span class="chip level-chip">${escapeHtml(employmentLevelText)}</span>` : ''}
       ${employmentTypeValues(j).map(value => `<span class="chip type">${escapeHtml(employmentTypeLabel(value))}</span>`).join('')}
     </div>
+    ${j.link_check && j.link_check.status !== 'reachable' ? `<div class="reason-row">Link needs a manual check: ${escapeHtml(j.link_check.reason)}</div>` : ''}
     <details class="job-details">
       <summary>Match details & source</summary>
+      ${j.link_check ? `<div class="detail-line">Link: ${escapeHtml(j.link_check.reason)}${j.link_check.checked_at ? ` · ${escapeHtml(new Date(j.link_check.checked_at).toLocaleString('en-IE'))}` : ''}</div>` : ''}
       ${j.scoring_evidence === 'title_only' ? '<div class="reason-row">Limited job details: verify requirements before applying.</div>' : ''}
       ${j.best_cv ? `<div class="reason-row">Suggested CV: ${escapeHtml(j.best_cv)} · Fit score is a ranking aid, not an interview probability.</div>` : ''}
       ${(pm.reasons || []).length ? `<div class="reason-row"><span class="reason-good">Matched:</span> ${escapeHtml((pm.reasons || []).join(' · '))}</div>` : ''}
@@ -2392,6 +2396,7 @@ loadRadarState();
 setupInstantFilters();
 autoFetchJobs();
 setInterval(autoFetchJobs, REFRESH_INTERVAL_MS);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) autoFetchJobs(); });
 </script>
 
 

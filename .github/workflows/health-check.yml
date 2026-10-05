@@ -27,7 +27,8 @@ jobs:
 
       - name: Validate dashboard
         run: |
-          pip install beautifulsoup4
+          pip install beautifulsoup4 requests
           python test_zero_audit.py
           python test_candidate_match.py
+          python test_job_quality.py
           python health_check.py

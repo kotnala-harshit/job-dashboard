@@ -50,12 +50,22 @@ The scraper:
 
 ## Automation schedule
 
-The scheduler runs the core boards plus integrated proven-company batches on an
-hourly primary trigger at `:23`. A recovery trigger at `:53` checks the timestamp
-of the last completed refresh and only runs the scraper when that refresh is at
-least 60 minutes stale. This gives a missed/delayed GitHub schedule a second
-chance without normally scraping twice per hour. Collection has a 45-minute
-limit within a 50-minute workflow.
+The scheduler checks at `:07`, `:22`, `:37`, and `:52`, collecting when the
+last completed refresh is at least 55 minutes old. GitHub may delay scheduled
+runs. Collection has a 45-minute limit within a 65-minute workflow.
+
+New links are checked on each collection; previous checks are reused for up to
+24 hours. A bounded audit (10 minutes plus 2 minutes of retries) keeps slow
+employers from preventing publication. Pending checks remain visible. Only
+repeat-confirmed unavailable links are removed; browser blocks and timeouts
+are labelled for manual checking. Deduplication uses vacancy URLs/requisition
+IDs, preserving distinct requisitions with the same title.
+
+An open, unlocked dashboard checks the newest encrypted payload every five
+minutes and when returning to the tab. New published listings appear without
+logging in again; saved/applied state and filters remain local. This refreshes
+published collections, not employer listings in real time. No plaintext job
+JSON or additional stored credentials are needed.
 
 Batch 1 adds Accenture, EY Ireland, KPMG Ireland, Oracle, SAP, Auxilion,
 Capgemini, Cognizant, Dell Technologies, and IBM.
@@ -78,3 +88,7 @@ Each direct collector runs once in an isolated process, with four collectors
 at a time and a three-minute limit per company. Their jobs pass through the same Ireland validation,
 deduplication, ranking, history, and graduate processing as the core boards.
 The Proven working tab shows batch membership and unsuccessful checks.
+
+Link/refresh regression checks: `python3 test_job_quality.py` and
+`python3 test_secure_refresh.py`. The browser check needs the existing Playwright
+Chromium runtime plus cryptography, and uses disposable test credentials.

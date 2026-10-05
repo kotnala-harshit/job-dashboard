@@ -14210,8 +14210,8 @@ def scrape_medtronic():
                     location = "Cork, Ireland"
 
                 url = urllib.parse.urljoin(
-                    "https://medtronic.wd1.myworkdayjobs.com",
-                    external_path,
+                    "https://medtronic.wd1.myworkdayjobs.com/MedtronicCareers/",
+                    external_path.lstrip("/"),
                 )
 
                 m = re.search(r"_(R\d+)(?:-\d+)?$", external_path)
@@ -16146,8 +16146,8 @@ def scrape_johnson_johnson():
                         break
 
                 url = urllib.parse.urljoin(
-                    "https://jj.wd5.myworkdayjobs.com",
-                    external_path,
+                    "https://jj.wd5.myworkdayjobs.com/JJ/",
+                    external_path.lstrip("/"),
                 )
 
                 m = re.search(
@@ -21263,7 +21263,7 @@ def scrape_virgin_media_ireland():
         if external_path:
             url = urllib.parse.urljoin(
                 f"{origin}/en-US/{site}/",
-                external_path,
+                external_path.lstrip("/"),
             )
         else:
             url = source
@@ -25927,165 +25927,8 @@ def main():
 
     results = _stamp1g_kept
 
-    # Source-priority de-duplication. Direct employer/ATS records win over
-    # aggregator copies of the same vacancy.
-    source_priority = {
-        "direct": 100, "workday": 95, "greenhouse": 95, "lever": 95, "ashby": 95,
-        "smartrecruiters": 95, "workable": 94, "recruitee": 94, "personio": 94,
-        "pinpoint": 94, "phenom": 93, "eightfold": 93, "oracle": 93, "jsonld": 90,
-        "adzuna": 30, "jooble": 25, "careerjet": 20,
-    }
-    aggregator_sources = {"adzuna", "jooble", "careerjet"}
-    results.sort(key=lambda j: (j.get("company") == "Mercer", source_priority.get((j.get("ats") or "").lower(), 50)), reverse=True)
-
-    seen_urls = set()
-    seen_signatures = set()
-    deduped = []
-    for j in results:
-        company_key = _company_key(company_display_name(j.get("company", "")))
-
-        raw_url = (j.get("url") or "").strip()
-
-        # Most tracking query strings should be ignored when deduplicating.
-        # Accenture is an exception: its official branded job URLs encode the
-        # requisition ID in ?id=, so stripping the full query would collapse
-        # every Accenture vacancy into the same /jobdetails URL.
-        if raw_url:
-            try:
-                parsed = urllib.parse.urlsplit(raw_url)
-                params = urllib.parse.parse_qs(parsed.query)
-                base_url = urllib.parse.urlunsplit(
-                    (parsed.scheme, parsed.netloc, parsed.path.rstrip("/"), "", "")
-                ).lower()
-
-                # Some employer sites encode the REAL vacancy ID entirely in
-                # the query string. Stripping every query parameter collapses
-                # dozens of distinct jobs into one URL.
-                #
-                # Examples:
-                #   Stripe / Pinterest / MongoDB / Toast -> ?gh_jid=...
-                #   Accenture -> ?id=...
-                # Preserve only known identity-bearing parameters while still
-                # dropping tracking parameters.
-                identity_pairs = []
-
-                for param in (
-                    "gh_jid",        # Greenhouse custom career pages
-                    "id",            # Accenture / generic requisition ID
-                    "jobId",
-                    "job_id",
-                    "jobid",
-                    "requisitionId",
-                    "requisition_id",
-                    "reqId",
-                    "reqid",
-                ):
-                    vals = params.get(param) or []
-                    if vals and str(vals[0]).strip():
-                        identity_pairs.append(
-                            (param.lower(), str(vals[0]).strip().lower())
-                        )
-
-                if identity_pairs:
-                    identity_pairs.sort()
-                    query_key = "&".join(
-                        f"{k}={v}" for k, v in identity_pairs
-                    )
-                    url_key = f"{base_url}?{query_key}"
-
-                elif "candidatemanager.net" in parsed.netloc.lower():
-                    # CandidateManager vacancy pages share one path.
-                    # The stable vacancy identity is the jid query parameter.
-                    jid = (
-                        params.get("jid")
-                        or params.get("jobid")
-                        or params.get("job_id")
-                    )
-
-                    if jid and jid[0]:
-                        url_key = (
-                            f"{base_url}"
-                            f"?jid={str(jid[0]).strip().lower()}"
-                        )
-                    else:
-                        url_key = base_url
-
-                elif company_key == _company_key("Google"):
-                    # Google job cards contain individual vacancy URLs.
-                    # Pagination/filter parameters such as location and page
-                    # are not part of the vacancy identity. Use the canonical
-                    # individual job URL instead of result-page URL + title.
-                    parsed_google = urllib.parse.urlsplit(raw_url)
-                    path = parsed_google.path.rstrip("/")
-                    if re.search(r"/jobs/results/\d+", path, re.I):
-                        url_key = urllib.parse.urlunsplit((
-                            parsed_google.scheme.lower(),
-                            parsed_google.netloc.lower(),
-                            path,
-                            "",
-                            "",
-                        ))
-                    else:
-                        url_key = base_url
-
-                elif "myworkdayjobs.com" in parsed.netloc.lower():
-                    # Some Workday boards expose one requisition through
-                    # multiple tenant paths (for example /job and /JJ/job).
-                    requisition = re.search(r"_(r-\d[\w-]*)$", parsed.path, re.I)
-                    url_key = (
-                        f"workday:{company_key}:{requisition.group(1).lower()}"
-                        if requisition else base_url
-                    )
-
-                elif company_key == _company_key("State Street"):
-                    # State Street exposes the same Workday requisition both
-                    # as /<requisition> and /<requisition>/apply.
-                    # The /apply suffix is an application route, not a
-                    # separate vacancy.
-                    state_path = parsed.path.rstrip("/")
-                    if state_path.lower().endswith("/apply"):
-                        state_path = state_path[:-len("/apply")].rstrip("/")
-
-                    url_key = urllib.parse.urlunsplit((
-                        parsed.scheme.lower(),
-                        parsed.netloc.lower(),
-                        state_path,
-                        "",
-                        "",
-                    ))
-
-                else:
-                    url_key = base_url
-
-            except Exception:
-                url_key = raw_url.lower()
-        else:
-            url_key = ""
-
-        title_key = normalized_title(j.get("title"))
-        loc_key = _norm_phrase(j.get("location"))
-        signature = (company_key, title_key, loc_key)
-        source = (j.get("ats") or "").lower()
-
-        if url_key and url_key in seen_urls:
-            continue
-
-        # Airbnb has repeatedly arrived through multiple sources with distinct
-        # tracking/application URLs. For Airbnb only, treat identical
-        # normalized title + location as one vacancy regardless of source.
-        if company_key == _company_key("Airbnb") and signature in seen_signatures:
-            continue
-
-        if source in aggregator_sources and signature in seen_signatures:
-            continue
-
-        deduped.append(j)
-        if url_key:
-            seen_urls.add(url_key)
-        if any(signature):
-            seen_signatures.add(signature)
-
-    results = deduped
+    from job_quality import deduplicate
+    results, _ = deduplicate(results)
 
     # Connector health describes the latest source check, while jobs describe
     # vacancies. A company with current jobs cannot simultaneously be recorded
@@ -26470,10 +26313,22 @@ def main():
         ),
     }
 
+    # Apply the same URL identity and confirmed-link evidence on every refresh.
+    from job_quality import apply_quality
+    audit_file = Path(__file__).with_name("job_link_audit.json")
+    link_audit = json.loads(audit_file.read_text()) if audit_file.exists() else {}
+    # Keep aliases so existing saved/applied browser entries survive URL repairs.
+    if Path("data.json").exists():
+        previous_aliases = {j["url"]: j.get("duplicate_urls", []) for j in json.loads(Path("data.json").read_text()).get("jobs", [])}
+        for job in output["jobs"]:
+            if previous_aliases.get(job["url"]):
+                job["duplicate_urls"] = sorted(set(job.get("duplicate_urls", []) + previous_aliases[job["url"]]))
+    apply_quality(output, link_audit)
+
     with open("data.json", "w") as f:
         json.dump(output, f, indent=2)
 
-    print(f"\nDone. {len(results)} matching jobs written to data.json ({len(errors)} companies errored).")
+    print(f"\nDone. {len(output['jobs'])} matching jobs written to data.json ({len(errors)} companies errored).")
 
 
 # === WORKING_IRELAND_BATCH_START ===
@@ -27050,7 +26905,7 @@ def _ireland_final_workday(company, wd, tenant, site, facet):
                 if not title or not path:
                     continue
 
-                url = urllib.parse.urljoin(origin, path)
+                url = urllib.parse.urljoin(f"{origin}/{site}/", path.lstrip("/"))
 
                 bullets = row.get("bulletFields") or []
                 req = _ireland_final_clean(

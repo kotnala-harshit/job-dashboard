@@ -102,10 +102,10 @@ if "data.json" not in bundled_json:
 # ------------------------------------------------------------------
 
 bootstrap = """
+<script id="secure-data" type="application/json">__SECURE_JSON_PLACEHOLDER__</script>
 <script>
 (() => {
-    const __SECURE_JSON_FILES__ =
-        __SECURE_JSON_PLACEHOLDER__;
+    const initialFiles = JSON.parse(document.getElementById("secure-data").textContent);
 
     const originalFetch = window.fetch.bind(window);
 
@@ -118,7 +118,7 @@ bootstrap = """
             raw = input.url;
         }
 
-        try {
+        {
             const u = new URL(raw, window.location.href);
             const path = u.pathname
                 .replace(/^\\/+/, "")
@@ -126,16 +126,15 @@ bootstrap = """
                 .pop();
 
             if (
-                path &&
+                u.origin === window.location.origin && path &&
                 Object.prototype.hasOwnProperty.call(
-                    __SECURE_JSON_FILES__,
+                    initialFiles,
                     path
                 )
             ) {
+                const latest = window.getLatestProtectedData ? await window.getLatestProtectedData() : null;
                 return new Response(
-                    JSON.stringify(
-                        __SECURE_JSON_FILES__[path]
-                    ),
+                    JSON.stringify((latest || initialFiles)[path]),
                     {
                         status: 200,
                         headers: {
@@ -145,7 +144,7 @@ bootstrap = """
                     }
                 );
             }
-        } catch (_) {}
+        }
 
         return originalFetch(input, init);
     };
@@ -162,7 +161,7 @@ bootstrap = bootstrap.replace(
         },
         ensure_ascii=False,
         separators=(",", ":"),
-    ),
+    ).replace("</", "<\\/"),
 )
 
 
@@ -931,41 +930,7 @@ async function loadRememberedLogin() {{
 }}
 
 
-async function unlock(
-    username,
-    password,
-    rememberDays = null
-) {{
-
-    const normalizedUsername =
-        username.trim().toLowerCase();
-
-    const usernameHash =
-        await sha256Hex(
-            normalizedUsername
-        );
-
-    if (usernameHash !== USERNAME_HASH) {{
-        throw new Error(
-            "Invalid username or password"
-        );
-    }}
-
-    const response =
-        await fetch(
-            "payload.json",
-            {{ cache: "no-store" }}
-        );
-
-    if (!response.ok) {{
-        throw new Error(
-            "Encrypted dashboard unavailable"
-        );
-    }}
-
-    const payload =
-        await response.json();
-
+async function decryptDashboard(payload, passwordKey, normalizedUsername) {{
     const salt =
         fromBase64(payload.salt);
 
@@ -985,16 +950,6 @@ async function unlock(
         usernameBytes,
         salt.length
     );
-
-    const passwordKey =
-        await crypto.subtle.importKey(
-            "raw",
-            new TextEncoder()
-                .encode(password),
-            "PBKDF2",
-            false,
-            ["deriveKey"]
-        );
 
     const key =
         await crypto.subtle.deriveKey(
@@ -1043,6 +998,56 @@ async function unlock(
 
     }}
 
+    return new TextDecoder().decode(plaintext);
+}}
+
+async function unlock(
+    username,
+    password,
+    rememberDays = null
+) {{
+
+    const normalizedUsername =
+        username.trim().toLowerCase();
+
+    const usernameHash =
+        await sha256Hex(
+            normalizedUsername
+        );
+
+    if (usernameHash !== USERNAME_HASH) {{
+        throw new Error(
+            "Invalid username or password"
+        );
+    }}
+
+    const response =
+        await fetch(
+            "payload.json",
+            {{ cache: "no-store" }}
+        );
+
+    if (!response.ok) {{
+        throw new Error(
+            "Encrypted dashboard unavailable"
+        );
+    }}
+
+    const payload =
+        await response.json();
+
+    const passwordKey =
+        await crypto.subtle.importKey(
+            "raw",
+            new TextEncoder()
+                .encode(password),
+            "PBKDF2",
+            false,
+            ["deriveKey"]
+        );
+
+    const dashboard = await decryptDashboard(payload, passwordKey, normalizedUsername);
+
     /*
      * Only update remembered-device state after successful
      * AES-GCM authentication/decryption.
@@ -1068,9 +1073,30 @@ async function unlock(
         }}
     }}
 
-    const dashboard =
-        new TextDecoder()
-            .decode(plaintext);
+    // Keep only the non-extractable key in this tab; no extra credential storage.
+    const networkFetch = window.fetch.bind(window);
+    let currentNonce = payload.nonce;
+    let latestFiles = null;
+    let pending = null;
+    window.getLatestProtectedData = () => {{
+        if (!pending) pending = (async () => {{
+            const response = await networkFetch("payload.json?t=" + Date.now(), {{cache: "no-store"}});
+            if (!response.ok) throw new Error("Encrypted dashboard update unavailable");
+            const next = await response.json();
+            if (next.nonce !== currentNonce) {{
+                const html = await decryptDashboard(next, passwordKey, normalizedUsername);
+                const doc = new DOMParser().parseFromString(html, "text/html");
+                const node = doc.getElementById("secure-data");
+                if (!node) throw new Error("Invalid dashboard update");
+                const files = JSON.parse(node.textContent);
+                if (!Array.isArray(files["data.json"]?.jobs)) throw new Error("Invalid job data");
+                latestFiles = files;
+                currentNonce = next.nonce;
+            }}
+            return latestFiles;
+        }})().finally(() => {{ pending = null; }});
+        return pending;
+    }};
 
     document.open();
 
