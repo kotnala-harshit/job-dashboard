@@ -25989,7 +25989,9 @@ def main():
                 else "aggregator" if (j.get("ats") or "").lower() in {"adzuna","jooble","careerjet"}
                 else "other"
             )
-        j.pop("description_text", None)
+        # Preserve collected evidence for private application preparation. It may be a truncated excerpt.
+        j["description_text"] = description_text
+        j["description_status"] = "review_required" if description_text.strip() else "pending"
 
     # Persistent freshness state: supports old {id: "timestamp"} files and richer v2 objects.
     now_dt = datetime.now(timezone.utc)
