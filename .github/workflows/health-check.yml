@@ -32,4 +32,3 @@ jobs:
           python test_candidate_match.py
           python test_job_quality.py
           python health_check.py
-          node test_copilot_sync.cjs

@@ -780,7 +780,6 @@ body{background:#f3f4f6!important}
   <div class="filters" style="padding:12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
     <label><input id="fRegularRoles" type="checkbox" checked onchange="applyFilters()"> Regular analyst and consultant roles</label>
     <button onclick="exportCopilotJobs()">Export saved jobs to copilot</button>
-    <small id="copilotSyncStatus" role="status">Connecting to private application tracker…</small>
     <a href="https://www.linkedin.com/jobs/search/?keywords=Data%20Analyst%20OR%20Business%20Analyst%20OR%20BI%20Analyst&amp;location=Ireland" target="_blank" rel="noopener">LinkedIn Ireland search</a>
     <a href="http://127.0.0.1:8791" target="_blank" rel="noopener">Private application copilot on this Mac</a>
     <small>Listings and collected description excerpts require employer-page review. LinkedIn Top applicant is user-observed.</small>
@@ -863,16 +862,14 @@ const IGNORED_KEY = 'ireland_job_dashboard_ignored_v1';
 const JOB_STATE_KEY = 'ireland_job_dashboard_state_v1';
 let IGNORED_JOBS = [];
 let JOB_STATES = {};
-let COPILOT_CONFIRMED = {};
 
 function loadRadarState() {
-  try { COPILOT_CONFIRMED = JSON.parse(localStorage.getItem('ireland_job_dashboard_copilot_confirmed_v1') || '{}') || {}; } catch(e) { COPILOT_CONFIRMED = {}; }
   try { IGNORED_JOBS = JSON.parse(localStorage.getItem(IGNORED_KEY) || '[]'); } catch(e) { IGNORED_JOBS = []; }
   try { JOB_STATES = JSON.parse(localStorage.getItem(JOB_STATE_KEY) || '{}'); } catch(e) { JOB_STATES = {}; }
 }
 function jobId(j) { return String(j.url || `${j.company}|${j.title}|${j.location || ''}`); }
 function isIgnored(j) { return [jobId(j), ...(j.duplicate_urls || [])].some(id => IGNORED_JOBS.includes(id)); }
-function jobState(j) { if ([j.url, ...(j.duplicate_urls || [])].some(url => COPILOT_CONFIRMED[copilotCanonicalUrl(url)]?.status === 'applied')) return 'applied'; return JOB_STATES[jobId(j)] ?? (j.duplicate_urls || []).map(id => JOB_STATES[id]).find(state => state === 'applied') ?? (j.duplicate_urls || []).map(id => JOB_STATES[id]).find(Boolean) ?? ''; }
+function jobState(j) { return JOB_STATES[jobId(j)] ?? (j.duplicate_urls || []).map(id => JOB_STATES[id]).find(state => state === 'applied') ?? (j.duplicate_urls || []).map(id => JOB_STATES[id]).find(Boolean) ?? ''; }
 function setJobState(j, state) {
   const id = jobId(j);
   if (state === 'applied' && jobState(j) !== 'applied') {
@@ -3017,51 +3014,6 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) auto
       renderGraduates();
     })
     .catch(err => console.warn('Graduate dashboard data load failed:', err));
-})();
-</script>
-
-
-<script>
-/* COPILOT_STATUS_SYNC_START */
-function copilotCanonicalUrl(value) {
-  try {
-    const url=new URL(value); if(!['http:','https:'].includes(url.protocol)||url.username||url.password)return '';
-    url.hash=''; url.pathname=url.pathname.replace(/\/$/,'');
-    for(const key of [...url.searchParams.keys()])if(key.toLowerCase().startsWith('utm_')||['source','ref','icid'].includes(key.toLowerCase()))url.searchParams.delete(key);
-    url.searchParams.sort(); return url.href.replace(/\/$/,'');
-  }catch{return '';}
-}
-function importCopilotConfirmed(applications) {
-  if(!Array.isArray(applications)||applications.length>10000)return 0;
-  let changes=0;
-  for(const entry of applications){
-    if(entry?.status!=='applied'||typeof entry.url!=='string'||!/^[a-f0-9]{16}$/.test(entry.job_id||'')||typeof entry.submitted_at!=='string'||!Number.isFinite(Date.parse(entry.submitted_at)))continue;
-    const url=copilotCanonicalUrl(entry.url);if(!url)continue;
-    if(COPILOT_CONFIRMED[url]?.submitted_at!==entry.submitted_at)changes++;
-    COPILOT_CONFIRMED[url]={status:'applied',job_id:entry.job_id,submitted_at:entry.submitted_at};
-    JOB_STATES[url]='applied';
-    for(const job of ALL_JOBS)if([job.url,...(job.duplicate_urls||[])].some(candidate=>copilotCanonicalUrl(candidate)===url))JOB_STATES[jobId(job)]='applied';
-  }
-  localStorage.setItem('ireland_job_dashboard_copilot_confirmed_v1',JSON.stringify(COPILOT_CONFIRMED));
-  localStorage.setItem(JOB_STATE_KEY,JSON.stringify(JOB_STATES));
-  return changes;
-}
-/* COPILOT_STATUS_SYNC_END */
-(function connectPrivateCopilot(){
-  const origin='http://127.0.0.1:8791';
-  const nonce=crypto.randomUUID();
-  const frame=document.createElement('iframe');frame.hidden=true;frame.title='Private application status sync';frame.src=origin+'/radar-sync';
-  frame.setAttribute('sandbox','allow-scripts allow-same-origin');
-  const indicator=document.getElementById('copilotSyncStatus');let connected=false;
-  function request(){frame.contentWindow?.postMessage({type:'copilot-status-request',nonce},origin);}
-  window.addEventListener('message',event=>{
-    if(event.origin!==origin||event.source!==frame.contentWindow||event.data?.type!=='copilot-confirmed-applications'||event.data.nonce!==nonce)return;
-    const changes=importCopilotConfirmed(event.data.applications);connected=true;
-    if(indicator)indicator.textContent='Private tracker connected · '+Object.keys(COPILOT_CONFIRMED).length+' confirmed applications';
-    if(changes)applyFilters();
-  });
-  frame.addEventListener('load',request);document.body.append(frame);setInterval(request,60000);
-  setTimeout(()=>{if(!connected&&indicator)indicator.textContent='Private tracker unavailable or browser local access blocked; existing notes preserved.';},10000);
 })();
 </script>
 
