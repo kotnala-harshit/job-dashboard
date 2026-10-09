@@ -777,14 +777,6 @@ body{background:#f3f4f6!important}
 </div>
 
 <main>
-  <div class="filters" style="padding:12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
-    <label><input id="fRegularRoles" type="checkbox" checked onchange="applyFilters()"> Regular analyst and consultant roles</label>
-    <button onclick="exportCopilotJobs()">Export saved jobs to copilot</button>
-    <a href="https://www.linkedin.com/jobs/search/?keywords=Data%20Analyst%20OR%20Business%20Analyst%20OR%20BI%20Analyst&amp;location=Ireland" target="_blank" rel="noopener">LinkedIn Ireland search</a>
-    <a href="http://127.0.0.1:8791" target="_blank" rel="noopener">Private application copilot on this Mac</a>
-    <small>Listings and collected description excerpts require employer-page review. LinkedIn Top applicant is user-observed.</small>
-  </div>
-
   <div class="subhead">
     <div class="tabs">
       <div id="tabLive" class="tab active" onclick="showTab('live')">Live jobs & graduates</div>
@@ -872,13 +864,6 @@ function isIgnored(j) { return [jobId(j), ...(j.duplicate_urls || [])].some(id =
 function jobState(j) { return JOB_STATES[jobId(j)] ?? (j.duplicate_urls || []).map(id => JOB_STATES[id]).find(state => state === 'applied') ?? (j.duplicate_urls || []).map(id => JOB_STATES[id]).find(Boolean) ?? ''; }
 function setJobState(j, state) {
   const id = jobId(j);
-  if (state === 'applied' && jobState(j) !== 'applied') {
-    const receipt = prompt('Enter the actual application confirmation or receipt reference. Opening a job page does not count as applying.');
-    if (!receipt || !receipt.trim()) return;
-    const evidence = JSON.parse(localStorage.getItem('ireland_job_dashboard_receipts_v1') || '{}');
-    evidence[id] = {reference:receipt.trim(), recorded_at:new Date().toISOString()};
-    localStorage.setItem('ireland_job_dashboard_receipts_v1', JSON.stringify(evidence));
-  }
   JOB_STATES[id] = jobState(j) === state ? '' : state;
   localStorage.setItem(JOB_STATE_KEY, JSON.stringify(JOB_STATES));
   applyFilters();
@@ -1657,20 +1642,6 @@ function renderMyApplications() {
   });
 }
 
-function regularCopilotRole(j) {
-  const title = j.title || '';
-  return !/\b(graduate|intern|internship|trainee|apprentice|senior|sr|staff|architect|lead|principal|head|director|manager|partner|vice president)\b/i.test(title)
-    && /\b(data analyst|business analyst|business systems analyst|bi analyst|business intelligence analyst|reporting analyst|analytics consultant|implementation consultant|functional consultant|erp consultant|data consultant|sap consultant|oracle consultant|erp implementation)\b/i.test(title);
-}
-function exportCopilotJobs() {
-  const selected = ALL_JOBS.filter(j => regularCopilotRole(j) && jobState(j) === 'saved');
-  if (!selected.length) { alert('Save regular target roles first, then export them to the private copilot.'); return; }
-  const jobs = selected.map(j => ({title:j.title, company:j.company, location:j.location, url:j.url,
-    description:j.description_text || '', description_status:j.description_text ? 'review_required' : 'pending',
-    availability:'listed_on_dashboard_requires_employer_review'}));
-  const url = URL.createObjectURL(new Blob([JSON.stringify({jobs}, null, 2)], {type:'application/json'}));
-  const a = document.createElement('a'); a.href=url; a.download='copilot-saved-jobs.json'; a.click(); URL.revokeObjectURL(url);
-}
 function applyFilters() {
   const search = document.getElementById('fSearch').value.trim().toLowerCase();
   const company = document.getElementById('fCompany').value;
@@ -1693,7 +1664,6 @@ function applyFilters() {
     document.getElementById('fEmploymentLevel')?.value || '';
 
   let filtered = ALL_JOBS.filter(j => {
-    if (document.getElementById("fRegularRoles")?.checked && !regularCopilotRole(j)) return false;
 
     if (isPartTimeJob(j) && !j.university_job && !isProfileRelevantPartTimeJob(j)) return false;
 if (search) {
