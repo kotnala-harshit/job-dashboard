@@ -32,6 +32,14 @@ with tempfile.TemporaryDirectory() as directory:
             assert page.evaluate("async () => {try {await unlock('audit-test','wrong-password',0); return false;} catch(e) {return true;}}")
             page.evaluate("unlock('audit-test','local-build-verification-only',0)")
             page.wait_for_function("typeof ALL_JOBS !== 'undefined' && ALL_JOBS.length > 0")
+            assert page.evaluate("""async () => {
+                const data = await (await fetch('data.json')).json();
+                const company = data.jobs[0].company;
+                data.registry_companies.push({company:'Legacy test alias', canonical_company:company});
+                data.jobs[0].company = 'Legacy test alias';
+                loadData(data);
+                return ALL_JOBS[0].company === company && !ALL_REGISTRY.some(c => c.company === 'Legacy test alias') && !getZeroJobCompanies().some(c => c.company === company);
+            }""")
             title=page.evaluate('ALL_JOBS[0].title')
             page.evaluate("JOB_STATES[jobId(ALL_JOBS[0])] = 'saved'; document.getElementById('fCompany').value = ALL_JOBS[0].company")
             company=page.locator('#fCompany').input_value()

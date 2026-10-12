@@ -1074,12 +1074,13 @@ function isRealJobTitle(title) {
 }
 
 function loadData(data) {
-  const jobs = data.jobs || [];
+  const aliases = new Map((data.registry_companies || []).filter(c => c.canonical_company).map(c => [c.company, c.canonical_company]));
+  const jobs = (data.jobs || []).map(j => aliases.has(j.company) ? {...j, company: aliases.get(j.company)} : j);
   ALL_JOBS = (data.focus === 'ireland' ? jobs : irelandOnlyJobs(jobs))
     .filter(j => isRealJobTitle(j.title));
   ALL_MANUAL = data.manual_check_companies || [];
-  ALL_REGISTRY = data.registry_companies || [];
-  ALL_COVERAGE = data.coverage_diagnostics || [];
+  ALL_REGISTRY = (data.registry_companies || []).filter(c => !aliases.has(c.company));
+  ALL_COVERAGE = (data.coverage_diagnostics || []).filter(c => !aliases.has(c.company));
   ALL_LIVE_ZERO = data.live_zero_companies || ALL_COVERAGE.filter(x => x.state === 'live_zero');
   COMPANY_HISTORY = data.company_history || {};
   PROVEN_WORKING_COMPANIES = data.proven_working_companies || Object.keys(COMPANY_HISTORY).filter(
