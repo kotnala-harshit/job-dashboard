@@ -1,6 +1,6 @@
 """Run with python3 test_zero_audit.py; no network requests."""
 from datetime import datetime, timezone, timedelta
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from types import SimpleNamespace
 
 import scrape
@@ -136,6 +136,30 @@ def check():
     with patch.dict(scrape._PRIORITY_OFFICIAL_CONNECTORS, {"Visa": (failed, "https://example.com")}):
         assert scrape.scrape_direct_company("Visa") == []
     assert scrape.CONNECTOR_HEALTH["Visa"]["live"] is False
+    import json
+    row = {"city": "Dublin", "country": "Ireland", "lever_id": "one", "slug": "analyst-dublin", "job_title": "Analyst"}
+    session = SimpleNamespace(get=lambda *a, **k: SimpleNamespace(text="let allJobs = " + json.dumps([row, {**row, "city": "London", "country": "United Kingdom"}]) + ";", raise_for_status=lambda: None))
+    with patch.object(scrape, "_session", return_value=session):
+        jobs = zero_audit.collect_veeva()
+        assert len(jobs) == 1 and jobs[0]["url"] == "https://careers.veeva.com/job/one/analyst-dublin/"
+    kefron = '<div class="job-opening"><a class="job-link" href="/Embed/Job/1">Analyst</a><span class="job-location">Dublin, Ireland</span></div>'
+    assert zero_audit.official_page_jobs("Kefron", kefron)[0]["url"] == "https://kefron.hirehive.com/Embed/Job/1"
+
+    browser = MagicMock()
+    page = browser.new_page.return_value
+    request = SimpleNamespace(post_data_json={"fieldsToInclude": []}, all_headers=lambda: {":authority": "example.com", "authorization": "public-search-token"})
+    page.expect_response.return_value.__enter__.return_value.value = SimpleNamespace(request=request, url="https://example.com/search")
+    page.request.post.return_value.ok = True
+    playwright = MagicMock()
+    playwright.__enter__.return_value.chromium.launch.return_value = browser
+    for countries, count, zero in [(["Ireland", "United Kingdom"], 1, False), (["United Kingdom"], 0, True), ([""], 0, False)]:
+        scrape.CONNECTOR_HEALTH.pop("Avanade", None)
+        page.request.post.return_value.json.return_value = {"results": [{"title": "Analyst", "clickUri": f"https://example.com/job/{i}", "raw": {"jobcountry": country}} for i, country in enumerate(countries)], "totalCount": len(countries)}
+        with patch.object(scrape, "sync_playwright", return_value=playwright):
+            assert len(zero_audit.collect_avanade()) == count
+        assert scrape.has_current_zero_evidence(scrape.CONNECTOR_HEALTH.get("Avanade", {})) == zero
+        assert ":authority" not in page.request.post.call_args.kwargs["headers"]
+
     print("Zero-source regression checks passed")
 
 

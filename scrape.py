@@ -179,6 +179,9 @@ UNIVERSITY_CAREER_PAGES = {
 }
 
 CAREERS_URL_OVERRIDES = {
+    "First Derivative": "https://careers.epam.com/en/jobs/campaign-tag/First_Derivative",
+    "Kefron": "https://kefron.com/finance-automation/careers",
+    "Fujitsu": "https://global.fujitsu/en-global/careers",
     "Apple": "https://jobs.apple.com/en-ie/search",
     "EY Ireland": "https://careers.ey.com/ey",
     "Accenture": "https://www.accenture.com/ie-en/careers/jobsearch",
@@ -29354,6 +29357,9 @@ def build_company_registry(include_cache=False):
     for item in registry:
         company = item.get("company") or item.get("name") or ""
         item["zero_audit"] = audited.get(company)
+        audit = item["zero_audit"] or {}
+        if audit.get("route") and audit.get("status") in {"jobs_found", "verified_zero"}:
+            item.update(automatic=True, platform=audit["route"]["platform"], careers_url=audit.get("source_url") or item.get("careers_url"))
         item["refresh_batch"] = next(
             (number for number, batch in enumerate(PROVEN_REFRESH_BATCHES, 1) if company in batch),
             None,

@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 import scrape
 
 OFFICIAL_PAGES = {
+    "Kefron": ("https://kefron.hirehive.com/embed", ".job-opening", "a.job-link", ".job-location"),
     "ASML": ("https://www.asml.com/en/careers/find-your-job?job_country=Ireland", "a.search-results__item", "h3", ".search-results__fields li:first-child"),
     "DPS Group (Arcadis)": ("https://www.dpsgroupglobal.com/careers/jobs/", ".boxstyle-info__copy", ".boxstyle-info__copy--info > a", ".info--list__item:first-child"),
     "CACEIS": ("https://jobs.caceis.com/offre-de-emploi/liste-offres.aspx", ".ts-offer-list-item", ".ts-offer-list-item__title-link", ".ts-offer-list-item__description"),
@@ -349,7 +350,68 @@ def check_deutsche_bank_zero():
     return []
 
 
+def collect_avanade():
+    url = "https://www.avanade.com/en/career/search-jobs"
+    jobs, locations = {}, []
+    with scrape.sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        try:
+            page = browser.new_page()
+            with page.expect_response(lambda r: "/rest/search/v2" in r.url and r.request.method == "POST", timeout=45000) as pending:
+                page.goto(url, wait_until="domcontentloaded", timeout=45000)
+            response = pending.value
+            body = response.request.post_data_json
+            body["fieldsToInclude"] += ["joblocation"]
+            body["numberOfResults"] = 1000
+            # shortcut: cap at 20,000 jobs; incomplete feeds never establish zero.
+            for offset in range(0, 20000, 1000):
+                body["firstResult"] = offset
+                result = page.request.post(response.url, headers={k: v for k, v in response.request.all_headers().items() if k in {"authorization", "content-type"}}, data=body)
+                if not result.ok:
+                    raise ValueError(f"Avanade search HTTP {result.status}")
+                data = result.json()
+                for row in data["results"]:
+                    raw = row["raw"]
+                    country = raw.get("jobcountry", "")
+                    country = "; ".join(country) if isinstance(country, list) else country
+                    locations.append(country)
+                    if scrape.region_ok(country):
+                        jobs[row["clickUri"]] = {"company": "Avanade", "ats": "direct", "title": row["title"], "location": country,
+                                                "url": row["clickUri"], "updated_at": None, "description_text": raw.get("jobdescription", "")}
+                if offset + len(data["results"]) >= data["totalCount"]:
+                    if not jobs and locations and all(foreign_location(loc) for loc in locations):
+                        scrape._mark_connector_health("Avanade", True, "Complete official active-job feed has no Ireland locations", url)
+                        scrape.CONNECTOR_HEALTH["Avanade"].update(verified_zero=True, official_total=len(locations))
+                    break
+                if not data["results"]:
+                    break
+        finally:
+            browser.close()
+    return list(jobs.values())
+
+
+def collect_veeva():
+    url = "https://careers.veeva.com/job-search-results/"
+    response = scrape._session().get(url, timeout=25)
+    response.raise_for_status()
+    # The search page embeds the complete feed before applying browser filters.
+    rows = json.JSONDecoder().raw_decode(response.text.split("let allJobs = ", 1)[1])[0]
+    jobs = []
+    for row in rows:
+        location = f"{row.get('city', '')}, {row.get('country', '')}"
+        if scrape.region_ok(location):
+            jobs.append({"company": "Veeva Systems", "ats": "direct", "title": row["job_title"], "location": location,
+                         "url": f"https://careers.veeva.com/job/{row['lever_id']}/{row['slug']}/", "updated_at": None})
+    if not jobs and rows and all(foreign_location(f"{r.get('city', '')}, {r.get('country', '')}", r.get("remote") == "1") for r in rows):
+        scrape._mark_connector_health("Veeva Systems", True, "Complete official feed has no eligible Ireland locations", url)
+        scrape.CONNECTOR_HEALTH["Veeva Systems"].update(verified_zero=True, official_total=len(rows))
+    return jobs
+
+
 CORRECTED_ROUTES = {
+    "Avanade": {"platform": "official_api", "slug": "Avanade"},
+    "Vanguard": {"platform": "workday", "slug": "vanguard|wd5|vanguard_external"},
+    "Veeva Systems": {"platform": "official_api", "slug": "Veeva Systems"},
     "Aviva Ireland": {"platform": "official_api", "slug": "Aviva Ireland"},
     "MSCI": {"platform": "official_api", "slug": "MSCI"},
     "Deutsche Bank": {"platform": "official_api", "slug": "Deutsche Bank"},
@@ -414,7 +476,7 @@ def collect(company):
             return []
         tried.add((platform, slug))
         if platform == "official_api":
-            jobs = {"MSCI": collect_msci, "Deutsche Bank": check_deutsche_bank_zero, "Aviva Ireland": collect_aviva}[company]()
+            jobs = {"Avanade": collect_avanade, "Veeva Systems": collect_veeva, "MSCI": collect_msci, "Deutsche Bank": check_deutsche_bank_zero, "Aviva Ireland": collect_aviva}[company]()
         elif platform == "successfactors":
             jobs = collect_successfactors(company, slug)
         elif platform == "bamboohr":
