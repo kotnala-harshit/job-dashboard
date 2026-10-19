@@ -453,7 +453,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8230535",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.711654+00:00",
+      "checked_at": "2026-10-19T00:59:06.916681+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8233456": {
@@ -461,7 +461,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8233456",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.712002+00:00",
+      "checked_at": "2026-10-19T00:59:06.917171+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8242560": {
@@ -501,7 +501,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8249589",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.712625+00:00",
+      "checked_at": "2026-10-19T00:59:06.917822+00:00",
       "failure_checks": 0
     },
     "https://integrity360.bamboohr.com/careers/785": {
@@ -651,7 +651,7 @@
     "http://www.lero.ie/": {
       "status": "error",
       "reason": "ConnectTimeout",
-      "checked_at": "2026-10-18T23:04:44.711070+00:00",
+      "checked_at": "2026-10-19T00:59:06.915934+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8130881": {
@@ -8457,8 +8457,8 @@
       "final_url": "https://careers.opentext.com/us/en/job/53796/Sr-AI-Developer",
       "status": "unreachable",
       "reason": "Employer page explicitly reports job unavailable",
-      "checked_at": "2026-10-18T00:00:29.009032+00:00",
-      "failure_checks": 24
+      "checked_at": "2026-10-19T00:59:06.925697+00:00",
+      "failure_checks": 26
     },
     "https://apply.careers.microsoft.com/careers/job/1970393556979217": {
       "http_status": 200,
@@ -8625,8 +8625,8 @@
       "final_url": "https://careers.opentext.com/us/en/job/52404/Lead-AI-Developer",
       "status": "unreachable",
       "reason": "Employer page explicitly reports job unavailable",
-      "checked_at": "2026-10-18T00:00:29.010094+00:00",
-      "failure_checks": 8
+      "checked_at": "2026-10-19T00:59:06.927390+00:00",
+      "failure_checks": 10
     },
     "https://careers.opentext.com/us/en/job/52405/Lead-AI-Developer": {
       "http_status": 200,
@@ -9577,8 +9577,8 @@
       "final_url": "https://careers.opentext.com/us/en/job/53619/Sr-Principal-AI-Architect",
       "status": "unreachable",
       "reason": "Employer page explicitly reports job unavailable",
-      "checked_at": "2026-10-18T00:00:29.013695+00:00",
-      "failure_checks": 24
+      "checked_at": "2026-10-19T00:59:06.934985+00:00",
+      "failure_checks": 26
     },
     "https://jobs.smartrecruiters.com/Eurofins/744000143051708-account-manager": {
       "http_status": 200,
@@ -10847,7 +10847,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/associate-15178": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-10-18T23:04:44.719772+00:00",
+      "checked_at": "2026-10-19T00:59:06.931986+00:00",
       "failure_checks": 0
     },
     "https://jobs.smartrecruiters.com/AbbVie/3743990015009326-biologics-technician": {
@@ -13477,7 +13477,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/businessanalyst-15136": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-10-18T23:04:44.722589+00:00",
+      "checked_at": "2026-10-19T00:59:06.936002+00:00",
       "failure_checks": 0
     },
     "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/2682": {
@@ -13491,7 +13491,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/juniorassociate-20159": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-10-18T23:04:44.724297+00:00",
+      "checked_at": "2026-10-19T00:59:06.940023+00:00",
       "failure_checks": 0
     },
     "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/2687": {
@@ -15979,7 +15979,7 @@
       "final_url": "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/R281329/",
       "status": "error",
       "reason": "HTTP 502",
-      "checked_at": "2026-10-18T23:04:44.728563+00:00",
+      "checked_at": "2026-10-19T00:59:06.959015+00:00",
       "failure_checks": 0
     },
     "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210788319": {
@@ -16385,7 +16385,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/businessanalystintern-15275": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-10-18T23:04:44.726280+00:00",
+      "checked_at": "2026-10-19T00:59:06.949674+00:00",
       "failure_checks": 0
     },
     "https://careers.tirlan.com/tirlan/job/Kilkenny-Finance-Associate-R95-DXR1/1366167455/": {
@@ -18767,7 +18767,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/specialist-communications-110429": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-10-18T23:04:44.733048+00:00",
+      "checked_at": "2026-10-19T00:59:06.963014+00:00",
       "failure_checks": 0
     },
     "https://cadence.wd1.myworkdayjobs.com/External_Careers/job/DUBLIN/Credit---Collections-Specialist_R52078": {
@@ -24581,7 +24581,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/seniorfellow-scientificaiclinicalbiostatistician-110969": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-10-18T23:04:44.733828+00:00",
+      "checked_at": "2026-10-19T00:59:06.970034+00:00",
       "failure_checks": 0
     },
     "https://jobs.aib.ie/aib/job/Dublin-General-Insurance-Sales-Delivery-Specialist%2C-Dublin-IE/1373335257/": {
@@ -29139,7 +29139,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/communicationsspecialist-socialhealthcarepublicentities-109567": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-10-18T23:04:44.734066+00:00",
+      "checked_at": "2026-10-19T00:59:06.972935+00:00",
       "failure_checks": 0
     },
     "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Senior-Demo-Engineer---Informatica-Demo-Engineering_JR359556": {
@@ -36069,7 +36069,7 @@
     "mailto:recruit@gasnetworks.ie?subject=C&amp;I Design Engineer \u2013 Renewable Gas - Ref No. GNI107": {
       "status": "unverified",
       "reason": "Email application; no web page to check",
-      "checked_at": "2026-10-18T23:04:44.717613+00:00",
+      "checked_at": "2026-10-19T00:59:06.923365+00:00",
       "failure_checks": 0
     },
     "https://job-boards.greenhouse.io/purestorage/jobs/8237586": {
@@ -37669,7 +37669,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8259169",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.714720+00:00",
+      "checked_at": "2026-10-19T00:59:06.920205+00:00",
       "failure_checks": 0
     },
     "https://integrity360.bamboohr.com/careers/820": {
@@ -39165,8 +39165,8 @@
       "final_url": "https://careers.opentext.com/us/en/job/53142/Lead-Software-Developer-C-C-WebAssembly",
       "status": "unreachable",
       "reason": "Employer page explicitly reports job unavailable",
-      "checked_at": "2026-10-18T00:00:29.018301+00:00",
-      "failure_checks": 20
+      "checked_at": "2026-10-19T00:59:06.957929+00:00",
+      "failure_checks": 22
     },
     "https://ie.linkedin.com/jobs/view/sales-development-representative-hebrew-at-linkedin-4461144014?position=2&pageNum=0&refId=QHmCZdk0138%2FAqPhxuUfzw%3D%3D&trackingId=HGuey36X3cxokB7tZfXRTg%3D%3D": {
       "http_status": 200,
@@ -39221,8 +39221,8 @@
       "final_url": "https://careers.opentext.com/us/en/job/53000/Senior-Consultant-Data-Migration-and-Modernization",
       "status": "unreachable",
       "reason": "Employer page explicitly reports job unavailable",
-      "checked_at": "2026-10-18T00:00:29.024109+00:00",
-      "failure_checks": 20
+      "checked_at": "2026-10-19T00:59:06.967593+00:00",
+      "failure_checks": 22
     },
     "https://careers.tirlan.com/tirlan/job/Ballitore-Maintenance-and-Engineering-Manager-KE-R14-CH05/1362560255/": {
       "http_status": 200,
@@ -39619,19 +39619,19 @@
     "mailto:recruit@gasnetworks.ie?subject=GPRO Analyst - Ref No. GNI160": {
       "status": "unverified",
       "reason": "Email application; no web page to check",
-      "checked_at": "2026-10-18T23:04:44.717943+00:00",
+      "checked_at": "2026-10-19T00:59:06.923746+00:00",
       "failure_checks": 0
     },
     "mailto:recruit@gasnetworks.ie?subject=Land Management Administrator - Ref No. GNI159": {
       "status": "unverified",
       "reason": "Email application; no web page to check",
-      "checked_at": "2026-10-18T23:04:44.718281+00:00",
+      "checked_at": "2026-10-19T00:59:06.924035+00:00",
       "failure_checks": 0
     },
     "mailto:recruit@gasnetworks.ie?subject=Design Delivery Lead \u2013 Electrical, Control &amp; Instrumentation  - Ref No. GNI161": {
       "status": "unverified",
       "reason": "Email application; no web page to check",
-      "checked_at": "2026-10-18T23:04:44.717919+00:00",
+      "checked_at": "2026-10-19T00:59:06.923721+00:00",
       "failure_checks": 0
     },
     "https://job-boards.greenhouse.io/gongio/jobs/4713267006": {
@@ -43383,7 +43383,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Digital-Construction-Lead/46507",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.726547+00:00",
+      "checked_at": "2026-10-19T00:59:06.954993+00:00",
       "failure_checks": 0
     },
     "https://apply.careers.microsoft.com/careers?start=50&location=Ireland&pid=1970393557018917&sort_by=distance&filter_include_remote=1&filter_include_relocation=0#app": {
@@ -44223,7 +44223,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8264379",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.716218+00:00",
+      "checked_at": "2026-10-19T00:59:06.923082+00:00",
       "failure_checks": 0
     },
     "https://careers.sig.com/dublin/jobs/11593": {
@@ -48767,7 +48767,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/QA-QC-Field-Manager/46590",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.724891+00:00",
+      "checked_at": "2026-10-19T00:59:06.948017+00:00",
       "failure_checks": 0
     },
     "https://careers.amgen.com/en/job/dublin/qc-micro-manager/87/101740732704": {
@@ -56823,7 +56823,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/NEC-Project-Manager/46643",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.724541+00:00",
+      "checked_at": "2026-10-19T00:59:06.940931+00:00",
       "failure_checks": 0
     },
     "https://codec.pinpointhq.com/en/postings/247418cc-dbc0-43d1-83c0-e85959a0068d": {
@@ -58887,7 +58887,7 @@
       "final_url": "https://careers.toasttab.com/jobs/senior-product-designer-toast-retail-dublin-county-dublin-ireland?gh_jid=8276127",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-18T00:00:29.002795+00:00",
+      "checked_at": "2026-10-19T00:58:58.652744+00:00",
       "failure_checks": 0
     },
     "https://research.dcu.ie/p/en": {
@@ -61565,7 +61565,7 @@
     "mailto:recruit@gasnetworks.ie?subject=ICS Security Delivery Lead - Ref No. GNI156": {
       "status": "unverified",
       "reason": "Email application; no web page to check",
-      "checked_at": "2026-10-18T23:04:44.718251+00:00",
+      "checked_at": "2026-10-19T00:59:06.924009+00:00",
       "failure_checks": 0
     },
     "https://qualcomm.eightfold.ai/careers/job/446721051842": {
@@ -67101,7 +67101,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Ports-Technical-Design-Lead-Ireland/46384",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.733581+00:00",
+      "checked_at": "2026-10-19T00:59:06.966940+00:00",
       "failure_checks": 0
     },
     "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210780058": {
@@ -68621,7 +68621,7 @@
       "final_url": "https://careers.ibm.com/en_US/careers/JobDetail?jobId=137222&source=WEB_Search_NA",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.718295+00:00",
+      "checked_at": "2026-10-19T00:59:06.924053+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8286680": {
@@ -70117,7 +70117,7 @@
       "final_url": "https://careers.toasttab.com/jobs/senior-director-international-customer-care-dublin-county-dublin-ireland?gh_jid=8264918",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-18T00:00:29.002199+00:00",
+      "checked_at": "2026-10-19T00:58:58.651878+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8258222": {
@@ -70325,7 +70325,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Principal-Ecologist-Ireland/46940",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.732691+00:00",
+      "checked_at": "2026-10-19T00:59:06.960667+00:00",
       "failure_checks": 0
     },
     "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Mechanical-Estimator/3268": {
@@ -70349,7 +70349,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Senior-Ecologist-Dublin-Cork/46935",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-10-18T23:04:44.733308+00:00",
+      "checked_at": "2026-10-19T00:59:06.964643+00:00",
       "failure_checks": 0
     },
     "https://careers.unitedhealthgroup.com/job/dublin/product-designer-ux-designer/34088/100399421248": {
@@ -76407,25 +76407,393 @@
       "reason": "HTTP success; vacancy availability may require the employer page",
       "checked_at": "2026-10-18T23:04:39.600822+00:00",
       "failure_checks": 0
+    },
+    "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Vulnerability-Management-Analyst_R162726": {
+      "http_status": 200,
+      "final_url": "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Vulnerability-Management-Analyst_R162726",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.666765+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/sr-pricing-strategy-manager-at-linkedin-4469717175?position=2&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=tObGPoHCqaOQIKkBzjMIRQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/sr-pricing-strategy-manager-at-linkedin-4469717175?position=2&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=tObGPoHCqaOQIKkBzjMIRQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.662047+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/talent-acquisition-partner-emeal-at-linkedin-4465079793?position=18&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=HiXBZ39F%2Fo805GL5yxiSvA%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/talent-acquisition-partner-emeal-at-linkedin-4465079793?position=18&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=HiXBZ39F%2Fo805GL5yxiSvA%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.663580+00:00",
+      "failure_checks": 0
+    },
+    "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/2770": {
+      "http_status": 200,
+      "final_url": "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/2770",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.656339+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=7&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=UKC9LNsGpFJz%2FlmS%2FZ64Nw%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=7&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=UKC9LNsGpFJz%2FlmS%2FZ64Nw%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:59.394449+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4469892719?position=27&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=K7laGVyXXxqkSfJtvTulAQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4469892719?position=27&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=K7laGVyXXxqkSfJtvTulAQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:59.494496+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-at-linkedin-4444457199?position=30&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=gh3zbpZmN%2BRPk5DNYhBxqQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-at-linkedin-4444457199?position=30&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=gh3zbpZmN%2BRPk5DNYhBxqQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:59.970304+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-nordics-talent-solutions-at-linkedin-4468382719?position=35&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=BnIZGqQHAb5Tn7FRUb5eag%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-nordics-talent-solutions-at-linkedin-4468382719?position=35&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=BnIZGqQHAb5Tn7FRUb5eag%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:59:00.074655+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=31&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=R%2BFBTGsuq%2BEKaBoUKDNSHA%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=31&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=R%2BFBTGsuq%2BEKaBoUKDNSHA%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:59:00.641097+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=6&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=jquJFQMsp7AMugWu1pw%2BSA%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=6&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=jquJFQMsp7AMugWu1pw%2BSA%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:59:00.707979+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=26&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=IfWCBEKVnBOax6ab9WGrbA%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=26&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=IfWCBEKVnBOax6ab9WGrbA%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:59:01.251461+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/lead-account-director-performance-expansion-team-linkedin-marketing-solutions-israel-at-linkedin-4476308788?position=32&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=p790jKytdpqhRk%2BVTpOWRg%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/lead-account-director-performance-expansion-team-linkedin-marketing-solutions-israel-at-linkedin-4476308788?position=32&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=p790jKytdpqhRk%2BVTpOWRg%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:59:01.784396+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-benelux-dutch-flemish-linkedin-talent-solutions-at-linkedin-4446585965?position=34&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=gIfFuCvDvJaeU4KwBfGZcQ%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-benelux-dutch-flemish-linkedin-talent-solutions-at-linkedin-4446585965?position=34&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=gIfFuCvDvJaeU4KwBfGZcQ%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:59:01.818317+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=1&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=iXRFnyF%2FeDglJqFOAMo37Q%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=1&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=iXRFnyF%2FeDglJqFOAMo37Q%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:59:01.175863+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-executive-portfolio-nordics-11-month-fixed-term-contract-linkedin-marketing-solutions-at-linkedin-4471284519?position=38&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=6EoULnsO%2FxqoTFOg%2Fj4EOg%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-executive-portfolio-nordics-11-month-fixed-term-contract-linkedin-marketing-solutions-at-linkedin-4471284519?position=38&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=6EoULnsO%2FxqoTFOg%2Fj4EOg%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:59:01.851576+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-director-performance-expansion-team-benelux-linkedin-marketing-solutions-ftc-11-months-at-linkedin-4467077925?position=39&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=qAZuC7Ari22nmaJoN2N3DA%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-director-performance-expansion-team-benelux-linkedin-marketing-solutions-ftc-11-months-at-linkedin-4467077925?position=39&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=qAZuC7Ari22nmaJoN2N3DA%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:59:01.868298+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/linkedin-sales-solutions-senior-account-director-%E2%80%93-emeal-mid-market-enterprise-spanish-italian-region-dublin-at-linkedin-4479510018?position=20&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=ESPk5Rycw%2FDW2T44IUVnpA%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/linkedin-sales-solutions-senior-account-director-%E2%80%93-emeal-mid-market-enterprise-spanish-italian-region-dublin-at-linkedin-4479510018?position=20&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=ESPk5Rycw%2FDW2T44IUVnpA%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:59:01.880712+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-executive-sales-solutions-uki-team-at-linkedin-4468646533?position=4&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=Y2p238JT7c3lazT8bTrRqw%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-executive-sales-solutions-uki-team-at-linkedin-4468646533?position=4&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=Y2p238JT7c3lazT8bTrRqw%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.669383+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4461128065?position=12&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=jNtTojNCE8IJMb%2FWt2gITA%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4461128065?position=12&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=jNtTojNCE8IJMb%2FWt2gITA%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.669570+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4474305646?position=11&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=TLr1qKNuaXoYbgWG7ns2Hg%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4474305646?position=11&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=TLr1qKNuaXoYbgWG7ns2Hg%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:58.669792+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4479892313?position=21&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=9Q5QdXtOEMXKrj%2BOpeWdYw%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4479892313?position=21&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=9Q5QdXtOEMXKrj%2BOpeWdYw%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:58.974725+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-talent-account-executive-talent-solutions-french-at-linkedin-4462856049?position=24&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=%2BEejqhYOqot5fQAz29biKQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-talent-account-executive-talent-solutions-french-at-linkedin-4462856049?position=24&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=%2BEejqhYOqot5fQAz29biKQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.670045+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4442582671?position=10&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=sQtH%2FcdMAbXckaxFHXnLZQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4442582671?position=10&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=sQtH%2FcdMAbXckaxFHXnLZQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:59.015572+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-french-at-linkedin-4475555834?position=19&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=QNxXxAf7%2FAz2hbm6XSZFNg%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-french-at-linkedin-4475555834?position=19&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=QNxXxAf7%2FAz2hbm6XSZFNg%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:59.134822+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-executive-french-linkedin-sales-solutions-at-linkedin-4444556654?position=16&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=Ol8FFpWvMEBxX2g4BELhYQ%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-executive-french-linkedin-sales-solutions-at-linkedin-4444556654?position=16&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=Ol8FFpWvMEBxX2g4BELhYQ%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:59.040676+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-sales-solution-italy-fixed-term-contract-at-linkedin-4473285048?position=40&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=GqX0gtfuSp3Do1FArYTI9Q%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-sales-solution-italy-fixed-term-contract-at-linkedin-4473285048?position=40&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=GqX0gtfuSp3Do1FArYTI9Q%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:59.221585+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-uki-talent-solutions-at-linkedin-4472175049?position=37&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=5GZqPdjnIUGzeY5oMYSFgA%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-uki-talent-solutions-at-linkedin-4472175049?position=37&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=5GZqPdjnIUGzeY5oMYSFgA%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:59.311392+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=25&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=XOa2tcjqvWvu4ufkqr9GmQ%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=25&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=XOa2tcjqvWvu4ufkqr9GmQ%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:58.665174+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/regional-account-manager-global-clients-program-6-months-ftc-at-linkedin-4467054153?position=41&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=t%2BCr48mifV1331mr8neqPQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/regional-account-manager-global-clients-program-6-months-ftc-at-linkedin-4467054153?position=41&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=t%2BCr48mifV1331mr8neqPQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:59.301637+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4480907532?position=33&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=DB1W1tX1bcn7XTwpwOJkgw%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4480907532?position=33&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=DB1W1tX1bcn7XTwpwOJkgw%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:58.665388+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4468235143?position=28&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=ap0WDrV9G3L%2BM25CX%2BGssQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4468235143?position=28&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=ap0WDrV9G3L%2BM25CX%2BGssQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:59.425730+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/associate-account-director-french-linkedin-talent-solution-staffing-at-linkedin-4476158753?position=36&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=6p2HyD0BrXIYazDfzdm7Yg%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/associate-account-director-french-linkedin-talent-solution-staffing-at-linkedin-4476158753?position=36&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=6p2HyD0BrXIYazDfzdm7Yg%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:59.698349+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-director-german-talent-solutions-at-linkedin-4469154384?position=22&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=6KhTWeXgv%2FujQCemv7CyRw%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-director-german-talent-solutions-at-linkedin-4469154384?position=22&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=6KhTWeXgv%2FujQCemv7CyRw%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:58.665594+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=14&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=WWW9L%2FWvI1u590K5sSML3A%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=14&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=WWW9L%2FWvI1u590K5sSML3A%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:58.666004+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-german-sales-solutions-at-linkedin-4442570945?position=13&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=zx%2FMfGv7FsoE5TOiwHRxzw%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-german-sales-solutions-at-linkedin-4442570945?position=13&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=zx%2FMfGv7FsoE5TOiwHRxzw%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.665788+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=15&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=qIHytdE7KSx3oocvWD9Hvw%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=15&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=qIHytdE7KSx3oocvWD9Hvw%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.666403+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=3&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=cIVBahBNXoLBkaCOsNBc1w%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=3&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=cIVBahBNXoLBkaCOsNBc1w%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:58.668035+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=8&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=jL9F37EdTjkh%2FPj7vWOUng%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=8&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=jL9F37EdTjkh%2FPj7vWOUng%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:58.668304+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4460491865?position=9&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=TqoTlcQCMuBhkun%2F7FhUsg%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4460491865?position=9&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=TqoTlcQCMuBhkun%2F7FhUsg%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:58.668545+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=23&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=wB7%2Bux6V7KnEcKfilI747A%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=23&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=wB7%2Bux6V7KnEcKfilI747A%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-10-19T00:58:58.668736+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=17&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=1Oh3FUqa7ymvv%2Be44lPhTw%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=17&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=1Oh3FUqa7ymvv%2Be44lPhTw%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.666588+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-talent-solutions-at-linkedin-4477804119?position=5&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=qNXPHKrUOvjK0oTqNOwWMQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-talent-solutions-at-linkedin-4477804119?position=5&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=qNXPHKrUOvjK0oTqNOwWMQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.669197+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-french-linkedin-sales-solutions-at-linkedin-4444544796?position=29&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=AMGNtd9iRQKzrzTk6ELl6w%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-french-linkedin-sales-solutions-at-linkedin-4444544796?position=29&pageNum=0&refId=wpXNwkaK6tNRJBecAyKE%2BA%3D%3D&trackingId=AMGNtd9iRQKzrzTk6ELl6w%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-10-19T00:58:58.669012+00:00",
+      "failure_checks": 0
     }
   },
-  "completed_at": "2026-10-18T23:05:57.066030+00:00",
-  "checked_urls": 4204,
+  "completed_at": "2026-10-19T01:00:19.340469+00:00",
+  "checked_urls": 4019,
   "status_counts": {
     "error": 9,
-    "reachable": 4153,
+    "reachable": 3956,
     "unverified": 17,
-    "unreachable": 1,
-    "blocked": 24
+    "unreachable": 5,
+    "blocked": 32
   },
   "last_cleanup": {
-    "at": "2026-10-18T23:05:57.066030+00:00",
+    "at": "2026-10-19T01:00:19.340469+00:00",
     "duplicates": [],
     "unavailable": [
       {
-        "url": "https://careers.opentext.com/us/en/job/52895/Sr-Site-Reliability-Engineer",
+        "url": "https://careers.opentext.com/us/en/job/53796/Sr-AI-Developer",
         "company": "OpenText",
-        "title": "Sr. Site Reliability Engineer",
+        "title": "Sr. AI Developer external link open in new tab",
+        "reason": "Employer page explicitly reports job unavailable"
+      },
+      {
+        "url": "https://careers.opentext.com/us/en/job/53000/Senior-Consultant-Data-Migration-and-Modernization",
+        "company": "OpenText",
+        "title": "Senior Consultant - Data Migration and Modernization",
+        "reason": "Employer page explicitly reports job unavailable"
+      },
+      {
+        "url": "https://careers.opentext.com/us/en/job/53619/Sr-Principal-AI-Architect",
+        "company": "OpenText",
+        "title": "Sr. Principal AI Architect",
+        "reason": "Employer page explicitly reports job unavailable"
+      },
+      {
+        "url": "https://careers.opentext.com/us/en/job/53142/Lead-Software-Developer-C-C-WebAssembly",
+        "company": "OpenText",
+        "title": "Lead Software Developer (C/ C++/ WebAssembly)",
+        "reason": "Employer page explicitly reports job unavailable"
+      },
+      {
+        "url": "https://careers.opentext.com/us/en/job/52404/Lead-AI-Developer",
+        "company": "OpenText",
+        "title": "Lead AI Developer external link open in new tab",
         "reason": "Employer page explicitly reports job unavailable"
       }
     ]
