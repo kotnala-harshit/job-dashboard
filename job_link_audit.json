@@ -433,11 +433,11 @@
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8226897": {
-      "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8226897",
-      "status": "unverified",
-      "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.946020+00:00",
+      "http_status": 200,
+      "final_url": "https://careers.toasttab.com/jobs/emea-people-operations-lead-fixed-term-contract-dublin-county-dublin-ireland?gh_jid=8226897",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:49.280411+00:00",
       "failure_checks": 0
     },
     "https://jobs.concentrix.com/job/?id=R1767444": {
@@ -449,11 +449,11 @@
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8230535": {
-      "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8230535",
-      "status": "unverified",
-      "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.946233+00:00",
+      "http_status": 200,
+      "final_url": "https://careers.toasttab.com/jobs/senior-software-engineer-ai-agent-experience-team-dublin-county-dublin-ireland?gh_jid=8230535",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:49.280607+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8233456": {
@@ -482,18 +482,18 @@
     },
     "https://careers.toasttab.com/jobs?gh_jid=8243136": {
       "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8243136",
+      "final_url": "https://careers.toasttab.com/jobs/staff-software-engineer-infrastructure-dublin-county-dublin-ireland?gh_jid=8243136",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.946466+00:00",
+      "checked_at": "2026-11-10T18:06:49.280785+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8249586": {
       "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8249586",
+      "final_url": "https://careers.toasttab.com/en-US/jobs/8249586?gh_jid=8249586",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.949391+00:00",
+      "checked_at": "2026-11-10T18:06:49.282649+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8249589": {
@@ -651,7 +651,7 @@
     "http://www.lero.ie/": {
       "status": "error",
       "reason": "ConnectTimeout",
-      "checked_at": "2026-11-10T10:26:55.945622+00:00",
+      "checked_at": "2026-11-10T18:06:49.280064+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8130881": {
@@ -7217,7 +7217,7 @@
       "final_url": "https://musgravegroup.com/vacancy/floor-supervisor/",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-01T19:42:39.689007+00:00",
+      "checked_at": "2026-11-10T18:06:37.078744+00:00",
       "failure_checks": 0
     },
     "https://www.atu.ie/research/research-centres": {
@@ -10847,7 +10847,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/associate-15178": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:55.952846+00:00",
+      "checked_at": "2026-11-10T18:06:49.285148+00:00",
       "failure_checks": 0
     },
     "https://jobs.smartrecruiters.com/AbbVie/3743990015009326-biologics-technician": {
@@ -13477,7 +13477,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/businessanalyst-15136": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:55.953579+00:00",
+      "checked_at": "2026-11-10T18:06:49.285679+00:00",
       "failure_checks": 0
     },
     "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/2682": {
@@ -13491,7 +13491,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/juniorassociate-20159": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:55.954126+00:00",
+      "checked_at": "2026-11-10T18:06:49.286260+00:00",
       "failure_checks": 0
     },
     "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/2687": {
@@ -16385,7 +16385,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/businessanalystintern-15275": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:56.292965+00:00",
+      "checked_at": "2026-11-10T18:06:49.287057+00:00",
       "failure_checks": 0
     },
     "https://careers.tirlan.com/tirlan/job/Kilkenny-Finance-Associate-R95-DXR1/1366167455/": {
@@ -17649,7 +17649,7 @@
       "final_url": "https://jobs.eir.care/jobs/detail/part-time-retail-sales-consultant-mahon-point-1430",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-11T09:37:02.880129+00:00",
+      "checked_at": "2026-11-10T18:06:38.655398+00:00",
       "failure_checks": 0
     },
     "https://jobs.citi.com/job/dublin/fund-accounting-etf-senior-manager/287/101350246416": {
@@ -17937,7 +17937,7 @@
       "final_url": "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Kinsale/Associate-Director---Finance_R-111884-2",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-27T12:59:26.259868+00:00",
+      "checked_at": "2026-11-10T18:06:38.704857+00:00",
       "failure_checks": 0
     },
     "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/FY27-Intern-Opportunities_R265819": {
@@ -18767,7 +18767,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/specialist-communications-110429": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:56.384942+00:00",
+      "checked_at": "2026-11-10T18:06:49.287212+00:00",
       "failure_checks": 0
     },
     "https://cadence.wd1.myworkdayjobs.com/External_Careers/job/DUBLIN/Credit---Collections-Specialist_R52078": {
@@ -19095,7 +19095,7 @@
       "final_url": "https://careers.tirlan.com/tirlan/job/Kilkenny-Digital-Finance-Manager-KK-R95-DXR1/1362361355/",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-04T23:16:30.405430+00:00",
+      "checked_at": "2026-11-10T18:06:38.942339+00:00",
       "failure_checks": 0
     },
     "https://jobs.apple.com/en-ie/details/200682909-1418/people-analytics-full-stack-developer": {
@@ -24581,7 +24581,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/seniorfellow-scientificaiclinicalbiostatistician-110969": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:56.523599+00:00",
+      "checked_at": "2026-11-10T18:06:49.613111+00:00",
       "failure_checks": 0
     },
     "https://jobs.aib.ie/aib/job/Dublin-General-Insurance-Sales-Delivery-Specialist%2C-Dublin-IE/1373335257/": {
@@ -25933,7 +25933,7 @@
       "final_url": "https://pfizer.wd1.myworkdayjobs.com/PfizerCareers/job/Ireland---Dublin---Ringsend/Senior-Manager--Corporate-Audit_4963160-2",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-25T14:28:14.905819+00:00",
+      "checked_at": "2026-11-10T18:06:40.230826+00:00",
       "failure_checks": 0
     },
     "https://workday.wd5.myworkdayjobs.com/Workday/job/Ireland-Dublin/Senior-Software-Developer---Authentication-Team_JR-0105355-2": {
@@ -29139,7 +29139,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/communicationsspecialist-socialhealthcarepublicentities-109567": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:56.585118+00:00",
+      "checked_at": "2026-11-10T18:06:49.705100+00:00",
       "failure_checks": 0
     },
     "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Senior-Demo-Engineer---Informatica-Demo-Engineering_JR359556": {
@@ -29155,7 +29155,7 @@
       "final_url": "https://stryker.wd1.myworkdayjobs.com/StrykerCareers/job/Cork-Ireland/GQO-Manufacturing-Operations-Graduate-Program---September-2027_R574279",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-28T20:10:56.394978+00:00",
+      "checked_at": "2026-11-10T18:06:41.024539+00:00",
       "failure_checks": 0
     },
     "https://cadence.wd1.myworkdayjobs.com/External_Careers/job/CORK-01/Staff-Systems-Engineer--Infrastructure-Automation---Virtualization-_R55602": {
@@ -32283,7 +32283,7 @@
       "final_url": "https://jj.wd5.myworkdayjobs.com/JJ/job/Limerick-Ireland/Staff-Automation-Engineer_R-095740-1",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-03T09:13:19.897357+00:00",
+      "checked_at": "2026-11-10T18:06:38.549020+00:00",
       "failure_checks": 0
     },
     "https://jj.wd5.myworkdayjobs.com/JJ/job/Limerick-Ireland/Team-Leader-Moulding-Engineer_R-099507-1": {
@@ -37666,10 +37666,10 @@
     },
     "https://careers.toasttab.com/jobs?gh_jid=8259169": {
       "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8259169",
+      "final_url": "https://careers.toasttab.com/jobs/senior-software-engineer-application-infrastructure-dublin-county-dublin-ireland?gh_jid=8259169",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.949555+00:00",
+      "checked_at": "2026-11-10T18:06:49.284104+00:00",
       "failure_checks": 0
     },
     "https://integrity360.bamboohr.com/careers/820": {
@@ -47471,7 +47471,7 @@
       "final_url": "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Consultant--Private-Equity-Accounting---Limerick---Hybrid_R147760",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-22T06:29:28.139719+00:00",
+      "checked_at": "2026-11-10T18:06:40.971280+00:00",
       "failure_checks": 0
     },
     "https://ie.linkedin.com/jobs/view/associate-account-director-french-linkedin-talent-solution-staffing-at-linkedin-4476158753?position=23&pageNum=0&refId=zeS5mTIulJLj1rjQFAGw6g%3D%3D&trackingId=RMOChxLQPKrA%2B3S%2BnHbFhQ%3D%3D": {
@@ -48615,7 +48615,7 @@
       "final_url": "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=YGTAZW&sid=BEVDEV&jid=BAZBGTBBY&a=C7WJZOemz8s%253d",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-30T07:49:00.409767+00:00",
+      "checked_at": "2026-11-10T18:06:37.076623+00:00",
       "failure_checks": 0
     },
     "https://mytribe.my.salesforce-sites.com/recruit/fRecruit__ApplyJob?vacancyNo=VN245": {
@@ -48991,7 +48991,7 @@
       "final_url": "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210797612",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-16T10:10:28.621958+00:00",
+      "checked_at": "2026-11-10T18:06:38.198332+00:00",
       "failure_checks": 0
     },
     "https://careers.atkinsrealis.com/en/jobs/business-development-director-transportation-r-166307": {
@@ -61805,7 +61805,7 @@
       "final_url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Specialist--Implementation_R-292608",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-30T07:49:18.261139+00:00",
+      "checked_at": "2026-11-10T18:06:39.190430+00:00",
       "failure_checks": 0
     },
     "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Cootehill/Utility-Engineering-FLL_31164727": {
@@ -62317,7 +62317,7 @@
       "final_url": "https://careers.dexcom.com/careers/job/44966285",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-01T19:42:39.016959+00:00",
+      "checked_at": "2026-11-10T18:06:37.076031+00:00",
       "failure_checks": 0
     },
     "https://eaton.eightfold.ai/careers/job/687239653566": {
@@ -68610,10 +68610,10 @@
     },
     "https://careers.toasttab.com/jobs?gh_jid=8245420": {
       "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8245420",
+      "final_url": "https://careers.toasttab.com/en-US/jobs/8245420?gh_jid=8245420",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.946636+00:00",
+      "checked_at": "2026-11-10T18:06:49.281235+00:00",
       "failure_checks": 0
     },
     "https://careers.ibm.com/en_US/careers/JobDetail?jobId=137222&source=WEB_Search_NA": {
@@ -77935,9 +77935,11 @@
       "failure_checks": 0
     },
     "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS/job/Dublin-Ireland/AI-Solution-Architect_J000705641": {
-      "status": "error",
-      "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:56.433371+00:00",
+      "http_status": 200,
+      "final_url": "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS/job/Dublin-Ireland/AI-Solution-Architect_J000705641",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:49.288300+00:00",
       "failure_checks": 0
     },
     "https://jobs.citi.com/job/dublin/senior-full-stack-software-engineer-vp/287/102161082432": {
@@ -77973,9 +77975,11 @@
       "failure_checks": 0
     },
     "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS/job/Dublin-Ireland/IT-Senior-Project-Manager_J000705139": {
-      "status": "error",
-      "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:56.434803+00:00",
+      "http_status": 200,
+      "final_url": "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS/job/Dublin-Ireland/IT-Senior-Project-Manager_J000705139",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:49.478884+00:00",
       "failure_checks": 0
     },
     "https://jobs.citi.com/job/dublin/otc-etf-operational-change-manager-director/287/102161076992": {
@@ -78155,9 +78159,11 @@
       "failure_checks": 0
     },
     "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS/job/Wuppertal-Germany/Manager--Corporate-Trade-EMEA--f-m-d-_J000705296": {
-      "status": "error",
-      "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:56.553946+00:00",
+      "http_status": 200,
+      "final_url": "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS/job/Wuppertal-Germany/Manager--Corporate-Trade-EMEA--f-m-d-_J000705296",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:49.683357+00:00",
       "failure_checks": 0
     },
     "https://ie.linkedin.com/jobs/view/account-executive-french-linkedin-sales-solutions-at-linkedin-4444544796?position=29&pageNum=0&refId=BuF4Uu9DE6hAC%2F0nj5DDMQ%3D%3D&trackingId=AG9D6p42%2FjJcFYOiq0Baxw%3D%3D": {
@@ -82621,7 +82627,7 @@
       "final_url": "https://www.bearingpoint.com/en-ie/careers/open-roles/job-offer-successfactors/?id=G5011894101&country=IE",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-26T18:12:51.790138+00:00",
+      "checked_at": "2026-11-10T18:06:37.769248+00:00",
       "failure_checks": 0
     },
     "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Product-Security-Lead_JR364992": {
@@ -89059,7 +89065,7 @@
       "final_url": "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Fund-Accounting---Administration--Officer_R-800233",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-29T00:06:52.730422+00:00",
+      "checked_at": "2026-11-10T18:06:39.631362+00:00",
       "failure_checks": 0
     },
     "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Alternative-Ops-Fund-Accounting--Officer_R-800226-1": {
@@ -89067,7 +89073,7 @@
       "final_url": "https://statestreet.wd1.myworkdayjobs.com/Global/job/Dublin-2-Ireland/Alternative-Ops-Fund-Accounting--Officer_R-800226-1",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-29T00:06:52.798062+00:00",
+      "checked_at": "2026-11-10T18:06:39.693535+00:00",
       "failure_checks": 0
     },
     "https://careers.unitedhealthgroup.com/job/dublin/senior-director-technology-strategy-and-innovation/34088/101043724976": {
@@ -89583,9 +89589,11 @@
       "failure_checks": 0
     },
     "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS/job/Troy-MI---USA/Global-SOX--and-Audit-Practice-Transformation-Manager_J000705727": {
-      "status": "error",
-      "reason": "ReadTimeout",
-      "checked_at": "2026-11-10T10:26:56.703648+00:00",
+      "http_status": 200,
+      "final_url": "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS/job/Troy-MI---USA/Global-SOX--and-Audit-Practice-Transformation-Manager_J000705727",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:49.766729+00:00",
       "failure_checks": 0
     },
     "https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Princeton---NJ---US/Senior-Director--Priority-Digital-Project-Lead--3-Openings-_R1606718-1": {
@@ -95785,7 +95793,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8302827",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.949960+00:00",
+      "checked_at": "2026-11-10T18:06:49.284589+00:00",
       "failure_checks": 0
     },
     "https://careers.sig.com/dublin/jobs/11707": {
@@ -97569,7 +97577,7 @@
       "final_url": "https://www.qualtrics.com/careers/us/en/job/8301392?gh_jid=8301392",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-10-29T16:55:21.430628+00:00",
+      "checked_at": "2026-11-10T18:06:37.079308+00:00",
       "failure_checks": 0
     },
     "https://jobs.smartrecruiters.com/AECOM2/744000158249179-planner": {
@@ -99585,7 +99593,7 @@
       "final_url": "https://careers.tirlan.com/tirlan/job/Dungarvan-Branch-Assistant-CountryLife-Dungarvan-WD-X35-KA99/1370599055/",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-03T22:42:24.985851+00:00",
+      "checked_at": "2026-11-10T18:06:40.090255+00:00",
       "failure_checks": 0
     },
     "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=21&pageNum=0&refId=6w9%2BNr2QOSu8muqsXveA6A%3D%3D&trackingId=6Tw96PI%2F46KRtwBPzwYyzg%3D%3D": {
@@ -99825,7 +99833,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8267171",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.949687+00:00",
+      "checked_at": "2026-11-10T18:06:49.284283+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8333416": {
@@ -99833,7 +99841,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8333416",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.950148+00:00",
+      "checked_at": "2026-11-10T18:06:49.284784+00:00",
       "failure_checks": 0
     },
     "https://jobs.smartrecruiters.com/AbbVie/3743990016486996-copy-of-strategic-sourcer": {
@@ -100209,7 +100217,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8289426",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.949882+00:00",
+      "checked_at": "2026-11-10T18:06:49.284484+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8333523": {
@@ -100217,7 +100225,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8333523",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.950296+00:00",
+      "checked_at": "2026-11-10T18:06:49.284935+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8203201": {
@@ -102889,7 +102897,7 @@
       "final_url": "https://www.novartis.com/careers/career-search/job/details/req-10077328-therapeutic-area-head-immunology-neuroscience-and-crm-it-it",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-09T09:15:37.774099+00:00",
+      "checked_at": "2026-11-10T18:06:41.194742+00:00",
       "failure_checks": 0
     },
     "https://ie.linkedin.com/jobs/view/senior-account-executive-sales-solutions-uki-team-at-linkedin-4468646533?position=4&pageNum=0&refId=9xtJj38b8eQnRE5RVrPTew%3D%3D&trackingId=ALj9sQsKFW%2F7flMN56VU5A%3D%3D": {
@@ -103233,7 +103241,7 @@
       "final_url": "https://www.bnpparibas.ie/en/jobs/insurance-pricing-manager/",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-03T02:24:51.864529+00:00",
+      "checked_at": "2026-11-10T18:06:37.082073+00:00",
       "failure_checks": 0
     },
     "https://www.metacareers.com/profile/job_details/1587047606069954": {
@@ -103849,7 +103857,7 @@
       "final_url": "https://apply.careers.microsoft.com/careers/apply?pid=1970393557043720",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-08T06:22:38.673739+00:00",
+      "checked_at": "2026-11-10T18:06:37.070984+00:00",
       "failure_checks": 0
     },
     "https://apply.careers.microsoft.com/careers?start=0&location=Ireland&pid=1970393557043720&sort_by=distance&filter_include_remote=1&filter_include_relocation=0#app": {
@@ -103857,7 +103865,7 @@
       "final_url": "https://apply.careers.microsoft.com/careers?start=0&location=Ireland&pid=1970393557043720&sort_by=distance&filter_include_remote=1&filter_include_relocation=0#app",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-08T06:22:35.087862+00:00",
+      "checked_at": "2026-11-10T18:06:37.070598+00:00",
       "failure_checks": 0
     },
     "https://apply.careers.microsoft.com/careers/job/1970393557027346": {
@@ -106985,7 +106993,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8248798",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.948627+00:00",
+      "checked_at": "2026-11-10T18:06:49.281399+00:00",
       "failure_checks": 0
     },
     "https://apply.workable.com/j/B5F03D6BD8": {
@@ -107833,7 +107841,7 @@
       "final_url": "https://jobs.takeda.com/job/dublin/director-regulatory-affairs-medical-devices-and-combination-product/1113/95597219904",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-03T22:42:27.464764+00:00",
+      "checked_at": "2026-11-10T18:06:40.647531+00:00",
       "failure_checks": 0
     },
     "https://www.google.com/about/careers/applications/jobs/results/141090848522543814-lead-data-center-systems-architect": {
@@ -110417,7 +110425,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8333439",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.950217+00:00",
+      "checked_at": "2026-11-10T18:06:49.284862+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8326579": {
@@ -110535,7 +110543,7 @@
       "final_url": "https://jobs.arup.com/jobs/rail-leader-ireland-34177",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-05T18:48:08.773469+00:00",
+      "checked_at": "2026-11-10T18:06:37.081382+00:00",
       "failure_checks": 0
     },
     "https://careers.opentext.com/us/en/job/53499/Sr-Consultant-CCM": {
@@ -110764,10 +110772,10 @@
     },
     "https://jobs.arup.com/jobs/34177/other-jobs-matching/location-and-category": {
       "http_status": 403,
-      "final_url": "https://jobs.arup.com/jobs/search/22310182",
+      "final_url": "https://jobs.arup.com/jobs/search/22441939",
       "status": "blocked",
       "reason": "Automated check blocked (HTTP 403)",
-      "checked_at": "2026-11-05T18:48:19.345558+00:00",
+      "checked_at": "2026-11-10T18:06:37.858440+00:00",
       "failure_checks": 0
     },
     "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/301264/": {
@@ -110783,7 +110791,7 @@
       "final_url": "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/298449/",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-08T22:28:43.364103+00:00",
+      "checked_at": "2026-11-10T18:06:38.027126+00:00",
       "failure_checks": 0
     },
     "https://jobs.aib.ie/aib/job/Dublin-Quantitative-Risk-Analyst-IE/1376642457/": {
@@ -111255,7 +111263,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Principal-Substation-Primary-Design-Engineer-Ireland/47875",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:56.533130+00:00",
+      "checked_at": "2026-11-10T18:06:49.642975+00:00",
       "failure_checks": 0
     },
     "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=6&pageNum=0&refId=GclzB7MXWaUD0Rrofg33%2Fg%3D%3D&trackingId=HTDQ0lq7sertMlSPI7u3iw%3D%3D": {
@@ -111287,7 +111295,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Associate-Director-Substations-Primary-Design-Ireland/47872",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:56.553062+00:00",
+      "checked_at": "2026-11-10T18:06:49.673960+00:00",
       "failure_checks": 0
     },
     "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/GrantThorntonIrelandExperiencedHires/job/116288": {
@@ -112447,7 +112455,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/GeoSpatial-GIS-Intern-Dublin/47936",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:56.385226+00:00",
+      "checked_at": "2026-11-10T18:06:49.287319+00:00",
       "failure_checks": 0
     },
     "https://www.riotgames.com/en/j/8348369": {
@@ -112871,7 +112879,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8267686",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.949790+00:00",
+      "checked_at": "2026-11-10T18:06:49.284395+00:00",
       "failure_checks": 0
     },
     "https://apply.careers.microsoft.com/careers?start=30&location=Ireland&pid=1970393557051024&sort_by=distance&filter_include_remote=1&filter_include_relocation=0#app": {
@@ -113495,7 +113503,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Principal-Civil-Engineer-Transmission-Distribution/47965",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:56.465188+00:00",
+      "checked_at": "2026-11-10T18:06:49.611721+00:00",
       "failure_checks": 0
     },
     "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=4&pageNum=0&refId=ySpP6ClzsTwUa%2Fy020bnuw%3D%3D&trackingId=b7lQRTBAIYJi3TbYUOBnWw%3D%3D": {
@@ -113607,7 +113615,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Associate-Director-Civil-Engineering-Transmission-Distribution/47963",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:56.619244+00:00",
+      "checked_at": "2026-11-10T18:06:49.739779+00:00",
       "failure_checks": 0
     },
     "https://www.google.com/about/careers/applications/jobs/results/111480296011899590-executive-researcher-google-cloud": {
@@ -115327,7 +115335,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Assistant-Scheduler/47983",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:56.235082+00:00",
+      "checked_at": "2026-11-10T18:06:49.286537+00:00",
       "failure_checks": 0
     },
     "https://jobs.ashbyhq.com/notion/499cda6b-522b-4596-8a4c-30efbb1e6b2a": {
@@ -115423,7 +115431,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Director-Energy-Power-Ireland/48027",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:56.397077+00:00",
+      "checked_at": "2026-11-10T18:06:49.287897+00:00",
       "failure_checks": 0
     },
     "https://jobs.eir.care/jobs/detail/part-time-retail-sales-consultant-midleton-976": {
@@ -119039,7 +119047,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8318623",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.950075+00:00",
+      "checked_at": "2026-11-10T18:06:49.284669+00:00",
       "failure_checks": 0
     },
     "https://www.gasnetworks.ie/node/3586": {
@@ -119055,7 +119063,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8367009",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:55.950369+00:00",
+      "checked_at": "2026-11-10T18:06:49.285011+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8357049": {
@@ -119101,7 +119109,7 @@
     "mailto:recruit@gasnetworks.ie?subject=Wholesale Market Analyst - Ref No. GNI168": {
       "status": "unverified",
       "reason": "Email application; no web page to check",
-      "checked_at": "2026-11-10T10:26:55.951000+00:00",
+      "checked_at": "2026-11-10T18:06:49.285091+00:00",
       "failure_checks": 0
     },
     "https://job-boards.greenhouse.io/intercom/jobs/8366639": {
@@ -119477,7 +119485,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Senior-Principal-Land-Surveyor/48077",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:56.423973+00:00",
+      "checked_at": "2026-11-10T18:06:49.288201+00:00",
       "failure_checks": 0
     },
     "https://jobs.smartrecruiters.com/Eurofins/744000160562679-head-of-deployment-and-support-lims": {
@@ -120453,7 +120461,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Project-Engineer-Life-Sciences/48136",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-10T10:26:56.407105+00:00",
+      "checked_at": "2026-11-10T18:06:49.288072+00:00",
       "failure_checks": 0
     },
     "https://jj.wd5.myworkdayjobs.com/JJ/job/Limerick-Ireland/Staff-Manufacturing-Engineer_R-106837": {
@@ -120727,103 +120735,1113 @@
       "reason": "HTTP success; vacancy availability may require the employer page",
       "checked_at": "2026-11-10T10:26:13.297639+00:00",
       "failure_checks": 0
+    },
+    "https://careers.datadoghq.com/detail/8360403/?gh_jid=8360403": {
+      "http_status": 200,
+      "final_url": "https://careers.datadoghq.com/detail/8360403/?gh_jid=8360403",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.075407+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.smartrecruiters.com/AbbVie/3743990016756486-plant-controller": {
+      "http_status": 200,
+      "final_url": "https://jobs.smartrecruiters.com/AbbVie/3743990016756486-plant-controller",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.085038+00:00",
+      "failure_checks": 0
+    },
+    "https://eaton.eightfold.ai/careers/job/687240113212": {
+      "http_status": 200,
+      "final_url": "https://eaton.eightfold.ai/careers/job/687240113212",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.078160+00:00",
+      "failure_checks": 0
+    },
+    "https://www.bakertilly.ie/vacancies/audit-executive-2": {
+      "http_status": 200,
+      "final_url": "https://www.bakertilly.ie/vacancies/audit-executive-2",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.079845+00:00",
+      "failure_checks": 0
+    },
+    "https://www.bakertilly.ie/vacancies/audit-assistant-manager-1": {
+      "http_status": 200,
+      "final_url": "https://www.bakertilly.ie/vacancies/audit-assistant-manager-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.082288+00:00",
+      "failure_checks": 0
+    },
+    "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=YGTGTU&sid=YYBF&jid=BAZBGTEVDD&a=FH1ckSP%252fGQE%253d": {
+      "http_status": 200,
+      "final_url": "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=YGTGTU&sid=YYBF&jid=BAZBGTEVDD&a=FH1ckSP%252fGQE%253d",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.077371+00:00",
+      "failure_checks": 0
+    },
+    "https://www.biomarin.com/job/senior-financial-accountant/": {
+      "http_status": 200,
+      "final_url": "https://www.biomarin.com/job/senior-financial-accountant/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.081955+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.ashbyhq.com/cubic3/89c73975-3f23-4062-98de-5f92d4840224": {
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/cubic3/89c73975-3f23-4062-98de-5f92d4840224",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.376896+00:00",
+      "failure_checks": 0
+    },
+    "https://www.biomarin.com/job/qa-specialist-shift-work/": {
+      "http_status": 200,
+      "final_url": "https://www.biomarin.com/job/qa-specialist-shift-work/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.080835+00:00",
+      "failure_checks": 0
+    },
+    "https://three-ireland.csod.com/ux/ats/careersite/5/home/requisition/2782": {
+      "http_status": 200,
+      "final_url": "https://three-ireland.csod.com/ux/ats/careersite/5/home/requisition/2782",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.085533+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.fidelity.com/ie/jobs/2136640/principal-cybersecurity-engineer/": {
+      "http_status": 200,
+      "final_url": "https://jobs.fidelity.com/ie/jobs/2136640/principal-cybersecurity-engineer/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.711656+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.unitedhealthgroup.com/job/dublin/senior-data-analyst/34088/103116189712": {
+      "http_status": 200,
+      "final_url": "https://careers.unitedhealthgroup.com/job/dublin/senior-data-analyst/34088/103116189712",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.664892+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.ashbyhq.com/cubic3/f1d7248a-0e62-4769-a372-a361dd9e084f": {
+      "http_status": 200,
+      "final_url": "https://jobs.ashbyhq.com/cubic3/f1d7248a-0e62-4769-a372-a361dd9e084f",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.411627+00:00",
+      "failure_checks": 0
+    },
+    "https://www.metacareers.com/profile/job_details/2578515725953331": {
+      "http_status": 200,
+      "final_url": "https://www.metacareers.com/profile/job_details/2578515725953331/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.083735+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.smartrecruiters.com/AECOM2/744000160915959-associate-project-manager": {
+      "http_status": 200,
+      "final_url": "https://jobs.smartrecruiters.com/AECOM2/744000160915959-associate-project-manager",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.542394+00:00",
+      "failure_checks": 0
+    },
+    "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=YGTGTU&sid=YYBF&jid=BAZBGTEVDW&a=FH1ckSP%252fGQE%253d": {
+      "http_status": 200,
+      "final_url": "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=YGTGTU&sid=YYBF&jid=BAZBGTEVDW&a=FH1ckSP%252fGQE%253d",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.077961+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.unitedhealthgroup.com/job/dublin/senior-software-engineer/34088/103108017376": {
+      "http_status": 200,
+      "final_url": "https://careers.unitedhealthgroup.com/job/dublin/senior-software-engineer/34088/103108017376",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.017628+00:00",
+      "failure_checks": 0
+    },
+    "https://huaweiireland.teamtailor.com/jobs/8700805-2026-senior-ai-researcher-contractor": {
+      "http_status": 200,
+      "final_url": "https://huaweiireland.teamtailor.com/jobs/8700805-2026-senior-ai-researcher-contractor",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.687259+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.smartrecruiters.com/AECOM2/744000160915759-senior-mechanical-engineer": {
+      "http_status": 200,
+      "final_url": "https://jobs.smartrecruiters.com/AECOM2/744000160915759-senior-mechanical-engineer",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.734765+00:00",
+      "failure_checks": 0
+    },
+    "https://ghr.wd1.myworkdayjobs.com/lateral-us/job/Dublin/Relationship-Banker_26039110": {
+      "http_status": 200,
+      "final_url": "https://ghr.wd1.myworkdayjobs.com/lateral-us/job/Dublin/Relationship-Banker_26039110",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.750368+00:00",
+      "failure_checks": 0
+    },
+    "https://apply.careers.microsoft.com/careers/job/1970393557051014": {
+      "http_status": 200,
+      "final_url": "https://apply.careers.microsoft.com/careers/job/1970393557051014",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.080558+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.ek.co/jobs/8700836-cyber-security-graduate-programme": {
+      "http_status": 200,
+      "final_url": "https://careers.ek.co/jobs/8700836-cyber-security-graduate-programme",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.475314+00:00",
+      "failure_checks": 0
+    },
+    "https://apply.careers.microsoft.com/careers/job/1970393557054354": {
+      "http_status": 200,
+      "final_url": "https://apply.careers.microsoft.com/careers/job/1970393557054354",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.080707+00:00",
+      "failure_checks": 0
+    },
+    "https://www.musgravegroup.com/cookie-policy/": {
+      "http_status": 200,
+      "final_url": "https://musgravegroup.com/cookie-policy/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.074643+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.johnsoncontrols.com/job/WD30276961": {
+      "http_status": 200,
+      "final_url": "https://jobs.johnsoncontrols.com/job/WD30276961",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.071566+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.johnsoncontrols.com/job/WD30276959": {
+      "http_status": 200,
+      "final_url": "https://jobs.johnsoncontrols.com/job/WD30276959",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.071234+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.smartrecruiters.com/AbbVie/3743990016763411-medical-manager-rheumatology": {
+      "http_status": 200,
+      "final_url": "https://jobs.smartrecruiters.com/AbbVie/3743990016763411-medical-manager-rheumatology",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.925109+00:00",
+      "failure_checks": 0
+    },
+    "https://www.amazon.jobs/en/jobs/10600990/commissioning-engineer-commissioning": {
+      "http_status": 200,
+      "final_url": "https://www.amazon.jobs/en/jobs/10600990/commissioning-engineer-commissioning",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.015304+00:00",
+      "failure_checks": 0
+    },
+    "https://codec.pinpointhq.com/en/postings/7e08d619-effa-4a12-9d26-b0a8a2fcab04": {
+      "http_status": 200,
+      "final_url": "https://codec.pinpointhq.com/en/postings/7e08d619-effa-4a12-9d26-b0a8a2fcab04",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.525105+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.fidelity.com/ie/jobs/2136633/senior-cyber-threat-intelligence-analyst/": {
+      "http_status": 200,
+      "final_url": "https://jobs.fidelity.com/ie/jobs/2136633/senior-cyber-threat-intelligence-analyst/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.412939+00:00",
+      "failure_checks": 0
+    },
+    "https://aviva.talent-community.com/projects/Enterprise-Assurance-Manager/77408": {
+      "http_status": 200,
+      "final_url": "https://aviva.talent-community.com/projects/Enterprise-Assurance-Manager/77408",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.085657+00:00",
+      "failure_checks": 0
+    },
+    "https://aviva.talent-community.com/projects/Desk-Based-Motor-Engineer/74401": {
+      "http_status": 200,
+      "final_url": "https://aviva.talent-community.com/projects/Desk-Based-Motor-Engineer/74401",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.084299+00:00",
+      "failure_checks": 0
+    },
+    "https://jj.wd5.myworkdayjobs.com/JJ/job/Limerick-Ireland/Maintenance-Technician_R-110191": {
+      "http_status": 200,
+      "final_url": "https://jj.wd5.myworkdayjobs.com/JJ/job/Limerick-Ireland/Maintenance-Technician_R-110191",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.051586+00:00",
+      "failure_checks": 0
+    },
+    "https://aerlingus-career.talent-soft.com/job/job-financial-controls-insurance-lead_2069.aspx": {
+      "http_status": 200,
+      "final_url": "https://aerlingus-career.talent-soft.com/job/job-financial-controls-insurance-lead_2069.aspx",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.772249+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.astrazeneca.com/job/dublin/apicom-maintenance-technician/7684/103110176000": {
+      "http_status": 200,
+      "final_url": "https://careers.astrazeneca.com/job/dublin/apicom-maintenance-technician/7684/103110176000",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.423543+00:00",
+      "failure_checks": 0
+    },
+    "https://fil.wd3.myworkdayjobs.com/001/job/Dublin-Office/Technical-Data-Analyst_J70595": {
+      "http_status": 200,
+      "final_url": "https://fil.wd3.myworkdayjobs.com/001/job/Dublin-Office/Technical-Data-Analyst_J70595",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.819092+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.smartrecruiters.com/Version1/744000160859869-application-support-analyst": {
+      "http_status": 200,
+      "final_url": "https://jobs.smartrecruiters.com/Version1/744000160859869-application-support-analyst",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.003842+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.amgen.com/en/job/dublin/supply-chain-mgr-product-planner/87/103112688400": {
+      "http_status": 200,
+      "final_url": "https://careers.amgen.com/en/job/dublin/supply-chain-mgr-product-planner/87/103112688400",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.576330+00:00",
+      "failure_checks": 0
+    },
+    "https://www.amazon.jobs/en/jobs/10600964/aml-compliance-analyst-with-swedish-kyc": {
+      "http_status": 200,
+      "final_url": "https://www.amazon.jobs/en/jobs/10600964/aml-compliance-analyst-with-swedish-kyc",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.305224+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.amgen.com/en/job/dublin/senior-associate-manufacturing/87/103121694480": {
+      "http_status": 200,
+      "final_url": "https://careers.amgen.com/en/job/dublin/senior-associate-manufacturing/87/103121694480",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.485496+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.amgen.com/en/job/dublin/detailed-scheduling-people-manager/87/103121694352": {
+      "http_status": 200,
+      "final_url": "https://careers.amgen.com/en/job/dublin/detailed-scheduling-people-manager/87/103121694352",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.732436+00:00",
+      "failure_checks": 0
+    },
+    "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210772788": {
+      "http_status": 200,
+      "final_url": "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210772788",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.159269+00:00",
+      "failure_checks": 0
+    },
+    "https://www.amazon.jobs/en/jobs/10600966/aml-compliance-analyst-with-vietnamese-kyc": {
+      "http_status": 200,
+      "final_url": "https://www.amazon.jobs/en/jobs/10600966/aml-compliance-analyst-with-vietnamese-kyc",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.458565+00:00",
+      "failure_checks": 0
+    },
+    "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Motor-Bodily-Injury-Claims-Adjuster_JR2604373": {
+      "http_status": 200,
+      "final_url": "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/Motor-Bodily-Injury-Claims-Adjuster_JR2604373",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.474002+00:00",
+      "failure_checks": 0
+    },
+    "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Sr-Analyst-Manager---Automation_R-115027-1": {
+      "http_status": 200,
+      "final_url": "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Sr-Analyst-Manager---Automation_R-115027-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.656967+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.jacobs.com/en_US/careers/JobDetail/Graduate-Civil-Engineer-Highways-Cork/48162": {
+      "http_status": 202,
+      "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Graduate-Civil-Engineer-Highways-Cork/48162",
+      "status": "unverified",
+      "reason": "Empty response",
+      "checked_at": "2026-11-10T18:06:49.478647+00:00",
+      "failure_checks": 0
+    },
+    "https://genesys.wd1.myworkdayjobs.com/Genesys/job/Galway-Ireland/Senior-Software-Engineer_JR112984-1": {
+      "http_status": 200,
+      "final_url": "https://genesys.wd1.myworkdayjobs.com/Genesys/job/Galway-Ireland/Senior-Software-Engineer_JR112984-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.593057+00:00",
+      "failure_checks": 0
+    },
+    "https://fil.wd3.myworkdayjobs.com/001/job/Dublin-Office/Senior-AI-Solutions-Engineer_J70588-1": {
+      "http_status": 200,
+      "final_url": "https://fil.wd3.myworkdayjobs.com/001/job/Dublin-Office/Senior-AI-Solutions-Engineer_J70588-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.438799+00:00",
+      "failure_checks": 0
+    },
+    "https://careers-inc.nttdata.com/job/Dublin-Transact-Platform-Product-Owner-D/1449434800/": {
+      "http_status": 200,
+      "final_url": "https://careers-inc.nttdata.com/job/Dublin-Transact-Platform-Product-Owner-D/1449434800/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.066304+00:00",
+      "failure_checks": 0
+    },
+    "https://mmc.wd1.myworkdayjobs.com/MMC/job/Dublin---Frame/Rewards-Services-Leader-Europe_R_371989-1": {
+      "http_status": 200,
+      "final_url": "https://mmc.wd1.myworkdayjobs.com/MMC/job/Dublin---Frame/Rewards-Services-Leader-Europe_R_371989-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.734020+00:00",
+      "failure_checks": 0
+    },
+    "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Master-Scheduler_R-109602": {
+      "http_status": 200,
+      "final_url": "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Master-Scheduler_R-109602",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.374757+00:00",
+      "failure_checks": 0
+    },
+    "https://www.amazon.jobs/en/jobs/10600992/commissioning-engineer-fls-systems-commissioning": {
+      "http_status": 200,
+      "final_url": "https://www.amazon.jobs/en/jobs/10600992/commissioning-engineer-fls-systems-commissioning",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.796419+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.esb.ie/job/Flexible-Quantity-Surveyor-Procurement-D/1372748357/": {
+      "http_status": 200,
+      "final_url": "https://careers.esb.ie/job/Flexible-Quantity-Surveyor-Procurement-D/1372748357/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.129379+00:00",
+      "failure_checks": 0
+    },
+    "https://mmc.wd1.myworkdayjobs.com/MMC/job/Dublin---Frame/Compliance-Specialist---Investments_R_368071": {
+      "http_status": 200,
+      "final_url": "https://mmc.wd1.myworkdayjobs.com/MMC/job/Dublin---Frame/Compliance-Specialist---Investments_R_368071",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.945867+00:00",
+      "failure_checks": 0
+    },
+    "https://ebay.wd5.myworkdayjobs.com/apply/job/Dublin/Software-Engineer---Cloud-Platform_R0072671/apply": {
+      "http_status": 200,
+      "final_url": "https://ebay.wd5.myworkdayjobs.com/apply/job/Dublin/Software-Engineer---Cloud-Platform_R0072671/apply",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.877534+00:00",
+      "failure_checks": 0
+    },
+    "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/2884": {
+      "http_status": 200,
+      "final_url": "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/2884",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.799100+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.smartrecruiters.com/AECOM2/744000160912955-join-aecom-s-quantity-surveyor-talent-network": {
+      "http_status": 200,
+      "final_url": "https://jobs.smartrecruiters.com/AECOM2/744000160912955-join-aecom-s-quantity-surveyor-talent-network",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.969488+00:00",
+      "failure_checks": 0
+    },
+    "https://intel.wd1.myworkdayjobs.com/External/job/Ireland-Leixlip/Module-Process-Engineer_JR0288959": {
+      "http_status": 200,
+      "final_url": "https://intel.wd1.myworkdayjobs.com/External/job/Ireland-Leixlip/Module-Process-Engineer_JR0288959",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.653028+00:00",
+      "failure_checks": 0
+    },
+    "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Kilkenny/Technical-Team-Lead_31166904": {
+      "http_status": 200,
+      "final_url": "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Kilkenny/Technical-Team-Lead_31166904",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.759656+00:00",
+      "failure_checks": 0
+    },
+    "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Data-Analytics-Manager_117869": {
+      "http_status": 200,
+      "final_url": "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Data-Analytics-Manager_117869",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.809534+00:00",
+      "failure_checks": 0
+    },
+    "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210803162": {
+      "http_status": 200,
+      "final_url": "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210803162",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.205548+00:00",
+      "failure_checks": 0
+    },
+    "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210806235": {
+      "http_status": 200,
+      "final_url": "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210806235",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.206998+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.esb.ie/job/Dublin-Professional-Engineer%2C-High-Voltage-Cables-D/1377167757/": {
+      "http_status": 200,
+      "final_url": "https://careers.esb.ie/job/Dublin-Professional-Engineer%2C-High-Voltage-Cables-D/1377167757/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.999886+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.smartrecruiters.com/AECOM2/744000160916169-senior-infrastructure-quantity-surveyor-aviation": {
+      "http_status": 200,
+      "final_url": "https://jobs.smartrecruiters.com/AECOM2/744000160916169-senior-infrastructure-quantity-surveyor-aviation",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.188233+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.opentext.com/us/en/job/54305/Senior-Cloud-Applications-Engineer-Monitoring-Observability": {
+      "http_status": 200,
+      "final_url": "https://careers.opentext.com/us/en/job/54305/Senior-Cloud-Applications-Engineer-Monitoring-Observability",
+      "status": "unreachable",
+      "reason": "Employer page explicitly reports job unavailable",
+      "checked_at": "2026-11-10T18:06:49.512858+00:00",
+      "failure_checks": 2
+    },
+    "https://ebay.wd5.myworkdayjobs.com/apply/job/Dublin/Senior-Software-Engineer--Infrastructure_R0076891/apply": {
+      "http_status": 200,
+      "final_url": "https://ebay.wd5.myworkdayjobs.com/apply/job/Dublin/Senior-Software-Engineer--Infrastructure_R0076891/apply",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.207723+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.netapp.com/job/windsor/revenue-enablement-education-specialist/27600/101302054976": {
+      "http_status": 200,
+      "final_url": "https://careers.netapp.com/job/windsor/revenue-enablement-education-specialist/27600/101302054976",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.097089+00:00",
+      "failure_checks": 0
+    },
+    "https://www.careers.zurich.com/job/Dublin-Operations-Administrator-10-month-contract-IE-D/737335602/": {
+      "http_status": 200,
+      "final_url": "https://www.careers.zurich.com/job/Dublin-Operations-Administrator-10-month-contract-IE-D/737335602/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.046980+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=22&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=NU40QxnO7qS9iBZtG59vBg%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=22&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=NU40QxnO7qS9iBZtG59vBg%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.006702+00:00",
+      "failure_checks": 0
+    },
+    "https://cisco.wd5.myworkdayjobs.com/Cisco_Careers/job/Dublin-Ireland/Principal-Software-Engineer_2029373/apply": {
+      "http_status": 200,
+      "final_url": "https://cisco.wd5.myworkdayjobs.com/Cisco_Careers/job/Dublin-Ireland/Principal-Software-Engineer_2029373/apply",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.343379+00:00",
+      "failure_checks": 0
+    },
+    "https://www.google.com/about/careers/applications/jobs/results/73689787159978694-engineering-analyst": {
+      "http_status": 200,
+      "final_url": "https://www.google.com/about/careers/applications/jobs/results/73689787159978694-engineering-analyst",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.588590+00:00",
+      "failure_checks": 0
+    },
+    "https://coke.wd1.myworkdayjobs.com/coca-cola-careers/job/Ireland---Wexford/Manager--Process-Chemist_R-148904-1": {
+      "http_status": 200,
+      "final_url": "https://coke.wd1.myworkdayjobs.com/coca-cola-careers/job/Ireland---Wexford/Manager--Process-Chemist_R-148904-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.469210+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.smartrecruiters.com/ServiceNow/744000160932293-forward-deployed-solution-engineer-applied-ai-fde": {
+      "http_status": 200,
+      "final_url": "https://jobs.smartrecruiters.com/ServiceNow/744000160932293-forward-deployed-solution-engineer-applied-ai-fde",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.557632+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4480907532?position=27&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=JUmlaM2Z99seabVO5K5BlA%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4480907532?position=27&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=JUmlaM2Z99seabVO5K5BlA%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.209034+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.amgen.com/en/job/dun-laoghaire/senior-maintenance-technician-shift-role-24-7/87/103121694384": {
+      "http_status": 200,
+      "final_url": "https://careers.amgen.com/en/job/dun-laoghaire/senior-maintenance-technician-shift-role-24-7/87/103121694384",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.948960+00:00",
+      "failure_checks": 0
+    },
+    "https://aviva.talent-community.com/projects/Pension-Claims-Administrator/77406": {
+      "http_status": 200,
+      "final_url": "https://aviva.talent-community.com/projects/Pension-Claims-Administrator/77406",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.085821+00:00",
+      "failure_checks": 0
+    },
+    "https://viatris.wd5.myworkdayjobs.com/external/job/Northern-Cross-Dublin-Ireland/Supply-Chain-Network-Manager_R5670471": {
+      "http_status": 200,
+      "final_url": "https://viatris.wd5.myworkdayjobs.com/external/job/Northern-Cross-Dublin-Ireland/Supply-Chain-Network-Manager_R5670471",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.726239+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.smartrecruiters.com/ServiceNow/744000160934119-forward-deployed-solution-engineer-applied-ai-fde": {
+      "http_status": 200,
+      "final_url": "https://jobs.smartrecruiters.com/ServiceNow/744000160934119-forward-deployed-solution-engineer-applied-ai-fde",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.583171+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.ey.com/ey/job/Dublin-2-Assurance-Technical-Learning-Coordinator/1456018133/": {
+      "http_status": 200,
+      "final_url": "https://careers.ey.com/ey/job/Dublin-2-Assurance-Technical-Learning-Coordinator/1456018133/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:38.955971+00:00",
+      "failure_checks": 0
+    },
+    "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland-One-South-County/Lead-AI-Engineer_R-295259": {
+      "http_status": 200,
+      "final_url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland-One-South-County/Lead-AI-Engineer_R-295259",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.612730+00:00",
+      "failure_checks": 0
+    },
+    "https://cisco.wd5.myworkdayjobs.com/Cisco_Careers/job/Galway-Ireland/Senior-Software-Engineer---Webex_2020728-1/apply": {
+      "http_status": 200,
+      "final_url": "https://cisco.wd5.myworkdayjobs.com/Cisco_Careers/job/Galway-Ireland/Senior-Software-Engineer---Webex_2020728-1/apply",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.768519+00:00",
+      "failure_checks": 0
+    },
+    "https://viatris.wd5.myworkdayjobs.com/external/job/Northern-Cross-Dublin-Ireland/Supply-Chain-Business-Analyst_R5675686": {
+      "http_status": 200,
+      "final_url": "https://viatris.wd5.myworkdayjobs.com/external/job/Northern-Cross-Dublin-Ireland/Supply-Chain-Business-Analyst_R5675686",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.947436+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=9&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=1RreupH31oJ1Idc11Bgx4w%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=9&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=1RreupH31oJ1Idc11Bgx4w%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.783923+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.eir.care/jobs/detail/part-time-retail-sales-consultant-o-connell-street-limerick-104": {
+      "http_status": 200,
+      "final_url": "https://jobs.eir.care/jobs/detail/part-time-retail-sales-consultant-o-connell-street-limerick-104",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.526594+00:00",
+      "failure_checks": 0
+    },
+    "https://jobs.johnsoncontrols.com/job/WD30276962": {
+      "http_status": 200,
+      "final_url": "https://jobs.johnsoncontrols.com/job/WD30276962",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.071727+00:00",
+      "failure_checks": 0
+    },
+    "https://libertyglobal.wd3.myworkdayjobs.com/VMIE_Careers/job/Macken-House/Senior-Network-and-Security-Analyst_REQ_00038871-1": {
+      "http_status": 200,
+      "final_url": "https://libertyglobal.wd3.myworkdayjobs.com/VMIE_Careers/job/Macken-House/Senior-Network-and-Security-Analyst_REQ_00038871-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.708493+00:00",
+      "failure_checks": 0
+    },
+    "https://www.google.com/about/careers/applications/jobs/results/123374793473827526-partner-solutions-engineer": {
+      "http_status": 200,
+      "final_url": "https://www.google.com/about/careers/applications/jobs/results/123374793473827526-partner-solutions-engineer",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.196001+00:00",
+      "failure_checks": 0
+    },
+    "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland-One-South-County/Senior-Data-Engineer_R-292866": {
+      "http_status": 200,
+      "final_url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland-One-South-County/Senior-Data-Engineer_R-292866",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.065367+00:00",
+      "failure_checks": 0
+    },
+    "https://aviva.talent-community.com/projects/Risk-Analytics-%26-Automation-Manager/77410": {
+      "http_status": 200,
+      "final_url": "https://aviva.talent-community.com/projects/risk-analytics-automation-manager/77410",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:37.847912+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=15&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=hxynhRpDw20vMWCo3yjhsA%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=15&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=hxynhRpDw20vMWCo3yjhsA%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.411628+00:00",
+      "failure_checks": 0
+    },
+    "https://libertyglobal.wd3.myworkdayjobs.com/en-US/VMIE_Careers/job/Ballymount/Promotions---Presentation-Assistant_REQ_00038869-1": {
+      "http_status": 200,
+      "final_url": "https://libertyglobal.wd3.myworkdayjobs.com/en-US/VMIE_Careers/job/Ballymount/Promotions---Presentation-Assistant_REQ_00038869-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.137623+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.amgen.com/en/job/dun-laoghaire/sr-maintenance-technician-inspection-and-packaging-24-7-shift/87/103121694400": {
+      "http_status": 200,
+      "final_url": "https://careers.amgen.com/en/job/dun-laoghaire/sr-maintenance-technician-inspection-and-packaging-24-7-shift/87/103121694400",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.828177+00:00",
+      "failure_checks": 0
+    },
+    "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Sponsorship-Marketing-Associate-Manager_JR367590": {
+      "http_status": 200,
+      "final_url": "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Sponsorship-Marketing-Associate-Manager_JR367590",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.506951+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=17&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=EQNEii09nkcvSWV%2Bf21Oyw%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=17&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=EQNEii09nkcvSWV%2Bf21Oyw%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-11-10T18:06:39.427057+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.esb.ie/job/ESB-Networks-Kilteel-Pole-Fi-Admin-Team-Member-Supply-Chain%2C-Kilteel-KE/1365719357/": {
+      "http_status": 200,
+      "final_url": "https://careers.esb.ie/job/ESB-Networks-Kilteel-Pole-Fi-Admin-Team-Member-Supply-Chain%2C-Kilteel-KE/1365719357/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.255931+00:00",
+      "failure_checks": 0
+    },
+    "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Sales-Development-Representative---BNL-Market_JR367859": {
+      "http_status": 200,
+      "final_url": "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Sales-Development-Representative---BNL-Market_JR367859",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.680102+00:00",
+      "failure_checks": 0
+    },
+    "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/United-Kingdom---Remote/Sr-Data-Scientist---Gen-AI--Remote-_R29878": {
+      "http_status": 200,
+      "final_url": "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/United-Kingdom---Remote/Sr-Data-Scientist---Gen-AI--Remote-_R29878",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.295988+00:00",
+      "failure_checks": 0
+    },
+    "https://bdx.wd1.myworkdayjobs.com/EXTERNAL_CAREER_SITE_IRELAND/job/IRL-Limerick---Castletroy/Staff-Software-Engineer_R-559576-1": {
+      "http_status": 200,
+      "final_url": "https://bdx.wd1.myworkdayjobs.com/EXTERNAL_CAREER_SITE_IRELAND/job/IRL-Limerick---Castletroy/Staff-Software-Engineer_R-559576-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.588402+00:00",
+      "failure_checks": 0
+    },
+    "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Associate-Director-Director--Pharmacoepidemiology-Project-Manager_R-115111-1": {
+      "http_status": 200,
+      "final_url": "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Associate-Director-Director--Pharmacoepidemiology-Project-Manager_R-115111-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.706085+00:00",
+      "failure_checks": 0
+    },
+    "https://danaher.wd1.myworkdayjobs.com/DanaherJobs/job/OCallaghan-Mills-Ireland/QC-Analyst-I---18-month-FTC_R1314762/apply": {
+      "http_status": 200,
+      "final_url": "https://danaher.wd1.myworkdayjobs.com/DanaherJobs/job/OCallaghan-Mills-Ireland/QC-Analyst-I---18-month-FTC_R1314762/apply",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.116060+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-french-at-linkedin-4475555834?position=18&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=GVPFvJNGERLoa0WRrhC0Rw%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-french-at-linkedin-4475555834?position=18&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=GVPFvJNGERLoa0WRrhC0Rw%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.492018+00:00",
+      "failure_checks": 0
+    },
+    "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Data-Analytics-Senior-Manager_117870": {
+      "http_status": 200,
+      "final_url": "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Dublin/Data-Analytics-Senior-Manager_117870",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.277080+00:00",
+      "failure_checks": 0
+    },
+    "https://ghr.wd1.myworkdayjobs.com/lateral-us/job/Dublin/Credit-Solutions-Advisor---Tassajara---Bilingual-Mandarin-Required_26040223-1": {
+      "http_status": 200,
+      "final_url": "https://ghr.wd1.myworkdayjobs.com/lateral-us/job/Dublin/Credit-Solutions-Advisor---Tassajara---Bilingual-Mandarin-Required_26040223-1",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.962691+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-talent-solutions-benelux-at-linkedin-4485376160?position=14&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=aSzlotsdhiGOYoftCQiAOQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-talent-solutions-benelux-at-linkedin-4485376160?position=14&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=aSzlotsdhiGOYoftCQiAOQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.476007+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.ey.com/ey/job/Dublin-2-Talent-Acquisition-Assistant-Manager-Dublin-%2811-month-FTC%29/1456025533/": {
+      "http_status": 200,
+      "final_url": "https://careers.ey.com/ey/job/Dublin-2-Talent-Acquisition-Assistant-Manager-Dublin-%2811-month-FTC%29/1456025533/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.480534+00:00",
+      "failure_checks": 0
+    },
+    "https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Pennsylvania---North-Wales-Upper-Gwynedd/Associate-Director-Digital-Compliance_R426039": {
+      "http_status": 200,
+      "final_url": "https://msd.wd5.myworkdayjobs.com/SearchJobs/job/USA---Pennsylvania---North-Wales-Upper-Gwynedd/Associate-Director-Digital-Compliance_R426039",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.228608+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/sales-development-representative-dutch-speaker-at-linkedin-4489485368?position=2&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=t%2F%2BteJezzcz4R5ZNiTFPHg%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/sales-development-representative-dutch-speaker-at-linkedin-4489485368?position=2&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=t%2F%2BteJezzcz4R5ZNiTFPHg%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.640984+00:00",
+      "failure_checks": 0
+    },
+    "https://paypal.wd1.myworkdayjobs.com/jobs/job/Dublin-County-Dublin-Ireland/Sr-Specialist--Enterprise-Servicing--German-speaking-_R0138651": {
+      "http_status": 200,
+      "final_url": "https://paypal.wd1.myworkdayjobs.com/jobs/job/Dublin-County-Dublin-Ireland/Sr-Specialist--Enterprise-Servicing--German-speaking-_R0138651",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.974889+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/client-solutions-manager-performance-expansion-team-french-linkedin-marketing-solutions-at-linkedin-4489460623?position=29&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=Q8p37phm1CQdIAqN38hWsQ%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/client-solutions-manager-performance-expansion-team-french-linkedin-marketing-solutions-at-linkedin-4489460623?position=29&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=Q8p37phm1CQdIAqN38hWsQ%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-11-10T18:06:41.882641+00:00",
+      "failure_checks": 0
+    },
+    "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Business-Development-Representative-UKI-Market--English-Speaking-_JR367864": {
+      "http_status": 200,
+      "final_url": "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Business-Development-Representative-UKI-Market--English-Speaking-_JR367864",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.754049+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.ey.com/ey/job/Dublin-2-FS-Technology-Consulting-Quality-Engineering-Lead-ManagerSenior-Manager-Dublin/1456174933/": {
+      "http_status": 200,
+      "final_url": "https://careers.ey.com/ey/job/Dublin-2-FS-Technology-Consulting-Quality-Engineering-Lead-ManagerSenior-Manager-Dublin/1456174933/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.089497+00:00",
+      "failure_checks": 0
+    },
+    "https://danaher.wd1.myworkdayjobs.com/DanaherJobs/job/OCallaghan-Mills-Ireland/QC-Analyst-I----18-month-FTC---Open-to-Graduates_R1322767-1/apply": {
+      "http_status": 200,
+      "final_url": "https://danaher.wd1.myworkdayjobs.com/DanaherJobs/job/OCallaghan-Mills-Ireland/QC-Analyst-I----18-month-FTC---Open-to-Graduates_R1322767-1/apply",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.162307+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=23&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=Ibv6lwtxNO8y%2F5kF%2BMtLTg%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=23&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=Ibv6lwtxNO8y%2F5kF%2BMtLTg%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.742409+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=7&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=5m%2Fq4O7eQTo9XtdpfIjNAw%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=7&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=5m%2Fq4O7eQTo9XtdpfIjNAw%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.828327+00:00",
+      "failure_checks": 0
+    },
+    "https://statestreet.wd1.myworkdayjobs.com/Global/job/Kilkenny-Ireland/Custody-Management-Services---Vice-President--8-Mth-Fixed-Term-Contract-_R-800969-1/apply": {
+      "http_status": 200,
+      "final_url": "https://statestreet.wd1.myworkdayjobs.com/Global/job/Kilkenny-Ireland/Custody-Management-Services---Vice-President--8-Mth-Fixed-Term-Contract-_R-800969-1/apply",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.809245+00:00",
+      "failure_checks": 0
+    },
+    "https://ghr.wd1.myworkdayjobs.com/lateral-us/job/Dublin/Relationship-Banker---Northwest-Columbus--OH---Hayden-Crossing--Powell--Lewis-Center-and-Worthington_26037762": {
+      "http_status": 200,
+      "final_url": "https://ghr.wd1.myworkdayjobs.com/lateral-us/job/Dublin/Relationship-Banker---Northwest-Columbus--OH---Hayden-Crossing--Powell--Lewis-Center-and-Worthington_26037762",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:42.076218+00:00",
+      "failure_checks": 0
+    },
+    "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Data-Analytics%2C-Manager-Senior-Manager-%28Referral-General-role%29/1423166933/": {
+      "http_status": 200,
+      "final_url": "https://careers.ey.com/ey/job/Dublin-2-UKI-Technology-Consulting-Data-Analytics%2C-Manager-Senior-Manager-%28Referral-General-role%29/1423166933/",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.884303+00:00",
+      "failure_checks": 0
+    },
+    "https://www.novartis.com/careers/career-search/job/details/req-10090894-associate-director-senior-principal-data-science-ai-biologics": {
+      "http_status": 200,
+      "final_url": "https://www.novartis.com/careers/career-search/job/details/req-10090894-associate-director-senior-principal-data-science-ai-biologics",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.441136+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=20&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=tIb1A8Pp4ctZ%2FW6I2fg5BA%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=20&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=tIb1A8Pp4ctZ%2FW6I2fg5BA%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.018869+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4461128065?position=12&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=cp1tt9DzuDUgUw%2Bs57ZLxg%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4461128065?position=12&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=cp1tt9DzuDUgUw%2Bs57ZLxg%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.129105+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-talent-account-executive-talent-solutions-french-at-linkedin-4462856049?position=21&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=zMQkbjNZZCTv5bDiXymaPw%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-talent-account-executive-talent-solutions-french-at-linkedin-4462856049?position=21&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=zMQkbjNZZCTv5bDiXymaPw%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.232826+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4442582671?position=11&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=dmOmeWaAg652kUvo1lCGJg%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4442582671?position=11&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=dmOmeWaAg652kUvo1lCGJg%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.359188+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=16&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=EMTvkVEmumxC7G%2F9jTIb7g%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=16&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=EMTvkVEmumxC7G%2F9jTIb7g%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.426177+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/lss-sales-sr-manager-global-accounts-team-dublin-or-london-at-linkedin-4488867509?position=28&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=4AWbQXHQBJW36n%2B46l3FuQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/lss-sales-sr-manager-global-accounts-team-dublin-or-london-at-linkedin-4488867509?position=28&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=4AWbQXHQBJW36n%2B46l3FuQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.538957+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=8&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=TW7mlakPE2mAQkZuGw0QgQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=8&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=TW7mlakPE2mAQkZuGw0QgQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.648974+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-italian-french-at-linkedin-4482862538?position=10&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=ni0Ki%2FKKu6ucJUq58NHTsQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-italian-french-at-linkedin-4482862538?position=10&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=ni0Ki%2FKKu6ucJUq58NHTsQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.850333+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4487232774?position=24&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=S4AlyoR5uSkg%2FhhBpJLVcQ%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4487232774?position=24&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=S4AlyoR5uSkg%2FhhBpJLVcQ%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:40.969831+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-at-linkedin-4444457199?position=25&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=deRExN9SE0MORsxMdQlGXw%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-at-linkedin-4444457199?position=25&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=deRExN9SE0MORsxMdQlGXw%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.052224+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-german-talent-solutions-at-linkedin-4486855564?position=3&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=eLelB2z95%2FUekl6bprZ55A%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-german-talent-solutions-at-linkedin-4486855564?position=3&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=eLelB2z95%2FUekl6bprZ55A%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.082822+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=26&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=76V53RpLwzhEZxzQ0UyQUg%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=26&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=76V53RpLwzhEZxzQ0UyQUg%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-11-10T18:06:41.193415+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=6&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=hhTnf%2FwMyhTcO%2BwWpSAiqA%3D%3D": {
+      "http_status": 429,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=6&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=hhTnf%2FwMyhTcO%2BwWpSAiqA%3D%3D",
+      "status": "blocked",
+      "reason": "Automated check blocked (HTTP 429)",
+      "checked_at": "2026-11-10T18:06:41.465903+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=4&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=HZ9rkoTyuUM28WcSUl2SCA%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=4&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=HZ9rkoTyuUM28WcSUl2SCA%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.471605+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-talent-solutions-italian-at-linkedin-4481562006?position=1&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=Q3hG5cPIDS3Ns6MrW%2FKRNA%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-talent-solutions-italian-at-linkedin-4481562006?position=1&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=Q3hG5cPIDS3Ns6MrW%2FKRNA%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.083835+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-portfolio-french-growth-mid-market-linkedin-marketing-solutions-at-linkedin-4488157825?position=19&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=ZfTUr4huNTCBShpKyCWn6A%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-portfolio-french-growth-mid-market-linkedin-marketing-solutions-at-linkedin-4488157825?position=19&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=ZfTUr4huNTCBShpKyCWn6A%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:41.738630+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=5&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=xERYp%2FcQ8UJRkl6Wc%2B0Rtw%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=5&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=xERYp%2FcQ8UJRkl6Wc%2B0Rtw%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.706349+00:00",
+      "failure_checks": 0
+    },
+    "https://ie.linkedin.com/jobs/view/account-executive-german-sales-solutions-at-linkedin-4442570945?position=13&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=9BRCL2s7gO3LQESBkm0bbg%3D%3D": {
+      "http_status": 200,
+      "final_url": "https://ie.linkedin.com/jobs/view/account-executive-german-sales-solutions-at-linkedin-4442570945?position=13&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=9BRCL2s7gO3LQESBkm0bbg%3D%3D",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-10T18:06:39.323847+00:00",
+      "failure_checks": 0
     }
   },
-  "completed_at": "2026-11-10T10:28:08.438828+00:00",
-  "checked_urls": 3963,
+  "completed_at": "2026-11-10T18:08:01.680717+00:00",
+  "checked_urls": 3938,
   "status_counts": {
-    "error": 12,
-    "reachable": 3895,
-    "unreachable": 14,
-    "unverified": 27,
-    "blocked": 15
+    "error": 8,
+    "reachable": 3887,
+    "unverified": 25,
+    "unreachable": 1,
+    "blocked": 17
   },
   "last_cleanup": {
-    "at": "2026-11-10T10:28:08.438828+00:00",
+    "at": "2026-11-10T18:08:01.680717+00:00",
     "duplicates": [],
     "unavailable": [
       {
-        "url": "https://careers.datadoghq.com/detail/8210507/?gh_jid=8210507",
-        "company": "Datadog",
-        "title": "Commercial Account Executive (Italy)",
-        "reason": "HTTP 404"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52389/Principal-AI-Developer",
+        "url": "https://careers.opentext.com/us/en/job/54305/Senior-Cloud-Applications-Engineer-Monitoring-Observability",
         "company": "OpenText",
-        "title": "Principal AI Developer external link open in new tab",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52405/Lead-AI-Developer",
-        "company": "OpenText",
-        "title": "Lead AI Developer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/53737/Sr-Executive-Briefing-Strategist",
-        "company": "OpenText",
-        "title": "Sr. Executive Briefing Strategist",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/51960/Premium-Support-Engineer-Fortify",
-        "company": "OpenText",
-        "title": "Premium Support Engineer- Fortify",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/53402/Principal-Product-Manager",
-        "company": "OpenText",
-        "title": "Principal Product Manager",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/53898/SAP-Alliance-Manager-Professional-Services",
-        "company": "OpenText",
-        "title": "SAP Alliance Manager - Professional Services",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52164/Lead-Site-Reliability-Engineer-Cork",
-        "company": "OpenText",
-        "title": "Lead Site Reliability Engineer | Cork external link open in new tab",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52284/Principal-AI-Developer",
-        "company": "OpenText",
-        "title": "Principal AI Developer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52306/Lead-AI-Developer",
-        "company": "OpenText",
-        "title": "Lead AI Developer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52388/Lead-AI-Developer",
-        "company": "OpenText",
-        "title": "Lead AI Developer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/53425/Principal-Software-Developer-Java",
-        "company": "OpenText",
-        "title": "Principal Software Developer Java",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/50382/Senior-Site-Reliability-Engineer",
-        "company": "OpenText",
-        "title": "Senior Site Reliability Engineer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/51502/Sr-Cloud-Applications-Engineer-SRE-Cork",
-        "company": "OpenText",
-        "title": "Sr. Cloud Applications Engineer (SRE) | Cork external link open in new tab",
+        "title": "Senior Cloud Applications Engineer - Monitoring & Observability",
         "reason": "Employer page explicitly reports job unavailable"
       }
     ]
