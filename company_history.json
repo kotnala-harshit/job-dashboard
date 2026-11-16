@@ -2,7 +2,7 @@
   "companies": {
     "Accenture": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "14496960",
@@ -235,11 +235,11 @@
         "R00371877"
       ],
       "distinct_jobs_seen": 228,
-      "current_live_jobs": 75
+      "current_live_jobs": 84
     },
     "Citi": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.citi.com/job/dublin/account-bank-payments-specialist/287/98742214336",
@@ -369,7 +369,7 @@
     },
     "Apple": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.apple.com/en-ie/details/200642499-1418/software-automation-engineer-localisation-release-engineering",
@@ -483,14 +483,15 @@
         "https://jobs.apple.com/en-ie/details/200693668-1418/intern-software-automation-engineer",
         "https://jobs.apple.com/en-ie/details/200693825-1418/hardware-test-engineer-product-operations",
         "https://jobs.apple.com/en-ie/details/200693845-1418/privacy-legal-specialist",
+        "https://jobs.apple.com/en-ie/details/200694241-1418/people-operations-adjudication-specialist",
         "https://jobs.apple.com/en-ie/details/200694529-1418/employee-relations-business-partner"
       ],
-      "distinct_jobs_seen": 112,
-      "current_live_jobs": 43
+      "distinct_jobs_seen": 113,
+      "current_live_jobs": 44
     },
     "Google": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.google.com/about/careers/applications/jobs/results/100072989575258822-technical-program-manager-technical-excellence-physical-security",
@@ -885,11 +886,11 @@
         "https://www.google.com/about/careers/applications/jobs/results?location=Ireland&page=6"
       ],
       "distinct_jobs_seen": 390,
-      "current_live_jobs": 101
+      "current_live_jobs": 88
     },
     "Microsoft": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://apply.careers.microsoft.com/careers/apply?pid=1970393556938961",
@@ -1233,11 +1234,11 @@
         "https://apply.careers.microsoft.com/careers?start=60&location=Ireland&pid=1970393557052849&sort_by=distance&filter_include_remote=1&filter_include_relocation=0#app"
       ],
       "distinct_jobs_seen": 339,
-      "current_live_jobs": 18
+      "current_live_jobs": 17
     },
     "Meta": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.metacareers.com/profile/job_details/1003424606105272",
@@ -1310,7 +1311,7 @@
     },
     "TikTok": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-15T00:47:59.010602+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://lifeattiktok.com/search/7395213560504944947",
@@ -1369,11 +1370,11 @@
         "https://lifeattiktok.com/search/7707015061048428805"
       ],
       "distinct_jobs_seen": 54,
-      "current_live_jobs": 0
+      "current_live_jobs": 12
     },
     "EY Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.ey.com/ey/job/Alpharetta-Director-Technology-Risk-GA-30009/1417697233/",
@@ -1641,6 +1642,7 @@
         "https://careers.ey.com/ey/job/Dublin-UKI-Technology-Consulting-AI-Security%2C-Senior-Manager-D02/1445102933/",
         "https://careers.ey.com/ey/job/Dublin-UKI-Technology-Consulting-AI-Security-Senior-Manager-D02/1445102933/",
         "https://careers.ey.com/ey/job/Dublin-UKI-Technology-Consulting-Cyber-Security-Architect%2C-Manager-D02/1437111833/",
+        "https://careers.ey.com/ey/job/Dublin-UKI-Technology-Consulting-Cybersecurity-Systems-Integrator-%28SI%29-Technology-Consulting%2C-Senior-M-D02/1457512633/",
         "https://careers.ey.com/ey/job/Dublin-UKI-Technology-Consulting-Digital-Engineering%2C-Director-D02/1457319733/",
         "https://careers.ey.com/ey/job/Dublin-UKI-Technology-Consulting-Digital-Engineering%2C-Senior-Manager-D02/1457314433/",
         "https://careers.ey.com/ey/job/Dublin-UKI-Technology-Consulting-Digital-Engineering-FullStack-Engineer%2CManager-D02/1457287433/",
@@ -1701,12 +1703,12 @@
         "https://eyglobal.yello.co/jobs/oqtWG0NHY29D2VOE9IBfwA?job_board_id=c1riT--B2O-KySgYWsZO1Q",
         "https://eyglobal.yello.co/jobs/qFTwq_gek3Zt2bdaqmMUCQ?job_board_id=c1riT--B2O-KySgYWsZO1Q"
       ],
-      "distinct_jobs_seen": 324,
-      "current_live_jobs": 151
+      "distinct_jobs_seen": 325,
+      "current_live_jobs": 152
     },
     "NetApp": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.netapp.com/job/cork/client-executive/27600/94066098896",
@@ -1795,7 +1797,7 @@
     },
     "Version 1": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.smartrecruiters.com/v1/companies/version1/postings/744000130548638",
@@ -2028,7 +2030,7 @@
     },
     "Wells Fargo": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.wellsfargojobs.com/en/jobs/r-551932/credit-risk-officer-senior-assistant-vice-president/",
@@ -2039,7 +2041,7 @@
     },
     "Cognizant": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.cognizant.com/global-en/jobs/46907/operator-with-spanish-latam/",
@@ -2083,7 +2085,7 @@
     },
     "AstraZeneca": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.astrazeneca.com/job/dublin/advanced-manufacturing-technician-api-apicom/7684/101129506320",
@@ -2106,7 +2108,7 @@
     },
     "Bank of America": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.bankofamerica.com/en-us/job-detail/25045353/manual-ethical-hacker-web-applications-multiple-locations",
@@ -2163,7 +2165,7 @@
     },
     "A&L Goodbody": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.algoodbody.com/careers/legalprofessionals/banking-finance-solicitor-finance",
@@ -2200,7 +2202,7 @@
     },
     "Jacobs": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.jacobs.com/en_US/careers/JobDetail/Administrator-Tunnel-Contract-Administration-Technical-Services/48268",
@@ -2311,7 +2313,7 @@
     },
     "AIB (Allied Irish Banks)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.aib.ie/aib/job/Belfast-AIB-UK-Graduate-Programme-2027-GB/1373069457/",
@@ -2404,7 +2406,7 @@
     },
     "Boston Scientific": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.bostonscientific.com/job/Clonmel-Documentation-Clerical-S3/1444478700/",
@@ -2477,7 +2479,7 @@
     },
     "Johnson Controls": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.johnsoncontrols.com/job/WD30274018",
@@ -2595,7 +2597,7 @@
     },
     "Ryanair": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.ryanair.com/jobs/aircraft-maintenance-engineering-apprenticeship-open-day/",
@@ -2636,7 +2638,7 @@
     },
     "PepsiCo": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.pepsicojobs.com/main/jobs/401833",
@@ -2650,7 +2652,7 @@
     },
     "Musgrave Group (SuperValu / Centra)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://musgravegroup.com/about-us/",
@@ -2797,11 +2799,11 @@
         "https://www.musgravegroup.com/cookie-policy/"
       ],
       "distinct_jobs_seen": 142,
-      "current_live_jobs": 2
+      "current_live_jobs": 3
     },
     "Susquehanna International Group (SIG)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.sig.com/dublin/jobs/10498",
@@ -2851,7 +2853,7 @@
     },
     "Schneider Electric": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.se.com/jobs/116619?lang=en-us",
@@ -2863,7 +2865,7 @@
     },
     "BNP Paribas Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.bnpparibas.ie/en/jobs/account-manager/",
@@ -2890,7 +2892,7 @@
     },
     "AMCS Group": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.amcsgroup.com/careers/data-analyst-213795/",
@@ -2940,7 +2942,7 @@
     },
     "Auxilion": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.auxilion.com/careers/deskside-engineer-l2",
@@ -2953,7 +2955,7 @@
     },
     "BioMarin": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.biomarin.com/job/associate-director-gvp-compliance-2/",
@@ -2963,6 +2965,8 @@
         "https://www.biomarin.com/job/cw-lab-scientist/",
         "https://www.biomarin.com/job/director-head-of-analytical-product-leads/",
         "https://www.biomarin.com/job/director-regional-distribution-logistics-lead-eumea/",
+        "https://www.biomarin.com/job/director-senior-director-value-delivery-lead-technical-operations-2/",
+        "https://www.biomarin.com/job/director-senior-director-value-delivery-lead-technical-operations/",
         "https://www.biomarin.com/job/drug-product-team-lead/",
         "https://www.biomarin.com/job/executive-director-senior-director-global-operational-excellence/",
         "https://www.biomarin.com/job/executive-operations-coordinator/",
@@ -2996,12 +3000,12 @@
         "https://www.biomarin.com/job/sterile-manufacturing-technician/",
         "https://www.biomarin.com/job/talent-acquisition-specialist/"
       ],
-      "distinct_jobs_seen": 39,
-      "current_live_jobs": 3
+      "distinct_jobs_seen": 41,
+      "current_live_jobs": 5
     },
     "Amazon": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "10374718",
@@ -3437,11 +3441,11 @@
         "https://www.amazon.jobs/en/jobs/10604140/systems-engineer-european-sovereign-cloud"
       ],
       "distinct_jobs_seen": 431,
-      "current_live_jobs": 53
+      "current_live_jobs": 52
     },
     "Squarespace": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "http://www.squarespace.com/about/careers?gh_jid=7796885",
@@ -3460,7 +3464,7 @@
     },
     "Pinterest": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.pinterestcareers.com/jobs/?gh_jid=7507652",
@@ -3497,7 +3501,7 @@
     },
     "Asana": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.asana.com/jobs/apply/7477015?gh_jid=7477015",
@@ -3518,7 +3522,7 @@
     },
     "Airbnb": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.airbnb.com/positions/7946318?gh_jid=7946318",
@@ -3535,11 +3539,11 @@
         "https://careers.airbnb.com/positions/8378197?gh_jid=8378197"
       ],
       "distinct_jobs_seen": 12,
-      "current_live_jobs": 9
+      "current_live_jobs": 8
     },
     "Coinbase": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.coinbase.com/careers/positions/7407956?gh_jid=7407956",
@@ -3555,7 +3559,7 @@
     },
     "Intercom": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/intercom/jobs/5082494",
@@ -3638,7 +3642,7 @@
     },
     "Reddit": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/reddit/jobs/7909463",
@@ -3652,7 +3656,7 @@
     },
     "Twilio": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/twilio/jobs/7394811",
@@ -3683,11 +3687,11 @@
         "https://job-boards.greenhouse.io/twilio/jobs/8265268"
       ],
       "distinct_jobs_seen": 26,
-      "current_live_jobs": 8
+      "current_live_jobs": 7
     },
     "Datadog": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.datadoghq.com/detail/5283132/?gh_jid=5283132",
@@ -3748,7 +3752,7 @@
     },
     "HubSpot": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.hubspot.com/careers/jobs/4991223?gh_jid=4991223",
@@ -3834,7 +3838,7 @@
     },
     "Stripe": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://stripe.com/jobs/search?gh_jid=4921361",
@@ -4001,7 +4005,7 @@
     },
     "Qualtrics": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.qualtrics.com/careers/us/en/job/7792805?gh_jid=7792805",
@@ -4018,7 +4022,7 @@
     },
     "Klaviyo": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.klaviyo.com/careers/jobs/7737859003?gh_jid=7737859003",
@@ -4055,7 +4059,7 @@
     },
     "Okta": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.okta.com/company/careers/opportunity/6629089?gh_jid=6629089",
@@ -4094,9 +4098,10 @@
         "https://www.okta.com/company/careers/opportunity/8336713?gh_jid=8336713",
         "https://www.okta.com/company/careers/opportunity/8336721?gh_jid=8336721",
         "https://www.okta.com/company/careers/opportunity/8353207?gh_jid=8353207",
+        "https://www.okta.com/company/careers/opportunity/8382952?gh_jid=8382952",
         "https://www.okta.com/company/careers/opportunity/8385349?gh_jid=8385349"
       ],
-      "distinct_jobs_seen": 37,
+      "distinct_jobs_seen": 38,
       "current_live_jobs": 19
     },
     "Udemy": {
@@ -4120,7 +4125,7 @@
     },
     "Toast": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.toasttab.com/jobs?gh_jid=7731560",
@@ -4207,7 +4212,7 @@
     },
     "Flipdish": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.eu.greenhouse.io/flipdish/jobs/4912878101",
@@ -4219,11 +4224,11 @@
         "https://job-boards.eu.greenhouse.io/flipdish/jobs/5029657101"
       ],
       "distinct_jobs_seen": 7,
-      "current_live_jobs": 3
+      "current_live_jobs": 4
     },
     "Tines": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/tines/jobs/6103937004",
@@ -4246,7 +4251,7 @@
     },
     "Notion": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/notion/021f4891-c95f-41de-b8fc-66d285f57851",
@@ -4305,7 +4310,7 @@
     },
     "MongoDB": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.mongodb.com/careers/job/?gh_jid=6826191",
@@ -4443,14 +4448,15 @@
         "https://www.mongodb.com/careers/job/?gh_jid=8366823",
         "https://www.mongodb.com/careers/job/?gh_jid=8381910",
         "https://www.mongodb.com/careers/job/?gh_jid=8383215",
-        "https://www.mongodb.com/careers/job/?gh_jid=8385636"
+        "https://www.mongodb.com/careers/job/?gh_jid=8385636",
+        "https://www.mongodb.com/careers/job/?gh_jid=8385839"
       ],
-      "distinct_jobs_seen": 136,
-      "current_live_jobs": 64
+      "distinct_jobs_seen": 137,
+      "current_live_jobs": 65
     },
     "Zscaler": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/zscaler/jobs/5193258007",
@@ -4462,7 +4468,7 @@
     },
     "Wayflyer": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/wayflyer/37f76daf-0f83-4ec8-be9f-3ddd833458e3",
@@ -4482,7 +4488,7 @@
     },
     "ClickUp": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/clickup/1cb8eaf1-f7cd-4236-8695-6ba807a43512",
@@ -4504,7 +4510,7 @@
     },
     "OpenAI": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/openai/0331f23d-bb84-4931-b509-c0b91980f46c",
@@ -4549,7 +4555,7 @@
     },
     "Snowflake": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/snowflake/12157257-dc3e-490b-8c7f-614a681c3e0c",
@@ -4581,7 +4587,7 @@
     },
     "Genesys": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://genesys.wd1.myworkdayjobs.com/Genesys/job/Galway-Flexible/Senior-Software-Engineer_JR112716-1",
@@ -4621,7 +4627,7 @@
     },
     "Adobe": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://adobe.wd5.myworkdayjobs.com/external_experienced/job/Dublin/Global-Employment-Tax-Advisor--EMEA_R170449",
@@ -4688,7 +4694,7 @@
     },
     "MSD (Merck Sharp & Dohme)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://msd.wd5.myworkdayjobs.com/SearchJobs/job/CHE---Lucerne---Schachen-Werthenstein/Assoc-Dir--DSCS-Digital-Technologies--Decision-Intelligence--m-f-d-_R420808",
@@ -4763,7 +4769,7 @@
     },
     "Sanofi": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://sanofi.wd3.myworkdayjobs.com/SanofiCareers/job/Dublin/Policy-and-External-Affairs-Executive---VIE-Contract_R2867964",
@@ -4836,7 +4842,7 @@
     },
     "Analog Devices": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://analogdevices.wd1.myworkdayjobs.com/External/job/Germany-Munich-Otl-Aicher-Strasse/Lead-Engineer--Systems-Applications---Power-Solutions_R265321",
@@ -5055,7 +5061,7 @@
     },
     "Cadence Design Systems": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://cadence.wd1.myworkdayjobs.com/External_Careers/job/CORK-01/AI-Intern---Technical-Communications--System-Design-Analysis-Group-_R55571-1",
@@ -5095,7 +5101,7 @@
     },
     "Mastercard": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland-Mountain-View/Director---Consumer-Credit-Analytics---Global-Product-Manager_R-288651",
@@ -5298,11 +5304,11 @@
         "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Stockholm-Sweden/Product-Manager--Threat-Protection---IP-Intelligence_R-290929"
       ],
       "distinct_jobs_seen": 198,
-      "current_live_jobs": 18
+      "current_live_jobs": 17
     },
     "Gilead Sciences": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://gilead.wd1.myworkdayjobs.com/gileadcareers/job/Ireland---Cork/Assoc-Director--Finance---Accounting_R0055933-1",
@@ -5357,7 +5363,7 @@
     },
     "Salesforce": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/AI-Builder--Emerging-Talent---Arabic-Market_JR343472",
@@ -5705,11 +5711,11 @@
         "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Remote/Lead-Solution-Engineer-Mulesoft--Turkish-speaker_JR359335-1"
       ],
       "distinct_jobs_seen": 343,
-      "current_live_jobs": 147
+      "current_live_jobs": 146
     },
     "Elavon": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://usbank.wd1.myworkdayjobs.com/Elavon_Careers/job/Dublin-Ireland/Fund-Accountant_2026-0027522-1",
@@ -5731,7 +5737,7 @@
     },
     "Deloitte Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://deloitteie.wd3.myworkdayjobs.com/experienced_professionals/job/Cork/Computer-Systems-Validation---Consultant--Hybrid_117730",
@@ -5849,7 +5855,7 @@
     },
     "Abbott": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland---Clonmel/Assembler--Permanent-Contract--2-Cycle-shift_31046901",
@@ -6030,11 +6036,11 @@
         "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Ireland--Sligo--Finisklin-Road/Accountant_31157622"
       ],
       "distinct_jobs_seen": 176,
-      "current_live_jobs": 89
+      "current_live_jobs": 88
     },
     "PIMCO": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://pimco.wd1.myworkdayjobs.com/pimco-careers/job/Dublin-IRL/Asset-Information-Associate--Senior-Associate_R106053",
@@ -6053,7 +6059,7 @@
     },
     "PwC Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://pwc.wd3.myworkdayjobs.com/Global_Experienced_Careers/job/Dublin---One-Spencer-Dock/Senior-Associate---Tax----Wexford--Waterford--Kilkenny--Limerick--Cork-_341885WD",
@@ -6162,7 +6168,7 @@
     },
     "Northern Trust": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Dublin-Ireland/Associate-Consultant--Transfer-Agency--Dealing-Team-_R162346-1",
@@ -6279,6 +6285,7 @@
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Project-Manager_R155691-2",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Regional-KYC-Operations-Manager_R157048",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Resource-Planning-Manager_R159850",
+        "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/SENIOR-ANALYST-DIVIDEND-REBATES---COMMISSIONS-TRANSFER-AGENCY_R162891",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Scrum-Master_R159276",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Senior-Accountant--Financial-Control_R162334",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Senior-Administrator--Company-Secretarial---Legal_R154848",
@@ -6352,12 +6359,12 @@
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/London-United-Kingdom/Senior-Consultant--Investment-Performance-Attribution-Analysis---Asset-Management_R163870",
         "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/London-United-Kingdom/Senior-Risk-Management-Specialist--Digital-Assets--Blockchain-Technology-Focus-_R158206"
       ],
-      "distinct_jobs_seen": 186,
+      "distinct_jobs_seen": 187,
       "current_live_jobs": 76
     },
     "Arista Networks": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.smartrecruiters.com/v1/companies/aristanetworks/postings/744000001334065",
@@ -6420,7 +6427,7 @@
     },
     "Workday": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://workday.wd5.myworkdayjobs.com/Workday/job/DCDublin3/Sr-Data-Center-Operations-Engineer---Dublin-Site-Lead_JR-IC-000053-1",
@@ -6509,7 +6516,7 @@
     },
     "Diageo Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/Cavan-Republic-of-Ireland/Account-Executive---On-Trade_JR1129835",
@@ -6558,11 +6565,11 @@
         "https://diageo.wd3.myworkdayjobs.com/Diageo_Careers/job/Wexford-Republic-of-Ireland/Account-Executive---On-Trade_JR1130363"
       ],
       "distinct_jobs_seen": 44,
-      "current_live_jobs": 6
+      "current_live_jobs": 7
     },
     "State Street": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://statestreet.wd1.myworkdayjobs.com/Global/job/Bangalore-India/Digital-Assets-Product-Development-lead--AVP_R-788189",
@@ -6824,7 +6831,7 @@
     },
     "Marsh McLennan": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://mmc.wd1.myworkdayjobs.com/MMC/job/Cluj-Napoca---Decembrie/Product-Owner--Mars-Tech_R_365602",
@@ -6913,7 +6920,7 @@
     },
     "Intel": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://intel.wd1.myworkdayjobs.com/External/job/Ireland-Leixlip/AI-Frameworks-Engineer_JR0287676-1",
@@ -6971,11 +6978,11 @@
         "https://intel.wd1.myworkdayjobs.com/External/job/Ireland-Leixlip/XMLNAME-5G-Telco-Cloud-and-AI-Software-Engineer_JR0288906"
       ],
       "distinct_jobs_seen": 53,
-      "current_live_jobs": 20
+      "current_live_jobs": 18
     },
     "Aptiv": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS/job/Dublin-Ireland/AI-Agentic-Engineer_J000705625-1",
@@ -7002,7 +7009,7 @@
     },
     "Becton Dickinson (BD)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://bdx.wd1.myworkdayjobs.com/EXTERNAL_CAREER_SITE_IRELAND/job/IRL-BD-and-CO-Dublin-South/ISC-E2E-Value-Stream-Project-Engineer_R-535472",
@@ -7051,11 +7058,11 @@
         "https://bdx.wd1.myworkdayjobs.com/EXTERNAL_CAREER_SITE_IRELAND/job/IRL-Wexford---Enniscorthy/Facilities-Technician--12-Month-FTC-_R-551083"
       ],
       "distinct_jobs_seen": 44,
-      "current_live_jobs": 11
+      "current_live_jobs": 12
     },
     "AbbVie": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.smartrecruiters.com/v1/companies/abbvie/postings/3743990013615156",
@@ -7200,7 +7207,7 @@
     },
     "PayPal": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://paypal.wd1.myworkdayjobs.com/jobs/job/Dublin-County-Dublin-Ireland/Account-Executive---SMB-Outbound_R0137530-1",
@@ -7225,7 +7232,7 @@
     },
     "Agilent Technologies": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://agilent.wd5.myworkdayjobs.com/Agilent_Careers/job/Ireland-Little-Island-Euro-Hse/Qualification-Profile--Agilent-University-Coordinator-for-Customer-Training--Temporary-position-_4040511",
@@ -7237,7 +7244,7 @@
     },
     "ServiceNow": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.smartrecruiters.com/ServiceNow/744000130831250",
@@ -7300,13 +7307,17 @@
         "https://jobs.smartrecruiters.com/ServiceNow/744000161688659-crm-account-executive-commercial-italian-speaking"
       ],
       "distinct_jobs_seen": 58,
-      "current_live_jobs": 17
+      "current_live_jobs": 16
     },
     "Johnson & Johnson": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Beerse-Antwerp-Belgium/Post-Doc---AI-Safety_R-103081",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Beerse-Antwerp-Belgium/XMLNAME-2027-FINANCE-LEADERSHIP-DEVELOPMENT-PROGRAM--FLDP----EMEA_R-109551-1",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Brussels-Brussels-Capital-Region-Belgium/Medical-Affairs-Specialist_R-018387",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Cork-Cork-Ireland/Executive-Account-Manager_R-105840",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Cork-Cork-Ireland/Senior-Analyst--Strategic-Capacity-Management_R-102692",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Cork-Cork-Ireland/Senior-Manager-EHS_R-103119",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Dublin-Ireland/Business-Development-Manager---J-J-MedTech---Surgery---Ireland_R-102968",
@@ -7344,15 +7355,21 @@
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Little-Island-Cork-Ireland/Senior-Finance-Manager--MTO_R-106053",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Little-Island-Cork-Ireland/Sr-Mgr-MTO-Operational-Excellence-Site-Lead_R-100289",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Little-Island-Cork-Ireland/Transcend-Deployment-Process-Manager_R-098151-1",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Little-Island-Cork-Ireland/Transcend-Manager-PMO_R-110770-1",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/New-Brunswick-New-Jersey-United-States-of-America/Business-Continuity---Risk-Process-Lead_R-108275-1",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Raritan-New-Jersey-United-States-of-America/Lead-Engineer--Evidence-Management_R-094794-1",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Automation-Manager_R-103069",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Automation-Staff-Engineer_R-106267",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Business-Continuity---Risk-Process-Lead_R-110140-2",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Commercial-Education-Spine-Manager_R-106575",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Digital-Manufacturing-IT-Lead-Analyst---Mendix---AI_R-106264-1",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Director--Bus-Svs-IT-w-Int-Mkts-Egmt_R-108757-1",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Director--Supply-Chain-Reliability_R-110257-2",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Experienced-Analyst--Technical-Product-Management_R-107866",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/HR-Specialist_R-106865-1",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Lead-Analyst--Currency-Analytics_R-097916-2",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Manager--CCFS_R-074930-1",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Manager--Safe-Fleet-Process-Owner_R-073354-1",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Manager-Data-Platform---Ireland_R-105879-2",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Manufacturing-Process-Specialist_R-108006",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Master-Scheduler_R-109602",
@@ -7366,6 +7383,7 @@
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Senior-Analyst--Strategic-Capacity-Management_R-102692",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Senior-Automation-Engineer_R-098562",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Senior-Director--Global-Planning-Joint-Reconstruction--DePuy-Synthes_R-099503",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Senior-Finance-Analyst-Currency-Management-DPSO_R-107881",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Senior-Quality-Engineer---Orthopedics_R-107884",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Senior-Supervisor--Team-Lead--Biologics-AD_R-102699",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Sr-Dir-IMSC-Global-Strat-Deployment_R-108357-2",
@@ -7383,6 +7401,10 @@
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/XMLNAME-2027-Graduate-Planner_R-104602",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/XMLNAME-2027-Graduate-Process-Engineer---Orthopedics_R-095952",
         "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/XMLNAME-2027-Graduate-Production-Planning---Scheduling-Analyst---Orthopedics_R-095074",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Tempo-Maidenhead-Berkshire-United-Kingdom/Senior-Manager-Strategy_R-106408",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Zuchwil-Switzerland/Sr-Manager-EMEA---SC-Technology---Logistics_R-105426-1",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Zug-Switzerland/Director-SCC-Deployment--IMSCP_R-110742",
+        "https://jj.wd5.myworkdayjobs.com/JJ/job/Zug-Switzerland/SenMgr--IM-TranSCend-Source_R-107702",
         "https://jj.wd5.myworkdayjobs.com/job/Dublin-Ireland/Sales-Specialist--Trauma--Johnson---Johnson-MedTech---Orthopaedics---Dublin_R-102228",
         "https://jj.wd5.myworkdayjobs.com/job/Dublin-Ireland/Sales-Specialist-Endomech-Energy---Johnson---Johnson-MedTech---Dublin---South-East_R-092145",
         "https://jj.wd5.myworkdayjobs.com/job/Dublin-Ireland/Technical-Specialist---Johnson---Johnson-MedTech---EP---Ireland_R-101784",
@@ -7434,12 +7456,12 @@
         "https://jj.wd5.myworkdayjobs.com/job/Ringaskiddy-Cork-Ireland/XMLNAME-2027-Graduate-Process-Engineer---Orthopedics_R-095952",
         "https://jj.wd5.myworkdayjobs.com/job/Ringaskiddy-Cork-Ireland/XMLNAME-2027-Graduate-Production-Planning---Scheduling-Analyst---Orthopedics_R-095074"
       ],
-      "distinct_jobs_seen": 126,
-      "current_live_jobs": 22
+      "distinct_jobs_seen": 141,
+      "current_live_jobs": 37
     },
     "AECOM": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.smartrecruiters.com/v1/companies/AECOM2/postings/744000140741139",
@@ -7754,11 +7776,11 @@
         "https://jobs.smartrecruiters.com/AECOM2/744000161469340-advisory-consultant-social-value"
       ],
       "distinct_jobs_seen": 310,
-      "current_live_jobs": 46
+      "current_live_jobs": 41
     },
     "AIG": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://aig.wd1.myworkdayjobs.com/aig/job/Dublin/A-H-Travel-Complex-Adjuster_JR2600705",
@@ -7796,7 +7818,7 @@
     },
     "Barclays": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "100032500688",
@@ -7908,7 +7930,7 @@
     },
     "Motorola Solutions": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Cork-Ireland---Business-CNTR-ZEI16/Android-Platform-Engineer_R68046",
@@ -7925,15 +7947,16 @@
         "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Cork-Ireland/Software-Engineering-Internship_R66949-1",
         "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Cork-Ireland/Software-Engineering-Work-Placement_R69536",
         "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Cork-Ireland/Software-Quality-Assurance-Analyst--12-month-FTC-_R69178",
+        "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Ireland-Dublin-ZEI12/Customer-Technical-Support-Engineer_R70774",
         "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Ireland-Dublin-ZEI12/Lead-Technical-Support-Specialist_R70739",
         "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Ireland-Offsite-ZEI99/Retail-Vertical-Channel-Account-Manager---Continental-Europe_R66511-1"
       ],
-      "distinct_jobs_seen": 16,
-      "current_live_jobs": 10
+      "distinct_jobs_seen": 17,
+      "current_live_jobs": 11
     },
     "BearingPoint": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.eu.greenhouse.io/bearingpoint/jobs/4196152101",
@@ -8001,12 +8024,13 @@
     },
     "CrowdStrike": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/France---Remote/Professional-Services-Principal-Consultant---Incident-Response--French-Speaking--Remote-_R29886",
         "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/Germany---Remote/Sr-Intelligence-Software-Engineer--Remote--DEU-_R30035",
         "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/Germany---Remote/Sr-Security-Researcher-II--Remote--DEU-_R28953",
+        "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/Germany---Remote/Sr-Security-Researcher-III--Remote-_R30777",
         "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/Germany---Remote/Sr-Security-Researcher_R29648",
         "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/Germany---Remote/Technical-Account-Manager--Hebrew-Speaking--Europe--Remote-_R30275",
         "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/Ireland---Dublin/Software-Engineer-III---Foundry--Hybrid--IRE-_R29080",
@@ -8026,14 +8050,16 @@
         "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/United-Kingdom---Remote/Manager--Data-Science--Remote-_R29099",
         "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/United-Kingdom---Remote/Security-Advisor-II--Falcon-Complete--Remote-_R30485",
         "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/United-Kingdom---Remote/Sr-Data-Scientist---Gen-AI--Remote-_R29878",
-        "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/United-Kingdom---Remote/Sr-Manager--Data-Science--Remote--GBR-_R29480"
+        "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/United-Kingdom---Remote/Sr-Manager--Data-Science--Remote--GBR-_R29480",
+        "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/United-Kingdom---Remote/Sr-Security-Researcher--Remote-_R30797-1",
+        "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/United-Kingdom---Remote/Sr-Security-Researcher-II--Remote-_R30796"
       ],
-      "distinct_jobs_seen": 23,
-      "current_live_jobs": 11
+      "distinct_jobs_seen": 26,
+      "current_live_jobs": 14
     },
     "Apex Group": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://theapexgroup.wd3.myworkdayjobs.com/apexgroupcareers/job/Cork/Account-Manager---Fund-Accounting_JR-0024866-1",
@@ -8068,7 +8094,7 @@
     },
     "CarTrawler": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://corporate.cartrawler.com/en-gb/careers/opportunities/045093a8-37ee-4e03-844a-d2e3b8b8c7e9",
@@ -8123,11 +8149,11 @@
         "https://jobs.lever.co/cartrawler/f3b3554a-b956-4bf4-ae72-fc62dd5b6b69"
       ],
       "distinct_jobs_seen": 50,
-      "current_live_jobs": 16
+      "current_live_jobs": 8
     },
     "Concentrix (Ireland)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://cnx.wd1.myworkdayjobs.com/external_global/job/Ireland-Dublin--Santry/Account-Manager_R1629025",
@@ -8151,11 +8177,11 @@
         "https://jobs.concentrix.com/job/?id=R1774538"
       ],
       "distinct_jobs_seen": 19,
-      "current_live_jobs": 5
+      "current_live_jobs": 4
     },
     "Eurofins Scientific": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.smartrecruiters.com/v1/companies/Eurofins/postings/744000133265768",
@@ -8234,7 +8260,7 @@
     },
     "LearnUpon": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/learnupon/jobs/4568297002",
@@ -8256,7 +8282,7 @@
     },
     "Merit Medical": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://merit.wd503.myworkdayjobs.com/Merit/job/Galway-Ireland/Electrician--Evening-Shift_JR117034",
@@ -8296,7 +8322,7 @@
     },
     "Tenable": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/tenableinc/jobs/4019356008",
@@ -8309,7 +8335,7 @@
     },
     "Anthropic": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/anthropic/jobs/4641822008",
@@ -8345,7 +8371,7 @@
     },
     "CitySwift": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://cityswift.com/job-post/?gh_jid=7762442003",
@@ -8356,11 +8382,11 @@
         "https://cityswift.com/job-post/?gh_jid=7979460003"
       ],
       "distinct_jobs_seen": 6,
-      "current_live_jobs": 5
+      "current_live_jobs": 4
     },
     "Crusoe": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/Crusoe/0932c95c-e8db-437c-9333-fcc37c659961",
@@ -8388,7 +8414,7 @@
     },
     "KLA Corporation": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://kla.wd1.myworkdayjobs.com/Search/job/Dublin-Ireland/Customer-Support-Engineer_2529587",
@@ -8415,7 +8441,7 @@
     },
     "Dillon Eustace": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "Dillon Eustace | Solicitor | Dublin",
@@ -8426,7 +8452,7 @@
     },
     "Ericsson": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ericsson.pinpointhq.com/en/postings/121c1a12-b678-47ee-bbac-22587f93f947"
@@ -8436,7 +8462,7 @@
     },
     "Codec": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://codec.pinpointhq.com/en/postings/0a1c1d81-c1df-48e9-929a-df22899dcaf5",
@@ -8471,11 +8497,11 @@
         "https://codec.pinpointhq.com/en/postings/dc3a94d4-34c1-42bd-84f6-bb256464f8f0"
       ],
       "distinct_jobs_seen": 30,
-      "current_live_jobs": 6
+      "current_live_jobs": 5
     },
     "Arthur Cox": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://arthurcox.pinpointhq.com/en/postings/08a52213-6135-4da2-9c0f-929ffae4ddcc",
@@ -8509,7 +8535,7 @@
     },
     "BDO Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://bdoireland.pinpointhq.com/en/postings/03243d7e-e0e7-4c84-bd37-ba63c80405a2",
@@ -8538,11 +8564,11 @@
         "https://bdoireland.pinpointhq.com/en/postings/fb028b14-71d9-454d-9823-04e397a133fb"
       ],
       "distinct_jobs_seen": 24,
-      "current_live_jobs": 4
+      "current_live_jobs": 3
     },
     "GE HealthCare": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Cork/CAPA-Leader_R4047859-1/apply",
@@ -8580,7 +8606,7 @@
     },
     "Cisco": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://cisco.wd5.myworkdayjobs.com/Cisco_Careers/job/Dublin-Ireland/Portfolio-Account-Executive---Ireland_2028264-1/apply",
@@ -8647,7 +8673,7 @@
     },
     "Fiserv": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/AWS-Cloud---Dev-Ops-Engineer_R-10373246/apply",
@@ -8658,6 +8684,7 @@
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/Data-Engineer_R-10373332/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/Data-Engineer_R-10373334-1/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/Director--VisionNext-Infrastructure---Reliability_R-10403349/apply",
+        "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/Director-of-Product--Vision-Next_R-10406991/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/EU-Risk-Director_R-10406674-1/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/FinTech-Regional-Product-Manager--Clover-from-Fiserv_R-10386649/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/Head-of-Bid-Management_R-10404479-1/apply",
@@ -8668,6 +8695,7 @@
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/Manager--Risk---Controls--12-FTC-_R-10393583/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/National-Corporate-Sales-Manager_R-10399761/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/National-Corporate-Sales-Manager_R-10399762/apply",
+        "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/Product-Manager---Commercial-Card--Vision-Next_R-10406993/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/Product-Manager--Data---Analytics_R-10406994/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/SME-Growth-Manager_R-10400559-1/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Dublin-Ireland/Senior-Automation-Engineer_R-10373237/apply",
@@ -8685,12 +8713,12 @@
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Nenagh-Ireland/Senior-QA-Tester_R-10374427/apply",
         "https://fiserv.wd5.myworkdayjobs.com/EXT/job/Nenagh-Ireland/Software-Developer_R-10373021/apply"
       ],
-      "distinct_jobs_seen": 34,
-      "current_live_jobs": 16
+      "distinct_jobs_seen": 36,
+      "current_live_jobs": 18
     },
     "Zimmer Biomet": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://career8.successfactors.com/careers?company=zimmerin01&loginFlowRequired=true&career_os=job_listing&career_ns=job_application&career_job_req_id=11846&_s.crb=25fvCmbM9Lad2rza%252fxJs%252fNp1mhY1RYUVrVIMdAiM2RI%253d",
@@ -8708,7 +8736,7 @@
     },
     "Danaher Corporation": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://danaher.wd1.myworkdayjobs.com/DanaherJobs/job/Cork-Ireland/Field-Service-Engineer---EU-West_R1321445/apply",
@@ -8740,7 +8768,7 @@
     },
     "Kerry Group": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://career5.successfactors.eu/careers?company=kerryluxemP&career_ns=job_application&career_job_req_id=63819&jobPipeline=PhenomCareerSite",
@@ -8815,11 +8843,11 @@
         "https://dpdhlgroup.avature.net/jobs/ApplicationMethods?jobId=391730&source=careers.dhl.com"
       ],
       "distinct_jobs_seen": 17,
-      "current_live_jobs": 1
+      "current_live_jobs": 0
     },
     "Kuehne+Nagel Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.kuehne-nagel.com/job/11436",
@@ -8842,7 +8870,7 @@
     },
     "Thermo Fisher Scientific": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://thermofisher.wd5.myworkdayjobs.com/ThermoFisherCareers/job/Athlone-Ireland/Application-Administrator_R-01360443-1/apply",
@@ -8892,7 +8920,7 @@
     },
     "Oracle": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "335680",
@@ -8947,7 +8975,7 @@
     },
     "EXL": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://fa-ewjt-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_2/job/11285/",
@@ -8980,7 +9008,7 @@
     },
     "Dell Technologies": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/294857/",
@@ -9038,7 +9066,7 @@
     },
     "Grant Thornton Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ehzq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/GrantThorntonIrelandExperiencedHires/job/113805",
@@ -9167,7 +9195,7 @@
     },
     "Honeywell": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ibqbjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Honeywell/job/149708/",
@@ -9192,7 +9220,7 @@
     },
     "Allianz Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.allianz.com/ie/en/job/101359/Internal-Audit-Manager-12-Month-Maternity-Contract",
@@ -9217,7 +9245,7 @@
     },
     "KPMG Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://kpmgireland.avature.net/experiencedhires/FolderDetail/Actuarial-Advisory-Associate-Director-Director/3242",
@@ -9309,7 +9337,7 @@
     },
     "Tata Consultancy Services (TCS)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=CXAZAZB&sid=YYAZD&jid=BAZBCXBWU&a=dwVoVYfJngc%253d",
@@ -9386,11 +9414,11 @@
         "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=CXAZAZB&sid=YYAZD&jid=BAZBWYBGT&a=dwVoVYfJngc%253d"
       ],
       "distinct_jobs_seen": 72,
-      "current_live_jobs": 24
+      "current_live_jobs": 26
     },
     "Vodafone Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://opportunities.vodafone.com/job/Dublin-Assistant-Manager-%28Galway%29/1436298033/",
@@ -9446,7 +9474,7 @@
     },
     "Wipro": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.wipro.com/job/ADMINISTRATOR-L3/192502-en_US/",
@@ -9466,7 +9494,7 @@
     },
     "Capgemini": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.capgemini.com/job/Dublin-SAP-Basis-Architect/1408005433/",
@@ -9484,7 +9512,7 @@
     },
     "Huawei Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://huaweiireland.teamtailor.com/jobs/4628889-2026-ai-research-intern-llms",
@@ -9519,7 +9547,7 @@
     },
     "Arup": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.arup.com/jobs/30219/other-jobs-matching/location-and-category",
@@ -9557,19 +9585,35 @@
         "https://jobs.arup.com/jobs/35053/other-jobs-matching/location-and-category",
         "https://jobs.arup.com/jobs/35674/other-jobs-matching/location-and-category",
         "https://jobs.arup.com/jobs/36117/other-jobs-matching/location-and-category",
+        "https://jobs.arup.com/jobs/36361/other-jobs-matching/location-and-category",
+        "https://jobs.arup.com/jobs/36473/other-jobs-matching/location-and-category",
+        "https://jobs.arup.com/jobs/36610/other-jobs-matching/location-and-category",
+        "https://jobs.arup.com/jobs/36997/other-jobs-matching/location-and-category",
+        "https://jobs.arup.com/jobs/37015/other-jobs-matching/location-and-category",
+        "https://jobs.arup.com/jobs/37035/other-jobs-matching/location-and-category",
+        "https://jobs.arup.com/jobs/37057/other-jobs-matching/location-and-category",
+        "https://jobs.arup.com/jobs/37250/other-jobs-matching/location-and-category",
+        "https://jobs.arup.com/jobs/37251/other-jobs-matching/location-and-category",
+        "https://jobs.arup.com/jobs/37253/other-jobs-matching/location-and-category",
         "https://jobs.arup.com/jobs/acoustics-work-placement-34579",
         "https://jobs.arup.com/jobs/associate-electrical-dc-engineer-34223",
         "https://jobs.arup.com/jobs/bim-infrastructure-coordinator-34701",
+        "https://jobs.arup.com/jobs/bim-infrastructure-coordinator-37035",
         "https://jobs.arup.com/jobs/building-controls-engineer-34158",
         "https://jobs.arup.com/jobs/building-services-work-placement-34480",
         "https://jobs.arup.com/jobs/civil-engineer-t-d-32790",
+        "https://jobs.arup.com/jobs/contract-manager-transport-infrastructure-projects-36473",
         "https://jobs.arup.com/jobs/design-and-build-water-infrastructure-lead-33561",
         "https://jobs.arup.com/jobs/electrical-project-engineer-34314",
         "https://jobs.arup.com/jobs/expression-of-interest-mechanical-electrical-engineers-34424",
         "https://jobs.arup.com/jobs/geoenvironmental-work-placement-34542",
         "https://jobs.arup.com/jobs/geospatial-work-placement-34478",
         "https://jobs.arup.com/jobs/geotechnical-engineer-35053",
+        "https://jobs.arup.com/jobs/geotechnical-engineer-36361",
         "https://jobs.arup.com/jobs/geotechnical-engineer-work-placement-34479",
+        "https://jobs.arup.com/jobs/graduate-building-services-electrical-engineer-dublin-37250",
+        "https://jobs.arup.com/jobs/graduate-fire-engineer-37253",
+        "https://jobs.arup.com/jobs/graduate-sustainability-consultant-37251",
         "https://jobs.arup.com/jobs/high-voltage-t-d-leader-30219",
         "https://jobs.arup.com/jobs/highways-engineer-32926",
         "https://jobs.arup.com/jobs/highways-project-engineer-32926",
@@ -9579,9 +9623,11 @@
         "https://jobs.arup.com/jobs/nec4-ecc-project-manager-32819",
         "https://jobs.arup.com/jobs/project-contract-administrator-transport-infrastructure-projects-33327",
         "https://jobs.arup.com/jobs/rail-leader-ireland-34177",
+        "https://jobs.arup.com/jobs/rail-leader-ireland-36997",
         "https://jobs.arup.com/jobs/senior-aquatic-fisheries-specialist-34489",
         "https://jobs.arup.com/jobs/senior-aquatic-fisheries-specialist-35674",
         "https://jobs.arup.com/jobs/senior-civil-bim-designer-36117",
+        "https://jobs.arup.com/jobs/senior-civil-bim-designer-37057",
         "https://jobs.arup.com/jobs/senior-civil-infrastructure-design-engineer-33927",
         "https://jobs.arup.com/jobs/senior-electrical-engineer-33552",
         "https://jobs.arup.com/jobs/senior-electrical-engineer-34377",
@@ -9591,15 +9637,17 @@
         "https://jobs.arup.com/jobs/senior-lighting-designer-34334",
         "https://jobs.arup.com/jobs/senior-transportation-engineer-32779",
         "https://jobs.arup.com/jobs/senior-water-engineer-33464",
+        "https://jobs.arup.com/jobs/star-cfd-building-physics-and-wind-work-placement-36610",
         "https://jobs.arup.com/jobs/transport-planning-senior-leader-33719",
-        "https://jobs.arup.com/jobs/transport-project-leader-ireland-34180"
+        "https://jobs.arup.com/jobs/transport-project-leader-ireland-34180",
+        "https://jobs.arup.com/jobs/transport-project-leader-ireland-37015"
       ],
-      "distinct_jobs_seen": 71,
+      "distinct_jobs_seen": 91,
       "current_live_jobs": 20
     },
     "Public Jobs / Civil Service": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://gradireland.com/jobs/graduate-opportunities-2026-administrative-officer-specialist-246333",
@@ -10275,7 +10323,7 @@
     },
     "NTT DATA": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers-inc.nttdata.com/job/Columbus-Sales-Executive-III-OH-43085/1392912900/",
@@ -10315,11 +10363,11 @@
         "https://careers-inc.nttdata.com/job/dublin-Senior-QA-Manager-Banking-D/1417072100/"
       ],
       "distinct_jobs_seen": 35,
-      "current_live_jobs": 10
+      "current_live_jobs": 9
     },
     "Coca-Cola HBC Ireland": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.coca-colahellenic.com/en_US/careers/ProjectDetail/Business-Developer-AFH-Clare-Limerick-Galway-maternity-cover-contract/26526",
@@ -10376,7 +10424,7 @@
     },
     "SAP": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.sap.com/job/Dublin-24-Business-Processes-Principal-Consultant-D24WA02/1427118633/",
@@ -10413,7 +10461,7 @@
     },
     "PM Group": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "10888",
@@ -10593,7 +10641,7 @@
     },
     "Trinity College Dublin": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://my.corehr.com/pls/coreportal_trp/"
@@ -10603,7 +10651,7 @@
     },
     "University College Cork (UCC)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://research.ucc.ie",
@@ -10620,7 +10668,7 @@
     },
     "Dublin City University (DCU)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://research.dcu.ie/p/en",
@@ -10646,7 +10694,7 @@
     },
     "University of Galway": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "http://www.lero.ie/",
@@ -10674,7 +10722,7 @@
     },
     "Munster Technological University (MTU)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.mtu.ie/about-mtu/university-executive/",
@@ -10701,7 +10749,7 @@
     },
     "RCSI University of Medicine and Health Sciences": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.rcsi.com/dublin/research-and-innovation/research",
@@ -10712,7 +10760,7 @@
     },
     "Technological University Dublin (TU Dublin)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://researchprofiles.tudublin.ie/",
@@ -10731,7 +10779,7 @@
     },
     "Atlantic Technological University (ATU)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://pure.atu.ie/",
@@ -10752,7 +10800,7 @@
     },
     "Technological University of the Shannon (TUS)": {
       "first_working_seen": "2026-08-17T20:15:06.194555+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://tus.ie/engineering-and-technology/",
@@ -10768,7 +10816,7 @@
     },
     "Mercer": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://mmc.wd1.myworkdayjobs.com/MMC/job/Boston---High-St/Investment-Data-Solutions-Specialist_R_368337",
@@ -10827,11 +10875,11 @@
         "https://mmc.wd1.myworkdayjobs.com/MMC/job/Dublin---Frame/Technical-Product-Director---Marsh_R_365768-1"
       ],
       "distinct_jobs_seen": 54,
-      "current_live_jobs": 7
+      "current_live_jobs": 6
     },
     "Fidelity International": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "J65285 Customer Service Representative (Evergreen) (Open)",
@@ -10851,10 +10899,12 @@
         "J71872 Assistant Manager, Global Regulatory Reporting (Open)",
         "J72017 Enterprise Architect - AMP (Open)",
         "J72090 Operational Resilience Senior Manager (Open)",
-        "J72965 Customer Service Representative (Evergreen) (Open)"
+        "J72965 Customer Service Representative (Evergreen) (Open)",
+        "https://fil.wd3.myworkdayjobs.com/001/job/Dublin-Office/Customer-Service-Representative_J72965",
+        "https://fil.wd3.myworkdayjobs.com/001/job/Dublin-Office/Technical-Data-Analyst_J70595"
       ],
-      "distinct_jobs_seen": 18,
-      "current_live_jobs": 4
+      "distinct_jobs_seen": 20,
+      "current_live_jobs": 2
     },
     "Harvey Nash Ireland": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
@@ -10890,7 +10940,7 @@
     },
     "Bloomberg": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://bloomberg.avature.net/careers/JobDetail/Bloomberg-On-Site-Support-Specialist/45032",
@@ -10919,11 +10969,11 @@
         "https://bloomberg.avature.net/careers/JobDetail/Team-Leader-Sustainable-Finance-Data-Governance-Controls/21241"
       ],
       "distinct_jobs_seen": 24,
-      "current_live_jobs": 12
+      "current_live_jobs": 11
     },
     "Bank of Ireland": {
       "first_working_seen": "2026-08-17T22:13:25.065760+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.bankofireland.com/jobs/accounting-graduate-programme-2027-dublin-ireland",
@@ -10997,7 +11047,7 @@
     },
     "Irish Rail (Iarnr\u00f3d \u00c9ireann)": {
       "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.irishrail.ie/en-ie/about-us/company-information/career-opportunities-at-iarnrod-eireann/chief-civil-engineer",
@@ -11019,7 +11069,7 @@
     },
     "DPS Group (Arcadis)": {
       "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.arcadis.com/careers/job/563671531729128?domain=arcadis.com",
@@ -11115,7 +11165,7 @@
     },
     "IBM": {
       "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.ibm.com/en_US/careers/JobDetail/Research-Scientist-Quantum-Algorithms-for-Differential-Equations/118888",
@@ -11149,11 +11199,11 @@
         "332022"
       ],
       "distinct_jobs_seen": 6,
-      "current_live_jobs": 3
+      "current_live_jobs": 0
     },
     "JPMorgan Chase": {
       "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "210727201",
@@ -11248,14 +11298,15 @@
         "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210807959",
         "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210808235",
         "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210808816",
-        "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210808912"
+        "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210808912",
+        "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210809218"
       ],
-      "distinct_jobs_seen": 93,
-      "current_live_jobs": 21
+      "distinct_jobs_seen": 94,
+      "current_live_jobs": 22
     },
     "Irish Life": {
       "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://life-careers.com/irishlife/job/Dublin-Administrator-Customer-SupportOperations/1456452433/",
@@ -11294,7 +11345,7 @@
     },
     "ESB": {
       "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.esb.ie/job/56-Upper-Mount-Street-Business-Coordinator-D/1375124957/",
@@ -11537,7 +11588,7 @@
     },
     "BlackRock": {
       "first_working_seen": "2026-08-18T22:18:19.434578+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.blackrock.com/job/dublin/alternatives-fund-accounting-associate/45831/102954392368",
@@ -11593,7 +11644,7 @@
     },
     "Gong": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/gongio/jobs/4129098006",
@@ -11627,7 +11678,7 @@
     },
     "Verizon": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/5221-Martinelli-Way-Dublin-California/Retail-Sales-Associate_R-1095307",
@@ -11664,6 +11715,7 @@
         "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Limerick-Ireland/Graduate-QA-Tester_R-1100593",
         "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Limerick-Ireland/Principal-Systems-Analyst_R-1103358-1",
         "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Limerick-Ireland/Procurement-Graduate_R-1100769",
+        "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Limerick-Ireland/Procurement-Graduate_R-1103276-1",
         "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Limerick-Ireland/Procurement-Specialist_R-1101592",
         "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Limerick-Ireland/SAP-Quality-Assurance-Tester_R-1102092-1",
         "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Limerick-Ireland/Senior-Network-Engineering-Manager--IP-Network-_R-1097805-1",
@@ -11677,12 +11729,12 @@
         "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Limerick-Ireland/Supply-Chain-Specialist_R-1102794-1",
         "https://verizon.wd12.myworkdayjobs.com/verizon-careers/job/Limerick-Ireland/Technical-Support-Engineer_R-1103376-1"
       ],
-      "distinct_jobs_seen": 46,
-      "current_live_jobs": 9
+      "distinct_jobs_seen": 47,
+      "current_live_jobs": 10
     },
     "Cohesity": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://cohesity.wd5.myworkdayjobs.com/Cohesity_Careers/job/Cork---Ireland-Office/Deal-Management-Analyst---Graduate_R04757-1",
@@ -11718,7 +11770,7 @@
     },
     "Proofpoint": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://proofpoint.wd5.myworkdayjobs.com/ProofpointCareers/job/Cork-Ireland/Accounting-Operations-Lead--International_R14794",
@@ -11741,7 +11793,7 @@
     },
     "Eli Lilly": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/Egypt-Remote/Director-Medical-Affairs-IBU-Alliance-CMH_R-114725",
@@ -11749,12 +11801,14 @@
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/IE-Global-Business-Solutions---Cork/Sr-Analyst---Manager---Automation-Engineer_R-112415-1",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/IE-Global-Business-Solutions---Cork/Sr-Analyst---Manager---Automation-Engineer_R-112418-2",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/IE-Global-Business-Solutions---Cork/Sr-Analyst---Manager---Business-Intelligence-Analyst_R-112060-1",
+        "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Analyst--Senior-Analyst--Enterprise-Meeting-Services-Contract-to-Pay--NE-hub-_R-115045-1",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Analyst--Sr-Analyst-EMS-HCP-Contract-to-Pay---Portuguese-Speaking_R-114322-1",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Analyst-Sr-Analyst---Enterprise-Meeting-Services---Contract-to-Pay_R-112964-1",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Analyst-Sr-Analyst---Global-HR-Solutions---Compliance---AI-Governance_R-113115-1",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Analyst-Sr-Analyst---Global-HR-Solutions---Technology-Pod_R-113116-1",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Associate---Senior-Associate--Manager-CMC-Regulatory-Associate---GRA-Regulatory-Delivery-Excellence_R-112387-1",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Associate---Sr-Associate--Manager---Regulatory-Labeling_R-112901",
+        "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Associate---Sr-Associate--Manager---Regulatory-Labeling_R-115399-1",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Associate--Senior-Associate---HRS-AI-Enablement_R-112383-1",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Associate--Senior-Associate--Global-HR-Solutions_R-112800-2",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/Ireland-Cork/Associate-Director---Anti-Corruption-Due-Diligence_R-106968-1",
@@ -11802,12 +11856,12 @@
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/US-Indianapolis-IN/Global-Patient-Safety-Pharmacoepidemiologist_R-112223",
         "https://lilly.wd115.myworkdayjobs.com/LLY/job/US-Indianapolis-IN/Sr-Principal--Global-Quality-Systems-Business-Partner_R-112324"
       ],
-      "distinct_jobs_seen": 57,
-      "current_live_jobs": 25
+      "distinct_jobs_seen": 59,
+      "current_live_jobs": 24
     },
     "Bristol Myers Squibb": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS/job/Dublin---IE/Agile-Sourcing-Intern_R1607025",
@@ -11868,7 +11922,7 @@
     },
     "Pfizer": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://pfizer.wd1.myworkdayjobs.com/PfizerCareers/job/Canada---Quebec---Kirkland/Premier-ou-premire-spcialiste-scientifique---Dveloppement-de-l-IA-et-systmes-agentiques-----Senior-Scientist---AI-Dev-and-Agentic-Systems_4963432",
@@ -11906,7 +11960,7 @@
     },
     "Viatris": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://viatris.wd5.myworkdayjobs.com/external/job/Baldoyle-Dublin-Ireland/Engineering-Technician_R5674896",
@@ -12024,7 +12078,7 @@
     },
     "Clio": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://clio.wd3.myworkdayjobs.com/cliocareersite/job/Barcelona/Senior-Development-Manager_BF-REQ-4169",
@@ -12067,7 +12121,7 @@
     },
     "Stryker": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://stryker.wd1.myworkdayjobs.com/StrykerCareers/job/Carrigtwohill-Ireland/Additive-Design-Engineer--Staff-_R573340",
@@ -12220,7 +12274,7 @@
     },
     "Medtronic": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://medtronic.wd1.myworkdayjobs.com/MedtronicCareers/job/Dublin-County-Dublin-Ireland/Affera-therapy-Specialist_R78692-1",
@@ -12332,7 +12386,7 @@
     },
     "Davy": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://apply.workable.com/j/094C523A59",
@@ -12364,6 +12418,7 @@
         "https://apply.workable.com/j/94369BEE00",
         "https://apply.workable.com/j/96FB1EC3C4",
         "https://apply.workable.com/j/9DF80403AF",
+        "https://apply.workable.com/j/9F8D49BDBA",
         "https://apply.workable.com/j/A93F1C1EFD",
         "https://apply.workable.com/j/A9B991DECF",
         "https://apply.workable.com/j/B451940BB8",
@@ -12382,12 +12437,12 @@
         "https://apply.workable.com/j/FA84738487",
         "https://apply.workable.com/j/FF23D9C842"
       ],
-      "distinct_jobs_seen": 46,
-      "current_live_jobs": 19
+      "distinct_jobs_seen": 47,
+      "current_live_jobs": 20
     },
     "Dexcom": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.dexcom.com/careers/job/41432141",
@@ -12480,7 +12535,7 @@
     },
     "Eaton": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://eaton.eightfold.ai/careers/job/687236620927",
@@ -12515,7 +12570,7 @@
     },
     "eBay": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ebay.wd5.myworkdayjobs.com/apply/job/Dublin/AI-ML-Agent-Engineer---Back-End-Focus_R0072633/apply",
@@ -12560,7 +12615,7 @@
     },
     "Hewlett Packard Enterprise (HPE)": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://hpe.wd5.myworkdayjobs.com/Jobsathpe/job/Galway-Galway-Ireland/AI-Innovation-Engineering-Internship_1211033/apply",
@@ -12594,7 +12649,7 @@
     },
     "Roche": {
       "first_working_seen": "2026-09-15T11:37:27.887618+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://roche.wd3.myworkdayjobs.com/roche-ext/job/Dublin/Business-Services-Coordinator_202608-121454",
@@ -12616,7 +12671,7 @@
     },
     "Aer Lingus": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://aerlingus-career.talent-soft.com/job/job-airline-partners-manager_2045.aspx",
@@ -12634,7 +12689,7 @@
     },
     "Ornua": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.ornua.com/job/Avila-Operations-Finance-Business-Partner-5194/1362133057/",
@@ -12671,7 +12726,7 @@
     },
     "Alter Domus": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.alterdomus.com/en/job/cork/2026-graduate-programme-fund-accounting-1/38735/45711691520",
@@ -12695,7 +12750,7 @@
     },
     "Applied Materials": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.appliedmaterials.com/job/dublin/electrical-engineer/95/99573671632",
@@ -12721,7 +12776,7 @@
     },
     "Astellas Pharma": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.astellas.com/job/Biotech-Associate/1420540800/",
@@ -12776,11 +12831,11 @@
         "https://careers.astellas.com/job/Validation-Lead/1420502300/"
       ],
       "distinct_jobs_seen": 50,
-      "current_live_jobs": 3
+      "current_live_jobs": 2
     },
     "AXA Ireland": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.axa.com/careers-home/jobs/23080?lang=en-us&previousLocale=en-US",
@@ -12796,7 +12851,7 @@
     },
     "Baker Tilly Ireland": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.bakertilly.ie/vacancies/audit-assistant-manager-1",
@@ -12818,7 +12873,7 @@
     },
     "Bausch + Lomb": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.bauschlomb.com/job/IE-Dublin-Quality-Assurance-Specialist%2C-Responsible-Person-%28RP%29/1371434957/",
@@ -12842,7 +12897,7 @@
     },
     "Baxter International": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://baxter.wd1.myworkdayjobs.com/baxter/job/Dublin/Account-Manager--IV-Fluids---Infusion-Systems---Ireland_JR-212765",
@@ -12861,7 +12916,7 @@
     },
     "AtkinsR\u00e9alis": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.atkinsrealis.com/en/jobs/architectural-technician-r-163520",
@@ -12952,7 +13007,7 @@
     },
     "Central Bank of Ireland": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=YUYF&sid=BDCXCX&jid=BAZBFBAZB&a=1bqO7eBaJhQ%253d",
@@ -12968,7 +13023,7 @@
     },
     "Dublin Port Company": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.occupop.com/shared/job/deputy-harbour-master-7a5a1",
@@ -12982,7 +13037,7 @@
     },
     "DCC plc": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.dcc.ie/certasenergy/job/Aylesbury-HGV-Class-2-Tanker-Driver-HP18-0XB/1444734333/",
@@ -13067,7 +13122,7 @@
     },
     "Eir": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.eir.care/jobs/detail/advanced-mobile-sales-specialist-2163",
@@ -13176,7 +13231,7 @@
     },
     "Gas Networks Ireland": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.gasnetworks.ie/corporate/careers/careers-overview/clo-support-analyst",
@@ -13222,7 +13277,7 @@
     },
     "Glanbia / Tirl\u00e1n": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.tirlan.com/tirlan/job/Ballitore-Maintenance-and-Engineering-Manager-KE-R14-CH05/1362560255/",
@@ -13276,7 +13331,7 @@
     },
     "Palo Alto Networks": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.paloaltonetworks.com/en/job/dublin/major-account-manager-private-sector/47263/96306439328",
@@ -13290,7 +13345,7 @@
     },
     "Optum": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.unitedhealthgroup.com/job/dublin/actuarial-consultant/34088/102642021392",
@@ -13386,6 +13441,7 @@
         "https://careers.unitedhealthgroup.com/job/dublin/senior-software-engineer/34088/103108017376",
         "https://careers.unitedhealthgroup.com/job/dublin/software-engineer/34088/101389667232",
         "https://careers.unitedhealthgroup.com/job/dublin/solution-advisor-analytics/34088/101133711840",
+        "https://careers.unitedhealthgroup.com/job/dublin/technical-product-manager/34088/103372953808",
         "https://careers.unitedhealthgroup.com/job/dublin/travel-operations-analyst/34088/100064264272",
         "https://careers.unitedhealthgroup.com/job/dublin/ui-engineer/34088/103261577856",
         "https://careers.unitedhealthgroup.com/job/letterkenny/cogito-administrator/34088/92872099088",
@@ -13402,12 +13458,12 @@
         "https://careers.unitedhealthgroup.com/job/letterkenny/senior-business-analyst/34088/100931703312",
         "https://careers.unitedhealthgroup.com/job/letterkenny/senior-business-analyst/34088/102336384496"
       ],
-      "distinct_jobs_seen": 108,
+      "distinct_jobs_seen": 109,
       "current_live_jobs": 33
     },
     "Willis Towers Watson (WTW)": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.wtwco.com/jobs/2027-retirement-actuarial-graduate-trainee-consultant-programme-dublin-dublin-county-dublin-ireland",
@@ -13457,7 +13513,7 @@
     },
     "Siemens": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.siemens.com/en_US/externaljobs/JobDetail/498931",
@@ -13478,14 +13534,15 @@
         "https://jobs.siemens.com/en_US/externaljobs/JobDetail/527414",
         "https://jobs.siemens.com/en_US/externaljobs/JobDetail/527998",
         "https://jobs.siemens.com/en_US/externaljobs/JobDetail/528567",
-        "https://jobs.siemens.com/en_US/externaljobs/JobDetail/528836"
+        "https://jobs.siemens.com/en_US/externaljobs/JobDetail/528836",
+        "https://jobs.siemens.com/en_US/externaljobs/JobDetail/529009"
       ],
-      "distinct_jobs_seen": 19,
+      "distinct_jobs_seen": 20,
       "current_live_jobs": 4
     },
     "McKinsey & Company": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.mckinsey.com/careers/search-jobs/jobs/associate-15178",
@@ -13512,7 +13569,7 @@
     },
     "Bord G\u00e1is Energy": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://centrica.wd3.myworkdayjobs.com/Centrica/job/Cork/GIS-Specialist_R0090207",
@@ -13562,7 +13619,7 @@
     },
     "IQVIA": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://iqvia.wd1.myworkdayjobs.com/IQVIA/job/Cork-City-Munster-Ireland/Key-Account-Manager_R1564300-1",
@@ -13634,7 +13691,7 @@
     },
     "Fenergo": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://apply.workable.com/j/085E42CA4B",
@@ -13659,7 +13716,7 @@
     },
     "OpenText": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.opentext.com/us/en/job/28667/Systems-Integration-Analyst-APJ-EMEA",
@@ -13809,6 +13866,7 @@
         "https://careers.opentext.com/us/en/job/53832/Lead-Security-Analyst-Cloud-Secuity",
         "https://careers.opentext.com/us/en/job/53857/Contracts-Administrator-WW-Renewals-Sales",
         "https://careers.opentext.com/us/en/job/53879/Partner-Development-Executive-SAP-m-f-x",
+        "https://careers.opentext.com/us/en/job/53895/Consultant",
         "https://careers.opentext.com/us/en/job/53898/SAP-Alliance-Manager-Professional-Services",
         "https://careers.opentext.com/us/en/job/53904/Production-Support-Specialist",
         "https://careers.opentext.com/us/en/job/53904/Production-Support-Specialist-French-Speaking",
@@ -13828,12 +13886,12 @@
         "https://careers.opentext.com/us/en/job/54271/Cloud-Applications-Engineer-Monitoring-Observability",
         "https://careers.opentext.com/us/en/job/54305/Senior-Cloud-Applications-Engineer-Monitoring-Observability"
       ],
-      "distinct_jobs_seen": 165,
+      "distinct_jobs_seen": 166,
       "current_live_jobs": 0
     },
     "Arcadis": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.arcadis.com/careers/job/563671531729128?domain=arcadis.com",
@@ -14022,7 +14080,7 @@
     },
     "Uisce \u00c9ireann (Irish Water)": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/1027",
@@ -14258,7 +14316,7 @@
     },
     "BNY": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://eofe.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/BNY-Careers/job/64543/",
@@ -14481,11 +14539,11 @@
         "https://broadcom.wd1.myworkdayjobs.com/en-US/External_Career/job/Technical-Support-Engineer_R026021-1"
       ],
       "distinct_jobs_seen": 3,
-      "current_live_jobs": 3
+      "current_live_jobs": 0
     },
     "EirGrid": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=YGTAZW&sid=BEVDEV&jid=BAZBCXAZGTCX&a=C7WJZOemz8s%253d",
@@ -14610,7 +14668,7 @@
     },
     "VHI Healthcare": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=YGTGTU&sid=YYBF&jid=BAZBDUDD&a=FH1ckSP%252fGQE%253d",
@@ -14662,7 +14720,7 @@
     },
     "Three Ireland": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://three-ireland.csod.com/ux/ats/careersite/5/home/requisition/2577",
@@ -14725,11 +14783,11 @@
         "https://three-ireland.csod.com/ux/ats/careersite/5/home/requisition/2799"
       ],
       "distinct_jobs_seen": 58,
-      "current_live_jobs": 24
+      "current_live_jobs": 23
     },
     "Goldman Sachs": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://higher.gs.com/roles/152403",
@@ -14746,7 +14804,7 @@
     },
     "RSM Ireland": {
       "first_working_seen": "2026-09-15T15:48:54.744611+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.candidatemanager.net/cm/p/pJobDetails.aspx?mid=YGTFD&sid=YBFD&jid=BAZBUYAZAZ&a=rcxqpwoWEZc%253d"
@@ -14756,7 +14814,7 @@
     },
     "Monzo": {
       "first_working_seen": "2026-09-15T21:12:22.301544+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/monzo/jobs/7686358",
@@ -14774,7 +14832,7 @@
     },
     "Takeda": {
       "first_working_seen": "2026-09-15T21:40:33.099445+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.takeda.com/job/dublin/analytical-innovation-and-technology-lead/1113/103278365872",
@@ -14814,7 +14872,7 @@
     },
     "Workhuman": {
       "first_working_seen": "2026-09-15T21:40:33.099445+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/Workhuman/14aa7219-4bbc-49b3-8add-7368e797c751",
@@ -14840,7 +14898,7 @@
     },
     "Synopsys": {
       "first_working_seen": "2026-09-15T23:53:20.318567+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.synopsys.com/job/dublin/asic-design-verification-architect/44408/94524277376",
@@ -14868,7 +14926,7 @@
     },
     "Riot Games": {
       "first_working_seen": "2026-09-15T23:53:20.318567+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.riotgames.com/en/j/8121706",
@@ -14880,6 +14938,8 @@
         "https://www.riotgames.com/en/j/8348367",
         "https://www.riotgames.com/en/j/8348369",
         "https://www.riotgames.com/en/j/8353230",
+        "https://www.riotgames.com/en/j/8381955",
+        "https://www.riotgames.com/en/j/8385235",
         "https://www.riotgames.com/en/work-with-us/job/8121706/senior-visual-design-artist-league-of-legends-12-month-contract-dublin-ireland",
         "https://www.riotgames.com/en/work-with-us/job/8165120/financial-accountant-dublin-ireland",
         "https://www.riotgames.com/en/work-with-us/job/8207202/manager-software-engineering-sre-site-lead-dublin-roc-dublin-ireland",
@@ -14894,12 +14954,12 @@
         "https://www.riotgames.com/en/work-with-us/job/8381955/security-engineer-security-operations-dublin-ireland",
         "https://www.riotgames.com/en/work-with-us/job/8385235/manager-software-engineering-sre-site-lead-dublin-roc-dublin-ireland"
       ],
-      "distinct_jobs_seen": 22,
+      "distinct_jobs_seen": 24,
       "current_live_jobs": 3
     },
     "SolarWinds": {
       "first_working_seen": "2026-09-16T00:41:52.506508+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.solarwinds.com/job-detail/?gh_jid=4663140005",
@@ -14923,7 +14983,7 @@
     },
     "Qualcomm": {
       "first_working_seen": "2026-09-16T01:33:58.403062+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://qualcomm.eightfold.ai/careers/job/446714854322",
@@ -15050,10 +15110,11 @@
     },
     "Fexco": {
       "first_working_seen": "2026-09-16T01:33:58.403062+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.fexco.com/vacancy/customer-service-advisor-onsite-or-hybrid-co-kerry-610815.html",
+        "https://careers.fexco.com/vacancy/customer-service-advisor-onsite-or-hybrid-co-kerry-623309.html",
         "https://careers.fexco.com/vacancy/customer-service-advisor-remote-622815.html",
         "https://careers.fexco.com/vacancy/finance-manager-fexco-aviation-services-621513.html",
         "https://careers.fexco.com/vacancy/financial-accountant-senior-financial-accountant-doe-617433.html",
@@ -15069,12 +15130,12 @@
         "https://careers.fexco.com/vacancy/team-lead-product-platform-622825.html",
         "https://careers.fexco.com/vacancy/team-operations-manager-rtb-x2-621666.html"
       ],
-      "distinct_jobs_seen": 15,
+      "distinct_jobs_seen": 16,
       "current_live_jobs": 5
     },
     "Virgin Media Ireland": {
       "first_working_seen": "2026-09-16T10:51:50.715958+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://libertyglobal.wd3.myworkdayjobs.com/VMIE_Careers/job/Limerick/Customer-Value-Management-Representative_REQ_00038775-1",
@@ -15092,11 +15153,11 @@
         "https://libertyglobal.wd3.myworkdayjobs.com/job/Ballymount/Production-Assistant_REQ_00038750-1"
       ],
       "distinct_jobs_seen": 13,
-      "current_live_jobs": 5
+      "current_live_jobs": 4
     },
     "Alexion Pharmaceuticals": {
       "first_working_seen": "2026-09-16T13:00:57.532223+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://astrazeneca.eightfold.ai/careers/job/563877690202904",
@@ -15139,7 +15200,7 @@
     },
     "Microchip Technology": {
       "first_working_seen": "2026-09-16T13:00:57.532223+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://microchiphr.wd5.myworkdayjobs.com/External/job/Ireland---Cork/Principal-DSP-Design-Engineer_R447-26",
@@ -15161,7 +15222,7 @@
     },
     "Jabil": {
       "first_working_seen": "2026-09-16T15:36:04.144036+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jabil.wd5.myworkdayjobs.com/Jabil_Careers/job/Dublin/Automation-Engineer_J2468666",
@@ -15206,11 +15267,11 @@
         "https://ms.wd5.myworkdayjobs.com/en-US/External/job/Dublin-Ireland/Senior-Investor-Services-Representative--Associate--Fund-Services--Dublin-_JR044201"
       ],
       "distinct_jobs_seen": 4,
-      "current_live_jobs": 3
+      "current_live_jobs": 0
     },
     "GridBeyond": {
       "first_working_seen": "2026-09-16T16:18:25.767453+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://gridbeyond.bamboohr.com/careers/133",
@@ -15221,7 +15282,7 @@
     },
     "Daon": {
       "first_working_seen": "2026-09-16T16:18:25.767453+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.daon.com/job-openings/"
@@ -15254,7 +15315,7 @@
     },
     "NeoDyne": {
       "first_working_seen": "2026-09-16T16:18:25.767453+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://api.occupop.com/shared/job/2027-graduate-electrical-engineer-power-1d265",
@@ -15313,7 +15374,7 @@
     },
     "ESW": {
       "first_working_seen": "2026-09-16T18:21:03.984392+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/esw/jobs/8541068002",
@@ -15335,7 +15396,7 @@
     },
     "Cubic\u00b3": {
       "first_working_seen": "2026-09-16T18:21:03.984392+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/cubic3/0178850f-215d-4e1c-88ec-1a0b2274ac3c",
@@ -15354,7 +15415,7 @@
     },
     "SumUp": {
       "first_working_seen": "2026-09-16T18:21:03.984392+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://sumup.com/careers/positions/8125775002?gh_jid=8125775002",
@@ -15373,6 +15434,7 @@
         "https://sumup.com/careers/positions/8785724002?gh_jid=8785724002",
         "https://sumup.com/careers/positions/8842216002?gh_jid=8842216002",
         "https://sumup.com/careers/positions/8844093002?gh_jid=8844093002",
+        "https://sumup.com/careers/positions/8855506002?gh_jid=8855506002",
         "https://sumup.com/careers/positions/8870907002?gh_jid=8870907002",
         "https://sumup.com/careers/positions/8870912002?gh_jid=8870912002",
         "https://sumup.com/careers/positions/8870996002?gh_jid=8870996002",
@@ -15382,12 +15444,12 @@
         "https://sumup.com/careers/positions/8874361002?gh_jid=8874361002",
         "https://sumup.com/careers/positions/8909052002?gh_jid=8909052002"
       ],
-      "distinct_jobs_seen": 24,
-      "current_live_jobs": 13
+      "distinct_jobs_seen": 25,
+      "current_live_jobs": 14
     },
     "FBD Insurance": {
       "first_working_seen": "2026-09-16T18:21:03.984392+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.fbdgroup.com/job/Bandon-Sales-Advisor-Bandon-Co_-P72-XC95/1355316557/",
@@ -15495,7 +15557,7 @@
     },
     "Amgen": {
       "first_working_seen": "2026-09-16T18:21:03.984392+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.amgen.com/en/job/dublin/bioprocess-technician/87/103069886832",
@@ -15560,7 +15622,7 @@
     },
     "Waystone": {
       "first_working_seen": "2026-09-16T18:21:03.984392+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://waystone.bamboohr.com/careers/1470",
@@ -15614,7 +15676,7 @@
     },
     "Smartling": {
       "first_working_seen": "2026-09-16T18:46:50.138843+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/smartling/jobs/7958749",
@@ -15626,7 +15688,7 @@
     },
     "Novartis": {
       "first_working_seen": "2026-09-16T22:19:04.498067+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.novartis.com/careers/career-search/job/details/req-10077144-commercial-portfolio-lead",
@@ -15675,7 +15737,7 @@
     },
     "Zurich Insurance": {
       "first_working_seen": "2026-09-16T22:19:04.498067+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://www.careers.zurich.com/job/Dublin-Actuarial-Trainee-IE-D/1371737857/",
@@ -15717,7 +15779,7 @@
     },
     "Lam Research": {
       "first_working_seen": "2026-09-16T22:19:04.498067+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://lamresearch.eightfold.ai/careers/job/1099553011981",
@@ -15742,7 +15804,7 @@
     },
     "LinkedIn": {
       "first_working_seen": "2026-09-16T22:19:04.498067+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ie.linkedin.com/jobs/view/account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4470450566?position=11&pageNum=0&refId=1oHoQaVJJek2M9wJMewHCA%3D%3D&trackingId=b9lTUwZybM%2BLThkeeIDtdw%3D%3D",
@@ -16435,6 +16497,7 @@
         "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=18&pageNum=0&refId=HdWlbvenotQAl%2F7I33oUKQ%3D%3D&trackingId=9Q5CoHrqBzzHq%2Fa11Xp84g%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=18&pageNum=0&refId=K9eOJrCLHdCfNofOPIdoCg%3D%3D&trackingId=iAvHdY8iMi3Cr9TXQl3VnQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=18&pageNum=0&refId=KNQlijuYePjkSMOmb2zrDw%3D%3D&trackingId=V2skjChRaKJNcBsXeKPOHg%3D%3D",
+        "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=18&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=IjExbcAERJzqvfpSPUpJdw%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=18&pageNum=0&refId=MB%2BzoSuJfzYTE2liV3dMfg%3D%3D&trackingId=HGCPzepEHOoks2%2F6uwA0bw%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=18&pageNum=0&refId=QUmqv8Ivp027p1rp7a7GOA%3D%3D&trackingId=G2qNJQVd9MzGfT7chNvzCw%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-dutch-talent-solutions-staffing-at-linkedin-4469899181?position=18&pageNum=0&refId=Reche9qe3DzbQI7uXrcB2A%3D%3D&trackingId=TyVJ1OVPFf5A2wLThAQz1Q%3D%3D",
@@ -16932,6 +16995,7 @@
         "https://ie.linkedin.com/jobs/view/account-executive-french-linkedin-sales-solutions-at-linkedin-4444544796?position=34&pageNum=0&refId=Ohi7fcVigJkL8PKcOfR5hw%3D%3D&trackingId=Wf2K%2BOIJp6akqW4VYQm6AA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-french-linkedin-sales-solutions-at-linkedin-4444544796?position=34&pageNum=0&refId=nTgE8xkC6Pe0QiqD2VqJyQ%3D%3D&trackingId=lzzfFiVsFjqBbRDUuF6fzA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-french-linkedin-sales-solutions-at-linkedin-4444544796?position=34&pageNum=0&refId=on0IXMANQ3lIfhHzRlRVfw%3D%3D&trackingId=BQ2dmirEn2eR7nRdMqamgg%3D%3D",
+        "https://ie.linkedin.com/jobs/view/account-executive-german-sales-solutions-at-linkedin-4442570945?position=11&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=ORqipkMWCFgHpwaDBMLBYQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-sales-solutions-at-linkedin-4442570945?position=12&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=vxAJtuxne9ndtIZ6cDfjGg%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-sales-solutions-at-linkedin-4442570945?position=12&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=BTjJx5VjDLUR6%2BfQlH3K6A%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-sales-solutions-at-linkedin-4442570945?position=12&pageNum=0&refId=0H4OuvC4d36vtO1gJp0n8Q%3D%3D&trackingId=KqIJp3EKI6zvW0ZsapY81A%3D%3D",
@@ -17386,6 +17450,7 @@
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=13&pageNum=0&refId=9xtJj38b8eQnRE5RVrPTew%3D%3D&trackingId=jNySxfSKSNNQP09%2B4rSWAg%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=13&pageNum=0&refId=9ziqxQtD%2BohQyYUBv%2FtfVA%3D%3D&trackingId=mdTWHHaXyilZ8j3tXDRahA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=13&pageNum=0&refId=DIrdV1AYpXWXFJBM66gAmA%3D%3D&trackingId=caJsGbfO8vyiJmQoQC3k8A%3D%3D",
+        "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=13&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=mHNK%2Faqh6yJYabQxSf0rNQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=13&pageNum=0&refId=Nlfc1FjdAutYbtH33e4YqQ%3D%3D&trackingId=tg8C84KVFsOTI5%2Bow%2BjnhA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=13&pageNum=0&refId=OuQDKk7hT1NtEfSzzx99%2FA%3D%3D&trackingId=nx4Ebmj1R0SwU5qOkJZpVA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4443944969?position=13&pageNum=0&refId=PXqwvgdWXF00fIsARZIwLQ%3D%3D&trackingId=2zm%2F2nyNBuuyzdwtKvBd6A%3D%3D",
@@ -17737,6 +17802,7 @@
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=14&pageNum=0&refId=9xtJj38b8eQnRE5RVrPTew%3D%3D&trackingId=iBo8%2FaII0dKSRr2xXgZFGg%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=14&pageNum=0&refId=9ziqxQtD%2BohQyYUBv%2FtfVA%3D%3D&trackingId=QhZJAyXYD09VEHUDr63ftA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=14&pageNum=0&refId=DIrdV1AYpXWXFJBM66gAmA%3D%3D&trackingId=9czCuWzvKCpsS1UpndCHsQ%3D%3D",
+        "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=14&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=X9RHSwSuQQcCXWXs8EqtsA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=14&pageNum=0&refId=PXqwvgdWXF00fIsARZIwLQ%3D%3D&trackingId=d0A6STLmn87KNIzVa%2BwCRw%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=14&pageNum=0&refId=varKrly8pgsZ4Z19VOUFcg%3D%3D&trackingId=ekBsRIIfAnHsS3HEZpyQ3A%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-at-linkedin-4478388978?position=15&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=qZIabe1IbuZFfXrOc%2F9qWQ%3D%3D",
@@ -17897,6 +17963,7 @@
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4454000691?position=42&pageNum=0&refId=Y5kFbCQcpuaVecsEfoyNjw%3D%3D&trackingId=Ff8LuWG%2BlV%2Fhu7j2v25ROA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4454000691?position=42&pageNum=0&refId=jkSElDhkWTfZuDbhek7%2FYg%3D%3D&trackingId=en6jBaOTypWjKTOn1GT8QA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4454000691?position=42&pageNum=0&refId=shfi5ac2%2FnjZtW72%2BOjYdg%3D%3D&trackingId=ScD0yrraskl3NSa67dDbYw%3D%3D",
+        "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4461128065?position=10&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=xhqm6ZiZefR94AJHuis3yA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4461128065?position=11&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=1aJJdeDPON%2FL2V8los%2BeGQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4461128065?position=11&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=8XdJG2rHzSdM1RpaWerY7g%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4461128065?position=11&pageNum=0&refId=%2FoVQMhY4lZdyQVHh6QDBKg%3D%3D&trackingId=8h2%2FeqN%2BdjjSs2MI9e2EYQ%3D%3D",
@@ -18352,6 +18419,7 @@
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4474305646?position=43&pageNum=0&refId=no%2FHNnt7VzZPOaQ%2FuBZ3Iw%3D%3D&trackingId=cqTdABJ%2BucyQMKwfgkIM8A%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-german-talent-solutions-staffing-at-linkedin-4474305646?position=43&pageNum=0&refId=y9wKotJgWGFnwh1ReN6ZNA%3D%3D&trackingId=zdEz2gKWkfCh8N2t599g%2BQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=15&pageNum=0&refId=3Vgldcmo8CmGb6NDQP2YOw%3D%3D&trackingId=sMcVl2%2BElxo%2Byc16hK9BKg%3D%3D",
+        "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=15&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=id2CyX1T7P6GWO%2B4WmNA8A%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=15&pageNum=0&refId=acNwWLl%2FfGWNfjgeb9UIbw%3D%3D&trackingId=WbCZAEncre%2BwFn0fvlAYiw%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=16&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=726bEgDNATSepbpCTntgkg%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=16&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=5R1OEAnOP5JCg2P%2BN%2B2awg%3D%3D",
@@ -18664,6 +18732,7 @@
         "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=21&pageNum=0&refId=o7M7cYt2c3sn1j5rvmvj7w%3D%3D&trackingId=f277DLyVrl9PcIK3dfsAJA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=21&pageNum=0&refId=on0IXMANQ3lIfhHzRlRVfw%3D%3D&trackingId=AfWzbQNbXmKXRKO44RD%2BZw%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-nordics-sales-solutions-at-linkedin-4444939277?position=21&pageNum=0&refId=vLWn9Osr7Tsy5biIZdhkJw%3D%3D&trackingId=6y2FfutR4V5Mpw41pU5KrA%3D%3D",
+        "https://ie.linkedin.com/jobs/view/account-executive-portfolio-french-growth-mid-market-linkedin-marketing-solutions-at-linkedin-4488157825?position=17&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=yOryl2zBdUfmZRdvZiTRfg%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-portfolio-french-growth-mid-market-linkedin-marketing-solutions-at-linkedin-4488157825?position=18&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=YaXf%2BwcrvrcnFkQMzmXUQw%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-portfolio-french-growth-mid-market-linkedin-marketing-solutions-at-linkedin-4488157825?position=18&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=QtWOIcrY6pwzVTjsMjACog%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-portfolio-french-growth-mid-market-linkedin-marketing-solutions-at-linkedin-4488157825?position=18&pageNum=0&refId=23f6GaUB44EAlaCZ645c%2BA%3D%3D&trackingId=%2FDeg9%2FSavu9th2tra6XeaA%3D%3D",
@@ -19092,6 +19161,7 @@
         "https://ie.linkedin.com/jobs/view/account-executive-talent-solutions-benelux-at-linkedin-4477645979?position=6&pageNum=0&refId=no%2FHNnt7VzZPOaQ%2FuBZ3Iw%3D%3D&trackingId=uErzji4slI2gtoUtK5lkug%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-talent-solutions-benelux-at-linkedin-4477645979?position=6&pageNum=0&refId=t7UFrUP2TkHDDG65xG8zag%3D%3D&trackingId=6gcOgEoyQe6O95CN%2BKu%2FbA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-talent-solutions-benelux-at-linkedin-4477645979?position=6&pageNum=0&refId=y9wKotJgWGFnwh1ReN6ZNA%3D%3D&trackingId=UiWBGOwnnK6wIdQqBwSwBA%3D%3D",
+        "https://ie.linkedin.com/jobs/view/account-executive-talent-solutions-benelux-at-linkedin-4485376160?position=12&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=jvk5h47BEwm3K72ylsqZCA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-talent-solutions-benelux-at-linkedin-4485376160?position=13&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=V332Nj6nxgi%2FjXru1G%2FwOA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-talent-solutions-benelux-at-linkedin-4485376160?position=13&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=4S1aYgnQxCBbdgL1p6wldA%3D%3D",
         "https://ie.linkedin.com/jobs/view/account-executive-talent-solutions-benelux-at-linkedin-4485376160?position=13&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=59XY5OEpJ0IwYrt%2BDz%2BJOw%3D%3D",
@@ -19699,6 +19769,7 @@
         "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4469892719?position=33&pageNum=0&refId=nTgE8xkC6Pe0QiqD2VqJyQ%3D%3D&trackingId=Ruy4X54djpnxqAn2bi1tXQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4469892719?position=33&pageNum=0&refId=on0IXMANQ3lIfhHzRlRVfw%3D%3D&trackingId=xh%2FMwPrXJ2SewYZoSD9F2g%3D%3D",
         "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4469892719?position=34&pageNum=0&refId=46SW6bCbwzxe6Wpn7u3Klw%3D%3D&trackingId=k8sNThQn6PIR8bAFjkL5qA%3D%3D",
+        "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4487232774?position=22&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=chgbeVbO2Et%2BEUuY5a6xrQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4487232774?position=23&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=MYqRzb5X%2BFWf4RVfb%2FGtkw%3D%3D",
         "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4487232774?position=23&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=SrNmc8ExeZmvTUVO%2BHCnYA%3D%3D",
         "https://ie.linkedin.com/jobs/view/associate-account-director-benelux-dutch-linkedin-talent-solutions-at-linkedin-4487232774?position=23&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=kJ7czqv2Vqz59I4z%2F43uPA%3D%3D",
@@ -19936,6 +20007,7 @@
         "https://ie.linkedin.com/jobs/view/associate-account-director-german-talent-solutions-at-linkedin-4462172732?position=19&pageNum=0&refId=shfi5ac2%2FnjZtW72%2BOjYdg%3D%3D&trackingId=sN%2BwwYAA4ZUSh%2FaIfIgNaA%3D%3D",
         "https://ie.linkedin.com/jobs/view/associate-account-director-german-talent-solutions-at-linkedin-4462172732?position=19&pageNum=0&refId=uvBHf58B%2BtbSxhfdMk4Ksw%3D%3D&trackingId=GM7fSDRvMF8n1YWrP7zATg%3D%3D",
         "https://ie.linkedin.com/jobs/view/associate-account-director-german-talent-solutions-at-linkedin-4462172732?position=19&pageNum=0&refId=vLWn9Osr7Tsy5biIZdhkJw%3D%3D&trackingId=J2E0m7haqo7d7WOHoqswUA%3D%3D",
+        "https://ie.linkedin.com/jobs/view/client-solutions-manager-performance-expansion-team-french-linkedin-marketing-solutions-at-linkedin-4489460623?position=28&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=Y53Fj4FmSHGp5D5Ik0W6kg%3D%3D",
         "https://ie.linkedin.com/jobs/view/client-solutions-manager-performance-expansion-team-french-linkedin-marketing-solutions-at-linkedin-4489460623?position=29&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=A35vgYRav7zHedcTn%2BPZQw%3D%3D",
         "https://ie.linkedin.com/jobs/view/client-solutions-manager-performance-expansion-team-french-linkedin-marketing-solutions-at-linkedin-4489460623?position=29&pageNum=0&refId=23f6GaUB44EAlaCZ645c%2BA%3D%3D&trackingId=bomO2N%2BU%2F3KDFbsUo6DuFQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/client-solutions-manager-performance-expansion-team-french-linkedin-marketing-solutions-at-linkedin-4489460623?position=29&pageNum=0&refId=7YOJklo8DA%2Fv82E3ME%2BW6w%3D%3D&trackingId=0VtAVKq1sN%2BliCx9EIkfUQ%3D%3D",
@@ -20755,6 +20827,7 @@
         "https://ie.linkedin.com/jobs/view/lss-sales-sr-manager-global-accounts-team-dublin-or-london-at-linkedin-4488867509?position=27&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=J40RRw0M4PMy7h1h%2FY9x%2BQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/lss-sales-sr-manager-global-accounts-team-dublin-or-london-at-linkedin-4488867509?position=27&pageNum=0&refId=7bWwpLIpdhSnw7rMYFx2Hg%3D%3D&trackingId=gkQE4YZsCV6swdbLA1xRyA%3D%3D",
         "https://ie.linkedin.com/jobs/view/lss-sales-sr-manager-global-accounts-team-dublin-or-london-at-linkedin-4488867509?position=27&pageNum=0&refId=Hw40x9ihMI8xUEzw0a2H0g%3D%3D&trackingId=f5H%2F3W0uWdn%2FM%2FNijeVBfw%3D%3D",
+        "https://ie.linkedin.com/jobs/view/lss-sales-sr-manager-global-accounts-team-dublin-or-london-at-linkedin-4488867509?position=27&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=L6zXoTopfFXhPTi6UwWdwQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/lss-sales-sr-manager-global-accounts-team-dublin-or-london-at-linkedin-4488867509?position=28&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=cLB1YYd%2Frb6Iy0GMVKIVWA%3D%3D",
         "https://ie.linkedin.com/jobs/view/lss-sales-sr-manager-global-accounts-team-dublin-or-london-at-linkedin-4488867509?position=28&pageNum=0&refId=23f6GaUB44EAlaCZ645c%2BA%3D%3D&trackingId=3QvMB5jUQ3fhL5gWb4QEnQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/lss-sales-sr-manager-global-accounts-team-dublin-or-london-at-linkedin-4488867509?position=28&pageNum=0&refId=7YOJklo8DA%2Fv82E3ME%2BW6w%3D%3D&trackingId=fZF6%2FLdl2FW%2FjBdg%2F6OtKA%3D%3D",
@@ -21606,6 +21679,7 @@
         "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=5&pageNum=0&refId=GclzB7MXWaUD0Rrofg33%2Fg%3D%3D&trackingId=dI7ZDcejUcn9lM5NE0fdUw%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=5&pageNum=0&refId=Hw40x9ihMI8xUEzw0a2H0g%3D%3D&trackingId=Kvaa%2FEHo7Jfe7AH0PTC9oQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=5&pageNum=0&refId=JbyrRS7GFZEozYqrqSuoyA%3D%3D&trackingId=RCMdnUYYLjtJlO%2FK7z9gpg%3D%3D",
+        "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=5&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=ixVfLtva5LM94A91O5SuTg%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=5&pageNum=0&refId=LuzfBAgoSX5bQM1sXpbdvA%3D%3D&trackingId=R7EZPAkTgwITJ4czmNyffQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=5&pageNum=0&refId=M81l%2BSvOxA%2FDvcMorNvsfA%3D%3D&trackingId=rKvO0%2B%2BUSPROWCLJBQ5JhQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-account-director-german-talent-solutions-staffing-%C2%A0-at-linkedin-4445950960?position=5&pageNum=0&refId=Nlfc1FjdAutYbtH33e4YqQ%3D%3D&trackingId=Jb0GLnSk8vfaVVy3ANN5hA%3D%3D",
@@ -22342,6 +22416,7 @@
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=23&pageNum=0&refId=Z4vJ42p%2FE14o6E6SjTJ3gg%3D%3D&trackingId=jYZZUoKBLDQiu8P6HYaQKA%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=23&pageNum=0&refId=o7M7cYt2c3sn1j5rvmvj7w%3D%3D&trackingId=L38HksBpEnA7o%2Bkz6GVHIw%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=23&pageNum=0&refId=vLWn9Osr7Tsy5biIZdhkJw%3D%3D&trackingId=%2FdHhSXfHCEoz1QQHNG4toQ%3D%3D",
+        "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=24&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=4s7tcWu7ET3iNkackcm66g%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=25&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=z2OcDR06OpxXIARO2drcdA%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=25&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=QXJOCysdN2sN3DwRyYDQkg%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-at-linkedin-4443342094?position=25&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=nmA9c%2B4tQ4XqO4RSBIB3oQ%3D%3D",
@@ -22497,6 +22572,7 @@
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=20&pageNum=0&refId=lf%2BAFXAh0vBuXeE9uSXFZA%3D%3D&trackingId=YilcTKhrjVpgeczxaWFZfA%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=21&pageNum=0&refId=B06uDHRSDCHGlEVTSDaBfg%3D%3D&trackingId=P3BByFWpl7jNEaghhtui%2Fg%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=21&pageNum=0&refId=FIYW9%2ByfzCjhUfSpHEfGSA%3D%3D&trackingId=x74lJeeaX%2FltBgf4Y2HCAQ%3D%3D",
+        "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=21&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=S2ymQ3l1EABiz25SSaGSLg%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=21&pageNum=0&refId=MXUALRSGFZvTGU30wEpFaw%3D%3D&trackingId=SPF4oHW7owidpeCe6qmc6Q%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=21&pageNum=0&refId=tfgZokfgVGW6jDCSaVFjcA%3D%3D&trackingId=ebWfRrSmiuR60QOqkU0gGQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-associate-account-director-german-talent-solutions-staffing-at-linkedin-4445699881?position=22&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=VumUsiBwAPUF1CF%2FNAiQGA%3D%3D",
@@ -23054,6 +23130,7 @@
         "https://ie.linkedin.com/jobs/view/register-your-interest-for-account-director-german-talent-solutions-at-linkedin-4441496241?position=16&pageNum=0&refId=o7M7cYt2c3sn1j5rvmvj7w%3D%3D&trackingId=v6P%2FeZ3qxPi2eyLTv6cxJQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-for-account-director-german-talent-solutions-at-linkedin-4441496241?position=16&pageNum=0&refId=vLWn9Osr7Tsy5biIZdhkJw%3D%3D&trackingId=zDIjYCjuxfWleeQmPgqBgQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-at-linkedin-4444457199?position=23&pageNum=0&refId=3Vgldcmo8CmGb6NDQP2YOw%3D%3D&trackingId=MSH0l7WeoReaPQ7XIOOzow%3D%3D",
+        "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-at-linkedin-4444457199?position=23&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=y8zrQC2PdeI5ehuabXvt9g%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-at-linkedin-4444457199?position=23&pageNum=0&refId=MXUALRSGFZvTGU30wEpFaw%3D%3D&trackingId=sFWvHlzSl22Hx%2Foc%2FxwhRQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-at-linkedin-4444457199?position=23&pageNum=0&refId=acNwWLl%2FfGWNfjgeb9UIbw%3D%3D&trackingId=CA5hilfGQGqI%2B4bWF1o85g%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-at-linkedin-4444457199?position=23&pageNum=0&refId=lf%2BAFXAh0vBuXeE9uSXFZA%3D%3D&trackingId=x69brLRKnkIacbmtoBlM8Q%3D%3D",
@@ -23634,6 +23711,7 @@
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=3&pageNum=0&refId=GclzB7MXWaUD0Rrofg33%2Fg%3D%3D&trackingId=Zxxw27AEd2qCH2E9eyt2Tw%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=3&pageNum=0&refId=Hw40x9ihMI8xUEzw0a2H0g%3D%3D&trackingId=v56zVCuDDWYA9geJgiPdXQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=3&pageNum=0&refId=JbyrRS7GFZEozYqrqSuoyA%3D%3D&trackingId=2SeKVe%2FWy5DYJeihoBuf5w%3D%3D",
+        "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=3&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=Ulzlv18AzjZLWQ3UUkkzzg%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=3&pageNum=0&refId=LuzfBAgoSX5bQM1sXpbdvA%3D%3D&trackingId=2FfCAjFUaZXfj8mNtmXj2A%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=3&pageNum=0&refId=M81l%2BSvOxA%2FDvcMorNvsfA%3D%3D&trackingId=Jh8vY6T2RdbNQ30E%2FyeuOw%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-director-german-talent-solutions-staffing-at-linkedin-4443227997?position=3&pageNum=0&refId=Ohi7fcVigJkL8PKcOfR5hw%3D%3D&trackingId=tn5Oeyy9BWaAPbqHb0cMtQ%3D%3D",
@@ -23916,6 +23994,7 @@
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-german-talent-solutions-at-linkedin-4486855564?position=2&pageNum=0&refId=GclzB7MXWaUD0Rrofg33%2Fg%3D%3D&trackingId=9nC3pis5HHYDTaoykP%2FY9A%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-german-talent-solutions-at-linkedin-4486855564?position=2&pageNum=0&refId=Hw40x9ihMI8xUEzw0a2H0g%3D%3D&trackingId=hzzVyCseY05%2FeLayIZyMXA%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-german-talent-solutions-at-linkedin-4486855564?position=2&pageNum=0&refId=JbyrRS7GFZEozYqrqSuoyA%3D%3D&trackingId=bE1oYWaamyghZKANEfkbpA%3D%3D",
+        "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-german-talent-solutions-at-linkedin-4486855564?position=2&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=qLlcCoZkxZBH9JeRsrx%2F%2BQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-german-talent-solutions-at-linkedin-4486855564?position=2&pageNum=0&refId=LuzfBAgoSX5bQM1sXpbdvA%3D%3D&trackingId=eRCOJX8%2BlKBSM2l%2BV%2BiC%2Bg%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-german-talent-solutions-at-linkedin-4486855564?position=2&pageNum=0&refId=M81l%2BSvOxA%2FDvcMorNvsfA%3D%3D&trackingId=jg71iTuyf8KGeTcfbq%2Fy3w%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-german-talent-solutions-at-linkedin-4486855564?position=2&pageNum=0&refId=TnCXi27fePAMpWbQUHnWIw%3D%3D&trackingId=SNUGWUWpTfJo%2BRpY6X%2Fb4Q%3D%3D",
@@ -24051,6 +24130,7 @@
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-talent-solutions-italian-at-linkedin-4490329348?position=1&pageNum=0&refId=COCOsLCfN4cOC8XH2L8Qjw%3D%3D&trackingId=7%2F63p%2BiHCmteh%2FL8p8pbfw%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-talent-solutions-italian-at-linkedin-4490329348?position=1&pageNum=0&refId=CzWXYkShywXpjKHVlqMzQw%3D%3D&trackingId=sV4HTxfs5X3nQV2njNR7lg%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-talent-solutions-italian-at-linkedin-4490329348?position=1&pageNum=0&refId=KygvSCwcbiZFFoqzsbxPEQ%3D%3D&trackingId=Nr5cw2N30YzNFeLFHsh9Ow%3D%3D",
+        "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-talent-solutions-italian-at-linkedin-4490329348?position=1&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=y4bMAFNiwi7k2nZskcb0Ag%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-talent-solutions-italian-at-linkedin-4490329348?position=1&pageNum=0&refId=LuzfBAgoSX5bQM1sXpbdvA%3D%3D&trackingId=2m3SS8dGfDfQHDYtG9Df9w%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-talent-solutions-italian-at-linkedin-4490329348?position=1&pageNum=0&refId=M81l%2BSvOxA%2FDvcMorNvsfA%3D%3D&trackingId=eY18%2B%2BuaPN4EJ7w0mdra5w%3D%3D",
         "https://ie.linkedin.com/jobs/view/register-your-interest-senior-account-executive-talent-solutions-italian-at-linkedin-4490329348?position=1&pageNum=0&refId=XSQ3gQ1HCw2i1YHKVTJ8hg%3D%3D&trackingId=DUDB5WK7azP3GUiViw2lvg%3D%3D",
@@ -24234,6 +24314,7 @@
         "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4452060644?position=17&pageNum=0&refId=jkSElDhkWTfZuDbhek7%2FYg%3D%3D&trackingId=6ykcXT%2F7ru4hko6Z7ma4dQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4452060644?position=17&pageNum=0&refId=shfi5ac2%2FnjZtW72%2BOjYdg%3D%3D&trackingId=QxGS1LR%2BJsXA1brdwtIlWg%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4452060644?position=17&pageNum=0&refId=uvBHf58B%2BtbSxhfdMk4Ksw%3D%3D&trackingId=2esp%2FNvedAwhQw8EffKyog%3D%3D",
+        "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4480907532?position=25&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=8wTGHht64yBLjbcPuYtuQg%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4480907532?position=26&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=9Vrcn1c17lEBTpTwYmIxzg%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4480907532?position=26&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=3%2BzZm6TpxPCrr%2FoOZ6lbGQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4480907532?position=26&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=JB7YECxk4O8N3%2Bw2S91%2BUQ%3D%3D",
@@ -24516,6 +24597,7 @@
         "https://ie.linkedin.com/jobs/view/sales-development-representative-hebrew-at-linkedin-4461144014?position=3&pageNum=0&refId=zpFmHYE6D7Fvr0uiRz533Q%3D%3D&trackingId=CmBb1M%2BnU6mj8Sw2V288Ug%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-hebrew-at-linkedin-4461144014?position=3&pageNum=0&refId=zvqgbYdr6ZPIcRGbi0HZjw%3D%3D&trackingId=SuewIy%2B6ZO1ywGdtM7ajtQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-nordics-at-linkedin-4487738384?position=27&pageNum=0&refId=w25kXaAyZGbUf1afxGu8Iw%3D%3D&trackingId=tXiuuV9UNUKjB0TR4yNY%2Fw%3D%3D",
+        "https://ie.linkedin.com/jobs/view/sales-development-representative-nordics-at-linkedin-4489999009?position=26&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=q95rK75EF8hwTSkw%2FQceNQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-nordics-at-linkedin-4489999009?position=27&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=n0Ev%2F8LhCyVmXX2b2M%2B8Tw%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-nordics-at-linkedin-4489999009?position=27&pageNum=0&refId=23f6GaUB44EAlaCZ645c%2BA%3D%3D&trackingId=z3JypkkF%2BQTcU%2FOlVQavcA%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-nordics-at-linkedin-4489999009?position=27&pageNum=0&refId=7YOJklo8DA%2Fv82E3ME%2BW6w%3D%3D&trackingId=rxpMAwGKNthpkXThxsqn%2FQ%3D%3D",
@@ -24709,6 +24791,7 @@
         "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=2&pageNum=0&refId=wfR0%2BpJ4TIVQ0mebjUbfVw%3D%3D&trackingId=%2FlLbb6dXQxB8mi85gajUUA%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=2&pageNum=0&refId=zpFmHYE6D7Fvr0uiRz533Q%3D%3D&trackingId=pa23oXfqezGQhYwY30y9eQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=2&pageNum=0&refId=zvqgbYdr6ZPIcRGbi0HZjw%3D%3D&trackingId=Tb%2F6dGo0%2BQA6JWBrGHPbxg%3D%3D",
+        "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=20&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=qlNSdGDP4NM2K808oPsLjQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=21&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=hkmB%2BV8s2pUlOEIQ9W7xFQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=21&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=UrWMbm1jAmIFDP9a6dDk4Q%3D%3D",
         "https://ie.linkedin.com/jobs/view/sales-development-representative-uki-at-linkedin-4459692465?position=21&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=v25aGsNyGu2GLTlGEh1iXg%3D%3D",
@@ -25732,6 +25815,7 @@
         "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=7&pageNum=0&refId=J06zOLjOfHTaI0EgiSHLYg%3D%3D&trackingId=TeFjuPZRbLjCPjJwedpm8w%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=7&pageNum=0&refId=J6U172lhupe4U1pI3LfQJw%3D%3D&trackingId=c7N8oxUaKb3IE4QTuU2qOQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=7&pageNum=0&refId=JbyrRS7GFZEozYqrqSuoyA%3D%3D&trackingId=BxBpTS99NjhOmVob04WFtA%3D%3D",
+        "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=7&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=TZEGuFUK8T5p7acnG4F4qA%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=7&pageNum=0&refId=LLjjJWJJafj%2BkWt6PFcHhw%3D%3D&trackingId=MqJnz90h0bLvNQA2JtzJhw%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=7&pageNum=0&refId=LuzfBAgoSX5bQM1sXpbdvA%3D%3D&trackingId=x74WbJoE7Q9vM5wiyFrOfQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-benelux-dutch-linkedin-sales-solutions-at-linkedin-4454544179?position=7&pageNum=0&refId=M81l%2BSvOxA%2FDvcMorNvsfA%3D%3D&trackingId=N3fs0qck5j8j6Hy72lFyJQ%3D%3D",
@@ -26435,6 +26519,7 @@
         "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=4&pageNum=0&refId=J06zOLjOfHTaI0EgiSHLYg%3D%3D&trackingId=w4h%2BDAiT7e0lse1H6jEQhw%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=4&pageNum=0&refId=JYCyxnxMANoDP64WG6BELQ%3D%3D&trackingId=uRnGR9WlrJBla%2BNeXILjgg%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=4&pageNum=0&refId=JbyrRS7GFZEozYqrqSuoyA%3D%3D&trackingId=U%2FCxsymDHgjuA7X4k7HCng%3D%3D",
+        "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=4&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=5uVihARZB1MORIi7yxP8aQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=4&pageNum=0&refId=LUlD3YCnIK%2FNTWXCvdI%2BNg%3D%3D&trackingId=iXBewHmNmY49XNrflDaagQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=4&pageNum=0&refId=LuzfBAgoSX5bQM1sXpbdvA%3D%3D&trackingId=Y%2FEOpktN3hXbiWaG8fsHYA%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=4&pageNum=0&refId=M81l%2BSvOxA%2FDvcMorNvsfA%3D%3D&trackingId=JD2wMqLvCXzDi7Epd5CVzQ%3D%3D",
@@ -26735,6 +26820,7 @@
         "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=8&pageNum=0&refId=J06zOLjOfHTaI0EgiSHLYg%3D%3D&trackingId=WUXM3CWVY1xlG3QixBMKAw%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=8&pageNum=0&refId=J6U172lhupe4U1pI3LfQJw%3D%3D&trackingId=y9EgsLHNCfl%2Ft3WDCuIr2Q%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=8&pageNum=0&refId=JbyrRS7GFZEozYqrqSuoyA%3D%3D&trackingId=Xa6wnWrIkdyKlCUuREJumw%3D%3D",
+        "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=8&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=UmPJ%2FDf7J9%2B%2FiC8RZRsa1Q%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=8&pageNum=0&refId=LLjjJWJJafj%2BkWt6PFcHhw%3D%3D&trackingId=sZLgpEoF0o%2BWweS4mYSBAA%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=8&pageNum=0&refId=LuzfBAgoSX5bQM1sXpbdvA%3D%3D&trackingId=h0v2M5YXfCXiLH9cMFQTZg%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=8&pageNum=0&refId=M81l%2BSvOxA%2FDvcMorNvsfA%3D%3D&trackingId=YgrNeo06Jx2hEQc6nIYHAQ%3D%3D",
@@ -26811,6 +26897,7 @@
         "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=9&pageNum=0&refId=y1AERuNDiljkkp%2BBKJAB0A%3D%3D&trackingId=GiMGeuGvuzdpdi4aHy%2Fd%2Fg%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=9&pageNum=0&refId=yb9xxiFAZjwUi0Gy2PVUAg%3D%3D&trackingId=JRzkfQV%2B1BpblsMqah3hUA%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-nordics-sales-solutions-at-linkedin-4444944120?position=9&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=1RreupH31oJ1Idc11Bgx4w%3D%3D",
+        "https://ie.linkedin.com/jobs/view/senior-account-executive-portfolio-dach-growth-mid-market-linkedin-marketing-solutions-ftc-11-months-at-linkedin-4490319937?position=29&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=FKhEuXDlsBBOxEertCUGQA%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-portfolio-dach-growth-mid-market-linkedin-marketing-solutions-ftc-11-months-at-linkedin-4490319937?position=30&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=FUuAQaDIIjRz%2Fe3nzC5j6Q%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-portfolio-dach-growth-mid-market-linkedin-marketing-solutions-ftc-11-months-at-linkedin-4490319937?position=30&pageNum=0&refId=23f6GaUB44EAlaCZ645c%2BA%3D%3D&trackingId=HDnRCJLD65t4VRSg2z7whA%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-account-executive-portfolio-dach-growth-mid-market-linkedin-marketing-solutions-ftc-11-months-at-linkedin-4490319937?position=30&pageNum=0&refId=7YOJklo8DA%2Fv82E3ME%2BW6w%3D%3D&trackingId=uTK2I8V235uVJLw%2F8aWfOA%3D%3D",
@@ -27789,6 +27876,7 @@
         "https://ie.linkedin.com/jobs/view/senior-recruitment-marketing-project-manager-emeal-at-linkedin-4465077817?position=41&pageNum=0&refId=cmw6UVuH2%2FRgxTae%2B9X4IA%3D%3D&trackingId=AR4ieTPktp3w47PE0FTWUA%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-recruitment-marketing-project-manager-emeal-at-linkedin-4465077817?position=41&pageNum=0&refId=dnCzKJtE8DrcjlzZEhWA8g%3D%3D&trackingId=xtl9YhaT1CtyZgT%2BnhbxTQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-recruitment-marketing-project-manager-emeal-at-linkedin-4465077817?position=41&pageNum=0&refId=uvBHf58B%2BtbSxhfdMk4Ksw%3D%3D&trackingId=SQFlRtA9ydVXIXBNUCp2xA%3D%3D",
+        "https://ie.linkedin.com/jobs/view/senior-talent-account-executive-talent-solutions-french-at-linkedin-4462856049?position=19&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=8q5wURFazLTdPL%2Fnd5ecHw%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-talent-account-executive-talent-solutions-french-at-linkedin-4462856049?position=20&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=SjENW%2F3MfjYCiLu54kFL%2Bw%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-talent-account-executive-talent-solutions-french-at-linkedin-4462856049?position=20&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=B7yXqMhEwDtcbnFy4dOZew%3D%3D",
         "https://ie.linkedin.com/jobs/view/senior-talent-account-executive-talent-solutions-french-at-linkedin-4462856049?position=20&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=aWcXRYY610QgarZ4aRGUhQ%3D%3D",
@@ -28531,6 +28619,7 @@
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=6&pageNum=0&refId=GclzB7MXWaUD0Rrofg33%2Fg%3D%3D&trackingId=HTDQ0lq7sertMlSPI7u3iw%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=6&pageNum=0&refId=Hw40x9ihMI8xUEzw0a2H0g%3D%3D&trackingId=mU3z%2F2VHIE2wEibjiy47Fw%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=6&pageNum=0&refId=JbyrRS7GFZEozYqrqSuoyA%3D%3D&trackingId=8mLWVE3qy9v2ZapbVt1HRQ%3D%3D",
+        "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=6&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=MppkGSY874MKMuJpHaJLFg%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=6&pageNum=0&refId=LuzfBAgoSX5bQM1sXpbdvA%3D%3D&trackingId=P85rXKQgsGTnchhk4Ehz2A%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=6&pageNum=0&refId=M81l%2BSvOxA%2FDvcMorNvsfA%3D%3D&trackingId=tyauoshi67a%2BC%2Fxb2CekxQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=6&pageNum=0&refId=TnCXi27fePAMpWbQUHnWIw%3D%3D&trackingId=TlX5nRivyMU5t%2FeGpIAarw%3D%3D",
@@ -28561,6 +28650,7 @@
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=7&pageNum=0&refId=waF%2BDktOODCmSYsV9g5g%2Fg%3D%3D&trackingId=7EnSFeqO7%2BhFHec%2F3Tphdw%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=7&pageNum=0&refId=y1AERuNDiljkkp%2BBKJAB0A%3D%3D&trackingId=agDexQcivZkgUDrIPKTb2g%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-french-at-linkedin-4486178112?position=7&pageNum=0&refId=zVrD%2FlETcbiM0T3oqtMu%2Bw%3D%3D&trackingId=5m%2Fq4O7eQTo9XtdpfIjNAw%3D%3D",
+        "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-french-at-linkedin-4475555834?position=16&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=QJ%2FcVdb5Feh1TpfMnFp7lg%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-french-at-linkedin-4475555834?position=17&pageNum=0&refId=%2FFVCabky5sRbMBOaKXujYQ%3D%3D&trackingId=DIQM3ypeco2umBG%2FEDio2Q%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-french-at-linkedin-4475555834?position=17&pageNum=0&refId=%2FmLbvqSLh1oBekPgZlaFYg%3D%3D&trackingId=x22S0fCK92OgOtrgF9K5%2FQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-french-at-linkedin-4475555834?position=17&pageNum=0&refId=0HVWd2Rd05dsF5UBo2QTYQ%3D%3D&trackingId=hwDBykeLpmtmoUYItTy11g%3D%3D",
@@ -28818,6 +28908,7 @@
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-italian-french-at-linkedin-4482862538?position=9&pageNum=0&refId=Hw40x9ihMI8xUEzw0a2H0g%3D%3D&trackingId=3waIlxyHhi%2FMoYqoOuwVpQ%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-italian-french-at-linkedin-4482862538?position=9&pageNum=0&refId=J06zOLjOfHTaI0EgiSHLYg%3D%3D&trackingId=JMSiMBmUSyHAgg8wsWC4Mg%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-italian-french-at-linkedin-4482862538?position=9&pageNum=0&refId=JbyrRS7GFZEozYqrqSuoyA%3D%3D&trackingId=mnN%2FASIjwAo%2Bx65NqpHm3g%3D%3D",
+        "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-italian-french-at-linkedin-4482862538?position=9&pageNum=0&refId=L%2F%2B9yG58pK5lltKFw1jZ8g%3D%3D&trackingId=aICl5DgMNxJdSY6splcj%2Bg%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-italian-french-at-linkedin-4482862538?position=9&pageNum=0&refId=LuzfBAgoSX5bQM1sXpbdvA%3D%3D&trackingId=v42KC3nzSiYVQCFeN1U1EA%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-italian-french-at-linkedin-4482862538?position=9&pageNum=0&refId=M81l%2BSvOxA%2FDvcMorNvsfA%3D%3D&trackingId=QYEsUQt9WUVsyXd%2FfHZoGw%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-account-executive-talent-solutions-staffing-italian-french-at-linkedin-4482862538?position=9&pageNum=0&refId=NOxKT3JTbn9n%2BkcFlpUsvQ%3D%3D&trackingId=5DnAlhm98QA0XdEuc404PQ%3D%3D",
@@ -29053,12 +29144,12 @@
         "https://ie.linkedin.com/jobs/view/talent-acquisition-partner-emeal-at-linkedin-4465079793?position=45&pageNum=0&refId=no%2FHNnt7VzZPOaQ%2FuBZ3Iw%3D%3D&trackingId=tN5qBo3OZOFCHJ%2FhJLNz3Q%3D%3D",
         "https://ie.linkedin.com/jobs/view/talent-acquisition-partner-emeal-at-linkedin-4465079793?position=45&pageNum=0&refId=y9wKotJgWGFnwh1ReN6ZNA%3D%3D&trackingId=8vHEhb2BXAnd8a9ojObReg%3D%3D"
       ],
-      "distinct_jobs_seen": 13307,
-      "current_live_jobs": 31
+      "distinct_jobs_seen": 13336,
+      "current_live_jobs": 30
     },
     "Nucleo": {
       "first_working_seen": "2026-09-17T20:16:30.964315+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://apply.workable.com/j/108463D28D",
@@ -29075,7 +29166,7 @@
     },
     "Trading 212": {
       "first_working_seen": "2026-09-18T13:19:55.362060+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://jobs.ashbyhq.com/trading212/1c6d6d6b-47f2-4bb1-b847-22b6dd82e129",
@@ -29111,7 +29202,7 @@
     },
     "Databricks": {
       "first_working_seen": "2026-09-23T15:41:46.428411+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://databricks.com/company/careers/open-positions/job?gh_jid=8612868002",
@@ -29145,7 +29236,7 @@
     },
     "PTSB (Permanent TSB)": {
       "first_working_seen": "2026-09-23T19:42:44.897282+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://ptsb.pinpointhq.com/en/postings/1f81e6d8-ecf7-4c6a-8739-6970e2d9da6c",
@@ -29157,7 +29248,7 @@
     },
     "Trend Micro": {
       "first_working_seen": "2026-09-23T22:53:29.327216+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://trendmicro.wd3.myworkdayjobs.com/External/job/Cork/Applied-AI-Engineer-Internship_R0010091",
@@ -29174,7 +29265,7 @@
     },
     "Ekco": {
       "first_working_seen": "2026-09-24T15:14:06.848821+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://careers.ek.co/jobs/8115693-financial-analyst",
@@ -29207,7 +29298,7 @@
     },
     "Expleo Ireland": {
       "first_working_seen": "2026-10-02T12:20:30.583936+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 10,
       "seen_job_keys": [
@@ -29240,7 +29331,7 @@
     },
     "AirNav Ireland": {
       "first_working_seen": "2026-10-02T12:20:30.583936+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 1,
       "seen_job_keys": [
@@ -29254,7 +29345,7 @@
     },
     "Alkermes": {
       "first_working_seen": "2026-10-02T12:20:30.583936+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 2,
       "seen_job_keys": [
@@ -29294,7 +29385,7 @@
     },
     "ARYZTA Ireland": {
       "first_working_seen": "2026-10-02T12:20:30.583936+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 1,
       "seen_job_keys": [
@@ -29306,7 +29397,7 @@
     },
     "Rippling": {
       "first_working_seen": "2026-10-02T16:36:45.639685+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 41,
       "seen_job_keys": [
@@ -29379,7 +29470,7 @@
     },
     "CRH": {
       "first_working_seen": "2026-10-02T18:21:53.959275+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 3,
       "seen_job_keys": [
@@ -29400,7 +29491,7 @@
     },
     "Storm Technology": {
       "first_working_seen": "2026-10-02T18:21:53.959275+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 2,
       "seen_job_keys": [
@@ -29414,7 +29505,7 @@
     },
     "Teva Pharmaceuticals": {
       "first_working_seen": "2026-10-02T18:21:53.959275+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 2,
       "seen_job_keys": [
@@ -29426,7 +29517,7 @@
     },
     "TransferMate": {
       "first_working_seen": "2026-10-02T18:21:53.959275+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 2,
       "seen_job_keys": [
@@ -29448,7 +29539,7 @@
     },
     "Integrity360": {
       "first_working_seen": "2026-10-04T13:40:26.290881+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 6,
       "seen_job_keys": [
@@ -29467,7 +29558,7 @@
     },
     "ASML": {
       "first_working_seen": "2026-10-04T13:40:26.290881+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 5,
       "seen_job_keys": [
@@ -29482,9 +29573,9 @@
     },
     "Aviva Ireland": {
       "first_working_seen": "2026-10-04T13:40:26.290881+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
-      "current_live_jobs": 24,
+      "current_live_jobs": 25,
       "seen_job_keys": [
         "https://aviva.talent-community.com/projects/1st-Line-Governance-%26-Assurance-Lead/77595",
         "https://aviva.talent-community.com/projects/Actuarial--Projects-Lead/74554",
@@ -29543,7 +29634,7 @@
     },
     "Veeva Systems": {
       "first_working_seen": "2026-10-12T22:52:20.033891+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 4,
       "seen_job_keys": [
@@ -29559,7 +29650,7 @@
     },
     "Vanguard": {
       "first_working_seen": "2026-10-12T22:52:20.033891+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 2,
       "seen_job_keys": [
@@ -29576,7 +29667,7 @@
     },
     "Kefron": {
       "first_working_seen": "2026-10-12T22:52:20.033891+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "current_live_jobs": 2,
       "seen_job_keys": [
@@ -29610,7 +29701,7 @@
     },
     "Deutsche Bank": {
       "first_working_seen": "2026-10-14T15:47:05.796314+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://db.wd3.myworkdayjobs.com/DBWebsite/job/Dublin-2-Grand-Canal-Square/Client-Services-Account-Manager---Collateralised-Loan-Obligation--CLO-_R0458206",
@@ -29621,7 +29712,7 @@
     },
     "Rockwell Automation": {
       "first_working_seen": "2026-10-29T16:54:16.231231+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://rockwellautomation.wd1.myworkdayjobs.com/External_Rockwell_Automation/job/Cork-Ireland/Spare-Parts-Administrator_R26-7259"
@@ -29631,7 +29722,7 @@
     },
     "Teneo Ireland": {
       "first_working_seen": "2026-11-12T21:21:35.611018+00:00",
-      "last_working_seen": "2026-11-16T03:31:04.735237+00:00",
+      "last_working_seen": "2026-11-16T11:27:24.855028+00:00",
       "ever_working": true,
       "seen_job_keys": [
         "https://job-boards.greenhouse.io/teneolinkedin/jobs/8202718003"
@@ -29641,7 +29732,7 @@
     }
   },
   "tracking_started": "2026-08-16",
-  "updated_at": "2026-11-16T03:31:04.735237+00:00",
+  "updated_at": "2026-11-16T11:27:24.855028+00:00",
   "proven_working_company_count": 288,
-  "historical_distinct_jobs_seen": 26993
+  "historical_distinct_jobs_seen": 27084
 }
