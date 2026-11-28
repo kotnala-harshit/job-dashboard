@@ -137,11 +137,11 @@
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8081766": {
-      "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8081766",
-      "status": "unverified",
-      "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.072036+00:00",
+      "http_status": 200,
+      "final_url": "https://careers.toasttab.com/jobs/senior-software-engineer-infrastructure-dublin-county-dublin-ireland-ad900b17-e51b-4832-bfc5-5cbd85ce076c?gh_jid=8081766",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-28T12:47:51.845504+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8038744": {
@@ -273,11 +273,11 @@
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8210638": {
-      "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8210638",
-      "status": "unverified",
-      "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.072591+00:00",
+      "http_status": 200,
+      "final_url": "https://careers.toasttab.com/jobs/senior-infrastructure-engineer-compute-storage-platform-dublin-county-dublin-ireland?gh_jid=8210638",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-28T12:47:51.845934+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8201856": {
@@ -434,10 +434,10 @@
     },
     "https://careers.toasttab.com/jobs?gh_jid=8226897": {
       "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8226897",
+      "final_url": "https://careers.toasttab.com/jobs/emea-people-operations-lead-fixed-term-contract-dublin-county-dublin-ireland?gh_jid=8226897",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.072882+00:00",
+      "checked_at": "2026-11-28T12:47:51.846251+00:00",
       "failure_checks": 0
     },
     "https://jobs.concentrix.com/job/?id=R1767444": {
@@ -457,11 +457,11 @@
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8233456": {
-      "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8233456",
-      "status": "unverified",
-      "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.073381+00:00",
+      "http_status": 200,
+      "final_url": "https://careers.toasttab.com/jobs/engineering-manager-2-real-time-analytics-dublin-county-dublin-ireland-43410c86-9c2b-4a22-b6e7-5010ddf9aa35?gh_jid=8233456",
+      "status": "reachable",
+      "reason": "HTTP success; vacancy availability may require the employer page",
+      "checked_at": "2026-11-28T12:47:51.846421+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8242560": {
@@ -482,10 +482,10 @@
     },
     "https://careers.toasttab.com/jobs?gh_jid=8243136": {
       "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8243136",
+      "final_url": "https://careers.toasttab.com/jobs/staff-software-engineer-infrastructure-dublin-county-dublin-ireland?gh_jid=8243136",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.075301+00:00",
+      "checked_at": "2026-11-28T12:47:51.846810+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8249586": {
@@ -10847,7 +10847,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/associate-15178": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-28T04:08:15.448021+00:00",
+      "checked_at": "2026-11-28T12:47:52.289471+00:00",
       "failure_checks": 0
     },
     "https://jobs.smartrecruiters.com/AbbVie/3743990015009326-biologics-technician": {
@@ -13477,7 +13477,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/businessanalyst-15136": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-28T04:08:15.553521+00:00",
+      "checked_at": "2026-11-28T12:47:52.356808+00:00",
       "failure_checks": 0
     },
     "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/2682": {
@@ -13491,7 +13491,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/juniorassociate-20159": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-28T04:08:15.584288+00:00",
+      "checked_at": "2026-11-28T12:47:52.600569+00:00",
       "failure_checks": 0
     },
     "https://elyx.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers/job/2687": {
@@ -16385,7 +16385,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/businessanalystintern-15275": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-28T04:08:15.651305+00:00",
+      "checked_at": "2026-11-28T12:47:53.117771+00:00",
       "failure_checks": 0
     },
     "https://careers.tirlan.com/tirlan/job/Kilkenny-Finance-Associate-R95-DXR1/1366167455/": {
@@ -17585,7 +17585,7 @@
       "final_url": "https://broadcom.wd1.myworkdayjobs.com/en-US/External_Career/job/Technical-Support-Engineer_R026021-1",
       "status": "blocked",
       "reason": "Automated check blocked (HTTP 429)",
-      "checked_at": "2026-11-26T21:00:24.845945+00:00",
+      "checked_at": "2026-11-28T12:47:50.090405+00:00",
       "failure_checks": 0
     },
     "https://analogdevices.wd1.myworkdayjobs.com/External/job/Ireland-Limerick/RF-Applications-Engineer_R266195": {
@@ -18417,7 +18417,7 @@
       "final_url": "https://broadcom.wd1.myworkdayjobs.com/External_Career/job/IRL-Remote-Location/Account-Executive_R026496",
       "status": "blocked",
       "reason": "Automated check blocked (HTTP 429)",
-      "checked_at": "2026-11-26T21:00:26.061326+00:00",
+      "checked_at": "2026-11-28T12:47:50.092175+00:00",
       "failure_checks": 0
     },
     "https://careers-inc.nttdata.com/job/dublin-Senior-Business-Analyst-MortgagesLending-D/1435654000/": {
@@ -18767,7 +18767,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/specialist-communications-110429": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-28T04:08:15.685680+00:00",
+      "checked_at": "2026-11-28T12:47:53.192560+00:00",
       "failure_checks": 0
     },
     "https://cadence.wd1.myworkdayjobs.com/External_Careers/job/DUBLIN/Credit---Collections-Specialist_R52078": {
@@ -21917,7 +21917,7 @@
       "final_url": "https://broadcom.wd1.myworkdayjobs.com/External_Career/job/IRL-Cork-Kavanagh-House/Staff-Security-Engineer_R026554",
       "status": "blocked",
       "reason": "Automated check blocked (HTTP 429)",
-      "checked_at": "2026-11-26T21:00:28.325672+00:00",
+      "checked_at": "2026-11-28T12:47:50.093945+00:00",
       "failure_checks": 0
     },
     "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers/job/Dublin-Ireland/Director--Software-Engineering_R-281578": {
@@ -24579,7 +24579,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/seniorfellow-scientificaiclinicalbiostatistician-110969": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-28T04:08:15.795058+00:00",
+      "checked_at": "2026-11-28T12:47:53.522855+00:00",
       "failure_checks": 0
     },
     "https://jobs.aib.ie/aib/job/Dublin-General-Insurance-Sales-Delivery-Specialist%2C-Dublin-IE/1373335257/": {
@@ -29137,7 +29137,7 @@
     "https://www.mckinsey.com/careers/search-jobs/jobs/communicationsspecialist-socialhealthcarepublicentities-109567": {
       "status": "error",
       "reason": "ReadTimeout",
-      "checked_at": "2026-11-28T04:08:15.801743+00:00",
+      "checked_at": "2026-11-28T12:47:53.535086+00:00",
       "failure_checks": 0
     },
     "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Ireland---Dublin/Senior-Demo-Engineer---Informatica-Demo-Engineering_JR359556": {
@@ -37667,7 +37667,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8259169",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.077575+00:00",
+      "checked_at": "2026-11-28T12:47:51.849866+00:00",
       "failure_checks": 0
     },
     "https://integrity360.bamboohr.com/careers/820": {
@@ -44221,7 +44221,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8264379",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.077776+00:00",
+      "checked_at": "2026-11-28T12:47:51.850015+00:00",
       "failure_checks": 0
     },
     "https://careers.sig.com/dublin/jobs/11593": {
@@ -47733,7 +47733,7 @@
       "final_url": "https://careers.astellas.com/job/Health-and-Safety-Graduate/1431865200/",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-26T02:56:18.432293+00:00",
+      "checked_at": "2026-11-28T12:47:50.086213+00:00",
       "failure_checks": 0
     },
     "https://jobs.smartrecruiters.com/ServiceNow/744000154608979-sr-software-engineer": {
@@ -68606,10 +68606,10 @@
     },
     "https://careers.toasttab.com/jobs?gh_jid=8245420": {
       "http_status": 202,
-      "final_url": "https://careers.toasttab.com/jobs?gh_jid=8245420",
+      "final_url": "https://careers.toasttab.com/en-US/jobs/8245420?gh_jid=8245420",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.076757+00:00",
+      "checked_at": "2026-11-28T12:47:51.846977+00:00",
       "failure_checks": 0
     },
     "https://careers.ibm.com/en_US/careers/JobDetail?jobId=137222&source=WEB_Search_NA": {
@@ -70121,7 +70121,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8258222",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.077352+00:00",
+      "checked_at": "2026-11-28T12:47:51.849630+00:00",
       "failure_checks": 0
     },
     "https://career5.successfactors.eu/careers?company=kerryluxemP&career_ns=job_application&career_job_req_id=66220&jobPipeline=PhenomCareerSite": {
@@ -95789,7 +95789,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8302827",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.078527+00:00",
+      "checked_at": "2026-11-28T12:47:51.850644+00:00",
       "failure_checks": 0
     },
     "https://careers.sig.com/dublin/jobs/11707": {
@@ -99827,7 +99827,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8267171",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.077975+00:00",
+      "checked_at": "2026-11-28T12:47:51.850167+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8333416": {
@@ -99835,7 +99835,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8333416",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.078920+00:00",
+      "checked_at": "2026-11-28T12:47:51.850916+00:00",
       "failure_checks": 0
     },
     "https://jobs.smartrecruiters.com/AbbVie/3743990016486996-copy-of-strategic-sourcer": {
@@ -100211,7 +100211,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8289426",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.078346+00:00",
+      "checked_at": "2026-11-28T12:47:51.850518+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8333523": {
@@ -100219,7 +100219,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8333523",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.079278+00:00",
+      "checked_at": "2026-11-28T12:47:51.851169+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8203201": {
@@ -106987,7 +106987,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8248798",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.077035+00:00",
+      "checked_at": "2026-11-28T12:47:51.848503+00:00",
       "failure_checks": 0
     },
     "https://apply.workable.com/j/B5F03D6BD8": {
@@ -110419,7 +110419,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8333439",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.079099+00:00",
+      "checked_at": "2026-11-28T12:47:51.851044+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8326579": {
@@ -112873,7 +112873,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8267686",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.078150+00:00",
+      "checked_at": "2026-11-28T12:47:51.850365+00:00",
       "failure_checks": 0
     },
     "https://apply.careers.microsoft.com/careers?start=30&location=Ireland&pid=1970393557051024&sort_by=distance&filter_include_remote=1&filter_include_relocation=0#app": {
@@ -119041,7 +119041,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8318623",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.078700+00:00",
+      "checked_at": "2026-11-28T12:47:51.850785+00:00",
       "failure_checks": 0
     },
     "https://www.gasnetworks.ie/node/3586": {
@@ -119057,7 +119057,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8367009",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.079840+00:00",
+      "checked_at": "2026-11-28T12:47:51.851559+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8357049": {
@@ -121831,7 +121831,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8359247",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.079663+00:00",
+      "checked_at": "2026-11-28T12:47:51.851427+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8319461": {
@@ -122639,7 +122639,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8358864",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.079471+00:00",
+      "checked_at": "2026-11-28T12:47:51.851279+00:00",
       "failure_checks": 0
     },
     "https://www.gasnetworks.ie/node/3591": {
@@ -122741,7 +122741,7 @@
       "final_url": "https://careers.ibm.com/en_US/careers/JobDetail?jobId=141934&source=WEB_Search_NA",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.081174+00:00",
+      "checked_at": "2026-11-28T12:47:51.852564+00:00",
       "failure_checks": 0
     },
     "https://jobs.johnsoncontrols.com/job/WD30284981": {
@@ -123381,7 +123381,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Contracts-and-Commercial-Consultant/48266",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.718247+00:00",
+      "checked_at": "2026-11-28T12:47:53.442604+00:00",
       "failure_checks": 0
     },
     "https://search.jobs.barclays/job/glasgow/markets-cash-equities-and-research-vp/13015/103168121968": {
@@ -123405,7 +123405,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Senior-Contracts-and-Commercial-Consultant/48265",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.730748+00:00",
+      "checked_at": "2026-11-28T12:47:53.456016+00:00",
       "failure_checks": 0
     },
     "https://careers.jacobs.com/en_US/careers/JobDetail/Senior-Highways-Civils-Engineer-Dublin-Cork/48264": {
@@ -124053,7 +124053,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8382757",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.080003+00:00",
+      "checked_at": "2026-11-28T12:47:51.851667+00:00",
       "failure_checks": 0
     },
     "https://dpdhlgroup.avature.net/jobs/ApplicationMethods?jobId=391730&source=careers.dhl.com": {
@@ -124093,7 +124093,7 @@
       "final_url": "https://apply.careers.microsoft.com/careers/job/1970393557070422",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-27T03:37:58.596752+00:00",
+      "checked_at": "2026-11-28T12:47:50.085175+00:00",
       "failure_checks": 0
     },
     "https://careers.atkinsrealis.com/en/jobs/civil-design-engineer-r-170951": {
@@ -124789,7 +124789,7 @@
       "final_url": "https://apply.careers.microsoft.com/careers/job/1970393557070399",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-27T03:37:58.485941+00:00",
+      "checked_at": "2026-11-28T12:47:50.084798+00:00",
       "failure_checks": 0
     },
     "https://www.auxilion.com/careers/service-desk-engineer-l1": {
@@ -130977,7 +130977,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Spatial-Coordinator/48429",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.616801+00:00",
+      "checked_at": "2026-11-28T12:47:52.924127+00:00",
       "failure_checks": 0
     },
     "https://aviva.talent-community.com/projects/Pensions-Propositions-Consultant/77736": {
@@ -132017,7 +132017,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/NEC-Site-Supervisor/48500",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.587615+00:00",
+      "checked_at": "2026-11-28T12:47:52.776821+00:00",
       "failure_checks": 0
     },
     "https://jobs.eir.care/jobs/detail/level-2-soc-incident-analyst-2124": {
@@ -133353,7 +133353,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Automation-Engineer-Safety-Instrumented-Systems-SIS-Machinery-Safety/48521",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.819829+00:00",
+      "checked_at": "2026-11-28T12:47:53.552273+00:00",
       "failure_checks": 0
     },
     "https://ie.linkedin.com/jobs/view/register-your-interest-account-executive-talent-solutions-nordic-at-linkedin-4490436320?position=26&pageNum=0&refId=KgHVksmXmxQsqA63hcsHnw%3D%3D&trackingId=ibkABnpwRC6hBqSmIBCC2A%3D%3D": {
@@ -134449,7 +134449,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8399016",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.080171+00:00",
+      "checked_at": "2026-11-28T12:47:51.851816+00:00",
       "failure_checks": 0
     },
     "https://www.pinterestcareers.com/jobs/?gh_jid=8334144": {
@@ -134577,7 +134577,7 @@
       "final_url": "https://jobs.arup.com/jobs/graduate-rail-systems-engineer-37254",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-23T09:45:09.867620+00:00",
+      "checked_at": "2026-11-28T12:47:50.085978+00:00",
       "failure_checks": 0
     },
     "https://careers.esb.ie/job/Dublin-IT-Project-Manager-D/1377881957/": {
@@ -134726,10 +134726,10 @@
     },
     "https://jobs.arup.com/jobs/37254/other-jobs-matching/location-and-category": {
       "http_status": 403,
-      "final_url": "https://jobs.arup.com/jobs/search/22986425",
+      "final_url": "https://jobs.arup.com/jobs/search/23247771",
       "status": "blocked",
       "reason": "Automated check blocked (HTTP 403)",
-      "checked_at": "2026-11-23T09:45:27.391705+00:00",
+      "checked_at": "2026-11-28T12:47:50.087758+00:00",
       "failure_checks": 0
     },
     "https://careers.unitedhealthgroup.com/job/dublin/director-data-analytics/34088/103475546800": {
@@ -136609,7 +136609,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Rail-Engineering-Manager/48614",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.660171+00:00",
+      "checked_at": "2026-11-28T12:47:53.126413+00:00",
       "failure_checks": 0
     },
     "https://enterpriseplatform.dell.com/hcmUI/CandidateExperience/en/sites/careers/job/302409/": {
@@ -136897,7 +136897,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Graduate-Project-Manager-Cities-Places-Dublin/48652",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.767983+00:00",
+      "checked_at": "2026-11-28T12:47:53.486727+00:00",
       "failure_checks": 0
     },
     "https://ntrs.wd1.myworkdayjobs.com/northerntrust/job/Limerick-Ireland/Project-Manager--Client-Change_R163424-1": {
@@ -138857,7 +138857,7 @@
       "final_url": "https://careers.ibm.com/en_US/careers/JobDetail?jobId=146276&source=WEB_Search_NA",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.082606+00:00",
+      "checked_at": "2026-11-28T12:47:51.853531+00:00",
       "failure_checks": 0
     },
     "https://www.accenture.com/ie-en/careers/jobdetails?id=R00351838_en&title=Senior+AI%2FML+Computational+Scientist+Senior+Manager": {
@@ -139289,7 +139289,7 @@
       "final_url": "https://careers.allianz.com/ie/en/job/110411/Quality-Insights-Analyst",
       "status": "reachable",
       "reason": "HTTP success; vacancy availability may require the employer page",
-      "checked_at": "2026-11-27T03:38:02.248537+00:00",
+      "checked_at": "2026-11-28T12:47:50.085561+00:00",
       "failure_checks": 0
     },
     "https://careers.opentext.com/us/en/job/53241/Digital-Renewal-Specialist": {
@@ -141785,7 +141785,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8411809",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.080519+00:00",
+      "checked_at": "2026-11-28T12:47:51.851934+00:00",
       "failure_checks": 0
     },
     "https://careers.toasttab.com/jobs?gh_jid=8411824": {
@@ -141793,7 +141793,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8411824",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.080702+00:00",
+      "checked_at": "2026-11-28T12:47:51.852035+00:00",
       "failure_checks": 0
     },
     "https://www.gasnetworks.ie/node/3661": {
@@ -141909,7 +141909,7 @@
     "mailto:recruit@gasnetworks.ie?subject=E,C &amp; I Technician   - Ref No. GNI178": {
       "status": "unverified",
       "reason": "Email application; no web page to check",
-      "checked_at": "2026-11-28T04:08:15.081027+00:00",
+      "checked_at": "2026-11-28T12:47:51.852263+00:00",
       "failure_checks": 0
     },
     "https://www.mongodb.com/careers/job/?gh_jid=8403312": {
@@ -142589,7 +142589,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Intermediate-Sustainability-Engineer-Life-Sciences/48798",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.779061+00:00",
+      "checked_at": "2026-11-28T12:47:53.494080+00:00",
       "failure_checks": 0
     },
     "https://ie.linkedin.com/jobs/view/senior-account-executive-german-sales-solutions-at-linkedin-4441958021?position=5&pageNum=0&refId=EL%2FEpHMWdjHwGdfKVeg8NQ%3D%3D&trackingId=oeXEPElD3T7I3g0Wq2AXUA%3D%3D": {
@@ -145197,7 +145197,7 @@
       "final_url": "https://careers.toasttab.com/jobs?gh_jid=8413505",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.080869+00:00",
+      "checked_at": "2026-11-28T12:47:51.852157+00:00",
       "failure_checks": 0
     },
     "https://stripe.com/jobs/search?gh_jid=8396176": {
@@ -146765,7 +146765,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Quantity-Surveyor-Mechanical/48953",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.696408+00:00",
+      "checked_at": "2026-11-28T12:47:53.274159+00:00",
       "failure_checks": 0
     },
     "https://jj.wd5.myworkdayjobs.com/JJ/job/Ringaskiddy-Cork-Ireland/Team-Lead-E-O-Mgmt_R-112069-1": {
@@ -146885,7 +146885,7 @@
       "final_url": "https://careers.jacobs.com/en_US/careers/JobDetail/Quantity-Surveyor-Electrical-Instrumentation/48956",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.754212+00:00",
+      "checked_at": "2026-11-28T12:47:53.483123+00:00",
       "failure_checks": 0
     },
     "https://ie.linkedin.com/jobs/view/sales-development-representative-german-at-linkedin-4480907532?position=21&pageNum=0&refId=IDp80Xgl67b24bCTafkQow%3D%3D&trackingId=NQavoMgTGZg9SAXTBPepcQ%3D%3D": {
@@ -147251,7 +147251,7 @@
     "mailto:recruit@gasnetworks.ie?subject=Field Operations Engineer - Ref No. GNI180": {
       "status": "unverified",
       "reason": "Email application; no web page to check",
-      "checked_at": "2026-11-28T04:08:15.081154+00:00",
+      "checked_at": "2026-11-28T12:47:51.852549+00:00",
       "failure_checks": 0
     },
     "https://netapp.eightfold.ai/careers/job/45642753": {
@@ -149051,7 +149051,7 @@
       "final_url": "https://careers.ibm.com/en_US/careers/JobDetail?jobId=146284&source=WEB_Search_NA",
       "status": "unverified",
       "reason": "Empty response",
-      "checked_at": "2026-11-28T04:08:15.375056+00:00",
+      "checked_at": "2026-11-28T12:47:52.289253+00:00",
       "failure_checks": 0
     },
     "https://www.dpsgroupglobal.com/job/senior-project-manager-3/": {
@@ -149295,115 +149295,17 @@
       "failure_checks": 0
     }
   },
-  "completed_at": "2026-11-28T04:09:27.711172+00:00",
-  "checked_urls": 3964,
+  "completed_at": "2026-11-28T12:49:04.676345+00:00",
+  "checked_urls": 3935,
   "status_counts": {
     "reachable": 2735,
-    "blocked": 1165,
-    "unverified": 41,
-    "unreachable": 16,
+    "blocked": 1155,
+    "unverified": 38,
     "error": 7
   },
   "last_cleanup": {
-    "at": "2026-11-28T04:09:27.711172+00:00",
+    "at": "2026-11-28T12:49:04.676345+00:00",
     "duplicates": [],
-    "unavailable": [
-      {
-        "url": "https://careers.opentext.com/us/en/job/54027/Director-Product-Management",
-        "company": "OpenText",
-        "title": "Director, Product Management",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52282/Principal-AI-Developer",
-        "company": "OpenText",
-        "title": "Principal AI Developer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/54171/Senior-Data-Center-Engineer",
-        "company": "OpenText",
-        "title": "Senior Data Center Engineer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52389/Principal-AI-Developer",
-        "company": "OpenText",
-        "title": "Principal AI Developer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/54387/Lead-Cloud-Applications-Developer-HPE-NonStop-Tandem",
-        "company": "OpenText",
-        "title": "Lead Cloud Applications Developer - HPE NonStop/Tandem",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52405/Lead-AI-Developer",
-        "company": "OpenText",
-        "title": "Lead AI Developer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52404/Lead-AI-Developer",
-        "company": "OpenText",
-        "title": "Lead AI Developer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/54254/Legal-Counsel",
-        "company": "OpenText",
-        "title": "Legal Counsel",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/54474/Sr-AI-Developer",
-        "company": "OpenText",
-        "title": "Sr AI Developer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52895/Sr-Site-Reliability-Engineer",
-        "company": "OpenText",
-        "title": "Sr. Site Reliability Engineer external link open in new tab",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/54371/Assistant-Financial-Controller-24-Months-Contract-Cork",
-        "company": "OpenText",
-        "title": "Assistant Financial Controller (24-Months Contract) - Cork",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/54475/Sr-AI-Developer-Architecture",
-        "company": "OpenText",
-        "title": "Sr AI Developer (Architecture)",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/54271/Cloud-Applications-Engineer-Monitoring-Observability",
-        "company": "OpenText",
-        "title": "Cloud Applications Engineer - Monitoring & Observability",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/53424/Lead-Software-Developer-Java",
-        "company": "OpenText",
-        "title": "Lead Software Developer Java",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/53782/Lead-Site-Reliability-Engineer",
-        "company": "OpenText",
-        "title": "Lead Site Reliability Engineer",
-        "reason": "Employer page explicitly reports job unavailable"
-      },
-      {
-        "url": "https://careers.opentext.com/us/en/job/52162/Sr-Site-Reliability-Administrator",
-        "company": "OpenText",
-        "title": "Sr. Site Reliability Administrator",
-        "reason": "Employer page explicitly reports job unavailable"
-      }
-    ]
+    "unavailable": []
   }
 }
